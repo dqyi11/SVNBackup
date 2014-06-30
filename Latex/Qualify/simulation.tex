@@ -131,11 +131,11 @@
 \begin{itemize}
 \item \textbf{Problem size} \\
 nodeNum(\textcolor{blue}{fully expanding tree}) 
-\item \textbf{Percentage of nodes explored} \\
+\item \textbf{Percentage of nodes explored} \textcolor{green}{[efficiency]}\\
 nodeNum(\textcolor{blue}{current expanding tree}) / nodeNum(\textcolor{blue}{fully expanding tree})
-\item \textbf{Percentage of optimal at first run} \\
+\item \textbf{Percentage of optimal at first run} \textcolor{red}{[goodness]}\\
 score(\textcolor{blue}{first found solution}) / score(\textcolor{blue}{optimal solution})
-\item \textbf{Percentage of runs reaching the optimal} \\
+\item \textbf{Percentage of runs reaching the optimal} \textcolor{red}{[goodness]}\\
 iterationCount(\textcolor{blue}{optimal found}) / iterationCount(\textcolor{blue}{finish tree expanding})
 \end{itemize}
 
@@ -163,20 +163,25 @@ The performance of the heuristic (Percentage of optimal at first run)
 \bigskip
 \bigskip
 
-\begin{columns}
-\column{0.45\textwidth}
-\begin{minipage}{\textwidth}
-\includegraphics[width=\textwidth]{./figure/compareGreedy}
-\end{minipage}
-\column{0.45\textwidth}
-\begin{minipage}{\textwidth}
-\includegraphics[width=\textwidth]{./figure/largeprob}
-\end{minipage}
-\end{columns}
+%\begin{columns}
+%\column{0.45\textwidth}
+%\begin{minipage}{\textwidth}
+%\includegraphics[width=\textwidth]{./figure/compareGreedy}
+%\end{minipage}
+%\column{0.45\textwidth}
+%\begin{minipage}{\textwidth}
+%\includegraphics[width=\textwidth]{./figure/largeprob}
+%\end{minipage}
+%\end{columns}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\textwidth]{./figure/compareGreedy}
+\end{figure}
 
 \end{frame}
 
-\begin{frame}{Environment difference}{Robustness}
+\begin{frame}{Information pattern difference}{Robustness}
 
 \begin{columns}
 

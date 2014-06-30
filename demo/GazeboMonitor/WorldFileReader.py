@@ -552,6 +552,15 @@ class WorldFileReader(QtGui.QWidget):
         doc.writexml( open(filename, 'w'), indent="", addindent="", newl='')
         
         #doc.unlink()
+    
             
+    def dumpWorldObstacle(self, filename):
         
+        #print "dumping.."        
+        f = open(filename, 'w')
+        f.write(str(self.worldInfo.width)+","+str(self.worldInfo.height)+"\n")
+        
+        for edge in self.worldInfo.graph.edges:
+            f.write(str(edge.a_x)+","+str(edge.a_y)+","+str(edge.b_x)+","+str(edge.b_y)+"\n")
+     
         
