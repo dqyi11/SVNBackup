@@ -20,12 +20,29 @@ class MapViewer(QtGui.QLabel):
         self.endPos = []
         
         self.particleNum = 4
-        self.mas = WaypointMultiAgentSystem(self.particleNum)
+        self.mas = WaypointMultiAgentSystem(self.particleNum, [self.width(), self.height()])
         
         self.RVals = np.random.randint(0,255,self.particleNum)
         self.GVals = np.random.randint(0,255,self.particleNum)
         self.BVals = np.random.randint(0,255,self.particleNum)
         
+    def resizeEvent(self, e):
+        w = e.size().width()
+        h = e.size().height()
+        self.mas.worldSize = [w, h]
+        super(MapViewer, self).resizeEvent(e)
+        
+        self.mas.dataVal = np.zeros((w,h))
+        
+    
+    def updateData(self):
+        
+        image = self.pixmap().toImage()
+        for x in range(self.width()):
+            for y in range(self.height()):
+                self.mas.dataVal[x,y] = QtGui.qGray(image.pixel(x,y))
+            
+        self.dump()
         
     def paintEvent(self, e):
         super(MapViewer, self).paintEvent(e)
@@ -57,9 +74,7 @@ class MapViewer(QtGui.QLabel):
         for agent in self.mas.agents:
             #print agent.searchRegion
             qp.drawRect(int(agent.searchRegion[0][0]), int(agent.searchRegion[1][0]), self.toleranceRegionSize[0], self.toleranceRegionSize[1])
-        
-
-        
+                
         for i in range(self.particleNum):
             for j in range(len(self.mas.agents)):
                 curr_agent = self.mas.agents[j]
@@ -84,7 +99,6 @@ class MapViewer(QtGui.QLabel):
             if len(self.startPos) == 2 and len(self.endPos)==2:
                 self.recordingPos = True
 
-            
     def mouseReleaseEvent(self, e):
         
         if e.button() == QtCore.Qt.LeftButton:
@@ -92,7 +106,6 @@ class MapViewer(QtGui.QLabel):
             if self.recordingPos == True:
                 self.recordingPos = False
                 self.resample()
-
                 self.update()
         
     def mouseMoveEvent(self, e):
@@ -112,7 +125,6 @@ class MapViewer(QtGui.QLabel):
             self.pointsCurveLength += deltaDist
             
         return self.pointsCurveLength
-        
             
     def resample(self):
         xs = []
@@ -138,9 +150,14 @@ class MapViewer(QtGui.QLabel):
             
         self.mas.agents = []
         searchRegionSize = [float(self.toleranceRegionSize[0]), float(self.toleranceRegionSize[1])]
-        for np in self.newpoints:
+        
+        for t in range(len(self.newpoints)):
+            np = self.newpoints[t]    
             centerPos = [float(np[0]), float(np[1])]
-            self.mas.addAgent(centerPos, searchRegionSize)
+            if t==0 or t==len(self.newpoints)-1:
+                self.mas.addAgent(centerPos, searchRegionSize, True)
+            else:
+                self.mas.addAgent(centerPos, searchRegionSize)
             
         self.points = []
         
@@ -148,6 +165,7 @@ class MapViewer(QtGui.QLabel):
             
     def dump(self):
         
+        '''
         dataLen = len(self.points)
         xs = np.zeros(dataLen, dtype=np.int)
         ys = np.zeros(dataLen, dtype=np.int)
@@ -157,6 +175,16 @@ class MapViewer(QtGui.QLabel):
         
         np.savetxt('x.csv', xs, delimiter=',', fmt="%d")
         np.savetxt('y.csv', ys, delimiter=',', fmt="%d")
+        '''
+
+        data = np.zeros((self.width(), self.height()))
+        for x in range(self.width()):
+            for y in range(self.height()):
+                data[x,y] = self.mas.dataVal[x,y]
+                
+        np.savetxt('data.csv', data, delimiter=',', fmt="%d")
+        
+        
         
     def addStart(self, pos):
         self.startPos = [pos.x(), pos.y()]

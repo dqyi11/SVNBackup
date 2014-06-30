@@ -359,8 +359,8 @@ class WorldFileReader(QtGui.QWidget):
 
     def initWorldInfo(self):
         self.worldInfo =  worldInfo()
-        self.worldInfo.width = self.worldSize[0]
-        self.worldInfo.height = self.worldSize[1]
+        self.worldInfo.width = self.worldSize[0]*self.scale
+        self.worldInfo.height = self.worldSize[1]*self.scale
         for model in self.models:
             for link in model.statics:
                 self.worldInfo.numberOfPolygon += 1
@@ -424,19 +424,16 @@ class WorldFileReader(QtGui.QWidget):
         y_max_node = doc.createElement("Y_MAX")
         y_max_node_val = doc.createTextNode(str(int(self.worldInfo.height)))
         y_max_node.appendChild(y_max_node_val)
-        num_poly_node = doc.createElement("numPolygons")
-        num_poly_node_val = doc.createTextNode(str(self.worldInfo.numberOfPolygon))
-        num_poly_node.appendChild(num_poly_node_val)
         root.appendChild(x_max_node)
         root.appendChild(y_max_node)
-        root.appendChild(num_poly_node)
+        
         
         #print "edges " + str(len(self.worldInfo.graph.edges))       
         
         edges_node = doc.createElement("edges")
         for edge in self.worldInfo.graph.edges:
             #print str(edge.idx)
-            edge_node = doc.createElement("edge")
+            edge_node = doc.createElement("Edge")
             edge_name_node = doc.createElement("name")
             
             edge_a_node = doc.createElement("a")
@@ -490,7 +487,8 @@ class WorldFileReader(QtGui.QWidget):
             edge_name_node_val = doc.createTextNode(str(edge.idx))
             edge_name_node.appendChild(edge_name_node_val)
             edge_was_seen_node = doc.createElement("wasSeen")
-            edge_was_seen_node_val = doc.createTextNode(str(False))
+            #edge_was_seen_node_val = doc.createTextNode(str(False))
+            edge_was_seen_node_val = doc.createTextNode("false")
             edge_was_seen_node.appendChild(edge_was_seen_node_val)
             
             edge_node.appendChild(edge_a_node)
@@ -502,12 +500,16 @@ class WorldFileReader(QtGui.QWidget):
             edges_node.appendChild(edge_node)
         
         #print "vertices " + str(len(self.worldInfo.graph.vertices))    
-        
+        num_poly_node = doc.createElement("numPolygons")
+        num_poly_node_val = doc.createTextNode(str(self.worldInfo.numberOfPolygon))
+        num_poly_node.appendChild(num_poly_node_val)
+        root.appendChild(num_poly_node)
+
         vertices_node = doc.createElement("vertices")        
         for vertex in self.worldInfo.graph.vertices:
             
             #print str(vertex.idx)
-            vertex_node = doc.createElement("vertex")
+            vertex_node = doc.createElement("Vertex")
             
             vertex_name_node = doc.createElement("name")
             vertex_name_node_val = doc.createTextNode(str(vertex.idx))
@@ -536,6 +538,7 @@ class WorldFileReader(QtGui.QWidget):
         root.appendChild(edges_node)
         root.appendChild(vertices_node)
         
+        '''
         enemies_node = doc.createElement("enemies")
         for enemy in self.enemies:
             enemy_node = doc.createElement("enemy")
@@ -543,10 +546,10 @@ class WorldFileReader(QtGui.QWidget):
             enemy_node.setAttribute("pos_y",str(enemy.pos[1]));
             enemies_node.appendChild(enemy_node)
         root.appendChild(enemies_node)
-        
+        '''
         #print "writing..."
         
-        doc.writexml( open(filename, 'w'), indent="  ", addindent="  ", newl='\n')
+        doc.writexml( open(filename, 'w'), indent="", addindent="", newl='')
         
         #doc.unlink()
             

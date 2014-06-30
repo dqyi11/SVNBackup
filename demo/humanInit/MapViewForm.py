@@ -67,7 +67,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.configWindow.show()
         
     def optimize(self):
-        self.mMapViewer.mas.evolve(50)
+        self.mMapViewer.mas.evolve(500)
         self.update()
         
     def importData(self):
@@ -81,9 +81,10 @@ class MapViewForm(QtGui.QMainWindow):
         self.formSize[1] = pixmap.height()
         
         self.mMapViewer.resize(self.formSize[0], self.formSize[1])
-                
         
         self.imageData = pixmap.toImage()
+        
+        self.mMapViewer.updateData()
         
         self.update()
         
