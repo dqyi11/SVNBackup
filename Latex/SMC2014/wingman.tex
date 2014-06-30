@@ -29,10 +29,10 @@ The parameters $ R_{flank} = 2 $ is used for the neighboring function of the hum
 
 We use a ``fully expanded tree size'' to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
 Due to the human constraint, the planning length is determined by the human's path length.
-The performance of the heuristic is measured by the \emph{percentage of optimal at first run}, that is a percentage computed from the value obtain in the first run of Algorithm \ref{alg:Anytime} over the optimal value.
+The performance of the heuristic is measured by the \emph{percentage of optimal at first iteration}, that is a percentage computed from the value obtain in the first iteration of Algorithm \ref{alg:Anytime} over the optimal value.
 High values of this metric indicate that the heuristic is useful.
 The greedy heuristic~\cite{singh2009efficient}, which chooses the maximum next step, is imported to compare with the backtracking heuristic.
-Figure \ref{fig:compareGreedy} shows the comparison between two types of heuristic on the percentages of the optimal as a function of different planning lengths.
+Figure \ref{fig:compareGreedy} shows the comparison between two types of heuristic on the percentages of the optimal as a function of planning lengths.
 We can see that the performance of the backtracking heuristic significantly surpasses that of the greedy heuristic.
 
 Naturally, as the size of the search space expands, the difficulty in finding the optimal solution using an exhaustive search grows.  Since we want to understand how well our anytime algorithm performs for problems that are too big to search exhaustively, we bound the payoff for the optimal path by using a ``teleport'' search in which the robot can bounce from region to region without following a connected path.
@@ -64,13 +64,13 @@ Since the anytime algorithm becomes an exhaustive search in the absence of freez
 \end{figure}
 In the anytime algorithm, the exploration might not stop when the optimal is found, due to the existence of overestimation.
 If current best of a search can reach the optimal very quickly, it means that a best solution found in a fixed time has high probability of being optimal.
-We use \emph{percentage of runs reaching the optimal} to measure this optimal search capability of Algorithm \ref{alg:Anytime}.
+We use \emph{number of iterations reaching optimal (normalized)} to measure this optimal search capability of Algorithm \ref{alg:Anytime}.
 Figure \ref{fig:diffT:a2} illustrates that the anytime algorithm can find the optimal solution relatively quickly.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{./images/T_InitOpt_OptRch.pdf}
-\caption{Percentages of optimal at first iteration and Percentage of runs reaching the optimal with different planning lengths.}
+\caption{Percentages of optimal at first iteration and number of iterations reaching optimal with different planning lengths.}
 \label{fig:diffT:a2}
 \end{figure}
 
@@ -116,7 +116,7 @@ For this comparison we hold the number of time steps fixed at $ 11 $ over differ
 Figure \ref{fig:ProbSizeInDiffHMP} shows that the problem size varies significantly depending on the type of path, though the planning length is identical.
 Interestingly, Algorithm \ref{alg:Anytime} shows better efficiency in larger problem size.
 In Figure \ref{fig:ExpRatioInDiffHMP}, we can see that the ratios of explored nodes are relatively smaller in the patterns of ``spiral'', ``lawn-mower'' and ``loitering'', in which the problem sizes are relatively larger in Figure \ref{fig:ProbSizeInDiffHMP}.
-We can see that the percentage of optimal at first run are all close to the optimum in all the patterns in Figure \ref{fig:InitOptInDiffHMP}, which implies the goodness of the backtracking heuristic.
+We can see that the percentage of optimal at first iteration are all close to the optimum in all the patterns in Figure \ref{fig:InitOptInDiffHMP}, which implies the goodness of the backtracking heuristic.
 
 \begin{figure}
 \centering
