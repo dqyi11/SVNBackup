@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{896585C1-BF8A-45D2-B4A1-C1614313ABA5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MapLabeling</RootNamespace>
+    <AssemblyName>MapLabeling</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="data\FeatureLabelManager.cs" />
+    <Compile Include="data\IndoorLabelManager.cs" />
+    <Compile Include="data\MapInfoManager.cs" />
+    <Compile Include="data\OutdoorLabelManager.cs" />
+    <Compile Include="OutdoorPropertyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutdoorPropertyForm.Designer.cs">
+      <DependentUpon>OutdoorPropertyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IndoorPropertyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IndoorPropertyForm.Designer.cs">
+      <DependentUpon>IndoorPropertyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FeaturePropertyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FeaturePropertyForm.Designer.cs">
+      <DependentUpon>FeaturePropertyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="data\OutdoorLabel.cs" />
+    <Compile Include="data\PixelMap.cs" />
+    <Compile Include="MapViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapViewerForm.Designer.cs">
+      <DependentUpon>MapViewerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToolbarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolbarForm.Designer.cs">
+      <DependentUpon>ToolbarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="data\FeatureLabel.cs" />
+    <Compile Include="data\IndoorLabel.cs" />
+    <EmbeddedResource Include="OutdoorPropertyForm.resx">
+      <DependentUpon>OutdoorPropertyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IndoorPropertyForm.resx">
+      <DependentUpon>IndoorPropertyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MapViewerForm.resx">
+      <DependentUpon>MapViewerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FeaturePropertyForm.resx">
+      <DependentUpon>FeaturePropertyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolbarForm.resx">
+      <DependentUpon>ToolbarForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,1099 @@
+\documentclass[12pt]{article}
+
+\input{preamble}
+
+\begin{document}
+
+\title{\textsf{Approximating the Pareto Optimal Set in Multi-Objective Optimization Using a Particle Swarm}}
+
+\author{
+\textsf{Daqing Yi}
+\and
+\textsf{Kevin D. Seppi}
+\and
+\textsf{Michael A. Goodrich}
+}
+
+\date{}
+\maketitle
+
+\begin{abstract}
+When multiple objectives cannot be mapped into a single dimensional real space, one often seeks find a Pareto optimal set. In a continuous space, due to the difficulty of finding all non-dominated solutions, a representative subset can be explored using evolutionary methods as an approximation of the Pareto optimal set. In this paper, we focus on how to use a particle swarm to find such an approximation of the Pareto optimal set.
+
+We use Hausdorff distance and diversity to measure how well the Pareto set is approximated. Based on this metric, we modify the canonical PSO algorithm to generate the approximation on the Pareto set in a multi-objective optimization problem. We also provide an analysis  of the convergence of the proposed algorithm, which guides the parameter selection. In conclusion, we demonstrate and evaluate the performance of this approach by simulation.
+\end{abstract}
+
+\section{Introduction}
+Multi-objective optimization has been widely applied in engineering, design, planning and etc. 
+In solving a multi-objective optimization problem, different objectives are usually converted into a single space so that the preference can be ranked.
+However, there exists some objectives that are not comparable.
+A set of Pareto optimal solutions is imported to represent different trade-off among different objectives.
+The objective functions in a multi-objective function is defined as a vector, whcih maps a point in solution space $ S $ into a point in the evaluation space $ Z $.
+
+\begin{mydef}[\textbf{Multi-Objective Optimization}]
+\label{def:multi_opt}
+Find the vector $ \vec{x}^{*} \in S $ which will satisfy the $ m $ inequality constraints
+\begin{equation}
+\label{eq:mo_ineq_constraint}
+g_{i}(\vec{x}) \geq 0, i = 1, 2, \cdots , m, 
+\end{equation}
+the $ p $ equality constraints
+\begin{equation}
+\label{eq:mo_eq_constraint}
+h_{i}(\vec{x}) = 0, i = 1, 2, \cdots , p, 
+\end{equation}
+and will optimize the vector function
+\begin{equation}
+\label{eq:mo_obj}
+\min_{ S } \vec{f}(\vec{x}) = \min_{ S } \left[ f_{1}(\vec{x}), f_{2}(\vec{x}) \cdots f_{k}(\vec{x}) \right]^{T},
+\end{equation}
+where $ \vec{x} $ is the vector of decision variables.
+\end{mydef}
+
+\begin{mydef}[\textbf{Dominance}]
+\label{def:dominance}
+$ \vec{x} \in S $ dominates $ \vec{x'} \in S $, if 
+\begin{equation}
+\label{eq:def_dominance}
+\forall i \in \{ 1, 2, \cdots k \}, f_{i}(\vec{x}) \leq f_{i}(\vec{x'}).
+\end{equation}
+We write it as $ \vec{x} \preceq \vec{x'} $.
+
+$ \vec{x}  $ is non-dominant, if 
+\begin{equation}
+\label{eq:def_nondominant}
+\nexists \vec{x'} \in S \land \vec{x'} \neq \vec{x}, \vec{x'} \preceq \vec{x}.
+\end{equation}
+\end{mydef}
+
+A set of all the non-dominant solutions is called a \emph{Pareto set}.
+\begin{mydef}[\textbf{Pareto set}]
+\label{def:pareto_opt_set}
+For a given multi-objective optimization problem $ \vec{f}() $, the \emph{Pareto optimal set} $ P^{*}_{S} \subset S $ is defined as
+\begin{equation}
+\label{eq:pa_opt_set}
+P^{*}_{S} := \{ \vec{x} \in S \mid \nexists \vec{x}' \in S, \vec{x'} \preceq  \vec{x} \}.
+\end{equation}
+
+\end{mydef}
+
+\emph{Pareto set} defines \emph{Pareto optimal} for the multi-objective optimization problems.
+In the evaluation space $ Z $, we have a \emph{Pareto front} mapped from \emph{Pareto set} by $ \vec{f}() $.
+
+\begin{mydef}[\textbf{Pareto Front}]
+\label{def:pareto_front}
+For a given multi-objective optimization problem $ \vec{f}() $ and Pareto optimal set $ P^{*}_{S} \subset S $, the \emph{Pareto front} $ P^{*}_{Z} \subset Z $ is defined as
+\begin{equation}
+\label{eq:pa_front}
+P^{*}_{Z} := \{ \vec{z} = \vec{f}(\vec{x}) \mid \vec{x} \in P^{*}_{S} \}.
+\end{equation}
+\end{mydef}
+
+\subsection{Evolutionary multi-objective optimization}
+
+Evolutionary computation has been the most popular tool in solving the multi-objective optimization problem, especially when exact methods cannot be applied directly.
+The inherent parallelism of evolutionary algorithms has been proven to be good ability to approximate the Pareto front from theoretical analysis and empirical studies.
+As a collective optimal search in the solution space, the particle swarm has also been imported into solving the multi-objective optimization problem.
+When the search space is continuous, it is impossible to enumerate all possible solutions in the Pareto set.
+Finding a subset representation is one of the methods that have been widely chosen.
+
+
+\cite{coello2002mopso} use an external repository as archive solutions that are found so that there can be a set of solutions instead of only one.
+\cite{abido2007two} propose an algorithm that copies all the ``non-dominated'' solutions an external Pareto-optimal set, which also adopts an archive.
+\cite{yen2009dynamic} also maintain a fixed size archive to store ``non-dominated'' solutions found in search.
+
+In determining whether a solution is non-dominance, it is impossible to compare with all the solution spaces in the entire space.
+The common way is to compare with only the positions of other particles in the swarm, which means there are only limited samplings.
+Thus, a incorrect ``non-dominant'' solution is likely to be stored into an archive.
+
+The swarm naturally can be the subset representation of the Pareto set.
+The particles keep ``exploit and explore'' without stopping and adding not non-dominant solutions.
+Instead of converging to a point in a single objective problem [\cite{clerc2002particle}], the particle swarm is expected to converge to the Pareto set in the multi-objective optimization problem.
+
+\cite{li2004better} imports ``maximin'' in defining the fitness function in order to have better spread on the Pareto front.
+It maintains a \emph{nonDomPSOList} to generate offspring as new candidates to update the particles in the swarm.
+
+
+In this paper, we focus on how to use a particle swarm to approximate the Pareto optimal set in solving a multi-objective optimization problem.
+
+\section{What is a good approximation}
+
+In measuring how a subset representation approximates a Pareto front, there are usually two factors selected as metric, which are
+\begin{itemize}
+\item how close the elements are to the Pareo front,
+\item how the diversity of the elements is like.
+\end{itemize}
+
+\subsection{Metrics of approximation performance}
+
+\subsubsection{Average Distance}
+
+We use the distance between a point and a set to measure how close a particle is to a Pareto front.
+The distance between a point $ u $ and a set $ B $ is defined as 
+$ dist(u, B) = \inf_{v \in B} || u - v ||  $.
+We define the distance between a set of points $ A $ and a set $ B $ as average distance.
+$ dist(A, B) = \sum_{ u \in A } dist(u, B) / | A | $.
+
+
+We notice that when $ A \subset B $, $ d_{H}(A, B) = 0 $.
+In our case, it means that all the particles moves into the Pareto set.
+
+
+\subsubsection{Diversity}
+
+There are several ways of measuring diversity proposed in research works. 
+
+\cite{risco2008optimization} proposed \emph{spacing} to measure diversity, which is 
+\begin{equation}
+\begin{aligned}
+S & = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n}(\bar{d}-d_{i})^{2}}, \\
+d_{i} & = \min_{j} || \vec{f}(\vec{x_{i}}) - \vec{f}(\vec{x_{j}}) ||, i,j \in \{ 1, \cdots , n \}, \\
+\bar{d} & = \frac{1}{n} \sum_{i=1}^{n} d_{i}.
+\end{aligned}
+\end{equation}
+
+\cite{silva2013multi} proposed a \emph{diversity factor} for each single particle to measure the diversity, which is:
+\begin{equation}
+\begin{aligned}
+d_{i} & = \frac{1}{n-1} \sum_{j=1, j \neq i}^{n} || \vec{f}(\vec{x_{i}}) - \vec{f}(\vec{x_{j}}) ||, \\
+DF_{i} & = \frac{ d_{i} - d_{min} }{ d_{max} - d_{min} }
+\end{aligned}
+\end{equation}
+
+\cite{coello2005solving} uses a \emph{Inverted generational distance}, which is:
+\begin{equation}
+\begin{aligned}
+GD & = \frac{\sqrt{\sum_{i=1}^{n} d_{i}^{2} }}{n} \\
+d_{i} & = \min_{j} || \vec{f}(\vec{x_{j}}) - \vec{f}(\vec{x_{i}}) ||
+\end{aligned}
+\end{equation}
+
+\cite{olorunda2008measuring} use a \emph{normalized average distance around the swarm center} to measure the diversity, which is:
+\begin{equation}
+\begin{aligned}
+D^{N} & = \frac{1}{n} \sum_{i=1}^{n} D^{N}_{i} \\
+D^{N}_{i} & = \frac{1}{n \times D} \sum_{j=1}^{n} || \vec{f}( \vec{x_{i}} ) - \vec{f}( \vec{x_{j}} ) || \\
+D & = \max_{i \neq j} || \vec{f}( \vec{x_{i}} ) - \vec{f}( \vec{x_{j}} ) ||
+\end{aligned}
+\end{equation}
+
+\cite{pires2013entropy} divides the solution space into $ N $ cells, use $ n_{i} $ to denote the number of particles in cell $ i $. Thus an entropy value can be obtained by
+\begin{equation}
+\begin{aligned}
+H = \sum_{1}^{N} \frac{n_{i}}{N} \log{ \frac{n_{i}}{N} }.
+\end{aligned}
+\end{equation}
+
+Here we are interested that each particle can maximize its distance to the nearest other particle in the evaluation space, which is
+\begin{equation}
+\label{eq:diversity_dist}
+\sup_{v \in X \setminus x} || \vec{f}(x) - \vec{f}(v) ||.
+\end{equation}
+
+Formally, we define two metrics to mesaure how $ \vec{f}(X) $ approximate the Pareto front $ P^{*}_{Z} $. They have priority by order.
+\begin{itemize}
+\item minimizing $ \sum_{x \in X}  \left( \inf_{z \in P^{*}_{Z} } || \vec{f}(x) - z  || \right) $,
+\item maximizing $ \sum_{u \in X} \left( \min_{v \in X \setminus u} || \vec{f}(u) - \vec{f}(v) || \right) $.
+\end{itemize}
+
+For each single particle, the equivalent metrics can be 
+\begin{itemize}
+\item minimizing $  \min_{z \in P^{*}_{Z} } || \vec{f}(x) - z  ||  $,
+\item maximizing $ \min_{v \in X \setminus u} || \vec{f}(u) - \vec{f}(v) ||  $.
+\end{itemize}
+
+\subsection{Global best and local best}
+
+\cite{coello2002mopso} proposed to use a randomly choosing global best or local best from archives to make particles diverse. 
+Rather than randomly selecting, \cite{mostaghim2003strategies} calculate a sigma value for selecting a local best from the archives for a particle.
+In a similar idea, \cite{raquel2005effective} uses a crowding distance in global best selection to maintain the diversity.
+
+\cite{alvarez2005mopso} introduced Pareto dominance to global best selection.
+\cite{balling2003maximin} firstly proposed a maximin fitness function applied to multi-objective optimization. 
+Based on that, \cite{li2004better} import this fitness to the PSO algorithm.
+
+In a single objective optimization, each particle has a global best and a local best, which represent the social value and the individual value. 
+\cite{andras2012bayesian} interpret this as that a particle keeps estimating a local best and receiving a global best estimation.
+In a multi-objective optimization problem, the optimal is not a solution but a set of solutions.
+Naturally, a particle needs a local estimation on the non-dominated set and a global estimation on the non-dominated set. 
+
+\cite{branke2006selecting} reviewed the function of local best selection in multi-objective optimization problems. 
+They analyzed several ways of local best selection to illustrate its function on convergence and diversity.
+The person best can be uniformly randomly sampled from known non-dominated solutions, which attracts the particle to some position in the Pareto front.
+
+\subsection{A Maximin fitness function}
+
+\cite{li2004better} used the ``maximin fitness function'' to a PSO framework, which is originally proposed in \cite{balling2003maximin}.
+\begin{mydef}[\textbf{Maximin Fitness Function}]
+\label{def:maximin}
+\begin{equation}
+\label{eq:maximin}
+f_{maximin} (x) = \max_{u \in X; u \neq x} \min_{i = 1, \cdots , k} [ f_{i} (x) - f_{i} (u)  ].
+\end{equation}
+\end{mydef}
+In equation \eqref{eq:maximin}, the term $ \min_{i = 1, \cdots , k} [ f_{i} (x) - f_{i} (u)  ] $ indicates whether $ u $ dominates $ x $.
+If $ u $ dominates $ x $, it means that $ \forall i, f_{i} (u) \leq f_{i} (x) $, we have $ \min_{i = 1, \cdots , k} [ f_{i} (x) - f_{i} (u)  ] \geq 0 $.
+Thus, if a particle is dominated by another particle in the swarm, $ f_{maximin} (x) \geq 0 $.
+By comparing with other particles, we can have an estimation on whether a particle is at a non-dominated position.
+There is a set of estimated non-dominated particles, which is denoted as $ \hat{P}^{*}_{X}  $, which can be considered as an estimation on where the Pareto set is.
+
+\begin{itemize}
+\item $ x \notin \hat{P}^{*}_{X} $, it indicates that $ f_{maximin} (x) \geq 0 $.
+Minimizing $ f_{maximin} (x) $ leads a particle close to $ \hat{P}^{*}_{X} $.
+\item $ x \in \hat{P}^{*}_{X} $, it indicates that $ f_{maximin} (x) \leq 0 $.
+Minimizing $ f_{maximin} (x) $ increases the distance to the farthest particle to the particle $ x $, but this is not equivalent to $ \min_{v \in X \setminus u} || \vec{f}(u) - \vec{f}(v) ||  $.
+Thus the diversity of the particles in $ \hat{P}^{*}_{X} $ can be increased but might not be maximized as we expected.
+\end{itemize}
+
+Because the value of a maximin fitness function is only calculated from the particles in the swarm, it implies that only a small portion in the entire solution spaces are considered.
+
+\begin{propty} 
+\label{prop:nondom_uncertainty}
+\begin{itemize}
+\item $ x \notin \hat{P}^{*}_{X} \Rightarrow x \notin P^{*}_{X} $;
+\item $ x \in  \hat{P}^{*}_{X} \centernot\Rightarrow x \in P^{*}_{X} $.
+\end{itemize}
+\end{propty}
+
+Therefore, when a particle is not in an estimated Pareto set, $ f_{maximin} (x) $ can be a good heuristic to move close to the estimated Pareto set.
+When a particle is in an estimated Pareto set, $ f_{maximin} (x) $ is neither a reliable heuristic to move to the true Pareto set nor a good heuristic to maximize diversity.
+Because a particle is expected to converge into a set and the diversity is maximized, we propose a \emph{global best set} and a \emph{local best set} to guide a particle that is estimated as non-dominated. 
+
+\subsection{A PSO approach on multi-objective optimization}
+
+We propose the modified particle swarm optimization on multi-objective optimization as below.
+\begin{enumerate}
+\item Initialize the positions of all the particles uniformly in the solution space;
+\item Calculate the fitness of each particles by equation \eqref{eq:maximin};
+\item Estimate the non-dominance of each particle;
+\item Update the local best and global best using the fitness value;
+\item If a particle is estimated as non-dominated, update the local best with a sample from the local estimation on the non-dominated set and update the global best with a sample from the global estimation on the non-dominated set;
+\item Update the velocity and position of each particle, 
+\begin{subequations}
+\label{eq:pso_alg}
+\begin{equation}
+\label{eq:up_vel}
+\begin{aligned}
+\vec{v}_{i}(t)  & = \chi [ \vec{v}_{i}(t-1) 
+ + \phi^{P} \vec{u}^{P}_{i}(t-1) \otimes (\vec{x}^{P}_{i}(t-1) - \vec{x}_{i}(t-1)) \\
+& + \phi^{G} \vec{u}^{G}_{i}(t-1) \otimes (\vec{x}^{G}_{i}(t-1) - \vec{x}_{i}(t-1)) ],
+\end{aligned}
+\end{equation}
+\begin{equation}
+\label{eq:up_pos}
+\vec{x}_{i}(t) = \vec{x}_{i}(t-1) + \vec{v}_{i}(t),
+\end{equation}
+\end{subequations}
+in which $ \vec{u}^{P}_{i}(t-1) $ and $ \vec{u}^{G}_{i}(t-1) $ are sampling from uniform distribution $ [0, 1] $;
+\item Update the local estimation on the non-dominated set of each particle and the global estimation on the non-dominated set.
+\end{enumerate}
+
+There exists two questions to be answered, which are
+\begin{itemize}
+\item how to model the estimation on a non-dominated set;
+\item and what the behavior of this algorithm is like.
+\end{itemize}
+
+
+\section{What happens when the global best and local best are set estimations}
+
+As described in the above algorithm, when a particle is estimated to be non-dominated, either the global best $ \vec{x}^{G}_{i} $ or the local best $ \vec{x}^{P}_{i} $ is an sample from an estimated non-dominated set.
+We can model such a sample as a random variable, the domain of which is the region that an estimated non-dominated set covers.
+
+From equation \eqref{eq:up_vel}, we can see that the topological influence in a swarm is maintained by the global best and the local best.
+To each particle, these two terms import
+\begin{itemize}
+\item the influence from other particles to one particle;
+\item the influence from the states in other dimensions to the state in one dimension in a particle.
+\end{itemize}
+When the global best $ \vec{x}^{G}_{i} $ and the local best $ \vec{x}^{P}_{i} $ are random variables that are independent with other states, a particle's motion in one dimension becomes independent with the motions in other dimensions and the motions of other particles.
+Without loss of generality, we look at the motion of one particle in one dimension, which is written as $ x(t) $ and $ v(t) $.
+
+\subsection{Mean analysis}
+
+\begin{thm}
+\label{thm:mean_analysis}
+When 
+\begin{equation}
+| A \pm \sqrt{A^{2} - \chi} | < 1 
+\end{equation}
+and
+\begin{equation}
+A = \frac{2 + 2 \chi - \chi \phi^{P} - \chi \phi^{G}}{4}
+\end{equation}
+the mean of a particle's position converges to 
+\begin{equation}
+\label{eq:mean_rel}
+\begin{aligned}
+E(x) = \frac{ \phi^{P} \bar{x}^{P} + \phi^{G} \bar{x}^{G} }{ \phi^{P} + \phi^{G} }.
+\end{aligned}
+\end{equation}
+\begin{proof}
+The proof is given in Appendix \ref{sec:app:mean}.
+\end{proof}
+\end{thm}
+
+\begin{coro}
+When $ \phi^{G} = \phi^{P} $,
+if $ \bar{x}^{G} = \bar{x}^{P} = \bar{P^{*}_{z}} $,
+then
+\begin{equation}
+E(x) = \bar{P^{*}_{z}}.
+\end{equation}
+\end{coro}
+
+
+
+\subsection{Variance analysis}
+
+\begin{thm}
+\label{thm:var_analysis}
+When the mean of a particle's position has converged, 
+let $ z_{1} $, $ z_{2} $ and $ z_{3} $ be the solutions to 
+\begin{equation}
+z^{3} - (1 - \chi \frac{ \phi^{P} + \phi^{G} }{2} )^{2} - \frac{2}{3} \chi^{2} ( \frac{ {\phi^{P}}^{2} + {\phi^{P}}^{2} }{4} ) ) z^{2} + 2 \chi ( 1 + \chi - \chi \frac{ \phi^{P} + \phi^{G} }{2} )^{2} z - \chi^{2} = 0.
+\end{equation}
+If $ | z_{1} | < 1  $, $ | z_{2} | < 1 $ and $ | z_{3} | < 1 $,
+the variance of a particle's position converges to
+\begin{equation}
+\label{eq:var_rel}
+\begin{aligned}
+& VAR(x) = \frac{(1 + \chi) ( \beta_{1} var(x^{G}) + \beta_{2} var(x^{P}) + \beta_{3} ) }{1 + \chi - \alpha_{2} - 2 \chi^{2} - \chi \alpha_{2} - 2 \chi ( \alpha_{1} )^{2} },
+\end{aligned}
+\end{equation}
+in which 
+\begin{equation}
+\alpha_{1} =  1 + \chi - \chi g - \chi p,
+\end{equation}
+\begin{equation}
+\alpha_{2} = (1 + \chi - \chi ( p + g ))^{2} - \frac{2}{3} \chi^{2} ( g^{2} + p^{2} ), 
+\end{equation}
+\begin{equation}
+\beta_{1} = \frac{1}{3} \chi^{2} g^{2},
+\end{equation}
+\begin{equation}
+\beta_{2} = \frac{1}{3} \chi^{2} p^{2}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+\beta_{3} & = \frac{1}{3} \chi^{2} ( g^{2} (  \bar{x}^{G} - E(x) )^{2}  + p^{2} ( \bar{x}^{P} - E(x) )^{2} ) \\
+ + & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ].
+ \end{aligned}
+\end{equation}
+
+\begin{proof}
+The proof is given in Appendix \ref{sec:app:variance}.
+\end{proof}
+\end{thm}
+
+\section{How to generate a good estimation}
+
+\subsection{A binary Bayesian classification approach}
+
+As stated in \cite{bratton2007defining}, there exists a balance between global exploration and local exploration in a PSO algorithm.
+In a multi-objective optimization, we define the global exploration as an estimation of the non-dominated set from the swarm and the local exploration of a particle as an estimation of the non-dominated set from the history of the observations on the visited positions. 
+
+Determining a non-dominated set in a solution space can be viewed as a binary classification problem. 
+We classify the solution space into a non-dominated region and a dominated region.
+We define the observation at a position by the estimation on whether this position is non-dominated.
+The ``training dataset'' for the classifier is the observation from explored positions.
+Thus there exists a global classifier from the global exploration. Each particle also has a local classifier from its local exploration.
+From Property \ref{prop:nondom_uncertainty}, we know that the ``observation'' are also noised.
+Therefore, we import a binary Bayesian classifier.
+
+Let $ x $ be a position and $ y $ be a boolean value to indicate its non-dominance.
+Define a tuple for the observation at a position as $ (x_{i}, y_{i}) $.
+$ x_{i} $ is a visited position and $ y_{t} $ is the estimation on the non-dominance at position $ x_{i} $.
+We can have a set of observations from the exploration, which are $ { (x_{1}, y_{1}), (x_{2}, y_{2}) , \cdots , (x_{N}, y_{N}) } $. 
+We are interested with $ P(y \mid x, x_{1}, \cdots x_{N}, y_{1} \cdots y_{N} ) $, which can be used to generate an estimated non-dominated set and generate samples from the estimated non-dominated set.
+
+\subsection{A solution using Gaussian process}
+
+
+
+
+\section{Simulation}
+
+\cite{zitzler2000comparison} propose a set of standard test functions to evaluate the performance of a multi-objective optimizer.
+In this paper, we focus only on
+\begin{itemize}
+\item ZDT1: the test function has a convex Pareto front,
+\item ZDT2: the test function has a non-convex Pareto front,
+\item ZDT3: the test function has a Pareto front which consists of several noncontiguous convex parts,
+\item ZDT4: the test function has a local Pareto front and a global Pareto front,
+\item ZDT6: the test function has a Pareto front which is not uniformly distributed.
+\end{itemize}
+
+\section{Conclusion}
+
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{sigproc}
+
+\appendix
+
+\section{Mean}
+\label{sec:app:mean}
+
+From equations \eqref{eq:up_vel} and \eqref{eq:up_pos}, we can have
+\begin{equation}
+\label{eq:one_dim_vel_up}
+\begin{aligned}
+v(t) & = \chi ( v(t-1) + \phi^{P} u^{P}(t-1) (x^{P}(t-1) - \vec{x}_{i}(t-1)) \\
+& + \phi^{G} u^{G}(t-1) (x^{G}(t-1) - x(t-1))  ),
+\end{aligned}
+\end{equation}
+and 
+\begin{equation}
+\label{eq:one_dim_pos_up}
+x(t) = x(t-1) + v(t). \\
+\end{equation}
+
+By applying equation \eqref{eq:one_dim_vel_up} to equation \eqref{eq:one_dim_pos_up}, we have
+\begin{equation}
+\label{eq:one_dim_pos_up2}
+\begin{aligned}
+x(t) & = ( 1 + \chi - \chi \phi^{G} u^{G}(t-1) - \chi \phi^{P} u^{P}(t-1) ) x(t-1) \\
+& - \chi x(t-2) + \chi \phi^{G} u^{G}(t-1) x^{G}(t-1) \\
+& + \chi \phi^{P} u^{P}(t-1) x^{P}(t-1).
+\end{aligned}
+\end{equation}
+
+Let
+\begin{equation}
+\label{eq:def_p}
+p(t) = \phi^{P} u^{P}(t)
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_g}
+g(t) = \phi^{G} u^{G}(t).
+\end{equation}
+
+By applying equation \eqref{eq:def_p} and equation \eqref{eq:def_g} to equation \eqref{eq:one_dim_pos_up2}, we can have
+\begin{equation}
+\label{eq:one_dim_pos_up3}
+\begin{aligned}
+x(t) & = ( 1 + \chi - \chi g(t-1) - \chi p(t-1) ) x(t-1) - \chi x(t-2) \\
+& + \chi g(t-1) x^{G}(t-1) + \chi p(t-1) x^{P}(t-1).
+\end{aligned}
+\end{equation}
+
+By equation \eqref{eq:def_p} and equation \eqref{eq:def_g}, we have
+\begin{equation}
+\label{eq:p_mean}
+E( p(t) ) = \phi^{P} / 2 = p
+\end{equation}
+and
+\begin{equation}
+\label{eq:g_mean}
+E( g(t) ) = \phi^{G} / 2 = g.
+\end{equation}
+
+Take the mean on equation \eqref{eq:one_dim_pos_up3}, we have the mean $ E(x(t)) $ as
+\begin{equation}
+\label{eq:one_dim_pos_up_mean}
+\begin{aligned}
+E( x(t) ) & = ( 1 + \chi - \chi p - \chi g ) E( x(t-1) ) - \chi E( x(t-2) ) \\ 
+& + \chi p E( x^{G}(t-1) ) + \chi g E( x^{P}(t-1) ).
+\end{aligned}
+\end{equation}
+
+Let $ E( x^{G}(t-1) ) = \bar{x}^{G} $ and $ E( x^{P}(t-1) ) = \bar{x}^{P} $.
+By applying z-transform on equation \eqref{eq:one_dim_pos_up_mean}, we can have
+\begin{equation}
+\label{eq:one_dim_pos_up_z_trans}
+E(x(z)) = ( 1 + \chi - \chi p - \chi g ) E(x(z)) z^{-1} - \chi E(x(z)) z^{-2} + \chi p \bar{x}^{P} + \chi g \bar{x}^{G}.
+\end{equation}
+
+\begin{equation}
+\label{eq:one_dim_pos_up_z_trans1}
+E(x(z)) = \frac{c^{P} \bar{x}^{P} + c^{G} \bar{x}^{G}}{z^{2} - (1 + \chi - c^{P} - c^{G} ) z + \chi }
+\end{equation}
+
+We can have equilibrium point as 
+\begin{equation}
+E(x) = \frac{ \chi p \bar{x}^{P} + \chi g \bar{x}^{G} }{ \chi p + \chi g } = \frac{ \phi^{P} \bar{x}^{P} + \phi^{G} \bar{x}^{G} }{ \phi^{P} + \phi^{G} }
+.
+\end{equation}
+
+By theorem []
+The stability criteria are that the poles in the unit circle.
+We have the poles 
+\begin{equation}
+\label{eq:mean_poles}
+p_{1,2} = \frac{ 1 + \chi - \chi p - \chi g }{2} \pm \sqrt{ \left( \frac{ 1 + \chi - \chi p - \chi g }{2} \right)^{2} - \chi }
+\end{equation}
+Let 
+\begin{equation}
+\label{eq:A}
+A = \frac{ 2 + 2 \chi - \chi \phi^{P} - \chi \phi^{G} }{4}.
+\end{equation}
+When
+\begin{equation}
+| A \pm \sqrt{ A^{2} - \chi } | < 1,
+\end{equation}
+$ E(x(t)) $ converges.
+
+
+\section{Variance}
+\label{sec:app:variance}
+
+Assume that $ x^{G}(t) $ and $ x^{P}(t) $ are converged so that we have their means and variances as constant, which are 
+$ \bar{x}^{G} $, $ \bar{x}^{P} $, $ var({x}^{G}) $ and $ var({x}^{P}) $ respectively.
+
+Let
+\begin{equation}
+\label{eq:def_delta_x}
+\Delta x(t) = x(t) - E(x).
+\end{equation}
+
+From equation \eqref{eq:one_dim_pos_up2}, we can have
+\begin{equation}
+\label{eq:one_dim_delta_pos_up}
+\begin{aligned}
+\Delta x(t) & = ( 1 + \chi - \chi \phi^{G} u^{G}(t-1) - \chi \phi^{P} u^{P}(t-1) ) x(t-1) \\
+& - \chi x(t-2) + \chi \phi^{G} u^{G}(t-1) x^{G}(t-1) \\
+& + \chi \phi^{P} u^{P}(t-1) x^{P}(t-1) - E(x) \\
+& = (1 + \chi - \chi p(t-1) - \chi g(t-1) ) x(t-1) - \chi x(t-2) \\
+& + \chi g(t-1) x^{G}(t-1) + \chi p(t-1) x^{P}(t-1) - E(x) \\
+& = (1 + \chi - \chi p(t-1) - \chi g(t-1) ) \Delta x(t-1)  - \chi \Delta x(t-2) \\
+& + \chi g(t-1) ( x^{G}(t-1) - E(x) ) + \chi p(t-1) ( x^{P}(t-1) - E(x) )
+\end{aligned}
+\end{equation}
+
+Let 
+\begin{equation}
+\label{eq:delta_x_g}
+\Delta x^{G}(t-1) =  x^{G}(t-1) - E(x)
+\end{equation}
+and
+\begin{equation}
+\label{eq:delta_x_p}
+\Delta x^{P}(t-1) =  x^{P}(t-1) - E(x).
+\end{equation}
+Let
+\begin{equation}
+\label{eq:b_t}
+B(t-1) = 1 + \chi - \chi g(t-1) - \chi p(t-1),
+\end{equation}
+and
+\begin{equation}
+\label{eq:c_t}
+\begin{aligned}
+C(t-1) & = \chi g(t-1) \Delta x^{G}(t-1) + \chi p(t-1) \Delta x^{P}(t-1) \\
+& = \chi [ g(t-1) ( x^{G}(t-1) - E(x) ) + p(t-1) ( x^{P}(t-1) - E(x) ) ].
+\end{aligned}
+\end{equation}
+
+We have equation \eqref{eq:one_dim_delta_pos_up} written as
+\begin{equation}
+\label{eq:delta_x_1}
+\Delta x(t) = B(t-1) \Delta x(t-1) - \chi \Delta x(t-2) + C(t-1) . 
+\end{equation}
+
+By equation \eqref{eq:one_dim_delta_pos_up}, we have 
+\begin{equation}
+\label{eq:one_dim_delta2_pos_up}
+\begin{aligned}
+{(\Delta x(t) )}^{2} & = [ B(t-1) \Delta x(t-1) - \chi \Delta x(t-2) + C(t-1) ]^{2}  \\
+& = B(t-1)^{2} ( \Delta x(t-1) )^{2} + \chi^{2} ( \Delta x(t-2) )^{2} \\
+& + C(t-1)^{2} - 2 \chi B(t-1) \Delta x(t-1) \Delta x(t-2) \\ 
+& + 2 B(t-1) C(t-1) \Delta x(t-1)  - 2 \chi C(t-1) \Delta x(t-2).
+\end{aligned}
+\end{equation}
+
+By the definition of variance 
+\begin{equation}
+\label{eq:def_var}
+var(x(t)) = E[ ( \Delta x(t) )^{2} ].
+\end{equation}
+
+\begin{equation}
+\label{eq:expand_var}
+\begin{aligned}
+E[ (\Delta x(t))^{2} ] & = E( ( B(t-1) )^{2} ) E( ( \Delta x(t-1) )^{2} ) \\
+& + \chi^{2} E( ( \Delta x(t-2) )^{2} ) \\
+& + E( ( C(t-1) )^{2} ) \\
+& - 2 \chi E( B(t-1) ) E( \Delta x(t-1) \Delta x(t-2) ) \\
+& + 2 E( B(t-1) C(t-1) ) E( \Delta x(t-1) )   \\
+& - 2 \chi E( C(t-1) ) E( \Delta x(t-2) ) .
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:a_t_mean}
+\begin{aligned}
+E( B(t-1) ) = 1 + \chi - \chi g - \chi p = \alpha_{1}.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_t_mean}
+\begin{aligned}
+E( C(t-1) ) & = \chi (g \bar{x}^{G} + p \bar{x}^{P})  - \chi (g + p) E(x)
+ = 0
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+& B(t-1) )^{2} \\
+& = ( 1 + \chi - \chi p(t-1) - \chi g(t-1) )^{2} \\
+& = (1 + \chi)^{2} - 2 \chi(1 + \chi) ( p(t-1) + g(t-1) ) + ( \chi p(t-1) + \chi g(t-1) )^{2} \\
+& = (1 + \chi)^{2} - 2 \chi(1 + \chi) ( p(t-1) + g(t-1) ) \\
+& + \chi^{2} p(t-1)^{2} + \chi^{2} g(t-1)^{2} + 2 \chi^{2} p(t-1) g(t-1).
+\end{aligned} 
+\end{equation}
+
+\begin{equation}
+\label{eq:a_t_2_mean}
+\begin{aligned}
+& E( ( B(t-1) )^{2} ) \\
+& = (1 + \chi)^{2} - 2 \chi(1 + \chi) ( p + g )  + \chi^{2} E( p(t-1)^{2} ) \\
+& + \chi^{2} E( g( t-1 )^{2} )
++ 2 \chi^{2} E( p(t-1) g(t-1) ) \\
+\end{aligned}
+\end{equation}
+
+Because $ u^{P}(t-1) $ and $ u^{G}(t-1) $ are independent,
+we have
+\begin{equation}
+E( p(t-1) g(t-1) ) = \frac{ \phi^{P} \phi^{G} }{4} = p g.
+\end{equation}
+
+We also have
+\begin{equation}
+\begin{aligned}
+E( p(t-1)^{2} ) = ( \phi^{P} )^{2} E( (u^{P}(t-1))^{2} ) = \frac{1}{12} ( \phi^{P} )^{2} = \frac{1}{3} p^{2}
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+E( g(t-1)^{2} ) = ( \phi^{G} )^{2} E( (u^{G}(t-1))^{2} ) = \frac{1}{12} ( \phi^{G} )^{2} = \frac{1}{3} g^{2}
+\end{aligned}
+\end{equation} 
+
+Thus, we can rewrite equation \eqref{eq:a_t_2_mean} as 
+\begin{equation}
+\label{eq:def_alpha_2}
+\begin{aligned}
+& E( ( B(t-1) )^{2} ) \\
+& = (1 + \chi)^{2} - 2 \chi(1 + \chi) ( p + g ) +  \chi^{2} \frac{ ( p^{2} + g^{2} ) }{3} + 2 \chi^{2} p g \\
+& = (1 + \chi - \chi ( p + g ))^{2} - \frac{2}{3} \chi^{2} ( g^{2} + p^{2} )  \\
+& = \alpha_{2}.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\label{eq:c_2}
+( C(t-1) )^{2} & = \chi^{2} [ g(t-1) ( x^{G}(t-1) - E(x) ) + p(t-1) ( x^{P}(t-1) - E(x) ) ]^{2} \\
+& = \chi^{2} [ g(t-1)^{2} ( x^{G}(t-1) - E(x) )^{2} + p(t-1)^{2} ( x^{P}(t-1) - E(x) )^{2}  \\
+& + 2 g(t-1) p(t-1) ( x^{G}(t-1) - E(x) ) ( x^{P}(t-1) - E(x) ) ] \\
+& = \chi^{2} g(t-1)^{2} [ ( x^{G}(t-1) )^{2} - 2 x^{G}(t-1) E(x) + ( E(x) )^{2} ] \\
+& + \chi^{2} p(t-1)^{2} [ ( x^{P}(t-1) )^{2} - 2 x^{P}(t-1) E(x) + ( E(x) )^{2} ]  \\
+& + 2 \chi^{2} g(t-1) p(t-1)[ x^{G}(t-1) x^{P}(t-1) - x^{P}(t-1) E(x) - x^{G}(t-1) E(x) + ( E(x) )^{2} ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:c_2_mean:1}
+\begin{aligned}
+& E( g(t-1)^{2} [ ( x^{G}(t-1) )^{2} - 2 x^{G}(t-1) E(x) + ( E(x) )^{2} ] ) \\
+= & E( g(t-1)^{2} ) [ E( ( x^{G}(t-1) )^{2} )  - 2 E( x^{G}(t-1) ) E(x) + ( E(x) )^{2} ] \\
+= & \frac{1}{3} g^{2} [ var(x^G)(t-1)  + ( E( x^{G}(t-1) ) )^{2} - 2 E( x^{G}(t-1) ) E(x) + ( E(x) )^{2} ] \\
+\end{aligned}
+\end{equation}
+
+Similarly, we have
+\begin{equation}
+\label{eq:c_2_mean:2}
+\begin{aligned}
+& E( p(t-1)^{2} [ ( x^{P}(t-1) )^{2} - 2 x^{p}(t-1) E(x) + ( E(x) )^{2} ] ) \\
+= & E( p(t-1)^{2} ) [ E( ( x^{P}(t-1) )^{2} )  - 2 E( x^{P}(t-1) ) E(x) + ( E(x) )^{2} ] \\
+= & \frac{1}{3} p^{2} [ var(x^P)(t-1)  + ( E( x^{P}(t-1) ) )^{2} - 2 E( x^{P}(t-1) ) E(x) + ( E(x) )^{2} ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:c_2_mean:3}
+\begin{aligned}
+& E( g(t-1) p(t-1)[ x^{G}(t-1) x^{P}(t-1) - x^{P}(t-1) E(x) - x^{G}(t-1) E(x) + ( E(x) )^{2} ] ) \\
+= & E( g(t-1) ) E( p(t-1) ) [ E( x^{G}(t-1) x^{P}(t-1) ) - E( x^{P}(t-1) ) E(x) - E( x^{G}(t-1) ) + ( E(x) )^{2} ] \\
+= & g p [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ]
+\end{aligned}
+\end{equation}
+
+
+By applying mean to equation \eqref{eq:c_2}, we have
+\begin{equation}
+\label{eq:c_2_mean}
+\begin{aligned}
+& E( ( C(t-1) )^{2} ) \\
+= & \chi^{2} E( g(t-1)^{2} [ ( x^{G}(t-1) )^{2} - 2 x^{G}(t-1) E(x) + ( E(x) )^{2} ] ) \\
++ & \chi^{2} E( p(t-1)^{2} [ ( x^{P}(t-1) )^{2} - 2 x^{p}(t-1) E(x) + ( E(x) )^{2} ] ) \\
++ & 2 \chi^{2} E( g(t-1) p(t-1)[ x^{G}(t-1) x^{P}(t-1) - x^{P}(t-1) E(x) - x^{G}(t-1) E(x) + ( E(x) )^{2} ] ) \\
+= & \frac{1}{3} g^{2} \chi^{2} [ var(x^G)(t-1)  + ( E( x^{G}(t-1) ) )^{2} - 2 E( x^{G}(t-1) ) E(x) + ( E(x) )^{2} ] \\
++ & \frac{1}{3} p^{2} \chi^{2} [ var(x^P)(t-1)  + ( E( x^{P}(t-1) ) )^{2} - 2 E( x^{P}(t-1) ) E(x) + ( E(x) )^{2} ] \\
++ & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ] \\
+= & \frac{1}{3} g^{2} \chi^{2} [ var(x^G)(t-1)  + ( \bar{x}^{G} )^{2} - 2 \bar{x}^{G} E(x) + ( E(x) )^{2} ] \\
++ & \frac{1}{3} p^{2} \chi^{2} [ var(x^P)(t-1)  + ( \bar{x}^{P} )^{2} - 2 \bar{x}^{P} E(x) + ( E(x) )^{2} ] \\
++ & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ] \\
+= & \frac{1}{3} g^{2} \chi^{2} [ var(x^G)  + ( \bar{x}^{G} )^{2} - 2 \bar{x}^{G} E(x) + ( E(x) )^{2} ]
++ \frac{1}{3} p^{2} \chi^{2} [ var(x^P)  + ( \bar{x}^{P} )^{2} - 2 \bar{x}^{P} E(x) + ( E(x) )^{2} ] \\
++ & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ] \\
+= & \frac{1}{3} \chi^{2} ( g^{2} var(x^{G}) + p^{2} var(x^{P}) ) + \frac{1}{3} \chi^{2} ( g^{2} (  \bar{x}^{G} - E(x) )^{2}  + p^{2} ( \bar{x}^{P} - E(x) )^{2} ) \\
+ + & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ].
+\end{aligned}
+\end{equation}
+
+Let 
+\begin{equation}
+\label{eq:def_beta_1}
+\beta_{1} = \frac{1}{3} \chi^{2} g^{2},
+\end{equation}
+
+\begin{equation}
+\label{eq:def_beta_2}
+\beta_{2} = \frac{1}{3} \chi^{2} p^{2}
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_beta_3}
+\begin{aligned}
+\beta_{3} & = \frac{1}{3} \chi^{2} ( g^{2} (  \bar{x}^{G} - E(x) )^{2}  + p^{2} ( \bar{x}^{P} - E(x) )^{2} ) \\
+ + & 2 g p \chi^{2} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ],
+ \end{aligned}
+\end{equation}
+we have
+\begin{equation}
+\label{eq:c_2_mean:new}
+\begin{aligned}
+E( ( C(t-1) )^{2} ) & = \beta_{1} var(x^{G}) + \beta_{2} var(x^{P}) + \beta_{3} \\
+& = \beta .
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c}
+\begin{aligned}
+& B(t-1)C(t-1) \\
+= & [ 1 + \chi - \chi g(t-1) - \chi p(t-1) ] C(t-1) \\
+= & (1 + \chi) C(t-1) - \chi ( g(t-1) + p(t-1) ) C(t-1) \\
+= & (1 + \chi) C(t-1) \\
+& - \chi^{2} ( g(t-1) + p(t-1) ) [ g(t-1) ( x^{G}(t-1) - E(x) ) + p(t-1) ( x^{P}(t-1) - E(x) ) ] \\
+= & (1 + \chi) C(t-1) \\
+& - \chi^{2} ( ( g(t-1) )^{2} + g(t-1) p(t-1) ) ( x^{G}(t-1) - E(x) ) \\
+& - \chi^{2} ( ( p(t-1) )^{2} + g(t-1) p(t-1) ) ( x^{P}(t-1) - E(x) ) \\
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:1}
+E( (1 + \chi) C(t-1) ) = (1 + \chi) E( C(t-1) ) = 0.
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:2}
+\begin{aligned}
+& E( ( ( g(t-1) )^{2} + g(t-1) p(t-1) ) ( x^{G}(t-1) - E(x) ) ) \\
+= & E( ( g(t-1) )^{2} + g(t-1) p(t-1) ) E( x^{G}(t-1) - E(x) ) \\
+= & ( E( ( g(t-1) )^{2} ) + E( g(t-1) ) E( p(t-1) ) ) ( E(x^{G}(t-1)) - E(x) ) \\
+= & ( \frac{g^{2}}{3} + p g ) ( E(x^{G}(t-1)) - E(x) )
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:3}
+\begin{aligned}
+& E( ( ( p(t-1) )^{2} + g(t-1) p(t-1) ) ( x^{P}(t-1) - E(x) ) ) \\
+= & E( ( p(t-1) )^{2} + g(t-1) p(t-1) ) E( x^{P}(t-1) - E(x) ) \\
+= & ( E( ( p(t-1) )^{2} ) + E( g(t-1) ) E( p(t-1) ) ) ( E(x^{P}(t-1)) - E(x) ) \\
+= & ( \frac{p^{2}}{3} + p g ) ( E(x^{G}(t-1)) - E(x) )
+\end{aligned}
+\end{equation}
+
+Thus we have
+\begin{equation}
+\label{eq:b_c_mean}
+\begin{aligned}
+& E( B(t-1)C(t-1) )  \\
+= & - \chi^{2} ( \frac{g^{2}}{3} + p g ) ( E(x^{G}(t-1)) - E(x) ) \\
+& - \chi^{2} ( \frac{p^{2}}{3} + p g ) ( E(x^{G}(t-1)) - E(x) )
+\end{aligned}
+\end{equation}
+
+Assume that $ E(x(t)) $ has converged to $ E(x) $, we have $ E( \Delta x(t-1) ) = 0 $.
+
+Thus, equation \eqref{eq:expand_var} can be written as
+\begin{equation}
+\label{eq:expand_var2}
+\begin{aligned}
+E[ (\Delta x(t))^{2} ] & = \alpha_{2} E( ( \Delta x(t-1) )^{2} ) \\
+& + \chi^{2} E( ( \Delta x(t-2) )^{2} ) + \beta  \\
+& - 2 \chi \alpha_{1} E( \Delta x(t-1) \Delta x(t-2) ).
+\end{aligned}
+\end{equation}
+
+By equation \eqref{eq:delta_x_1}
+\begin{equation}
+\label{eq:delta_x_t_1}
+\Delta x(t-1) = B(t-2) \Delta x(t-2) - \chi \Delta x(t-3) + C(t-2).
+\end{equation}
+
+By multiplying $ \Delta x(t-2) $ to equation \eqref{eq:delta_x_t_1}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2}
+\Delta x(t-1) \Delta x(t-2) = B(t-2) ( \Delta x(t-2) )^{2} - \chi \Delta x(t-3) \Delta x(t-2) + C(t-2) \Delta x(t-2).
+\end{equation}
+
+By taking mean over equation \eqref{eq:delta_x_t_1_x_t_2}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean}
+\begin{aligned}
+E( \Delta x(t-1) \Delta x(t-2) )E[ (\Delta x(t-1))^{2} ] & = E( B(t-2) ) E( ( \Delta x(t-2) )^{2} ) - \chi E( \Delta x(t-3) \Delta x(t-2) ) \\
+& + E( C(t-2) ) E( \Delta x(t-2) ).
+\end{aligned}
+\end{equation}
+
+By applying $ E( \Delta x(t-2) ) = 0 $ and $ E( B(t-2) ) = \alpha_{1} $, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean:2}
+E( \Delta x(t-1) \Delta x(t-2) ) = \alpha_{1} E( ( \Delta x(t-2) )^{2} ) - \chi E( \Delta x(t-3) \Delta x(t-2) ).
+\end{equation}
+
+By reorganizing equation \eqref{eq:delta_x_t_1_x_t_2_mean:2}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean:3}
+E( \Delta x(t-1) \Delta x(t-2) ) + \chi E( \Delta x(t-2) \Delta x(t-3) ) = \alpha_{1} E( ( \Delta x(t-2) )^{2} ) .
+\end{equation}
+
+By replacing $ t $ with $ t - 1 $ in equation \eqref{eq:expand_var2}, we have
+\begin{equation}
+\label{eq:expand_var3}
+\begin{aligned}
+E[ (\Delta x(t-1))^{2} ] & = \alpha_{2} E( ( \Delta x(t-2) )^{2} ) \\
+& + \chi^{2} E( ( \Delta x(t-3) )^{2} ) + \beta \\
+& - 2 \chi \alpha_{1} E( \Delta x(t-2) \Delta x(t-3) ).
+\end{aligned}
+\end{equation}
+
+By multiplying $ E[ (\Delta x(t-1))^{2} ] $ with $ \chi $ and summing with $ E[ (\Delta x(t))^{2} ] $, we have
+\begin{equation}
+\label{eq:generate_minus}
+\begin{aligned}
+& E[ (\Delta x(t))^{2} ] + \chi E[ (\Delta x(t-1))^{2} ] \\
+= & [ \alpha_{2} E( ( \Delta x(t-1) )^{2} ) + \chi^{2} E( ( \Delta x(t-2) )^{2} ) + \beta - 2 \chi \alpha_{1} E( \Delta x(t-1) \Delta x(t-2) ) ] \\
+& + \chi [  \alpha_{2} E( ( \Delta x(t-2) )^{2} ) + \chi^{2} E( ( \Delta x(t-3) )^{2} ) + \beta - 2 \chi \alpha_{1} E( \Delta x(t-2) \Delta x(t-3) ) ] \\
+& = \alpha_{2} E( ( \Delta x(t-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} ) E( ( \Delta x(t-2) )^{2} ) + \chi^{2} E( ( \Delta x(t-3) )^{2} ) \\
+& + \beta ( 1 + \chi ) - 2 \chi \alpha_{1} [ E( \Delta x(t-1) \Delta x(t-2) ) + \chi E( \Delta x(t-2) \Delta x(t-3) ) ].
+\end{aligned}
+\end{equation}
+
+By replacing equation \eqref{eq:delta_x_t_1_x_t_2_mean:3} with term $  E( \Delta x(t-1) \Delta x(t-2) ) + \chi E( \Delta x(t-2) \Delta x(t-3) )  $ in equation \eqref{eq:generate_minus}, we have
+\begin{equation}
+\label{eq:generate_minus:2}
+\begin{aligned}
+& E[ (\Delta x(t))^{2} ] + \chi E[ (\Delta x(t-1))^{2} ] \\
+= & \alpha_{2} E( ( \Delta x(t-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} ) E( ( \Delta x(t-2) )^{2} ) + \chi^{2} E( ( \Delta x(t-3) )^{2} ) \\
+& + \beta (1 + \chi ) - 2 \chi ( \alpha_{1} )^{2}   E( ( \Delta x(t-2) )^{2} ) \\
+= & \alpha_{2} E( ( \Delta x(t-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} - 2 \chi ( \alpha_{1} )^{2} ) E( ( \Delta x(t-2) )^{2} ) + \chi^{2} E( ( \Delta x(t-3) )^{2} ) \\
+& + \beta (1 + \chi ) 
+\end{aligned}
+\end{equation}
+
+By writing $ E[ (\Delta x(t))^{2} ] $ as $ var(x(t)) $, we have equation \eqref{eq:generate_minus:2} as
+\begin{equation}
+\label{eq:generate_minus:3}
+\begin{aligned}
+& var(x(t)) + (\chi - \alpha_{2} ) var(x(t-1)) - ( \chi^{2} + \chi \alpha_{2} + 2 \chi ( \alpha_{1} )^{2} ) var(x(t-2)) \\
+& - \chi^{2} var(x(t-3)) - \beta (1 + \chi ) = 0.
+\end{aligned}
+\end{equation}
+
+From equation \eqref{eq:generate_minus:3}, we can find that the equilibrium is 
+\begin{equation}
+\label{eq:var_equilibrium}
+var(x) = \frac{(1 + \chi) \beta}{1 + \chi - \alpha_{2} - 2 \chi^{2} - \chi \alpha_{2} - 2 \chi ( \alpha_{1} )^{2} }
+\end{equation}
+
+By applying z-transform to equation \eqref{eq:generate_minus:3}, we have
+\begin{equation}
+\label{eq:var_z_trans:1}
+\begin{aligned}
+& var(x(z)) + (\chi - \alpha_{2} ) var(x(z))z^{-1}  - ( \chi^{2} + \chi \alpha_{2} + 2 \chi ( \alpha_{1} )^{2} ) var(x(z)) z^{-2} - \chi^{2} var(x(z)) z^{-3} = (1 + \chi) \beta.
+\end{aligned}
+\end{equation}
+
+By organizing equation \eqref{eq:var_z_trans:1}, we have
+\begin{equation}
+\label{eq:var_z_trans:2}
+var(x(z)) = \frac{(1 + \chi) \beta z^{3}}{z^{3} + (\chi - \alpha_{2} ) z^{2} + 2 \chi ( \alpha_{1} )^{2} ) z - \chi^{2} }.
+\end{equation}
+
+The characteristic equation is
+\begin{equation}
+\label{eq:var_characteristic}
+z^{3} + (\chi - \alpha_{2} ) z^{2} + 2 \chi ( \alpha_{1} )^{2} z - \chi^{2} = 0.
+\end{equation}
+
+By replacing $ \alpha_{1} $ with equation \eqref{eq:a_t_mean} and replacing $ \alpha_{2} $ with equation \eqref{eq:def_alpha_2}, we have
+\begin{equation}
+\label{eq:var_characteristic:2}
+z^{3} - (1 - \chi ( p + g ))^{2} - \frac{2}{3} \chi^{2} ( g^{2} + p^{2} ) ) z^{2} + 2 \chi ( 1 + \chi - \chi g - \chi p )^{2} z - \chi^{2} = 0.
+\end{equation}
+
+By replacing $ p $ with $ \frac{\phi^{P}}{2} $ and replacing $ g $ with $ \frac{\phi^{G}}{2} $, we have
+\begin{equation}
+\label{eq:var_characteristic:3}
+z^{3} - (1 - \chi \frac{ \phi^{P} + \phi^{G} }{2} )^{2} - \frac{2}{3} \chi^{2} ( \frac{ {\phi^{P}}^{2} + {\phi^{P}}^{2} }{4} ) ) z^{2} + 2 \chi ( 1 + \chi - \chi \frac{ \phi^{P} + \phi^{G} }{2} )^{2} z - \chi^{2} = 0.
+\end{equation}
+
+
+
+We can use Jury test to verify the stability.
+
+
+
+
+=================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{equation}
+\label{eq:delta_t_1_2}
+\begin{aligned}
+& \Delta x(t-1) \Delta x(t-2) = a(t-2) ( \Delta x(t-2) )^{2} \\
+& - \chi \Delta x(t-3) \Delta x(t-2) + b(t-2) \Delta x(t-2).
+\end{aligned}
+\end{equation}
+Thus we have 
+\begin{equation}
+\label{eq:delta_t_1_2_mean}
+\begin{aligned}
+& E( \Delta x(t-1) \Delta x(t-2) ) \\
+& = a E ( \Delta x(t-2) )^{2} ) - \chi E( \Delta x(t-3) \Delta x(t-2) ).
+\end{aligned}
+\end{equation}
+It is equivalent to
+\begin{equation}
+\label{eq:delta_t_1_2_mean2}
+\begin{aligned}
+&  a E ( \Delta x(t-2) )^{2} )  \\
+& = E( \Delta x(t-1) \Delta x(t-2) ) + \chi E( \Delta x(t-3) \Delta x(t-2) ).
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:gene_minus}
+\begin{aligned}
+& E[ (\Delta x(t))^{2} ] + \chi E[ (\Delta x(t-1))^{2} ] \\
+& = a2 E[ (\Delta x(t-1))^{2} ] + \chi a2 E[ (\Delta x(t-2))^{2} ] \\
+& + \chi^{2} E[ (\Delta x(t-2))^{2} ] + \chi^{3} E[ (\Delta x(t-3))^{2} ] \\
+& + b2 + \chi b2 - 2 \chi {a1}^{2} E( \Delta x(t-2) )^{2} ).
+\end{aligned}
+\end{equation}
+Thus we can have
+\begin{equation}
+\begin{aligned}
+& var(x(t)) + (\chi - a2) var(x(t-1)) \\
+& - (\chi a2 + \chi^{2} - 2 \chi {a1}^{2} ) var(x(t-2)) - \chi^{3} var(x(t-3)) \\
+& = (1+\chi) b2.
+\end{aligned}
+\end{equation}
+We can have the equilibrium point is 
+\begin{equation}
+\label{eq:var_equilirium}
+\begin{aligned}
+VAR(x) = \frac{ (1+\chi) b2 }{ 1 + \chi + 2 \chi {a1}^{2} - a2 - \chi a2  - \chi^{2} - \chi^{3}  }
+\end{aligned}
+\end{equation}
+
+We have
+
+\begin{equation}
+\label{eq:b_t_2_mean2}
+\begin{aligned}
+& b2 = 
+\frac{\chi^{2}}{3} (c^{G})^{2} VAR( x^{G} )  + \frac{\chi^{2}}{3} (c^{P})^{2} VAR( (x^{P} )  \\
+& + \frac{\chi^{2}}{3} (c^{G})^{2} (\bar{x}^{G})^{2} 
++ \frac{\chi^{2}}{3} (c^{P})^{2} (\bar{x}^{P})^{2}  \\
+& - \frac{2 \chi^{2} }{3} ( (c^{G})^{2} \bar{x}^{G} + (c^{P})^{2} \bar{x}^{P} ) E(x)  + \frac{\chi^{2}}{3} E(x)^{2} ( (c^{G})^{2} + (c^{P})^{2} ) \\
+& + 2 \chi^{2} c^{G} c^{P} ( \bar{x}^{G} - E(x) ) ( \bar{x}^{P} - E(x) ) \\
+& = \frac{\chi^{2}}{3} (c^{G})^{2} VAR( x^{G} )  + \frac{\chi^{2}}{3} (c^{P})^{2} VAR( (x^{P} ) + b2'
+\end{aligned}
+\end{equation}
+
+Thus,
+\begin{equation}
+\label{eq:var_equilirium2}
+\begin{aligned}
+& VAR(x) = \frac{ (1+\chi)  }{ 1 + \chi + 2 \chi {a1}^{2} - a2 - \chi a2  - \chi^{2} - \chi^{3}  } \\
+& ( \frac{\chi^{2}}{3} (c^{G})^{2} VAR( x^{G} )  + \frac{\chi^{2}}{3} (c^{P})^{2} VAR( (x^{P} ) + b2'  )
+\end{aligned}
+\end{equation}
+
+\section{Equivalence proof}
+
+We have a simplified notation for equations \eqref{eq:pso_alg}, which are
+\begin{equation}
+\label{eq:equal:vel_up1}
+v(t) = \chi [ v(t-1) + u(t) ]
+\end{equation}
+and 
+\begin{equation}
+\label{eq:equal:pos_up1}
+x(t) = x(t-1) + v(t).
+\end{equation}
+Let 
+\begin{equation}
+\label{eq:equal:def_vel2}
+v'(t) = v(t-1) + u(t),
+\end{equation}
+we have
+\begin{equation}
+\label{eq:equal:vel1_vel2_eq}
+v(t) = \chi v'(t).
+\end{equation}
+
+By applying equation \eqref{eq:equal:vel1_vel2_eq} to equation \eqref{eq:equal:def_vel2}, we have
+\begin{equation}
+v'(t) = \chi v'(t-1) + u(t).
+\end{equation}
+
+By applying equation \eqref{eq:equal:vel1_vel2_eq} to equation \eqref{eq:equal:pos_up1}, we have
+\begin{equation}
+x(t) = x(t-1) + \chi v'(t).
+\end{equation}
+
+If we have a continuous system as
+\begin{subequations}
+\begin{equation}
+\dot{y}(t) = 
+\end{equation}
+\begin{equation}
+content...
+\end{equation}
+\end{subequations}
+
+
+
+
+\end{document}

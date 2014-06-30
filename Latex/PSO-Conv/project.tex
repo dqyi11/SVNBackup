@@ -1,0 +1,111 @@
+% LLNCStmpl.tex
+% Template file to use for LLNCS papers prepared in LaTeX
+%websites for more information: http://www.springer.com
+%http://www.springer.com/lncs
+
+\documentclass{llncs}
+%Use this line instead if you want to use running heads (i.e. headers on each page):
+%\documentclass[runningheads]{llncs}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\newtheorem{mydef}{Definition}
+\newtheorem{mylem}{Lemma}
+\newtheorem{mythm}{Theorem}
+\newtheorem{myprop}{Property}
+\newtheorem{mycoro}{Corollary}
+
+\begin{document}
+\title{Convergence Analysis on Particle Swarm Optimization}
+
+%If you're using runningheads you can add an abreviated title for the running head on odd pages using the following
+%\titlerunning{abreviated title goes here}
+%and an alternative title for the table of contents:
+%\toctitle{table of contents title}
+
+%\subtitle{Subtitle Goes Here}
+
+%For a single author
+%\author{Author Name}
+
+%For multiple authors:
+\author{Daqing Yi \and Kevin D. Seppi \and Michael A. Goodrich}
+
+
+%If using runnningheads you can abbreviate the author name on even pages:
+%\authorrunning{abbreviated author name}
+%and you can change the author name in the table of contents
+%\tocauthor{enhanced author name}
+
+%For a single institute
+%\institute{Institute Name \email{email address}}
+
+% If authors are from different institutes 
+\institute{Brigham Young University}
+
+%to remove your email just remove '\email{email address}'
+% you can also remove the thanks footnote by removing '\thanks{Thank you to...}'
+
+
+\maketitle
+
+\begin{abstract}
+In this paper, we decompose the PSO algorithm into two sub-systems, which are \emph{rule update} and \emph{optimization strategy}.
+We show when the rule update sub-system is input-to-state stable analysis.
+It implies that if the input to the system is bounded, the state is bounded.
+If the input to the system is converged, the state will converge.
+It means that the convergence of the PSO is determined by the output of the optimization strategy sub-system, which are the \emph{personal best} and \emph{global best}.
+If they are converged to a point, the particles will converge.
+If they do not converge to a point but are bounded in a range, the particles will at least be constrained in a boundary.
+The way of decomposition enables the convergence analysis applicable a wide range of the PSO algorithms.
+Because most of the variations on the PSO algorithm follow the same update rule but only have different way of generating personal best and global best.
+In this way, the convergence analysis becomes two parts, which are
+\begin{itemize}
+\item if the update rule sub-system is input-to-state stable;
+\item if the optimization strategy sub-system generates converging personal best and global best or bounded personal best and global best.
+\end{itemize}
+
+In existing convergence analysis on particle swarm optimization, the random terms in the update rule are usually replaced with constant terms.
+The random terms play a role of ``exploit and explore'', which has important effect on the dynamics of the particles.
+In our works, we include the influence of the random terms in analyzing the stability.
+Moreover, we extend the convergence analysis to the conditions that the swarm is not in stagnation. 
+By the property of the input-to-state stability, we can show that the positions of the particles are still determined by the boundaries of the personal best and global best, in which this boundary also implicitly indicates the capability of exploration.
+\end{abstract}
+
+\input{related_work.tex}
+
+\input{sys_model.tex}
+
+\input{iss.tex}
+
+\input{stochastic_analysis.tex}
+
+
+%The bibliography, done here without a bib file
+%This is the old BibTeX style for use with llncs.cls
+\bibliographystyle{splncs}
+
+%Alternative bibliography styles:
+%the following does the same as above except with alphabetic sorting
+%\bibliographystyle{splncs_srt}
+%the following is the current LNCS BibTex with alphabetic sorting
+%\bibliographystyle{splncs03}
+%If you want to use a different BibTex style include [oribibl] in the document class line
+
+\bibliography{reference}
+
+\appendix
+
+\input{app_proof_lemma1.tex}
+
+\input{app_proof_iss_thm.tex}
+
+\input{app_mean_model.tex}
+
+\input{app_var_model.tex}
+
+\end{document}
+

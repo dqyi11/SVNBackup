@@ -1,0 +1,50 @@
+<div id="avatar">
+	<img width=160 src="{{bio.photo}}" />
+</div>
+<br/>
+<div id="bio">
+	<p>
+	    <div id="bio_name">
+    		{{bio.full_name}}
+    	</div>
+    	<br/>
+    	
+    	<div id="bio_title">
+       		{{bio.title}}
+       	</div>
+       	<br/>
+
+       	<a>{{bio.department}}</a>
+       	<br/>
+       	<a>{{bio.school}}</a>
+	    <br/>
+	    <br/>
+	    
+	    <div id="bio_contact">   	
+		    <span class="address">
+		    	<b>Address: </b>
+		        {{bio.address}}
+		        <br/>
+	        </span>
+	        <span class="email">
+		        <b>Email: </b>
+		        <a href="mailto:{{bio.email}}">{{bio.email}}</a>
+		        <br/>
+	        </span>
+	        <span class="phone">
+		        <b>Phone: </b>{{bio.phone}}
+		        <br/>
+	        </span>
+	        {% if bio.fax %}
+	            <span class="fax">
+		            <b>Fax: </b>{{bio.fax}}
+		            <br>
+	            </span>
+	        {% endif %}
+        </div>
+	</p>
+
+    <p>
+		<a href="{{bio.cv}}" class="bio_cv">Curriculum Vitae</a>
+    </p>
+</div>

@@ -1,0 +1,121 @@
+\documentclass[12pt]{article}
+
+\input{preamble}
+
+\begin{document}
+
+\title{\textsf{UCF Trip Report}}
+\author{\textsf{Daqing Yi}}
+\date{\textsf{}}
+
+\maketitle
+
+\section{ACTIVE Lab}
+
+The lab I visited is \textbf{ACTIVE Lab}, which Dr. Daniel Barber works in. They are collaborating with Dr. Florian Jentsch's \textbf{Team Performance Lab} in human-robot interaction of RCTA.
+Currently they are building:
+\begin{itemize}
+\item Gesture command in human-robot interaction; \\
+
+They are defining the standard protocol using arm hand signal in human robot communication. 
+\href{http://www.youtube.com/watch?v=IiXrYnRdyPs}{Gesture Control with Big Dog}
+ 
+\item Simulation on human robot collaboration.
+
+They are building simulation environment on RIVET for user study in Team performance lab. RIVET is used as virtual reality interface, on which a soldier will work to execute collaborative tasks. Bob Dean's visit is to test and transfer the knowledge on how to use middle-ware provide by GDRS. They will use this to develop AI modules to control the virtual KBot in RIVET.
+
+\end{itemize}
+
+\section{RIVET}
+
+RIVET is developed on \href{http://www.garagegames.com/products/torque-3d}{Torque Game Engine}, which is a C++ based script language - Torque script. RIVET supports a large set of unmanned vehicles and sensors, which enables the simulation of hardware in the loop.
+
+In a client-server framework, RIVET support single/multiple players joining in a mission. 
+
+\subsection{World Building}
+
+RIVET provides a couple of editors in building a world. 
+\begin{itemize}
+\item \textbf{Mission editor} \\
+define simulation environment to load;
+\item \textbf{World editor} \\
+define objects in the world;
+\item \textbf{Terrain editor} \\
+define terrain with different texture;
+\item \textbf{Crowd editor} \\
+define path-following AI entity.
+\end{itemize}
+
+Supported by Torque engine, any objects (human, robot and etc.) created by Torque constructor can also be loaded into RIVET.
+
+By configuration, the coordinator in RIVET can be transformed to UTM coordinator.
+
+\subsection{BOLT}
+
+RIVET provides ``Engineering Software Platform for the Integration of Autonomous Logic(ESPIAL)'', which provides interface to RIVET.
+
+They can be categorized into three types:
+\begin{itemize}
+\item \textbf{mission map communication}: \\
+load map information and map manipulation;
+\item \textbf{vehicle communication}: \\
+tele-operate vehicles and read statuses; 
+\item \textbf{sensor communication}: \\
+read sensor configuration and data.
+\end{itemize}
+
+Any RIVET instance can either be operated by a player or be controlled by socket communication. The BOLT interface running on Linux wrapped the functionality of socket communication to support ESPIAL, which enables the integration with ROS. ROS node can call BLOT interface to communicate with a RIVET instance.
+
+\section{RFrame}
+
+RFrame is a middle-ware framework provide by GDRS for robotic development. Basically, it provides message passing and data sharing when multiple system running simultaneously. Those functionalities are similar with what ROS provides. Thus, RFrame is going to add ports to ROS, and providing code conversion from ROS.
+
+\subsection{World Model}
+
+World Model is running on RFrame, which builds the functions needed for a robot's world model.
+
+The input source of the world model contains:
+\begin{itemize}
+\item \textbf{hardware interface abstraction} \\
+The sensor data and actuator information are obtained through hardware interface abstraction so that world model can work on different hardware/simulated platforms;
+\item \textbf{semantic object} \\
+labeled data and predefined semantic objects needed for task execution;
+\item \textbf{mission/behavior/action statuses} \\
+tracking the progress of the task execution.
+\end{itemize}
+
+The world model maintains a virtual map with semantic objects for task execution. At the same time, the world model caches information data obtained from sensory input.
+
+A high-level human-robot interaction may be in the form of speech-to-text, gesture recognition and etc. The execution will be divided into executors in three layers: 
+\begin{itemize}
+\item \textbf{mission executor}: \\
+it parses the input into a sequences of behaviors, involving the queries to world model on the world status and mission status notification;
+\item \textbf{behavior executor}: \\
+behaviors are trigged by event, which subscribes the notification from world model.
+\item \textbf{action executor}: \\
+behavior execution is decomposed into actions (allowing parallel running). By hardware interface abstraction, the commands can be converted into the commands in different actuator platforms.
+
+\end{itemize} 
+
+\section{Implementation}
+
+\subsection{On RIVET}
+
+RIVET already provides support on a lot of maps, vehicles and sensors.
+
+The needs of developing on RIVET can be:
+\begin{itemize}
+\item map editing,
+\item objects adding,
+\item environment dynamics enhancement.
+\end{itemize}
+
+\subsection{Interaction with RIVET}
+Theoretically that we can use any language and platform to interact with RIVET. However, the protocol is not available and BLOT is not open source(built to *.so files). We can only call BOLT library on Linux or create an adapter for that.
+
+RFrame and World Model are running on Linux and using Qt4 for GUI. 
+
+\bibliographystyle{apalike}
+\bibliography{bib}
+
+\end{document}

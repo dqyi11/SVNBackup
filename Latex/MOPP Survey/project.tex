@@ -1,0 +1,55 @@
+\documentclass[12pt]{article}
+
+\input{preamble}
+
+\begin{document}
+
+\title{\textsf{Survey on Multi-Objective Path Planning}}
+\author{\textsf{Daqing Yi}}
+\date{\textsf{}}
+
+\maketitle
+
+\paragraph{\textbf{Tarbiat Modares University, Tehran, Iran}}
+\cite{masehian2010multi2} \cite{masehian2010multi} use PSO to solve a path planning problem, in which they model the problem with two objectives ``shortest path'' and ``smoothest path''. A fitness function is defined as scalarization of two objective functions, which is $ \mbox{fitness} = \lambda_{1} F_{1} + \lambda_{2} F_{2} $. This forms a global planning process, which gives next target position. If there is a directly connecting line intersects with any obstacle, a local planning process using probabilistic roadmap method(PRM) is imported to search shortest path between two positions. 
+
+\paragraph{\textbf{Tijuana Institute of Technology Tijuana, Mexico}}
+\cite{castillo2007multiple} uses Pareto optimality to rank the populations generated in a Genetic Algorithm. The world has been modelled into a grid system, so that each path can be encoded into a chromosome expression.
+
+\paragraph{\textbf{Tel-Aviv University, Israel}}
+\cite{avigad2009interactive} 
+
+\cite{moshaiov2004concept}
+
+\cite{moshaiov2007extended} 
+
+\cite{avigad2007sequential}
+
+\paragraph{\textbf{University of Salford, UK}}
+\cite{soltani2004fuzzy} imports a path planning problem on site construction, which searches for a balance between path length, safety and visibility. Fuzzy membership funtions are imported to define objectives on safety and visibility. Including the objective of minimum transportation cost, a composite single objective function is obtained by linear combination of three objectives. The problem solver used is a Dijkstra search.
+
+\paragraph{\textbf{IIT Kanpur, Kanpur, India}}
+\cite{ahmed2011multi} form a path planning problem which expects to reaching a goal point in shortest time while generate safe paths. They define three forms of safety measure:
+\begin{itemize}
+\item difficulty level by artificial potential field;
+\item minimizing total obstacles in neighborhood to avoid obstacle cluttered areas;
+\item maximizing visibility (mean sensor field of view) using isovists lines.
+\end{itemize}
+A map has been discretized for GA encoding purpose. Using NSGA-II in \cite{deb2002fast}, a sequence of waypoints are generated in considering those metrics above. Importing either B-spline or PP-spline, a complete path in continuous space can be generated with the consideration on smoothness.
+
+\paragraph{\textbf{Queensland University of Technology, Australia}}
+\cite{wu2007fuzzy} \cite{wu2011multi}
+
+\paragraph{\textbf{Air Force Institute of Technology, USA}}
+\cite{Pohl:2008:MUM:1516744.1516965}
+
+\paragraph{\textbf{École Centrale de Nantes, France}}
+\cite{ur2010multi}
+
+\paragraph{\textbf{McGill University, Canada}}
+\cite{higuera2012socially}
+
+\bibliographystyle{apalike}
+\bibliography{reference}
+
+\end{document}

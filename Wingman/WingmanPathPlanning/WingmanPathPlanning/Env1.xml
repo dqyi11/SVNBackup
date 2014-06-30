@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Environment>
+<Gaussian meanX = "500" meanY = "600" varX = "50" varY = "50" rho="0">
+</Gaussian>
+<Gaussian meanX = "100" meanY = "100" varX = "20" varY = "50" rho="0">
+</Gaussian>
+<Gaussian meanX = "300" meanY = "400" varX = "80" varY = "80" rho="0">
+</Gaussian>
+</Environment>

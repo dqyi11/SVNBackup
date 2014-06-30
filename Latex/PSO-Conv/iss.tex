@@ -1,0 +1,108 @@
+\section{Input-to-State Stability}
+\label{sec:iss}
+
+In order to help the proof, we import several comparison functions.
+
+\begin{mydef}[$ K $-function]
+\label{def:k_func}
+A continuous function $ \gamma : \mathbb{R}_{geq 0} \rightarrow \mathbb{R}_{geq 0} $ is a $ K $-function if it is continuous, strictly increasing and $ \gamma (0) = 0 $. \\
+It is a $ K_{\infty} $-function if it is a $ K $-function and $ \gamma (s) \rightarrow \infty $ as $ s \rightarrow \infty $.
+\end{mydef}
+
+\begin{mydef}[KL-function]
+\label{def:kl_func}
+A continuous function $ \beta : \mathbb{R}_{geq 0} \times \mathbb{R}_{geq 0} \rightarrow \mathbb{R}_{geq 0} $ is a $ KL $-function if for each fixed $ t \geq 0 $, the function $ \beta ( \dot , t ) $ is a $ K $-function, and for each fixed $ s \geq 0 $, the function $ \beta ( s, \dot ) $ is decreasing and $ \beta (s, t) \rightarrow 0 $ as $ t \rightarrow \infty $.
+\end{mydef}
+
+\begin{mydef}[Positive definite function]
+\label{def:pd_func}
+A function $ \gamma $ is \emph{positive definite} if $ \gamma (s) > 0, \forall s > 0 $ and $ r(0)= 0 $.
+\end{mydef}
+
+\begin{mydef}[Input-to-state stable]\cite{Jiang2001857}
+\label{def:iss}
+For a discrete-time system
+\begin{equation}
+\label{eq:dis_nonlinear}
+x(k+1) = f( x(k) , u(k) ),
+\end{equation}
+with $ f(0,0) = 0 $
+\footnote{It means that $ x = 0 $ is an equilibrium of the 0-input system.}, the system is \emph{(globally) input-to-state stable} if there exist a $ KL $-function $ \beta  $ and a $ K $-function $ \gamma $ such that, for each input $ u \in l^{m}_{\infty} $ and each $ \xi \in \mathbb{R}^{n} $, it holds that
+\begin{equation}
+\label{eq:def_iss}
+| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma (|| u ||)
+\end{equation}
+for every $ k \in \mathbb{Z}_{+} $.
+\end{mydef}
+
+The input-to-state stability indicates that the state of the system is bounded in a range determined by the bound of the input.
+The $ \beta () $ term in equation \eqref{eq:def_iss} defines an initial bound with a decaying feature.
+The $ \gamma () $ term in equation \eqref{eq:def_iss} defines a bound determined by the input.
+It means that the influence $ \beta () $ term will gradually decrease to zero along time and the state will be bounded by a range determined by the bound of the input after that.
+
+Recall the ``explore and exploit'' property in the PSO algorithm, a bound of the particles' states indicates the balance between the explore and the exploit.
+We do not expect to see that the states converge while the personal best and global best have converged.
+In the way we decomposed the PSO algorithm, input-to-state stability provides what we expect to see in the update rule sub-system.
+Different algorithm provides different optimization strategy sub-systems. 
+When it is expected to maintain a certain capability of the explore, the states of the particles could be managed in a boundary.
+When it is expected to finish exploring and reach a stagnation, the states of the particles could converge.
+
+\begin{mydef}[ISS-Lyapunov function]\cite{Jiang2001857}
+\label{eq:iss_func}
+A continuous function $ V : \mathbb{R}^{n} \rightarrow \mathbb{R}_{\geq 0} $ is an \emph{ISS-Lyapunov function} for system \eqref{eq:dis_nonlinear} if the followings hold:
+\begin{enumerate}
+\item there exist $ K $-functions $ \alpha_{1} $, $ \alpha_{2} $ such that 
+\begin{equation}
+\label{eq:iss_lyapunov1}
+\alpha_{1} ( | \xi | ) \leq V( \xi ) \leq \alpha_{2}  ( | \xi | ), \forall \xi \in \mathbb{R}^{n},
+\end{equation}
+\item there exist a $ K_{\infty} $-function $ \alpha_{3} $ and a $ K $-function $ \sigma $, such that
+\begin{equation}
+\label{eq:iss_lyapunov2}
+V( f( \xi, \mu ) ) - V( \xi ) \leq - \alpha_{3} ( | \xi | ) + \sigma ( | \mu | ),
+\forall \xi \in \mathbb{R}^{n}, \mu \in \mathbb{R}^{m}.
+\end{equation}
+\end{enumerate}
+\end{mydef}
+
+\begin{mylem}\cite{Jiang2001857}
+\label{lem:iss_stable}
+If system \eqref{eq:dis_nonlinear} admits a continuous ISS-Lyapunov function, then it is input-to-state stable.
+\begin{proof}
+The proof is given in Appendix \ref{sec:app:proof_lemma}.
+\end{proof}
+\end{mylem}
+
+
+\begin{mythm}
+The system \eqref{eq:pso_up_linalg} is input-to-state stable, if there exists a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q $ that has $ A^{T} P A - P = - Q $ , in which 
+\begin{equation}
+A = 
+\begin{bmatrix}
+\chi & - \lambda \\
+\chi & 1 - \lambda
+\end{bmatrix}
+\end{equation}
+and $ \lambda \in [0, \chi ( \phi^{G} + \phi^{P} ) ] $.
+
+\begin{proof}
+
+
+\end{proof}
+\end{mythm}
+
+\begin{mycoro}
+\label{coro:state_bound}
+\begin{equation}
+\label{eq:state_bound}
+| x(k) | \leq \max ( x(0) , \alpha_{1}^{-1} \circ \alpha_{2} \circ \alpha_{3}^{-1} \circ \sigma ( || u || ) )
+\end{equation}
+\begin{proof}
+Let $ \rho = Id $.
+With $ x( k_{0} ) \in D $ and $ b = \alpha_{4}^{-1} \circ \sigma ( || u || ) $,
+we have $ j_{0} = \min \{ k \in \mathbb{Z}_{+} \mid x(k) \in D \} $.
+When $ k \geq j_{0} $, $ V( x(k) ) \leq \alpha_{4}^{-1} \circ \sigma ( || u ||  ) $.
+When $ k < j_{0} $, $ V( x(k) ) \leq V( x(0) ) $.
+Thus, we can have equation \eqref{coro:state_bound}.
+\end{proof}
+\end{mycoro}

@@ -1,0 +1,21 @@
+\section{Introduction}
+\label{sec:intro}
+
+This project is based on ``Distributed cooperative attitude synchronization and tracking for multiple rigid bodies'' by Dr. Ren \cite{5229134}, in which discusses the consensus seeking of a system of agents with non-linear model.
+Two approaches have been proposed for ``cooperative attitude synchronization'' (position control) and ``reference attitude tracking'' (trajectory tracking) respectively.
+Two approaches are stated independently and look different.
+One objective of this project is seeking the consensus between two approaches, which can be used as a pattern on analyzing other synchronization systems and designing control laws for them.
+
+The structure of this report is as following.
+Section \ref{sec:prob_stat} states the system model, which includes the rigid body dynamics of each agent and the interaction topology.
+Section \ref{sec:coop_att_syn} presents the control law proposed for the cooperative attitude synchronization and the proof strategy.
+%I try to figure out the roles of the terms in the control law so that I can simplify the control law with ignorance on the transient performance and prove the stability.
+By analyzing the roles of the terms in the control law, I simplify the control law to find the essential component that guarantees the stability.
+It means that the stability can still be preserved and proved without some terms for transient performance.
+Section \ref{sec:ref_att_trk} illustrates the control law proposed for the reference attitude tracking and the proof strategy.
+I use a same proof strategy to prove the stability of the control law on the cooperative attitude synchronization, which shows the consistency between two approaches.
+It means that the ideas of improvement can be applied to both control approaches.
+Simulations are also taken on both approaches for analysis purpose.
+Section \ref{sec:io_stable} proposes an interconnection perspective for analyzing a class of distributed system control problems as a pattern of analyzing a consensus-seeking problem.
+A hypothesis on proving the stability is proposed, in which the proof can be achieved by analyzing the stability-relevant properties of the sub-components.
+Section \ref{sec:summary} discusses some possible future work from Dr. Ren's paper.

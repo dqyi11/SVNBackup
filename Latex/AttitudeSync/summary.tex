@@ -1,0 +1,23 @@
+\section{Discussion}
+\label{sec:summary}
+
+There are some potential future work on Dr. Ren's paper \cite{5229134}.
+\begin{itemize}
+\item $ - F^{T}(\sigma_{i}) $ is used in designing the control law to eliminate the $ F^{-1}(\sigma_{i}) $ in the rigid body attitude dynamics.
+It means that the performance of the control law relies on the correctness of the model.
+One possible improvement might be importing an adaptive control or a sliding mode control (probably not good for aerial vehicle control though). 
+However, this is not the focus of this project and is not discussed due to the size limitation.
+\item The attitude synchronization depends on an undirected graph topology, because the symmetry of the graph Laplacian is needed in proving the stability.
+It can be extended to support a directed graph topology.
+\item As all the agents are aerial vehicles, the role of a damping term in the control is sometimes very important.
+In simulating the reference tracking, because the reference trajectory is not very smooth, I do not import a damping term to tune the performance.
+If needed, the idea of a damping term in attitude synchronization can be imported to reference tracking as well.
+\end{itemize}
+
+How to analyze a consensus seeking problem and design a control law are summarized as
+\begin{itemize}
+\item combining the states of all the agents to get a system state from a parallel interconnection perspective;
+\item decomposing the system into a coordinate scheme and a consensus scheme from a serial feedback interconnection perspective.
+\end{itemize}
+%These ideas can be applied to many distributed optimization problems and distributed control problems.
+If the hypothesis \ref{hyp:one} proposed in Section \ref{sec:io_stable} can be theoretically proved, it can be applied to many distributed algorithms that have consensus-seeking spirits.

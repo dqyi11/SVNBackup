@@ -1,0 +1,380 @@
+\section{Derivation of Variance Model}
+\label{sec:app:derivation_variance}
+
+\begin{proof}
+
+Let
+\begin{equation}
+\label{eq:def_delta_x}
+\Delta x(k) = x(k) - E(x).
+\end{equation}
+
+As $ E(x(t)) $ has converged to $ E(x) $, we have $ E( \Delta x(k-1) ) = 0 $.
+
+From equation \eqref{eq:pso1_alg_line:init}, we can have
+\begin{equation}
+\label{eq:pso1_alg_line:mod}
+\begin{aligned}
+x(k) = & (1 + \chi - \chi \phi^{P} u^{P}(k-1) - \chi \phi^{G} u^{G}(k-1) ) x(k-1) - \chi x(k-2) \\
+& + \phi^{P} u^{P}(k-1) x^{P}(k-1) + \phi^{G} u^{G}(k-1) x^{G}(k-1).
+\end{aligned}
+\end{equation}
+
+By applying equation \eqref{eq:pso1_alg_line:mod} into equation \eqref{eq:def_delta_x}, we have
+\begin{equation}
+\label{eq:delta_pos_alg_line:init}
+\begin{aligned}
+\Delta x(t) & = ( 1 + \chi - \chi \phi^{G} u^{G}(k-1) - \chi \phi^{P} u^{P}(k-1) ) x(k-1) - \chi x(k-2)  \\
+& + \chi \phi^{G} u^{G}(k-1) x^{G}(k-1) + \chi \phi^{P} u^{P}(k-1) x^{P}(k-1) - E(x)) \\
+& = (1 + \chi - a(k-1) - b(k-1) ) x(k-1) - \chi x(k-2) \\
+& + a(k-1) x^{G}(k-1) + \b(k-1) x^{P}(k-1) - E(x) \\
+& = (1 + \chi - a(k-1) - b(k-1) ) \Delta x(t-1)  - \chi \Delta x(t-2) \\
+& + a(k-1) ( x^{G}(k-1) - E(x) ) + b(t-1) ( x^{P}(k-1) - E(x) )
+\end{aligned}
+\end{equation}
+
+Let 
+\begin{equation}
+\label{eq:delta_x_g}
+\Delta x^{G}(k) =  x^{G}(k) - E(x)
+\end{equation}
+and
+\begin{equation}
+\label{eq:delta_x_p}
+\Delta x^{P}(k) =  x^{P}(k) - E(x).
+\end{equation}
+
+Let
+\begin{equation}
+\label{eq:b_t}
+B(k-1) = 1 + \chi - a(k-1) - b(k-1),
+\end{equation}
+and
+\begin{equation}
+\label{eq:c_t}
+\begin{aligned}
+C(k-1) & = a(k-1) \Delta x^{G}(k-1) + b(k-1) \Delta x^{P}(k-1) \\
+& = a(k-1) ( x^{G}(k-1) - E(x) ) + b(k-1) ( x^{P}(k-1) - E(x) ).
+\end{aligned}
+\end{equation}
+
+We have equation \eqref{eq:delta_pos_alg_line:init} written as
+\begin{equation}
+\label{eq:delta_pos_alg_line:mod}
+\Delta x(k) = B(k-1) \Delta x(k-1) - \chi \Delta x(k-2) + C(k-1) . 
+\end{equation}
+
+By equation \eqref{eq:delta_pos_alg_line:mod}, we have 
+\begin{equation}
+\label{eq:delta_pos2_alg_line:init}
+\begin{aligned}
+{(\Delta x(k) )}^{2} & = [ B(k-1) \Delta x(k-1) - \chi \Delta x(k-2) + C(k-1) ]^{2}  \\
+& = B(k-1)^{2} ( \Delta x(k-1) )^{2} + \chi^{2} ( \Delta x(k-2) )^{2} \\
+& + C(k-1)^{2} - 2 \chi B(k-1) \Delta x(k-1) \Delta x(k-2) \\ 
+& + 2 B(k-1) C(k-1) \Delta x(k-1)  - 2 \chi C(k-1) \Delta x(k-2).
+\end{aligned}
+\end{equation}
+
+By the definition of variance 
+\begin{equation}
+\label{eq:def_var}
+VAR(x(k)) = E[ ( \Delta x(k) )^{2} ].
+\end{equation}
+
+\begin{equation}
+\label{eq:delta_pos2_alg_line:mean}
+\begin{aligned}
+E[ (\Delta x(k))^{2} ]
+= & E( ( B(k-1) )^{2} ) E( ( \Delta x(k-1) )^{2} ) + \chi^{2} E( ( \Delta x(k-2) )^{2} ) + E( ( C(k-1) )^{2} ) \\
+& - 2 \chi E( B(k-1) ) E( \Delta x(k-1) \Delta x(k-2) ) + 2 E( B(k-1) C(k-1) ) E( \Delta x(k-1) ) \\
+& - 2 \chi E( C(k-1) ) E( \Delta x(k-2) ) .
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:a_t_mean}
+\begin{aligned}
+E( B(k-1) ) = 1 + \chi - \frac{ \chi \phi^{G} }{2} - \frac{ \chi \phi^{P} }{2} = \alpha_{1}.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_t_mean}
+\begin{aligned}
+E( C(k-1) )
+ = & \chi ( \phi^{G} E( x^{G}(k) ) + E( \phi^{P} x^{P}(k) ) )  - \chi ( \phi^{G} + \phi^{P} ) E(x)
+ = 0
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+B(k-1) )^{2} 
+= & ( 1 + \chi - \chi a(k-1) - \chi b(k-1) )^{2} \\
+= & (1 + \chi)^{2} - 2 \chi(1 + \chi) ( a(k-1) + b(k-1) ) + ( \chi a(t-1) + \chi  b(k-1) )^{2} \\
+= & (1 + \chi)^{2} - 2 \chi(1 + \chi) ( a(k-1) + b(k-1) ) \\
+& + \chi^{2} a(k-1)^{2} + \chi^{2} b(k-1)^{2} + 2 \chi^{2} a(k-1) b(k-1).
+\end{aligned} 
+\end{equation}
+
+\begin{equation}
+\label{eq:a_t_2_mean}
+\begin{aligned}
+E( ( B(k-1) )^{2} ) = & (1 + \chi)^{2} - \chi(1 + \chi) ( \phi^{G} + \phi^{P} )  + \chi^{2} E( a( k-1 )^{2} ) \\
+& + \chi^{2} E( b( k-1 )^{2} )
++ 2 \chi^{2} E( a( k-1 ) b( k-1 ) ) \\
+\end{aligned}
+\end{equation}
+
+Because $ u^{P}(k-1) $ and $ u^{G}(k-1) $ are independent,
+we have
+\begin{equation}
+E( a(k-1) b(k-1) ) = \frac{ \phi^{P} \phi^{G} }{4}.
+\end{equation}
+
+We also have
+\begin{equation}
+\begin{aligned}
+E( a(k-1)^{2} ) = ( \phi^{G} )^{2} E( (u^{G}(k-1))^{2} ) = \frac{1}{12} ( \phi^{G} )^{2}
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+E( b(t-1)^{2} ) = ( \phi^{P} )^{2} E( (u^{P}(k-1))^{2} ) = \frac{1}{12} ( \phi^{P} )^{2}.
+\end{aligned}
+\end{equation} 
+
+Thus, we can rewrite equation \eqref{eq:a_t_2_mean} as 
+\begin{equation}
+\label{eq:def_alpha_2}
+\begin{aligned}
+E( ( B(k-1) )^{2} ) & = (1 + \chi)^{2} -  \chi(1 + \chi) ( \phi^{G} + \phi^{P} ) +  \chi^{2} \frac{ ( (\phi^{G})^{2} + (\phi^{P})^{2} ) }{12} + \chi^{2} \frac{ \phi^{P} \phi^{G} }{4} \\
+& = (1 + \chi - \chi \frac{ \phi^{G} + \phi^{P} }{ 2 } )^{2} - \frac{1}{6} \chi^{2} ( ( \phi^{G} )^{2} + ( \phi^{P} )^{2} ) \\
+& = \alpha_{2}.
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\begin{aligned}
+\label{eq:c_2}
+( C(k-1) )^{2} = & [ a(k-1) ( x^{G}(k-1) - E(x) ) + b(k-1) ( x^{P}(k-1) - E(x) ) ]^{2} \\
+= & a(k-1)^{2} ( x^{G}(k-1) - E(x) )^{2} + b(k-1)^{2} ( x^{P}(k-1) - E(x) )^{2}  \\
+& + 2 a(k-1) b(k-1) ( x^{G}(k-1) - E(x) ) ( x^{P}(k-1) - E(x) ) \\
+= & a(k-1)^{2} [ ( x^{G}(k-1) )^{2} - 2 x^{G}(k-1) E(x) + ( E(x) )^{2} ] \\
+& +  b(k-1)^{2} [ ( x^{P}(k-1) )^{2} - 2 x^{P}(k-1) E(x) + ( E(x) )^{2} ]  \\
+& + 2 a(k-1) b(k-1)[ x^{G}(k-1) x^{P}(k-1) - x^{P}(k-1) E(x) - x^{G}(k-1) E(x) + ( E(x) )^{2} ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:c_2_mean:1}
+\begin{aligned}
+& E( a(k-1)^{2} [ ( x^{G}(k-1) )^{2} - 2 x^{G}(k-1) E(x) + ( E(x) )^{2} ] ) \\
+& = \chi^{2} \frac{ (\phi^{G})^{2} }{12} [ E( ( x^{G}(k-1) )^{2} )  - 2 E( x^{G}(k-1) ) E(x) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{ (\phi^{G})^{2} }{12} [ VAR(x^G)(k-1)  + ( E( x^{G}(t-1) ) )^{2} - 2 E( x^{G}(t-1) ) E(x) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{ (\phi^{G})^{2} }{12} [ VAR(x^G)(k-1)  + (\Delta \bar{x}^{G} )^{2} ]
+\end{aligned}
+\end{equation}
+
+Similarly, we have
+\begin{equation}
+\label{eq:c_2_mean:2}
+\begin{aligned}
+& E( b(k-1)^{2} [ ( x^{P}(k-1) )^{2} - 2 x^{p}(k-1) E(x) + ( E(x) )^{2} ] ) \\
+& = \chi^{2} \frac{(\phi^{P})^{2}}{12} [ E( ( x^{P}(k-1) )^{2} )  - 2 E( x^{P}(k-1) ) E(x) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{(\phi^{P})^{2}}{12} [ VAR(x^P)(t-1)  + ( E( x^{P}(t-1) ) )^{2} - 2 E( x^{P}(t-1) ) E(x) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{ (\phi^{P})^{2} }{12} [ VAR(x^P)(k-1)  + (\Delta \bar{x}^{P} )^{2} ]
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:c_2_mean:3}
+\begin{aligned}
+& E( a(k-1) b(k-1)[ x^{G}(k-1) x^{P}(k-1) - x^{P}(k-1) E(x) - x^{G}(k-1) E(x) + ( E(x) )^{2} ] ) \\
+& = E( g(k-1) ) E( p(k-1) ) [ E( x^{G}(k-1) x^{P}(k-1) ) - E( x^{P}(k-1) ) E(x) - E( x^{G}(k-1) ) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{ \phi^{G} \phi^{P} }{4} [ \bar{x}^{G} \bar{x}^{P} - ( \bar{x}^{G} + \bar{x}^{P} ) E(x) + ( E(x) )^{2} ] \\
+& = \chi^{2} \frac{ \phi^{G} \phi^{P} }{4} \Delta \bar{x}^{G} \Delta \bar{x}^{P} 
+\end{aligned}
+\end{equation}
+
+
+By applying mean to equation \eqref{eq:c_2}, we have
+\begin{equation}
+\label{eq:c_2_mean}
+\begin{aligned}
+& E( ( C(k-1) )^{2} ) \\
+= & E( a(k-1)^{2} ( \Delta x^{G}(k-1) )^{2} ) + E( b(k-1)^{2} ( \Delta x^{P}(k-1) )^{2} ) \\
+& + 2 E( a(k-1) b(k-1) \Delta x^{G}(k-1) \Delta x^{P}(k-1) ) \\
+= & \chi^{2} \frac{ (\phi^{G})^{2} }{12} [ VAR(x^G)(k-1)  + (\Delta \bar{x}^{G} )^{2} ] \\
+& + \chi^{2} \frac{ (\phi^{P})^{2} }{12} [ VAR(x^P)(k-1)  + (\Delta \bar{x}^{P} )^{2} ] \\
+& + 2 \chi^{2} \frac{ \phi^{G} \phi^{P} }{4} \Delta \bar{x}^{G} \Delta \bar{x}^{P} \\
+= & \frac{1}{12} \chi^{2} ( \phi^{G} )^{2} VAR(x^G)(k-1) + \frac{1}{12} \chi^{2} ( \phi^{P} )^{2} VAR(x^P)(k-1) \\
+& + \chi^{2} [ \frac{ (\phi^{G})^{2} }{12} (\Delta \bar{x}^{G} )^{2} + \frac{ (\phi^{P})^{2} }{12} (\Delta \bar{x}^{P} )^{2} + \frac{ \phi^{G} \phi^{P} }{2} \Delta \bar{x}^{G} \Delta \bar{x}^{P} ]
+\end{aligned}
+\end{equation}
+
+Let 
+\begin{equation}
+\label{eq:def_beta_1}
+\beta_{1} = \frac{1}{12} \chi^{2} ( \phi^{G} )^{2},
+\end{equation}
+
+\begin{equation}
+\label{eq:def_beta_2}
+\beta_{2} = \frac{1}{12} \chi^{2} ( \phi^{P} )^{2}
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_beta_3}
+\begin{aligned}
+\beta_{3} = & \chi^{2} [ \frac{ (\phi^{G})^{2} }{12} (\Delta \bar{x}^{G} )^{2} + \frac{ (\phi^{P})^{2} }{12} (\Delta \bar{x}^{P} )^{2} + \frac{ \phi^{G} \phi^{P} }{2} \Delta \bar{x}^{G} \Delta \bar{x}^{P} ] \\
+= & \frac{ \chi^{2} }{ 12 } [ (\phi^{G})^{2} (\Delta \bar{x}^{G} )^{2} + (\phi^{P})^{2} (\Delta \bar{x}^{P} )^{2} + 6 \phi^{G} \phi^{P} \Delta \bar{x}^{G} \Delta \bar{x}^{P} ],
+ \end{aligned}
+\end{equation}
+we have
+\begin{equation}
+\label{eq:c_2_mean:new}
+\begin{aligned}
+E( ( C(k-1) )^{2} ) & = \beta_{1} VAR( x^{G}(k-1) ) + \beta_{2} VAR( x^{P}(k-1) ) + \beta_{3} \\
+& = \beta .
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c}
+\begin{aligned}
+& B(k-1)C(k-1) \\
+= & [ 1 + \chi - a(k-1) - b(k-1) ] C(k-1) \\
+= & (1 + \chi) C(k-1) - ( a(k-1) + b(k-1) ) C(k-1) \\
+= & (1 + \chi) C(k-1) \\
+& - ( a(k-1) + b(k-1) ) [ a(k-1) ( x^{G}(k-1) - E(x) ) + b(k-1) ( x^{P}(k-1) - E(x) ) ] \\
+= & (1 + \chi) C(t-1) \\
+& - ( ( a(k-1) )^{2} + a(k-1) b(k-1) ) ( x^{G}(k-1) - E(x) ) \\
+& - ( ( b(k-1) )^{2} + a(k-1) b(k-1) ) ( x^{P}(k-1) - E(x) ) \\
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:1}
+E( (1 + \chi) C(k-1) ) = (1 + \chi) E( C(k-1) ) = 0.
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:2}
+\begin{aligned}
+& E( ( ( a(k-1) )^{2} + a(k-1) b(t-1) ) ( x^{G}(k-1) - E(x) ) ) \\
+= & E( ( a(k-1) )^{2} + a(t-1) b(k-1) ) E( x^{G}(k-1) - E(x) ) \\
+= & ( E( ( a(k-1) )^{2} ) + E( a(k-1) ) E( b(k-1) ) ) ( E(x^{G}(t-1)) - E(x) ) \\
+= & \chi^{2} \Delta \bar{x}^{G} ( \frac{ ( \phi^{G} )^{2}}{12} + \frac{ \phi^{G} \phi^{P} }{4} ).
+\end{aligned}
+\end{equation}
+
+\begin{equation}
+\label{eq:b_c_mean:3}
+\begin{aligned}
+& E( ( ( b(k-1) )^{2} + a(k-1) b(t-1) ) ( x^{P}(k-1) - E(x) ) ) \\
+= & E( ( b(k-1) )^{2} + a(t-1) b(k-1) ) E( x^{P}(k-1) - E(x) ) \\
+= & ( E( ( b(k-1) )^{2} ) + E( a(k-1) ) E( b(k-1) ) ) ( E(x^{P}(t-1)) - E(x) ) \\
+= & \chi^{2} \Delta \bar{x}^{P} ( \frac{ ( \phi^{P} )^{2}}{12} + \frac{ \phi^{G} \phi^{P} }{4} ).
+\end{aligned}
+\end{equation}
+
+Thus we have
+\begin{equation}
+\label{eq:b_c_mean}
+\begin{aligned}
+& E( B(k-1)C(k-1) )  \\
+= & - \chi^{2} \bar{x}^{G} ( \frac{ ( \phi^{G} )^{2}}{12} + \frac{ \phi^{G} \phi^{P} }{4} )  \\
+& - \chi^{2} \bar{x}^{P} ( \frac{ ( \phi^{P} )^{2}}{12} + \frac{ \phi^{G} \phi^{P} }{4} ) 
+\end{aligned}
+\end{equation}
+
+Thus, equation \eqref{eq:delta_pos2_alg_line:mean} can be written as
+\begin{equation}
+\label{eq:expand_var2}
+\begin{aligned}
+E[ (\Delta x(k))^{2} ] = & \alpha_{2} E( ( \Delta x(k-1) )^{2} ) \\
+& + \chi^{2} E( ( \Delta x(k-2) )^{2} ) + \beta  \\
+& - 2 \chi \alpha_{1} E( \Delta x(k-1) \Delta x(k-2) ).
+\end{aligned}
+\end{equation}
+
+By equation \eqref{eq:delta_pos_alg_line:mod}
+\begin{equation}
+\label{eq:delta_x_t_1}
+\Delta x(k-1) = B(k-2) \Delta x(k-2) - \chi \Delta x(k-3) + C(k-2).
+\end{equation}
+
+By multiplying $ \Delta x(k-2) $ to equation \eqref{eq:delta_x_t_1}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2}
+\Delta x(k-1) \Delta x(k-2) = B(k-2) ( \Delta x(k-2) )^{2} - \chi \Delta x(k-3) \Delta x(k-2) + C(k-2) \Delta x(k-2).
+\end{equation}
+
+By taking mean over equation \eqref{eq:delta_x_t_1_x_t_2}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean}
+\begin{aligned}
+E( \Delta x(k-1) \Delta x(k-2) )E[ (\Delta x(k-1))^{2} ] & = E( B(k-2) ) E( ( \Delta x(k-2) )^{2} ) - \chi E( \Delta x(k-3) \Delta x(k-2) ) \\
+& + E( C(k-2) ) E( \Delta x(k-2) ).
+\end{aligned}
+\end{equation}
+
+By applying $ E( \Delta x(k-2) ) = 0 $ and $ E( B(k-2) ) = \alpha_{1} $, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean:2}
+E( \Delta x(k-1) \Delta x(k-2) ) = \alpha_{1} E( ( \Delta x(k-2) )^{2} ) - \chi E( \Delta x(k-3) \Delta x(k-2) ).
+\end{equation}
+
+By reorganizing equation \eqref{eq:delta_x_t_1_x_t_2_mean:2}, we have
+\begin{equation}
+\label{eq:delta_x_t_1_x_t_2_mean:3}
+E( \Delta x(k-1) \Delta x(k-2) ) + \chi E( \Delta x(k-2) \Delta x(k-3) ) = \alpha_{1} E( ( \Delta x(k-2) )^{2} ) .
+\end{equation}
+
+By replacing $ k $ with $ k - 1 $ in equation \eqref{eq:expand_var2}, we have
+\begin{equation}
+\label{eq:expand_var3}
+\begin{aligned}
+E[ (\Delta x(k-1))^{2} ] = & \alpha_{2} E( ( \Delta x(k-2) )^{2} ) \\
+& + \chi^{2} E( ( \Delta x(k-3) )^{2} ) + \beta \\
+& - 2 \chi \alpha_{1} E( \Delta x(k-2) \Delta x(k-3) ).
+\end{aligned}
+\end{equation}
+
+By multiplying $ E[ (\Delta x(k-1))^{2} ] $ with $ \chi $ and summing with $ E[ (\Delta x(k))^{2} ] $, we have
+\begin{equation}
+\label{eq:generate_minus}
+\begin{aligned}
+& E[ (\Delta x(k))^{2} ] + \chi E[ (\Delta x(k-1))^{2} ] \\
+= & [ \alpha_{2} E( ( \Delta x(k-1) )^{2} ) + \chi^{2} E( ( \Delta x(k-2) )^{2} ) + \beta - 2 \chi \alpha_{1} E( \Delta x(k-1) \Delta x(k-2) ) ] \\
+& + \chi [  \alpha_{2} E( ( \Delta x(k-2) )^{2} ) + \chi^{2} E( ( \Delta x(k-3) )^{2} ) + \beta - 2 \chi \alpha_{1} E( \Delta x(k-2) \Delta x(k-3) ) ] \\
+& = \alpha_{2} E( ( \Delta x(k-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} ) E( ( \Delta x(k-2) )^{2} ) + \chi^{2} E( ( \Delta x(k-3) )^{2} ) \\
+& + \beta ( 1 + \chi ) - 2 \chi \alpha_{1} [ E( \Delta x(k-1) \Delta x(k-2) ) + \chi E( \Delta x(k-2) \Delta x(k-3) ) ].
+\end{aligned}
+\end{equation}
+
+By replacing equation \eqref{eq:delta_x_t_1_x_t_2_mean:3} with term $  E( \Delta x(k-1) \Delta x(k-2) ) + \chi E( \Delta x(k-2) \Delta x(k-3) )  $ in equation \eqref{eq:generate_minus}, we have
+\begin{equation}
+\label{eq:generate_minus:2}
+\begin{aligned}
+& E[ (\Delta x(k))^{2} ] + \chi E[ (\Delta x(k-1))^{2} ] \\
+= & \alpha_{2} E( ( \Delta x(k-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} ) E( ( \Delta x(k-2) )^{2} ) + \chi^{2} E( ( \Delta x(k-3) )^{2} ) \\
+& + \beta (1 + \chi ) - 2 \chi ( \alpha_{1} )^{2}   E( ( \Delta x(k-2) )^{2} ) \\
+= & \alpha_{2} E( ( \Delta x(t-1) )^{2} ) + ( \chi^{2} + \chi \alpha_{2} - 2 \chi ( \alpha_{1} )^{2} ) E( ( \Delta x(k-2) )^{2} ) + \chi^{2} E( ( \Delta x(k-3) )^{2} ) \\
+& + \beta (1 + \chi ) 
+\end{aligned}
+\end{equation}
+
+By writing $ E[ (\Delta x(t))^{2} ] $ as $ var(x(t)) $, we have equation \eqref{eq:generate_minus:2} as
+\begin{equation}
+\label{eq:generate_minus:3}
+\begin{aligned}
+& VAR(x(k)) + (\chi - \alpha_{2} ) VAR(x(k-1)) - ( \chi^{2} + \chi \alpha_{2} + 2 \chi ( \alpha_{1} )^{2} ) VAR(x(k-2)) \\
+& - \chi^{2} VAR(x(k-3)) - \beta (1 + \chi ) = 0.
+\end{aligned}
+\end{equation}
+
+
+\end{proof}

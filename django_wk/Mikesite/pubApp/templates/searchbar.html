@@ -1,0 +1,42 @@
+<div id="search_bar">
+	<h3> Type: </h3>
+	<ul>
+	    <li {% if type_idx == 0 %}id="current"{% endif %}>
+	        <a {% if type_idx != 0 %}
+	            href="/papers/search/?type=all&year={%if year_idx == "0" %}all{% else %}{{ year_idx }}{% endif %}"
+	        {% endif %}>All</a>
+	    </li>
+	    <li {% if type_idx == 1 %}id="current"{% endif %}>
+	        <a {% if type_idx != 1 %}
+	            href="/papers/search/?type=journal&year={%if year_idx == "0" %}all{% else %}{{ year_idx }}{% endif %}"
+	        {% endif %}>Journal Papers and Book Chapters</a>
+	    </li>
+
+	    <li {% if type_idx == 2 %}id="current"{% endif %}>
+		    <a {% if type_idx != 2 %}
+		            href="/papers/search/?type=conference&year={%if year_idx == "0" %}all{% else %}{{ year_idx }}{% endif %}"
+		        {% endif %}>Conference and Workshop Papers</a>
+	    </li>
+	    <li>Abstracts and Posters</li>
+	    <li>Theses and Reports</li>
+	    <li>Selected Workshops and Presentations</li>
+	</ul>
+	
+	<h3> Years: </h3>
+	<ul>
+	    <li {% if year_idx == "0" %}id="current"{% endif %}>
+	        <a {% if year_idx != "0" %}
+	               href="/papers/search/?year=all&type={% if type_idx == 0 %}all{% elif type_idx == 1 %}journal{% elif type_idx == 2 %}conference{% endif %}"
+	           {% endif %}
+	        >All</a>
+	    </li>
+		{% for year in year_list %}
+			<li {% if year_idx == year %}id="current"{% endif %}>
+			    <a {% if year_idx != year %}
+		               href="/papers/search/?year={{ year }}&type={% if type_idx == 0 %}all{% elif type_idx == 1 %}journal{% elif type_idx == 2 %}conference{% endif %}"
+		           {% endif %}
+			    >{{year}}</a>
+			</li>
+		{% endfor %}
+	</ul>
+</div>

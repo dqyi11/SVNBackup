@@ -1,0 +1,175 @@
+\section{Proof of Theorem \ref{thm:iss}}
+\label{sec:app:proof_iss_thm}
+
+\begin{proof}
+
+In order to analyze the convergence, we assume that there is a reference position $ x^{*} $.
+We are interested with how the particle converges to this reference point.
+
+Let
+\begin{equation}
+\label{eq:def_mat_A}
+A(k) = \begin{bmatrix}
+\chi & - a(k-1) - b(k-1)
+\\ 
+\chi & 1 - a(k-1) - b(k-1)
+\end{bmatrix}
+\end{equation}
+and
+\begin{equation}
+B(k) = 
+\begin{bmatrix}
+a(k) & b(k)
+\\ 
+a(k) & b(k)
+\end{bmatrix}.
+\end{equation}
+Let
+\begin{equation}
+\label{eq:def_mat_x}
+X(k) = 
+\begin{bmatrix}
+v(k)
+\\ 
+x(k) - x^{*}
+\end{bmatrix}
+\end{equation}
+and
+\begin{equation}
+U(k) = 
+\begin{bmatrix}
+X^{G}(k)
+\\ 
+X^{P}(k)
+\end{bmatrix}.
+\end{equation}
+
+We can modify equation \eqref{eq:pso_up_linalg_simp} into
+\begin{equation}
+\label{eq:proof_func}
+X(k+1) = A(k) X(k) + B(k) U(k).
+\end{equation}
+
+From equation \eqref{eq:pso_up_linalg_simp}, we can know that
+\begin{equation}
+\label{eq:A_bound}
+| A(k) | \leq | A' |
+\end{equation}
+and
+\begin{equation}
+\label{eq:B_bound}
+| B(k) | \leq | B' |.
+\end{equation}
+
+Assume that we have a positive definite matrix $ P $ that
+\begin{equation}
+\label{eq:stein_equation}
+A^{T}(k) P A(k) - P = - Q(k),
+\end{equation}
+and
+\begin{equation}
+\label{eq:Q_bound}
+| Q(k) | \leq | Q' |.
+\end{equation}
+
+Define a Lyapunov function
+\begin{equation}
+\label{eq:lyapunov_v}
+V( X(k) ) = X^{T} (k) P X(k).
+\end{equation}
+
+We can have
+\begin{equation}
+\label{eq:lyapunov_delta}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+& = X^{T}(k+1) P X(k+1) - X^{T}(k) P X(k) \\ 
+\end{aligned}
+\end{equation}
+
+From equation \eqref{eq:proof_func}, we have
+\begin{equation}
+\label{eq:proof_func_trans}
+\begin{aligned}
+X^{T}(k+1) = & [ A(k) X(k) + B(k) U(k) ]^{T} \\
+= & X^{T}(k)  A^{T}(k) + U^{T}(k) B^{T}(k).
+\end{aligned}
+\end{equation}
+
+By applying equation \eqref{eq:proof_func_trans} to equation \eqref{eq:lyapunov_delta}, we have
+\begin{equation}
+\label{eq:lyapunov_delta2}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+= & [ X^{T}(k)  A^{T}(k) + U^{T}(k) B^{T}(k) ] P [ A(k) X(k) + B(k) U(k) ] - X^{T}(k) P X(k) \\
+= & X^{T}(k)  A^{T}(k) P A(k) X(k) +  X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P A(k) X(k) + U^{T}(k) B^{T}(k) P B(k) U(k) - X^{T}(k) P X(k) \\
+= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P B(k) U(k)
+\end{aligned}
+\end{equation}
+
+By applying equation \eqref{eq:Q_bound}, we can have
+\begin{equation}
+\label{eq:lyapunov_delta3}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k).
+\end{aligned}
+\end{equation}
+
+Because we have
+\begin{equation}
+\label{eq:norm_Q_bound}
+\lambda_{min}(Q') < | Q' | < \lambda_{max}(Q'),
+\end{equation}
+\begin{equation}
+\label{eq:lyapunov_delta4}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) | + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) | + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+& - \frac{1}{2} \lambda_{min}(Q') [ | X(k) |^{2} - \frac{4 | A^{T}(k) P B(k) | }{ \lambda_{min}(Q') }  | X(k) | | U(k) | + \frac{4 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } | U(k) |^{2} ] \\
+& + [ \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) |  ] | U(k) |^{2} \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} - \frac{1}{2} \lambda_{min}(Q') ( | X(k) | - \frac{2 | A^{T}(k) P B(k) | }{ \lambda_{min}(Q') } | U(k) | )^{2} \\
+& + [ \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) | ] | U(k) |^{2} \\
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) | ] | U(k) |^{2} 
+\end{aligned}
+\end{equation}
+
+By equations \eqref{eq:A_bound} and \eqref{eq:B_bound}, we have
+\begin{equation}
+\label{eq:APB_bound}
+| A^{T}(k) P B(k) | \leq | A' | | P | | B' |
+\end{equation}
+and
+\begin{equation}
+\label{eq:BPB_bound}
+| B^{T}(k) P B(k) | \leq | P | | B' |^{2}.
+\end{equation}
+
+Thus, we can have
+\begin{equation}
+\label{eq:lyapunov_delta5}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 | A' |^{2} | P |^{2} | B' |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | P | | B' |^{2} | ] U(k) |^{2}.
+\end{aligned}
+\end{equation}
+
+Let
+\begin{equation}
+\label{eq:proof_alpha3_func}
+\alpha_{3} ( \xi )= \frac{1}{2} \lambda_{min}(Q') \xi^{2}
+\end{equation}
+and
+\begin{equation}
+\label{eq:proof_sigma_func}
+\sigma ( \xi ) = [ \frac{2 | A' |^{2} | P |^{2} | B' |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | P | | B' |^{2} | ] \xi^{2},
+\end{equation}
+we can find that equation \eqref{eq:lyapunov_v} is a ISS-Lyapunov function.
+
+By Lemma \ref{lem:iss_stable}, we have that equation \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
+
+\end{proof}

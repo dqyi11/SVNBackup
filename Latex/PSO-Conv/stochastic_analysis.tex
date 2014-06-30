@@ -1,0 +1,178 @@
+\section{Stochastic Analysis}
+
+The input-to-stable stability analysis can also be applied to stochastic analysis, like those in \cite{Jiang20078} and \cite{Poli:2008:DSS:1384929.1384944}.
+
+\subsection{Mean convergence analysis}
+
+In analyzing the mean of the dynamic, we are less interested with the mean of the velocity. 
+We adopt a same way like \cite{Jiang2001857} to construct the mean\footnote{How it is derived is given in appendix \ref{sec:app:derivation_mean} }.
+
+\begin{equation}
+\label{eq:pso1_alg_mean_linalg:final}
+\begin{bmatrix}
+E( x(k+1) ) \\
+E( x(k) )
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 + \chi - a(k) - b(k) & -\chi \\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+E( x(k) ) \\
+E( x(k-1) )
+\end{bmatrix}
++
+\begin{bmatrix}
+a(k) & b(k) \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+E( x^{P}(k) ) \\
+E( x^{G}(k) )
+\end{bmatrix}
+\end{equation}
+
+We are interested with how $ E( x(k) ) $ deviates from the optimal position $ x^{*} $.
+Thus, we had a coordinator transformation to move from the origin $ [0, 0]^{T} $ to the origin $ [x^{*}, x^{*}]^{T} $.
+Let
+\begin{equation}
+\label{eq:def_delta_ex}
+\Delta E( x(k) ) = E( x(k) ) - x^{*},
+\end{equation}
+\begin{equation}
+\label{eq:def_delta_exg}
+\Delta E( x^{G}(k) ) = E( x^{G}(k) ) - x^{*}
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_delta_exp}
+\Delta E( x^{P}(k) ) = E( x^{P}(k) ) - x^{*}
+\end{equation}
+
+\begin{equation}
+\label{eq:pso1_alg_mean_linalg:final:trans}
+\begin{bmatrix}
+\Delta E( x(k+1) ) \\
+\Delta E( x(k) )
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & -\chi \\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\Delta E( x(k) ) \\
+\Delta E( x(k-1) )
+\end{bmatrix}
++
+\begin{bmatrix}
+\frac{ \chi \phi^{P} }{2} & \frac{ \chi \phi^{G} }{2} \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+\Delta E( x^{P}(k) ) \\
+\Delta E( x^{G}(k) )
+\end{bmatrix}
+\end{equation}
+
+The input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:final:trans} shows how the $ E(x(k)) $ will deviate from the $ x^{*} $ when we know how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from the $ x^{*} $.
+\begin{mythm}
+The system \eqref{eq:pso1_alg_mean_linalg:final:trans} is input-to-state stable, if there exist a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q $ so that
+$ A^{T} P A - P = Q $ and
+\begin{equation}
+A =
+\begin{bmatrix}
+1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & -\chi \\
+1 & 0
+\end{bmatrix}.
+\end{equation}
+\end{mythm}
+
+
+\subsection{Variance convergence analysis}
+
+In analyzing the variance, we are interested with how the $ VAR(x(k)) $ deviates the origin.
+There is no need to have a coordinator transformation.
+
+The variance convergence analysis is usually based on that the mean has converged \cite{Jiang20078} \cite{Poli:2007:EAS:1276958.1276977}.
+We have the means of $ x(k) $, $ x^{G}(k) $ and $ x^{P}(k) $ as constant, which are $ E(x(k)) = E(x) $, $  E(x^{G}(k)) = \bar{x}^{G} $. and $ E(x^{P}(k)) = \bar{x}^{P} $. 
+For convenience, we have
+\begin{equation}
+\label{eq:def_delta_mean_xg}
+E(x^{G}(k)) - E(x(k)) =  \bar{x}^{G} - E(x) = \Delta \bar{x}^{G}
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_delta_mean_xp}
+E(x^{P}(k)) - E(x(k)) =  \bar{x}^{P} - E(x) = \Delta \bar{x}^{P}.
+\end{equation}
+
+We have the variance model as\footnote{How it is derived is given in appendix \ref{sec:app:derivation_variance} }
+\begin{equation}
+\label{eq:pso1_alg_var_linalg}
+\begin{aligned}
+\begin{bmatrix}
+VAR( x(k) ) \\
+VAR( x(k-1) ) \\
+VAR( x(k-2) ) 
+\end{bmatrix}
+= &
+\begin{bmatrix}
+- \chi + \alpha_{2}  &  \chi^{2} + \chi \alpha_{2} + 2 \chi ( \alpha_{1} )^{2}  & \chi^{2} \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+VAR( x(k-1) ) \\
+VAR( x(k-2) ) \\
+VAR( x(k-3) ) 
+\end{bmatrix}
+\\ & +
+\begin{bmatrix}
+\beta_{1} & \beta_{2} & \beta_{3} \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+VAR( x^{G}(k-1) ) \\
+VAR( x^{P}(k-1) ) \\
+1
+\end{bmatrix},
+\end{aligned}
+\end{equation}
+in which
+\begin{equation}
+\label{eq:def_param_alpha1}
+\alpha_{1} = 1 + \chi - \frac{ \chi \phi^{G} }{2} - \frac{ \chi \phi^{P} }{2}
+\end{equation}
+\begin{equation}
+\label{eq:def_param_alpha2}
+\alpha_{2} = (1 + \chi - \chi \frac{ \phi^{G} + \phi^{P} }{ 2 } )^{2} - \frac{1}{6} \chi^{2} ( ( \phi^{G} )^{2} + ( \phi^{P} )^{2} ),
+\end{equation}
+\begin{equation}
+\label{eq:def_param_beta1}
+\beta_{1} = \frac{1}{12} \chi^{2} ( \phi^{G} )^{2},
+\end{equation}
+\begin{equation}
+\label{eq:def_param_beta2}
+\beta_{2} = \frac{1}{12} \chi^{2} ( \phi^{P} )^{2},
+\end{equation}
+and
+\begin{equation}
+\label{eq:def_param_beta3}
+\beta_{3} = \frac{ \chi^{2} }{ 12 } [ (\phi^{G})^{2} (\Delta \bar{x}^{G} )^{2} + (\phi^{P})^{2} (\Delta \bar{x}^{P} )^{2} + 6 \phi^{G} \phi^{P} \Delta \bar{x}^{G} \Delta \bar{x}^{P} ].
+\end{equation}
+
+\begin{mythm}
+The system \eqref{eq:pso1_alg_var_linalg} is input-to-state stable, if there exist a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q $ so that
+$ A^{T} P A - P = Q $ and
+\begin{equation}
+A = 
+\begin{bmatrix}
+- \chi + \alpha_{2}  &  \chi^{2} + \chi \alpha_{2} + 2 \chi ( \alpha_{1} )^{2}  & \chi^{2} \\
+1 & 0 & 0 \\
+0 & 1 & 0
+\end{bmatrix}.
+\end{equation}
+\end{mythm}

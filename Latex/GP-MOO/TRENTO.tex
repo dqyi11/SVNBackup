@@ -1,0 +1,30 @@
+\section{Active learning of Pareto fronts}
+
+\begin{itemize}
+\item [\textbf{2014}] Active learning of Pareto fronts~\cite{6606803}
+\end{itemize}
+
+Active learning is also used to estimate the Pareto front.
+There is an assumption, which is for a $ m $-objective continuous MOP, the Pareto front is a $ (m-1) $-dimensional piecewise-continuous manifold.
+
+By the dominance relation, we can write $ z_{d} = g(\mathbf{z}_{I}) $.
+Without loss of generality, $ z_{m} = g(\mathbf{z}_{I}), I = \{ 1, \cdots , m-1 \} $.
+Define $ z^{ID}_{k} = \min_{x \in \Omega} f_{k} (x) $.
+This is a functional formulation of the Pareto Front by expressing an arbitrary objective $ z_{d} $ as a continuous function $ g $ of the remaining objectives $ \mathbf{z}_{I} $.
+Gaussian process can be used as a regression task with input feature vector $ \mathbf{z}_{I} $ and output $ z_{m} $, which makes the approximated Pareto-optimal vector$ ( \mathbf{z}_{I}, z_{m} ) $.
+
+ALP algorithm is as following:
+\begin{itemize}
+\item \textbf{Initialization}
+\begin{itemize}
+\item selecting $ \mathbf{z}_{I} $ randomly;
+\item generating $ z_{m} $ by $ \min f_m(x) $ with constraint $ f_{i} (x) = z_{i} , i = 1, \cdots , m-1 $;
+\item initializing training set $ T $ by $ v $ of $ (\mathbf{z}_{I} , z_{m}) $;
+\item dominance-based filtering = removing dominated instance by new training instances.
+\end{itemize}
+\item \textbf{Iteration}
+\begin{itemize}
+\item train Gaussian process model on set $ T $
+\item select most informative $ \mathbf{\hat{z}}_{I} $ - \emph{Uncertainty sampling principle}
+\end{itemize}
+\end{itemize}

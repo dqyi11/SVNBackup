@@ -1,0 +1,5 @@
+The number of node expanded is 8145
+The number of complete expanding node is 94963
+PATH BY EXPANDING TREE N : HexaPath: 9-14 9-15 10-14 10-15 11-15 12-15 13-14 14-14 15-14 
+SCORE: 12.0683459906105
+TIME SPENT: 12831.734

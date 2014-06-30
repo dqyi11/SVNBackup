@@ -1,0 +1,41 @@
+\section{Active learning for multi-objective optimization}
+
+\begin{itemize}
+\item [\textbf{2013}] Active learning for multi-objective optimization~\cite{zuluaga2013active}
+\item [\textbf{2012}] "Smart" Design Space Sampling to Predict Pareto-optimal Solutions~\cite{Zuluaga2012} 
+\end{itemize}
+
+\emph{Pareto Active Learning} (PAL) is proposed to solve the multi-objective optimization problem, which samples design space to predict Pareto-optimal set.
+The process includes
+\begin{itemize}
+\item modeling the objectives as samples from a Gaussian process distribution;
+\item choosing next design;
+\item controlling prediction accuracy and sampling cost.
+\end{itemize}
+
+\begin{tabular}{|c|c|} \hline
+design space $ E \subset \mathbb{R}^{d} $ & objective space $ f(E) \subset \mathbb{R}^{n} $ \\ \hline
+Pareto-optimal set $ P $ & Pareto front $ f(P) $ \\ \hline
+\end{tabular}
+
+$ P $ - positive, 
+$ N $ - negative, 
+$ U $ - unclassified, 
+$ S $ - evaluated set and $ R $ - uncertainty region.
+
+The performance is measured by hyper-volume error, which is volume enclosed by $ f(P) / f(\hat{P}) $.
+``Hyper-volume error'' is defined as $ \eta = V(P) - V(\hat{P}) $.
+Using a Gaussian process to predict $ f_{i} $ makes $ \mu(x) $ and uncertainty $ \sigma(x) $.
+
+Hyper-rectangle is defined as 
+$ Q_{\mu, \sigma, \beta}(x) = \{ y \mid \mu(x)-\beta^{1/2} \sigma(x) \preceq  y \preceq \mu(x)+\beta^{1/2} \sigma(x) \} $.
+It is used to update the uncertain region
+$ R_{t}(x) = R_{t-1}(x) \cap Q_{\mu, \sigma, \beta}(x) $.
+
+The initialization is $ P_{0} = \phi $, $ N_{0} = \phi $, $ U_{0} = E $, $ S_{0} = \phi $ and $ R_{0} = E $. 
+The repeat process includes
+\begin{itemize}
+\item \textbf{modeling} - calculate $ \mu(x) $ and $ \sigma(x) $;
+\item \textbf{classification} - update $ P_{t} $, $ N_{t} $ and $ U_{t} $;
+\item \textbf{sampling} - $ x_{t+1} = \arg \max_{ U_{t} \cup P_{t} \setminus S_{t} } \{ w_{t}(x) \} $ and $ w_{t} (x) = \max_{y, y^{'} \in R_{t} (x) } \parallel y - y^{'} \parallel_{2} $.
+\end{itemize}

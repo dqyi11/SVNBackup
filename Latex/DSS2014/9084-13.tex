@@ -1,0 +1,49 @@
+\documentclass[]{spie}  %>>> use for US letter paper
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{amsmath}
+
+\title{Supporting task-oriented collaboration in human-robot teams using semantic-based path planning}
+
+\author{Daqing Yi and Michael A. Goodrich
+\skiplinehalf
+Brigham Young University, Provo, UT, USA 
+}
+
+\authorinfo{Further author information: (Send correspondence to Michael A. Goodrich)\\Daqing Yi: E-mail: daqing.yi@byu.edu\\  Michael A. Goodrich: E-mail: mike@cs.byu.edu}
+
+\begin{document} 
+\maketitle
+
+\begin{abstract}
+Improvements in robot autonomy are changing the human-robot interaction from low-level manipulation to high-level task-based collaboration.
+For a task-oriented collaboration, a human assigns sub-tasks to robot team members.
+%There usually exists difficulty for the human to define an accurate model for the robots, especially in the form of natural languages.
+In this paper, we consider task-oriented collaboration of humans and robots in a cordon and search problem.
+We focus on a path-planning framework with natural language input.
+By the semantic elements in a shared mental model, a natural language command can be converted into optimization objectives.
+We import multi-objective optimization to facilitate modeling the ``adverb'' elements in natural language commands.
+Finally, human interactions are involved in the optimization search process in order to guarantee that the found solution correctly reflects the human's intent.
+\end{abstract}
+
+\keywords{Path planning, Multi-objective optimization, Semantic-based HRI}
+
+\input{intro.tex}
+
+\input{semantic.tex}
+
+\input{moo.tex}
+
+\input{system.tex}
+
+\input{summary.tex}
+
+\acknowledgments     %>>>> equivalent to \section*{ACKNOWLEDGMENTS}       
+We would like to thank the Robotics Collaborative Technology Alliance for providing funding for this work.
+The views of this paper do not necessarily reflect the views of the funding agency.
+
+\bibliography{reference}   %>>>> bibliography data in report.bib
+\bibliographystyle{spiebib}   %>>>> makes bibtex use spiebib.bst
+
+\end{document} 

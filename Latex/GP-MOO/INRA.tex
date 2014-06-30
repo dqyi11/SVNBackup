@@ -1,0 +1,16 @@
+\section{Stepwise uncertainty reduction}
+
+\begin{itemize}
+\item [\textbf{2013}] Multiobjective optimization using Gaussian process emulators via
+stepwise uncertainty reduction~\cite{picheny2013multiobjective}
+\item [\textbf{2014}] A stepwise uncertainty reduction approach to constrained global optimization~\cite{picheny2014stepwise}
+\end{itemize}
+
+\emph{Stepwise uncertainty reduction} (SUR strategy) is used to reduce an uncertainty measure by sequential sampling about a quantity of interest.
+The objective space is decomposed into cells, which are hyper-rectangles $ \Omega_{i} $.
+A set of non-dominated cells $ I^{*} $ can be found by comparing with all other cells.
+
+\emph{Improvement} is defined as the difference between the current observed minimum and the new function value if it is positive, or zero otherwise, which is written as $ \max(0, u^{min}_{n}-Y(x)) , y^{min}_{n} = \min(y_{1}, \cdots , y_{n}) $.
+\emph{Expected improvement} is conditional expectation under the GP model
+$ EI(x) = E[ \max(0, u^{min}_{n}-Y(x)) \mid A_{n} ] $.
+The new measurement is selected as $ x_{n+1} = \arg \max_{x \in X} EI(x) $.

@@ -1,0 +1,140 @@
+\section{An Application to Robot Wingman}
+\label{sec:wingman}
+
+In this section, we apply Algorithm \ref{alg:Anytime} to the robot wingman problem~\cite{goodrich2013toward}.
+Let $R_{\rm flank}$ denote the {\em flank support range}, which determines the area that a robot wingman is expected to stay in when a human is moving; this is illustrated in Figure \ref{fig:Wingman}.
+The robot wingman constraint requires that $ \forall t, || x_{t} - y^{h}_{t} || \leq R_{flank} $ or, equivalently, 
+$ \forall t \in T,  x_{t} \in N( y^{h}_{t} ) $.
+
+Consider a two-dimension search space discretized into a world of hexagonal cells.
+This discretization gives a constant distance from the center of one cell to any of its immediate neighbors, which facilitates modeling the agent observation range.
+Moreover, a hexagonal tessellation is consistent with the assumption that we made that the robot would move at constant speed from one cell to another; in a hexagonal tessellation, the distances between the centers of all neighboring cells and the current cell is constant.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.35\linewidth]{./images/Wingman.pdf}
+\caption{A Robot Wingman Framework.}
+\label{fig:Wingman}
+\end{figure}
+
+The observation model of an agent uses the likelihood of detecting an object of interest in cell $ i $ and follows Bayes rule in updating the posterior~\cite{goodrich2013toward}.
+Since we know the human's path, $ Y^{h} $, we can use the human's observation model to predict what the human could observe and update the prior distribution of information to reflect this.
+The simulation results we present assume that human observations have already been factored into the prior distribution of information.
+
+\subsection{Performance}
+
+We simulate the use of the algorithm in a search space in which the entropy of each cell is randomly generated.
+The simulation results are aggregated from 20 runs of each case.
+The parameters $ R_{flank} = 2 $ is used for the neighboring function of the human path constraint and $ R^{robot}_{obs} = 2 $ is used for the robot's observation range.
+
+We use a ``fully expanded tree size'' to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
+Due to the human constraint, the planning length is determined by the human's path length.
+The performance of the heuristic is measured by the \emph{percentage of optimal at first run}, that is a percentage computed from the value obtain in the first run of Algorithm \ref{alg:Anytime} over the optimal value.
+High values of this metric indicate that the heuristic is useful.
+The greedy heuristic~\cite{singh2009efficient}, which chooses the maximum next step, is imported to compare with the backtracking heuristic.
+Figure \ref{fig:compareGreedy} shows the comparison between two types of heuristic on the percentages of the optimal as a function of different planning lengths.
+We can see that the performance of the backtracking heuristic significantly surpasses that of the greedy heuristic.
+
+Naturally, as the size of the search space expands, the difficulty in finding the optimal solution using an exhaustive search grows.  Since we want to understand how well our anytime algorithm performs for problems that are too big to search exhaustively, we bound the payoff for the optimal path by using a ``teleport'' search in which the robot can bounce from region to region without following a connected path.
+Figure \ref{fig:largeprob} shows the rewards collected using the path produced by the backtracking heuristic normalized by the rewards collected by the``teleport'' path for large search spaces. Again, the backtracking heuristic is  much better than the greedy solution (similarly normalized).
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/compareGreedy}
+\caption{The performance comparison between the backtracking heuristic and the greedy heuristic.}
+\label{fig:compareGreedy}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/largeprob}
+\caption{The performance comparison between the backtracking heuristic and the greedy heuristic in a large problem space.}
+\label{fig:largeprob}
+\end{figure}
+
+We use \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
+In particular, we are interested in whether freezing nodes improves search efficiency.
+Figure \ref{fig:diffT:a1} shows that the percentage of nodes explored decreases significantly when the problem size is expanded.
+Since the anytime algorithm becomes an exhaustive search in the absence of freezing nodes (and hence follows the size of the search space in the figure), this figure indicates that the percentage of nodes expanded is significantly decreased by freezing nodes.
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/T_ProbSize_ExpRatio.pdf}
+\caption{Problem size and exploration ration with different planning lengths.}
+\label{fig:diffT:a1}
+\end{figure}
+In the anytime algorithm, the exploration might not stop when the optimal is found, due to the existence of overestimation.
+If current best of a search can reach the optimal very quickly, it means that a best solution found in a fixed time has high probability of being optimal.
+We use \emph{percentage of runs reaching the optimal} to measure this optimal search capability of Algorithm \ref{alg:Anytime}.
+Figure \ref{fig:diffT:a2} illustrates that the anytime algorithm can find the optimal solution relatively quickly.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/T_InitOpt_OptRch.pdf}
+\caption{Percentages of optimal at first iteration and Percentage of runs reaching the optimal with different planning lengths.}
+\label{fig:diffT:a2}
+\end{figure}
+
+\subsection{Robustness}
+
+We extend the search environment from \emph{random} to \emph{uniform} and \emph{multimodal}.
+Uniform indicates that the entropies in different cells are identical, and multimodal indicates that the entropy distribution among cells is a multi-modal spatial distribution.
+Figure \ref{fig:EnvPerform} shows that Algorithm \ref{alg:Anytime} consistently performs well in different types of search environment.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/EnvPerform}
+\caption{Performance in different types of environments.}
+\label{fig:EnvPerform}
+\end{figure}
+
+In order to illustrate how well Algorithm \ref{alg:Anytime} adapts to different human path constraints, we introduce five common patterns of paths executed by a human in a search task, which are \emph{line}, \emph{spiral}, \emph{lawn-mower}, \emph{arc} and \emph{loitering}.
+Figure \ref{fig:diffHMP} shows examples on these five patterns.
+Due to the wingman constraint, different human paths lead to different problem sizes and different ratios of overlap in the coverage at two different time steps.
+For this comparison we hold the number of time steps fixed at $ 11 $ over different patterns as in Figure \ref{fig:diffHMP}. 
+
+\begin{figure} 
+  \centering 
+  \subfigure[Line]{ 
+    \label{fig:HMP_Line}
+    \includegraphics[width=0.2\linewidth]{./images/HMP_Line_Small.png}} 
+  \subfigure[Spiral]{ 
+    \label{fig:HMP_Sipral}
+    \includegraphics[width=0.14\linewidth]{./images/HMP_Spiral_Small.png}}
+  \subfigure[Lawn-mower]{ 
+    \label{fig:HMP_LawnMower} 
+    \includegraphics[width=0.14\linewidth]{./images/HMP_LawnMower_Small.png}}  
+  \subfigure[Arc]{ 
+    \label{fig:HMP_Arc}
+    \includegraphics[width=0.2\linewidth]{./images/HMP_Arc_Small.png}} 
+  \subfigure[Loitering]{ 
+    \label{fig:HMP_Loitering}
+    \includegraphics[width=0.14\linewidth]{./images/HMP_Loitering_Small.png}}                
+  \caption{Different patterns of human path.} 
+  \label{fig:diffHMP}
+\end{figure}
+
+Figure \ref{fig:ProbSizeInDiffHMP} shows that the problem size varies significantly depending on the type of path, though the planning length is identical.
+Interestingly, Algorithm \ref{alg:Anytime} shows better efficiency in larger problem size.
+In Figure \ref{fig:ExpRatioInDiffHMP}, we can see that the ratios of explored nodes are relatively smaller in the patterns of ``spiral'', ``lawn-mower'' and ``loitering'', in which the problem sizes are relatively larger in Figure \ref{fig:ProbSizeInDiffHMP}.
+We can see that the percentage of optimal at first run are all close to the optimum in all the patterns in Figure \ref{fig:InitOptInDiffHMP}, which implies the goodness of the backtracking heuristic.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/ProbSizeInDiffHMP}
+\caption{Problem size in different patterns of human paths.}
+\label{fig:ProbSizeInDiffHMP}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/ExpRatioInDiffHMP}
+\caption{Exploration ratios in different patterns of human paths.}
+\label{fig:ExpRatioInDiffHMP}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./images/InitOptInDiffHMP}
+\caption{Percentages of optimal at first iteration in different patterns of human paths.}
+\label{fig:InitOptInDiffHMP}
+\end{figure}

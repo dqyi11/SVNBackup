@@ -1,0 +1,40 @@
+\section{Introduction}
+\label{sec:intro}
+
+In problems that require searching for an object of interest, robots can make human efforts more effective because robots can be more robust to environmental contamination and can sense things beyond of human capabilities.
+Designing the interactions between a human and a robot for search is no longer constrained to Sheridan's levels of autonomy~\cite{sheridan1978human}.
+Alternatives to Sheridan's levels for a search task include interactions where the human manages the robot either by shaping the information used by the robot to make decisions~\cite{Lanny2010} or by imposing constraints on robot and then allowing the robot to flexibly plan within those constraints~\cite{Lanny2010,clark2013hierarchical,BradshawAdjAuto2002}.  
+
+In this paper, we consider constraint-based interactions  between a human and a robot for a search task.
+Rather than consider constraints like no-fly zones or strict waypoints, we explore path constraints imposed by the human and then allow the robot to deviate from the path within some specified tolerance.
+The source of these constraints range from the robot operating as a ``wingman'', to a co-located human searcher, to a human telling the robot to approximate the shortest path to an object of interest while gathering maximal information.
+%Since the problem is a search problem, we assume that the robot and human's objective is to maximize information obtained by the robot's sensors.
+Furthermore, we assume that the robot's path-planner operates on a discretized representation of the environment and that the robot's sensor footprint covers multiple cells in the discrete representation.
+Finally, we assume that the robot's sensor becomes less accurate as the distance between the robot and an object of interest grows.
+These assumptions make the path-planning problem a constrained version of the submodular orienteering problem on a graph.
+%Efficient approximation algorithms exist for unconstrained versions of this problem~\cite{singh2009efficient}, such as those that arise with sensor placement.
+%A path constraint imposes a topological constraint that can be efficiently approximated for some types of constraints using a budget-like approach~\cite{chekuri2005recursive}.
+%Unfortunately, this budget-like approach does not work for the type of constraint that we consider, namely a bounded deviation from a specified path.
+
+This paper presents an anytime approximate solution to this problem that uses backtracking to generate an efficient heuristic and an expanding tree.
+Section \ref{sec:problem} shows how a multi-partite graph is generated using the human-path constraint and formulates the problem into a class of submodular orienteering on a multi-partite graph.
+Section \ref{sec:submod_orienteer} describes the algorithm in the context of solving the submodular orienteering problem and presents a proof that the algorithm will always find the optimal solution, given enough time.
+Section \ref{sec:wingman} introduces a robot wingman problem to demonstrate the performance and efficiency of the algorithm.
+
+\section{Related Work}
+By modeling the objective of a search task using information measurement, previous work has focused on planning a path for a robot to maximize information gained in a reasonable time, especially in a large problem spaces.
+In a continuous space, a rapidly-exploring random tree can solve the information maximization path planning problem, and also shows good efficiency in an online optimization~\cite{levine2010information}.
+If there exists a temporal logical constraint, a receding horizon planning can be used~\cite{JonesSchwagerBeltaICRA13scLTLInfo}.
+
+If the robot's observation model is a coverage instead of a point, the objective of the path planning becomes \emph{maximum coverage}.
+Maximum coverage is a classic NP-hard combinatorial optimization problem~\cite{megiddo1983maximum}, which includes unignorable overlaps.
+The total information of a set of observation coverages is measured by mutual information, which implies a property of ``nondecreasing submodularity''~\cite{singh2009efficient}.
+A greedy approximation with known performance bound can efficiently exploit the submodularity property of mutual information~\cite{singh2009efficient}.
+A branch and bound approach can also be used in informative path planning~\cite{binney2012branch}.
+
+Maximizing the reward collected from a limited-length graph walk is usually known as an \emph{orienteering problem} \cite{Vansteenwegen20111}, in which the total reward is a summation of the rewards of visited vertices.
+If the reward function of a vertex has submodularity as in a \emph{maximum coverage problem}, the problem is defined as a \emph{submodular orienteering problem}~\cite{chekuri2005recursive}.
+Unfortunately in the submodular orienteering case
+the location of the robot at time $ t $ constrains the reachable locations at time $ t+1 $.
+Thus, na\"{\i}vely applying a greedy algorithm to the submodular orienteering case, that is, with a ``teleport'' assumption, yields poor results~\cite{krause2012submodular}.
+For a generalization of the submodular orienteering problem in which the neighboring constraint can be converted into a time budget, a recursive greedy algorithm can be applied~\cite{chekuri2005recursive}.

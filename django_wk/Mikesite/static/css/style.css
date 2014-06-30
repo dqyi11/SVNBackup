@@ -1,0 +1,141 @@
+body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 10pt;
+	line-height: 14pt;
+	padding: 20px;
+	background-color:#EFF6FC
+}
+
+h1 {
+	font-size: 20pt;
+	font-weight: normal;
+	line-height: 24pt;
+	color: #C5AF7D;
+}
+
+.utitle_blk {
+    float:right;
+    margin-right:25px
+}
+
+a.utitle_text {
+    color: #F9FCFE;
+    font-size: 10pt;
+    font-weight: normal;
+}
+
+a.byu_logo {
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+span.mtitle_text {
+	color: #C5AF7D;
+	font-size: 20pt;
+	font-weight: bold;
+}
+
+#navcontainer {
+	text-align: center;
+}
+
+#navcontainer ul{
+	background: #003366;
+	list-style-type: none;
+	margin:0;
+	padding:0;
+}
+
+#navcontainer li {
+	display: inline;
+	float: center;
+	padding: 0px 5px;
+}
+
+#navcontainer a {
+    color: #FFFFDD;
+    font-size: 12pt;
+    text-decoration: none;
+}
+
+#avatar {
+    text-align: center;
+    vertical-align:middle;
+    padding-top:20px;
+}
+
+#bio {
+    text-align: center;
+}
+#bio_name {
+    font-size: 14pt;
+}
+#bio_title {
+	color: #C5AF7D;
+    font-size: 12pt;
+    font-weight: bold;    
+}
+
+#footer td{
+    background-color: #91B2D2;
+    text-align: center;
+}
+
+#bio_contact {
+    text-align: center;
+}
+
+a.bio_cv {
+	text-decoration: none;
+    color: #114477;
+}
+
+a.bio_cv:hover {
+    text-decoration: underline;
+}
+
+#pub_list ul {
+    width: 700px;
+    vertical-align:top;
+}
+
+#pub_list li {
+	vertical-align:top;
+}
+
+a.pub_auth {
+}
+
+a.pub_title {
+    font-weight: bold;
+}
+a.pub_info {
+    font-style:italic;
+}
+
+#search_bar #current {
+	color: #114477;
+	font-size: 110%;
+	font-weight: bold;
+}
+
+#search_bar a {
+    color: #336699;
+    text-decoration: none;
+}
+
+#search_bar li {
+    color: #336699;
+	text-decoration: none;
+}
+
+#search_bar ul {
+    list-style-type: none;
+}
+
+#search_bar h3 {
+	color: #C5AF7D;
+}
+
+

@@ -1,0 +1,44 @@
+\documentclass[]{spie}
+
+\usepackage[]{graphicx}
+%\usepackage[]{natbib}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{setspace}
+\doublespacing
+
+\newtheorem{hyp}{Hypothesis}
+
+
+\title{Distributed attitude synchronization and tracking}
+
+\author{Daqing Yi
+%\skiplinehalf
+%Brigham Young University
+}
+
+\begin{document}
+
+\maketitle
+
+\input{intro.tex}
+
+\input{prob_stat.tex}
+
+\input{coop_att_syn.tex}
+
+\input{ref_att_trk.tex}
+
+\input{io_stable.tex}
+
+%\input{simulation.tex}
+
+\input{summary.tex}
+
+\bibliographystyle{spiebib}
+\bibliography{reference}
+
+\end{document}

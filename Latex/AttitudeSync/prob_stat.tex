@@ -1,0 +1,64 @@
+\section{Problem Statement}
+\label{sec:prob_stat}
+
+\subsection{Rigid body attitude dynamics}
+\label{sec:att_dyn}
+
+In a multi-agent system, each agent adopts a rigid body attitude dynamics.
+For an agent $ i $, let $ \phi_{i}  \in \mathbb{R}^{3} $ be its angle, $ \omega_{i} \in \mathbb{R}^{3} $ be its angular velocity, 
+$ J_{i} \in \mathbb{R}^{3} \times \mathbb{R}^{3} $ be its inertia and $ \tau_{i} \in \mathbb{R}^{3} $ be its control torque.
+Modified Rodriguez parameters(MPR) is introduced to represent attitude, which is $ \sigma_{i} = a_{i} \tan( \frac{ \phi_{i} }{4} ) $.
+The attitude dynamics of agent $ i $ is transformed into 
+\begin{subequations}
+\begin{equation}
+ \dot{\sigma}_{i} = F( \sigma_{i} ) \omega_{i},
+\end{equation}
+\begin{equation} 
+  J_{i} \dot{\omega}_{i} = - \omega_{i} \times J_{i} \omega_{i} + \tau_{i},
+\end{equation}  
+\end{subequations}  
+where $ F( \sigma_{i} ) = \frac{1}{2} \left[  \frac{ 1 - \sigma^{T}_{i} \sigma_{i} }{2} I_{3} + \sigma_{i}^{ \times } + \sigma_{i} \sigma^{T}_{i} \right] $
+\footnote{ For a vector $ v = [ v_{1}, v_{2}, v_{3} ]^{T} $, $ v^{\times} = \begin{bmatrix} 0 & - v_{3} & v_{2} \\ v_{3} & 0 & - v_{1} \\ - v_{2} & v_{1} & 0 \end{bmatrix} $. It means that $ v \times w = v^{\times} w $. }.
+
+It can be written in another form 
+\begin{equation}
+H^{*}_{i} ( \sigma_{i} ) \ddot{\sigma}_{i} + C^{*}_{i} ( \sigma_{i} , \dot{ \sigma }_{i} ) \dot{ \sigma }_{i} = F^{-T} ( \sigma_{i} ) \tau_{i} ,
+\end{equation}
+where $ H^{*}_{i} ( \sigma_{i} ) = F^{-T} ( \sigma_{i} ) J_{i} F^{-1} ( \sigma_{i} ) $ and
+$ C^{*}_{i} ( \sigma_{i} , \dot{ \sigma }_{i} ) = - F^{-T} ( \sigma_{i} ) J_{i} F^{-1} ( \sigma_{i} ) \dot{F} ( \sigma_{i} ) F^{-1} ( \sigma_{i} ) - F^{-T} ( \sigma_{i} ) ( J_{i} F^{-1} ( \sigma_{i} ) \dot{ \sigma_{i} } )^{ \times } F^{-1} ( \sigma_{i} ) $.
+Several properties of these equations have been used to facilitate the control design.
+\begin{itemize}
+\item $ H^{*}_{i} ( \sigma_{i} ) $ is a symmetric positive-definite matrix;
+\item $ \dot{H}^{*}_{i} ( \sigma_{i} ) - 2 C^{*}_{i} ( \sigma_{i} , \dot{ \sigma }_{i} ) $ is a skew-symmetric matrix;
+\item $ \tau_{i} = F^{T}( \sigma_{i} ) \tau^{'}_{i} $ makes $ H^{*}_{i} ( \sigma_{i} ) \ddot{\sigma}_{i} + C^{*}_{i} ( \sigma_{i} , \dot{ \sigma }_{i} ) \dot{ \sigma }_{i} = \tau^{'}_{i} $.
+\end{itemize}
+
+\subsection{The topology of a multi-agent system}
+\label{sec:sys_topo}
+
+The synchronization process relies on the interaction between agents in the system.
+Dr. Ren's paper \cite{5229134} uses a virtual leader, the dynamics of which is not influenced by other agents and is used as the system control objective.
+It is assumed that usually only a small subset of the agents can interact/communicate with the virtual leader due to the communication cost.
+The synchronization process becomes how the control objectives can be propagated from the virtual leader to all other agents.  
+
+There are two types of interaction topology, the directed graph and the undirected graph, which have symmetric and asymmetric adjacency matrices respectively.
+The symmetry property is important in stability proof used in solving the cooperative attitude synchronization problem.
+A symmetric graph Laplacian matrix $ M $ can have $ M^{T} M^{-1} = I $.
+Moreover, it is assumed that the edges are weighted and there is no self-edge.
+In order to guarantee the information propagation and facilitate the problem analysis, it is assumed that there is a path from a virtual leader to any other vertex.
+\begin{itemize}
+\item \textbf{Undirected graph}: The graph is connected, including the vertex of the virtual leader [Theorem 3.1 \cite{5229134}];
+\item \textbf{Directed graph}:  There exists a directed spanning tree, in which the vertex of the virtual leader is the root [Theorem 4.1 \cite{5229134}].
+\end{itemize}
+
+There are two forms of information propagation on the interaction topology.
+The \emph{direct} propagation is by relaying the reference attitude from the virtual leader.
+The \emph{indirect} propagation is by synchronizing with neighboring agents. 
+%The neighborhood is determined by the edges of the interaction topology.
+The advantages of an \emph{indirect} propagation come from the independence of a routing system.
+\begin{itemize}
+\item \textbf{Scalability}: The system can be easily expanded into a large agent number;
+\item \textbf{Flexibility}: The system can adapt to a time-varying interaction topology;
+\item \textbf{Robustness}: The transient performance can be guaranteed due to the coupling effects from the neighbors.
+\end{itemize}
+

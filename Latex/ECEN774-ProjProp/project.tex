@@ -1,0 +1,90 @@
+% LLNCStmpl.tex
+% Template file to use for LLNCS papers prepared in LaTeX
+%websites for more information: http://www.springer.com
+%http://www.springer.com/lncs
+
+\documentclass{llncs}
+%Use this line instead if you want to use running heads (i.e. headers on each page):
+%\documentclass[runningheads]{llncs}
+
+
+\begin{document}
+\title{Distributed Cooperative Attitude Synchronization and Tracking for Multiple Rigid Bodies}
+
+%If you're using runningheads you can add an abreviated title for the running head on odd pages using the following
+%\titlerunning{abreviated title goes here}
+%and an alternative title for the table of contents:
+%\toctitle{table of contents title}
+
+\subtitle{EC EN 774 Project Proposal}
+
+%For a single author
+%\author{Author Name}
+
+%For multiple authors:
+\author{Daqing Yi}
+
+
+%If using runnningheads you can abbreviate the author name on even pages:
+%\authorrunning{abbreviated author name}
+%and you can change the author name in the table of contents
+%\tocauthor{enhanced author name}
+
+%For a single institute
+\institute{\email{dqyi11@gmail.com}}
+
+% If authors are from different institutes 
+%\institute{First Institute Name \email{email address} \and Second Institute Name\thanks{Thank you to...} \email{email address}}
+
+%to remove your email just remove '\email{email address}'
+% you can also remove the thanks footnote by removing '\thanks{Thank you to...}'
+
+
+\maketitle
+
+%\begin{abstract}
+%abstract text goes here - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+%\end{abstract}
+
+This project refers to Dr. Ren's paper of ``Distributed Cooperative Attitude Synchronization and Tracking for Multiple Rigid Bodies'' \cite{5229134}.
+
+In the network synchronization problem, though the interaction topology of multiple agents indicates a linear system model, the network model becomes nonlinear when the dynamics of each agent is nonlinear.
+This project focuses on how the theoretical methods on nonlinear system can be applied to network synchronization problems on nonlinear models.
+
+In \cite{5229134}, distributed cooperative attitude synchronization problem is discussed.
+The attitude of a rigid body follows a nonlinear dynamics.
+Thus, Dr. Ren models the dynamics of the network into a nonlinear system by representing each node with MRP.
+
+Dr. Ren proposed a control law in a passivity approach.
+By proposing a Lyapunov function and using \emph{LaSalle's invariance principle}, Dr. Wen proves that all the agents can converge to the reference attitude without angular velocity measurement through network synchronization.
+
+The problem is extended to time-varying reference tracking.
+A virtual leader is imported as a node in the topology, which connects with only a portion of the agents.
+Because the virtual leader only broadcasts the reference in the interaction, the agents shows reference tracking due to the convergence property in network synchronization.
+Dr. Ren uses a Lyapunov function and \emph{Barbalat's lemma} to prove that the dynamics of the agents converge to the time-varying reference when there is a directed spanning tree in the topology. 
+
+The project plan consists of 
+\begin{itemize}
+\item recognizing the nonlinear model of rigid body attitude dynamics;
+\item understanding how the cooperative attitude synchronization problem is formed;
+\item listing the properties and assumptions in the problem definitions;
+\item understanding the proof strategies;
+\item verifying the performance by simulation;
+\item analyzing and discussing how the work can be enhanced.
+\end{itemize}
+
+%The bibliography, done here without a bib file
+%This is the old BibTeX style for use with llncs.cls
+\bibliographystyle{splncs}
+
+%Alternative bibliography styles:
+%the following does the same as above except with alphabetic sorting
+%\bibliographystyle{splncs_srt}
+%the following is the current LNCS BibTex with alphabetic sorting
+%\bibliographystyle{splncs03}
+%If you want to use a different BibTex style include [oribibl] in the document class line
+
+\bibliography{reference}
+
+\end{document}
+

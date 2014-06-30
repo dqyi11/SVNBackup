@@ -1,0 +1,135 @@
+\section{A Linear System Perspective on the Canonical PSO}
+\label{sec:decomposition}
+
+\cite{4424687} imports a linear system perspective to the canonical PSO. 
+There are two components that influence the systematic dynamic, which are
+\begin{itemize}
+\item how the global best and personal best are updated;
+\item the parameters in the update rule.
+\end{itemize}
+In designing a PSO algorithm for the properties in different problem, different strategies are applied to update the global best and the personal best.
+Relatively, the update rule is rarely modified.
+
+Without loss of generality, we look at only a one-dimension particle to simplify the equations.
+\begin{subequations}
+\label{eq:pso1_alg}
+\begin{equation}
+\label{eq:up_vel1}
+\begin{aligned}
+v(k+1) & = \chi [ v(k) 
+ + \phi^{P} u^{P}(k) (x^{P}(k) - x(k)) + \phi^{G} u^{G}(k) (x^{G}(k) - x(k)) ] \\
+& = \chi v(k) + ( - \chi \phi^{P} u^{P}(k) - \chi \phi^{G} u^{G}(k) ) x(k) + \phi^{P} u^{P}(k) x^{P}(k) + \phi^{G} u^{G}(k) x^{G}(k),
+\end{aligned}
+\end{equation}
+\begin{equation}
+\label{eq:up_pos1}
+\begin{aligned}
+x(k+1) & = x(k) + v(k+1) \\
+& = \chi v(k) + (1 - \chi \phi^{P} u^{P}(k) - \chi \phi^{G} u^{G}(k) ) x(k) + \phi^{P} u^{P}(k) x^{P}(k) + \phi^{G} u^{G}(k) x^{G}(k) .
+\end{aligned}
+\end{equation}
+\end{subequations}
+
+We can organize the equations \eqref{eq:pso1_alg} into a linear form.
+
+\begin{equation}
+\label{eq:pso_up_linalg}
+\begin{aligned}
+\begin{bmatrix}
+v(k+1)
+\\ 
+x(k+1)
+\end{bmatrix}
+= &
+\begin{bmatrix}
+\chi & - \chi (\phi^{G} u^{G}(k) + \phi^{P} u^{P}(k) )
+\\ 
+\chi & 1 - \chi (\phi^{G} u^{G}(k) + \phi^{P} u^{P}(k) )
+\end{bmatrix}
+\begin{bmatrix}
+v(k)
+\\ 
+x(k)
+\end{bmatrix}
+\\ & +  
+\begin{bmatrix}
+\chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
+\\ 
+\chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
+\end{bmatrix}
+\begin{bmatrix}
+x^{G}(k)
+\\ 
+x^{P}(k)
+\end{bmatrix}.
+\end{aligned}
+\end{equation}
+
+Define
+\begin{equation}
+\label{eq:func_a}
+a(k) = \chi \phi^{G} u^{G}(k)
+\end{equation}
+and
+\begin{equation}
+\label{eq:func_b}
+b(k) = \chi \phi^{P} u^{P}(k),
+\end{equation}
+we have a simplified form of equation \eqref{eq:pso_up_linalg} as
+\begin{equation}
+\label{eq:pso_up_linalg_simp}
+\begin{aligned}
+\begin{bmatrix}
+v(k+1)
+\\ 
+x(k+1)
+\end{bmatrix}
+& =
+\begin{bmatrix}
+\chi & - a(k) - b(k)
+\\ 
+\chi & 1 - a(k) - b(k)
+\end{bmatrix}
+\begin{bmatrix}
+v(k)
+\\ 
+x(k)
+\end{bmatrix}
+\\
+& + 
+\begin{bmatrix}
+a(k) & b(k)
+\\ 
+a(k) & b(k)
+\end{bmatrix}
+\begin{bmatrix}
+x^{G}(k)
+\\ 
+x^{P}(k)
+\end{bmatrix},
+\end{aligned}
+\end{equation}
+in which
+$ a(k) \in [0, \chi \phi^{G} ] $ and $ b(k) \in [0, \chi \phi^{P}] $.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{sys_flow.pdf}
+\caption{A system structure of the PSO}
+\label{fig:sys_flow}
+\end{figure}
+
+We can decompose the model of a single particle into two components, which are illustrated in Figure \ref{fig:sys_flow}.
+Two components forms a cascade system structure.
+An \emph{optimization strategy sub-system} generates $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ based on last position $ x_{i}(k) $ and the swarm information from the topology interaction.
+$ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ are used as inputs to the \emph{rule update sub-system}.
+
+The convergence problem are answered by
+\begin{itemize}
+\item whether the \emph{rule update sub-system} is input-to-state stable;
+\item how the output of the \emph{optimization strategy sub-system} is like.
+\end{itemize}
+
+If the \emph{rule update sub-system} is input-to-state stable, the convergence of $ x_{i}(k) $ depends on the boundaries of $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
+In the next section, we will evaluate the input-to-state stability of the rule update sub-system.
+

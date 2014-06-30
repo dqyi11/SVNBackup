@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E0A086AC-9042-460F-9824-56D8E8F7E9FF}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PathPlanner</RootNamespace>
+    <AssemblyName>PathPlaner</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DotNumerics">
+      <HintPath>QuickGraph\DotNumerics.dll</HintPath>
+    </Reference>
+    <Reference Include="EMK.Cartography">
+      <HintPath>QuickGraph\EMK.Cartography.dll</HintPath>
+    </Reference>
+    <Reference Include="EMK.Collections">
+      <HintPath>QuickGraph\EMK.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.GLEE">
+      <HintPath>QuickGraph\Microsoft.GLEE.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.Drawing">
+      <HintPath>QuickGraph\Microsoft.GLEE.Drawing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.GLEE.GraphViewerGDI">
+      <HintPath>QuickGraph\Microsoft.GLEE.GraphViewerGDI.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph">
+      <HintPath>QuickGraph\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Data">
+      <HintPath>QuickGraph\QuickGraph.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Glee">
+      <HintPath>QuickGraph\QuickGraph.Glee.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph.Graphviz">
+      <HintPath>QuickGraph\QuickGraph.Graphviz.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Data\FeatureLabel.cs" />
+    <Compile Include="Data\FeatureLabelManager.cs" />
+    <Compile Include="Data\IndoorLabel.cs" />
+    <Compile Include="Data\IndoorLabelManager.cs" />
+    <Compile Include="Data\OutdoorLabel.cs" />
+    <Compile Include="Data\OutdoorLabelManager.cs" />
+    <Compile Include="Data\ParamMgr.cs" />
+    <Compile Include="Data\PathManager.cs" />
+    <Compile Include="HexagonMap\CalcUtil.cs" />
+    <Compile Include="HexagonMap\ColorConverter.cs" />
+    <Compile Include="HexagonMap\FlatVertice.cs" />
+    <Compile Include="HexagonMap\Hex.cs" />
+    <Compile Include="HexagonMap\HexagonalMap.cs" />
+    <Compile Include="HexagonMap\HexagonalMapDrawer.cs" />
+    <Compile Include="HexagonMap\HexagonalMapState.cs" />
+    <Compile Include="HexagonMap\HexaSet.cs" />
+    <Compile Include="HexagonMap\HexOrientation.cs" />
+    <Compile Include="HexagonMap\HexState.cs" />
+    <Compile Include="HexagonMap\PointyVertice.cs" />
+    <Compile Include="MapViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MapViewForm.Designer.cs">
+      <DependentUpon>MapViewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ParamConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParamConfigForm.Designer.cs">
+      <DependentUpon>ParamConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Planner\Agent.cs" />
+    <Compile Include="Planner\DistMinPathPlanner.cs" />
+    <Compile Include="Planner\ExpandingTree.cs" />
+    <Compile Include="HexagonMap\MapStateManager.cs" />
+    <Compile Include="Planner\PathPlanner.cs" />
+    <Compile Include="Planner\PathPlanningGraph.cs" />
+    <Compile Include="Planner\PlanningGraphGenerator.cs" />
+    <Compile Include="Planner\PlanningGraphPruner.cs" />
+    <Compile Include="Planner\RndWalkPathPlanner.cs" />
+    <Compile Include="Planner\Robot.cs" />
+    <Compile Include="Planner\TopologyGraph.cs" />
+    <Compile Include="Planner\TopologyGraphGenerator.cs" />
+    <Compile Include="Planner\InfoMaxPathPlanner.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToolbarForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ToolbarForm.Designer.cs">
+      <DependentUpon>ToolbarForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Data\MapInfoManager.cs" />
+    <Compile Include="Data\PixelMap.cs" />
+    <EmbeddedResource Include="MapViewForm.resx">
+      <DependentUpon>MapViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ParamConfigForm.resx">
+      <DependentUpon>ParamConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="ToolbarForm.resx">
+      <DependentUpon>ToolbarForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

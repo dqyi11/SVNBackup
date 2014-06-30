@@ -1,0 +1,67 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{lem}{Lemma}
+\newtheorem{Hyp}{Assumption}
+\newtheorem{propty}{Property}
+\newtheorem{thm}{Theorem}
+\newtheorem{mydef}{Definition}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{subfigure}
+\usepackage{float}
+
+\begin{document}
+
+\title{Informative Path Planning for a Wingman Robot in a Collaborative Search Task}
+
+\author{
+\IEEEauthorblockN{Daqign Yi, Michael A. Goodrich and Kevin D. Seppi}
+\IEEEauthorblockA{Department of Computer Science\\
+Brigham Young University\\
+Provo, Utah 30332--0250\\
+Email: daqing.yi@byu.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+We introduce a role of a robot wingman for a search task of a human-robot team.
+The path planning problem for a robot wingman is converted into a submodular orienteering problem on a multi-partite graph.
+We propose a backtracking process to generate the path-search heuristic.
+An expanding tree is imported to track the path search process in an anytime algorithm. 
+We use a node-frozen procedure on the expanding tree to increase the search efficiency and prove that it preserves optimality.
+At the end, a set of simulation results are given to illustrate the algorithm's performance and analyze the sensitivities on different parameters.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\input{introduction.tex}
+
+\input{related_work.tex}
+
+\input{problem_statement.tex}
+
+\input{submod_orienteering.tex}
+
+\input{anytime_alg.tex}
+
+\input{simulation.tex}
+
+\input{summary.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+
+\input{appendix.tex}
+
+\end{document}

@@ -1,0 +1,25 @@
+\section{Introduction}
+\label{sec:intro}
+Particle Swarm Optimization (PSO) is a popular and well-studied algorithm that was originally motivated by the flocking behaviors of birds and insects.
+Soon after its first publication it was discovered that the structure of the PSO algorithm is amenable to formal analysis using dynamical systems theory (sometimes referred to as dynamic systems) \cite{985692}.
+The use of this theory has informed the setting of parameters \cite{Trelea2003317,Jiang20078}, lead to the proposal of new variants of the algorithm \cite{985692}, and allowed for the analysis of the behavior of the algorithm \cite{Schmitt:2013:PSO:2463372.2463563}, especially the behavior at stagnation, that is, when the algorithm fails to find better solutions \cite{985692}.
+
+While the study of the algorithm at stagnation is important and a significant first step, it only answers questions about the behavior at the point that PSO has degenerated into random search.
+At that point the algorithm can be mimicked by simply sampling from the appropriate distribution \cite{5175367}.
+In this paper we extend the limited work that has been done to understand
+the behavior \emph{before} stagnation, that is, when the unique mechanisms of PSO are directing the behavior of the algorithm.
+
+By using a \emph{cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the affect of the personal and global best.
+This paper does so in contrast to prior work which focuses on the position update.
+This model also allows us to make fewer assumptions in mapping from PSO to a dynamical system model.
+Using the cascade model we are able to derive the conditions under which the process is input-to-state stable (ISS)\cite{Jiang2001857}, produce bounds on particle motion, as well as prove bounds on the mean of particle motion.
+The ISS conditions and the bounds can inform parameter adjustments and other properties that can, in turn, control the extent to which the algorithm explores or exploits the fitness landscape.
+This is espeically valuable in the context of the design of future PSO variants. 
+
+The body of this paper is organized as described here.
+In section \ref{sec:sys_model}, we model the PSO dynamics as a cascade system.
+Section \ref{sec:iss} reviews the definition of input-to-state stability (ISS) and shows that for particular parameter values, PSO is ISS. Using the ISS property we then give the bound on particle motion.
+In section \ref{sec:opt_strgy}, we examine the convergence of the algorithm.
+In section \ref{sec:sto_anly}, we introduce the ISS property in a stochastic analysis of mean
+particle behavior.
+

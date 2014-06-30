@@ -1,0 +1,71 @@
+\section{Related Work}
+
+There exists a huge amount of variations on particle swarm optimization algorithms in different types of problems. 
+
+\cite{4223164} defines a standard for the PSO, which includes a ring topology, a constricted update rule and etc. 
+The constricted update rule is written as
+
+\begin{subequations}
+\label{eq:pso_alg}
+\begin{equation}
+\label{eq:up_vel}
+\begin{aligned}
+\vec{v}_{i}(k+1) & = \chi [ \vec{v}_{i}(k) 
+ + \phi^{P} \vec{u}^{P}_{i}(k) \otimes (\vec{x}^{P}_{i}(k) - \vec{x}_{i}(k)) \\
+& + \phi^{G} \vec{u}^{G}_{i}(k) \otimes (\vec{x}^{G}_{i}(k) - \vec{x}_{i}(k)) ],
+\end{aligned}
+\end{equation}
+\begin{equation}
+\label{eq:up_pos}
+\vec{x}_{i}(k+1) = \vec{x}_{i}(k) + \vec{v}_{i}(k+1).
+\end{equation}
+\end{subequations}
+
+As there exists a social interaction between the swarm particles and the random factor in the constricted update rule, the dynamic of the problem usually shows some non-deterministic property, like many other evolutionary algorithms.
+Understanding the system dynamic helps 
+A class of analysis focuses on the convergence of the PSO algorithms. 
+
+\cite{Clerc06stagnationanalysis} proposed the ``stagnation phenomenon'', in which the exploration process is not able to find a new improvement.
+
+The analysis methods can be categorized into two approaches.
+
+One approach is ignoring the stochastic factors, in which the random terms are replaced with constant terms.
+\cite{985692} proposed how a particle will converge when it is in a stagnation.
+Based on the convergence analysis, \cite{Trelea2003317} proposed how to use that as the guidance on parameter selection.
+
+
+The other approach focuses on the stochastic analysis.
+Naturally, after applying the mean to the variables, the stochastic terms are converted into constant terms again. 
+
+Using a continuous time model to approximate the discrete time dynamic of the PSO, \cite{5675669} imported a system dynamic from the continuous model to simulate the particle trajectory. 
+
+From a discrete-time model, 
+\cite{Jiang20078} 
+\cite{jiang2007particle}
+modeled the dynamics of the mean and the variance of a particle in the stagnation.
+Using the characteristic equation, the convergence analysis is obtained.
+In a similar way, 
+\cite{5175367}
+\cite{Poli:2007:EAS:1276958.1276977}
+\cite{Poli:2008:DSS:1384929.1384944}
+modeled the different order moment into discrete-time system.
+Using the discrete-time system model of different moments, the equilibrium can be found.
+The stability requirements are also obtained from the norm of the root values of the characteristic equation are all less than 1.
+
+
+Viewing the system as random search process, 
+\cite{vandenBergh:2010:CPP:2010420.2010421} analyze the the probability of the convergence along the time.
+
+By building a linear system model, \cite{4424687} viewed the PSO algorithm as a closed loop system .
+Moreover, \cite{Chakraborty20111411} applied this modeling method into a multi-objective problem using the PSO algorithm. 
+
+Usually the analyses are taken under the assumption that the system reaches the stagnation, which often means that the global best and the personal best are not changing. 
+It means that the optimal search arrives at a local optimum or a global optimum.
+By looking at the step, \cite{Schmitt:2013:PSO:2463372.2463563} shows how a particle might reach to at least a local optimum.
+
+Converting the stochastic terms in equation \eqref{eq:pso_alg} into constant terms does not consider the effect from the stochastic terms, which is an important feature of the PSO algorithm.
+In this paper, we analyze the convergence of the PSO without converting the stochastic terms into constant terms.
+
+Stagnation analysis is limited only after the swarm reaches stagnation.
+Whether and how the swarm can reaches a stagnation is still unknown.
+In this paper, we extend the convergence analysis from only within stagnation assumption. 

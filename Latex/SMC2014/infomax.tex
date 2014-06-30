@@ -1,0 +1,63 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage[numbers]{natbib}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\newtheorem{lem}{Lemma}
+\newtheorem{Hyp}{Assumption}
+\newtheorem{propty}{Property}
+\newtheorem{thm}{Theorem}
+\newtheorem{mydef}{Definition}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{subfigure}
+\usepackage{float}
+
+\begin{document}
+
+\title{Informative Path Planning with a Human Path Constraint}
+
+\author{
+\IEEEauthorblockN{Daqign Yi, Michael A. Goodrich and Kevin D. Seppi}
+\IEEEauthorblockA{Department of Computer Science\\
+Brigham Young University\\
+Provo, Utah 84604\\
+Email: daqing.yi@byu.edu, \{mike, kseppi\}@cs.byu.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+One way for a human and a robot to collaborate on a search task is for the human to specify constraints on the robot's path and then allow the robot to find an optimal path subject to these constraints.
+This paper presents an anytime solution to the robot's path-planning problem when the human specifies a path constraint and an acceptable amount of deviation from this path.
+The robot's objective is to maximize information gathered during the search subject to this constraint.
+We first discretize the path constraint and then convert the resulting problem into a multi-partite graph.
+Information maximization becomes a submodular orienteering problem on this topology structure.
+Backtracking is used to generate an efficient heuristic for solving this problem, and an expanding tree is used to facilitate an anytime algorithm.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\input{intro.tex}
+
+\input{problem.tex}
+
+\input{solution.tex}
+
+\input{wingman.tex}
+
+\input{summary.tex}
+
+\bibliographystyle{IEEEtranN}
+\bibliography{reference}
+
+\input{appendix.tex}
+
+\end{document}

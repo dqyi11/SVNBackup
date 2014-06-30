@@ -1,0 +1,42 @@
+<launch>
+	<!-- Turtlesim Node -->
+	<node pkg="turtlesim" type="turtlesim_node" name="sim" />
+
+	<node pkg="turtlesim" type="turtle_teleop_key" name="teleop" output="screen"/>
+
+	<!-- Axes -->
+	<param name="scale_linear" value="1" type="double"/>
+	<param name="scale_angular" value="1" type="double" />
+
+	<!-- Parameter -->
+	<param name="rr" value="1.0" type="double"/>
+	<param name="ro" value="3.0" type="double"/>
+	<param name="ra" value="12.0" type="double"/>
+	<param name="angular_vel" value="1.0" type="double"/>  <!-- 40 degrees  == 0.698132 -->
+	<param name="speed" value="3.0" type="double"/>
+	<param name="size" value="20" type="int"/>
+	<param name="sight" value="270" type="int" />
+	
+	<node pkg="learning_tf" type="couzin_sender" args="/turtle1" name="turtle1" />
+	
+	<node pkg="learning_tf" type="couzin_combine" args="turtle2 6.34 7.67 3.87" name="turtle2"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle3 5.46 7.96 3.46" name="turtle3"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle4 4.53 7.96 3.05" name="turtle4"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle5 3.64 7.67 2.94" name="turtle5"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle6 2.87 7.12 2.3" name="turtle6"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle7 2.33 6.36 1.9" name="turtle7"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle8 2.04 5.46 1.21" name="turtle8"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle9 2.03 4.53 1.15" name="turtle9"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle10 2.32 3.64 0.78" name="turtle10"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle11 2.87 2.87 0.78" name="turtle11"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle12 3.63 2.33 0.57" name="turtle12"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle13 4.53 2.04 0.2" name="turtle13"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle14 5.47 2.03 0.1" name="turtle14"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle15 6.36 2.33 -1.2" name="turtle15"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle16 7.12 2.87 -0.38" name="turtle16"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle17 7.67 3.64 -1.2" name="turtle17"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle18 7.96 4.53 -2.52" name="turtle18"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle19 7.96 5.46 -2.6" name="turtle19"/>
+	<node pkg="learning_tf" type="couzin_combine" args="turtle20 7.67 6.36 -2.8" name="turtle20"/>
+	
+</launch>

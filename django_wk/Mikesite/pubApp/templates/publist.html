@@ -1,0 +1,15 @@
+<div id="pub_list">
+	<ul>
+		{% for pub_year in pub_years %}
+		    <h3>
+		    {{ pub_year.0 }}
+		    </h3>
+			{% for publication in pub_year.1 %}
+				<div{% if not forloop.last %} style="margin-bottom: 20px;"{% endif %}>
+					{% include "publication.html" %}
+				</div>
+			{% endfor %}
+			<br/>
+		{% endfor %}
+	</ul>
+</div>

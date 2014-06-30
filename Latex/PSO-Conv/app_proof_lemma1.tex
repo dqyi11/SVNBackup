@@ -1,0 +1,139 @@
+\section{Proof on Lemma \ref{lem:iss_stable}}
+\label{sec:app:proof_lemma}
+
+\begin{proof}
+
+Define
+\begin{equation}
+\label{eq:def_alpha4}
+\alpha_{4} = \alpha_{3} \circ \alpha_{2}^{-1}.
+\end{equation}
+
+We need to import some lemmas.
+
+\begin{mylem}
+\label{lem:k_func_prop1}
+For any $ K_{\infty} $-function $ \alpha $, there is a $ \hat{ \alpha } $ such that the following holds:
+\begin{itemize}
+\item $ \hat{\alpha} (s) \leq \alpha (r), \forall r \geq 0 $; 
+\item $ Id - \hat{\alpha} $ is $ K $-function.
+\end{itemize}
+\end{mylem}
+
+Define a set 
+\begin{equation}
+\label{eq:def_set_D}
+D = \{ \xi \mid V( \xi ) \leq b \},
+\end{equation}
+where 
+\begin{equation}
+b = \alpha_{4}^{-1} \circ \rho^{-1} \circ \sigma ( || u || ).  
+\end{equation}
+
+By applying equation \eqref{eq:iss_lyapunov1} into equation \eqref{eq:iss_lyapunov2}, we have
+\begin{equation}
+\label{eq:iss_lyapunov2:mod}
+V( f( \xi, \mu ) ) - V( \xi ) \leq - \alpha_{4} ( V( \xi ) ) + \sigma ( | \mu | ).
+\end{equation}
+
+We first need to prove a property as below.
+\begin{myprop}
+\label{prop:after_j0}
+If there is some $ k_{0} \in \mathbb{Z}_{+} $ such that $ x( k_{0} ) \in D $, then $ \forall k \geq k_{0} , x(k) \in D $.
+\begin{proof}
+As $ x( k_{0} ) \in D $, we have $ v( x( k_{0} ) ) \leq b $.
+
+By equation \eqref{eq:iss_lyapunov2:mod}, we have
+\begin{equation}
+V( x(k_{0} + 1) ) - V( x( k_{0} ) ) \leq - \alpha_{4} ( V ( x( k_{0} ) ) ) + \sigma ( || u || ).
+\end{equation}
+We can write it as 
+\begin{equation}
+V( x(k_{0} + 1) ) \leq ( Id - \alpha_{4} ) ( V ( x( k_{0} ) ) ) + \sigma ( | \mu | ).
+\end{equation}
+
+By Lemma \ref{lem:k_func_prop1}, we know $ Id - \alpha_{4} $ is $ k $-function, which are strictly increasing.
+By $ v( x( k_{0} ) ) \leq b $, we can have
+\begin{equation}
+\begin{aligned}
+V( x(k_{0} + 1) ) \leq & ( Id - \alpha_{4} ) ( b ) + \sigma ( | \mu | ) \\
+= & - (Id - \rho) \circ \alpha_{4} ( b ) + b - \rho \circ \alpha_{4} ( b ) + \sigma ( || u || ) \\
+\leq & - (Id - \rho) \circ \alpha_{4} ( b ) + b \leq b
+\end{aligned}
+\end{equation}
+
+By induction, we can have $ V( x( k_{0} + j ) ) \leq b , \forall j \in \mathbb{Z}_{+} $, which means
+\begin{equation}
+\label{eq:vx_in_d}
+V( x( k ) ) \leq b,  \forall k \geq k_{0}.
+\end{equation}
+
+\end{proof}
+\end{myprop}
+
+Let $ \hat{\gamma} = \alpha_{4}^{-1} \circ \rho^{-1} \circ \sigma $.
+Let $ j_{0} = \min \{ k \in \mathbb{Z}_{+} \mid x( k ) \in D \} $.
+
+Property \ref{prop:after_j0} gives what happens after $ j_{0} $.
+
+Now we look at what happens before $ j_{0} $.
+
+By equation \eqref{eq:vx_in_d}, we have
+\begin{equation}
+V( x( k ) ) \leq \hat{\gamma} ( || u || ), \forall k \geq j_{0}.
+\end{equation}
+
+By the definition of $ j_{0} $, we have 
+\begin{equation}
+V( x( k ) ) > \hat{\gamma} ( || u || ), \forall k < j_{0}.
+\end{equation}
+It means that 
+\begin{equation}
+V( x( k ) ) > \alpha_{4}^{-1} \circ \rho^{-1} \circ \sigma ( || u || ).
+\end{equation}
+Thus we have
+\begin{equation}
+\rho \circ \alpha_{4} ( V( x( k ) ) ) > \sigma ( || u || ),
+\end{equation}
+which equals
+\begin{equation}
+\label{eq:ineq_to_sigma_u}
+- \rho \circ \alpha_{4} ( V( x( k ) ) ) + \sigma ( || u || ) < 0.
+\end{equation}
+
+By equation \eqref{eq:iss_lyapunov2:mod}, we have
+\begin{equation}
+\begin{aligned}
+V( x(k + 1) ) - V( x( k ) ) \leq & - \alpha_{4} ( V ( x( k ) ) ) + \sigma ( || u || ) \\
+= & - ( Id - \rho ) \circ \alpha_{4} ( V ( x( k ) ) ) - \rho \circ \alpha_{4} ( V ( x( k ) ) ) + \sigma ( || u || ).
+\end{aligned}
+\end{equation} 
+
+By equation \eqref{eq:ineq_to_sigma_u}, we have
+\begin{equation}
+V( x(k + 1) ) - V( x( k ) ) \leq - ( Id - \rho ) \circ \alpha_{4} ( V ( x( k ) ) ).
+\end{equation}
+
+By a standard comparison lemma, there exists some $ KL $-function $ \hat{\beta} $ that 
+\begin{equation}
+V( x( k ) ) \leq \hat{\beta}( V( x(0) ), k  ), \forall 0 \leq k \leq j_{0} + 1.
+\end{equation}
+
+Thus, 
+\begin{equation}
+V( x ( k ) ) \leq \max \{ \hat{ \beta } ( V( \xi , k ), \hat{ \gamma } ( || u || ) ) \}, \forall k \in \mathbb{Z}_{+}.
+\end{equation}
+
+Let 
+\begin{equation}
+\beta(s, t) = \alpha_{1}^{-1} ( \hat{ \beta } ( \alpha_{2} ( | \xi | ) , t  ) )
+\end{equation}
+and
+\begin{equation}
+\gamma (s) = \alpha_{1}^{-1} \circ \hat{ \gamma } (s),
+\end{equation}
+equation \eqref{def:iss} is obtained.
+
+Thus the system is input-to-state stable.
+
+\end{proof}

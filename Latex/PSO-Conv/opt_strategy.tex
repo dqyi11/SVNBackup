@@ -1,0 +1,40 @@
+\section{Optimization strategy}
+
+When the rule update sub-system is input-to-state stable, the convergence of $ x(k) $ depends on the input $ u(k) $, which are $ x^{P}(k) $ and $ x^{G}(k) $ from the optimization strategy sub-system.
+In the PSO algorithm, we are interested with how the particles converge to an interested position or area, where the optimal point locates.
+The input-to-state stable is for the convergence to the origin.
+By coordinator transformation, we can show that given a reference point, if the input is bounded in an area around the reference point, the output can also be bounded around the reference point.
+
+
+\subsection{Single-objective optimization}
+
+As the stagnation is defined as there is no new improvement found, we have that $ x^{P}(k) $ and $ x^{G}(k) $ are constant.
+In \cite{985692}, it is stated that
+\begin{equation}
+\label{eq:single_obj_equilibrium}
+\hat{x} = \frac{\phi^{P} x^{P} + \phi^{G} x^{G} }{ \phi^{P} + \phi^{G} } 
+\end{equation}
+ is an equilibrium point, in which $ x^{P} $ and $ x^{G} $ are the personal best and global best in stagnation respectively.
+
+Let $ \hat{x} $ be the reference point and $ x^{*} $ be the optimal point, we know that 
+\begin{equation}
+\label{eq:single_obj_input_bound}
+| U(k) | \leq \max (| x^{P} - \hat{x} |, | x^{G} - \hat{x} |).
+\end{equation}
+
+
+
+Particularly, when $ x^{P} = x^{*} $ and $ x^{G} = x^{*} $, we have
+$ \hat{x} = x^{*} $.
+Then $ | U(k) | = 0 $.
+By definition \eqref{def:iss}, we know that
+\begin{equation}
+\label{eq:single_obj_convergence}
+\exists T , | x(T) - x^{*} |  = 0,
+\end{equation}
+which means that $ x(k) \rightarrow x^{*} $. 
+
+\subsection{Multi-objective optimization}
+\cite{Chakraborty20111411} looks at the convergence in the multi-objective optimization problem.
+
+In this case, 

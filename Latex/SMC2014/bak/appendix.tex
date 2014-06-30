@@ -1,0 +1,251 @@
+\appendix
+
+\section{Path Order Independence}
+\label{app:order_independence}
+\begin{proof}
+
+Consider that a robot observes at position $ x_{1} $ and $ x_{2} $.
+We have two observations $ O^{x_{1}} $ and $ O^{x_{2}} $ respectively from $ N^{robot}_{obsRange}( \cdot ) $.
+By using a Bayes rule to update the Posteriori, we can have $ P(S \mid O^{x_{1}} , O^{x_{1}} ) $.
+Because of the time-invariant properties and spatial independence in Assumptions \ref{Assumption3} and \ref{Assumption4}, we can have
+\begin{equation}
+\label{eq:ord_ind1}
+P(S \mid O^{x_{1}} , O^{x_{1}} ) = P(S \mid O^{x_{1}} ) P(S \mid O^{x_{1}} ).
+\end{equation}
+The order independence is naturally from the multiply operation in equation \eqref{eq:ord_ind1}.
+It applies to large numbers of observation.
+
+Similarly, it applies to a human observation model.
+\end{proof}
+
+\section{Proof of Lemma \ref{Lemma1}}
+\label{app:Lemma1}
+\begin{proof}
+\begin{equation}
+\begin{aligned}
+& I(\mathbf{S}; \mathbf{O}^{X} \mid \mathbf{O}^{Y^{h}}) \\
+& = H(\mathbf{S} \mid \mathbf{O}^{Y^{h}}) - H(\mathbf{S} \mid \mathbf{O}^{X} , \mathbf{O}^{Y^{h}}) \\
+& = H(\mathbf{S} , \mathbf{O}^{Y^{h}}) - H(\mathbf{O}^{Y^{h}}) - H(\mathbf{S} , \mathbf{O}^{X} , \mathbf{O}^{Y^{h}}) 
++ H(\mathbf{O}^{X} , \mathbf{O}^{Y^{h}}) \\
+& = [ H(\mathbf{O}^{X} , \mathbf{O}^{Y^{h}}) - H(\mathbf{O}^{Y^{h}}) ] - [ H(\mathbf{S} , \mathbf{O}^{X} , \mathbf{O}^{Y^{h}}) - H(\mathbf{S} , \mathbf{O}^{Y^{h}}) ] \\
+& = [H(O_{T}^{X} \mid O_{1}^{X} , \cdots , O_{T-1}^{X}, \mathbf{O}^{Y^{h}}) + \cdots + H(O_{1}^{X} \mid \mathbf{O}^{Y^{h}}) + H(\mathbf{O}^{Y^{h}}) - H(\mathbf{O}^{Y^{h}}) ] \\
+& - [H(O_{T}^{X} \mid O_{1}^{X} , \cdots , O_{T-1}^{X}, \mathbf{S}, \mathbf{O}^{Y^{h}}) + \cdots + H(O_{1}^{X} \mid \mathbf{S}, \mathbf{O}^{Y^{h}}) + H(\mathbf{S} , \mathbf{O}^{Y^{h}}) - H(\mathbf{S} , \mathbf{O}^{Y^{h}})] \\
+& = \sum_{t=1}^{T} H(O_{t}^{X} \mid O_{1}^{X} , \cdots , O_{t-1}^{X}, \mathbf{O}^{Y^{h}}) - \sum_{t=1}^{T} H(O_{t}^{X} \mid O_{1}^{X} , \cdots , O_{t-1}^{X}, \mathbf{S}, \mathbf{O}^{Y^{h}}) \\
+& = \sum_{t=1}^{T} I(O^{X}_{t} ; \mathbf{S} \mid O^{X}_{1} , \cdots , O^{X}_{t-1}, \mathbf{O}^{Y^{h}})
+\end{aligned}
+\end{equation}
+\end{proof}
+
+\section{Proof of equation \ref{eq:cond_submod_prop}} 
+\label{app:cond_submod_prop}
+\begin{proof}
+
+Applying Definition \ref{def:submod_func} to $ f(A \mid B \cup C) - f(A \mid B) $, we have
+\begin{equation}
+\label{eq:diff_cond_submod}
+\begin{aligned}
+& f(A \mid B \cup C) - f(A \mid B) \\
+& = \left[ f( A \cup B \cup C ) - f ( B \cup C ) \right]
+- \left[ f ( A \cup B ) - f ( B )  \right] \\
+& = \left[ f( A \cup B \cup C ) + f ( B ) \right] 
+- \left[ f ( B \cup C ) + f ( A \cup B ) \right]. \\
+\end{aligned}
+\end{equation}
+
+By applying
+\begin{equation}
+f( A \cup B \cup C ) = f( (A \cup B) \cup (B \cup C)
+\end{equation}
+and
+\begin{equation}
+f ( B ) = f ( (A \cup B) \cap (B \cup C) )
+\end{equation}
+to equation \eqref{eq:diff_cond_submod}, we have
+\begin{equation}
+\label{eq:diff_cond_submod2}
+\begin{aligned}
+& f(A \mid B \cup C) - f(A \mid B) \\
+& = \left[ f( (A \cup B) \cup (B \cup C) ) + f ( (A \cup B) \cap (B \cup C) )  \right]
+- \left[ f ( B \cup C ) + f ( A \cup B ) \right]. \\
+\end{aligned}
+\end{equation}
+
+By applying equation \eqref{eq:submod} to equation \eqref{eq:diff_cond_submod2} , we have
+\begin{equation}
+f(A \mid B \cup C) - f(A \mid B) \leq 0.
+\end{equation}
+
+\end{proof}
+
+\section{Proof of the chain rule on conditional submodular function}
+\label{app:cond_submod_chain_rule}
+\begin{proof}
+
+We prove a chain rule on conditional submodular function.
+By applying equation \eqref{eq:cond_submod} to $ f( A \cup B \mid C ) $, we have
+\begin{equation}
+\label{eq:cond_submod_chain_rule}
+\begin{aligned}
+f( A \cup B \mid C ) & = f( A \cup B \cup C ) - f( C ) \\
+& = f( B \mid A \cup C ) + f( A \cup C ) - f( C ) \\
+& = f( B \mid A \cup C ) + f( A \mid C).
+\end{aligned}
+\end{equation} 
+
+\end{proof}
+
+\section{Recursive estimation generates better approximation}
+\label{app:better_approximation}
+Let $ t' > t + 1 $.
+Define $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}) $ as estimated maximum total reward of visiting $ v_{t'} $ after $ v_{1} \cdots v_{t} $ are visited.
+Similarly, $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $ as estimated maximum total reward of visiting $ v_{t'} $ after $ v_{1} \cdots v_{t+1} $ are visited.
+By equation \eqref{eq:inductionResult}, we have 
+\begin{equation}
+\hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) \geq u(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}).
+\end{equation}
+
+By submodularity, we have
+\begin{equation}
+\hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) \leq \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}).
+\end{equation}
+
+Thus $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $ is closer to $ u(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $ than $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}) $.
+$ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $ is a better approximation to $ u(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $ than $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}) $.
+Since $ max() $ operator is monotonic, the estimation on $ h() $ using $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}, v_{t+1}) $  is a better approximation to $ h() $ than the estimation on $ h() $ using $ \hat{u}(v_{t'} \mid v_{1} \cdots v_{t}) $.
+It means that estimating maximum future reward with newly added vertex provides a better approximation to the $ h() $.
+
+\section{Proof of Property \ref{prop:u2gh}}
+\label{app:proof_prop_u2gh}
+
+We are proving
+$ u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = g(x_{t} \mid x_{1} , \cdots , x_{t'} ) + h( x_{1} , \cdots, x_{t'}, x_{t} ) $.
+
+\begin{proof}
+
+By equation \eqref{eq:cond_submod_chain_rule}, we can write equation \eqref{eq:def_p_0} as
+\begin{equation}
+\label{eq:def_p_0:1}
+u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = 
+\max_{V(t+1), \cdots ,V(T) } [ f(x_{t} \mid x_{1}, \cdots , x_{t'}) + f( x_{t+1}, \cdots x_{T} \mid x_{1}, \cdots , x_{t'}, x_{t}) ]
+\end{equation}
+in the constraint of equation \eqref{eq:def_p_0:constraint1} and equation \eqref{eq:def_p_0:constraint2}.
+
+By the constraint in equation \eqref{eq:def_p_0:constraint1} and equation \eqref{eq:def_p_0:constraint2}  in Definition \ref{def:max_total_reward},
+we can see that $ x_{t} $ is independent with $ max() $ operator in equation \eqref{eq:def_p_0:1}.
+
+Thus we can rewrite equation \eqref{eq:def_p_0:1} as
+\begin{equation}
+\label{eq:def_p_0:2}
+u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = f(x_{t} \mid x_{1}, \cdots , x_{t'})  + \max_{ V(t+1), \cdots , V(T) } f( x_{t+1}, \cdots x_{T} \mid x_{1}, \cdots , x_{t'}, x_{t})
+\end{equation}
+in the constraint of equation \eqref{eq:def_p_0:constraint1} and equation \eqref{eq:def_p_0:constraint2}.
+
+By Definition \ref{def:max_future_reward}, we can write equation \eqref{eq:def_p_0:2} as equation \eqref{eq:def_p}.
+
+\end{proof}
+
+\section{Proof of Property \ref{prop:u2gh_2}}
+\label{app:proof_prop_u2gh_2}
+
+We are proving
+$ u( x_{t} \mid x_{1} , \cdots , x_{t'} ) = f( x_{t} \mid \tilde{X}(x_{t}), x_{1} , \cdots , x_{t'} ) +  \max_{x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E} u( x_{t+1} \mid x_{1} , \cdots , x_{t'} ) $
+in which
+$ \tilde{X}(x_{t}) = \arg \max_{ V(t+1) \cdots V(T) } f( x_{t+1} \cdots x_{T} \mid x_{1} , \cdots , x_{t'} ) $
+in the constraint that
+$ \forall \tau \in \{ t+1 , \cdots , T \},  ( x_{ \tau-1 }, x_{ \tau } ) \in E $.
+
+\begin{proof}
+
+By equation \eqref{eq:cond_submod_chain_rule}, we can rewrite equation \eqref{eq:u2gh_2:1} as
+\begin{equation}
+\label{eq:ug2gh_2:1:b}
+u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = f(x_{t}, \tilde{X}(x_{t}) \mid x_{1} , \cdots , x_{t'} ).
+\end{equation}
+
+By Property \ref{prop:orderIndependence}, we can write equation \eqref{eq:ug2gh_2:1:b} as
+\begin{equation}
+\label{eq:u2gh_2:0_r}
+\begin{aligned}
+u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = 
+f( \tilde{X}(x_{t}) \mid x_{1}, \cdots , x_{t'}) + f(x_{t} \mid x_{1}, \cdots , x_{t'}, \tilde{X}(x_{t})) .
+\end{aligned}
+\end{equation}
+
+By equations \eqref{eq:u2gh_2:1} and \eqref{eq:u2gh_2:1:constraint}, we have
+\begin{equation}
+\label{eq:u2gh_2:1_r}
+f( \tilde{X}(x_{t}) \mid x_{1}, \cdots , x_{t'}) = \max_{ V(t+1) \cdots V(T) } f( x_{t+1} \cdots x_{T} \mid x_{1} , \cdots , x_{t'} )
+\end{equation}
+in the constraint of equation \eqref{eq:u2gh_2:1:constraint}.
+
+Thus we can decompose the constraint of equation \eqref{eq:u2gh_2:1:constraint} into
+\begin{equation}
+\label{eq:u2gh_2:1:constraint:1}
+x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E
+\end{equation}
+and
+\begin{equation}
+\label{eq:u2gh_2:1:constraint:2}
+\forall t'' \in [t+2, T], x(t'') \in V(t'') \land ( x_{t''-1}, x_{t''} ) \in E.
+\end{equation}
+
+By equation \eqref{eq:u2gh_2:1:constraint:2} and Definition \ref{def:max_total_reward}, we can rewrite \eqref{eq:u2gh_2:1_r} as
+\begin{equation}
+\label{eq:ft_leq_h}
+\begin{aligned}
+& f( \tilde{X}(x_{t}) \mid x_{1}, \cdots , x_{t'}) = 
+& = \max_{V_{t+1}} u( x_{t+1} \mid x_{1} , \cdots , x_{t'} )
+\end{aligned}
+\end{equation}
+in the constraint of equation \eqref{eq:u2gh_2:1:constraint:1}.
+
+By applying equation \eqref{eq:ft_leq_h} and the constraint of equation \eqref{eq:u2gh_2:1:constraint:1} to equation \eqref{eq:u2gh_2:0_r}, we have
+$ u( x_{t} \mid x_{1} , \cdots , x_{t'} ) = f( x_{t} \mid \tilde{X}(x_{t}), x_{1} , \cdots , x_{t'} ) +  \max_{x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E} u( x_{t+1} \mid x_{1} , \cdots , x_{t'} ) $.
+
+Property \ref{prop:u2gh_2} is proved.
+
+\end{proof}
+
+\section{Proof of Property \ref{prop:h2p}}
+\label{app:proof_prop_h2p}
+
+We are proving that $ h( x_{1}, \cdots x_{t'} ) = \max_{x_{t'+1} \in V(t'+1) \land (v_{t'}, x_{t'+1}) \in E} u(x_{t'+1} \mid x_{1}, \cdots x_{t'} ) $.
+
+\begin{proof}
+
+By equation \eqref{eq:def_h} and \eqref{eq:cond_submod_chain_rule}, we have
+\begin{equation}
+\label{eq:h2p_proof}
+\begin{aligned}
+& h(x_{1} , \cdots, x_{t'} ) \\
+& = \max_{V_{t'+1}, \cdots , V_{T}} [ f(x_{t'+1} \mid  x_{1}, \cdots , x_{t'}) + f(x_{t'+2} \cdots x_{T} \mid x_{1}, \cdots , x_{t'}, x_{t'+1}) ] 
+\end{aligned}
+\end{equation}
+in the constraint of the equation \eqref{eq:def_h:constraint1} and equation \eqref{eq:def_h:constraint2}.
+
+We can rewrite equation \eqref{eq:h2p_proof} as
+\begin{equation}
+\label{eq:h2p_proof2}
+\begin{aligned}
+& h(x_{1} , \cdots, x_{t'} ) \\
+= & \max_{ x_{t'+1} \in V(t'+1) \land ( x_{t'}, x_{t'+1} ) \in E } \left[  \max_{V_{t'+2}, \cdots , V_{T}} [ f(x_{t'+1} \mid  x_{1}, \cdots , x_{t'}) + f(x_{t'+2} \cdots x_{T} \mid x_{1}, \cdots , x_{t'}, x_{t'+1}) ] \right] \\
+= & \max_{ x_{t'+1} \in V(t'+1) \land ( x_{t'}, x_{t'+1} ) \in E } \left[ f(x_{t'+1} \mid  x_{1}, \cdots , x_{t'}) + \max_{V_{t'+2}, \cdots , V_{T}} f(x_{t'+2} \cdots x_{T} \mid x_{1}, \cdots , x_{t'}, x_{t'+1}) \right] \\
+\end{aligned}
+\end{equation}
+in the constraint that
+\begin{equation}
+\forall t \in [t'+2, T], x_{t} \in V(t) \land ( x_{t}, x_{t-1} ) \in E. 
+\end{equation}
+
+
+By applying equations \eqref{eq:def_g} and \eqref{eq:def_h} into equation \eqref{eq:h2p_proof2}, we have
+\begin{equation}
+\begin{aligned}
+h( x_{1}, \cdots x_{t'} )  & = \max_{ x_{t'+1} \in V(t'+1) \land ( x_{t'}, x_{t'+1} ) \in E } \left[  g(x_{t'+1} \mid  x_{1}, \cdots , x_{t'}) + h( x_{1}, \cdots , x_{t'}, x_{t'+1}) ] \right] \\
+& = \max_{ x_{t'+1} \in V(t'+1) \land ( x_{t'}, x_{t'+1} ) \in E } u(x_{t'+1} \mid x_{1}, \cdots x_{t'} ).
+\end{aligned}
+\end{equation}
+
+Equation \eqref{eq:h2p} has been proved.
+
+\end{proof}

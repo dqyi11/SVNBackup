@@ -1,0 +1,52 @@
+\section{Derivation of Mean Model}
+\label{sec:app:derivation_mean}
+
+\begin{proof}
+
+By equation \eqref{eq:up_pos1}, we can have
+\begin{equation}
+\label{eq:vel_t}
+v(k) = x(k) - x(k-1).
+\end{equation}
+
+By applying equation \eqref{eq:vel_t} into equation \eqref{eq:up_pos1}, we have
+\begin{equation}
+\label{eq:pso1_alg_line:init}
+\begin{aligned}
+x(k+1) = & \chi ( x(k) - x(k-1) ) + (1 - \chi \phi^{P} u^{P}(k) - \chi \phi^{G} u^{G}(k) ) x(k) + \phi^{P} u^{P}(k) x^{P}(k) + \phi^{G} u^{G}(k) x^{G}(k) \\
+= & (1 + \chi - \chi \phi^{P} u^{P}(k) - \chi \phi^{G} u^{G}(k) ) x(k) - \chi x(k-1) + \phi^{P} u^{P}(k) x^{P}(k) + \phi^{G} u^{G}(k) x^{G}(k)
+\end{aligned}
+\end{equation}
+
+By applying the mean to equation \eqref{eq:pso1_alg_line:init} and writing in a linear form, we have
+\begin{equation}
+\label{eq:pso1_alg_mean_linalg:init}
+\begin{aligned}
+\begin{bmatrix}
+E( x(k+1) ) \\
+E( x(k) )
+\end{bmatrix}
+= &
+\begin{bmatrix}
+1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & - \chi \\
+1 & 0
+\end{bmatrix}
+\begin{bmatrix}
+E( x(k) ) \\
+E( x(k-1) )
+\end{bmatrix}
+\\ & + 
+\begin{bmatrix}
+\frac{ \chi \phi^{P} }{2} & \frac{ \chi \phi^{G} }{2} \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+E( x^{P}(k) ) \\
+E( x^{G}(k) )
+\end{bmatrix}
+\end{aligned}
+\end{equation}
+
+By equations \eqref{eq:func_a} and \eqref{eq:func_b}, we have equation \eqref{eq:pso1_alg_mean_linalg:final}.
+
+\end{proof}

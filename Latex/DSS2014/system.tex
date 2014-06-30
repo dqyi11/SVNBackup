@@ -1,0 +1,55 @@
+\section{System framework}
+\label{sec:system}
+
+We propose the system flow shown in in Figure \ref{fig:sys_flow}.
+Either the human supervisor or an automated object recognizer labels the search space to initialize a shared mental model.
+With the shared mental model, a parse converts a verbal command from the human into a sub-task abstraction for the robot.
+In the path planning problem, this abstraction is encoded as a mathematical model of the optimization problem.
+Each adverb in the task grammar is associated with a different planning objective.
+The path planner generates the set of Pareto optimal solutions and the human selects one that matches his/her intent. 
+After a solution is found, it is sent to a robot to execute.
+
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.5\linewidth]{./images/sys_flow}
+\caption{The process of a semantic-based path planning.}
+\label{fig:sys_flow}
+\end{figure}
+
+\begin{figure}
+\subfigure[Planned path from hexagonal map.]{
+\centering
+\includegraphics[width=0.28\linewidth]{./images/min_dist2}
+\label{fig:plan}
+}
+\subfigure[Task execution monitor.]{
+\centering
+\includegraphics[width=0.29\linewidth]{./images/planMonitor3}
+\label{fig:stage}
+} 
+\subfigure[Task execution in Gazebo simulator.]{
+\centering
+\includegraphics[width=0.37\linewidth]{./images/gazebo2}
+\label{fig:stage-sim}
+}
+\caption{Simulation with the Gazebo simulator.}
+\label{fig:simulation}
+\end{figure}
+
+We are currently developing tools to test our approach.
+The map of a workspace is firstly labeled by a supervisor.
+A labeled map is shown in Figure \ref{fig:Label}.
+We assign semantic IDs to different sub-regions by using ``indoor'' and ``outdoor'' labels.
+We label the doors and windows of several regions, which are frequently used in the verbal commands of a cordon and search task.
+Moreover, we label some significant objects on the ground to facilitate localizing the positions of task execution.
+Within the labeled map, a verb command, ``go quickly to location BD-2'', is read and parsed into multi-objectives and constraints by the task grammar.
+A path planner finds an ``optimal'' solution through interactive multi-objective optimization.
+The planning is currently on a discretized map, which is a hexagonal description of the test environment, which is shown in Figure \ref{fig:plan}.
+Thus, the format of a planned path is a sequence of hexagonal cells.
+This path is then converted into a sequence of waypoints, which is shown in Figure \ref{fig:stage}.
+We test the task execution in the Gazebo simulator by using a virtual turtlebot, which is illustrated in Figure \ref{fig:stage-sim}.
+It is easier to construct a testing urban environment in the Gazebo simulator, and the implementation can be easily migrated to a real turtlebot.
+Figure \ref{fig:stage} shows a task execution monitor, which provides the progress of task execution.
+A execution monitor GUI, shown in Figure \ref{fig:stage}, displays the sequence of waypoints of a planned path and continuously receives the position updates from the virtual robot, which is used to check how the task is executed.
+The blue points are reached waypoints and the green points are the waypoints to be reached.
+The process is shown in Figure \ref{fig:simulation}.

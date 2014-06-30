@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Setting>
+<Form width="1000" height="1000"></Form>
+<HexaMap width="30" height="30" size="15"></HexaMap>
+<SimHexaMap width="6" height="6" size="15"></SimHexaMap>
+</Setting>

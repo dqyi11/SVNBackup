@@ -1,0 +1,80 @@
+<li class="pub_item">
+
+<a class="pub_author">
+	{{publication.authors}}.
+</a> 
+
+<a class="pub_title">
+	{{publication.title}}. 
+</a>
+
+{% if publication.journal %}
+	<a class="pub_info">
+		{{publication.journal}}
+		
+		{% if publication.volume %}
+		    , vol {{publication.volume}}
+		{% endif %}
+		
+		{% if publication.number %}
+		    , NO {{publication.number}}
+		{% endif %}
+		
+		{% if publication.pages %}
+		    , pp {{publication.pages}}
+		{% endif %}
+		
+		{% if publication.year %}
+		    , 
+		    {% if publication.month %}
+		    	{{publication.month}} 
+			{% endif %}
+			
+			{{publication.year}}
+			
+		{% endif %}
+	</a>
+{% else %}
+	<a class="pub_info">
+		{% if publication.book_title %}
+			{{ publication.book_title }},
+		{% endif %}
+		
+		{% if publication.publisher %}
+			{{ publication.publisher }},
+		{% endif %}
+		
+		{% if publication.volume %}
+		    , vol {{publication.volume}}
+		{% endif %}
+		
+		{% if publication.number %}
+		    , NO {{publication.number}}
+		{% endif %}
+		
+		{% if publication.pages %}
+		    , pp {{publication.pages}}
+		{% endif %}
+		
+		{% if publication.year %}
+		    , 
+		    {% if publication.month %}
+		    	{{publication.month}} 
+			{% endif %}
+			
+			{{publication.year}} 
+			
+		{% endif %}
+	</a>
+{% endif %}
+
+{% if publication.url %}    
+	<a class="pub_url" rel="external" href="{{ publication.url }}">LINK</a>
+{% endif %}
+
+{% if publication.doi %}
+	<a class="pub_doi" rel="external" href="{{ publication.doi }}">DOI</a>
+{% endif %}
+
+</li>
+

@@ -1,0 +1,87 @@
+\appendices 
+\section{Proof of a Useful Property}
+\label{app:prop:u2gh_2}
+The following property is necessary to prove Lemma~1.
+
+\begin{propty}
+\label{prop:u2gh_2}
+\begin{equation}
+\label{eq:u2gh_2:0}
+\begin{aligned}
+u( x_{t} \mid & x_{1} , \cdots , x_{t'} ) = f( x_{t} \mid \tilde{X}(x_{t}), x_{1} , \cdots , x_{t'} ) \\
+& + \max_{x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E} u( x_{t+1} \mid x_{1} , \cdots , x_{t'} ),
+\end{aligned}
+\end{equation}
+in which
+\begin{equation}
+\label{eq:u2gh_2:1}
+\tilde{X}(x_{t}) = \arg \max_{ V(t+1) \cdots V(T) } f( x_{t+1} \cdots x_{T} \mid x_{1} , \cdots , x_{t'} )
+\end{equation}
+subject to the constraint
+\begin{equation}
+\label{eq:u2gh_2:1:constraint}
+\forall \tau \in \{ t+1 , \cdots , T \},  x_{ \tau } \in V( \tau ) \land ( x_{ \tau-1 }, x_{ \tau } ) \in E .
+\end{equation}
+
+\begin{proof}
+By chain rule, we have
+$ u(x_{t} \mid x_{1} , \cdots , x_{t'} ) = f( \tilde{X}(x_{t}) \mid x_{1}, \cdots , x_{t'}) + f(x_{t} \mid x_{1}, \cdots , x_{t'}, \tilde{X}(x_{t})) $.
+By decomposing the constraint in \eqref{eq:u2gh_2:1:constraint} into
+$ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E $
+and
+$ \forall t'' \in [t+2, T], x(t'') \in V(t'') \land ( x_{t''-1}, x_{t''} ) \in E $, equation \eqref{eq:u2gh_2:1} can be 
+$ f( \tilde{X}(x_{t}) \mid x_{1}, \cdots , x_{t'}) = 
+\max_{V_{t+1}} u( x_{t+1} \mid x_{1} , \cdots , x_{t'} ) $
+subject to the constraint $ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E $.
+Thus equation \eqref{eq:u2gh_2:0} can be obtained. 
+
+
+\end{proof}
+
+\end{propty}
+\section{ Proof of Lemma \ref{lem:underestimate} }
+\label{app:lemma_under}
+
+\begin{proof} Equation \eqref{eq:underestimate} can be proven using induction as follows.
+We have following two propositions, corresponding to the {\em basis case} and {\em induction step}, which are
+\begin{itemize}
+\item \textbf{proposition 1} $ \forall x_{T} \in V(T), \hat{u}( x_{T} \mid v_{1} , \cdots , v_{t'} ) = u( x_{T} \mid v_{1} , \cdots , v_{t'} ) $; 
+\item \textbf{proposition 2} If $ \forall x_{t+1} \in V(t+1), \hat{u}( x_{t+1} \mid v_{1} , \cdots , v_{t'} ) \geq u( x_{t+1} \mid v_{1} , \cdots , v_{t'} ) $, 
+then $ \forall x_{t} \in V(t), \hat{u}( x_{t} \mid v_{1} , \cdots , v_{t'} ) \geq u( x_{t} \mid v_{1} , \cdots , v_{t'} ) $.
+\end{itemize}
+%When these two propositions are true, we can apply induction by proposition 2 from proposition 1 to any partition $ V(t') $ so that equation \eqref{eq:underestimate} is true.
+
+{\bf Basis:} At time $ T $, we have
+$ u( x_{T} \mid  v_{1} , \cdots , v_{t'} ) = f( x_{T} \mid v_{1} , \cdots , v_{t'} ) $
+and
+$ \hat{u}( x_{T} \mid v_{1} , \cdots , v_{t'} ) = f( x_{T} \mid v_{1} , \cdots , v_{t'} ) $.
+Thus proposition 1 is true.
+
+{\bf Induction Step:}
+The definition of $ u(x_{t} \mid v_{1} , \cdots , v_{t'} ) $, Property \ref{prop:u2gh_2}, and the definition of $ \hat{u}( x_{t} \mid v_{1} , \cdots , v_{t'} ) $ in Algorithm \ref{alg:Backtrack}, imply
+$ \hat{u}( x_{t} \mid v_{1} , \cdots , v_{t'} ) - u(x_{t} \mid v_{1} , \cdots , v_{t'} )
+= \left[ f(x_{t} \mid v_{1} , \cdots , v_{t'} ) - f(x_{t} \mid v_{1} , \cdots , v_{t'}, \tilde{x}_{t+1}, \cdots \tilde{x}_{T} ) \right]
+ + [ \max_{ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E } \hat{u}( x_{t+1} \mid v_{1} , \cdots , v_{t'} )  - \max_{x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E } u( x_{t+1} \mid v_{1} , \cdots , v_{t'} ) ] $.
+By submodularity, we know that
+$ f( x_{t} \mid v_{1} , \cdots , v_{t'} )  
+- f(x_{t} \mid v_{1} , \cdots , v_{t'}, \tilde{x}_{t+1}, \cdots \tilde{x}_{T} ) \geq 0 $. 
+
+Define the following two values
+\begin{eqnarray*}
+x^{a}_{t+1} &=& \arg \max_{ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E} \hat{u}( x_{t+1} \mid v_{t'} , \cdots , v_{1} )\\
+x^{b}_{t+1} &=& \arg \max_{ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1}) \in E } u( x_{t+1} \mid v_{1} , \cdots , v_{t'} ). 
+\end{eqnarray*}
+Both $ x^{a}_{t+1} $ and $ x^{b}_{t+1} $ belong to the set of vertices that satisfy the constraint $ x_{t+1} \in V(t+1) \land (x_{t}, x_{t+1}) \in E $.
+Since $ x^{a}_{t+1} $ is the answer to $ \arg \max \hat{u}(\cdot) $, we have
+$ \hat{u}( x^{a}_{t+1} \mid v_{1} , \cdots , v_{t'} ) \geq \hat{u}( x^{b}_{t+1} \mid v_{1} , \cdots , v_{t'} ) $.
+By the induction hypothesis, $ \hat{u}( x^{b}_{t+1} \mid v_{1} , \cdots , v_{t'} ) \geq u( x^{b}_{t+1} \mid v_{1} , \cdots , v_{t'} ) $.
+By transitivity, we have $  \hat{u}( x^{a}_{t+1} \mid v_{1} , \cdots , v_{t'} ) \geq  u ( x^{b}_{t+1} \mid v_{1} , \cdots , v_{t'} ) $.
+By the definitions $ x^{a}_{t+1} $ and $ x^{b}_{t+1} $, 
+which equals to 
+$ \max_{ x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E } \hat{u}( x_{t+1} \mid v_{1} , \cdots , v_{t'} )  
+ - \max_{x_{t+1} \in V(t+1) \land ( x_{t}, x_{t+1} ) \in E } u( x_{t+1} \mid v_{1} , \cdots , v_{t'} ) \geq 0 $.
+Thus proposition 2 is true.
+
+{\bf Conclusion:} Since the basis case and induction step are true, Equation \eqref{eq:underestimate} follows.
+\end{proof}
+

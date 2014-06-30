@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Graph>
+   <Partite name="P1">
+    <Vertex name="V11"></Vertex>
+	<Vertex name="V12"></Vertex>
+	<Vertex name="V13"></Vertex>
+	<Vertex name="V14"></Vertex>
+  </Partite>
+  <Partite name="P2">
+    <Vertex name="V21"></Vertex>
+	<Vertex name="V22"></Vertex>
+	<Vertex name="V23"></Vertex>
+  </Partite>
+  <Connector partite1="P1" partite2="P2">
+    <Edge node1="V11" node2="V21"></Edge>
+	<Edge node1="V11" node2="V22"></Edge>
+	<Edge node1="V11" node2="V23"></Edge>
+	<Edge node1="V12" node2="V21"></Edge>
+	<Edge node1="V12" node2="V22"></Edge>
+	<Edge node1="V12" node2="V23"></Edge>
+	<Edge node1="V13" node2="V21"></Edge>
+	<Edge node1="V13" node2="V22"></Edge>
+	<Edge node1="V13" node2="V23"></Edge>
+	<Edge node1="V14" node2="V21"></Edge>
+	<Edge node1="V14" node2="V22"></Edge>
+	<Edge node1="V14" node2="V23"></Edge>  	
+  </Connector>  
+</Graph>
