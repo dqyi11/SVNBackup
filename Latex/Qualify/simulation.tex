@@ -6,7 +6,7 @@
 
 \begin{figure}
 \centering
-\includegraphics[width = 0.5\textwidth]{./figure/Wingman}
+\includegraphics[width = 0.6\textwidth]{./figure/Wingman}
 \end{figure}
 
 \end{frame}
@@ -129,15 +129,33 @@
 \begin{frame}{Metrics}{Results}
 
 \begin{itemize}
-\item \textbf{Problem size} \\
-nodeNum(\textcolor{blue}{fully expanding tree}) 
-\item \textbf{Percentage of nodes explored} \textcolor{green}{[efficiency]}\\
-nodeNum(\textcolor{blue}{current expanding tree}) / nodeNum(\textcolor{blue}{fully expanding tree})
-\item \textbf{Percentage of optimal at first run} \textcolor{red}{[goodness]}\\
-score(\textcolor{blue}{first found solution}) / score(\textcolor{blue}{optimal solution})
-\item \textbf{Percentage of runs reaching the optimal} \textcolor{red}{[goodness]}\\
-iterationCount(\textcolor{blue}{optimal found}) / iterationCount(\textcolor{blue}{finish tree expanding})
+\item \textcolor{metric-PR}{\textbf{Problem size}} \\
+nodeNum(\dashuline{fully expanding tree}) 
+
+\item \textcolor{metric-NE}{\textbf{Percentage of nodes explored}}
+%\textcolor{green}{[efficiency]}
+\\
+nodeNum(\dashuline{current expanding tree}) / nodeNum(\dashuline{fully expanding tree})
+
+\item \textcolor{metric-OFI}{\textbf{Percentage of optimal at first iteration}}
+%\textcolor{red}{[goodness]}
+\\
+score(\dashuline{first found solution}) / score(\dashuline{optimal solution})
+
+\item \textcolor{metric-IRO}{\textbf{Number of iterations to reach optimal (normalized)}}
+%\textcolor{red}{[goodness]}
+\\
+iterationCount(\dashuline{optimal found}) / iterationCount(\dashuline{finish tree expanding})
 \end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+quality of heuristic
+
+
+quality of algorithm
 
 \end{frame}
 
