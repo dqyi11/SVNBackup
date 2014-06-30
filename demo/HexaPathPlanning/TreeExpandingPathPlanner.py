@@ -34,13 +34,12 @@ class TreeExpandingPathPlanner(object):
             rewardDistribution = self.agent.applyObservation(pos, self.map, rewardDistribution)        
             maxTotalRewards = backtracking.getMaximumTotalReward(planGraph, rewardDistribution, solutionPath)
             
-            
             for node in currentNode.childNodeList:
                 forIdx = planGraph.partitions[t].getVertexIndex(node.pos)
                 node.maxTotalReward = maxTotalRewards[forIdx]
             maxNextIdx = getMaxChildIndex(currentNode.childNodeList)
-            print maxTotalRewards
-            print "T:" + str(t) + "  - " + str(maxNextIdx)
+            #print maxTotalRewards
+            #print "T:" + str(t) + "  - " + str(maxNextIdx)
             currentNode = currentNode.childNodeList[maxNextIdx]
             solutionPath.append(currentNode.pos)
         

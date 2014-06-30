@@ -28,6 +28,7 @@ class BacktrackingHeuristic(object):
             else:
                 for i in range(vexNumInPartite):
                     vex = planningGraph.partitions[t].vertices[i]
+                    pos = vex
                     edges = planningGraph.partitions[t].findEdges(vex)
                     maxFutureVal = -0.1
                     for e in edges:
@@ -36,9 +37,8 @@ class BacktrackingHeuristic(object):
                             currentVal = backtrackingMatrix[t+1][nextIdx]
                             if maxFutureVal < currentVal:
                                 maxFutureVal = currentVal
-                    
                     backtrackingMatrix[t][i] = self.agent.getObservation(pos, self.hexamap, rewardDistribution)+maxFutureVal
-                    
+                    #print "B:" + str(backtrackingMatrix[t][i])
         #maximumTotalReward = copy.deepcopy(backtrackingMatrix[subpathLen])        
         #return maximumTotalReward
         return backtrackingMatrix[subpathLen]
