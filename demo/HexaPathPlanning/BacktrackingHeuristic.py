@@ -38,7 +38,7 @@ class BacktrackingHeuristic(object):
                             if maxFutureVal < currentVal:
                                 maxFutureVal = currentVal
                     backtrackingMatrix[t][i] = self.agent.getObservation(pos, self.hexamap, rewardDistribution)+maxFutureVal
-                    #print "B:" + str(backtrackingMatrix[t][i])
+        
         #maximumTotalReward = copy.deepcopy(backtrackingMatrix[subpathLen])        
         #return maximumTotalReward
         return backtrackingMatrix[subpathLen]

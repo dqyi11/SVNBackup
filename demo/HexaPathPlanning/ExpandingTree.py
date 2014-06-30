@@ -40,6 +40,25 @@ class ExpandingTree(object):
                 node.childNodeList.append(childNode)
                 self.nodeList.append(childNode)
             self.state = "EXPANDED"
+            
+    def getMaxNewNode(self):
+        maxNode = None
+        maxNodeVal = -0.1
+        
+        for node in self.nodeList:
+            if node.state == "NEW":
+                if node.maxTotalReward > maxNodeVal:
+                    maxNodeVal = node.maxTotalReward
+                    maxNode = node                    
+        return node
+    
+    def freeze(self, freezeThreshold):
+        for node in self.nodeList:
+            if node.state=="NEW":
+                if node.maxTotalReward <= freezeThreshold:
+                    node.state = "FROZEN"
+            
+            
                 
             
     

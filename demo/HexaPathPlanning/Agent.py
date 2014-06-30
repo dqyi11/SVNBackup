@@ -1,3 +1,5 @@
+import copy
+
 class Agent(object):
     
     def __init__(self):
@@ -23,4 +25,13 @@ class Agent(object):
             else:
                 rewardDistribution[hx[0],hx[1]] = rewardDistribution[hx[0],hx[1]] * (1 - self.discountFactor)
         return rewardDistribution
+    
+    def getPathReward(self, path, hexamap, rewardDistribution):
+        rewardDist = copy.deepcopy(rewardDistribution)
+        pathReward = 0.0
+        for pos in path:
+            pathReward = self.getObservation(pos, hexamap, rewardDist)
+            rewardDist = self.applyObservation(pos, hexamap, rewardDist)
+
+        return pathReward
         
