@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="New document 1">
+   sodipodi:docname="alg_flow.svg">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -23,7 +23,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="943.1453"
+     inkscape:cx="951.71673"
      inkscape:cy="162.77203"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -130,7 +130,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -375,5 +375,23 @@
          x="837.14288"
          y="106.56279"
          style="font-size:60px;fill:#2285e6;fill-opacity:1;font-weight:bold;-inkscape-font-specification:Sans Bold">Solution</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:10;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;marker-end:url(#TriangleOutM)"
+       d="m 1080,362.77203 -680,0 0,-80 360,0"
+       id="path3302"
+       inkscape:connector-curvature="0"
+       transform="translate(-720,52.362183)" />
+    <text
+       xml:space="preserve"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="97.14286"
+       y="360.84851"
+       id="text4292"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4294"
+         x="97.14286"
+         y="360.84851"
+         style="font-size:60px;font-weight:bold;-inkscape-font-specification:Sans Bold">Iteration</tspan></text>
   </g>
 </svg>
