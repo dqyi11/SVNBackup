@@ -79,11 +79,43 @@
 \column{0.4\textwidth}
 \begin{minipage}{\textwidth}
 
-Exhaustive search
+Exhaustive enumeration
 
 \begin{itemize}
 \item depth-first recursive traverse
 \item node $ \Longleftrightarrow $ subpath
+\end{itemize}
+%Exapnding tree $ G_{T} = (N, L, T) $ \\
+%\begin{itemize}
+%\item $ T $ - tree depth
+%\item $ N $ - Node set
+%\item $ L $ - directed link set
+%\end{itemize}
+\end{minipage}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Expanding tree}{Anytime algorithm framework}
+
+\begin{columns}
+
+\column{0.6\textwidth}
+\begin{minipage}{\textwidth}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{./figure/tree_expanding_process}
+\end{figure}
+\end{minipage}
+
+
+\column{0.4\textwidth}
+\begin{minipage}{\textwidth}
+
+Tree expanding
+
+\begin{itemize}
 \item tracking the search process
 \item estimation storage
 \end{itemize}

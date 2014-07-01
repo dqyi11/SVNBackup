@@ -156,8 +156,10 @@ iterationCount(\dashuline{optimal found}) / iterationCount(\dashuline{finish tre
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
-\begin{block}{Percentage of optimal at first iteration}
-quality of heuristic
+\begin{block}{quality of heuristic}
+{\small 
+\textcolor{metric-OFI}{Percentage of optimal at first iteration}
+}
 \end{block}
 \end{minipage}
 
@@ -175,8 +177,10 @@ quality of heuristic
 \column{0.7\textwidth}
 \begin{center}
 \begin{minipage}{0.43\textwidth}
-\begin{block}{Number of iterations to reach optimal (normalized)}
-quality of algorithm
+\begin{block}{quality of algorithm}
+{\small 
+\textcolor{metric-IRO}{Number of iterations to reach optimal (normalized)}
+}
 \end{block}
 \end{minipage}
 \end{center}
@@ -198,14 +202,30 @@ quality of algorithm
 \end{minipage}
 \end{columns}
 
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+{\small 
+\textcolor{metric-PR}{Problem size} \\
+\textcolor{metric-NE}{Percentage of nodes explored}
+}
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+{\small 
+\textcolor{metric-OFI}{Percentage of optimal at first iteration} \\
+\textcolor{metric-IRO}{Number of iterations to reach optimal (normalized)}
+}
+\end{center}
+\end{columns}
+
 \end{frame}
 
 \begin{frame}{Compare with greedy heuristic}{Performance}
 
-The performance of the heuristic (Percentage of optimal at first run)
-
-\bigskip
-\bigskip
+\begin{center}
+The quality of the heuristic 
+\end{center}
 
 %\begin{columns}
 %\column{0.45\textwidth}
@@ -222,6 +242,12 @@ The performance of the heuristic (Percentage of optimal at first run)
 \centering
 \includegraphics[width=0.6\textwidth]{./figure/compareGreedy}
 \end{figure}
+
+\begin{center}
+{\small 
+\textcolor{metric-OFI}{Percentage of optimal at first iteration}
+}
+\end{center}
 
 \end{frame}
 
@@ -253,6 +279,21 @@ The performance of the heuristic (Percentage of optimal at first run)
 \begin{center}
 \includegraphics[width=0.6\textwidth]{./figure/EnvPerform}
 \end{center}
+
+\begin{columns}
+\column{0.5\textwidth}
+\begin{center}
+{\small
+\textcolor{metric-OFI}{Percentage of optimal at first iteration}
+}
+\end{center}
+\column{0.5\textwidth}
+\begin{center}
+{\small
+\textcolor{metric-NE}{Percentage of nodes explored}
+}
+\end{center}
+\end{columns}
 
 
 \end{frame}
@@ -330,6 +371,11 @@ The performance of the heuristic (Percentage of optimal at first run)
 \centering
 \includegraphics[width=\textwidth]{./figure/ProbSizeInDiffHMP}
 \end{figure}
+\begin{center}
+{\small
+\textcolor{metric-PR}{Problem size}
+}
+\end{center}
 \end{minipage}
 
 \column{0.4\textwidth}
@@ -342,6 +388,11 @@ The performance of the heuristic (Percentage of optimal at first run)
 \includegraphics[width=\textwidth]{./figure/ExpRatioInDiffHMP}
 \end{figure}
 \end{minipage}
+\begin{center}
+{\small
+\textcolor{metric-NE}{Percentage of nodes explored}
+}
+\end{center}
 \end{columns}
 
 \bigskip
@@ -357,6 +408,10 @@ The performance of the heuristic (Percentage of optimal at first run)
 \includegraphics[width=0.7\textwidth]{./figure/InitOptInDiffHMP}
 \end{figure}
 \end{minipage}
+\begin{center}
+{\small
+\textcolor{metric-OFI}{Percentage of optimal at first iteration}}
+\end{center}
 \end{columns}
 
 \end{frame}
