@@ -156,6 +156,8 @@ class MapViewForm(QtGui.QMainWindow):
         planner = TreeExpandingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
         self.hexaMap.hexamapState.robotPath = planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistribution)
         
+        print planner.iterationCount        
+        
         self.update()
         
         

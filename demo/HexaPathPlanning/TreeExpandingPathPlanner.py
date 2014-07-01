@@ -16,8 +16,9 @@ class TreeExpandingPathPlanner(object):
     
     def __init__(self, hexamap, agent):
         self.map = hexamap
-        self.runOnlyOnce = True
-        self.agent = agent        
+        self.runOnlyOnce = False
+        self.agent = agent
+        self.iterationCount = 0        
         
     def planPath(self, planGraph, start, planningLen, rewardDistribution):
         solutionPath = []
@@ -26,16 +27,26 @@ class TreeExpandingPathPlanner(object):
         backtracking = BacktrackingHeuristic(self.map, self.agent)
         expandingTree = ExpandingTree(planGraph, start)
         
+        bestFoundSolution = None
+        bestFoundSolutionReward = -0.1       
+        
         currentNode = expandingTree.root
-        iterationCount = self.runTimes
+        self.iterationCount = 0   
         stopCriteria = False
         
         while stopCriteria==False:
             tempRewardDistribution = copy.deepcopy(rewardDistribution)
-            currentNode = expandingTree.getMaxNewNode()
-            for t in range(1,planningLen):
+            startIdx = len(solutionPath)
+            
+            #print "before search-current pos: " + str(currentNode.pos)            
+            #print "before search-solution path: " + str(solutionPath)
+            
+            
+            for t in range(startIdx,planningLen):
                 pos = currentNode.pos
                 expandingTree.expandNode(currentNode)
+                #print "@" + str(t) + " expand " + str(currentNode.pos)
+                expandingTree.updateChidNodesInstantRewards(currentNode, self.map, self.agent, tempRewardDistribution)
                 
                 rewardDistribution = self.agent.applyObservation(pos, self.map, tempRewardDistribution)        
                 maxTotalRewards = backtracking.getMaximumTotalReward(planGraph, tempRewardDistribution, solutionPath)
@@ -50,8 +61,30 @@ class TreeExpandingPathPlanner(object):
                 solutionPath.append(currentNode.pos)
                 
             pathReward = self.agent.getPathReward(solutionPath, self.map, rewardDistribution)
+            
+            if pathReward > bestFoundSolutionReward:
+                bestFoundSolution = solutionPath
+                bestFoundSolutionReward = pathReward
+            
+            self.iterationCount += 1
+            if self.runOnlyOnce==True:
+                stopCriteria=True
+                
+            currentNode = expandingTree.getMaxNewNode()
+            if currentNode != None:
+                solutionPath = expandingTree.getSubpath(currentNode)
+            else:
+                solutionPath = []
+
+            #print bestFoundSolution
+            #if currentNode != None:
+                #print "after search-current pos: " + str(currentNode.pos)            
+                #print "after search-solution path: " + str(solutionPath)
+                
+            if currentNode == None:
+                stopCriteria=True
         
-        return solutionPath
+        return bestFoundSolution
     
 
         

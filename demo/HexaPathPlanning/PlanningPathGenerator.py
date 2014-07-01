@@ -32,7 +32,7 @@ class PlanningPathGenerator(object):
     
     def forwardPrune(self, graph):
         for t in range(1, graph.T):
-            print t
+            #print t
             graph.removeUnreachableVertices(t)
         graph.cleanObsoleteEdges()
         
