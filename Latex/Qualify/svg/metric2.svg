@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="metric2.pdf">
+   sodipodi:docname="metric2.svg">
   <defs
      id="defs4">
     <marker
@@ -49,8 +49,8 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1280"
-     inkscape:window-height="962"
+     inkscape:window-width="1366"
+     inkscape:window-height="706"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1">
@@ -70,7 +70,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -79,6 +79,26 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(719.53613,-55.960815)">
+    <path
+       style="fill:#971200;fill-opacity:1;stroke:none"
+       d="m -400,172.36218 40,0 0,360 -40,0 z"
+       id="path4405"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#ed250c;fill-opacity:1;stroke:none"
+       d="m -360,292.36218 40,0 0,240 -40,0 z"
+       id="path4403"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#3af308;fill-opacity:1;stroke:none"
+       d="m -320,452.36218 240,0 0,40 -240,0 z"
+       id="path4399"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:#3a9e08;fill-opacity:1;stroke:none"
+       d="m -320,492.36218 640,0 0,40 -640,0 z"
+       id="path4401"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutM)"
        d="m -320,532.36218 0,-400"
@@ -108,26 +128,6 @@
        style="fill:none;stroke:#323232;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:20, 20;stroke-dashoffset:0"
        d="m -80,172.36218 -240,0"
        id="path4395"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#3af308;fill-opacity:1;stroke:none"
-       d="m -320,452.36218 240,0 0,40 -240,0 z"
-       id="path4399"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#3a9e08;fill-opacity:1;stroke:none"
-       d="m -320,492.36218 640,0 0,40 -640,0 z"
-       id="path4401"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#ed250c;fill-opacity:1;stroke:none"
-       d="m -360,292.36218 40,0 0,240 -40,0 z"
-       id="path4403"
-       inkscape:connector-curvature="0" />
-    <path
-       style="fill:#971200;fill-opacity:1;stroke:none"
-       d="m -400,172.36218 40,0 0,360 -40,0 z"
-       id="path4405"
        inkscape:connector-curvature="0" />
     <text
        xml:space="preserve"
