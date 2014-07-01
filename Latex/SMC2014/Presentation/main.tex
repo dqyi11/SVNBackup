@@ -1,0 +1,123 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\usepackage{amsmath}
+\usepackage{textpos}
+\usepackage{ulem}
+
+\definecolor{BYUblue}{RGB}{0,31,69}
+\definecolor{BYUgold}{RGB}{195,163,106}
+\usecolortheme[RGB={0,31,69}]{structure} % BYU Blue
+
+\definecolor{metric-PR}{RGB}{200,127,0}
+\definecolor{metric-NE}{RGB}{51,51,255}
+\definecolor{metric-OFI}{RGB}{204,0,0}
+\definecolor{metric-IRO}{RGB}{0,102,51}
+
+\usetheme{Frankfurt}
+\setbeamercolor*{section in head/foot}{bg=BYUblue,fg=gray!25}
+\setbeamercolor*{frametitle}{bg=BYUblue!50,fg=white!25}
+\setbeamercovered{transparent}
+\mode<all>
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\title{Informative Path Planning\\
+with a Human Path Constraint}
+
+%\subtitle{Optional Subtitle}
+
+\author{Daqing Yi 
+%\and Michael A. Goodrich \and Kevin D. Seppi
+}
+
+
+\institute
+{
+  Department of Computer Science\\
+  Brigham Young University
+}
+
+\date[]{} 
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{100mm}(0.9\textwidth,-1.2cm)
+\includegraphics[width=1.1cm]{figure/BYU_logo.png}
+\end{textblock*}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}{Structure}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+
+\input{intro.tex}
+
+\input{problem.tex}
+
+\input{solution.tex}
+
+\input{simulation.tex}
+
+% Placing a * after \section means it will not show in the
+% outline or table of contents.
+\input{summary.tex}
+
+% All of the following is optional and typically not needed. 
+\input{appendix.tex}
+
+\end{document}
+
+
