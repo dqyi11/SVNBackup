@@ -59,10 +59,20 @@ class MapViewConfigForm(QtGui.QWidget):
         self.btnCancel = QtGui.QPushButton("Cancel")
         self.btnCancel.clicked.connect(self.cancel)
         
-        self.grid.addWidget(self.hexSize, 1, 0)
-        self.grid.addWidget(self.hexSizeEdit, 1, 1)
-        self.grid.addWidget(self.useObstacleCheck, 1, 2)
-        self.grid.addWidget(self.btnGenMap, 2, 2)
+        self.lbInfoVec = QtGui.QLabel("Dimension")
+        self.cbInfoVec = QtGui.QComboBox()
+        if self.parentWindow.hexaMap!=None:
+            self.initCbInfoVec()
+        self.cbInfoVec.activated[str].connect(self.onSelcbInfoVec)
+        
+        self.grid.addWidget(self.hexSize, 0, 0)
+        self.grid.addWidget(self.hexSizeEdit, 0, 1)
+        self.grid.addWidget(self.useObstacleCheck, 0, 2)
+        self.grid.addWidget(self.btnGenMap, 1, 2)
+        
+        self.grid.addWidget(self.lbInfoVec, 2, 0)
+        self.grid.addWidget(self.cbInfoVec, 2, 1)
+        
         self.grid.addWidget(self.wingmanRadius, 3, 0)
         self.grid.addWidget(self.wingmanRadiusEdit, 3, 1)
         self.grid.addWidget(self.humanObsRange, 4, 0)
@@ -78,6 +88,18 @@ class MapViewConfigForm(QtGui.QWidget):
         self.setLayout(self.grid)
         #self.setGeometry(100,100,200,400)
         self.show()
+        
+    def initCbInfoVec(self):
+        self.cbInfoVec.clear()
+        for i in range(self.parentWindow.hexaMap.hexamapState.hexValDim):
+                self.cbInfoVec.addItem(str(i))
+                
+    def onSelcbInfoVec(self, text):
+        print text
+        intIdx = int(text)
+        if self.parentWindow.hexaMap != None:
+            self.parentWindow.hexaMap.hexamapState.currentHexValDim = intIdx
+            self.parentWindow.update()
         
     def changeUseObstacle(self):
         if self.useObstacleCheck.checkState() == QtCore.Qt.Checked:

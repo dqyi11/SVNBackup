@@ -20,6 +20,7 @@ class HexagonalMapState(object):
         self.defaultRobotColor = QtGui.QColor(0, 0, 204)
         
         self.activeCells = []
+        self.currentHexValDim = 0
         self.hexValDim = valDim
         self.hexVals = []
         for d in range(self.hexValDim):
@@ -55,6 +56,11 @@ class HexagonalMapState(object):
                 rndVal = np.random.random(self.y_num)
                 for j in range(self.y_num):
                     self.hexVals[k][i,j] = rndVal[j] 
+                    
+    def clearVal(self):
+        for d in range(self.hexValDim):
+            hexVal = np.ones((self.x_num, self.y_num))
+            self.hexVals.append(hexVal)
                     
     def getHexColor(self, i, j, k=0):
         val = self.hexVals[k][i,j]

@@ -4,10 +4,10 @@ from HexagonalMapState import *
 
 class HexaMapWidget(QtGui.QWidget):
 
-    def __init__(self, x_num, y_num, side, orientation):
+    def __init__(self, x_num, y_num, side, orientation, dim=1):
         super(HexaMapWidget, self).__init__()
         self.hexamap = HexagonalMap(x_num, y_num, side, orientation)
-        self.hexamapState = HexagonalMapState(self.hexamap)     
+        self.hexamapState = HexagonalMapState(self.hexamap, dim)     
         self.initUI()
         
     def initUI(self):
@@ -47,7 +47,7 @@ class HexaMapWidget(QtGui.QWidget):
                 if self.hexamapState.accessible[i,j] == 0:
                     brush = QtGui.QBrush(self.hexamapState.defaultObstacleColor)
                 else:
-                    brush = QtGui.QBrush(self.hexamapState.getHexColor(i,j))
+                    brush = QtGui.QBrush(self.hexamapState.getHexColor(i,j, self.hexamapState.currentHexValDim))
                 qp.setBrush(brush)
                 qp.drawPolygon(polygon)
                 

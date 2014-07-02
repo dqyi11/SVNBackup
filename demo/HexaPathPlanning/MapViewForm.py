@@ -18,6 +18,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.hexOrientation = "POINTY"
         self.obsThreshold = 60
         self.considerObstacle = True
+        self.dataDim = 4
         
         self.wingmanRadius = 2
         self.humanObsR = 2
@@ -41,6 +42,10 @@ class MapViewForm(QtGui.QMainWindow):
         loadDataAction.triggered.connect(self.loadData)
         saveDataAction = QtGui.QAction('Save', self)
         saveDataAction.triggered.connect(self.saveData)
+        clearDataAction = QtGui.QAction('Clear', self)
+        clearDataAction.triggered.connect(self.clearEnvData)
+        randomDataAction = QtGui.QAction('Random', self)
+        randomDataAction.triggered.connect(self.randomEnvData)        
                 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
@@ -49,9 +54,10 @@ class MapViewForm(QtGui.QMainWindow):
         toolMenu.addAction(configAction)
         toolMenu.addAction(saveDataAction)
         toolMenu.addAction(loadDataAction)
-    
-        self.mapView = QtGui.QLabel()
-        self.setCentralWidget(self.mapView)        
+        envMenu = menubar.addMenu('&Env')
+        envMenu.addAction(clearDataAction)
+        envMenu.addAction(randomDataAction)
+               
         self.show()
                
     def configParam(self):
@@ -59,6 +65,8 @@ class MapViewForm(QtGui.QMainWindow):
         
     def openMap(self):
         
+        self.mapView = QtGui.QLabel()
+        self.setCentralWidget(self.mapView) 
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
         pixmap = QtGui.QPixmap(fname)
         
@@ -89,12 +97,14 @@ class MapViewForm(QtGui.QMainWindow):
         
     def generateHexaMap(self):        
         self.x_num, self.y_num = calcHexDimension(self.formSize[0], self.formSize[1], self.hexSize, self.hexOrientation)
-        self.hexaMap = HexaMapWidget(self.x_num, self.y_num, self.hexSize, self.hexOrientation)
+        self.hexaMap = HexaMapWidget(self.x_num, self.y_num, self.hexSize, self.hexOrientation, self.dataDim)
         self.setCentralWidget(self.hexaMap)
         if self.considerObstacle == True:
             self.updateObstalce()
         self.planningPathGenerator = PlanningPathGenerator(self.hexaMap.hexamap)
         #self.hexaMap.hexamap.generateTopologyGraph()
+        self.configWindow.initCbInfoVec()
+        self.configWindow.update()
         
         self.update() 
         
@@ -177,7 +187,6 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.update()
         
-        
     def applyHumanPath(self):
         if self.hexaMap != None:
             self.hexaMap.hexamapState.human.discountFactor = self.humanDiscountFactor
@@ -193,5 +202,15 @@ class MapViewForm(QtGui.QMainWindow):
                 rewardDistribution = human.applyObservation(hx, self.hexaMap.hexamap, rewardDistribution)
             self.hexaMap.hexamapState.hexVals[0] = rewardDistribution    
             #print rewardDistribution
+            self.update()
+            
+    def clearEnvData(self):
+        if self.hexaMap != None:
+            self.hexaMap.hexamapState.clearVal()
+            self.update()
+    
+    def randomEnvData(self):
+        if self.hexaMap != None:
+            self.hexaMap.hexamapState.initRndVal()
             self.update()
             
