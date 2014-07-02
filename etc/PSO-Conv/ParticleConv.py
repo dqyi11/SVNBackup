@@ -14,9 +14,12 @@ if __name__ == '__main__':
     
     runs = 1000
     
-    phi1 = 2
-    phi2 = 2
-    inertia = 0.8
+    #phi1 = 2
+    #phi2 = 2
+    #inertia = 0.8
+    phi1 = 0.5
+    inertia = 0.5
+    phi2 = 0.5
     
     pos = (np.random.random() - 0.5) * 20
     vel = 0.0

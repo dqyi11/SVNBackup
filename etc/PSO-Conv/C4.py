@@ -13,9 +13,9 @@ if __name__ == '__main__':
         for d in range(30):
             val += X[0,d]**2 
         val /= 4000.0
-        val2 = 1.0
+        val2 = 0.0
         for d in range(30):
-            val2 *= np.cos(X[0,d]/np.sqrt(float(d+1))) + 1
+            val2 *= np.cos(X[0,d]/np.sqrt(float(d))) + 1
         return val - val2
     
     bounds = []
@@ -27,7 +27,7 @@ if __name__ == '__main__':
         ws.append([-600.0, 600.0]) 
     swarm.initParticles(ws)
     
-    runPlan = [800]
+    runPlan = [250]
     for r in runPlan:
         for t in range(r):
             swarm.update()

@@ -11,13 +11,14 @@ if __name__ == '__main__':
     def DeJongF4(X):
         val = 0.0
         for d in range(30):
-            val += (d+1) * ( X[0,d]**4 )
+            val += d * ( X[0,d]**4 )
         return val
     
     bounds = []
     bests = []
     swarm = Swarm(20, 30)
-    swarm.setParam(2.0, 2.0, 0.8, DeJongF4)
+    #swarm.setParam(2.0, 2.0, 0.8, DeJongF4)
+    swarm.setParam(0.5, 0.5, 0.7985, DeJongF4)
     ws = []
     for i in range(30):
         ws.append([-20.0, 20.0]) 
