@@ -1,0 +1,13 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this paper, we have decomposed the PSO algorithm into a cascade model, which consists of input update and position update components.
+We introduce the input-to-state stability analysis to the position update component.
+For an input-to-state stable position update component, if the input to this component is bounded, the state is bounded; also if the input to the component converges, the state converges.
+The convergence of the PSO is determined by the output of the input update component, which are the personal best and global best.
+If they are in stagnation, the particle converges.
+
+The analysis of a cascade structure used here can be applied to a wide range of the PSO variants.
+In cases that use the same position update component but different input update components, the convergence and the boundary of the particles are determined by
+whether the input update component generates converging or bounded personal best and global best.
+For variants that use a different position update component, the ISS properties would need to be verified.

@@ -2,34 +2,71 @@
 
 \hyphenation{op-tical net-works semi-conduc-tor}
 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\newtheorem{mydef}{Definition}
+\newtheorem{mylem}{Lemma}
+\newtheorem{mythm}{Theorem}
+\newtheorem{myprop}{Property}
+\newtheorem{mycoro}{Corollary}
+
+
 \begin{document}
 
-\title{Bare Demo of IEEEtran.cls for Journals}
+\title{Input-to-state stable analysis on Particle Swarm Optimization}
 
-\author{Daqing Yi \and Kevin D. Seppi \and Michael A. Goodrich}
+\author{
+\IEEEauthorblockN{Daqing Yi,
+Kevin D. Seppi, and Michael A. Goodrich}
+
+\IEEEauthorblockA{Department of computer science, Brigham Young University, Provo, UT 84604 USA}
+\thanks{}
+}
 
 % The paper headers
-\markboth{Journal of \LaTeX\ Class Files,~Vol.~11, No.~4, December~2012}%
-{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+%\markboth{Journal of \LaTeX\ Class Files,~Vol.~11, No.~4, December~2012}%
+%{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+\markboth{}{}
 
 \maketitle
 
 \begin{abstract}
-The abstract goes here.
+This paper examines the dynamics of particle swarm optimization (PSO) by modeling PSO as a cascade system and then applying input-to-state stability analysis.
+Using a cascade system model we can
+include the effects of the global-best and personal-best values more directly in the model of the dynamics.
+Thus in contrast to previous study of PSO dynamics, the input-to-state stability property used here allows for the analysis of PSO both before and at stagnation.
+In addition, the use of input-to-state stability allows this analysis to preserve random terms which were heretofore simplified to constants.
+This analysis is important because it can inform the setting of PSO parameters and better characterize the nature of PSO as a dynamic system.
+This work also illuminates the way in which the personal best and the global best updates influence the bound on particle's position and hence, how the algorithm
+exploits and explores the fitness landscape as a function of the personal best and global best.
 \end{abstract}
 
 \begin{IEEEkeywords}
-IEEEtran, journal, \LaTeX, paper, template.
+Particle swarm optimization
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
 
-\section{Introduction}
+\input{intro.tex}
 
-\section{Conclusion}
+\input{related_work.tex}
 
-\appendices
-\section{Proof of the First Zonklar Equation}
+\input{sys_model.tex}
+
+\input{iss.tex}
+
+\input{opt_strategy.tex}
+
+\input{stochastic_analysis.tex}
+
+\input{conclusion.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+
 
 \end{document}
 
