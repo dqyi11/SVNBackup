@@ -1,5 +1,6 @@
 from PyQt4 import QtGui, QtCore
 from Agent import *
+import pickle
 import numpy as np
 
 class HexagonalMapState(object):
@@ -62,6 +63,12 @@ class HexagonalMapState(object):
             int_val = 255
         #print int_val
         return QtGui.QColor(int_val, int_val, int_val)
+    
+    def dumpVal(self, filename):        
+        pickle.dump( self.hexVals, open( filename, "wb" ) )
         
+    def loadVal(self, filename):
+        self.hexVals = pickle.load( open( filename, "rb" ) )
+        self.hexValDim = len(self.hexVals)
         
         

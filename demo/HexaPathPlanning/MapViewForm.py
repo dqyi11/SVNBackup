@@ -37,12 +37,18 @@ class MapViewForm(QtGui.QMainWindow):
         openAction.triggered.connect(self.openMap)
         configAction = QtGui.QAction('Config', self)
         configAction.triggered.connect(self.configParam)
+        loadDataAction = QtGui.QAction('Load', self)
+        loadDataAction.triggered.connect(self.loadData)
+        saveDataAction = QtGui.QAction('Save', self)
+        saveDataAction.triggered.connect(self.saveData)
                 
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(openAction)
         toolMenu = menubar.addMenu('&Tool')
         toolMenu.addAction(configAction)
+        toolMenu.addAction(saveDataAction)
+        toolMenu.addAction(loadDataAction)
     
         self.mapView = QtGui.QLabel()
         self.setCentralWidget(self.mapView)        
@@ -69,6 +75,17 @@ class MapViewForm(QtGui.QMainWindow):
         self.planningPathGenerator = None
         
         self.update()
+        
+    def saveData(self):
+        fname = QtGui.QFileDialog.getSaveFileName(self, 'save file')
+        if fname!= None:
+            self.hexaMap.hexamapState.dumpVal(fname)
+            
+    def loadData(self):
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
+        if fname!=None:
+            self.hexaMap.hexamapState.loadVal(fname)
+            self.update()
         
     def generateHexaMap(self):        
         self.x_num, self.y_num = calcHexDimension(self.formSize[0], self.formSize[1], self.hexSize, self.hexOrientation)
