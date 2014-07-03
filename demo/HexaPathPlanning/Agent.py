@@ -9,12 +9,15 @@ class Agent(object):
         
     def getObservation(self, pos, hexamap, rewardDistribution):
         reward = 0.0
-        hexes = hexamap.getHexesByRadius(pos, self.observeRange)
-        for hx in hexes:
-            if hx[0]==pos[0] and hx[1]==pos[1]:
-                reward += rewardDistribution[hx[0],hx[1]]
-            else:
-                reward += self.discountFactor*rewardDistribution[hx[0],hx[1]]
+        if self.observeRange==0:
+            reward = rewardDistribution[pos[0],pos[1]]
+        else:
+            hexes = hexamap.getHexesByRadius(pos, self.observeRange)
+            for hx in hexes:
+                if hx[0]==pos[0] and hx[1]==pos[1]:
+                    reward += rewardDistribution[hx[0],hx[1]]
+                else:
+                    reward += self.discountFactor*rewardDistribution[hx[0],hx[1]]
         return reward
         
     def applyObservation(self, pos, hexamap, rewardDistribution):
