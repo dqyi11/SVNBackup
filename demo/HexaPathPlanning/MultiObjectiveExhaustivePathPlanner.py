@@ -49,18 +49,32 @@ class MultiObjectiveExhaustivePathPlanner(object):
         
     def findPath(self, planGraph, subpath, rewardDistributions):
         currentStep = len(subpath)
+        #print "current step " + str(currentStep)
         if currentStep >= planGraph.T:
             tempPath = copy.deepcopy(subpath)
             self.allPaths.append(tempPath)
             self.allScores.append(self.agent.getPathRewardVec(tempPath, self.map, rewardDistributions))
             return
-        
-        
-        edges = planGraph.partitions[currentStep].findEdges(tempPath[currentStep-1])
+    
+        edges = planGraph.partitions[currentStep-1].findEdges(subpath[currentStep-1])
         for edge in edges:
+            #print "working on " +str(edge[0]) + " - " + str(edge[1])
             tempPath = copy.deepcopy(subpath)
             tempPath.append(edge[1])        
             self.findPath(planGraph, tempPath, rewardDistributions)
+        
+    def printToFile(self, filename):
+        f = open(filename, 'w')
+        for k in range(len(self.allPaths)):
+            path = self.allPaths[k]
+            for i in range(len(path)):
+                p = path[i]
+                if i==len(path)-1:
+                    f.write(str(p) + " ")
+                else:
+                    f.write(str(p) + " - ")
+            f.write(" : " + str(self.allScores[k]) + "\n")
+        f.close()
         
         
             

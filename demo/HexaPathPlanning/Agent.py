@@ -45,8 +45,7 @@ class Agent(object):
         pathReward = np.zeros(dim)
         for pos in path:
             for d in range(dim):
-                pathReward[d] = self.getObservation(pos, hexamap, rewardDist)
-                rewardDist = self.applyObservation(pos, hexamap, rewardDist)
+                pathReward[d] += self.getObservation(pos, hexamap, rewardDist[d])
 
         return pathReward
         

@@ -104,9 +104,7 @@ class HexagonalMap(object):
                     if hexIdxA[0] == hexIdxB[0] or hexIdxA[0] == hexIdxB[0]+1:
                         return True
         
-        return False
-        
-            
+        return False 
     
     def getConnectedHexes(self, hexIdx):
         connectedHexes = []

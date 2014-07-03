@@ -7,6 +7,7 @@ from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
 from MultiObjectiveBacktrackingPathPlanner import *
 from MultiObjectiveExhaustivePathPlanner import *
+from NondominatedSolutionManager import *
 import copy
 
 class MapViewForm(QtGui.QMainWindow):
@@ -33,6 +34,8 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.hexaMap = None
         self.planningPathGenerator = None
+        
+        self.nondominatedSolutionMgr = None
         
         self.configWindow = MapViewConfigForm(self)
         self.initUI()
@@ -182,22 +185,38 @@ class MapViewForm(QtGui.QMainWindow):
         
         #plannedPathGraph.dump()
         
-        rewardDistribution = copy.deepcopy(self.hexaMap.hexamapState.hexVals[0])
         humanPath = self.hexaMap.hexamapState.humanPath
         planningLen = len(humanPath)
         
+        self.nondominatedSolutionMgr = NondominatedSolutionManager(planningLen)
+        
         if self.multiObjective==False:
+            rewardDistribution = copy.deepcopy(self.hexaMap.hexamapState.hexVals[0])
             planner = TreeExpandingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
             self.hexaMap.hexamapState.robotPath = planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistribution)
             
             print planner.iterationCount      
         else:
+            rewardDistributions = copy.deepcopy(self.hexaMap.hexamapState.hexVals)
             if self.useExhaustive==True:
                 planner = MultiObjectiveExhaustivePathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
+                planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistributions, self.dataDim)
                 print "all paths num " + str(len(planner.allPaths))
                 print "nondominated paths num " + str(len(planner.solutions))
+                #planner.printToFile("solutions.txt")
+                self.nondominatedSolutionMgr.nondominatedSolutions = planner.solutions
+                self.nondominatedSolutionMgr.nondominatedSolutionScoreVecs = planner.solutionScores
+                self.nondominatedSolutionMgr.printToFile("solutions.txt")
+                
+                ndCnt = 0
+                for x in planner.allPaths:
+                    if True==self.nondominatedSolutionMgr.has(x):
+                        ndCnt += 1
+                print "ND CNT " + str(ndCnt)
+                
             else:
                 planner = MultiObjectiveBacktrackingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot) 
+                
         
         self.update()
         
