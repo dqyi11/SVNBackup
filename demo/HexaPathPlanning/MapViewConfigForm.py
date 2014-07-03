@@ -50,6 +50,20 @@ class MapViewConfigForm(QtGui.QWidget):
         self.robotObsFactorEdit = QtGui.QLineEdit()
         self.robotObsFactorEdit.setText(QtCore.QString.number(robotObsFactor))
         
+        self.doMultiObj = QtGui.QCheckBox("Multi-objective")
+        if self.parentWindow.multiObjective == True:
+            self.doMultiObj.setCheckState(QtCore.Qt.Checked)
+        else:
+            self.doMultiObj.setCheckState(QtCore.Qt.Unchecked)
+        self.doMultiObj.stateChanged.connect(self.changeDoMultiObj)
+        
+        self.doExhaustive = QtGui.QCheckBox("Exhaustive")
+        if self.parentWindow.useExhaustive == True:
+            self.doExhaustive.setCheckState(QtCore.Qt.Checked)
+        else:
+            self.doExhaustive.setCheckState(QtCore.Qt.Unchecked)
+        self.doExhaustive.stateChanged.connect(self.changeDoExhaustive)
+        
         self.btnApply = QtGui.QPushButton("Apply")
         self.btnApply.clicked.connect(self.applyHumanPath) 
         
@@ -81,9 +95,11 @@ class MapViewConfigForm(QtGui.QWidget):
         self.grid.addWidget(self.robotObsRange, 5, 0)
         self.grid.addWidget(self.robotObsRangeEdit, 5, 1)
         self.grid.addWidget(self.robotObsFactorEdit, 5, 2)
-        self.grid.addWidget(self.btnApply, 6, 1)
-        self.grid.addWidget(self.btnPlan, 6, 2)
-        self.grid.addWidget(self.btnCancel, 7, 2)       
+        self.grid.addWidget(self.doMultiObj, 6, 0)
+        self.grid.addWidget(self.doExhaustive, 6, 1)
+        self.grid.addWidget(self.btnApply, 7, 1)
+        self.grid.addWidget(self.btnPlan, 7, 2)
+        self.grid.addWidget(self.btnCancel, 8, 2)       
         
         self.setLayout(self.grid)
         #self.setGeometry(100,100,200,400)
@@ -107,6 +123,20 @@ class MapViewConfigForm(QtGui.QWidget):
         else:
             self.parentWindow.considerObstacle = False
         self.update()
+        
+    def changeDoMultiObj(self):
+        if self.doMultiObj.checkState() == QtCore.Qt.Checked:
+            self.parentWindow.multiObjective = True
+        else:
+            self.parentWindow.multiObjective = False
+        self.update()
+        
+    def changeDoExhaustive(self):
+        if self.doExhaustive.checkState() == QtCore.Qt.Checked:
+            self.parentWindow.useExhaustive = True
+        else:
+            self.parentWindow.useExhaustive = False
+        self.update()        
         
     def genMap(self):
         

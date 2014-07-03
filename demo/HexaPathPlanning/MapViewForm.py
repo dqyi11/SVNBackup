@@ -5,6 +5,8 @@ from HexaMapWidget import *
 from HexaUtils import *
 from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
+from MultiObjectiveBacktrackingPathPlanner import *
+from MultiObjectiveExhaustivePathPlanner import *
 import copy
 
 class MapViewForm(QtGui.QMainWindow):
@@ -19,6 +21,9 @@ class MapViewForm(QtGui.QMainWindow):
         self.obsThreshold = 60
         self.considerObstacle = True
         self.dataDim = 4
+        
+        self.multiObjective=True
+        self.useExhaustive = True
         
         self.wingmanRadius = 2
         self.humanObsR = 2
@@ -180,10 +185,19 @@ class MapViewForm(QtGui.QMainWindow):
         rewardDistribution = copy.deepcopy(self.hexaMap.hexamapState.hexVals[0])
         humanPath = self.hexaMap.hexamapState.humanPath
         planningLen = len(humanPath)
-        planner = TreeExpandingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
-        self.hexaMap.hexamapState.robotPath = planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistribution)
         
-        print planner.iterationCount        
+        if self.multiObjective==False:
+            planner = TreeExpandingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
+            self.hexaMap.hexamapState.robotPath = planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistribution)
+            
+            print planner.iterationCount      
+        else:
+            if self.useExhaustive==True:
+                planner = MultiObjectiveExhaustivePathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
+                print "all paths num " + str(len(planner.allPaths))
+                print "nondominated paths num " + str(len(planner.solutions))
+            else:
+                planner = MultiObjectiveBacktrackingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot) 
         
         self.update()
         

@@ -1,4 +1,5 @@
 import copy
+import numpy as np
 
 class Agent(object):
     
@@ -33,8 +34,19 @@ class Agent(object):
         rewardDist = copy.deepcopy(rewardDistribution)
         pathReward = 0.0
         for pos in path:
-            pathReward = self.getObservation(pos, hexamap, rewardDist)
+            pathReward += self.getObservation(pos, hexamap, rewardDist)
             rewardDist = self.applyObservation(pos, hexamap, rewardDist)
+
+        return pathReward
+    
+    def getPathRewardVec(self, path, hexamap, rewardDistributions):
+        rewardDist = copy.deepcopy(rewardDistributions)
+        dim = len(rewardDistributions)
+        pathReward = np.zeros(dim)
+        for pos in path:
+            for d in range(dim):
+                pathReward[d] = self.getObservation(pos, hexamap, rewardDist)
+                rewardDist = self.applyObservation(pos, hexamap, rewardDist)
 
         return pathReward
         
