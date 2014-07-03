@@ -27,8 +27,8 @@ class MapViewForm(QtGui.QMainWindow):
         self.useExhaustive = True
         
         self.wingmanRadius = 2
-        self.humanObsR = 2
-        self.robotObsR = 2
+        self.humanObsR = 0
+        self.robotObsR = 0
         self.humanDiscountFactor = 0.4
         self.robotDiscountFactor = 0.4
         
@@ -216,7 +216,7 @@ class MapViewForm(QtGui.QMainWindow):
                 
             else:
                 planner = MultiObjectiveBacktrackingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot) 
-                
+                planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistributions, self.dataDim)
         
         self.update()
         

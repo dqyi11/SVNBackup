@@ -23,6 +23,8 @@ class MultiObjectiveBacktrackingPathPlanner(object):
             estimatedFutureReward = backtracking.getBacktrackedEstimation(planGraph, rewardDistribution)
             estimatedFutureRewards.append(estimatedFutureReward)
             
+            
+            
         
             
             

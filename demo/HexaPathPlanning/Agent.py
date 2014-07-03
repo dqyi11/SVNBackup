@@ -48,4 +48,11 @@ class Agent(object):
                 pathReward[d] += self.getObservation(pos, hexamap, rewardDist[d])
 
         return pathReward
+    
+    def getObservationVec(self, pos, hexamap, rewardDistributions):
+        dim = len(rewardDistributions)
+        reward = np.zeros(dim)
+        for d in range(dim):
+            reward[d] = self.getObservation(pos, hexamap, rewardDistributions[d])
+        return reward
         
