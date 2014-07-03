@@ -11,12 +11,17 @@ class MultiObjectivePathPlanner(object):
         self.agent = agent
         self.iterationCount = 0   
         
-    def planPath(self, planGraph, start, planningLen, rewardDistribution):
+    def planPath(self, planGraph, start, planningLen, rewardDistribution, dimension):
         solutionGraph = ExpandingMultiPartiteGraph(planningLen, 'solutionGraph')
         solutionGraph.partitions[0].addVertex(start)
         
         backtracking = BacktrackingHeuristic(self.map, self.agent)
         
         for t in range(1,planningLen):
+            for d in range(dimension):
+                pass
+            
+            
+                
             
         
