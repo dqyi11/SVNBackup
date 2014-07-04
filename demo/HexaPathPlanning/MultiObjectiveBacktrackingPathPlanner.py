@@ -1,4 +1,5 @@
 from ExpandingMultiPartiteGraph import *
+from MultiObjectiveExpandingTree import *
 from Agent import *
 from BacktrackingHeuristic import *
 import copy
@@ -12,9 +13,8 @@ class MultiObjectiveBacktrackingPathPlanner(object):
         self.iterationCount = 0   
         
     def planPath(self, planGraph, start, planningLen, rewardDistributions, dimension):
-        solutionGraph = ExpandingMultiPartiteGraph(planningLen, 'solutionGraph')
-        solutionGraph.partitions[0].addVertex(start)
         
+        expandingTree = MultiObjectiveExpandingTree(planGraph, start, dimension)        
         backtracking = BacktrackingHeuristic(self.map, self.agent)
         
         estimatedFutureRewards = []
@@ -22,6 +22,14 @@ class MultiObjectiveBacktrackingPathPlanner(object):
             rewardDistribution = rewardDistributions[d]
             estimatedFutureReward = backtracking.getBacktrackedEstimation(planGraph, rewardDistribution)
             estimatedFutureRewards.append(estimatedFutureReward)
+            
+        for t in range(1,planningLen):
+            for node in expandingTree.newNodeList:
+                if node.state=="NEW" and node.level==t:
+                    expandingTree.expandNode(node)
+                    expandingTree.updateChidNodesInstantRewards(node, self.map, self.agent, rewardDistributions)
+                    
+                    
             
             
             
