@@ -1,4 +1,5 @@
 import numpy as np
+import copy
 
 class MultiObjectiveExpandingNode(object):
     
@@ -13,13 +14,13 @@ class MultiObjectiveExpandingNode(object):
         self.instantReward = np.zeros(dimension)
     
 
-class MultiObjectiveExpandingTree(ExpandingTree):
+class MultiObjectiveExpandingTree(object):
     
     def __init__(self, graph, rootPos, dimension):
         self.graph = graph
         self.T = graph.T
         self.dimension = dimension        
-        self.root = ExpandingNode(rootPos, 0, 0)
+        self.root = MultiObjectiveExpandingNode(rootPos, 0, 0, self.dimension)
         self.newNodeList = []
         self.newNodeList.append(self.root)
         
@@ -37,7 +38,7 @@ class MultiObjectiveExpandingTree(ExpandingTree):
         edges = partite.findEdges(pos)
         for e in edges:
             nextIdx = nextPartite.getVertexIndex(e[1])
-            childNode = ExpandingNode(e[1], nextLevel, nextIdx)
+            childNode = MultiObjectiveExpandingNode(e[1], nextLevel, nextIdx, self.dimension)
             childNode.parentNode = node
             node.childNodeList.append(childNode)
             if childNode.level==self.T-1:
@@ -46,12 +47,11 @@ class MultiObjectiveExpandingTree(ExpandingTree):
                 self.newNodeList.append(childNode)
         self.state = "EXPANDED"
             
-    def updateChidNodesInstantRewards(self, node, hexamap, agent, rewardDistribution):
-        tempRewardDist = copy.deepcopy(rewardDistribution)
+    def updateChidNodesInstantRewards(self, node, hexamap, agent, rewardDistributions):
         subpath = self.getSubpath(node)
         subpathScore = agent.getPathRewardVec(subpath, hexamap, rewardDistributions)
         for childNode in node.childNodeList:
-            instantReward = agent.getObservationVec(childNode.pos, hexamap, tempRewardDist)        
+            instantReward = agent.getObservationVec(childNode.pos, hexamap, rewardDistributions)        
             for d in range(self.dimension):
                 childNode.instantReward[d] = subpathScore[d] + instantReward[d]
             
