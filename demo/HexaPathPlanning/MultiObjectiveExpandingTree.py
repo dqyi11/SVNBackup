@@ -10,6 +10,7 @@ class MultiObjectiveExpandingNode(object):
         self.state = "NEW"
         self.parentNode = None
         self.childNodeList = []
+        self.dimension = dimension
         self.maxTotalReward = np.zeros(dimension)
         self.instantReward = np.zeros(dimension)
     
@@ -68,6 +69,9 @@ class MultiObjectiveExpandingTree(object):
             path[currentLevel][1] = currentNode.pos[1]
             currentNode = currentNode.parentNode
             currentLevel -= 1        
-        return path                
+        return path
+    
+        
+                      
         
         

@@ -29,7 +29,7 @@ class MultiObjectiveExhaustivePathPlanner(object):
             nonDominated = True
             for j in range(len(self.allPaths)):
                 if i!=j:
-                    if self.dominated(self.allScores[j], self.allScores[i]):
+                    if True==self.isDominated(self.allScores[i], self.allScores[j]):
                         nonDominated = False
             if nonDominated==True:
                 self.solutions.append(self.allPaths[i])
@@ -38,13 +38,18 @@ class MultiObjectiveExhaustivePathPlanner(object):
         return self.solutions, self.solutionScores                       
                 
         
-    def dominated(self, vec1Val, vec2Val):
-        #if vec1 dominate vec2
+    def isDominated(self, vec1Val, vec2Val):
+        #if vec1 dominated by vec2
         dominated = True
         vecLen = len(vec1Val)
+        same = True
         for i in range(vecLen):
-            if vec1Val[i] < vec2Val[i]:
+            if vec1Val[i] > vec2Val[i]:
                 dominated = False
+            if vec1Val[i] != vec2Val[i]:
+                same = False
+        if same==True:
+            dominated = False
         return dominated    
         
     def findPath(self, planGraph, subpath, rewardDistributions):
