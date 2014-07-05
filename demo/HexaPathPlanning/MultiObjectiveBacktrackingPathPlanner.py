@@ -45,6 +45,8 @@ class MultiObjectiveBacktrackingPathPlanner(object):
                     if node.state=="NEW" and node.level==t:
                         expandingTree.expandNode(node)
                         expandingTree.updateChidNodesInstantRewards(node, self.map, self.agent, rewardDistributions)
+            else:
+                print "left " + str(len(expandingTree.newNodeList))
 
                 
                     
