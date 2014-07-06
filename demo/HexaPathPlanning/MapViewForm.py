@@ -215,11 +215,21 @@ class MapViewForm(QtGui.QMainWindow):
                 print "ND CNT " + str(ndCnt)
                 
             else:
+                exPlanner = MultiObjectiveExhaustivePathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
+                exPlanner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistributions, self.dataDim)
+                print "all paths num " + str(len(exPlanner.allPaths))
+                print "nondominated paths num " + str(len(exPlanner.solutions))
+                #planner.printToFile("solutions.txt")
+                self.nondominatedSolutionMgr.nondominatedSolutions = exPlanner.solutions
+                          
                 planner = MultiObjectiveBacktrackingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot) 
                 planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistributions, self.dataDim)
                 
+                ndCnt = 0
                 for s in planner.solutions:
-                    print s
+                    if True==self.nondominatedSolutionMgr.has(s):
+                        ndCnt += 1
+                print "FOUND ND CNT " + str(ndCnt)
         
         self.update()
         
