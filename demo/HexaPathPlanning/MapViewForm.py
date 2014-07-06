@@ -217,6 +217,9 @@ class MapViewForm(QtGui.QMainWindow):
             else:
                 planner = MultiObjectiveBacktrackingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot) 
                 planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistributions, self.dataDim)
+                
+                for s in planner.solutions:
+                    print s
         
         self.update()
         

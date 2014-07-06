@@ -1,4 +1,3 @@
-from ExpandingMultiPartiteGraph import *
 from MultiObjectiveExpandingTree import *
 from Agent import *
 from BacktrackingHeuristic import *
@@ -12,8 +11,10 @@ class MultiObjectiveBacktrackingPathPlanner(object):
         self.agent = agent
         self.iterationCount = 0   
         self.terminalNodeList = []
+        self.solutions = []
         
     def planPath(self, planGraph, start, planningLen, rewardDistributions, dimension):
+        self.solutions = []
         
         expandingTree = MultiObjectiveExpandingTree(planGraph, start, dimension)        
         backtracking = BacktrackingHeuristic(self.map, self.agent)
@@ -25,7 +26,8 @@ class MultiObjectiveBacktrackingPathPlanner(object):
             estimatedFutureReward = backtracking.getBacktrackedEstimation(planGraph, rewardDistribution)
             estimatedFutureRewards.append(estimatedFutureReward)
             
-        for t in range(1,planningLen):
+        for t in range(planningLen):
+            #print " @ " + str(t) + " - " +str(len(expandingTree.newNodeList))
             for n1 in expandingTree.newNodeList:
                 if n1.state=="NEW" and n1.level==t:
                     nondominated = True
@@ -42,11 +44,14 @@ class MultiObjectiveBacktrackingPathPlanner(object):
             
             if t<planningLen-1:
                 for node in expandingTree.newNodeList:
+                    #print "node " + str(node.pos) + " " + node.state + " " + str(node.level)
                     if node.state=="NEW" and node.level==t:
+                        #print "expanding " + str(node.pos)
                         expandingTree.expandNode(node)
                         expandingTree.updateChidNodesInstantRewards(node, self.map, self.agent, rewardDistributions)
-            else:
-                print "left " + str(len(expandingTree.newNodeList))
+            print "@ " + str(t) + " left " + str(len(expandingTree.terminalNodeList))
+            
+        self.solutions = expandingTree.getSolutions()
 
                 
                     

@@ -24,6 +24,7 @@ class MultiObjectiveExpandingTree(object):
         self.root = MultiObjectiveExpandingNode(rootPos, 0, 0, self.dimension)
         self.newNodeList = []
         self.newNodeList.append(self.root)
+        self.terminalNodeList = []
         
     def expandNode(self, node):
         if node.state != "NEW":
@@ -43,6 +44,7 @@ class MultiObjectiveExpandingTree(object):
             childNode.parentNode = node
             node.childNodeList.append(childNode)
             if childNode.level==self.T-1:
+                self.terminalNodeList.append(childNode)
                 childNode.state = "EXPANDED"
             else:
                 self.newNodeList.append(childNode)
@@ -70,6 +72,13 @@ class MultiObjectiveExpandingTree(object):
             currentNode = currentNode.parentNode
             currentLevel -= 1        
         return path
+    
+    def getSolutions(self):
+        solutions = []
+        for node in self.terminalNodeList:
+            solution = self.getSubpath(node)
+            solutions.append(solution)
+        return solutions
     
         
                       
