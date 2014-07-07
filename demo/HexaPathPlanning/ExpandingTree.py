@@ -10,7 +10,7 @@ class ExpandingNode(object):
         self.parentNode = None
         self.childNodeList = []
         self.maxTotalReward = 0.0
-        self.instantReward = 0.0
+        self.parentReward = 0.0
 
 class ExpandingTree(object):
     
@@ -51,22 +51,22 @@ class ExpandingTree(object):
         subpathScore = agent.getPathReward(subpath, hexamap, tempRewardDist)
         tempRewardDist = agent.applyObservation(node.pos, hexamap, tempRewardDist)
         for childNode in node.childNodeList:
-            childNode.instantReward = subpathScore + agent.getObservation(childNode.pos, hexamap, tempRewardDist)        
+            childNode.parentReward = subpathScore# + agent.getObservation(childNode.pos, hexamap, tempRewardDist)        
             
     def getMaxNewNode(self):
         maxNode = None
         maxNodeVal = -0.1        
         for node in self.newNodeList:
             if node.state == "NEW":
-                if node.maxTotalReward+node.instantReward > maxNodeVal:
-                    maxNodeVal = node.maxTotalReward+node.instantReward
+                if node.maxTotalReward+node.parentReward > maxNodeVal:
+                    maxNodeVal = node.maxTotalReward+node.parentReward
                     maxNode = node                    
         return maxNode
     
     def freeze(self, freezeThreshold):
         for node in self.nodeList:
             if node.state=="NEW":
-                if node.maxTotalReward+node.instantReward <= freezeThreshold:
+                if node.maxTotalReward+node.parentReward <= freezeThreshold:
                     node.state = "FROZEN"
                         
     def getSubpath(self, node):

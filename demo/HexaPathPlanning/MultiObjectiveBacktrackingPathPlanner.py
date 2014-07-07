@@ -25,6 +25,7 @@ class MultiObjectiveBacktrackingPathPlanner(object):
             rewardDistribution = rewardDistributions[d]
             estimatedFutureReward = backtracking.getBacktrackedEstimation(planGraph, rewardDistribution)
             estimatedFutureRewards.append(estimatedFutureReward)
+            print estimatedFutureReward
             
         for t in range(planningLen):
             #print " @ " + str(t) + " - " +str(len(expandingTree.newNodeList))
@@ -61,9 +62,9 @@ class MultiObjectiveBacktrackingPathPlanner(object):
         vecLen = node1.dimension
         same = True
         for i in range(vecLen):
-            if node1.instantReward[i] + node1.maxTotalReward[i]> node2.instantReward[i] + node2.maxTotalReward[i]:
+            if node1.parentReward[i] + node1.maxTotalReward[i]> node2.parentReward[i] + node2.maxTotalReward[i]:
                 dominated = False
-            if node1.instantReward[i] + node1.maxTotalReward[i]!= node2.instantReward[i] + node2.maxTotalReward[i]:
+            if node1.parentReward[i] + node1.maxTotalReward[i]!= node2.parentReward[i] + node2.maxTotalReward[i]:
                 same = False
         if same==True:
             dominated = False

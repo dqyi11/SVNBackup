@@ -150,6 +150,11 @@ class MapViewConfigForm(QtGui.QWidget):
         self.hide()
     
     def applyHumanPath(self):
+        self.parentWindow.wingmanRadius = int(self.wingmanRadiusEdit.displayText())
+        self.parentWindow.humanObsR = int(self.humanObsRangeEdit.displayText())
+        self.parentWindow.robotObsR = int(self.robotObsRangeEdit.displayText())
+        self.parentWindow.humanDiscountFactor = float(self.humanObsFactorEdit.displayText())
+        self.parentWindow.robotDiscountFactor = float(self.robotObsFactorEdit.displayText())
         self.parentWindow.applyHumanPath()
         
     def plan(self):

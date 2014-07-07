@@ -12,7 +12,7 @@ class MultiObjectiveExpandingNode(object):
         self.childNodeList = []
         self.dimension = dimension
         self.maxTotalReward = np.zeros(dimension)
-        self.instantReward = np.zeros(dimension)
+        self.parentReward = np.zeros(dimension)
     
 
 class MultiObjectiveExpandingTree(object):
@@ -54,9 +54,9 @@ class MultiObjectiveExpandingTree(object):
         subpath = self.getSubpath(node)
         subpathScore = agent.getPathRewardVec(subpath, hexamap, rewardDistributions)
         for childNode in node.childNodeList:
-            instantReward = agent.getObservationVec(childNode.pos, hexamap, rewardDistributions)        
+            #instantReward = agent.getObservationVec(childNode.pos, hexamap, rewardDistributions)        
             for d in range(self.dimension):
-                childNode.instantReward[d] = subpathScore[d] + instantReward[d]
+                childNode.parentReward[d] = subpathScore[d]# + instantReward[d]
             
                         
     def getSubpath(self, node):

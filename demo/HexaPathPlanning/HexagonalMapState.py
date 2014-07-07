@@ -58,6 +58,7 @@ class HexagonalMapState(object):
                     self.hexVals[k][i,j] = rndVal[j] 
                     
     def clearVal(self):
+        self.hexVals = []
         for d in range(self.hexValDim):
             hexVal = np.ones((self.x_num, self.y_num))
             self.hexVals.append(hexVal)

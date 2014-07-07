@@ -59,6 +59,7 @@ class BacktrackingHeuristic(object):
                 for i in range(vexNumInPartite):
                     pos = planningGraph.partitions[t].vertices[i]
                     backtrackingMatrix[t][i] = self.agent.getObservation(pos, self.hexamap, rewardDistribution)
+                    print "t:"+str(t) + " i:"+str(i)+ " = " +str(backtrackingMatrix[t][i])
             else:
                 for i in range(vexNumInPartite):
                     vex = planningGraph.partitions[t].vertices[i]
