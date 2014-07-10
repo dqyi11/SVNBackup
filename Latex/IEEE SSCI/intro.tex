@@ -9,12 +9,12 @@ At that point the algorithm can be mimicked by simply sampling from the appropri
 In this paper we extend the limited work that has been done to understand
 the behavior \emph{before} stagnation, that is, when the unique mechanisms of PSO are directing the behavior of the algorithm.
 
-By using a \emph{cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the affect of the personal and global best.
+By using a \emph{cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the effect of the personal and global best.
 This paper does so in contrast to prior work which focuses on the position update.
 This model also allows us to make fewer assumptions in mapping from PSO to a dynamical system model.
 Using the cascade model we are able to derive the conditions under which the process is input-to-state stable (ISS)\cite{Jiang2001857}, produce bounds on particle motion, as well as prove bounds on the mean of particle motion.
 The ISS conditions and the bounds can inform parameter adjustments and other properties that can, in turn, control the extent to which the algorithm explores or exploits the fitness landscape.
-This is espeically valuable in the context of the design of future PSO variants. 
+This is especially valuable in the context of the design of future PSO variants. 
 
 The body of this paper is organized as described here.
 In section \ref{sec:sys_model}, we model the PSO dynamics as a cascade system.
