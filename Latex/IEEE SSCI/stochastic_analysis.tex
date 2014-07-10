@@ -1,0 +1,71 @@
+\section{Stochastic Analysis}
+\label{sec:sto_anly}
+
+Using a cascade system perspective, the input-to-stable stability analysis can also be applied to stochastic analysis.
+Like the others \cite{Jiang20078,Poli:2008:DSS:1384929.1384944}, we derive the models on the statistical features on the particle's position.
+The criteria for the convergence on the statistic values on the particle's position are given in \cite{Jiang20078} and \cite{Poli:2008:DSS:1384929.1384944}, when a particle is in stagnation.
+The input-to-state stable analysis can provide the boundaries before reaching stagnation.
+
+%\subsection{Mean convergence analysis}
+
+We adopt the approach of Jiang, Luo \& Yang to construct a model for the mean.
+It is given that $ E( x(k) ) $ converges to $ \hat{x} = \frac{\phi^{P} x^{P} + \phi^{G} x^{G} }{ \phi^{P} + \phi^{G} } $ in stagnation \cite{Jiang20078}.
+If we consider $ \hat{x} $ as a swarm average estimation on the optimum, we are interested in how $ E( x(k) ) $ deviates from $ \hat{x} $.
+\begin{equation}
+\label{eq:pso1_alg_mean_linalg:final}
+\begin{aligned}
+\begin{bmatrix}
+E( x(k+1) ) - \hat{x} \\
+E( x(k) ) - \hat{x}
+\end{bmatrix}
+= 
+A_{m}
+\begin{bmatrix}
+E( x(k) ) - \hat{x} \\
+E( x(k-1) ) - \hat{x}
+\end{bmatrix}
++
+B_{m}
+\begin{bmatrix}
+E( x^{P}(k) ) - \hat{x}\\
+E( x^{G}(k) ) - \hat{x}
+\end{bmatrix},
+\end{aligned}
+\end{equation}
+with $ A_{m} = \begin{bmatrix}
+1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & -\chi \\
+1 & 0
+\end{bmatrix} $
+and $ B_{m} = \begin{bmatrix}
+\frac{ \chi \phi^{P} }{2} & \frac{ \chi \phi^{G} }{2} \\
+0 & 0
+\end{bmatrix} $.
+
+The convergence criteria have been given in \cite{Jiang20078}.
+The input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:final} shows how the $ E(x(k)) $ will deviate from the $ \hat{x} $ when we know how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from the $ \hat{x} $.
+
+\begin{mythm}
+The system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, if $ | \lambda_{\max} ( A_{m} ) | < 1 $.
+\begin{proof}
+The proof process is similar with Theorem \ref{thm:iss}, but we can get a constant symmetric positive definite $ Q_{m} $ from $ A_{m}^{T} P A_{m} - P = - Q_{m} $.
+\end{proof}
+\end{mythm}
+
+%\begin{mycoro}
+%When $ | \lambda_{\max} ( A_{m} ) | < 1 $, the system %\eqref{eq:pso1_alg_mean_linalg:final} is %input-to-state stable.
+%\end{mycoro}
+
+Similar to Corollary \ref{coro:state_bound}, we can use the $ Q_{m} $ to determine the state bound.
+\begin{mycoro}
+If the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, we have a bound 
+\begin{equation}
+\exists T, \forall k > T, 
+| E( x(k) ) - \hat{x} | \leq  \gamma_{m} | [ E( x^{P}(k) ) - \hat{x} ,  E( x^{G}(k) ) - \hat{x} ]^{T} |,
+\end{equation}
+with 
+\begin{equation}
+\gamma_{m} = \frac{ 2 \lVert A_{m} \rVert^{2} \lVert B_{m} \rVert^{2} + \lambda_{min}( Q_{m} )^{2} \lVert B_{m} \rVert^{2} }{ 2( \lambda_{min}( Q_{m} ) )^{3} }.
+\end{equation}
+\end{mycoro}
+
+In a similar way, we can apply the input-to-state stability analysis to the variance model \cite{Jiang20078} and higher order moment models \cite{Poli:2007:EAS:1276958.1276977}.
