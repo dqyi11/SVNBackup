@@ -78,7 +78,7 @@ and
 $ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
 we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
 
-By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
+Because $ V(X) $ is real value, by applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
 \begin{equation}
 \label{eq:lyapunov_delta2}
 \begin{aligned}
@@ -189,7 +189,7 @@ It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
 If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ -1 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 0 $.
 It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
 
-\item If $ a^{2} \geq 4 \chi $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+\item If $ a^{2} \leq 4 \chi $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
 
 $ | \lambda_{\max} | < 1 $ derives $ \frac{ a^{2} }{4} + \frac{ a^{2} - 4\chi }{4} < 1 $.
 It means that $ - 2 \sqrt{ 2(1+\chi) } < a < 2 \sqrt{ 2(1+\chi) } $.
@@ -251,4 +251,7 @@ Thus the boundaries of the movement of particles become smaller, which is illust
 \label{fig:bound_case:e}
 \end{figure}
 
-
+We can see that the parameter selection has an impact on the size of a particle's exploration region and convergence rate.
+If all the particles converge quickly and explore small regions, it is easy to have early premature.
+If all the particles converge slowly and explore large regions, the swarm is hard to converge.
+If we want    
