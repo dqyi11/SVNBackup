@@ -1,0 +1,51 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+
+\title{Dynamics of Particle Swarm}
+
+\date{}
+
+\maketitle
+
+In order to understand what happens in a PSO(Particle swarm optimization), people are usually interested with the ``exploration and exploitation'' of this algorithm.
+\begin{itemize}
+\item ``Exploration'' means \textbf{search capability}, which determines how likely the particles could find local best and global best;
+\item ``Exploitation'' leads to \textbf{convergence}, which shows how the particles utilize the found current best.
+It also tells what happens on the swarm behavior when no new global best can be found.
+\end{itemize}
+
+There is no guarantee that PSO could always find a global optimal.
+It is not hard to give an example that the global optimal could not be found. 
+The factors impact the likelihood that the global optimal is found include:
+\begin{itemize}
+\item number of particles,
+\item $ \chi $, $ \Phi^{P} $, $ \Phi^{G} $,
+\item and the distribution of the fitness space.
+\end{itemize}
+
+Our analysis will focus on a standard PSO.
+It includes the canonical update rule and a ring topology (single and consistent global best).
+
+
+
+
+\section{How a particle is led to a local best}
+
+This depends on the shape of fitness space
+
+\section{What happens when the global best is not changed}
+
+Make the global best as the leader
+
+\begin{itemize}
+\item 
+\item 
+\end{itemize}
+
+
+\end{document}
