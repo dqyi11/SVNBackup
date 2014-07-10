@@ -83,9 +83,12 @@ By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) 
 \label{eq:lyapunov_delta2}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert | U(k) | | X(k) | + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert | U(k) | | X(k) | \\
+& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
 \end{aligned}
 \end{equation}
 
@@ -94,7 +97,8 @@ By completing the square, we have
 \label{eq:lyapunov_delta4}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+& + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
 \end{aligned}
 \end{equation}
 
@@ -155,7 +159,7 @@ Figure \ref{fig:boundary} gives an example on how a particle's boundary is deter
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\linewidth]{./boundary}
+\includegraphics[width=0.7\linewidth]{./figure/boundary}
 \caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation \ref{eq:state_bound:conv}.
 The ratio of wo radii indicates $ \gamma $.}
 \label{fig:boundary}
@@ -202,8 +206,44 @@ The x-axis is $ \phi = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
 The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:iss} and the yellow boundary is obtained from Corollary \ref{coro:param_unit_disc}.
 \begin{figure}
 \centering
-\includegraphics[width=0.5\linewidth]{./param2}
+\includegraphics[width=0.7\linewidth]{./figure/param2}
 \caption{Parameter space}
 \label{fig:paramSpace}
 \end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{./figure/bound_case_1}
+\caption{Parameters in the margin of stable region.}
+\label{fig:bound_case:a}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{./figure/bound_case_2}
+\caption{Parameters not in the stable region.}
+\label{fig:bound_case:b}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{./figure/bound_case_3}
+\caption{Parameters not in the stable region.}
+\label{fig:bound_case:c}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{./figure/bound_case_4}
+\caption{Parameters in the stable region.}
+\label{fig:bound_case:d}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{./figure/bound_case_5}
+\caption{Parameters in the stable region.}
+\label{fig:bound_case:e}
+\end{figure}
+
 
