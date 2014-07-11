@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{subfigure}
 \begin{document}
 
 \title{Dynamics of Particle Swarm}
@@ -31,6 +32,19 @@ The factors impact the likelihood that the global optimal is found include:
 Our analysis will focus on a standard PSO.
 It includes the canonical update rule and a ring topology (single and consistent global best).
 
+Define three types of agents in a particle swarm, which are \emph{particle agent}, \emph{global best agent} and \emph{personal best agent}.
+We can have a topology of the swarm in a ring structure, as in Figure \ref{fig:topology3}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./topology3}
+\caption{The swarm topology}
+\label{fig:topology3}
+\end{figure}
+
+By this structure, we can see that the interaction between particles are determined by the global best.
+It means that when the global best is not changed, the interaction between particles is broken.
+If both the global best and personal best are not changed, the interaction between dimensions in a particle is also broken.
 
 
 
