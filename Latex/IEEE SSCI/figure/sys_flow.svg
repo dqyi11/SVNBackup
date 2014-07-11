@@ -11,7 +11,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="522.84619"
-   height="236.03185"
+   height="254.54301"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
@@ -29,8 +29,8 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="706"
+     inkscape:window-width="1280"
+     inkscape:window-height="962"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -99,7 +99,7 @@
      id="layer1"
      inkscape:groupmode="layer"
      inkscape:label="Layer 1"
-     transform="translate(-32.948164,-231.1479)">
+     transform="translate(-32.948164,-212.63673)">
     <rect
        y="300.31686"
        x="295.42719"
@@ -259,15 +259,20 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="92.857155"
-       y="257.36218"
+       x="243.43417"
+       y="235.93361"
        id="text5490"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan5492"
-         x="92.857155"
-         y="257.36218"
-         style="font-size:32px">swarm information</tspan></text>
+         x="243.43417"
+         y="235.93361"
+         style="font-size:32px;text-align:center;text-anchor:middle">from other dimension</tspan><tspan
+         sodipodi:role="line"
+         x="243.43417"
+         y="275.93359"
+         style="font-size:32px;text-align:center;text-anchor:middle"
+         id="tspan3108">and particles</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
