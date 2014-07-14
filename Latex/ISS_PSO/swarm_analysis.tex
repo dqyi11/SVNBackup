@@ -7,7 +7,8 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 
-\newtheorem{thm}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
 
 \begin{document}
 
@@ -29,7 +30,7 @@ It is not hard to give an example that the global optimal could not be found.
 The factors impact the likelihood that the global optimal is found include:
 \begin{itemize}
 \item number of particles,
-\item $ \chi $, $ \Phi^{P} $, $ \Phi^{G} $,
+\item $ \chi $, $ \phi^{P} $, $ \phi^{G} $,
 \item and the distribution of the fitness space.
 \end{itemize}
 
@@ -57,12 +58,13 @@ However, in most of the cases, the personal best might be updated if it is not t
 There are two types of situations in the fitness space:
 \begin{itemize}
 \item global best and personal best are in same hill;
-\item`global best and personal best are not in same hill.
+\item global best and personal best are not in same hill.
 \end{itemize}
 
 While global best and personal best are in the same hill, the personal best will gradually move toward the global best.
 
-\begin{figure} \centering
+\begin{figure}
+\centering
 \subfigure[Before updating personal best.] { \label{fig:one_hill_case:a}
 \includegraphics[width=0.47\textwidth]{one_hill_case}
 }
@@ -74,26 +76,44 @@ While global best and personal best are in the same hill, the personal best will
 \end{figure}
 
 When global best and personal best are not in the same hill, the case can be complicated.
-Once the particle moves into a region that $ f(x) > f(x^{P}) $, the personal best will be updated.
-It becomes the one hill case in Figure \ref{fig:one_hill_case:b}.
+There are two cases:
+\begin{itemize}
+\item the global best is at a hill whose top is higher than that the personal best is at [Figure \ref{fig:two_hills_case:a}];
+\item the personal best is at a hill whose top is higher than that the global best is at [Figure \ref{fig:two_hills_case:b}]. 
+\end{itemize}
+By the moving of a particle, once the global best and the personal best get onto a same hill, it becomes the one hill case in Figure \ref{fig:one_hill_case:b}.
+The problem can be answered in two steps:
+\begin{itemize}
+\item the likelihood that a particle moves a personal best or a global best;
+\item the likelihood that a particle converges to a personal best or a global best.
+\end{itemize}
 
-\begin{figure}[tbph]
+\begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{./two_hills_case}
-\caption{}
+\subfigure[The likelihood of moving to the global best.] {\label{fig:two_hills_case:a}
+\includegraphics[width=0.57\textwidth]{two_hills_case}
+}
+\subfigure[The likelihood of moving to the personal best.] {\label{fig:two_hills_case:b}
+\includegraphics[width=0.57\textwidth]{two_hills_case2}
+}
+\caption{Two hill case.}
 \label{fig:two_hills_case}
 \end{figure}
 
-\begin{thm}
+
+\begin{theorem}
+There is a probability $ p $  that a particle moves toward the personal best, and $ 1 - p $ that a particle moves toward the global best,
+\begin{equation}
+p = 
+\end{equation}
+\end{theorem}
+
+\begin{corollary}
 There is probability $ p $ that the personal best can move to the same hill with the global best,
 \begin{equation}
 p = 
 \end{equation}
-\end{thm}
-
-\section{How a particle is led to a local best or a global best}
-
-This depends on the shape of fitness space
+\end{corollary}
 
 \section{What happens when the global best is not changed}
 
@@ -103,6 +123,10 @@ Make the global best as the leader
 \item 
 \item 
 \end{itemize}
+
+\section{How a particle is led to a local best or a global best}
+
+This depends on the shape of fitness space
 
 
 \end{document}

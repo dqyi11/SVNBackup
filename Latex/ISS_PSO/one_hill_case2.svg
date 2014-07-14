@@ -10,11 +10,11 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1513.8477"
-   height="640"
+   height="677.14288"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="one_hill_case.pdf">
+   sodipodi:docname="one_hill_case2.svg">
   <defs
      id="defs4">
     <marker
@@ -72,8 +72,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="643.9491"
-     inkscape:cy="2.5446108"
+     inkscape:cx="643.94913"
+     inkscape:cy="39.687468"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -102,7 +102,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
