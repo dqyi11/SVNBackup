@@ -1,10 +1,14 @@
 \documentclass[10pt,a4paper]{article}
 \usepackage[latin1]{inputenc}
+\usepackage{amsthm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage{subfigure}
+
+\newtheorem{thm}{Theorem}
+
 \begin{document}
 
 \title{Dynamics of Particle Swarm}
@@ -49,10 +53,45 @@ If both the global best and personal best are not changed, the interaction betwe
 \section{Redefine stagnation}
 
 The stagnation phenomenon is usually modeled as that the global best and personal best are not updated.
+However, in most of the cases, the personal best might be updated if it is not the same with the global best.
+There are two types of situations in the fitness space:
+\begin{itemize}
+\item global best and personal best are in same hill;
+\item`global best and personal best are not in same hill.
+\end{itemize}
 
+While global best and personal best are in the same hill, the personal best will gradually move toward the global best.
 
+\begin{figure} \centering
+\subfigure[Before updating personal best.] { \label{fig:one_hill_case:a}
+\includegraphics[width=0.47\textwidth]{one_hill_case}
+}
+\subfigure[After updating personal best.] { \label{fig:one_hill_case:b}
+\includegraphics[width=0.47\textwidth]{one_hill_case2}
+}
+\caption{One hill case.}
+\label{fig:one_hill_case}
+\end{figure}
 
-\section{How a particle is led to a local best}
+When global best and personal best are not in the same hill, the case can be complicated.
+Once the particle moves into a region that $ f(x) > f(x^{P}) $, the personal best will be updated.
+It becomes the one hill case in Figure \ref{fig:one_hill_case:b}.
+
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.7\linewidth]{./two_hills_case}
+\caption{}
+\label{fig:two_hills_case}
+\end{figure}
+
+\begin{thm}
+There is probability $ p $ that the personal best can move to the same hill with the global best,
+\begin{equation}
+p = 
+\end{equation}
+\end{thm}
+
+\section{How a particle is led to a local best or a global best}
 
 This depends on the shape of fitness space
 
