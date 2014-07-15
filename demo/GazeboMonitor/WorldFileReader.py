@@ -8,6 +8,8 @@ from xml.dom import minidom
 from PyQt4 import QtGui, QtCore
 import math
 import numpy as np
+from shapely.geometry import Polygon
+from PolygonManager import *
 
 
 class enemyObject(object):
@@ -361,9 +363,10 @@ class WorldFileReader(QtGui.QWidget):
         self.worldInfo =  worldInfo()
         self.worldInfo.width = self.worldSize[0]*self.scale
         self.worldInfo.height = self.worldSize[1]*self.scale
+        self.polygons = []
         for model in self.models:
             for link in model.statics:
-                self.worldInfo.numberOfPolygon += 1
+                #self.worldInfo.numberOfPolygon += 1
                         
                               
                 #posX = link.pos[0] + model.pos[0] + model.map_pos[0] + self.worldSize[0]/2.0 
@@ -397,16 +400,28 @@ class WorldFileReader(QtGui.QWidget):
                 BRx = BRx*self.scale
                 BRy = BRy*self.scale
                 
-                self.worldInfo.graph.addVertex(ULx, ULy)
-                self.worldInfo.graph.addVertex(URx, URy)
-                self.worldInfo.graph.addVertex(BLx, BLy)
-                self.worldInfo.graph.addVertex(BRx, BRy)
+                #self.worldInfo.graph.addVertex(ULx, ULy)
+                #self.worldInfo.graph.addVertex(URx, URy)
+                #self.worldInfo.graph.addVertex(BLx, BLy)
+                #self.worldInfo.graph.addVertex(BRx, BRy)
                 
-                self.worldInfo.graph.addEdge(ULx, ULy, URx, URy)
-                self.worldInfo.graph.addEdge(URx, URy, BRx, BRy)
-                self.worldInfo.graph.addEdge(BRx, BRy, BLx, BLy)
-                self.worldInfo.graph.addEdge(BLx, BLy, ULx, ULy)
-    
+                #self.worldInfo.graph.addEdge(ULx, ULy, URx, URy)
+                #self.worldInfo.graph.addEdge(URx, URy, BRx, BRy)
+                #self.worldInfo.graph.addEdge(BRx, BRy, BLx, BLy)
+                #self.worldInfo.graph.addEdge(BLx, BLy, ULx, ULy)
+                
+                self.polygons.append(Polygon([(ULx, ULy),(URx, URy),(BRx, BRy), (BLx, BLy)]))
+        self.polygons = PolygonManager().merge(self.polygons)
+        
+        self.worldInfo.numberOfPolygon = len(self.polygons)
+        for poly in self.polygons:
+            vexNum = len(poly.exterior.coords)
+            for i in range(vexNum-1):
+                self.worldInfo.graph.addVertex(poly.exterior.coords[i][0], poly.exterior.coords[i][1])
+                self.worldInfo.graph.addVertex(poly.exterior.coords[i+1][0], poly.exterior.coords[i+1][1])
+                self.worldInfo.graph.addEdge(poly.exterior.coords[i][0], poly.exterior.coords[i][1], poly.exterior.coords[i+1][0], poly.exterior.coords[i+1][1])        
+            
+            self.worldInfo.graph.addEdge(poly.exterior.coords[vexNum-1][0], poly.exterior.coords[vexNum-1][1], poly.exterior.coords[0][0], poly.exterior.coords[0][1])    
     
                 
                 

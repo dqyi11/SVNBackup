@@ -5,6 +5,8 @@ Created on Apr 24, 2014
 '''
 
 from WorldFileReader import *
+from FileUtils import *
+
 import sys 
 
 if __name__ == '__main__':
@@ -15,7 +17,8 @@ if __name__ == '__main__':
     reader = WorldFileReader(file,5)
     #reader.dump('two_houses.png')
     reader.initWorldInfo()
-    #reader.dumpWorldInfo('world_wall2_world.xml')    
+    reader.dumpWorldInfo('world_wall2_world.xml')    
+    replaceFileHead("world_wall2_world.xml", "world_wall2_world2.xml")
     #reader.dumpWorldObstacle('world_wall2.dat')
-    reader.dumpWorldObstacle('two_houses.dat')
+    #reader.dumpWorldObstacle('two_houses.dat')
     sys.exit(app.exec_())
