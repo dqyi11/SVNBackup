@@ -9,7 +9,7 @@ class PolygonManager(object):
         
         while True:
             
-            print "new loop"
+            #print "new loop"
             if False==self.hasIntersection(newPolygons):
                 return newPolygons
             
@@ -44,10 +44,10 @@ class PolygonManager(object):
                 poly1=polygons[i]
                 poly2=polygons[j]
                 if poly2.intersects(poly1)==True:
-                    print "Found between " + str(i) + " - " + str(j)
+                    #print "Found between " + str(i) + " - " + str(j)
                     return True
                 
-        print "No intersect"
+        #print "No intersect"
         return False
         
         

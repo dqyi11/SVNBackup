@@ -63,6 +63,10 @@ class graphInfo(object):
         vex.radius = radius
         vex.angle = angle
         
+        for v in self.vertices:
+            if v.x == vex.x and v.y==vex.y:
+                return
+        
         self.vertices.append(vex)
         
     def addEdge(self, aX, aY, bX, bY):
@@ -91,6 +95,10 @@ class graphInfo(object):
         ed.a_angle = a_angle
         ed.b_radius = b_radius
         ed.b_angle = b_angle
+        
+        for e in self.edges:
+            if e.a_x == ed.a_x and e.a_y == ed.a_y and e.b_x == ed.b_x and e.b_y == ed.b_y:
+                return
         
         self.edges.append(ed)
         
