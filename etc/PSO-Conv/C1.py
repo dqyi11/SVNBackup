@@ -11,14 +11,14 @@ if __name__ == '__main__':
     def DeJongF4(X):
         val = 0.0
         for d in range(30):
-            val += d * ( X[0,d]**4 )
+            val += (d+1) * ( X[0,d]**4 )
         return val
     
     bounds = []
     bests = []
+    pos = []
     swarm = Swarm(20, 30)
-    #swarm.setParam(2.0, 2.0, 0.8, DeJongF4)
-    swarm.setParam(0.5, 0.5, 0.7985, DeJongF4)
+    swarm.setParam(20.0, 20.0, 0.8, DeJongF4)
     ws = []
     for i in range(30):
         ws.append([-20.0, 20.0]) 
@@ -31,6 +31,7 @@ if __name__ == '__main__':
             
             bounds.append(swarm.bound)
             bests.append(swarm.globalbestFitness)
+            pos.append(swarm.particles[0].pos[0,0]);
             
     dataLen = len(bounds)
     fig = plt.figure()
@@ -45,6 +46,12 @@ if __name__ == '__main__':
     ax2.legend(loc=2)
     #ax2.set_xlim([0, np.e]);
     ax2.set_ylabel('best value')
+    
+    
+    fig2 = plt.figure()
+    ax3 = fig2.add_subplot(111)
+    ax3.plot(np.arange(dataLen), pos)
+    ax3.set_title("chi = 0.8, phi = 40")
     plt.show()
             
     
