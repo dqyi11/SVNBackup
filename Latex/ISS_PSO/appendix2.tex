@@ -1,0 +1,88 @@
+%\section{Appendix 2}
+%\label{sec:appendix2}
+
+\subsection{How the boundary is like}
+
+As we have the update equation as
+$ X(k+1) = A(k) X(k) + B(k) U(k) $, we can derive 
+\begin{equation}
+X(k+1) = ( \prod_{k}^{i=0} A(i) ) X(0) + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} A(j) ) B(i) U(i)  ] 
+\end{equation}
+by recursively applying it.
+
+By the property of matrix norm, we have
+\begin{equation}
+| X(k+1) | \leq ( \prod_{i=0}^{k} \lVert A(i) \rVert ) | X(0) | + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} \lVert A(j) \rVert ) \lVert B(i) \rVert | U(i) |  ].
+\end{equation}
+
+$ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(i) | \leq | U | $, we have
+\begin{equation}
+\begin{aligned}
+| X(k+1) | & \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U |  ] \\
+& = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U |
+\end{aligned}
+\end{equation}
+
+The boundary will be a function of $ bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+Thus the minimum boundary is $ \min_{k} bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+
+When we have $ \lVert A \rVert < 1 $, 
+$ ( \lVert A \rVert )^{k+1} \rightarrow 0 $ and
+$ \frac{1 - (\lVert A \rVert )^{k+1} }{1 - \lVert A \rVert} \rightarrow \frac{1}{1 - \lVert A \rVert } $
+as $ k \rightarrow \infty $.
+
+\subsection{Multiple dimensions}
+
+Let the update rule of $ i $-th dimension case be 
+$ [ v_{i}(k+1),  x_{i}(k+1) ]^{T} = A_{i}(k) [ v_{i}(k),  x_{i}(k) ]^{T} + B_{i}(k) [ x^{G}_{i} (k), x^{P}_{i} (k) ]^{T} $, 
+we can have
+\begin{equation}
+\begin{aligned}
+\begin{bmatrix}
+[ v_{1}(k+1),  x_{1}(k+1) ]^{T} \\
+[ v_{2}(k+1),  x_{2}(k+1) ]^{T} \\
+\vdots \\
+[ v_{N}(k+1),  x_{N}(k+1) ]^{T}
+\end{bmatrix}
+ = &
+\begin{bmatrix}
+A_{1}(k) & \mathbf{0}^{2} & \cdots & \mathbf{0}^{2} \\
+\mathbf{0}^{2} & A_{2}(k) & \cdots & \mathbf{0}^{2} \\
+\vdots & \ddots & \ddots & \vdots \\
+\mathbf{0}^{2} & \mathbf{0}^{2} & \cdots & A_{N}(k)
+\end{bmatrix}
+\begin{bmatrix}
+[ v_{1}(k),  x_{1}(k) ]^{T} \\
+[ v_{2}(k),  x_{2}(k) ]^{T} \\
+\vdots \\
+[ v_{N}(k),  x_{N}(k) ]^{T}
+\end{bmatrix} \\
+& + \begin{bmatrix}
+B_{1}(k) & \mathbf{0}^{2} & \cdots & \mathbf{0}^{2} \\
+\mathbf{0}^{2} & B_{2}(k) & \cdots & \mathbf{0}^{2} \\
+\vdots & \ddots & \ddots & \vdots \\
+\mathbf{0}^{2} & \mathbf{0}^{2} & \cdots & B_{N}(k)
+\end{bmatrix}
+\begin{bmatrix}
+[ x^{G}_{1} (k), x^{P}_{1} (k) ]^{T} \\
+[ x^{G}_{2} (k), x^{P}_{2} (k) ]^{T} \\
+\vdots \\
+[ x^{G}_{N} (k), x^{P}_{N} (k) ]^{T}
+\end{bmatrix} \\
+= & A(k) X(k) + B(k) U(k)
+\end{aligned}
+\end{equation}
+for $ N $-dimension particle.
+
+This is a parallel interconnection of the update rule of each single dimension.
+Any states of two dimensions are not coupled. 
+If the update rule of each single dimension is input-to-state stable, the entire state of the system is input-to-state stable.
+
+By
+$ \lambda^{\max} (A) \leq \max \{ \lambda^{\max} (A_{1}), \cdots , \lambda^{\max} (A_{N}) \} $ and 
+$ \lambda^{\max} (B) \leq \max \{ \lambda^{\max} (B_{1}), \cdots , \lambda^{\max} (B_{N}) \} $,
+we can have
+$ \lVert A \rVert \leq \max \{ \lVert A_{1} \rVert, \cdots , \lVert A_{N} \rVert \}  $
+and
+$ \lVert B \rVert \leq \max \{ \lVert B_{1} \rVert, \cdots , \lVert B_{N} \rVert \}  $.
+The properties can be reserved.
