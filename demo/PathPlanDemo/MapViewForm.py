@@ -5,6 +5,7 @@ from HexaMapWidget import *
 from HexaUtils import *
 from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
+from LabelManager import *
 import copy
 
 class MapViewForm(QtGui.QMainWindow):
@@ -34,6 +35,7 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.nondominatedSolutionMgr = None
         
+        self.labelMgr = LabelManager()
         self.configWindow = MapViewConfigForm(self)
         self.initUI()
         self.cursorHexIdx = None
@@ -76,7 +78,10 @@ class MapViewForm(QtGui.QMainWindow):
         self.mapView = QtGui.QLabel()
         self.setCentralWidget(self.mapView) 
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
-        pixmap = QtGui.QPixmap(fname)
+        
+        self.labelMgr.loadFile(fname)
+        
+        pixmap = QtGui.QPixmap(self.labelMgr.mapFile)
         
         self.mapView.setPixmap(pixmap)
         
@@ -194,6 +199,7 @@ class MapViewForm(QtGui.QMainWindow):
         
         rewardDistribution = copy.deepcopy(self.hexaMap.hexamapState.hexVals[0])
         planner = TreeExpandingPathPlanner(self.hexaMap.hexamap, self.hexaMap.hexamapState.robot)
+        planner.runOnlyOnce = True
         self.hexaMap.hexamapState.robotPath = planner.planPath(plannedPathGraph, humanPath[0], planningLen, rewardDistribution)
         
         print planner.iterationCount      
@@ -269,6 +275,13 @@ class MapViewForm(QtGui.QMainWindow):
                 if self.hexaMap.hexamapState.refStartHexIdx != None and self.hexaMap.hexamapState.refEndHexIdx != None:
                     topograph = self.hexaMap.hexamap.generateTopologyGraph()
                     self.hexaMap.hexamapState.humanPath = topograph.findShortestPath(self.hexaMap.hexamapState.refStartHexIdx, self.hexaMap.hexamapState.refEndHexIdx)
+                    self.hexaMap.hexamapState.refStartHexIdx = None
+                    self.hexaMap.hexamapState.refEndHexIdx = None
+                    self.update()
+            elif self.currentRefState == self.referenceStates[2]:
+                if self.hexaMap.hexamapState.refStartHexIdx != None and self.hexaMap.hexamapState.refEndHexIdx != None:
+                    topograph = self.hexaMap.hexamap.generateTopologyGraph()
+                    self.hexaMap.hexamapState.humanPath = topograph.findLeastRiskyPath(self.hexaMap.hexamapState.refStartHexIdx, self.hexaMap.hexamapState.refEndHexIdx)
                     self.hexaMap.hexamapState.refStartHexIdx = None
                     self.hexaMap.hexamapState.refEndHexIdx = None
                     self.update()

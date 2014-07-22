@@ -65,6 +65,21 @@ class TopologyGraph(object):
             newPath.append(x)
             
         return newPath
+    
+    def findLeastRiskyPath(self, start, end, riskyVals):
+        
+        g = nx.DiGraph()
+        for edge in self.edges:
+            g.add_edge(str(edge[0]), str(edge[1]), weight=riskyVals[edge[1][0],edge[1][1]])
+            g.add_edge(str(edge[1]), str(edge[0]), weight=riskyVals[edge[0][0],edge[0][1]])
+        pathFound = nx.shortest_path(g, str(start),str(end))
+        newPath = []
+        for np in pathFound:
+            x = ast.literal_eval(np) 
+            newPath.append(x)
+            
+        return newPath
+            
         
             
                     
