@@ -7,6 +7,7 @@ from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
 from LabelManager import *
 import copy
+import os
 
 class MapViewForm(QtGui.QMainWindow):
     
@@ -78,10 +79,12 @@ class MapViewForm(QtGui.QMainWindow):
         self.mapView = QtGui.QLabel()
         self.setCentralWidget(self.mapView) 
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
-        
+                
         self.labelMgr.loadFile(fname)
         
-        pixmap = QtGui.QPixmap(self.labelMgr.mapFile)
+        self.dirname = os.path.dirname(fname)
+        
+        pixmap = QtGui.QPixmap(self.dirname + "/" + self.labelMgr.mapFile)
         
         self.mapView.setPixmap(pixmap)
         

@@ -41,10 +41,10 @@ class LabelManager(object):
         
     def loadFile(self, filename):
         
-        self.labelFile = filename
+        self.labelFile = filename        
         xmldoc = minidom.parse(self.labelFile)
-        mapLabel = xmldoc.getElementsByTagName('MapLabel')[0]
         
+        mapLabel = xmldoc.getElementsByTagName('MapLabel')[0]
         self.mapFile = mapLabel.getAttribute("MapFile")
         self.mapWidth = int(mapLabel.getAttribute("MapWidth"))
         self.mapHeight = int(mapLabel.getAttribute("MapHeight"))

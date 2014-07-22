@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MapLabel MapFile="two_houses.ppm" WorldFile="" MapWidth="500" MapHeight="500">
+<features>
+<Feature ID="Feature-0" Name="X1" Type="Door" Pos="{X=242,Y=222}" />
+</features>
+<indoors>
+<Indoor ID="Indoor-0" Name="C1">
+<Vertices>
+<Vertex Pos="{X=314,Y=179}" />
+<Vertex Pos="{X=218,Y=121}" />
+<Vertex Pos="{X=314,Y=40}" />
+</Vertices>
+</Indoor>
+</indoors>
+<outdoors>
+<Outdoor ID="Outdoor-0" Name="C1" Type="Unknown">
+<Vertices>
+<Vertex Pos="{X=232,Y=337}" />
+<Vertex Pos="{X=314,Y=339}" />
+<Vertex Pos="{X=318,Y=380}" />
+</Vertices>
+</Outdoor>
+</outdoors>
+</MapLabel>
