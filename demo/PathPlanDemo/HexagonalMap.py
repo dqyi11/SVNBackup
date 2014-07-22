@@ -251,6 +251,8 @@ class HexagonalMap(object):
                     g.addEdge(([i,j],nh))
                     
         g.dump()
+        
+        return g
                                 
             
                 

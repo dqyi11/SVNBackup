@@ -34,7 +34,7 @@ class MapViewConfigForm(QtGui.QWidget):
         self.btnGenMap = QtGui.QPushButton("Gen Map")
         self.btnGenMap.clicked.connect(self.genMap)
         
-        self.wingmanRadius = QtGui.QLabel('Wingman')
+        self.wingmanRadius = QtGui.QLabel('Constraint')
         self.wingmanRadiusEdit = QtGui.QLineEdit()
         self.wingmanRadiusEdit.setText(QtCore.QString.number(wingmanR))
         
@@ -78,6 +78,9 @@ class MapViewConfigForm(QtGui.QWidget):
         self.lbInfoVec = QtGui.QLabel("Reference path")
         self.cbInfoVec = QtGui.QComboBox()
         
+        self.btnGenRef = QtGui.QPushButton("Gen Reference")
+        self.btnGenRef.clicked.connect(self.genRef)
+        
         self.initCbInfoVec()
         self.cbInfoVec.activated[str].connect(self.onSelcbInfoVec)
         
@@ -88,6 +91,7 @@ class MapViewConfigForm(QtGui.QWidget):
         
         self.grid.addWidget(self.lbInfoVec, 2, 0)
         self.grid.addWidget(self.cbInfoVec, 2, 1)
+        self.grid.addWidget(self.btnGenRef, 2, 2)
         
         self.grid.addWidget(self.wingmanRadius, 3, 0)
         self.grid.addWidget(self.wingmanRadiusEdit, 3, 1)
@@ -171,5 +175,8 @@ class MapViewConfigForm(QtGui.QWidget):
         self.parentWindow.humanDiscountFactor = float(self.humanObsFactorEdit.displayText())
         self.parentWindow.robotDiscountFactor = float(self.robotObsFactorEdit.displayText())
         self.parentWindow.planPath()
+        
+    def genRef(self):        
+        self.parentWindow.genReference()
         
             

@@ -261,5 +261,17 @@ class MapViewForm(QtGui.QMainWindow):
             self.hexaMap.hexamapState.refStartHexIdx = None
             self.hexaMap.hexamapState.refEndHexIdx = None
             self.hexaMap.hexamapState.humanPath = []
+            
+    def genReference(self):
+        
+        if self.hexaMap != None:
+            if self.currentRefState == self.referenceStates[1]:
+                if self.hexaMap.hexamapState.refStartHexIdx != None and self.hexaMap.hexamapState.refEndHexIdx != None:
+                    topograph = self.hexaMap.hexamap.generateTopologyGraph()
+                    self.hexaMap.hexamapState.humanPath = topograph.findShortestPath(self.hexaMap.hexamapState.refStartHexIdx, self.hexaMap.hexamapState.refEndHexIdx)
+                    self.hexaMap.hexamapState.refStartHexIdx = None
+                    self.hexaMap.hexamapState.refEndHexIdx = None
+                    self.update()
+                    
         
             

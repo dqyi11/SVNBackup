@@ -1,5 +1,6 @@
 import pygraphviz as pgv
 import networkx as nx
+import ast
 
 class TopologyGraph(object):
 
@@ -55,9 +56,15 @@ class TopologyGraph(object):
     def findShortestPath(self, start, end):
         
         g = nx.Graph()
-        g.add_edge('a','b',weight=0.1)
-        print nx.shortest_path(g, 'a','d')
-        
+        for edge in self.edges:
+            g.add_edge(str(edge[0]), str(edge[1]))
+        pathFound = nx.shortest_path(g, str(start),str(end))
+        newPath = []
+        for np in pathFound:
+            x = ast.literal_eval(np) 
+            newPath.append(x)
+            
+        return newPath
         
             
                     
