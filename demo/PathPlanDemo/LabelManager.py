@@ -1,4 +1,5 @@
 from xml.dom import minidom
+import re
 
 class FeatureLabel(object):
     
@@ -41,8 +42,10 @@ class LabelManager(object):
         
     def loadFile(self, filename):
         
-        self.labelFile = filename        
-        xmldoc = minidom.parse(self.labelFile)
+        self.labelFile = filename    
+        #print self.labelFile
+        f = open(self.labelFile)    
+        xmldoc = minidom.parseString(f.read())
         
         mapLabel = xmldoc.getElementsByTagName('MapLabel')[0]
         self.mapFile = mapLabel.getAttribute("MapFile")
@@ -55,15 +58,16 @@ class LabelManager(object):
         indoors = xmldoc.getElementsByTagName('indoors')[0]
         indoorLabels = indoors.getElementsByTagName('Indoor')
         outdoors = xmldoc.getElementsByTagName('outdoors')[0]
-        outdoorLabels = indoors.getElementsByTagName('Outdoor')
+        outdoorLabels = outdoors.getElementsByTagName('Outdoor')
         
         for featureLabel in featureLabels:
             f_l = FeatureLabel()
             f_l.id = featureLabel.getAttribute("ID")
             f_l.name = featureLabel.getAttribute("Name")
             f_l.type = featureLabel.getAttribute("Type")
-            pos = featureLabel.getAttribute("Pos")
-            print self.parsePos(pos)
+            pos = self.parsePos(featureLabel.getAttribute("Pos"))
+            print pos
+            f_l.pos = pos
             self.features.append(f_l)
             
         for indoorLabel in indoorLabels:
@@ -72,8 +76,9 @@ class LabelManager(object):
             i_l.name = indoorLabel.getAttribute("Name")
             vertices = indoorLabel.getElementsByTagName('Vertices')[0].getElementsByTagName('Vertex')
             for vex in vertices:
-                pos = vex.getAttribute("Pos")
-                print self.parsePos(pos)
+                pos = self.parsePos(vex.getAttribute("Pos"))
+                print pos
+                i_l.vertices.append(pos)
             self.indoors.append(i_l)
             
         for outdoorLabel in outdoorLabels:
@@ -83,15 +88,15 @@ class LabelManager(object):
             o_l.type = outdoorLabel.getAttribute("Type")
             vertices = outdoorLabel.getElementsByTagName('Vertices')[0].getElementsByTagName('Vertex')
             for vex in vertices:
-                pos = vex.getAttribute("Pos")
-                print self.parsePos(pos)
+                pos = self.parsePos(vex.getAttribute("Pos"))
+                print pos
+                o_l.vertices.append(pos)
             self.outdoors.append(o_l)
             
-    def parsePos(self, str):
-        x, y = str.unformat('{X={0},Y={1}}')
-        return [int(x), int(y)]
-        
-        
+    def parsePos(self, strPos):        
+        p = re.compile('\d+')
+        ms = p.findall(str(strPos))
+        return [int(ms[0]), int(ms[1])]
         
         
         

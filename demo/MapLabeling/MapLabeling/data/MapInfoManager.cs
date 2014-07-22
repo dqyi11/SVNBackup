@@ -117,15 +117,15 @@ namespace MapLabeling.data
                 xtw.WriteAttributeString("MapHeight", this.mapHeight.ToString());
 
                 xtw.WriteStartElement("features");
-                xtw.WriteString(this.featureMgr.DumpToString());
+                xtw.WriteRaw(this.featureMgr.DumpToString());
                 xtw.WriteEndElement();
 
                 xtw.WriteStartElement("indoors");
-                xtw.WriteString(this.indoorMgr.DumpToString());
+                xtw.WriteRaw(this.indoorMgr.DumpToString());
                 xtw.WriteEndElement();
 
                 xtw.WriteStartElement("outdoors");
-                xtw.WriteString(this.outdoorMgr.DumpToString());
+                xtw.WriteRaw(this.outdoorMgr.DumpToString());
                 xtw.WriteEndElement();
 
                 xtw.WriteEndElement();
@@ -135,6 +135,28 @@ namespace MapLabeling.data
 
         public void LoadFile(string filename)
         {
+
+            System.Xml.XmlDocument xmlDoc = new System.Xml.XmlDocument();
+            xmlDoc.Load(filename); //Loads the document
+            System.Xml.XmlNodeList nodeList = xmlDoc.GetElementsByTagName("MapLabel");
+            System.Xml.XmlNode currentNode = nodeList[0];
+
+            this.mapFilename = currentNode.Attributes["MapFile"].Value;
+            this.worldFilename = currentNode.Attributes["WorldFile"].Value;
+            this.mapWidth = Int32.Parse(currentNode.Attributes["MapWidth"].Value);
+            this.mapHeight = Int32.Parse(currentNode.Attributes["MapHeight"].Value);
+
+            System.Xml.XmlNode featureNode = xmlDoc.SelectNodes("/MapLabel/features")[0];
+            string featureStr = featureNode.InnerXml;
+            featureMgr.LoadFromString(featureStr);
+            System.Xml.XmlNode indoorNode = xmlDoc.SelectNodes("/MapLabel/indoors")[0];
+            string indoorStr = indoorNode.InnerXml;
+            indoorMgr.LoadFromString(indoorStr);  
+            System.Xml.XmlNode outdoorNode = xmlDoc.SelectNodes("/MapLabel/outdoors")[0];
+            string outdoorStr = outdoorNode.InnerXml;
+            outdoorMgr.LoadFromString(outdoorStr);
+
+            /*
             using (StreamReader sr = new StreamReader(filename))
             {
                 XmlTextReader xtr = new XmlTextReader(sr);
@@ -153,29 +175,30 @@ namespace MapLabeling.data
                         }
                         else if (xtr.Name == "features")
                         {
-                            string featureStr = xtr.ReadString();
-                            featureStr = "<features>" + featureStr;
+                            string featureStr = "<features>";
+                            featureStr += xtr.ReadElementContentAsString();
                             featureStr = featureStr + "</features>";
                             featureMgr.LoadFromString(featureStr);
                             
                         }
                         else if (xtr.Name == "indoors")
                         {
-                            string indoorStr = xtr.ReadString();
-                            indoorStr = "<indoors>" + indoorStr;
+                            string indoorStr = "<indoors>";
+                            indoorStr += xtr.ReadElementContentAsString();
                             indoorStr = indoorStr + "</indoors>";
                             indoorMgr.LoadFromString(indoorStr);                            
                         }
                         else if (xtr.Name == "outdoors")
                         {
-                            string outdoorStr = xtr.ReadString();
-                            outdoorStr = "<outdoors>" + outdoorStr;
+                            string outdoorStr = "<outdoors>";
+                            outdoorStr += xtr.ReadElementContentAsString();
                             outdoorStr = outdoorStr + "</outdoors>";
                             outdoorMgr.LoadFromString(outdoorStr);
                         }
                     }
                 }
             }
+             * */
         }
 
         public string GetMapFilename()

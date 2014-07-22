@@ -160,11 +160,19 @@ namespace MapLabeling.data
                             && !(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "features"))
                         {
                             xtr.Read();
+                            if (xtr.ReadState == ReadState.EndOfFile)
+                            {
+                                return;
+                            }
                         }
 
                         if (xtr.NodeType != XmlNodeType.None)
                         {
                             xtr.Read();
+                            if (xtr.ReadState == ReadState.EndOfFile)
+                            {
+                                return;
+                            }
                         }
 
                     }

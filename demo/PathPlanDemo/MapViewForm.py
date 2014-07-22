@@ -82,7 +82,7 @@ class MapViewForm(QtGui.QMainWindow):
                 
         self.labelMgr.loadFile(fname)
         
-        self.dirname = os.path.dirname(fname)
+        self.dirname = os.path.dirname(os.path.abspath(fname))
         
         pixmap = QtGui.QPixmap(self.dirname + "/" + self.labelMgr.mapFile)
         

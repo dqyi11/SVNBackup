@@ -184,6 +184,10 @@ namespace MapLabeling.data
                         while (!(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "Indoor"))
                         {
                             xtr.Read();
+                            if (xtr.ReadState == ReadState.EndOfFile)
+                            {
+                                return;
+                            }
                         }
 
                         xtr.Read();

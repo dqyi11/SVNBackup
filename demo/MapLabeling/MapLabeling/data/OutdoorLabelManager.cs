@@ -188,6 +188,10 @@ namespace MapLabeling.data
                         while (!(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "Outdoor"))
                         {
                             xtr.Read();
+                            if (xtr.ReadState == ReadState.EndOfFile)
+                            {
+                                return;
+                            }
                         }
 
                         xtr.Read();
