@@ -122,6 +122,7 @@ class MapViewConfigForm(QtGui.QWidget):
             
         if self.parentWindow.hexaMap != None:
             self.parentWindow.clearRefPath()
+            self.parentWindow.update()
         
     def changeUseObstacle(self):
         if self.useObstacleCheck.checkState() == QtCore.Qt.Checked:

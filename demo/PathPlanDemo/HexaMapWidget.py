@@ -87,13 +87,31 @@ class HexaMapWidget(QtGui.QWidget):
                     polygon.append(pt)
                 qp.drawPolygon(polygon)
                 
-        if self.hexamap.hexamapState.refStartHexIdx != None:
-            brush = QtGui.QBrush(self.hexamapState.defaultRobotColor)
+        if self.hexamapState.refStartHexIdx != None:
+            brush = QtGui.QBrush(self.hexamapState.refStartColor)
             qp.setBrush(brush)
+            
+            cell = self.hexamapState.refStartHexIdx
+            hx = self.hexamap.getHex(cell[0], cell[1])
+            if hx!=None:
+                polygon = QtGui.QPolygonF()
+                for k in range(6):
+                    pt = QtCore.QPointF(hx.points[k][0], hx.points[k][1])
+                    polygon.append(pt)
+                qp.drawPolygon(polygon)
         
-        if self.hexamap.hexamapState.refEndHexIdx != None:
-            brush = QtGui.QBrush(self.hexamapState.defaultRobotColor)
+        if self.hexamapState.refEndHexIdx != None:
+            brush = QtGui.QBrush(self.hexamapState.refEndColor)
             qp.setBrush(brush)
+            
+            cell = self.hexamapState.refEndHexIdx
+            hx = self.hexamap.getHex(cell[0], cell[1])
+            if hx!=None:
+                polygon = QtGui.QPolygonF()
+                for k in range(6):
+                    pt = QtCore.QPointF(hx.points[k][0], hx.points[k][1])
+                    polygon.append(pt)
+                qp.drawPolygon(polygon)
             
                 
                 

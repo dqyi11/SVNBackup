@@ -248,10 +248,12 @@ class MapViewForm(QtGui.QMainWindow):
     def addStart(self):
         if self.hexaMap != None:
             self.hexaMap.hexamapState.refStartHexIdx = self.cursorHexIdx
+            self.update()
         
     def addEnd(self):
         if self.hexaMap != None:
             self.hexaMap.hexamapState.refEndHexIdx = self.cursorHexIdx
+            self.update()
             
     def clearRefPath(self):
         
