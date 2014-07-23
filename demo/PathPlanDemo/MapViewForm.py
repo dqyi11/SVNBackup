@@ -22,7 +22,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.considerObstacle = True
         self.dataDim = 4
         
-        self.referenceStates = ["Manual", "Shortest", "Least risky"]
+        self.referenceStates = ["Manual", "Quickly", "Safely"]
         self.currentRefState = "Manual"
         
         self.wingmanRadius = 2
