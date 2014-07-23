@@ -79,21 +79,27 @@ We have $ x^{G} \neq x^{P} \implies f(x^{G}) > f(x^{P}) $ and $ x^{G} = x^{P} \i
 \end{figure}
 
 \begin{lemma}
-When $ x^{G} \neq x^{P} $,  
+\label{lem:one_hill:xp_to_xg}
+Let $ x^{G} $ be fixed. 
+When $ x^{P}(k) \neq x^{G} $, $ x^{P}(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $.
+\begin{proof}
+Define the distance 
+\end{proof}
 \end{lemma}
 
 \begin{lemma}
-When $  x^{G} = x^{P} $, 
+When $  x^{G} = x^{P} $, $ x(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $ if it is ISS.
+\begin{proof}
+By Lemma \ref{lem:one_hill:xp_to_xg}, we know $ \lVert x^{P}(k) - x^{G} \rVert \rightarrow 0 $.
+By the property of input-to-state stability, we have $ \lVert x(k) - x^{G} \rVert \rightarrow 0 $, which means
+$ x(k) \rightarrow x^{G} $.
+\end{proof}
 \end{lemma}
 
 \begin{theorem}
-When the personal best and the global best are in the same hill, the personal best and the global best will always converge to the local optimal.
+When $ f(x^{G}) $ and $ f(x^{P}) $ are in the same hill, if $ x^{G} $ is fixed, $ x^{P}(k) \rightarrow x^{G}(k) $ and $ x(k) \rightarrow x^{G}(k) $ as $ k \rightarrow \infty $.
 \begin{proof}
-When the personal best and the global best are in the same hill, there are only two cases.
-\begin{itemize}
-\item $ f(x^{G}) > f(x^{P}) $ 
-\item $ f(x^{G}) = f(x^{P}) $ 
-\end{itemize}
+Use contra
 \end{proof}
 \end{theorem}
 
