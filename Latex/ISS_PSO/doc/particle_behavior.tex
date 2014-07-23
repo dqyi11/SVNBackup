@@ -1,4 +1,6 @@
-\section{Redefine stagnation}
+\section{Particle behavior}
+
+\subsection{Redefine stagnation}
 
 \begin{lemma}
 \label{lem:unconverge_neq_gb}
@@ -25,6 +27,27 @@ The stagnation phenomenon is usually modeled as that the global best and persona
 By Lemma \ref{lem:unconverge_neq_gb}, we know that in this case, the particle will never really converge.
 However, in most of the cases, the personal best is highly likely to be updated if it is not the same with the global best.
 
+Thus, we define ``stagnation'' as the global best is not updated.
+In the topology in Figure \ref{fig:topology3}, the role of the global best is like a leader in the swarm, while all the particles run locally by updating the current positions and the personal best.
+We can have Property \ref{prop:stagnation_decompose}.
+
+\begin{property}
+\label{prop:stagnation_decompose}
+The dynamics of a swarm can be decomposed into a sequence of stagnations.
+In each stagnation, the global best is not changed.
+When a new global best is found, the swarm moves into a new stagnation.
+\end{property}
+
+By the topology in Figure \ref{fig:topology3}, we also notice that interactions between the particles are maintained by the update of the global best.
+When the global best is not changed, the behaviors of the particles are actually decoupled.
+Thus we can have Property \ref{prop:decoupled_particles}.
+
+\begin{property}
+\label{prop:decoupled_particles}
+In stagnation, any two particles in a swarm has no interaction between each other.
+\end{property}
+
+By Property \ref{prop:stagnation_decompose} and Property \ref{prop:decoupled_particles}, we are able to analyze the behavior a particle in a single stagnation.
 There are two types of situations in the fitness space:
 \begin{itemize}
 \item global best and personal best are in same hill;
@@ -33,7 +56,15 @@ There are two types of situations in the fitness space:
 
 \subsection{Local optimal - One hill case}
 
-While global best and personal best are in the same hill, the personal best will gradually move toward the global best.
+While global best and personal best are in the same hill, the search problem becomes finding the local optimal.
+Due to the rule of updating the personal best and the global best, we can have Property \ref{prop:result_of_update}.
+
+\begin{property}
+\label{prop:result_of_update}
+$ f(x^{G}(k)) \geq f(x^{P}(k)) \geq f(x(k)) $
+\end{property}
+
+We have $ x^{G} \neq x^{P} \implies f(x^{G}) > f(x^{P}) $ and $ x^{G} = x^{P} \implies f(x^{G}) = f(x^{P}) $.
 
 \begin{figure}
 \centering
@@ -48,7 +79,11 @@ While global best and personal best are in the same hill, the personal best will
 \end{figure}
 
 \begin{lemma}
-When $ f(x^{G}) > f(x^{P}) $ 
+When $ x^{G} \neq x^{P} $,  
+\end{lemma}
+
+\begin{lemma}
+When $  x^{G} = x^{P} $, 
 \end{lemma}
 
 \begin{theorem}
