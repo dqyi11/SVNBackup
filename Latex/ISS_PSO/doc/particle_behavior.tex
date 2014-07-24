@@ -80,10 +80,12 @@ We have $ x^{G} \neq x^{P} \implies f(x^{G}) > f(x^{P}) $ and $ x^{G} = x^{P} \i
 
 \begin{lemma}
 \label{lem:one_hill:xp_to_xg}
-Let $ x^{G} $ be fixed. 
-When $ x^{P}(k) \neq x^{G} $, $ x^{P}(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $.
+If the particle does not move out of the hill, when $ x^{P}(k) \neq x^{G} $, $ x^{P}(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $.
 \begin{proof}
-Define the distance 
+Define the distance
+
+It will not converge if the particle moves into a position that is better than global best.
+Because it will stop moving. 
 \end{proof}
 \end{lemma}
 
@@ -97,9 +99,9 @@ $ x(k) \rightarrow x^{G} $.
 \end{lemma}
 
 \begin{theorem}
-When $ f(x^{G}) $ and $ f(x^{P}) $ are in the same hill, if $ x^{G} $ is fixed, $ x^{P}(k) \rightarrow x^{G}(k) $ and $ x(k) \rightarrow x^{G}(k) $ as $ k \rightarrow \infty $.
+When $ f(x^{G}) $ and $ f(x^{P}) $ are in the same hill, $ x^{P}(k) \rightarrow x^{G}(k) $ and $ x(k) \rightarrow x^{G}(k) $ as $ k \rightarrow \infty $.
 \begin{proof}
-Use contra
+Use contradiction
 \end{proof}
 \end{theorem}
 
