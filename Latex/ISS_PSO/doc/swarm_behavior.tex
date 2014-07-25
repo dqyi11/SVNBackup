@@ -1,0 +1,11 @@
+\section{Swarm behavior}
+
+As we know, the optimization search process of the PSO is finding a better global best.
+Because each particle will either converge to the current global best or trigger a new global best.
+The optimization search process depends how the particles can trigger a new global best.
+
+\begin{lemma}
+Let $ P_{i} $ be the probability that particle $ i $ finds the global optimal.
+The probability that a swarm of $ N $ particles finds the global optimal is
+$ 1 - \prod_{i=1}^{N} (1 - P_{i}) $.
+\end{lemma}

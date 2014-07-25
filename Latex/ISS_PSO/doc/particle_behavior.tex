@@ -1,6 +1,8 @@
 \section{Particle behavior}
+\label{sec:particle_behavior}
 
-\subsection{Redefine stagnation}
+\section{Redefine stagnation}
+\label{sec:redefine_stagnation}
 
 \begin{lemma}
 \label{lem:unconverge_neq_gb}
@@ -54,7 +56,16 @@ There are two types of situations in the fitness space:
 \item global best and personal best are not in same hill.
 \end{itemize}
 
-\subsection{Local optimal - One hill case}
+\subsection{What happens in a stagnation for a particle}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{./structure_constant_gb}
+\caption{The interconnection when global best is not updated.}
+\label{fig:structure_constant_gb}
+\end{figure}
+
+\subsubsection{Local optimal - One hill case}
 
 While global best and personal best are in the same hill, the search problem becomes finding the local optimal.
 Due to the rule of updating the personal best and the global best, we can have Property \ref{prop:result_of_update}.
@@ -80,8 +91,14 @@ We have $ x^{G} \neq x^{P} \implies f(x^{G}) > f(x^{P}) $ and $ x^{G} = x^{P} \i
 
 \begin{lemma}
 \label{lem:one_hill:xp_to_xg}
-If the particle does not move out of the hill, when $ x^{P}(k) \neq x^{G} $, $ x^{P}(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $.
+Assume that the particle does not move out of the hill, when $ x^{P}(k) \neq x^{G} $.
+\begin{itemize}
+\item If $ x^{G} $ is the local optimal, $ x^{P}(k) \rightarrow x^{G} $ as $ k \rightarrow \infty $.
+\item If $ x^{G} $ is not the local optimal, $ x^{P} $ and $ x^{G} $ converged at the position $ x(k) $, which $ f(x(k)) \geq f(x^{G}) $.
+\end{itemize}
 \begin{proof}
+TODO: add proof here
+
 Define the distance
 
 It will not converge if the particle moves into a position that is better than global best.
@@ -100,13 +117,13 @@ $ x(k) \rightarrow x^{G} $.
 
 \begin{theorem}
 When $ f(x^{G}) $ and $ f(x^{P}) $ are in the same hill, $ x^{P}(k) \rightarrow x^{G}(k) $ and $ x(k) \rightarrow x^{G}(k) $ as $ k \rightarrow \infty $.
+$ x^{G}(k) $ will be either unchanged or updated to a better position.
 \begin{proof}
 Use contradiction
 \end{proof}
 \end{theorem}
 
-
-\subsection{global optimal - Not one hill case}
+\subsubsection{global optimal - Not one hill case}
 
 When global best and personal best are not in the same hill, the case can be complicated.
 There are two cases:
