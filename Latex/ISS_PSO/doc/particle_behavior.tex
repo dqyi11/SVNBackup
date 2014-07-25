@@ -14,9 +14,9 @@ There are two existing forces driving the movement of a particle, which are $ \D
 Thus we have
 \begin{equation}
 \begin{array}{lcl}
-v(k+1) & = \chi ( v(k) + \Delta f^{G} (k) + \Delta f^{P} (k) ) \\
-\Delta f^{G} (k) & = \phi^{G} u^{G} (k) (x^{G} - x(k)) \\
-\Delta f^{P} (k) & = \phi^{P} u^{P} (k) (x^{P} - x(k)) 
+v(k+1) = & \chi ( v(k) + \Delta f^{G} (k) + \Delta f^{P} (k) ) \\
+\Delta f^{G} (k) = & \phi^{G} u^{G} (k) (x^{G} - x(k)) \\
+\Delta f^{P} (k) = & \phi^{P} u^{P} (k) (x^{P} - x(k)) 
 \end{array}
 \end{equation}
 We can see that when $ \Delta f^{G} + \Delta f^{P} \neq 0 $, $ v(k)  \not \rightarrow 0 $.
@@ -37,7 +37,10 @@ We can have Property \ref{prop:stagnation_decompose}.
 \label{prop:stagnation_decompose}
 The dynamics of a swarm can be decomposed into a sequence of stagnations.
 In each stagnation, the global best is not changed.
+In each stagnation, there is a particle not moving, whose global best and personal best are the same.
+It works as a leader in a flock structure.
 When a new global best is found, the swarm moves into a new stagnation.
+The particle that finds the new global best becomes a new leader.
 \end{property}
 
 By the topology in Figure \ref{fig:topology3}, we also notice that interactions between the particles are maintained by the update of the global best.
@@ -126,6 +129,19 @@ Use contradiction
 \subsubsection{global optimal - Not one hill case}
 
 When global best and personal best are not in the same hill, the case can be complicated.
+The optimization process depends on the distribution of the fitness space.
+
+Given the positions of the global best and the personal best, the solution space can be divided into three types.
+\begin{itemize}
+\item $ f(x) \geq f(x^{G}) $ Once the particle gets into the region, the global best and the personal best are updated to this new location and stops moving.
+It triggered the entire swarm moves to next stagnation.
+\item $ f(x^{G}) > f(x) \geq f(x^{P}) $ Once the particle gets into this region, the personal best is updated. 
+How the solution space is divided into three types needs to be updated.
+\item $ f(x) < f(x^{P}) $ When the particle is in this region, it just randomly walks under the influence of the potential field determined by the personal best and the global best.
+\end{itemize}
+
+
+
 There are two cases:
 \begin{itemize}
 \item the global best is at a hill whose top is higher than that the personal best is at [Figure \ref{fig:two_hills_case:a}];
@@ -154,13 +170,13 @@ The problem can be answered in two steps:
 \begin{theorem}
 There is a probability $ p $  that a particle moves toward the personal best, and $ 1 - p $ that a particle moves toward the global best,
 \begin{equation}
-p = 
+p = .
 \end{equation}
 \end{theorem}
 
 \begin{corollary}
 There is probability $ p $ that the personal best can move to the same hill with the global best,
 \begin{equation}
-p = 
+p = .
 \end{equation}
 \end{corollary}
