@@ -1,6 +1,7 @@
 
 
 \section{Redefine stagnation}
+\label{sec:redefine_stagnation}
 
 \begin{lemma}
 \label{lem:unconverge_neq_gb}
@@ -68,5 +69,33 @@ When a particle is in this region, it only moves as a random walk.
 \caption{How global best and personal best divide the solution space.}
 \label{fig:categorize_regions}
 \end{figure}
+
+The result of the movement of a particle is determined by which region of the solution space it moves in.
+
+\section{One hill case}
+\label{sec:one_hill_case}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./one_hill_case_region_split}
+\caption{How the solution space is split in a one hill case.}
+\label{fig:one_hill_case_split_region}
+\end{figure}
+
+We firstly assume that the distribution of the fitness space is a single hill, as in Figure \ref{fig:one_hill_case_split_region}.
+Define $ \lVert x^{G} - x^{P} \rVert $ as the distance between the personal best and the global best.
+\begin{itemize}
+\item Assume that a particle is initialized in the red region.
+Both the global best and the personal best will be updated, thus $ \lVert x^{G} - x^{P} \rVert = 0 $.
+A stagnation will be triggered and this particle becomes the leader of the swarm.
+\item Assume that a particle is initialized in the orange region.
+The personal best will be updated to the current position of this particle, thus $ \lVert x^{G} - x^{P} \rVert $ will become smaller. 
+\item Assume that a particle is initialized in the yellow region.
+As the personal best and global best work as attractors, this particle will gradually moves into either the red region or the orange region.
+\end{itemize}
+
+\section{More than one hill case}
+\label{sec:more_than_one_hill_case}
+
 
 
