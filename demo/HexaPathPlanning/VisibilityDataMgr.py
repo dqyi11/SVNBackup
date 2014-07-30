@@ -43,8 +43,9 @@ class VisibilityDataMgr(object):
         
         f.close()
         
-                
+        #print self.visData[0]
         
+
     def parseFilehead(self, headStr):
         m = re.match(r'Columns: (\d+), Rows: (\d+), HexSize: (\d+)', headStr)
         vals = m.groups()
@@ -82,12 +83,16 @@ class VisibilityDataMgr(object):
                 f.write(str(i)+","+str(j)+":\n")
                 for rowIdx in range(self.height):
                     for colIdx in range(self.width):
-                        f.write(str(self.visData[j*self.width+i][i,j]))
+                        #print self.visData[j*self.width+i]
+                        dataVal = self.visData[j*self.width+i][colIdx,rowIdx]
+                        if dataVal==0.0:
+                            f.write("0")
+                        else:
+                            f.write(str(dataVal))
                         if colIdx < self.width-1:
                             f.write(",")
                     f.write("\n")
             f.write("\n")
-        
         
         f.close()
             
