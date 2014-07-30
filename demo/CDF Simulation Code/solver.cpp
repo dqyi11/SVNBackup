@@ -103,15 +103,6 @@ void project ( int N, float * u, float * v, float * p, float * div, int o, int *
 	set_bnd ( N, 1, u, o, object ); set_bnd ( N, 2, v, o, object );
 }
 
-void dens_step ( int N, float * x, float * x0, float * u, float * v, float diff, float dt, int o, int * object )
-{
-	add_source ( N, x, x0, dt );
-//	SWAP ( x0, x );
-	diffuse ( N, 0, x0, x, diff, dt, o, object );
-//	SWAP ( x0, x );
-	advect ( N, 0, x, x0, u, v, dt, o, object );
-}
-
 void vel_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt, int o, int * object )
 {
 	add_source ( N, u, u0, dt );

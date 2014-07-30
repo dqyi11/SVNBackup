@@ -14,7 +14,6 @@ void lin_solve ( int N, int b, float * x, float * x0, float a, float c, int o, i
 void diffuse ( int N, int b, float * x, float * x0, float diff, float dt, int o, int * object );
 void advect ( int N, int b, float * d, float * d0, float * u, float * v, float dt, int o, int * object );
 void project ( int N, float * u, float * v, float * p, float * div, int o, int * object );
-void dens_step ( int N, float * x, float * x0, float * u, float * v, float diff, float dt, int o, int * object );
 void vel_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt, int o, int * object );
 
 
