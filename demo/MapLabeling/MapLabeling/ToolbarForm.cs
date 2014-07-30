@@ -24,6 +24,7 @@ namespace MapLabeling
             {
                 this.checkboxIndoor.Checked = false;
                 this.checkboxOutdoor.Checked = false;
+                this.checkboxEnemy.Checked = false;
                 this.parentForm.SetFormState(MapViewerForm.FormState.ADD_FEATURE);
             }
             else
@@ -38,6 +39,7 @@ namespace MapLabeling
             {
                 this.checkboxPoint.Checked = false;
                 this.checkboxOutdoor.Checked = false;
+                this.checkboxEnemy.Checked = false;
                 this.parentForm.SetFormState(MapViewerForm.FormState.ADD_INDOOR);
             }
             else
@@ -52,7 +54,23 @@ namespace MapLabeling
             {
                 this.checkboxIndoor.Checked = false;
                 this.checkboxPoint.Checked = false;
+                this.checkboxEnemy.Checked = false;
                 this.parentForm.SetFormState(MapViewerForm.FormState.ADD_OUTDOOR);
+            }
+            else
+            {
+                this.parentForm.SetFormState(MapViewerForm.FormState.NORMAL);
+            }
+        }
+
+        private void checkboxEnemy_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkboxEnemy.Checked == true)
+            {
+                this.checkboxIndoor.Checked = false;
+                this.checkboxPoint.Checked = false;
+                this.checkboxOutdoor.Checked = false;
+                this.parentForm.SetFormState(MapViewerForm.FormState.ADD_ENEMY);
             }
             else
             {

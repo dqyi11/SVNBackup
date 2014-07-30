@@ -31,6 +31,7 @@ namespace MapLabeling
             ADD_FEATURE = 2,
             ADD_INDOOR = 3,
             ADD_OUTDOOR = 4,
+            ADD_ENEMY = 5,
         };
 
         FormState formState;
@@ -162,6 +163,15 @@ namespace MapLabeling
 
                 Refresh();
             }
+            else if (formState == FormState.ADD_ENEMY)
+            {
+                EnemyLabel enemy = this.infoMgr.enemyMgr.CreateLabel();
+                enemy.pos = new Point(e.X, e.Y);
+                EnemyPropertyForm propertyForm = new EnemyPropertyForm(enemy, this.infoMgr.enemyMgr);
+
+                propertyForm.ShowDialog();
+                Refresh();
+            }
             else
             {
                 MouseEventArgs mouseEvent = (MouseEventArgs)e;
@@ -178,6 +188,7 @@ namespace MapLabeling
             this.infoMgr.outdoorMgr.Draw(e.Graphics);
             this.infoMgr.indoorMgr.Draw(e.Graphics);
             this.infoMgr.featureMgr.Draw(e.Graphics);
+            this.infoMgr.enemyMgr.Draw(e.Graphics);
 
             if (this.tempIndoorLabel != null)
             {

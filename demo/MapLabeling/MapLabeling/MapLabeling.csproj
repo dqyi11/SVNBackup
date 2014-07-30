@@ -46,6 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnemyPropertyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnemyPropertyForm.Designer.cs">
+      <DependentUpon>EnemyPropertyForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="data\EnemyLabel.cs" />
+    <Compile Include="data\EnemyLabelManager.cs" />
     <Compile Include="data\FeatureLabelManager.cs" />
     <Compile Include="data\IndoorLabelManager.cs" />
     <Compile Include="data\MapInfoManager.cs" />
@@ -86,6 +94,9 @@
     </Compile>
     <Compile Include="data\FeatureLabel.cs" />
     <Compile Include="data\IndoorLabel.cs" />
+    <EmbeddedResource Include="EnemyPropertyForm.resx">
+      <DependentUpon>EnemyPropertyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="OutdoorPropertyForm.resx">
       <DependentUpon>OutdoorPropertyForm.cs</DependentUpon>
     </EmbeddedResource>

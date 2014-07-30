@@ -9,10 +9,11 @@ namespace MapLabeling.data
 {
     public class MapInfoManager
     {
-        public enum LabelType { NONE = 0, FEATURE = 1, OUTDOOR = 2, INDOOR = 3 };
+        public enum LabelType { NONE = 0, FEATURE = 1, OUTDOOR = 2, INDOOR = 3, ENEMY = 4 };
         public FeatureLabelManager featureMgr = null;
         public IndoorLabelManager indoorMgr = null;
         public OutdoorLabelManager outdoorMgr = null;
+        public EnemyLabelManager enemyMgr = null;
 
         public string mapFilename = null;
         public string worldFilename = null;
@@ -27,6 +28,7 @@ namespace MapLabeling.data
             featureMgr = new FeatureLabelManager(this);
             indoorMgr = new IndoorLabelManager(this);
             outdoorMgr = new OutdoorLabelManager(this);
+            enemyMgr = new EnemyLabelManager(this);
 
             mapFilename = "";
             worldFilename = "";
@@ -48,10 +50,24 @@ namespace MapLabeling.data
                 if (isFound == true)
                 {
                     activeLabelType = LabelType.FEATURE;
+                    enemyMgr.ResetActiveEnemy();
                     indoorMgr.ResetActiveIndoor();
                     outdoorMgr.ResetActiveOutdoor();
                 }
             }
+
+            if (isFound == false)
+            {
+                isFound = enemyMgr.FindActiveEnemy(x, y);
+                if (isFound == true)
+                {
+                    activeLabelType = LabelType.ENEMY;
+                    featureMgr.ResetActiveFeature();
+                    indoorMgr.ResetActiveIndoor();
+                    outdoorMgr.ResetActiveOutdoor();
+                }
+            }
+
 
             if (isFound == false)
             {
@@ -60,6 +76,7 @@ namespace MapLabeling.data
                 {
                     activeLabelType = LabelType.INDOOR;
                     featureMgr.ResetActiveFeature();
+                    enemyMgr.ResetActiveEnemy();
                     outdoorMgr.ResetActiveOutdoor();
                 }
             }
@@ -71,6 +88,7 @@ namespace MapLabeling.data
                 {
                     activeLabelType = LabelType.OUTDOOR;
                     featureMgr.ResetActiveFeature();
+                    enemyMgr.ResetActiveEnemy();
                     indoorMgr.ResetActiveIndoor();
                 }
             }
@@ -79,9 +97,11 @@ namespace MapLabeling.data
             {
                 activeLabelType = LabelType.NONE;
                 featureMgr.ResetActiveFeature();
+                enemyMgr.ResetActiveEnemy();
                 indoorMgr.ResetActiveIndoor();
                 outdoorMgr.ResetActiveOutdoor();
             }
+
         }
 
 
@@ -100,6 +120,11 @@ namespace MapLabeling.data
             else if (activeLabelType == LabelType.OUTDOOR)
             {
                 outdoorMgr.DeleteActiveOutdoor();
+                activeLabelType = LabelType.NONE;
+            }
+            else if (activeLabelType == LabelType.ENEMY)
+            {
+                enemyMgr.DeleteActiveFeature();
                 activeLabelType = LabelType.NONE;
             }
         }
@@ -126,6 +151,10 @@ namespace MapLabeling.data
 
                 xtw.WriteStartElement("outdoors");
                 xtw.WriteRaw(this.outdoorMgr.DumpToString());
+                xtw.WriteEndElement();
+
+                xtw.WriteStartElement("enemies");
+                xtw.WriteRaw(this.enemyMgr.DumpToString());
                 xtw.WriteEndElement();
 
                 xtw.WriteEndElement();
@@ -155,6 +184,9 @@ namespace MapLabeling.data
             System.Xml.XmlNode outdoorNode = xmlDoc.SelectNodes("/MapLabel/outdoors")[0];
             string outdoorStr = outdoorNode.InnerXml;
             outdoorMgr.LoadFromString(outdoorStr);
+            System.Xml.XmlNode enemyNode = xmlDoc.SelectNodes("/MapLabel/enemies")[0];
+            string enemyStr = enemyNode.InnerXml;
+            enemyMgr.LoadFromString(enemyStr);
 
             /*
             using (StreamReader sr = new StreamReader(filename))

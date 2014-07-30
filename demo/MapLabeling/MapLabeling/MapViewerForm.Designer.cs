@@ -206,7 +206,7 @@
             // 
             // toolbarForm
             // 
-            this.toolbarForm.ClientSize = new System.Drawing.Size(116, 140);
+            this.toolbarForm.ClientSize = new System.Drawing.Size(116, 200);
             this.toolbarForm.Location = new System.Drawing.Point(0, 0);
             this.toolbarForm.Name = "toolbarForm";
             this.toolbarForm.Text = "Toolbar";
