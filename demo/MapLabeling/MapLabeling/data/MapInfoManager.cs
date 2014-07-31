@@ -177,16 +177,28 @@ namespace MapLabeling.data
 
             System.Xml.XmlNode featureNode = xmlDoc.SelectNodes("/MapLabel/features")[0];
             string featureStr = featureNode.InnerXml;
-            featureMgr.LoadFromString(featureStr);
+            if (featureStr != "")
+            {
+                featureMgr.LoadFromString(featureStr);
+            }
             System.Xml.XmlNode indoorNode = xmlDoc.SelectNodes("/MapLabel/indoors")[0];
             string indoorStr = indoorNode.InnerXml;
-            indoorMgr.LoadFromString(indoorStr);  
+            if (indoorStr != "")
+            {
+                indoorMgr.LoadFromString(indoorStr);
+            }
             System.Xml.XmlNode outdoorNode = xmlDoc.SelectNodes("/MapLabel/outdoors")[0];
             string outdoorStr = outdoorNode.InnerXml;
-            outdoorMgr.LoadFromString(outdoorStr);
+            if (outdoorStr != "")
+            {
+                outdoorMgr.LoadFromString(outdoorStr);
+            }
             System.Xml.XmlNode enemyNode = xmlDoc.SelectNodes("/MapLabel/enemies")[0];
             string enemyStr = enemyNode.InnerXml;
-            enemyMgr.LoadFromString(enemyStr);
+            if (enemyStr != "")
+            {
+                enemyMgr.LoadFromString(enemyStr);
+            }
 
             /*
             using (StreamReader sr = new StreamReader(filename))
