@@ -111,12 +111,12 @@ class MapViewForm(QtGui.QMainWindow):
         
     def saveData(self):
         fname = QtGui.QFileDialog.getSaveFileName(self, 'save file')
-        if fname!= None:
+        if fname!= None and fname!='':
             self.hexaMap.hexamapState.dumpVal(fname)
             
     def loadData(self):
         fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
-        if fname!=None:
+        if fname!=None and fname!='':
             self.hexaMap.hexamapState.loadVal(fname)
             self.update()
         
@@ -173,6 +173,8 @@ class MapViewForm(QtGui.QMainWindow):
                 x_pos = e.pos().x()
                 y_pos = e.pos().y()
                 hexIdx = self.hexMap.hexamap.findHex(x_pos, y_pos)
+                if hexIdx != None:
+                    if self.visbilityDataMgr.
                     
     
     def keyPressEvent(self, event):
