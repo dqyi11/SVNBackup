@@ -84,6 +84,18 @@ class MapViewConfigForm(QtGui.QWidget):
         self.initCbInfoVec()
         self.cbInfoVec.activated[str].connect(self.onSelcbInfoVec)
         
+        self.radioBtnGroup = QtGui.QButtonGroup(self.grid)
+        self.radioBtnInfoMax = QtGui.QRadioButton("Info max")
+        self.radioBtnRiskMin = QtGui.QRadioButton("Risk min")
+        self.radioBtnInfoMax.toggled.connect(self.updateParentState)
+        self.radioBtnRiskMin.toggled.connect(self.updateParentState)
+        self.radioBtnGroup.addButton(self.radioBtnInfoMax)
+        self.radioBtnGroup.addButton(self.radioBtnRiskMin)
+        if self.parentWindow.currentPlanState == self.parentWindow.planStates[0]:
+            self.radioBtnInfoMax.setChecked(True)
+        elif self.parentWindow.currentPlanState == self.parentWindow.planStates[1]:
+            self.radioBtnRiskMin.setChecked(True)
+        
         self.grid.addWidget(self.hexSize, 0, 0)
         self.grid.addWidget(self.hexSizeEdit, 0, 1)
         self.grid.addWidget(self.useObstacleCheck, 0, 2)
@@ -93,14 +105,17 @@ class MapViewConfigForm(QtGui.QWidget):
         self.grid.addWidget(self.cbInfoVec, 2, 1)
         self.grid.addWidget(self.btnGenRef, 2, 2)
         
-        self.grid.addWidget(self.wingmanRadius, 3, 0)
-        self.grid.addWidget(self.wingmanRadiusEdit, 3, 1)
-        self.grid.addWidget(self.humanObsRange, 4, 0)
-        self.grid.addWidget(self.humanObsRangeEdit, 4, 1)
-        self.grid.addWidget(self.humanObsFactorEdit, 4, 2)
-        self.grid.addWidget(self.robotObsRange, 5, 0)
-        self.grid.addWidget(self.robotObsRangeEdit, 5, 1)
-        self.grid.addWidget(self.robotObsFactorEdit, 5, 2)
+        self.grid.addWidget(self.radioBtnInfoMax, 3,0)
+        self.grid.addWidget(self.radioBtnRiskMin, 3,1)
+        
+        self.grid.addWidget(self.wingmanRadius, 4, 0)
+        self.grid.addWidget(self.wingmanRadiusEdit, 4, 1)
+        self.grid.addWidget(self.humanObsRange, 5, 0)
+        self.grid.addWidget(self.humanObsRangeEdit, 5, 1)
+        self.grid.addWidget(self.humanObsFactorEdit, 5, 2)
+        self.grid.addWidget(self.robotObsRange, 6, 0)
+        self.grid.addWidget(self.robotObsRangeEdit, 6, 1)
+        self.grid.addWidget(self.robotObsFactorEdit, 6, 2)
 
         self.grid.addWidget(self.btnApply, 7, 1)
         self.grid.addWidget(self.btnPlan, 7, 2)
@@ -178,5 +193,11 @@ class MapViewConfigForm(QtGui.QWidget):
         
     def genRef(self):        
         self.parentWindow.genReference()
+        
+    def updateParentState(self):
+        if self.radioBtnInfoMax.isChecked()==True:
+            self.parentWindow.currentPlanState = self.parentWindow.planStates[0]
+        elif self.radioBtnRiskMin.isChecked()==True:
+            self.parentWindow.currentPlanState = self.parentWindow.planStates[1]
         
             

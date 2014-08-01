@@ -6,6 +6,7 @@ from HexaUtils import *
 from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
 from LabelManager import *
+from VisibilityDataMgr import *
 import copy
 import os
 
@@ -25,6 +26,9 @@ class MapViewForm(QtGui.QMainWindow):
         self.referenceStates = ["Manual", "Quickly", "Safely"]
         self.currentRefState = "Manual"
         
+        self.planStates = ["InfoMax", "RiskMin"]
+        self.currentPlanState = "InfoMax"
+        
         self.wingmanRadius = 2
         self.humanObsR = 0
         self.robotObsR = 0
@@ -41,6 +45,8 @@ class MapViewForm(QtGui.QMainWindow):
         self.initUI()
         self.cursorHexIdx = None
         
+        self.visbilityDataMgr = VisibilityDataMgr()
+        
         
     def initUI(self):        
         openAction = QtGui.QAction('Open', self)
@@ -51,6 +57,8 @@ class MapViewForm(QtGui.QMainWindow):
         loadDataAction.triggered.connect(self.loadData)
         saveDataAction = QtGui.QAction('Save', self)
         saveDataAction.triggered.connect(self.saveData)
+        importVisAction = QtGui.QAction('Import Visibility', self)
+        importVisAction.triggered.connect(self.importVisibility)
         clearDataAction = QtGui.QAction('Clear', self)
         clearDataAction.triggered.connect(self.clearEnvData)
         randomDataAction = QtGui.QAction('Random', self)
@@ -63,6 +71,7 @@ class MapViewForm(QtGui.QMainWindow):
         toolMenu.addAction(configAction)
         toolMenu.addAction(saveDataAction)
         toolMenu.addAction(loadDataAction)
+        toolMenu.addAction(importVisAction)
         envMenu = menubar.addMenu('&Env')
         envMenu.addAction(clearDataAction)
         envMenu.addAction(randomDataAction)
@@ -159,6 +168,11 @@ class MapViewForm(QtGui.QMainWindow):
                         self.update()
                     else:
                         self.showContextMenu(e.pos(), hexIdx)
+        elif e.button() == QtCore.Qt.LeftButton:
+            if self.hexaMap != None:
+                x_pos = e.pos().x()
+                y_pos = e.pos().y()
+                hexIdx = self.hexMap.hexamap.findHex(x_pos, y_pos)
                     
     
     def keyPressEvent(self, event):
@@ -289,5 +303,9 @@ class MapViewForm(QtGui.QMainWindow):
                     self.hexaMap.hexamapState.refEndHexIdx = None
                     self.update()
                     
+    def importVisibility(self):
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
+        if fname!=None:
+            self.visbilityDataMgr.loadFile(fname)         
         
             
