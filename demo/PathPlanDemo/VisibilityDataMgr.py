@@ -10,6 +10,7 @@ class VisibilityDataMgr(object):
         self.height = 0
         self.hexSize = 0
         self.visData = []
+        self.currentHexId = None
         
     def loadFile(self, filename):
         self.filename = filename
@@ -95,6 +96,15 @@ class VisibilityDataMgr(object):
             f.write("\n")
         
         f.close()
+        
+    def getValue(self, hexId):
+        
+        if self.currentHexId != None:
+            listIdx = self.currentHexId[1]*self.width+self.currentHexId[0]
+            return self.visData[listIdx][hexId[0], hexId[1]]
+        return 0.0
+    
+
             
         
         
