@@ -16,7 +16,7 @@ if __name__ == '__main__':
     
     phi1 = 1
     phi2 = 1
-    inertia = 0.1
+    inertia = 0.72984
     '''
     phi1 = 2.05    
     phi2 = 2.05
