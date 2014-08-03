@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 def fitness_func(val):
     
-    return 10-(val-4)**2
+    return 10-((val-4.0)/10.0)**2
 
 if __name__ == '__main__':
      
@@ -61,11 +61,18 @@ if __name__ == '__main__':
         gbFitHist.append(gb_fitness)
         pbFitHist.append(pb_fitness)
         
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.set_title('position')
-    ax.plot(np.arange(runs), posHist, np.arange(runs), pbHist, np.arange(runs), gbHist)
-    ax.legend(["particle", "personal best", "global best"])
+    xs = np.arange(-100, 100, 1)
+    ys = fitness_func(xs)
+    fig0 = plt.figure()
+    ax0 = fig0.add_subplot(111)
+    ax0.set_title('distribution')
+    ax0.plot(xs,ys)    
+    
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.set_title('position')
+    ax1.plot(np.arange(runs), posHist, np.arange(runs), pbHist, np.arange(runs), gbHist)
+    ax1.legend(["particle", "personal best", "global best"])
     
     
     fig2 = plt.figure()
