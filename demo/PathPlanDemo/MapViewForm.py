@@ -174,7 +174,10 @@ class MapViewForm(QtGui.QMainWindow):
                 y_pos = e.pos().y()
                 hexIdx = self.hexMap.hexamap.findHex(x_pos, y_pos)
                 if hexIdx != None:
-                    if self.visbilityDataMgr.
+                    if self.visbilityDataMgr.currentHexIdx = hexIdx:
+                        for i in range(self.hexaMap.hexamap.x_num):
+                            for j in range(self.hexaMap.hexamap.y_num):
+                                self.hexaMap.hexamapState.hexVals[i,j] = self.visbilityDataMgr.
                     
     
     def keyPressEvent(self, event):
@@ -307,7 +310,7 @@ class MapViewForm(QtGui.QMainWindow):
                     
     def importVisibility(self):
         fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
-        if fname!=None:
+        if fname!=None and fname!='':
             self.visbilityDataMgr.loadFile(fname)         
         
             
