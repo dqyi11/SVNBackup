@@ -70,10 +70,11 @@ class HexagonalMapState(object):
                     
     def getHexColor(self, i, j, k=0):
         val = self.hexVals[k][i,j]
-        int_val = int(255*val)
-        if int_val > 255:
-            int_val = 255
-        #print int_val
+        int_val = int(255.0*val)
+        #print str(int_val) + " : " + str(val)
+        if int_val > 255.0:
+            int_val = 255.0
+        
         return QtGui.QColor(int_val, int_val, int_val)
     
     def dumpVal(self, filename):        

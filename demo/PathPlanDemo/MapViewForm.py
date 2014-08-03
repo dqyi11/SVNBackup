@@ -21,7 +21,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.hexOrientation = "POINTY"
         self.obsThreshold = 60
         self.considerObstacle = True
-        self.dataDim = 4
+        self.dataDim = 1
         
         self.referenceStates = ["Manual", "Quickly", "Safely"]
         self.currentRefState = "Manual"
@@ -131,6 +131,9 @@ class MapViewForm(QtGui.QMainWindow):
         self.configWindow.initCbInfoVec()
         self.configWindow.update()
         
+        self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
+        self.visbilityDataMgr.dumpData('visData2.txt')
+        
         self.update() 
         
     def updateObstalce(self):        
@@ -172,12 +175,13 @@ class MapViewForm(QtGui.QMainWindow):
             if self.hexaMap != None:
                 x_pos = e.pos().x()
                 y_pos = e.pos().y()
-                hexIdx = self.hexMap.hexamap.findHex(x_pos, y_pos)
+                hexIdx = self.hexaMap.hexamap.findHex(x_pos, y_pos)
                 if hexIdx != None:
-                    if self.visbilityDataMgr.currentHexIdx = hexIdx:
-                        for i in range(self.hexaMap.hexamap.x_num):
-                            for j in range(self.hexaMap.hexamap.y_num):
-                                self.hexaMap.hexamapState.hexVals[i,j] = self.visbilityDataMgr.
+                    self.visbilityDataMgr.currentHexId = hexIdx
+                    for i in range(self.hexaMap.hexamap.x_num):
+                        for j in range(self.hexaMap.hexamap.y_num):
+                            self.hexaMap.hexamapState.hexVals[0][i,j] = self.visbilityDataMgr.getValue(i,j)
+                    self.update()
                     
     
     def keyPressEvent(self, event):

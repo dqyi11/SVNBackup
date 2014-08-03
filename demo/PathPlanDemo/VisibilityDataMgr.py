@@ -5,7 +5,7 @@ class VisibilityDataMgr(object):
 
     def __init__(self):    
         self.filename = None
-        self.visibilityData = None
+
         self.width = 0
         self.height = 0
         self.hexSize = 0
@@ -97,13 +97,24 @@ class VisibilityDataMgr(object):
         
         f.close()
         
-    def getValue(self, hexId):
+    def getValue(self, x, y):
         
         if self.currentHexId != None:
             listIdx = self.currentHexId[1]*self.width+self.currentHexId[0]
-            return self.visData[listIdx][hexId[0], hexId[1]]
-        return 0.0
+            return self.visData[listIdx][x, y]
+        return 0.5
     
+    def randInit(self, width, height, hexSize):
+        
+        self.width = width
+        self.height = height
+        self.hexSize = hexSize
+        
+        self.visData = []
+        for col in range(width):
+            for row in range(height):
+                data = np.random.random((width, height))
+                self.visData.append(data)
 
             
         
