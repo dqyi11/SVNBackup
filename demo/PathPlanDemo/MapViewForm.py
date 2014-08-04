@@ -177,11 +177,12 @@ class MapViewForm(QtGui.QMainWindow):
                 y_pos = e.pos().y()
                 hexIdx = self.hexaMap.hexamap.findHex(x_pos, y_pos)
                 if hexIdx != None:
-                    self.visbilityDataMgr.currentHexId = hexIdx
-                    for i in range(self.hexaMap.hexamap.x_num):
-                        for j in range(self.hexaMap.hexamap.y_num):
-                            self.hexaMap.hexamapState.hexVals[0][i,j] = self.visbilityDataMgr.getValue(i,j)
-                    self.update()
+                    if self.currentPlanState == self.planStates[1]:
+                        self.visbilityDataMgr.currentHexId = hexIdx
+                        for i in range(self.hexaMap.hexamap.x_num):
+                            for j in range(self.hexaMap.hexamap.y_num):
+                                self.hexaMap.hexamapState.hexVals[0][i,j] = self.visbilityDataMgr.getValue(i,j)
+                        self.update()
                     
     
     def keyPressEvent(self, event):
