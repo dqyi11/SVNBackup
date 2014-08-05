@@ -11,6 +11,11 @@ class DiffusionGenerator(object):
     def generateDataDiffusion(self):
         os.system("")
         
+        filenameA = ""
+        
+        with open(filenameA) as csvfile:
+            x = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        
         
         
         
