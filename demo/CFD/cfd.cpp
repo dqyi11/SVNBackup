@@ -299,7 +299,7 @@ void CFD  ( int gridSize, float timestep, float viscosity, char *obstacles, char
 	u_file = string(output) + "_HorVel.csv";
 	v_file = string(output) + "_VertVel.csv";
 
-	ofstream file1(u_file), file2(v_file);
+	ofstream file1(u_file.c_str()), file2(v_file.c_str());
 
 	int i, j;
 	if (file1.is_open() && file2.is_open())
