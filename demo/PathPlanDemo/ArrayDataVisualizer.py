@@ -37,15 +37,16 @@ class ArrayDataVisualizer(object):
         minVal = min(minArray) #np.minimum(np.minimum(dataArray))
         maxVal = max(maxArray) #np.maximum(np.maximum(dataArray))
         
-        print str(minVal) + " - " + str(maxVal)
-        
         ran = maxVal - minVal
+        print  str(minVal) + " - " + str(maxVal) + " = " + str(ran)
         for i in range(width):
             for j in range(height):
                 if ran != 0.0:
-                    newDataArray[i,j] = dataArray[i][j]/ran
+                    newDataArray[i,j] = (dataArray[i][j] - minVal)/ran
                 else:
                     newDataArray[i,j] = dataArray[i][j]
+                    
+        print newDataArray            
         return newDataArray
             
     def getColor(self, val):

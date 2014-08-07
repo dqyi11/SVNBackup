@@ -65,7 +65,7 @@ class InfoDistributionGenerator(object):
                 #print row
                 floatRow = [float(x) for x in row[0].split(',')]
                 self.diffH.append(floatRow)
-            print self.diffH
+            #print self.diffH
            
         self.diffV = []
         with open(filenameV) as cvsfileV:
@@ -73,7 +73,7 @@ class InfoDistributionGenerator(object):
             for row in xV:
                 floatRow = [float(x) for x in row[0].split(',')]
                 self.diffV.append(floatRow)
-            print self.diffV
+            #print self.diffV
             
         
     def generateFilename(self):
