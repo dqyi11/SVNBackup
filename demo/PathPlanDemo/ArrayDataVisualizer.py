@@ -1,31 +1,51 @@
 from PyQt4 import QtGui, QtCore
 import numpy as np
+from PIL import Image
 
-class ArrayDataVisualizer(QtGui.QLabel):
+#class ArrayDataVisualizer(QtGui.QLabel):
+class ArrayDataVisualizer(object):
 
     def __init__(self, parent):
-        super(ArrayDataVisualizer, self).__init__(parent)
+        #super(ArrayDataVisualizer, self).__init__(parent)
         self.dataArray = None
+        self.width = 0
+        self.height = 0
     
     def setDataArray(self, width, height, dataArray):
+        self.width = width
+        self.height = height
         self.dataArray = self.normalize(width, height, dataArray)
+        '''
         img = QtGui.QImage(width, height, QtGui.QImage.Format_RGB888)
         img.fill(QtGui.QColor.white())
         for i in range(width):
             for j in range(height):
                 img.setPixel(i, j, self.getColor(self.dataArray[i,j]))
-        img.save('check.png')
+        #img.save('check.png')
         self.setPixmap(QtGui.QPixmap(img))
+        '''
+        
         
     def normalize(self, width, height, dataArray):
         newDataArray = np.zeros((width, height))      
         
-        minVal = np.minimum(np.minimum(dataArray))
-        maxVal = np.maximum(np.maximum(dataArray))
+        minArray = []
+        maxArray = []
+        for d in dataArray:
+            minArray.append(min(d))
+            maxArray.append(max(d))
+        minVal = min(minArray) #np.minimum(np.minimum(dataArray))
+        maxVal = max(maxArray) #np.maximum(np.maximum(dataArray))
+        
+        print str(minVal) + " - " + str(maxVal)
+        
         ran = maxVal - minVal
         for i in range(width):
             for j in range(height):
-                newDataArray[i,j] = dataArray[i,j]/ran
+                if ran != 0.0:
+                    newDataArray[i,j] = dataArray[i][j]/ran
+                else:
+                    newDataArray[i,j] = dataArray[i][j]
         return newDataArray
             
     def getColor(self, val):
@@ -33,7 +53,13 @@ class ArrayDataVisualizer(QtGui.QLabel):
         return QtGui.QColor(intVal, intVal, intVal)
     
     def dumpToFile(self,filename):
-        pass
+    
+        img = Image.new('L',(self.width, self.height), "black")
+        for i in range(self.width):
+            for j in range(self.height):
+                intVal = int(255*self.dataArray[i,j])
+                img.putpixel((i,j), intVal) 
+        img.save(filename)
         
         
         
