@@ -20,7 +20,7 @@ class InfoDistributionGenerator(object):
         self.dt = 0.1
         self.visc = 0.0
         
-        self.source_width = 2
+        self.source_width = 9
         self.source_angle = 0
         self.source_strength = 0.2
         self.source_slope = 45.0/np.pi
@@ -59,16 +59,24 @@ class InfoDistributionGenerator(object):
         filenameH = filename + "_HorVel.csv"
         filenameV = filename + "_VertVel.csv"
         
+        floatXH = []
         with open(filenameH) as csvfileH:
             xH = csv.reader(csvfileH, delimiter=' ', quotechar='|')
             for row in xH:
-                print row
-            
+                #print row
+                floatRow = [float(x) for x in row[0].split(',')]
+                floatXH.append(floatRow)
+            print floatXH
+           
+        floatXV = []
         with open(filenameV) as cvsfileV:
             xV = csv.reader(cvsfileV, delimiter=' ', quotechar='|')
             for row in xV:
-                print row
+                floatRow = [float(x) for x in row[0].split(',')]
+                floatXV.append(floatRow)
+            print floatXV
             
+        
     def generateFilename(self):
         name = str(int(time.time()))
         return name        
