@@ -14,7 +14,7 @@ class ArrayDataVisualizer(QtGui.QLabel):
         for i in range(width):
             for j in range(height):
                 img.setPixel(i, j, self.getColor(self.dataArray[i,j]))
-                
+        img.save('check.png')
         self.setPixmap(QtGui.QPixmap(img))
         
     def normalize(self, width, height, dataArray):
@@ -31,6 +31,9 @@ class ArrayDataVisualizer(QtGui.QLabel):
     def getColor(self, val):
         intVal = int(255*val)
         return QtGui.QColor(intVal, intVal, intVal)
+    
+    def dumpToFile(self,filename):
+        pass
         
         
         

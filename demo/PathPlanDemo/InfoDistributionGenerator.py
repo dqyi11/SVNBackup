@@ -54,27 +54,26 @@ class InfoDistributionGenerator(object):
         
         return completed
 
-        
     def readDataDiffusion(self, filename):                 
         filenameH = filename + "_HorVel.csv"
         filenameV = filename + "_VertVel.csv"
         
-        floatXH = []
+        self.diffH = []
         with open(filenameH) as csvfileH:
             xH = csv.reader(csvfileH, delimiter=' ', quotechar='|')
             for row in xH:
                 #print row
                 floatRow = [float(x) for x in row[0].split(',')]
-                floatXH.append(floatRow)
-            print floatXH
+                self.diffH.append(floatRow)
+            print self.diffH
            
-        floatXV = []
+        self.diffV = []
         with open(filenameV) as cvsfileV:
             xV = csv.reader(cvsfileV, delimiter=' ', quotechar='|')
             for row in xV:
                 floatRow = [float(x) for x in row[0].split(',')]
-                floatXV.append(floatRow)
-            print floatXV
+                self.diffV.append(floatRow)
+            print self.diffV
             
         
     def generateFilename(self):
