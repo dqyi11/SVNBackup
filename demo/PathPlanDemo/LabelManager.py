@@ -8,6 +8,9 @@ class FeatureLabel(object):
         self.name = ""
         self.type = ""
         self.pos = None
+        
+    def getLabel(self):
+        return "ID: " + self.id + " NAME: " + self.name + " TYPE: " + self.type + " POS: " + str(self.pos)
     
 class IndoorLabel(object):
     
@@ -16,6 +19,13 @@ class IndoorLabel(object):
         self.name = ""
         self.type = ""
         self.vertices = []
+        
+    def getLabel(self):
+        string = "ID: " + str(self.id) + " NAME: " + str(self.name) + " TYPE: " + self.type + " \n"
+        string += "VERTICES: " 
+        for v in self.vertices:
+            string += str(v) + ", "
+        return string            
     
 class OutdoorLabel(object):
     
@@ -24,6 +34,24 @@ class OutdoorLabel(object):
         self.name = ""
         self.type = ""
         self.vertices = []
+        
+    def getLabel(self):
+        string = "ID: " + str(self.id) + " NAME: " + str(self.name) + " TYPE: " + self.type + " \n"
+        string += "VERTICES: " 
+        for v in self.vertices:
+            string += str(v) + ", "
+        return string            
+    
+        
+class EnemyLabel(object):
+    
+    def __init__(self):
+        self.id = ""
+        self.name = ""
+        self.pos = None
+        
+    def getLabel(self):
+        return "ID: " + self.id + " NAME: " + self.name + " POS: " + str(self.pos)
 
 class LabelManager(object):
     
@@ -38,6 +66,7 @@ class LabelManager(object):
         self.features = []
         self.indoors = []
         self.outdoors = []
+        self.enemies = []
         
         
     def loadFile(self, filename):
@@ -59,6 +88,8 @@ class LabelManager(object):
         indoorLabels = indoors.getElementsByTagName('Indoor')
         outdoors = xmldoc.getElementsByTagName('outdoors')[0]
         outdoorLabels = outdoors.getElementsByTagName('Outdoor')
+        enemies = xmldoc.getElementsByTagName('enemies')[0]
+        enemyLabels = enemies.getElementsByTagName('Enemy')
         
         for featureLabel in featureLabels:
             f_l = FeatureLabel()
@@ -66,7 +97,7 @@ class LabelManager(object):
             f_l.name = featureLabel.getAttribute("Name")
             f_l.type = featureLabel.getAttribute("Type")
             pos = self.parsePos(featureLabel.getAttribute("Pos"))
-            print pos
+            #print pos
             f_l.pos = pos
             self.features.append(f_l)
             
@@ -77,7 +108,7 @@ class LabelManager(object):
             vertices = indoorLabel.getElementsByTagName('Vertices')[0].getElementsByTagName('Vertex')
             for vex in vertices:
                 pos = self.parsePos(vex.getAttribute("Pos"))
-                print pos
+                #print pos
                 i_l.vertices.append(pos)
             self.indoors.append(i_l)
             
@@ -89,14 +120,43 @@ class LabelManager(object):
             vertices = outdoorLabel.getElementsByTagName('Vertices')[0].getElementsByTagName('Vertex')
             for vex in vertices:
                 pos = self.parsePos(vex.getAttribute("Pos"))
-                print pos
+                #print pos
                 o_l.vertices.append(pos)
             self.outdoors.append(o_l)
+            
+        for enemyLabel in enemyLabels:
+            e_l = EnemyLabel()
+            e_l.id = enemyLabel.getAttribute("ID")
+            e_l.name = enemyLabel.getAttribute("Name")
+            pos = self.parsePos(enemyLabel.getAttribute("Pos"))
+            #print pos
+            e_l.pos = pos
+            self.enemies.append(e_l)
             
     def parsePos(self, strPos):        
         p = re.compile('\d+')
         ms = p.findall(str(strPos))
         return [int(ms[0]), int(ms[1])]
+    
+    def printLabels(self):
+        
+        print "Width: " + str(self.mapWidth) + " Height: " + str(self.mapHeight)
+        print "Label: " + str(self.labelFile)
+        print "Map: " + str(self.mapFile)
+        print "World: " + str(self.worldFile)
+        
+        print "FEATURE "
+        for f in self.features:
+            print f.getLabel()
+        print "INDOOR "
+        for i in self.indoors:
+            print i.getLabel()
+        print "OUTDOOR "
+        for o in self.outdoors:
+            print o.getLabel()
+        print "ENEMY "
+        for e in self.enemies:
+            print e.getLabel()
         
         
         
