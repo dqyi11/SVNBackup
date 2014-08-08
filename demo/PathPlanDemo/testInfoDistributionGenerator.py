@@ -11,5 +11,5 @@ if __name__ == '__main__':
     gnr.readDataDiffusion('testData')
     
     vis = ArrayDataVisualizer(None)
-    vis.setDataArray(500,500,gnr.diffH)
-    vis.dumpToFile('diffH.png')
+    vis.setDataArray(500,500,gnr.diff)
+    vis.dumpToFile('diff.png')

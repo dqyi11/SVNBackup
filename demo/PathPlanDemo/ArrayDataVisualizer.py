@@ -25,10 +25,10 @@ class ArrayDataVisualizer(object):
         self.setPixmap(QtGui.QPixmap(img))
         '''
         
-        
     def normalize(self, width, height, dataArray):
         newDataArray = np.zeros((width, height))      
         
+        '''
         minArray = []
         maxArray = []
         for d in dataArray:
@@ -36,17 +36,20 @@ class ArrayDataVisualizer(object):
             maxArray.append(max(d))
         minVal = min(minArray) #np.minimum(np.minimum(dataArray))
         maxVal = max(maxArray) #np.maximum(np.maximum(dataArray))
+        '''
+        minVal = dataArray.min()
+        maxVal = dataArray.max()
         
         ran = maxVal - minVal
-        print  str(minVal) + " - " + str(maxVal) + " = " + str(ran)
+        #print  str(minVal) + " - " + str(maxVal) + " = " + str(ran)
         for i in range(width):
             for j in range(height):
                 if ran != 0.0:
-                    newDataArray[i,j] = (dataArray[i][j] - minVal)/ran
+                    newDataArray[i,j] = (dataArray[i,j] - minVal)/ran
                 else:
-                    newDataArray[i,j] = dataArray[i][j]
+                    newDataArray[i,j] = dataArray[i,j]
                     
-        print newDataArray            
+        #print newDataArray            
         return newDataArray
             
     def getColor(self, val):

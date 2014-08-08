@@ -10,6 +10,7 @@ class InfoDistributionGenerator(object):
         #self.visualizer = ArrayDataVisualizer()
         self.diffV = None
         self.diffH = None
+        self.diff = None
         
         self.sourceFilename = None
         self.outputFilename = None
@@ -20,9 +21,9 @@ class InfoDistributionGenerator(object):
         self.dt = 0.1
         self.visc = 0.0
         
-        self.source_width = 9
+        self.source_width = 10
         self.source_angle = 0
-        self.source_strength = 0.2
+        self.source_strength = 0.9
         self.source_slope = 45.0/np.pi
         
     def generateDistribution(self, obstacleFile):        
@@ -75,7 +76,12 @@ class InfoDistributionGenerator(object):
                 self.diffV.append(floatRow)
             #print self.diffV
             
-        
+        self.diff = np.zeros((self.N, self.N))
+        for i in range(self.N):
+            for j in range(self.N):
+                self.diff[i,j] = np.sqrt(self.diffH[i][j]**2+self.diffV[i][j]**2)
+
+            
     def generateFilename(self):
         name = str(int(time.time()))
         return name        
