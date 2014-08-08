@@ -7,6 +7,8 @@ from PlanningPathGenerator import *
 from TreeExpandingPathPlanner import *
 from LabelManager import *
 from VisibilityDataMgr import *
+from InfoDistributionGenerator import *
+from PIL import Image
 import copy
 import os
 
@@ -17,7 +19,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.formSize = size
         self.resize(self.formSize[0], self.formSize[1])
         
-        self.hexSize = 10
+        self.hexSize = 5
         self.hexOrientation = "POINTY"
         self.obsThreshold = 60
         self.considerObstacle = True
@@ -47,7 +49,7 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.visbilityDataMgr = VisibilityDataMgr()
         
-        self.diffData = None
+        self.diff = None
         
         
     def initUI(self):        
@@ -59,6 +61,8 @@ class MapViewForm(QtGui.QMainWindow):
         loadDataAction.triggered.connect(self.loadData)
         saveDataAction = QtGui.QAction('Save', self)
         saveDataAction.triggered.connect(self.saveData)
+        importDiffAction = QtGui.QAction('Import Diffusion', self)
+        importDiffAction.triggered.connect(self.importDiffusion)
         importVisAction = QtGui.QAction('Import Visibility', self)
         importVisAction.triggered.connect(self.importVisibility)
         clearDataAction = QtGui.QAction('Clear', self)
@@ -73,6 +77,7 @@ class MapViewForm(QtGui.QMainWindow):
         toolMenu.addAction(configAction)
         toolMenu.addAction(saveDataAction)
         toolMenu.addAction(loadDataAction)
+        toolMenu.addAction(importDiffAction)
         toolMenu.addAction(importVisAction)
         envMenu = menubar.addMenu('&Env')
         envMenu.addAction(clearDataAction)
@@ -102,8 +107,8 @@ class MapViewForm(QtGui.QMainWindow):
         self.formSize[0] = pixmap.width()
         self.formSize[1] = pixmap.height()
         
-        gnr = InfoDistributionGenerator(mgr, 500)
-        gnr.generateDistribution('two_houses.dat')
+        #self.diffGnr = InfoDistributionGenerator(self.labelMgr, 500)
+        #self.diffGnr.generateDistribution(self.labelMgr.obstacleFile)
         
         self.mapView.resize(self.formSize[0], self.formSize[1])
         self.imageData = pixmap.toImage()
@@ -138,6 +143,9 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
         self.visbilityDataMgr.dumpData('visData2.txt')
+        
+        if self.currentPlanState == self.planStates[0]:
+            self.hexaMap.hexamapState.loadFromArray(self.diff)
         
         self.update() 
         
@@ -321,6 +329,21 @@ class MapViewForm(QtGui.QMainWindow):
     def importVisibility(self):
         fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
         if fname!=None and fname!='':
-            self.visbilityDataMgr.loadFile(fname)         
+            self.visbilityDataMgr.loadFile(fname)  
+            
+    def importDiffusion(self):
+        fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
+        if fname!=None and fname!='':
+            w = self.mapView.width()
+            h = self.mapView.height()
+            self.diff = np.zeros((w, h))
+            print fname
+            
+            img = Image.open(str(fname))
+            img.convert("L")
+            for i in range(w):
+                for j in range(h):
+                    self.diff[i,j] = img.getpixel((i,j))
+                    
         
             

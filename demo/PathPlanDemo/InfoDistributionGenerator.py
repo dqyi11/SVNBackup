@@ -5,7 +5,7 @@ import numpy as np
 
 class InfoDistributionGenerator(object):
 
-    def __init__(self, labelMgr, N):
+    def __init__(self, labelMgr, width, height):
         self.labelMgr = labelMgr
         #self.visualizer = ArrayDataVisualizer()
         self.diffV = None
@@ -17,14 +17,15 @@ class InfoDistributionGenerator(object):
         self.outputFilenameH = None
         self.outputFilenameV = None
         
-        self.N = N
-        self.dt = 0.1
+        self.width = width
+        self.height = height
+        self.dt = 0.5
         self.visc = 0.0
         
-        self.source_width = 20
+        self.source_width = 5
         self.source_angle = 0
-        self.source_strength = 0.9
-        self.source_slope = 45.0*np.pi/180.0
+        self.source_strength = 40.0
+        self.source_slope = 0 #45.0*np.pi/180.0
         
     def generateDistribution(self, obstacleFile):        
         self.sourceFilename = self.generateFilename() + ".dat"
@@ -34,7 +35,7 @@ class InfoDistributionGenerator(object):
         
     def runCFD(self, obstacleFilename, sourceFilename, outputName):
         
-        cmd = "CFD "+str(self.N) + " " + str(self.dt) + " " + str(self.visc) + " " + obstacleFilename + " " + sourceFilename + " " + outputName + " 1" 
+        cmd = "CFD "+str(self.width) + " " + str(self.height) + " " + str(self.dt) + " " + str(self.visc) + " " + obstacleFilename + " " + sourceFilename + " " + outputName
         print cmd
         os.system(cmd)
         
@@ -76,9 +77,9 @@ class InfoDistributionGenerator(object):
                 self.diffV.append(floatRow)
             #print self.diffV
             
-        self.diff = np.zeros((self.N, self.N))
-        for i in range(self.N):
-            for j in range(self.N):
+        self.diff = np.zeros((self.width, self.height))
+        for i in range(self.width):
+            for j in range(self.height):
                 self.diff[i,j] = np.sqrt(self.diffH[i][j]**2+self.diffV[i][j]**2)
 
             

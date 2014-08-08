@@ -31,11 +31,15 @@ class Hex(object):
             self.points.append([x-r, y+h])
             
         self.center = [0, 0]
+        centerX = 0.0
+        centerY = 0.0
         for i in range(6):
-            self.center[0] += self.points[i][0]
-            self.center[1] += self.points[i][1]
-        self.center[0] /= 6
-        self.center[1] /= 6
+            centerX += self.points[i][0]
+            centerY += self.points[i][1]
+        centerX = centerX / 6.0
+        centerY = centerY / 6.0
+        self.center[0] = centerX
+        self.center[1] = centerY
         
     def insideHex(self, x, y):
         #http://astronomy.swin.edu.au/~pbourke/geometry/insidepoly/

@@ -146,6 +146,7 @@ class LabelManager(object):
         print "Label: " + str(self.labelFile)
         print "Map: " + str(self.mapFile)
         print "World: " + str(self.worldFile)
+        print "Obstacle: " + str(self.obstacleFile)
         
         print "FEATURE "
         for f in self.features:

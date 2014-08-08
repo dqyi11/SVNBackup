@@ -85,11 +85,15 @@ class HexagonalMapState(object):
         self.hexValDim = len(self.hexVals)
         
     def loadFromArray(self, dataArray):
-        self.hexVals = []
         for i in range(self.x_num):
-            vals = []
             for j in range(self.y_num):
-                val = dataArray[int(map.hexes[i][j].center[0]),int(map.hexes[i][j].center[1])]
-                vals.append(val)
-            self.hexVals.append(vals)
+                self.hexVals[0][i,j] = dataArray[int(self.map.hexes[i][j].center[0]),int(self.map.hexes[i][j].center[1])]
+        
+        minVal = self.hexVals[0].min()
+        maxVal = self.hexVals[0].max()
+        ran = float(maxVal - minVal)
+        for i in range(self.x_num):
+            for j in range(self.y_num):
+                self.hexVals[0][i,j] = (self.hexVals[0][i,j]-minVal)/ran
+        
         
