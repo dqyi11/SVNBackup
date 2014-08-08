@@ -100,7 +100,7 @@ static void clear_data ( void )
 				a += x*cos(slope);
 				b += x*sin(slope);
 
-				object_space_grid[IX(a, b)] = 1;
+				object_space_grid[IX(a, N-b)] = 1;
 			}
 
 			for (double x = 1.0; x <= distRed; x += 0.1)
@@ -111,14 +111,14 @@ static void clear_data ( void )
 				a += x*cos(slopeRed);
 				b += x*sin(slopeRed);
 
-				objectRed[IXRed(a, b)] = 1;
+				objectRed[IXRed(a, N-b)] = 1;
 			}
 
-			objectRed[IXRed(edgeRed[0], edgeRed[1])] = 1;
-			objectRed[IXRed(edgeRed[2], edgeRed[3])] = 1;
+			objectRed[IXRed(edgeRed[0], N-edgeRed[1])] = 1;
+			objectRed[IXRed(edgeRed[2], N-edgeRed[3])] = 1;
 
-			object_space_grid[IX(edge[0], edge[1])] = 1;
-			object_space_grid[IX(edge[2], edge[3])] = 1;
+			object_space_grid[IX(edge[0], N-edge[1])] = 1;
+			object_space_grid[IX(edge[2], N-edge[3])] = 1;
 		}
 		file.close();
 	}
@@ -306,7 +306,7 @@ void CFD  ( int gridSize, float timestep, float viscosity, char *obstacles, char
 	{
 		for (i = 0; i < N/sizeDown+2; i++)
 		{
-			for (j = 0; j < N/sizeDown+1; j++)
+			for (j = N/sizeDown+1; j > 0; j--)
 			{
 				file1 << uRed[IXRed(i,j)] << ',';
 				file2 << vRed[IXRed(i,j)] << ',';
