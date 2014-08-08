@@ -84,4 +84,12 @@ class HexagonalMapState(object):
         self.hexVals = pickle.load( open( filename, "rb" ) )
         self.hexValDim = len(self.hexVals)
         
+    def loadFromArray(self, dataArray):
+        self.hexVals = []
+        for i in range(self.x_num):
+            vals = []
+            for j in range(self.y_num):
+                val = dataArray[int(map.hexes[i][j].center[0]),int(map.hexes[i][j].center[1])]
+                vals.append(val)
+            self.hexVals.append(vals)
         
