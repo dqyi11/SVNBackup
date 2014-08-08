@@ -62,6 +62,7 @@ class LabelManager(object):
         self.mapWidth = 0
         self.mapHeight = 0
         self.worldFile = None
+        self.obstacleFile = None
         
         self.features = []
         self.indoors = []
@@ -81,6 +82,7 @@ class LabelManager(object):
         self.mapWidth = int(mapLabel.getAttribute("MapWidth"))
         self.mapHeight = int(mapLabel.getAttribute("MapHeight"))
         self.worldFile = mapLabel.getAttribute("WorldFile")
+        self.obstacleFile = mapLabel.getAttribute("ObstacleFile")
         
         features = xmldoc.getElementsByTagName('features')[0]
         featureLabels = features.getElementsByTagName('Feature')

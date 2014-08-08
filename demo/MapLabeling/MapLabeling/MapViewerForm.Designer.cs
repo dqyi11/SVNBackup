@@ -51,6 +51,8 @@
             this.toolbarForm = new MapLabeling.ToolbarForm();
             this.editContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.obstacleFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openObstacleFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.viewerMenuStrip.SuspendLayout();
             this.viewerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.viewerPictureBox)).BeginInit();
@@ -137,7 +139,8 @@
             // importToolStripMenuItem
             // 
             this.importToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.worldFileToolStripMenuItem});
+            this.worldFileToolStripMenuItem,
+            this.obstacleFileToolStripMenuItem});
             this.importToolStripMenuItem.Name = "importToolStripMenuItem";
             this.importToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.importToolStripMenuItem.Text = "Import";
@@ -145,7 +148,7 @@
             // worldFileToolStripMenuItem
             // 
             this.worldFileToolStripMenuItem.Name = "worldFileToolStripMenuItem";
-            this.worldFileToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.worldFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.worldFileToolStripMenuItem.Text = "World File";
             this.worldFileToolStripMenuItem.Click += new System.EventHandler(this.worldFileToolStripMenuItem_Click);
             // 
@@ -217,14 +220,25 @@
             this.editContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem1});
             this.editContextMenuStrip.Name = "polygonContextMenuStrip";
-            this.editContextMenuStrip.Size = new System.Drawing.Size(153, 48);
+            this.editContextMenuStrip.Size = new System.Drawing.Size(108, 26);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
             this.toolStripMenuItem1.Text = "Delete";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // obstacleFileToolStripMenuItem
+            // 
+            this.obstacleFileToolStripMenuItem.Name = "obstacleFileToolStripMenuItem";
+            this.obstacleFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.obstacleFileToolStripMenuItem.Text = "Obstacle File";
+            this.obstacleFileToolStripMenuItem.Click += new System.EventHandler(this.obstacleFileToolStripMenuItem_Click);
+            // 
+            // openObstacleFileDialog
+            // 
+            this.openObstacleFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openObstacleFileDialog_FileOk);
             // 
             // MapViewerForm
             // 
@@ -275,6 +289,8 @@
         private System.Windows.Forms.OpenFileDialog openWorldFileDialog;
         private System.Windows.Forms.ContextMenuStrip editContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem obstacleFileToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openObstacleFileDialog;
     }
 }
 

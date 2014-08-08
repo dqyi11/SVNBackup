@@ -47,6 +47,8 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.visbilityDataMgr = VisibilityDataMgr()
         
+        self.diffData = None
+        
         
     def initUI(self):        
         openAction = QtGui.QAction('Open', self)
@@ -99,6 +101,9 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.formSize[0] = pixmap.width()
         self.formSize[1] = pixmap.height()
+        
+        gnr = InfoDistributionGenerator(mgr, 500)
+        gnr.generateDistribution('two_houses.dat')
         
         self.mapView.resize(self.formSize[0], self.formSize[1])
         self.imageData = pixmap.toImage()

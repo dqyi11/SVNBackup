@@ -334,5 +334,18 @@ namespace MapLabeling
             this.infoMgr.DeleteActiveLabel();
             Refresh();
         }
+
+        private void obstacleFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.pixelMap != null)
+            {
+                this.openObstacleFileDialog.ShowDialog();
+            }
+        }
+
+        private void openObstacleFileDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            this.infoMgr.obstacleFilename = System.IO.Path.GetFileName(this.openObstacleFileDialog.FileName);
+        }
     }
 }

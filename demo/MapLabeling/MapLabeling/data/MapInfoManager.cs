@@ -17,6 +17,7 @@ namespace MapLabeling.data
 
         public string mapFilename = null;
         public string worldFilename = null;
+        public string obstacleFilename = null;
         public int mapWidth;
         public int mapHeight;
 
@@ -32,6 +33,7 @@ namespace MapLabeling.data
 
             mapFilename = "";
             worldFilename = "";
+            obstacleFilename = "";
 
             activeX = 0;
             activeY = 0;
@@ -138,6 +140,7 @@ namespace MapLabeling.data
                 xtw.WriteStartElement("MapLabel");
                 xtw.WriteAttributeString("MapFile", this.mapFilename);
                 xtw.WriteAttributeString("WorldFile", this.worldFilename);
+                xtw.WriteAttributeString("ObstacleFile", this.obstacleFilename);
                 xtw.WriteAttributeString("MapWidth", this.mapWidth.ToString());
                 xtw.WriteAttributeString("MapHeight", this.mapHeight.ToString());
 
@@ -172,6 +175,7 @@ namespace MapLabeling.data
 
             this.mapFilename = currentNode.Attributes["MapFile"].Value;
             this.worldFilename = currentNode.Attributes["WorldFile"].Value;
+            this.obstacleFilename = currentNode.Attributes["ObstacleFile"].Value;
             this.mapWidth = Int32.Parse(currentNode.Attributes["MapWidth"].Value);
             this.mapHeight = Int32.Parse(currentNode.Attributes["MapHeight"].Value);
 
