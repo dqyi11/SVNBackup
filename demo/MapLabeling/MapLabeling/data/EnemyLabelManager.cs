@@ -154,7 +154,9 @@ namespace MapLabeling.data
 
                         this.enemies.Add(label);
 
-                        while (!(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "Enemy")
+                        xtr.Read();
+
+                        while (!(xtr.NodeType == XmlNodeType.Element && xtr.Name == "Enemy")
                             && !(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "enemies"))
                         {
                             xtr.Read();
@@ -164,6 +166,7 @@ namespace MapLabeling.data
                             }
                         }
 
+                        /*
                         if (xtr.NodeType != XmlNodeType.None)
                         {
                             xtr.Read();
@@ -172,6 +175,7 @@ namespace MapLabeling.data
                                 return;
                             }
                         }
+                         */
 
                     }
                 }

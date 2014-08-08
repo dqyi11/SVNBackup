@@ -156,7 +156,9 @@ namespace MapLabeling.data
 
                         this.features.Add(label);
 
-                        while (!(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "Feature")
+                        xtr.Read();
+
+                        while (!(xtr.NodeType == XmlNodeType.Element && xtr.Name == "Feature")
                             && !(xtr.NodeType == XmlNodeType.EndElement && xtr.Name == "features"))
                         {
                             xtr.Read();
@@ -166,6 +168,7 @@ namespace MapLabeling.data
                             }
                         }
 
+                        /*
                         if (xtr.NodeType != XmlNodeType.None)
                         {
                             xtr.Read();
@@ -174,6 +177,7 @@ namespace MapLabeling.data
                                 return;
                             }
                         }
+                         */ 
 
                     }
                 }

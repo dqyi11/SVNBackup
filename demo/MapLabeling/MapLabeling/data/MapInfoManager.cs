@@ -179,25 +179,37 @@ namespace MapLabeling.data
             string featureStr = featureNode.InnerXml;
             if (featureStr != "")
             {
-                featureMgr.LoadFromString(featureStr);
+                string newFeatureStr = "<features>";
+                newFeatureStr += featureStr;
+                newFeatureStr += "</features>";
+                featureMgr.LoadFromString(newFeatureStr);
             }
             System.Xml.XmlNode indoorNode = xmlDoc.SelectNodes("/MapLabel/indoors")[0];
             string indoorStr = indoorNode.InnerXml;
             if (indoorStr != "")
             {
-                indoorMgr.LoadFromString(indoorStr);
+                string newIndoorStr = "<indoors>";
+                newIndoorStr += indoorStr;
+                newIndoorStr += "</indoors>";
+                indoorMgr.LoadFromString(newIndoorStr);
             }
             System.Xml.XmlNode outdoorNode = xmlDoc.SelectNodes("/MapLabel/outdoors")[0];
             string outdoorStr = outdoorNode.InnerXml;
             if (outdoorStr != "")
             {
-                outdoorMgr.LoadFromString(outdoorStr);
+                string newOutdoorStr = "<indoors>";
+                newOutdoorStr += outdoorStr;
+                newOutdoorStr += "</indoors>";
+                outdoorMgr.LoadFromString(newOutdoorStr);
             }
             System.Xml.XmlNode enemyNode = xmlDoc.SelectNodes("/MapLabel/enemies")[0];
             string enemyStr = enemyNode.InnerXml;
             if (enemyStr != "")
             {
-                enemyMgr.LoadFromString(enemyStr);
+                string newEnemyStr = "<enemies>";
+                newEnemyStr += enemyStr;
+                newEnemyStr += "</enemies>";
+                enemyMgr.LoadFromString(newEnemyStr);
             }
 
             /*
