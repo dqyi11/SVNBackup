@@ -21,10 +21,10 @@ class InfoDistributionGenerator(object):
         self.dt = 0.1
         self.visc = 0.0
         
-        self.source_width = 10
+        self.source_width = 20
         self.source_angle = 0
         self.source_strength = 0.9
-        self.source_slope = 45.0/np.pi
+        self.source_slope = 45.0*np.pi/180.0
         
     def generateDistribution(self, obstacleFile):        
         self.sourceFilename = self.generateFilename() + ".dat"
@@ -38,7 +38,7 @@ class InfoDistributionGenerator(object):
         print cmd
         os.system(cmd)
         
-        time.sleep(5)
+        #time.sleep(5)
         
         self.readDataDiffusion(outputName)
     
@@ -47,11 +47,11 @@ class InfoDistributionGenerator(object):
         completed = False
         
         with open(filename, 'w') as sourceFile:
-            sourceFile.writeline(str(len(self.labelMgr.features)))
+            sourceFile.write(str(len(self.labelMgr.features))+"\n")
             for feature in self.labelMgr.features:
                 dataStr = "0, " + str(feature.pos[0]) + ", " + str(feature.pos[1]) + ", " + str(self.source_width) + ", "
                 dataStr += str(self.source_angle) + ", " + str(self.source_strength) + ", " + str(self.source_slope)
-                sourceFile.writeline(dataStr)
+                sourceFile.write(dataStr+"\n")
         
         return completed
 
