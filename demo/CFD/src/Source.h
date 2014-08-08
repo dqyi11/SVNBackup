@@ -25,7 +25,7 @@ public:
 	Source();
 	Source(float []);
 
-	void setSource(float *, float *, int);
+	void setSource(float *, float *, int, int);
 
 	virtual ~Source();
 };

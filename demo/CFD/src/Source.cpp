@@ -29,7 +29,7 @@ Source::Source(float params[7])
 	slope = params[6];
 }
 
-void Source::setSource(float *v_x, float *v_y, int size)
+void Source::setSource(float *v_x, float *v_y, int width, int height)
 {
 	if (type == 0)
 	{
@@ -43,10 +43,10 @@ void Source::setSource(float *v_x, float *v_y, int size)
 			a = dist*cos(slope);
 			b = dist*sin(slope);
 
-			v_x[((o_x + a)+(size+2)*(size-o_y + b))] = u;
-			v_y[((o_x + a)+(size+2)*(size-o_y + b))] = v;
-			v_x[((o_x - a)+(size+2)*(size-o_y - b))] = u;
-			v_y[((o_x - a)+(size+2)*(size-o_y - b))] = v;
+			v_x[((o_x + a)+(width+2)*(height-o_y + b))] = u;
+			v_y[((o_x + a)+(width+2)*(height-o_y + b))] = v;
+			v_x[((o_x - a)+(width+2)*(height-o_y - b))] = u;
+			v_y[((o_x - a)+(width+2)*(height-o_y - b))] = v;
 		}
 	}
 
@@ -62,8 +62,8 @@ void Source::setSource(float *v_x, float *v_y, int size)
 			float dist = sqrt((x - o_x)*(x - o_x) + (y - o_y)*(y - o_y));
 			float angle = atan2(y - o_y, x - o_x);
 
-			v_x[((x)+(size+2)*(size-y))] = (dist * cos(angle))/strength;
-			v_y[((x)+(size+2)*(size-y))] = (dist * sin(angle))/strength;
+			v_x[((x)+(width+2)*(height-y))] = (dist * cos(angle))/strength;
+			v_y[((x)+(width+2)*(height-y))] = (dist * sin(angle))/strength;
 
 			//		for (float p = 0.0; p <= 3.0; p += 0.3)
 			//		{
