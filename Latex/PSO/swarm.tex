@@ -1,0 +1,42 @@
+\section{Swarm analysis}
+\label{sec:swarm}
+
+\subsection{Consensus of a swarm}
+
+Combinations of ISS parts are ISS
+
+Swarm as such a combination
+
+Conditions where update is ISS
+
+trivially at stagnation
+But also when on a single hill
+
+Bound on swarm for the single hill case (perhaps as function of the width of the hill?
+Or width of the hill as a percentage of the feasible region?)
+test on 2-d case to show that the bound can prevent a particle    from reaching another hill.
+This is one form of the swarm failing to converge the global optimal.
+
+Can we look at parameters for the whole swarm?
+
+\subsection{Value of a swarm}
+
+Being on one hill is the unlikely case bound in the multi hill case.
+Might not seem useful but is the essence of what makes a swarm a swarm.
+Bounds the swarm to a region around p-bests where g-best has been unable to pull other particles to its hill.
+For a function with narrow hills, g-bests on a narrow hills is less likely to capture another particle, thus the swarm searches more, for functions with broad hills, p-gest are more likely to be pulled to g-bests hill and search there.
+Thus swarm diversity is the mechanism that allows the swarm to not converge when searching is likely needed but focus and converge when the fitness landscape appear to favor exploitation.
+This does not happen at stagnation and does not happen without multiple members. <need to say this in a more mathematical way>>
+
+example ?? function for exploration case
+example sphere function for the exploitation case
+try to use bound as a function of hill width metric
+
+Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
+
+\subsection{Diversity injection}
+
+Work with the Rastrigin function has lead others to experiment with diversity injection to prevent pre-mature convergence (or prevent convergence at all)
+I am not sure, do we want it to converge? ever?
+On what basis would I propose a new algorithm?
+Show that it would converge based on ISS?

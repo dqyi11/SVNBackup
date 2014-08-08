@@ -1,0 +1,63 @@
+\documentclass[journal]{IEEEtran}
+
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\newtheorem{mydef}{Definition}
+\newtheorem{mylem}{Lemma}
+\newtheorem{mythm}{Theorem}
+\newtheorem{myprop}{Property}
+\newtheorem{mycoro}{Corollary}
+
+
+\begin{document}
+
+\title{Particle Swarm Optimization}
+
+\author{
+\IEEEauthorblockN{Daqing Yi,
+Kevin D. Seppi, and Michael A. Goodrich}
+
+\IEEEauthorblockA{Department of computer science, Brigham Young University, Provo, UT 84604 USA}
+\thanks{}
+}
+
+% The paper headers
+%\markboth{Journal of \LaTeX\ Class Files,~Vol.~11, No.~4, December~2012}%
+%{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+\markboth{}{}
+
+\maketitle
+
+\begin{abstract}
+Previous analysis of the dynamics of particle swarm optimization has often relied on either the assumption of ``stagnation'' (a state where the swarm ceases make progress), the removal of random effects, or both.
+In this paper we use a newer tool for the analysis of system dynamics, specifically the concept of Input to State Stability (ISS).
+ISS allows us to make statements about the behavior of the swarm not clearly address in previous analysis, specifically bounds on particle and swam behavior.
+We can also do so before stagnation and with random affect fully accounted for. 
+\end{abstract}
+
+\begin{IEEEkeywords}
+Particle swarm optimization
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+\input{intro.tex}
+
+\input{rel_work.tex}
+
+\input{particle.tex}
+
+\input{swarm.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+
+
+\end{document}
+
