@@ -1,2 +1,59 @@
 \section{Related work}
 \label{sec:rel_work}
+
+Although the input-to-state stable analysis given in this paper can be applied to many versions of PSO,
+for this work we use the formulas from Kennedy's most recent definition of PSO\cite{4223164}.
+This version of PSO includes a ring topology, and a constricted position update rule. 
+The constricted position update rule is
+
+\begin{subequations}
+\label{eq:pso_alg}
+\begin{equation}
+\label{eq:up_vel}
+\begin{aligned}
+v_{ij}(k+1) & = \chi [ v_{ij}(k) 
+ + \phi^{P} u^{P}_{ij}(k) (x^{P}_{ij}(k) - x_{ij}(k)) + \phi^{G} u^{G}_{ij}(k) ( x^{G}_{ij}(k) - x_{ij}(k)) ],
+\end{aligned}
+\end{equation}
+\begin{equation}
+\label{eq:up_pos}
+x_{ij}(k+1) = x_{ij}(k) + v_{ij}(k+1).
+\end{equation}
+\end{subequations}
+$ x_{ij}(k) $ represents the position of particle $ i $ in dimension $ j $ at time $ k $.
+$ v_{ij}(k) $ similarly represents the velocity of particle $ i $ in dimension $ j $ also at time $ k $.
+$ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global (actually topology) and personal best positions observed by the swarm and the particle respectively. 
+$ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from $ [0,1] $.
+$ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
+
+Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
+However once a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $, it exhibits the \emph{stagnation phenomenon} \cite{Clerc06stagnationanalysis}.
+In this state the analysis is easier since there is no effect from the topology.
+
+Previous work that assumes stagnation can be categorized into two groups each based on how the analysis treats the stochastic factors.
+The first approach is to ignore the stochastic factors.
+Using this simplification, the convergence of a particle at stagnation can be analyzed \cite{985692}. 
+By building a linear system model \cite{4424687}, the PSO algorithm can be viewed as a closed loop system and the convergence can be analyzed.
+Based on such a convergence analysis, parameters can be set for best effect \cite{Trelea2003317}.
+
+The second approach for handling the stochastic factors is based on the stochastic analysis.
+By taking the mean of the stochastic variables, the stochastic terms can be converted into
+constant terms.
+A convergence analysis of the mean and variance of a particle at stagnation can also be obtained using the characteristic equation in a discrete-time model 
+\cite{Jiang20078}.
+In a similar way, 
+other moments can be computed
+\cite{5175367,Poli:2007:EAS:1276958.1276977,Poli:2008:DSS:1384929.1384944}.
+Using the discrete-time system model of different moments, the equilibrium can be found.
+The stability requirements can be obtained from the norm by setting the root values of the characteristic equation to all be less than 1.
+
+There is also some work that addresses the dynamics when a particle is not in the stagnation phase.
+The discrete-time dynamics of PSO, that is, the dynamics of particle trajectory, can be approximated
+using a continuous-time model
+\cite{5675669}.
+Furthermore, the probability of convergence in time can be analyzed
+by viewing the update process as a random search process
+\cite{vandenBergh:2010:CPP:2010420.2010421}.
+The process of particles reaching a local optimum
+has also been analyzed
+\cite{Schmitt:2013:PSO:2463372.2463563}.
