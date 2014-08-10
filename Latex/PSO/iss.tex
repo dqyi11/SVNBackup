@@ -139,9 +139,12 @@ By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) 
 \label{eq:lyapunov_delta2}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert | U(k) | | X(k) | + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k)  \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert | U(k) | | X(k) | \\
+& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
 \end{aligned}
 \end{equation}
 
@@ -150,7 +153,8 @@ By completing the square, we have
 \label{eq:lyapunov_delta4}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} }  \\
+& + \lVert B^{T}(k) P B(k) \rVert ] | U(k) |^{2}. 
 \end{aligned}
 \end{equation}
 
