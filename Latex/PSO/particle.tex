@@ -23,9 +23,30 @@ When a particle is in this region, it only moves as a random walk.
 
 The result of the movement of a particle is determined by which region of the solution space it moves in.
 
-\subsection{One hill case}
+\subsection{What happens in a single hill case}
+
+When the fitness distribution is a single hill, the analysis can be easier.
+In most of the cases, the particles should all converge into a single hill where the global best locates in.
+
+\begin{myprop}
+In a single hill case, $ x^{p}(k) = x(k) $. 
+\end{myprop}
+
+It means that there is no effect from a personal best.p
+[TODO] random walk reaching a point
+
+
+\begin{mylem}
+In a single hill case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the particle is ISS.
+\end{mylem}
+
+\begin{mylen}
+In a single hill case, when $ f( x^{G} ) < f( x^{*}) $, the particle will converge to $ \hat{x^{*}} $ and $ f(\hat{x^{*}}) \geq f(x^{G}) $ if the particle is ISS.
+The probability of $ \hat{x^{*}} = x^{G} $ is .
+\end{mylem}
+
+\subsection{More than single hill case}
 
 
 
-\subsection{More than one hill case}
 
