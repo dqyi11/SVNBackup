@@ -189,7 +189,7 @@ but the properties of ISS still apply independent of where the function is cente
 
 Having proven that PSO is ISS we can now state a bound on particle position.
 
-\begin{mycoro}
+\begin{mythm}
 \label{coro:state_bound}
 Given the bound on the input $ || u || $ in the position update component, we have the bound on the particle position from equation \eqref{eq:pso_up_linalg_simp}.
 \begin{equation}
@@ -206,10 +206,35 @@ The $ \max $ part is needed to account for the effect of the starting point, rep
 |  x(k) - x^{*} | \leq \gamma ( | [ x^{G}(k) - x^{*}, x^{P}(k) - x^{*} ]^{T} | ).
 \end{equation}
 \begin{proof}
-This is obtained from Remark 3.7 in \cite{Jiang2001857} and by choosing $ P $ be a symmetric identity matrix.
-Furthermore we drop the velocity part becuase $ | x(k) - x^{*} | \leq | [ v(k), x(k) - x^{*} ]^{T} | $.
+As we have the update equation as
+$ X(k+1) = A(k) X(k) + B(k) U(k) $, we can derive 
+\begin{equation}
+X(k+1) = ( \prod_{k}^{i=0} A(i) ) X(0) + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} A(j) ) B(i) U(i)  ] 
+\end{equation}
+by recursively applying it.
+
+By the property of matrix norm, we have
+\begin{equation}
+| X(k+1) | \leq ( \prod_{i=0}^{k} \lVert A(i) \rVert ) | X(0) | + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} \lVert A(j) \rVert ) \lVert B(i) \rVert | U(i) |  ].
+\end{equation}
+
+$ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(i) | \leq | U | $, we have
+\begin{equation}
+\begin{aligned}
+| X(k+1) | & \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U |  ] \\
+& = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U |
+\end{aligned}
+\end{equation}
+
+The boundary will be a function of $ bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+Thus the minimum boundary is $ \min_{k} bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+
+When we have $ \lVert A \rVert < 1 $, 
+$ ( \lVert A \rVert )^{k+1} \rightarrow 0 $ and
+$ \frac{1 - (\lVert A \rVert )^{k+1} }{1 - \lVert A \rVert} \rightarrow \frac{1}{1 - \lVert A \rVert } $
+as $ k \rightarrow \infty $.
 \end{proof}
-\end{mycoro}
+\end{mythm}
 
 Figure \ref{fig:boundary} gives an example on how a particle's boundary is determined by the personal best and global best.
 
