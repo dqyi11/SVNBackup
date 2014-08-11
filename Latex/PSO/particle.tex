@@ -1,2 +1,31 @@
 \section{Particle analysis}
 \label{sec:particle}
+
+
+As in Figure \ref{fig:categorize_regions}, the solution space will be divided into three types of regions by the global best and the personal best.
+\begin{itemize}
+\item $ f(x) > f(x^G) $
+Once a particle gets into this region, it updates both global best and personal best. 
+It becomes a leader of the swarm.
+\item $ f(x^{G}) > f(x) > f(x^{P}) $
+Once a particle gets into this region, it updates only the personal best.
+The solution space is then re-divided.
+\item $ f(x) < f(x^{P}) $
+When a particle is in this region, it only moves as a random walk.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/categorize_regions}
+\caption{How global best and personal best divide the solution space.}
+\label{fig:categorize_regions}
+\end{figure}
+
+The result of the movement of a particle is determined by which region of the solution space it moves in.
+
+\subsection{One hill case}
+
+
+
+\subsection{More than one hill case}
+
