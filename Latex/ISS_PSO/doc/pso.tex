@@ -108,11 +108,70 @@ By Property \ref{prop:single_hill_convergence}, we know that when they all conve
 , it means that all the particles converge to and stop at same local maximum $ \hat{ x^{*} } $.
 It also means that there is no trigger of a new stagnation that $ f(x) > f( \hat{ x^{*} } ) $.
 
+\begin{figure}[ht]
+\begin{center} 
+  \subfigure[Distribution.]{% 
+    \includegraphics[width=.5\textwidth]{distribution1} \label{fig:case1-1:distribution} 
+  } \\
+  \subfigure[Position - case 1.]{% 
+      \includegraphics[width=.47\textwidth]{position1-1} \label{fig:case1-1:position} 
+  } 
+  \subfigure[Fitness - case 1.]{% 
+      \includegraphics[width=.47\textwidth]{fitness1-1} \label{fig:case1-1:fitness} 
+  } \\
+  \subfigure[Position - case 2.]{% 
+      \includegraphics[width=.47\textwidth]{position1-2} \label{fig:case1-2:position} 
+  } 
+  \subfigure[Fitness - case 2.]{% 
+      \includegraphics[width=.47\textwidth]{fitness1-2} \label{fig:case1-2:fitness} 
+  } 
+  \caption{Simulation of one hill case. Case 1 - not local optimal; Case 2 - local optimal. $ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $.} 
+\end{center}
+\end{figure}
+
 \section{More than one hill case}
 \label{sec:more_than_one_hill_case}
 
+\begin{figure}[ht]
+\begin{center} 
+  \subfigure[Distribution.]{% 
+    \includegraphics[width=.5\textwidth]{distribution2} \label{fig:case2-1:distribution} 
+  } \\
+  \subfigure[Position - case 1.]{% 
+      \includegraphics[width=.47\textwidth]{position2-1} \label{fig:case2-1a:position} 
+  } 
+  \subfigure[Fitness - case 1.]{% 
+      \includegraphics[width=.47\textwidth]{fitness2-1} \label{fig:case2-1:fitness} 
+  } \\
+  \subfigure[Position - case 2.]{% 
+      \includegraphics[width=.47\textwidth]{position2-2} \label{fig:case2-1b:position} 
+  } 
+  \subfigure[Fitness - case 2.]{% 
+      \includegraphics[width=.47\textwidth]{fitness2-2} \label{fig:case2-1b:fitness} 
+  } 
+  \caption{Simulation of non-one-hill case. Case 1 - not local optimal; Case 2 - local optimal. $ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $.} 
+\end{center}
+\end{figure}
 
+\begin{figure}[ht]
+\begin{center} 
+  \subfigure[Distribution.]{% 
+    \includegraphics[width=.5\textwidth]{distribution3} \label{fig:case2-2:distribution} 
+  }
+  \subfigure[Fitness - case 2.]{% 
+	 \includegraphics[width=.47\textwidth]{fitness3} \label{fig:case2-2:fitness} 
+  }  
+  \\
+  \subfigure[Position - case 1.]{% 
+      \includegraphics[width=.47\textwidth]{position3-1} \label{fig:case2-2:position1} 
+  } 
+  \subfigure[Position - case 2.]{% 
+      \includegraphics[width=.47\textwidth]{position3-2} \label{fig:case2-2:position2} 
+  } 
 
+  \caption{Simulation of non-one hill case. $ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $. } 
+\end{center}
+\end{figure}
 
 
 
