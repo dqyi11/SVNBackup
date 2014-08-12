@@ -1,6 +1,21 @@
 \section{Particle analysis}
 \label{sec:particle}
 
+In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position.
+
+\begin{equation}
+[ v(k+1), x(k+1) - x^{G} ]^{T} = A(k) [ v(k), x(k) - x^{G} ]^{T} + B(k) [ 0, x^{P}(k) - x^{G} ]^{T}
+\end{equation}
+This illustrates that $ \lVert x(k+1) - x^{G} \rVert $ is determined by $ \lVert x^{P}(k) - x^{G} \rVert $.
+It also shows that a particle will stop moving when $ x^{P}(k) = x^{G} $.
+
+In order to understand how the boundary of the particle's movement, we let $ x(0) $ be the reference position.
+\begin{equation}
+[ v(k+1), x(k+1) - x(0) ]^{T} = A(k) [ v(k), x(k) - x(0) ]^{T} + B(k) [ x^{G} - x(0), x^{P}(k) - x(0) ]^{T}
+\end{equation}
+It indicates that $ \lVert x(k+1) - x(0) \rVert  $ is determined by $ \lVert x^{G} - x(0) \rVert $ and $ \lVert x^{P}(k) - x(0) \rVert $.
+
+
 As in Figure \ref{fig:categorize_regions}, the solution space will be divided into three types of regions by the global best and the personal best.
 \begin{itemize}
 \item $ f(x) > f(x^G) $
