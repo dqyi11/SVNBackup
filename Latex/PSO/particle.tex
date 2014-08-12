@@ -42,9 +42,7 @@ The result of the movement of a particle is determined by which region of the so
 When the fitness distribution is a single hill, the analysis can be easier.
 In most of the cases, the particles should all converge into a single hill where the global best locates in.
 
-\begin{myprop}
-In a single hill case, $ x^{p}(k) = x(k) $. 
-\end{myprop}
+
 
 It means that there is no effect from a personal best.p
 [TODO] random walk reaching a point
@@ -55,8 +53,7 @@ In a single hill case, when $ x^{G} = x^{*} $, the particle will converge to $ x
 \end{mylem}
 
 \begin{mylem}
-In a single hill case, when $ f( x^{G} ) < f( x^{*}) $, the particle will converge to $ \hat{x^{*}} $ and $ f(\hat{x^{*}}) \geq f(x^{G}) $ if the particle is ISS.
-The probability of $ \hat{x^{*}} = x^{G} $ is .
+In a single hill case, when $ f( x^{G} ) < f( x^{*}) $, the particle will converge to $ \hat{x^{*}} $ and $ f(\hat{x^{*}}) > f(x^{G}) $ if the particle is ISS.
 \end{mylem}
 
 \begin{figure}[ht]
@@ -93,9 +90,12 @@ The probability of $ \hat{x^{*}} = x^{G} $ is .
 \caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
 \end{figure}
 
+Show the exploitation
+
 
 \subsection{More than single hill case}
 
+Show the exploration
 
 \begin{figure}[ht]
 \centering
