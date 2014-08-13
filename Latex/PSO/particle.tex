@@ -5,27 +5,72 @@ In order to understand how the particle converges to the global best, we let $ x
 We have interest with three types of movement range, which are defined by three types of reference positions.
 \begin{itemize}
 \item \textbf{global best} $ \lVert x(k) - x^{G} \rVert $ indicates the distance to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
+It is given in Equation \eqref{eq:rel_gb}.
 \item \textbf{initial position} $ \lVert x(k) - x(0) \rVert $ indicates the distance to the initial position, which depends on $ \lVert x^{G} - x(0) \rVert $ and $ \lVert x^{P}(k) - x(0) \rVert $.
-\item \textbf{global optimal} $ \lVert x(k) - x^{*} \rVert $ indicates the distance to the global optimal, which depends on $ \lVert x^{G} -  x^{*} \rVert $ and $ \lVert x^{P}(k) -  x^{*} \rVert $
+It is given in Equation \eqref{eq:rel_init}.
+\item \textbf{global optimal} $ \lVert x(k) - x^{*} \rVert $ indicates the distance to the global optimal, which depends on $ \lVert x^{G} -  x^{*} \rVert $ and $ \lVert x^{P}(k) -  x^{*} \rVert $.
+It is given in Equation \eqref{eq:rel_opt}.
 \end{itemize}
 
 \begin{equation}
 \label{eq:rel_gb}
 \begin{aligned}
-[ v(k+1), x(k+1) - x^{G} ]^{T} = A(k) [ v(k), x(k) - x^{G} ]^{T} + B(k) [ 0, x^{P}(k) - x^{G} ]^{T}
+\begin{bmatrix}
+v(k+1) \\
+x(k+1) - x^{G}
+\end{bmatrix}
+ = A(k) 
+\begin{bmatrix}
+v(k) \\
+x(k) - x^{G}
+\end{bmatrix}
++ B(k) 
+\begin{bmatrix}
+0 \\
+x^{P}(k) - x^{G}
+\end{bmatrix}
 \end{aligned}
 \end{equation}
-This illustrates that $ \lVert x(k+1) - x^{G} \rVert $ is determined by $ \lVert x^{P}(k) - x^{G} \rVert $.
-It also shows that a particle will stop moving when $ x^{P}(k) = x^{G} $.
 
-In order to understand how the boundary of the particle's movement, we let $ x(0) $ be the reference position.
 \begin{equation}
 \label{eq:rel_init}
 \begin{aligned}
-[ v(k+1), x(k+1) - x(0) ]^{T} = A(k) [ v(k), x(k) - x(0) ]^{T} + B(k) [ x^{G} - x(0), x^{P}(k) - x(0) ]^{T}
+\begin{bmatrix}
+v(k+1) \\
+x(k+1) - x(0)
+\end{bmatrix}
+ = A(k) 
+\begin{bmatrix}
+v(k) \\
+ x(k) - x(0)
+\end{bmatrix}
++ B(k) 
+\begin{bmatrix}
+x^{G} - x(0) \\
+x^{P}(k) - x(0)
+\end{bmatrix}
 \end{aligned}
 \end{equation}
-It indicates that $ \lVert x(k+1) - x(0) \rVert  $ is determined by $ \lVert x^{G} - x(0) \rVert $ and $ \lVert x^{P}(k) - x(0) \rVert $.
+
+\begin{equation}
+\label{eq:rel_opt}
+\begin{aligned}
+\begin{bmatrix}
+v(k+1) \\
+x(k+1) - x^{*}
+\end{bmatrix}
+ = A(k) 
+\begin{bmatrix}
+v(k) \\
+ x(k) - x^{*}
+\end{bmatrix}
++ B(k) 
+\begin{bmatrix}
+x^{G} - x^{*} \\
+x^{P}(k) - x^{*}
+\end{bmatrix}
+\end{aligned}
+\end{equation}
 
 
 As in Figure \ref{fig:categorize_regions}, the solution space will be divided into three types of regions by the global best and the personal best.
@@ -65,8 +110,20 @@ In a single hill case, when $ x^{G} = x^{*} $, the particle will converge to $ x
 \end{mylem}
 
 \begin{mylem}
-In a single hill case, when $ f( x^{G} ) < f( x^{*}) $, the particle will converge to $ \hat{x^{*}} $ and $ f(\hat{x^{*}}) > f(x^{G}) $ if the particle is ISS.
+In a single hill case, if $ x^{G} \not = x^{*} $, a particle will never get to 
+\begin{proof}
+Consider the velocity $ v(k+1) $ consists of two parts, inertia $ \chi v(k) $ and attractive force $ \chi \phi^{P} (x^{P}(k) - x(k) ) + \chi \phi^{G} ( x^{G} - x(k) ) $.
+While the particle moves into $ x^{G} $, the attractive force becomes zero but the inertia still exists, due to the velocity moves the particle into this current position.
+\end{proof} 
 \end{mylem}
+
+\begin{mythm}
+In a single hill case, the particle will almost surly find a $ \hat{x^{*}} $ that $ f(\hat{x^{*}}) > f(x^{G}) $ if $ f( x^{G} ) < f( x^{*}) $.
+\begin{proof}
+Because the particle cannot stop at $ x(k) = x^{G} = x^{P} $.
+It will finally arrives into a region that $ f(x) > f(x^{G}) $.
+\end{proof}
+\end{mythm}
 
 \begin{figure}[ht]
 \centering
@@ -108,6 +165,8 @@ Show the exploitation
 \subsection{More than single hill case}
 
 Show the exploration
+
+
 
 \begin{figure}[ht]
 \centering

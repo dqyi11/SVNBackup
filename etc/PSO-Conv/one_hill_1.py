@@ -38,6 +38,9 @@ if __name__ == '__main__':
     gbFitHist = []
     pbFitHist = []
     
+    u1s = np.random.random(runs)
+    u2s = np.random.random(runs)
+    
     for i in range(runs):
         
         pbHist.append(pb)
@@ -46,8 +49,8 @@ if __name__ == '__main__':
         
         u1 = np.random.random()
         u2 = np.random.random()
-        localForce = phi1 * u1 * (pb - pos)
-        globalForce = phi2 * u2 * (gb - pos)
+        localForce = phi1 * u1s[i] * (pb - pos)
+        globalForce = phi2 * u2s[i] * (gb - pos)
         
         vel = inertia * (vel + localForce + globalForce)
         pos = pos + vel

@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="800" height="600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="156.5" cy="333.5" rx="30" ry="30"/>
+	<text x="82.5" y="339.5" font-family="Times New Roman" font-size="20">f(x)&lt;f(x^p)&lt;f(x^G)</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="225.5" cy="474.5" rx="30" ry="30"/>
+	<text x="151.5" y="480.5" font-family="Times New Roman" font-size="20">f(x)=f(x^p)&lt;f(x^G)</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="386.5" cy="391.5" rx="30" ry="30"/>
+	<text x="294.5" y="397.5" font-family="Times New Roman" font-size="20">f(x)=f(x^p)=f(x^G) v&gt;0</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="427.5" cy="242.5" rx="30" ry="30"/>
+	<text x="335.5" y="248.5" font-family="Times New Roman" font-size="20">f(x)=f(x^p)=f(x^G) v=0</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="594.5" cy="362.5" rx="30" ry="30"/>
+	<text x="549.5" y="368.5" font-family="Times New Roman" font-size="20">f(x)&gt;f(x^G)</text>
+	<ellipse stroke="black" stroke-width="1" fill="none" cx="594.5" cy="362.5" rx="24" ry="24"/>
+	<polygon stroke="black" stroke-width="1" points="169.687,360.447 212.313,447.553"/>
+	<polygon fill="black" stroke-width="1" points="212.313,447.553 213.288,438.17 204.306,442.566"/>
+	<polygon stroke="black" stroke-width="1" points="391.5,360.5 418.746,271.194"/>
+	<polygon fill="black" stroke-width="1" points="418.746,271.194 411.629,277.387 421.194,280.305"/>
+	<polygon stroke="black" stroke-width="1" points="251.5,456.5 359.47,404.514"/>
+	<polygon fill="black" stroke-width="1" points="359.47,404.514 350.093,403.48 354.431,412.49"/>
+	<polygon stroke="black" stroke-width="1" points="186.5,342.5 357.362,384.361"/>
+	<polygon fill="black" stroke-width="1" points="357.362,384.361 350.781,377.601 348.402,387.314"/>
+	<polygon stroke="black" stroke-width="1" points="412.5,374.5 564.565,364.474"/>
+	<polygon fill="black" stroke-width="1" points="564.565,364.474 556.253,360.011 556.911,369.989"/>
+	<polygon stroke="black" stroke-width="1" points="369.5,363.5 370.931,365.856"/>
+	<polygon fill="black" stroke-width="1" points="370.931,365.856 371.053,356.423 362.505,361.613"/>
+</svg>
