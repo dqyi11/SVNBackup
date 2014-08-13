@@ -62,7 +62,7 @@ x(k+1) - x^{*}
  = A(k) 
 \begin{bmatrix}
 v(k) \\
- x(k) - x^{*}
+x(k) - x^{*}
 \end{bmatrix}
 + B(k) 
 \begin{bmatrix}
@@ -73,26 +73,6 @@ x^{P}(k) - x^{*}
 \end{equation}
 
 
-As in Figure \ref{fig:categorize_regions}, the solution space will be divided into three types of regions by the global best and the personal best.
-\begin{itemize}
-\item $ f(x) > f(x^G) $
-Once a particle gets into this region, it updates both global best and personal best. 
-It becomes a leader of the swarm.
-\item $ f(x^{G}) > f(x) > f(x^{P}) $
-Once a particle gets into this region, it updates only the personal best.
-The solution space is then re-divided.
-\item $ f(x) < f(x^{P}) $
-When a particle is in this region, it only moves as a random walk.
-\end{itemize}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{./fig/categorize_regions}
-\caption{How global best and personal best divide the solution space.}
-\label{fig:categorize_regions}
-\end{figure}
-
-The result of the movement of a particle is determined by which region of the solution space it moves in.
 
 \subsection{What happens in a single hill case}
 
@@ -122,6 +102,28 @@ In a single hill case, the particle will almost surly find a $ \hat{x^{*}} $ tha
 \begin{proof}
 Because the particle cannot stop at $ x(k) = x^{G} = x^{P} $.
 It will finally arrives into a region that $ f(x) > f(x^{G}) $.
+
+As in Figure \ref{fig:categorize_regions}, the solution space will be divided into three types of regions by the global best and the personal best.
+\begin{itemize}
+\item $ f(x) > f(x^G) $
+Once a particle gets into this region, it updates both global best and personal best. 
+It becomes a leader of the swarm.
+\item $ f(x^{G}) > f(x) > f(x^{P}) $
+Once a particle gets into this region, it updates only the personal best.
+The solution space is then re-divided.
+\item $ f(x) < f(x^{P}) $
+When a particle is in this region, it only moves as a random walk.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/categorize_regions}
+\caption{How global best and personal best divide the solution space.}
+\label{fig:categorize_regions}
+\end{figure}
+
+The result of the movement of a particle is determined by which region of the solution space it moves in.
+
 \end{proof}
 \end{mythm}
 
@@ -166,7 +168,30 @@ Show the exploitation
 
 Show the exploration
 
+In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $
 
+\begin{mylem}
+
+\begin{proof}
+By Markov's inequality, we have
+\begin{equation}
+P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \leq \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert }.
+\end{equation} 
+By the boundary, we have
+\begin{equation}
+E( \lVert x(k) - x^{*} \rVert ) \leq \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
+\end{equation}
+in which $ \delta () $ is the boundary function.
+\begin{equation}
+\begin{aligned}
+& P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
+= & 1 - P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \\
+> & 1 - \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert } \\
+> & 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert }.
+\end{aligned}
+\end{equation}
+\end{proof}
+\end{mylem}
 
 \begin{figure}[ht]
 \centering
