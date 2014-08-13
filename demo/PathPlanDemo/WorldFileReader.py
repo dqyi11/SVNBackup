@@ -523,13 +523,11 @@ class WorldFileReader(QtGui.QWidget):
             edge_node.appendChild(edge_was_seen_node)            
             
             edges_node.appendChild(edge_node)
+            
+        root.appendChild(edges_node)
         
         #print "vertices " + str(len(self.worldInfo.graph.vertices))    
-        num_poly_node = doc.createElement("numPolygons")
-        num_poly_node_val = doc.createTextNode(str(self.worldInfo.numberOfPolygon))
-        num_poly_node.appendChild(num_poly_node_val)
-        root.appendChild(num_poly_node)
-        
+                
         hex_col_node = doc.createElement("hexColumns")
         hex_col_node_val = doc.createTextNode(str(col_num))
         hex_col_node.appendChild(hex_col_node_val)
@@ -544,6 +542,11 @@ class WorldFileReader(QtGui.QWidget):
         hex_size_node_val = doc.createTextNode(str(hexSize))
         hex_size_node.appendChild(hex_size_node_val)
         root.appendChild(hex_size_node)
+        
+        num_poly_node = doc.createElement("numPolygons")
+        num_poly_node_val = doc.createTextNode(str(self.worldInfo.numberOfPolygon))
+        num_poly_node.appendChild(num_poly_node_val)
+        root.appendChild(num_poly_node)
 
         vertices_node = doc.createElement("vertices")        
         for vertex in self.worldInfo.graph.vertices:
@@ -575,7 +578,7 @@ class WorldFileReader(QtGui.QWidget):
             
             vertices_node.appendChild(vertex_node)
         
-        root.appendChild(edges_node)
+        
         root.appendChild(vertices_node)
         
         '''
@@ -589,6 +592,7 @@ class WorldFileReader(QtGui.QWidget):
         '''
         #print "writing..."
         
+        doc.toprettyxml()
         doc.writexml( open(filename, 'w'), indent="", addindent="", newl='')
         
         #doc.unlink()
