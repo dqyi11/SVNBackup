@@ -8,6 +8,7 @@ from TreeExpandingPathPlanner import *
 from LabelManager import *
 from VisibilityDataMgr import *
 from InfoDistributionGenerator import *
+from PathManager import *
 from PIL import Image
 import copy
 import os
@@ -50,11 +51,14 @@ class MapViewForm(QtGui.QMainWindow):
         self.visbilityDataMgr = VisibilityDataMgr()
         
         self.diff = None
+        self.mapFilename = ''
         
         
     def initUI(self):        
         openAction = QtGui.QAction('Open', self)
         openAction.triggered.connect(self.openMap)
+        exportAction = QtGui.QAction('Export path', self)
+        exportAction.triggered.connect(self.exportPath)        
         configAction = QtGui.QAction('Config', self)
         configAction.triggered.connect(self.configParam)
         loadDataAction = QtGui.QAction('Load', self)
@@ -334,8 +338,8 @@ class MapViewForm(QtGui.QMainWindow):
     def importDiffusion(self):
         fname = QtGui.QFileDialog.getOpenFileName(self, 'open file')
         if fname!=None and fname!='':
-            w = self.mapView.width()
-            h = self.mapView.height()
+            w = self.formSize[0]
+            h = self.formSize[1]
             self.diff = np.zeros((w, h))
             print fname
             
@@ -345,5 +349,12 @@ class MapViewForm(QtGui.QMainWindow):
                 for j in range(h):
                     self.diff[i,j] = img.getpixel((i,j))
                     
+    def exportPath(self):
+        if len(self.hexaMap.hexamapState.robotPath) > 0:
+            filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", "", ".xml")
+            pathMgr = PathManager(self.hexaMap.hexamap, self.labelMgr.mapFile)
+            pathMgr.dumpPath(self.hexaMap.hexamapState.robotPath, filename)
+        
+        
         
             
