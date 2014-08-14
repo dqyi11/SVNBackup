@@ -1,16 +1,16 @@
 \section{Particle analysis}
 \label{sec:particle}
 
-In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position.
-We have interest with three types of movement range, which are defined by three types of reference positions.
+In this section, we analyze the behavior of a single particle in a swarm.
+In a single stagnation, the global best is unchanged.
+Thus we make the global best as the constant.
+We are interested with 
 \begin{itemize}
-\item \textbf{global best} $ \lVert x(k) - x^{G} \rVert $ indicates the distance to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
-It is given in Equation \eqref{eq:rel_gb}.
-\item \textbf{initial position} $ \lVert x(k) - x(0) \rVert $ indicates the distance to the initial position, which depends on $ \lVert x^{G} - x(0) \rVert $ and $ \lVert x^{P}(k) - x(0) \rVert $.
-It is given in Equation \eqref{eq:rel_init}.
-\item \textbf{global optimal} $ \lVert x(k) - x^{*} \rVert $ indicates the distance to the global optimal, which depends on $ \lVert x^{G} -  x^{*} \rVert $ and $ \lVert x^{P}(k) -  x^{*} \rVert $.
-It is given in Equation \eqref{eq:rel_opt}.
+\item whether the particle converges to the global best;
+\item and the probability that the particle find a new global best.
 \end{itemize}
+
+In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position and get Equation \eqref{eq:rel_gb}.
 
 \begin{equation}
 \label{eq:rel_gb}
@@ -32,72 +32,47 @@ x^{P}(k) - x^{G}
 \end{aligned}
 \end{equation}
 
-\begin{equation}
-\label{eq:rel_init}
-\begin{aligned}
-\begin{bmatrix}
-v(k+1) \\
-x(k+1) - x(0)
-\end{bmatrix}
- = A(k) 
-\begin{bmatrix}
-v(k) \\
- x(k) - x(0)
-\end{bmatrix}
-+ B(k) 
-\begin{bmatrix}
-x^{G} - x(0) \\
-x^{P}(k) - x(0)
-\end{bmatrix}
-\end{aligned}
-\end{equation}
+By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
 
-\begin{equation}
-\label{eq:rel_opt}
-\begin{aligned}
-\begin{bmatrix}
-v(k+1) \\
-x(k+1) - x^{*}
-\end{bmatrix}
- = A(k) 
-\begin{bmatrix}
-v(k) \\
-x(k) - x^{*}
-\end{bmatrix}
-+ B(k) 
-\begin{bmatrix}
-x^{G} - x^{*} \\
-x^{P}(k) - x^{*}
-\end{bmatrix}
-\end{aligned}
-\end{equation}
+\subsection{When the fitness distribution is a single hill}
 
+A single hill of the fitness distribution is most typical.
+It provides a partial monotonic form and most of the cases the final convergence happens on a single hill.
+Any other form can usually be viewed as a combination of single hills as well.
 
-
-\subsection{What happens in a single hill case}
-
-When the fitness distribution is a single hill, the analysis can be easier.
-In most of the cases, the particles should all converge into a single hill where the global best locates in.
-
-
-
-It means that there is no effect from a personal best.p
-[TODO] random walk reaching a point
-
+When the global best is already the optimal solution, there is no chance for the particle to find a better solution and trigger a new global best.
+The particle should gradually converge to the global best if the position update component is input-to-state stable, as in Lemma \ref{lem:singleHill:particle:converge}.
 
 \begin{mylem}
-In a single hill case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the particle is ISS.
+\label{lem:singleHill:particle:converge}
+In a single hill case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the particle is input-to-state stable.
+\begin{proof}
+When $ x^{G} = x^{*} $, the input update component is also ISS.
+The serial connection of two ISS component is still ISS.
+As the input is zero by $ \lVert x^{G} - x^{*} \rVert = 0 $, $ x(k) - x^{*} $ will converge to zero.
+\end{proof}
 \end{mylem}
 
+When the global best is not yet the optimal solution, the convergence of the particle cannot be guaranteed.
+If the particle accidently reach into a region that the fitness is better than the current global best, a new global best is found.
+The particle might either runs stochastically in a region that the fitness is worse than both the personal best and the global best.
+If the particle at least gets into a position that is better than the current personal best, the personal best will be updated. 
+We notice that the particle should never reach and stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:singleHill:particle:nonstop}.
+
 \begin{mylem}
-In a single hill case, if $ x^{G} \not = x^{*} $, a particle will never get to 
+\label{lem:singleHill:particle:nonstop}
+In a single hill case, if $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
 \begin{proof}
 Consider the velocity $ v(k+1) $ consists of two parts, inertia $ \chi v(k) $ and attractive force $ \chi \phi^{P} (x^{P}(k) - x(k) ) + \chi \phi^{G} ( x^{G} - x(k) ) $.
 While the particle moves into $ x^{G} $, the attractive force becomes zero but the inertia still exists, due to the velocity moves the particle into this current position.
 \end{proof} 
 \end{mylem}
 
+By Lemma \ref{lem:singleHill:particle:nonstop}, we can prove that the particle will finally get to a position that is at least better than the current global best if given enough run time.
+We have Theorem \ref{thm:singleHill:particle:better}.
+
 \begin{mythm}
+\label{thm:singleHill:particle:better}
 In a single hill case, the particle will almost surly find a $ \hat{x^{*}} $ that $ f(\hat{x^{*}}) > f(x^{G}) $ if $ f( x^{G} ) < f( x^{*}) $.
 \begin{proof}
 Because the particle cannot stop at $ x(k) = x^{G} = x^{P} $.
@@ -124,8 +99,17 @@ When a particle is in this region, it only moves as a random walk.
 
 The result of the movement of a particle is determined by which region of the solution space it moves in.
 
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/fsm}
+\caption{}
+\label{fig:fsm}
+\end{figure}
+
 \end{proof}
 \end{mythm}
+
+\subsubsection{Simulation on single hill case}
 
 \begin{figure}[ht]
 \centering
@@ -161,14 +145,21 @@ The result of the movement of a particle is determined by which region of the so
 \caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
 \end{figure}
 
-Show the exploitation
+\subsubsection{Exploitation}
+
+The convergence property in a single hill case shows the potential exploitation from the single particle.
+As a search heuristic, $ x^{G} $ attracts the particle moving toward itself.
 
 
 \subsection{More than single hill case}
 
-Show the exploration
+When there is more than one hill in the range that the particle moves, it is not easy to figure out a pattern of the behaviors that the particles share.
 
-In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVer $ indirectly.
+[TODO: Give an example that the particle will wander between the personal best and the global best]
+
+As we are interested with the probability that the particle gets into a position that is better than the current global best, we hope the distance from this position to the optimal is closer than that from the global best to the optimal.
+
+In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
 
 \begin{mylem}
 \begin{equation}
@@ -198,6 +189,8 @@ in which $ \delta () $ is the boundary function.
 \end{equation}
 \end{proof}
 \end{mylem}
+
+\subsubsection{Simulation on non-single hill case}
 
 \begin{figure}[ht]
 \centering
@@ -233,3 +226,4 @@ in which $ \delta () $ is the boundary function.
 \caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
 \end{figure}
 
+\subsubsection{Exploration}

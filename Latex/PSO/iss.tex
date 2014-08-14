@@ -22,7 +22,7 @@ The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \righ
 
 In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
 We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. We also derive the bounds implied by the ISS property.
-We use the ISS property in Section \ref{sec:opt_strgy} to find bounds on particle motion.
+We use the ISS property to find bounds on particle motion.
 
 We first introduce several types of functions \cite{Jiang2001857}.
 \begin{itemize}
@@ -254,4 +254,14 @@ The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:is
 \caption{Parameter space}
 \label{fig:paramSpace}
 \end{figure}
+
+Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input update component. We can say:
+\begin{enumerate}
+\item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
+\item If the personal best and global best vary within a bound, the particle will converge within a bound;
+\item If the personal best and global best become constant, the particle will converge to a point.
+\end{enumerate}
+
+Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
+In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
 

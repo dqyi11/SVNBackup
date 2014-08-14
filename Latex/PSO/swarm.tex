@@ -1,28 +1,34 @@
 \section{Swarm analysis}
 \label{sec:swarm}
 
-\subsection{Consensus of a swarm}
+%\subsection{Consensus of a swarm}
 
-\begin{itemize}
-\item Combinations of ISS parts are ISS
-\item Swarm as such a combination
-\item Conditions where update is ISS
-\item trivially at stagnation. But also when on a single hill
-\end{itemize}
+%\begin{itemize}
+%\item Combinations of ISS parts are ISS
+%\item Swarm as such a combination
+%\item Conditions where update is ISS
+%\item trivially at stagnation. But also when on a single hill
+%\end{itemize}
 
-\begin{itemize}
-\item Bound on swarm for the single hill case (perhaps as function of the width of the hill?
-Or width of the hill as a percentage of the feasible region?)
-\item test on 2-d case to show that the bound can prevent a particle from reaching another hill.
-This is one form of the swarm failing to converge the global optimal.
-\item Can we look at parameters for the whole swarm?
-\end{itemize}
+%\begin{itemize}
+%\item Bound on swarm for the single hill case (perhaps as function of the width of the hill?
+%Or width of the hill as a percentage of the feasible region?)
+%\item test on 2-d case to show that the bound can prevent a particle from reaching another hill.
+%This is one form of the swarm failing to converge the global optimal.
+%\item Can we look at parameters for the whole swarm?
+%\end{itemize}
+
+\subsection{When the fitness distribution is a single hill}
 
 \begin{mythm}
 In one hill case, if there are more than two particles, $ x^{G} \rightarrow x^{*} $.
 \begin{proof}
 \end{proof}
 \end{mythm}
+
+\subsubsection{Simulation}
+
+\subsection{More than single hill case}
 
 \begin{mythm}
 The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
@@ -32,20 +38,22 @@ P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
 $ P_{i} $ is the probability of particle $ i $ finds a better global best.
 \end{mythm}
 
+\subsubsection{Simulation}
+
 \subsection{Value of a swarm}
 
-Being on one hill is the unlikely case bound in the multi hill case.
-Might not seem useful but is the essence of what makes a swarm a swarm.
-Bounds the swarm to a region around p-bests where g-best has been unable to pull other particles to its hill.
-For a function with narrow hills, g-bests on a narrow hills is less likely to capture another particle, thus the swarm searches more, for functions with broad hills, p-gest are more likely to be pulled to g-bests hill and search there.
-Thus swarm diversity is the mechanism that allows the swarm to not converge when searching is likely needed but focus and converge when the fitness landscape appear to favor exploitation.
-This does not happen at stagnation and does not happen without multiple members. <need to say this in a more mathematical way>>
+%Being on one hill is the unlikely case bound in the multi hill case.
+%Might not seem useful but is the essence of what makes a swarm a swarm.
+%Bounds the swarm to a region around p-bests where g-best has been unable to pull other particles to its hill.
+%For a function with narrow hills, g-bests on a narrow hills is less likely to capture another particle, thus the swarm searches more, for functions with broad hills, p-gest are more likely to be pulled to g-bests hill and search there.
+%Thus swarm diversity is the mechanism that allows the swarm to not converge when searching is likely needed but focus and converge when the fitness landscape appear to favor exploitation.
+%This does not happen at stagnation and does not happen without multiple members. <need to say this in a more mathematical way>>
 
-example ?? function for exploration case
-example sphere function for the exploitation case
-try to use bound as a function of hill width metric
+%example ?? function for exploration case
+%example sphere function for the exploitation case
+%try to use bound as a function of hill width metric
 
-Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
+%Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
 
 \subsubsection{Competition}
 
