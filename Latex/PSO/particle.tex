@@ -168,10 +168,16 @@ Show the exploitation
 
 Show the exploration
 
-In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $
+In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVer $ indirectly.
 
 \begin{mylem}
-
+\begin{equation}
+\begin{aligned}
+& P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
+& > 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert },
+\end{aligned}
+\end{equation}
+in which $ \delta () $ is a boundary function.
 \begin{proof}
 By Markov's inequality, we have
 \begin{equation}

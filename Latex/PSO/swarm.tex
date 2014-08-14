@@ -18,6 +18,20 @@ This is one form of the swarm failing to converge the global optimal.
 \item Can we look at parameters for the whole swarm?
 \end{itemize}
 
+\begin{mythm}
+In one hill case, if there are more than two particles, $ x^{G} \rightarrow x^{*} $.
+\begin{proof}
+\end{proof}
+\end{mythm}
+
+\begin{mythm}
+The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
+\begin{equation}
+P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
+\end{equation}
+$ P_{i} $ is the probability of particle $ i $ finds a better global best.
+\end{mythm}
+
 \subsection{Value of a swarm}
 
 Being on one hill is the unlikely case bound in the multi hill case.
@@ -32,6 +46,13 @@ example sphere function for the exploitation case
 try to use bound as a function of hill width metric
 
 Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
+
+\subsubsection{Competition}
+
+
+
+\subsubsection{Diversity}
+
 
 \subsection{Diversity injection}
 
