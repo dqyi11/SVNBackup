@@ -23,6 +23,10 @@
 \begin{mythm}
 In one hill case, if there are more than two particles, $ x^{G} \rightarrow x^{*} $.
 \begin{proof}
+There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
+If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Lemma \ref{lem:singleHill:particle:nonstop}.
+If the global best is not $ x^{*} $, the particles will take turns to find new global best by Theorem \ref{thm:singleHill:particle:better} till $ x^{*} = x^{G} $.
+Then it becomes the case $ x^{G} = x^{*} $.
 \end{proof}
 \end{mythm}
 
@@ -36,6 +40,15 @@ The probability that the swarm finds a better global best depends on the probabi
 P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
 \end{equation}
 $ P_{i} $ is the probability of particle $ i $ finds a better global best.
+\begin{proof}
+The search process is a competition among the particles in the swarm.
+If the swarm does not find a better global best, it means that none of the particle finds a better global best.
+For particle $ i $, the probability that a new global best cannot be found is $ 1 - P_{i} $.
+Because the global best is constant, the movements of the particles are independent in the search process.
+Thus, the probability that no particle finds a new global best becomes
+$ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
+Then we can know that the probability that a new global best can be found by the swarm.
+\end{proof}
 \end{mythm}
 
 \subsubsection{Simulation}
@@ -64,7 +77,7 @@ $ P_{i} $ is the probability of particle $ i $ finds a better global best.
 
 \subsection{Diversity injection}
 
-Work with the Rastrigin function has lead others to experiment with diversity injection to prevent pre-mature convergence (or prevent convergence at all)
-I am not sure, do we want it to converge? ever?
-On what basis would I propose a new algorithm?
-Show that it would converge based on ISS?
+%Work with the Rastrigin function has lead others to experiment with diversity injection to prevent pre-mature convergence (or prevent convergence at all)
+%I am not sure, do we want it to converge? ever?
+%On what basis would I propose a new algorithm?
+%Show that it would converge based on ISS?
