@@ -77,13 +77,14 @@ class MapViewForm(QtGui.QMainWindow):
         menubar = self.menuBar()
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(openAction)
+        fileMenu.addAction(exportAction)
         toolMenu = menubar.addMenu('&Tool')
         toolMenu.addAction(configAction)
         toolMenu.addAction(saveDataAction)
         toolMenu.addAction(loadDataAction)
         toolMenu.addAction(importDiffAction)
         toolMenu.addAction(importVisAction)
-        envMenu = menubar.addMenu('&Env')
+        envMenu = menubar.addMenu('&Test')
         envMenu.addAction(clearDataAction)
         envMenu.addAction(randomDataAction)
         
@@ -352,7 +353,7 @@ class MapViewForm(QtGui.QMainWindow):
     def exportPath(self):
         if len(self.hexaMap.hexamapState.robotPath) > 0:
             filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", "", ".xml")
-            pathMgr = PathManager(self.hexaMap.hexamap, self.labelMgr.mapFile)
+            pathMgr = PathManager(self.hexaMap.hexamap, self.labelMgr.mapFile, 5, self.formSize[0], self.formSize[1])
             pathMgr.dumpPath(self.hexaMap.hexamapState.robotPath, filename)
         
         
