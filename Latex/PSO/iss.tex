@@ -1,59 +1,21 @@
 \section{Input-to-state stability}
 \label{sec:iss}
 
-\begin{itemize}
-\item ISS of a particle (use an appendix if long)
-\item Parameters need for a particle to be ISS
-\item Contrast with the empirical approach of Clerc and Kennedy??
-\item Use appendix for mean and variance analysis
-\end{itemize}
+%\begin{itemize}
+%\item ISS of a particle (use an appendix if long)
+%\item Parameters need for a particle to be ISS
+%\item Contrast with the empirical approach of Clerc and Kennedy??
+%\item Use appendix for mean and variance analysis
+%\end{itemize}
 
-\subsection{A cascade model of a particle}
-
-In this paper, we model the behavior of the PSO algorithm as a \emph{cascade system}.
-This enables analysis of PSO with stochastic factors preserved and without the stagnation assumption.
-As shown in Figure \ref{fig:sys_flow}, this system is comprised of two components that form a
-cascade system structure.
-These two components are the 
-\emph{input update component} for the global best ($ x^{G}_{i}(k) $) and the personal best ($ x^{P}_{i}(k) $), and the 
-\emph{position update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $ and the swarm topology.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{./fig/sys_flow.pdf}
-\caption{System structure of PSO}
-\label{fig:sys_flow}
-\end{figure}
-
-The properties of this system can be analyzed using the input-to-state stability of the position update component and the input update component. 
+The properties of this system can be analyzed using the input-to-state stability of the position update component. 
 Given an input-to-state stable position update component, we will see that the convergence of $ x_{i}(k) $ depends on bounds on $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
 
-In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
-
 Because the position update works independently at each dimension.
-Without loss of generality, we look at a one-dimension particle and extract the linear form of the position update component.
-\begin{equation}
-\label{eq:pso_up_linalg_simp}
-X(k+1) = A(k) X(k) + B(k) U(k)
-\end{equation}
-with
-$ A(k) = \begin{bmatrix}
-\chi & - \chi \phi^{G} u^{G}(k) - \chi \phi^{P} u^{P}(k)
-\\ 
-\chi & 1 - \chi \phi^{G} u^{G}(k) - \chi \phi^{P} u^{P}(k)
-\end{bmatrix} $
-and
-$ B(k) = \begin{bmatrix}
-\chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
-\\ 
-\chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
-\end{bmatrix} $.
+When the solution space is multi-dimension, there is just a parallel-interconnection of the position update components of all the dimension.
+Without loss of generality, we look at a one-dimension particle.
 
-The system state is $ X(k) = [ v(k), x(k) - x^{*} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} $
-\footnote{$ x^{*} $ means an equilibrium point to the system.
-In PSO, it can be a local optimum, a global optimum, or an estimated optimum.
-We use it as a reference point to check the bounds.}
-.
+In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \rightarrow x^{*} $.
 
 \subsection{Input-to-state stability of the position update}

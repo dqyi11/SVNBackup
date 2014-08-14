@@ -1,25 +1,29 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Restate abstract 
-
-%Include:
-%The ability to analyze the behavior of the swarm before stagnation is important.
-%Because at stagnation the mechanism for sharing information among the particles in the swarm has been reduced to a constant, it is merely a collection of independent agents.
-%The sharing of information is what make the swarm a swarm. 
-
-In PSO, ``stagnation'' is usually defined as the personal best and global best keep constant over some time steps \cite{4223160}.
+``Stagnation'' appears frequently in the search process of evolutionary optimization algorithms. 
+It is commonly considered as that the algorithm stops finding a better solution.
+In particle swarm optimization, ``stagnation'' is usually defined as the personal best and global best keep constant over some time steps \cite{4223160}.
+``Stagnation'' is a very important phenomenon in analyzing the behavior and the optimization search capability of the particle swarm optimization.
 Plenty of work have focused on the behavior of a particle when this happens, particularly where it converges to. [TODO: cite some work]
-While the global best is not changed, there exists no information sharing among the particles.
-The swarm becomes merely a collection of independent agents.
 
-In many cases, the personal best is more frequently updated than the global best.
-Particularly, when the personal best and the global best are inconsistent, there exists no real convergence of a particle's position, which is given in Property \ref{prop:unconverge_neq_gb}.
+Instead of viewing the optimization process as a random search and stopping at a ``stagnation'', we find that ``stagnation'' happens frequently during the search process.
+The swarm behavior leads that the global best would be unchanged for a great share of the entire search time.
+As a way of finding a new global best, the personal best of a particle is more frequently changed while the global best is unchanged. 
+Define the period of time that the global best is unchanged as one ``stagnation''.
+The process of particle swarm optimization consists of a sequence of stagnations, of which the global best is refined in a newer stagnation.
+
+While the global best is not changed in a single stagnation, there also exists no information sharing among the particles.
+The swarm becomes merely a collection of independent agents.
+In the stagnation, the particles have no interaction with each other.
+There exists a potential competition.
+The particle that finds a better solution takes over the global best and triggers a new stagnation.
+
+Due to the non-zero force on the motion of the particle, when the personal best and the global best are inconsistent, there exists no real convergence of a particle's position, which is given in Property \ref{prop:unconverge_neq_gb}.
 \begin{myprop}
 \label{prop:unconverge_neq_gb}
 A particle won't stop moving when its personal best and global best are not the same, 
 which means that 
 $ \lim_{k \rightarrow \infty} v(k) \neq 0 $, if $ x^{P} \neq x^{G} $.
 \end{myprop}
-
 In order to know better on the dynamics of the PSO, we need more results of the swarm behavior before stagnation.
