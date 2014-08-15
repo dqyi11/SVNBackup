@@ -18,9 +18,13 @@
 %\item Can we look at parameters for the whole swarm?
 %\end{itemize}
 
-\subsection{When the fitness distribution is a single hill}
+\subsection{Unimodal fitness distribution}
+
+Due to the potential competition in the swarm, if there is always a particle finds a better solution till the optimal is reached, the swarm can always find the optimal in the single hill case.
+We have Theorem \ref{thm:singleHill:swarm:converge}.
 
 \begin{mythm}
+\label{thm:singleHill:swarm:converge}
 In one hill case, if there are more than two particles, $ x^{G} \rightarrow x^{*} $.
 \begin{proof}
 There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
@@ -30,16 +34,28 @@ Then it becomes the case $ x^{G} = x^{*} $.
 \end{proof}
 \end{mythm}
 
+[TODO:] More particles --> convergence rate
+
 \subsubsection{Simulation}
 
-\subsection{More than single hill case}
+\subsection{Multi-modal fitness distribution}
+
+When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
+The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
+The increase of the number of the particles raise the probability that the swarm can find a new global best.
+We have Theorem \ref{thm:nonsingleHill:swarm:prob}.
 
 \begin{mythm}
+\label{thm:nonsingleHill:swarm:prob}
 The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
 \begin{equation}
 P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
 \end{equation}
-$ P_{i} $ is the probability of particle $ i $ finds a better global best.
+$ P_{i} $ is the probability of particle $ i $ finds a new global best
+and $ P $ is the probability that the swarm finds a new global best.
+\begin{equation}
+\forall i \in [1, N], P_{i} < P.
+\end{equation}
 \begin{proof}
 The search process is a competition among the particles in the swarm.
 If the swarm does not find a better global best, it means that none of the particle finds a better global best.
@@ -50,6 +66,17 @@ $ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
 Then we can know that the probability that a new global best can be found by the swarm.
 \end{proof}
 \end{mythm}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/probRise}
+\caption{The probability increases with the particle number.}
+\label{fig:probRise}
+\end{figure}
+
+Figure \ref{fig:probRise} illustrates how the probability of the swarm increases with the number of the particles, assuming that the probabilities of all the particles are the same.
+The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
+
 
 \subsubsection{Simulation}
 
