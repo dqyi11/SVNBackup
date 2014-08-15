@@ -356,6 +356,15 @@ class MapViewForm(QtGui.QMainWindow):
             pathMgr = PathManager(self.hexaMap.hexamap, self.labelMgr.mapFile, 5, self.formSize[0], self.formSize[1])
             pathMgr.dumpPath(self.hexaMap.hexamapState.robotPath, filename)
         
+    def updateCurrentPlanState(self, state):
+        self.currentPlanState = state
         
+        if self.currentPlanState == self.planStates[0]:
+            if self.hexaMap != None:
+                self.hexaMap.hexamapState.loadFromArray(self.diff)
+                self.update()
+        else:
+            self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
+            self.update()   
         
             

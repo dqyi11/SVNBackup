@@ -196,8 +196,8 @@ class MapViewConfigForm(QtGui.QWidget):
         
     def updateParentState(self):
         if self.radioBtnInfoMax.isChecked()==True:
-            self.parentWindow.currentPlanState = self.parentWindow.planStates[0]
+            self.parentWindow.updateCurrentPlanState(self.parentWindow.planStates[0])
         elif self.radioBtnRiskMin.isChecked()==True:
-            self.parentWindow.currentPlanState = self.parentWindow.planStates[1]
+            self.parentWindow.updateCurrentPlanState(self.parentWindow.planStates[1])
         
             
