@@ -45,23 +45,24 @@ The particle should gradually converge to the global best if the position update
 
 \begin{mylem}
 \label{lem:singleHill:particle:converge}
-In a unimodal case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the particle is input-to-state stable.
+In a unimodal case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the update component of the particle is input-to-state stable.
 \begin{proof}
-When $ x^{G} = x^{*} $, the input update component is also ISS.
-The serial connection of two ISS components still reserves ISS.
+When $ x^{G} = x^{*} $, the input update component is also input-to-state stable.
+The serial connection of two ISS components still reserves input-to-state stability.
 As the input is zero by $ \lVert x^{G} - x^{*} \rVert = 0 $, $ x(k) - x^{*} $ will converge to zero.
 \end{proof}
 \end{mylem}
 
 When the global best is not yet the optimal solution, the convergence of the particle cannot be guaranteed.
-If the particle accidentally reach into a region that the fitness is better than the current global best, a new global best is found.
+If the particle accidentally reaches into a region that the fitness is better than the current global best, a new global best is found.
 The particle might either runs stochastically in a region that the fitness is worse than both the personal best and the global best.
 If the particle at least gets into a position that is better than the current personal best, the personal best will be updated. 
-We notice that the particle should never reach and stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:singleHill:particle:nonstop}.
+We notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:singleHill:particle:nonstop}.
 
 \begin{mylem}
 \label{lem:singleHill:particle:nonstop}
 In a unimodal case, if $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
+\footnote{The precision cut-off in implementation is ignored.}
 \begin{proof}
 Consider the velocity $ v(k+1) $ consists of two parts, inertia $ \chi v(k) $ and attractive force $ \chi \phi^{P} (x^{P}(k) - x(k) ) + \chi \phi^{G} ( x^{G} - x(k) ) $.
 While the particle moves into $ x^{G} $, the attractive force becomes zero but the inertia still exists, due to the velocity moves the particle into this current position.
@@ -98,6 +99,15 @@ When a particle is in this region, it only moves as a random walk.
 \end{figure}
 
 The result of the movement of a particle is determined by which region of the solution space it moves in.
+The states of the particle can be defined as
+\begin{itemize}
+\item \textbf{A} [$ f(x) \leq f(x^{P}) \leq f(x^{G}) $]
+\item \textbf{B} [$ f(x) = f(x^{P}) \leq f(x^{G}) $] 
+\item \textbf{C} [$ f(x) = f(x^{P}) \leq f(x^{G}) \and v > 0 $]
+\item \textbf{D} [$ f(x) = f(x^{P}) \leq f(x^{G}) \and v = 0 $]
+\item \textbf{E} [$ f(x) > f(x^{P}) = f(x^{G}) $]
+\end{itemize}
+
 
 \begin{figure}[tbph]
 \centering
