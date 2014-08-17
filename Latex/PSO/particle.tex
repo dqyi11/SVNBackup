@@ -34,6 +34,22 @@ x^{P}(k) - x^{G}
 
 By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
 
+\begin{myprop}
+\label{prop:particle:nonoptimal}
+Whether a particle is guaranteed to reach the optimal is determined by the boundary of its movement.
+\end{myprop}
+
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.7\linewidth]{./simfig/bound/bound_position}
+\caption{}
+\label{fig:bound_position}
+\end{figure}
+
+Figure \ref{fig:bound_position} gives an example on the boundary impacting the reach of the optimal.
+Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
+As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
+
 \subsection{Unimodal fitness distribution}
 
 A unimodal fitness distribution is most typical.
@@ -109,7 +125,10 @@ The states of the particle can be defined as
 \end{itemize}
 
 The Figure \ref{fig:fsm} shows the state transitions.
-
+When the particle is in state A, it is in random walk with attractions to the global best and personal best.
+In state B, it means that the particle find a better personal best.
+In state C, the particles moves into the current global best, but the velocity is not zero yet.
+The only chance that the particle cannot find a better global best happens when it gets into state D.
 
 \begin{figure}[tbph]
 \centering
@@ -121,46 +140,13 @@ The Figure \ref{fig:fsm} shows the state transitions.
 \end{proof}
 \end{mythm}
 
-\subsubsection{Simulation on unimodal case}
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case1/distribution1}
-\label{fig:case1-1:distribution} 
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case1/position1-1} 
-\label{fig:case1-1:position}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case1/fitness1-1} 
-\label{fig:case1-1:fitness}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case1/position1-2} 
-\label{fig:case1-2:position}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-  
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case1/fitness1-2} 
-\label{fig:case1-2:fitness} 
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
 
 \subsubsection{Exploitation}
 
 The convergence property in a unimodal case shows the potential exploitation from the single particle.
 As a search heuristic, $ x^{G} $ attracts the particle moving toward itself.
+
 
 
 \subsection{Multi-model fitness distribution}
@@ -202,41 +188,5 @@ in which $ \delta () $ is the boundary function.
 \end{equation}
 \end{proof}
 \end{mylem}
-
-\subsubsection{Simulation on multi-modal cases}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case2/distribution2}
-\label{fig:case2-1:distribution} 
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case2/position2-1} 
-\label{fig:case2-1:position}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case2/fitness2-1} 
-\label{fig:case2-1:fitness}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case2/position2-2} 
-\label{fig:case2-2:position}
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
-  
-\begin{figure}[ht]
-\centering
-\includegraphics[width=.7\linewidth]{./simfig/case2/fitness2-2} 
-\label{fig:case2-2:fitness} 
-\caption{$ \chi = 0.72984 , \phi^{P} = 2.05 , \phi^{G} = 2.05 $ }
-\end{figure}
 
 \subsubsection{Exploration}
