@@ -3,7 +3,7 @@
 
 In this section, we analyze the behavior of a single particle in a swarm.
 In a single stagnation, the global best is unchanged.
-Thus we make the global best as the constant.
+Thus we can have the global best as the constant.
 We are interested with 
 \begin{itemize}
 \item whether the particle converges to the global best;
@@ -140,26 +140,42 @@ The only chance that the particle cannot find a better global best happens when 
 \end{proof}
 \end{mythm}
 
-
-
 \subsubsection{Exploitation}
 
-The convergence property in a unimodal case shows the potential exploitation from the single particle.
-As a search heuristic, $ x^{G} $ attracts the particle moving toward itself.
+The design of the position component of a particle imports the exploitation of the optimal search.
+When input-to-state stability is guaranteed, a single particle shows the convergence in a unimodal case.
+The personal best and the global best attracts the particle moving toward themselves~\cite{Schmitt:2013:PSO:2463372.2463563}.
 
+The input-to-state stability guarantees that the particle could utilize the current information as the heuristic.
 
 
 \subsection{Multi-model fitness distribution}
 
-When there is more than one hill in the range that the particle moves, it is not easy to figure out a pattern of the behaviors that the particles share.
+When there are multiple modalities in the range that the particle moves, it is not easy to figure out a pattern of the behaviors that the particles share.
+More factors of the fitness distribution can impact the optimal search process.
+When the movement of the particle is bounded, there can be cases that the particle cannot reach the region that contains a better solution.
+%[TODO: Give an example that the particle will wander between the personal best and the global best]
 
-[TODO: Give an example that the particle will wander between the personal best and the global best]
+The exploration range is determined by the boundary of a particle's movement.
+
+\begin{mylem}
+\label{lem:particle:bound_mov}
+The bound of a particle's movement is 
+\begin{equation}
+\lVert x(k) - x^{*} \rVert < \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
+\end{equation}
+in which $ \delta () $ is a boundary function. 
+\end{mylem}
+
+Lemma \ref{lem:particle:bound_mov} shows that the boundary of a particle's movement is determined by where the global best $ x^{G} $ and the personal best $ x^{P}(k) $ locate at.
+
+[TODO] Add how the new global best might be found or not be found.
 
 As we are interested with the probability that the particle gets into a position that is better than the current global best, we hope the distance from this position to the optimal is closer than that from the global best to the optimal.
 
 In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
 
-\begin{mylem}
+\begin{mycoro}
 \label{lem:nonsingleHill:particle:prob}
 \begin{equation}
 \begin{aligned}
@@ -187,6 +203,8 @@ in which $ \delta () $ is the boundary function.
 \end{aligned}
 \end{equation}
 \end{proof}
-\end{mylem}
+\end{mycoro}
 
 \subsubsection{Exploration}
+
+

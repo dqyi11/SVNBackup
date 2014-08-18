@@ -18,6 +18,15 @@
 %\item Can we look at parameters for the whole swarm?
 %\end{itemize}
 
+In section \ref{sec:particle}, we can see the limitation of the search capacity of a particle.
+The particle is in a randomized walk in an attractive potential fields defined by the global best and the personal best.
+There exists a lot of factors that prevents the particle reaching the optimal.
+The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
+The import of interaction topology enhances the search capability, which makes it more than a beam-search style optimization method.
+In this section, we analyze the star topology of global best update.
+In this topology, the global best update imports the competition among the particles.
+The particle finds a new global best becomes the leader of the swarm.
+
 \subsection{Unimodal fitness distribution}
 
 Due to the potential competition in the swarm, if there is always a particle finds a better solution till the optimal is reached, the swarm can always find the optimal in the unimodal case.
@@ -25,7 +34,7 @@ We have Theorem \ref{thm:singleHill:swarm:converge}.
 
 \begin{mythm}
 \label{thm:singleHill:swarm:converge}
-In the unimodal case, if there are more than two particles, $ x^{G} \rightarrow x^{*} $.
+In the unimodal case, when there are more than two particles, $ x^{G} \rightarrow x^{*} $ if all the particles has input-to-state stable position update component.
 \begin{proof}
 There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
 If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Lemma \ref{lem:singleHill:particle:nonstop}.
@@ -34,9 +43,10 @@ Then it becomes the case $ x^{G} = x^{*} $.
 \end{proof}
 \end{mythm}
 
-[TODO:] More particles --> convergence rate
+%[TODO:] More particles --> convergence rate
+%This is hard. Because convergence rate is not a constant.
 
-\subsubsection{Simulation}
+%\subsubsection{Simulation}
 
 \subsection{Multi-modal fitness distribution}
 
@@ -49,11 +59,13 @@ We have Theorem \ref{thm:nonsingleHill:swarm:prob}.
 \label{thm:nonsingleHill:swarm:prob}
 The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
 \begin{equation}
+\label{eq:prob_sum}
 P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
 \end{equation}
 $ P_{i} $ is the probability of particle $ i $ finds a new global best
 and $ P $ is the probability that the swarm finds a new global best.
 \begin{equation}
+\label{eq:prob_less}
 \forall i \in [1, N], P_{i} < P.
 \end{equation}
 \begin{proof}
@@ -64,6 +76,8 @@ Because the global best is constant, the movements of the particles are independ
 Thus, the probability that no particle finds a new global best becomes
 $ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
 Then we can know that the probability that a new global best can be found by the swarm.
+By writing Equation \ref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
+we have Equation \ref{eq:prob_less}.
 \end{proof}
 \end{mythm}
 
@@ -78,7 +92,7 @@ Figure \ref{fig:probRise} illustrates how the probability of the swarm increases
 The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
 
 
-\subsubsection{Simulation}
+%\subsubsection{Simulation}
 
 \subsection{Value of a swarm}
 
@@ -97,10 +111,19 @@ The uniformly random initialization enables the diversity of the probabilities o
 
 \subsubsection{Competition}
 
-
+\begin{itemize}
+\item The existence of a competition enhances the chance that the global best can be refined, which increases the probability that the global optimal can be found.
+\item 
+\item 
+\end{itemize}
 
 \subsubsection{Diversity}
 
+\begin{itemize}
+\item The uniformly initialization on the search space increases the inconsistency between the personal best and the global best.
+It means that the particle moves in a larger range.
+With a reasonable step length determined by $ \chi $, it is more likely to find a better solution.
+\end{itemize}
 
 \subsection{Diversity injection}
 
