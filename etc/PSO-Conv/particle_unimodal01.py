@@ -9,13 +9,17 @@ if __name__ == '__main__':
      
     runs = 4000
     
-    phi1 = 2.05
-    phi2 = 2.05
+    phi1 = 0.2
+    phi2 = 0.2
     #inertia = 0.8
     #phi1 = 2.05
     #phi2 = 2.05
-    inertia = 0.72984
+    inertia = 0.3
     #inertia = 0.9
+    
+    phi1_new = 2.05
+    phi2_new = 2.05
+    inertia_new = 0.72984
     
     pb_init = 800.0
     gb_init = 600.0
@@ -30,7 +34,6 @@ if __name__ == '__main__':
     pos2 = pos
     vel2 = 0.0
     
-    
     gb_fitness = fitness_func(gb)
     pb_fitness = fitness_func(pb)
     
@@ -42,9 +45,6 @@ if __name__ == '__main__':
     fitHist = []
     gbFitHist = []
     pbFitHist = []
-    
-    u1s = np.random.random(runs)
-    u2s = np.random.random(runs)
     
     gb2_fitness = fitness_func(gb2)
     pb2_fitness = fitness_func(pb2)
@@ -58,24 +58,32 @@ if __name__ == '__main__':
     gbFitHist2 = []
     pbFitHist2 = []
     
+    u1s = np.random.random(runs)
+    u2s = np.random.random(runs)
+    
+    stop = False
     for i in range(runs):
         
         pbHist.append(pb)
         gbHist.append(gb)
         posHist.append(pos)
         
-        localForce = phi1 * u1s[i] * (pb - pos)
-        globalForce = phi2 * u2s[i] * (gb - pos)
-        
-        vel = inertia * (vel + localForce + globalForce)
-        pos = pos + vel
+        if stop==False:
+            localForce = phi1 * u1s[i] * (pb - pos)
+            globalForce = phi2 * u2s[i] * (gb - pos)
+            
+            vel = inertia * (vel + localForce + globalForce)
+            pos = pos + vel
+        else:
+            vel = 0.0
         
         velHist.append(vel)
         
         fitness = fitness_func(pos)
         if fitness > gb_fitness:
             gb = pos
-            gb_fitness = fitness 
+            gb_fitness = fitness
+            stop = True
         if fitness > pb_fitness:
             pb = pos
             pb_fitness = fitness
@@ -83,30 +91,25 @@ if __name__ == '__main__':
         fitHist.append(fitness)
         gbFitHist.append(gb_fitness)
         pbFitHist.append(pb_fitness)
-       
-    deltaHist = [] 
+      
+    stop = False 
     for i in range(runs):
         
         pbHist2.append(pb2)
         gbHist2.append(gb2)
         posHist2.append(pos2)
         
-        localForce = phi1 * u1s[i] * (pb2 - pos2)
-        globalForce = phi2 * u2s[i] * (gb2 - pos2)
-        
-        oldVel2 = vel2
-        vel2 = inertia * (vel2 + localForce + globalForce)
+        if stop == False:
+            localForce = phi1_new * u1s[i] * (pb2 - pos2)
+            globalForce = phi2_new * u2s[i] * (gb2 - pos2)
+            
+            vel2 = inertia_new * (vel2 + localForce + globalForce)
+            pos2 = pos2 + vel2
+        else:
+            vel2 = 0.0
         
         velHist2.append(vel2)
-        '''
-        print vel2
-        if vel2 == 0.0:
-            if oldVel2 < 0:
-                vel2 =  - 0.00001
-            else:
-                vel2 = 0.00001
-        '''
-        pos2 = pos2 + vel2
+        
         
         fitness2 = fitness_func(pos2)
         if fitness2 > gb2_fitness:
@@ -119,8 +122,6 @@ if __name__ == '__main__':
         fitHist2.append(fitness2)
         gbFitHist2.append(gb2_fitness)
         pbFitHist2.append(pb2_fitness)
-        
-        deltaHist.append(posHist2[i] - posHist[i])
         
         
     xs = np.arange(-100, 1000, 1)
@@ -139,9 +140,10 @@ if __name__ == '__main__':
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
     ax1.set_title('position')
-    ax1.plot(np.arange(runs), posHist, np.arange(runs), pbHist, np.arange(runs), gbHist, np.arange(runs), maxPos)
-    ax1.legend(["particle", "personal best", "global best", "optimal"])
+    ax1.plot(np.arange(runs), posHist, np.arange(runs), posHist2, np.arange(runs), maxPos)
+    ax1.legend(["parameter 1", "parameter 2", "optimal"])
     
+    '''
     maxFitness = 10 * np.ones(runs)
     
     fig2 = plt.figure()
@@ -161,8 +163,5 @@ if __name__ == '__main__':
     ax4.set_title('fitness')
     ax4.plot(np.arange(runs), fitHist2, np.arange(runs), pbFitHist2, np.arange(runs), gbFitHist2, np.arange(runs), maxFitness)
     ax4.legend(["particle", "personal best", "global best", "optimal"])
-    
-    print velHist
-    
-    
+    '''
     plt.show()
