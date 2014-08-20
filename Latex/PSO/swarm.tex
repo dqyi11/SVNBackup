@@ -20,7 +20,7 @@
 
 In section \ref{sec:particle}, we can see the limitation of the search capacity of a particle.
 The particle is in a randomized walk in an attractive potential fields defined by the global best and the personal best.
-There exists a lot of factors that prevents the particle reaching the optimal.
+There exist a lot of factors that prevents the particle reaching the optimal.
 The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
 The import of interaction topology enhances the search capability, which makes it more than a beam-search style optimization method.
 In this section, we analyze the star topology of global best update.
@@ -91,7 +91,6 @@ we have Equation \ref{eq:prob_less}.
 Figure \ref{fig:probRise} illustrates how the probability of the swarm increases with the number of the particles, assuming that the probabilities of all the particles are the same.
 The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
 
-
 %\subsubsection{Simulation}
 
 \subsection{Value of a swarm}
@@ -109,21 +108,25 @@ The uniformly random initialization enables the diversity of the probabilities o
 
 %Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
 
+
 \subsubsection{Competition}
 
-\begin{itemize}
-\item The existence of a competition enhances the chance that the global best can be refined, which increases the probability that the global optimal can be found.
-\item 
-\item 
-\end{itemize}
+The competition is imported when there is a swarm.
+The competition prevents the global best stuck in a position, especially a local optimal.
+As a result, the probability that the global optimal can be found would be increased.
 
 \subsubsection{Diversity}
 
-\begin{itemize}
-\item The uniformly initialization on the search space increases the inconsistency between the personal best and the global best.
-It means that the particle moves in a larger range.
-With a reasonable step length determined by $ \chi $, it is more likely to find a better solution.
-\end{itemize}
+Swarm also brings the diversity.
+Because the particles are randomly initialized.
+As the particles are initialized at different positions, the diversity of the probabilities of finding a better solution $ P_{i} $ is increased.
+By Theorem \ref{thm:nonsingleHill:swarm:prob}, we know that the probability of the swarm that finds a better solution is also increased.
+
+At the same time, there also exists diversity of the personal best.
+This also enlarges the inconsistencies between the personal best and the global best.
+By Lemma \ref{lem:particle:bound_mov}, we know that the explore range of each particle can be increased.
+As a result, the swarm could explore a larger region.
+
 
 \subsection{Diversity injection}
 

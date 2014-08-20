@@ -10,7 +10,7 @@ We are interested with
 \item and the probability that the particle find a new global best.
 \end{itemize}
 
-In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position and get Equation \eqref{eq:rel_gb}.
+In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position and get equation \eqref{eq:rel_gb}.
 
 \begin{equation}
 \label{eq:rel_gb}
@@ -32,7 +32,7 @@ x^{P}(k) - x^{G}
 \end{aligned}
 \end{equation}
 
-By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
+By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance from position $ x(k) $ to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
 
 \begin{myprop}
 \label{prop:particle:nonoptimal}
@@ -46,7 +46,7 @@ Whether a particle is guaranteed to reach the optimal is determined by the bound
 \label{fig:bound_position}
 \end{figure}
 
-Figure \ref{fig:bound_position} gives an example on the boundary impacting the reach of the optimal.
+Figure \ref{fig:bound_position} gives an example on the boundary impacting the moving toward the optimal.
 Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
 As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
 
@@ -207,4 +207,14 @@ in which $ \delta () $ is the boundary function.
 
 \subsubsection{Exploration}
 
+If we take the initial position $ x(0) $ as reference point for analyzing the movement boundary, we can have a form that 
+\begin{equation}
+\lVert x(k) - x(0) \rVert \leq \delta ( \max ( \lVert x^{G} - x(0) \rVert , \lVert x^{P} - x(0) \rVert ) ).
+\end{equation}
+It means that a particle moves in a bounded region in the multi-modal case.
+The range of this region depends on where the global best $ x^{G} $ and the personal best $ x^{P} $ locate.
+By equation \eqref{eq:bound:final}, we can see that this boundary should include both the global best and the personal best.
+Particularly, the larger $ \lVert A \rVert $ is, the larger boundary is.
+It enables the explore capability of a particle.
+A smaller step provides a higher probability of finding a better solution, which locates in between the personal best and the global best.
 

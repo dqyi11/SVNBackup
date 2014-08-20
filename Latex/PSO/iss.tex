@@ -11,9 +11,8 @@
 The properties of this system can be analyzed using the input-to-state stability of the position update component. 
 Given an input-to-state stable position update component, we will see that the convergence of $ x_{i}(k) $ depends on bounds on $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
 
-Because the position update works independently at each dimension.
-When the solution space is multi-dimension, there is just a parallel-interconnection of the position update components of all the dimension.
 Without loss of generality, we look at a one-dimension particle.
+The parallel connection of input-to-state stable components reserves the input-to-state stability.
 
 In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \rightarrow x^{*} $.
@@ -21,7 +20,8 @@ The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \righ
 \subsection{Input-to-state stability of the position update}
 
 In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
-We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. We also derive the bounds implied by the ISS property.
+We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range.
+We also derive the bounds implied by the ISS property.
 We use the ISS property to find bounds on particle motion.
 
 We first introduce several types of functions \cite{Jiang2001857}.
@@ -129,7 +129,7 @@ Since the identity matrix $ P $ has $ || P || = 1 $:
 \label{eq:lyapunov_delta5}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] | U(k) |^{2}.
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] \lVert U(k) \rVert^{2}.
 \end{aligned}
 \end{equation}
 
@@ -147,14 +147,14 @@ Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO (eq
 Note that in using equation \eqref{eq:pso_up_linalg_simp},
 $ [ v(k), x(k) - x^{*} ]^{T} = [0, 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} = [0, 0]^{T} $.
 For an arbitrary optimization problem $ x^{*} $ would typically not be at the origin. 
-In such a problem, input-to-state stability means that the boundaries of $ | v(k) | $ and $ | x(k) - x^{*} | $ would be transformed and thus determined by $ | x^{G}(k) - x^{*} | $ and $ | x^{P}(k) - x^{*} | $,
+In such a problem, input-to-state stability means that the boundaries of $ \lVert v(k) \lVert $ and $ \lVert x(k) - x^{*} \rVert $ would be transformed and thus determined by $ | x^{G}(k) - x^{*} | $ and $ | x^{P}(k) - x^{*} | $,
 but the properties of ISS still apply independent of where the function is centered.
 
 Having proven that PSO is ISS we can now state a bound on particle position.
 
 \begin{mythm}
 \label{coro:state_bound}
-Given the bound on the input $ || u || $ in the position update component, we have the bound on the particle position from equation \eqref{eq:pso_up_linalg_simp}.
+Given the bound on the input $ \lVert u \rVert $ in the position update component, we have the bound on the particle position from equation \eqref{eq:pso_up_linalg_simp}.
 \begin{equation}
 \label{eq:state_bound}
 \forall k, 
@@ -183,6 +183,7 @@ By the property of matrix norm, we have
 
 $ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(i) | \leq | U | $, we have
 \begin{equation}
+\label{eq:bound:final}
 \begin{aligned}
 | X(k+1) | & \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U |  ] \\
 & = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U |
@@ -261,7 +262,6 @@ Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
 \item If the personal best and global best become constant, the particle will converge to a point.
 \end{enumerate}
-
 Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
 In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
 

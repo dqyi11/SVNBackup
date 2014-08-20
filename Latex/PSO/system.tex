@@ -26,7 +26,7 @@ $ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global (actually topology) and perso
 $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from $ [0,1] $.
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
-The organization of the swarm is made by the star topology.
+The organization of the swarm is implemented by the star topology.
 When the position of a particle is chosen to be the global best, its personal best is updated as well.
 In this case, $ x(k) = x^{P}(k) = x^{G}(k) $, which means this particle will not move till a new global best is found.
 We could view this particle as a leader of this swarm.
@@ -85,4 +85,5 @@ In PSO, it can be a local optimum, a global optimum, or an estimated optimum.
 We use it as a reference point to check the bounds.}
 With a new $ x(k+1) $ and the global best $ x^{G} $ from the topology of the swarm, the input update component will update the personal best $ x^{P}(k+1) $ and the global best $ x^{G}(k+1) $ that are fed into the position update component.
 
-
+Because the position update works independently at each dimension.
+When the solution space is multi-dimension, there is just a parallel-interconnection of the position update components of all the dimension.
