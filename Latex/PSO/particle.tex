@@ -1,9 +1,33 @@
 \section{Particle analysis}
 \label{sec:particle}
 
-In this section, we analyze the behavior of a single particle in a swarm.
-In a single stagnation, the global best is unchanged.
-Thus we can have the global best as the constant.
+``stagnation'' G and P stop moving
+``leader stagnation'' G stop moving
+``general unimodal'' (ISS of posotion update $ \rightarrow $ parameter values: consistent with past results )
+\begin{itemize}
+\item [theorem] in stagnation, inputs are bounded $ \rightarrow $ $ x(k+1) $ is bounded \\
+(like previous results) \\
+$  x^{*} = x^{G} = x^{P} $ \\
+$  \hat{x^{*}} = x^{G} \not = x^{P} $
+\item in unimodal case (smooth?)  \\
+1) (Lemma ?) when $ x^{G} = x^{*} $, input update is ISS \\
+2) (Lemma 1) when $ x^{G} = x^{*} $, ISS position update parameters, then particle is ISS \\
+2) (theorem ?) ..... then $ x \rightarrow x^{G} $ \\
+3) (Lemma 2) if $ x^{G} \not = x^{*} $ surely not stop at $ x^{G} $ \\
+4) (theorem 3) almost surly $ | x^{*} - x(k) | < \epsilon $ \\
+Lemma ? if unimodal then input update is ISS \\
+Needed: lemma 2 (?), Bound covers some non-zero set of points $ X $, where $ \forall x \in X, f(x) > f(x^{G}) $ \\
+Use def of "almost surly" - coin example \\
+maybe use fig. 7 with transition prob > 0 (Markov process) 
+\item in multimodal case \\
+lemma 3 \\
+corollary 2 $ \rightarrow $ theorem \\
+(theorem) Add the case for $ x^{*} $ outside of bound formed by $ x^{G} $ and $ x^{P} $ in this case (prob of finding $ x^{*} $) = 0.
+\end{itemize}
+
+In this section, we analyze the behavior of one particle in a swarm.
+In one leader stagnation, the global best is unchanged.
+Thus we denote the global best as a constant $ x^{G} $.
 We are interested with 
 \begin{itemize}
 \item whether the particle converges to the global best;
@@ -32,11 +56,26 @@ x^{P}(k) - x^{G}
 \end{aligned}
 \end{equation}
 
-By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance from position $ x(k) $ to the global best, which depends on  $ \lVert x^{P}(k) - x^{G} \rVert $.
+\subsection{Stagnation}
+
+In stagnation, we have both the personal best and the global best are not updated, which are denoted as $ x^{P} $ and $ x^{G} $ respectively.
+By Theorem \ref{coro:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance from position $ x(k) $ to the global best, which depends on  $ \lVert x^{P} - x^{G} \rVert $.
+Thus we have Theorem \ref{thm:stagnation_bound}.
+
+\begin{mythm}
+\label{thm:stagnation_bound}
+\begin{equation}
+| x(k) - x^{G} | \leq \gamma ( | x^{P}(k) - x^{G} | ), 
+\end{equation}
+Particularly, when $ x^{P} $ is constant,
+$  | x(k) - x^{G} | \leq \gamma ( | x^{P} - x^{G} | ). $
+$ \gamma () $ is a boundary function.
+\end{mythm}
+
 
 \begin{myprop}
 \label{prop:particle:nonoptimal}
-Whether a particle is guaranteed to reach the optimal is determined by the boundary of its movement.
+Whether a particle can reach the optimal is determined by the boundary of its movement.
 \end{myprop}
 
 \begin{figure}[tbph]
