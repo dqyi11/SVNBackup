@@ -11,6 +11,7 @@ class VisibilityDataMgr(object):
         self.hexSize = 0
         self.visData = []
         self.currentHexId = None
+        self.visSumData = []
         
     def loadFile(self, filename):
         self.filename = filename
@@ -45,6 +46,10 @@ class VisibilityDataMgr(object):
         f.close()
         
         #print self.visData[0]
+        self.visSumData = np.zeros((self.width, self.height))
+        for x in range(self.width):
+            for y in range(self.height):
+                self.visSumData[x,y]=np.sum(np.sum(self.visData[x+self.width*y],axis=0))
         
 
     def parseFilehead(self, headStr):
