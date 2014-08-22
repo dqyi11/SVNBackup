@@ -256,7 +256,23 @@ The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:is
 \label{fig:paramSpace}
 \end{figure}
 
-Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input update component. We can say:
+
+%Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input update component. We can say:
+%\begin{enumerate}
+%\item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
+%\item If the personal best and global best vary within a bound, the particle will converge within a bound;
+%\item If the personal best and global best become constant, the particle will converge to a point.
+%\end{enumerate}
+%Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
+%In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
+
+%Answer two questions here
+% a) why we need iss of position update 
+% b) what else do we need for iss
+
+The input-to-state stability of the position update component makes the movement of a particle bounded in a range that covers the global best and the personal best.
+This property provides the chance that the particle exploits the regions near around the personal best and the global best.
+We can have:
 \begin{enumerate}
 \item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
@@ -264,4 +280,13 @@ Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:
 \end{enumerate}
 Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
 In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
+Conversely, if the position update component is not input-to-state stable, the movement of the particle will diverge from the global best and the personal best.
+The design of the exploitation by the personal best and the global best is lost.
+As in Figure \ref{fig:sys_flow}, the position update component and the input update component are serially connected.
+When the position update component is input-to-state stable, the input-to-state stability of the particle is determined by the input-to-state stability of the input update component.
+However, the input-to-state stability of the input update component depends on the fitness distribution, which could not be guaranteed in many cases.
+In section \ref{sec:particle}, we will analyze the behavior of the particle when the position update component is input-to-state stable.
+We will later extend the analysis to the swarm in section \ref{sec:swarm}.
+
+
 
