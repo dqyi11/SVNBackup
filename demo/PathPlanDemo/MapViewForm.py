@@ -146,8 +146,8 @@ class MapViewForm(QtGui.QMainWindow):
         self.configWindow.initCbInfoVec()
         self.configWindow.update()
         
-        self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
-        self.visbilityDataMgr.dumpData('visData2.txt')
+        #self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
+        #self.visbilityDataMgr.dumpData('visData2.txt')
         
         if self.currentPlanState == self.planStates[0]:
             self.hexaMap.hexamapState.loadFromArray(self.diff)
@@ -364,7 +364,7 @@ class MapViewForm(QtGui.QMainWindow):
                 self.hexaMap.hexamapState.loadFromArray(self.diff)
                 self.update()
         else:
-            self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
+            #self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
             self.update()   
         
             
