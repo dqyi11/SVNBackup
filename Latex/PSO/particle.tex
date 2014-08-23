@@ -84,7 +84,7 @@ Not only $ | x^{P} - x^{G} | $ but also the parameters have impact on the size o
 \begin{figure}[tbph]
 \centering
 \includegraphics[width=0.7\linewidth]{./simfig/bound/bound_position}
-\caption{}
+\caption{The convergence to the optimal of particles with different parameters.}
 \label{fig:bound_position}
 \end{figure}
 
@@ -92,33 +92,57 @@ Figure \ref{fig:bound_position} gives an example on the boundary impacting the m
 Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
 As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
 
+In order to analyze the behavior of a particle, we look at what happens to a particle in one ``leader stagnation''. 
+
 \subsection{Unimodal fitness distribution}
 
 A unimodal fitness distribution is most typical.
 It provides a partial monotonic form and most of the cases the final convergence happens on a unimodal fitness distribution.
 Any other form can usually be viewed as a combination of unimodalities as well.
+In a unimodal case, there can be two types of cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $.
+
+\subsubsection{$ x^{G} = x^{*} $}
 
 When the global best is already the optimal solution, there is no chance for the particle to find a better solution and trigger a new global best.
-The particle should gradually converge to the global best if the position update component is input-to-state stable, as in Lemma \ref{lem:singleHill:particle:converge}.
+The particle should gradually converge to the global best if the position-update component is input-to-state stable, as in Theorem \ref{thm:unimodal:particle:converge}.
 
 \begin{mylem}
-\label{lem:singleHill:particle:converge}
-In a unimodal case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{G} $ if the update component of the particle is input-to-state stable.
+\label{lem:unimodal:particle:input_iss}
+In a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
 \begin{proof}
-When $ x^{G} = x^{*} $, the input update component is also input-to-state stable.
-The serial connection of two ISS components still reserves input-to-state stability.
-As the input is zero by $ \lVert x^{G} - x^{*} \rVert = 0 $, $ x(k) - x^{*} $ will converge to zero.
+haha
 \end{proof}
 \end{mylem}
+
+\begin{mylem}
+\label{lem:unimodal:particle:iss}
+In a unimodal case, when $ x^{G} = x^{*} $, the cascade model of a particle is input-to-state stable.
+\begin{proof}
+By Lemma \ref{lem:unimodal:particle:input_iss}, we have the input-update component is also input-to-state stable.
+The serial connection of two ISS components still reserves input-to-state stability.
+\end{proof}
+\end{mylem}
+
+\begin{mythm}
+\label{thm:unimodal:particle:converge}
+In a unimodal case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+\begin{proof}
+By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
+Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ \lVert x^{G} - x^{*} \rVert = 0 $.
+By the property of the input-to-state stability, $ | x(k) - x^{*} | $ will converge to zero, which means that the particle will converge to $ x^{*} $.
+\end{proof}
+\end{mythm}
+
+\subsubsection{ $ x^{G} \not = x^{*}  $ }
 
 When the global best is not yet the optimal solution, the convergence of the particle cannot be guaranteed.
 If the particle accidentally reaches into a region that the fitness is better than the current global best, a new global best is found.
 The particle might either runs stochastically in a region that the fitness is worse than both the personal best and the global best.
 If the particle at least gets into a position that is better than the current personal best, the personal best will be updated. 
-We notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:singleHill:particle:nonstop}.
+We notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:unimodal:particle:nonstop}.
 
 \begin{mylem}
-\label{lem:singleHill:particle:nonstop}
+\label{lem:unimodal:particle:nonstop}
 In a unimodal case, if $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
 \footnote{The precision cut-off in implementation is ignored.}
 \begin{proof}
@@ -127,11 +151,16 @@ While the particle moves into $ x^{G} $, the attractive force becomes zero but t
 \end{proof} 
 \end{mylem}
 
-By Lemma \ref{lem:singleHill:particle:nonstop}, we can prove that the particle will finally get to a position that is at least better than the current global best if given enough run time.
-We have Theorem \ref{thm:singleHill:particle:better}.
+\begin{mylem}
+\label{lem:unimodal:particle:input_iss2}
+When $ x^{G} \not = x^{*} $, the input-update component is input-to-state stable.
+\end{mylem}
+
+By Lemma \ref{lem:unimodal:particle:nonstop}, we can prove that the particle will finally get to a position that is at least better than the current global best if given enough run time.
+We have Theorem \ref{thm:unimodal:particle:better}.
 
 \begin{mythm}
-\label{thm:singleHill:particle:better}
+\label{thm:unimodal:particle:better}
 In a unimodal case, the particle will almost surly find a $ \hat{x^{*}} $ that $ f(\hat{x^{*}}) > f(x^{G}) $ if $ f( x^{G} ) < f( x^{*}) $.
 \begin{proof}
 Because the particle cannot stop at $ x(k) = x^{G} = x^{P} $.
