@@ -110,7 +110,8 @@ The particle should gradually converge to the global best if the position-update
 \label{lem:unimodal:particle:input_iss}
 In a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
 \begin{proof}
-haha
+By equation \eqref{eq:pso_input_up}, we know the input of the input-update component is zero, as we take $ x^{G} $ as the reference point.
+The output is $ [x] $
 \end{proof}
 \end{mylem}
 
@@ -143,7 +144,7 @@ We notice that the particle should never stop at the current global best $ x^{G}
 
 \begin{mylem}
 \label{lem:unimodal:particle:nonstop}
-In a unimodal case, if $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
+If $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
 \footnote{The precision cut-off in implementation is ignored.}
 \begin{proof}
 Consider the velocity $ v(k+1) $ consists of two parts, inertia $ \chi v(k) $ and attractive force $ \chi \phi^{P} (x^{P}(k) - x(k) ) + \chi \phi^{G} ( x^{G} - x(k) ) $.
@@ -153,7 +154,10 @@ While the particle moves into $ x^{G} $, the attractive force becomes zero but t
 
 \begin{mylem}
 \label{lem:unimodal:particle:input_iss2}
-When $ x^{G} \not = x^{*} $, the input-update component is input-to-state stable.
+In a unimodal case, when $ x^{G} \not = x^{*} $, the input-update component is input-to-state stable.
+\begin{proof}
+
+\end{proof}
 \end{mylem}
 
 By Lemma \ref{lem:unimodal:particle:nonstop}, we can prove that the particle will finally get to a position that is at least better than the current global best if given enough run time.
