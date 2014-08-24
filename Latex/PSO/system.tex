@@ -26,6 +26,15 @@ $ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global (actually topology) and perso
 $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from $ [0,1] $.
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
+\begin{equation}
+\label{eq:pb_up}
+x^{P}(k) = \arg \max_{ x \in \{ x(k), x^{P}(k-1) \} } f(x)
+\end{equation}
+\begin{equation}
+\label{eq:gb_up}
+x^{G}(k) = \arg \max_{ x \in \{ x(k), x^{G}(k-1) \} } f(x)
+\end{equation}
+
 The organization of the swarm is implemented by the star topology.
 When the position of a particle is chosen to be the global best, its personal best is updated as well.
 In this case, $ x(k) = x^{P}(k) = x^{G}(k) $, which means this particle will not move till a new global best is found.
@@ -87,3 +96,13 @@ With a new $ x(k+1) $ and the global best $ x^{G} $ from the topology of the swa
 
 Because the position update works independently at each dimension.
 When the solution space is multi-dimension, there is just a parallel-interconnection of the position update components of all the dimension.
+
+The output of the input-update component is the input of the position-update component.
+Take the same reference point $ x^{*} $, we can write the input-update component as 
+\begin{equation}
+\label{eq:pso_input_up}
+U = g(V)
+\end{equation}
+with $ U = [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} $ 
+and $ V = [ x^{G} - x^{*}, x(k) - x^{*} ] $
+from equation \eqref{eq:gb_up} and equation \eqref{eq:pb_up}. 
