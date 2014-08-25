@@ -84,6 +84,12 @@ class MapViewConfigForm(QtGui.QWidget):
         self.initCbInfoVec()
         self.cbInfoVec.activated[str].connect(self.onSelcbInfoVec)
         
+        self.lbViewMode = QtGui.QLabel("View mode")
+        self.cbViewMode = QtGui.QComboBox()
+        
+        self.initCbViewMode()
+        self.cbViewMode.activated[str].connect(self.onSelCbViewMode)
+        
         self.radioBtnGroup = QtGui.QButtonGroup(self.grid)
         self.radioBtnInfoMax = QtGui.QRadioButton("Info max")
         self.radioBtnRiskMin = QtGui.QRadioButton("Risk min")
@@ -105,21 +111,24 @@ class MapViewConfigForm(QtGui.QWidget):
         self.grid.addWidget(self.cbInfoVec, 2, 1)
         self.grid.addWidget(self.btnGenRef, 2, 2)
         
-        self.grid.addWidget(self.radioBtnInfoMax, 3,0)
-        self.grid.addWidget(self.radioBtnRiskMin, 3,1)
+        self.grid.addWidget(self.lbViewMode, 3, 0)
+        self.grid.addWidget(self.cbViewMode, 3, 1)
         
-        self.grid.addWidget(self.wingmanRadius, 4, 0)
-        self.grid.addWidget(self.wingmanRadiusEdit, 4, 1)
-        self.grid.addWidget(self.humanObsRange, 5, 0)
-        self.grid.addWidget(self.humanObsRangeEdit, 5, 1)
-        self.grid.addWidget(self.humanObsFactorEdit, 5, 2)
-        self.grid.addWidget(self.robotObsRange, 6, 0)
-        self.grid.addWidget(self.robotObsRangeEdit, 6, 1)
-        self.grid.addWidget(self.robotObsFactorEdit, 6, 2)
+        self.grid.addWidget(self.radioBtnInfoMax, 4,0)
+        self.grid.addWidget(self.radioBtnRiskMin, 4,1)
+        
+        self.grid.addWidget(self.wingmanRadius, 5, 0)
+        self.grid.addWidget(self.wingmanRadiusEdit, 5, 1)
+        self.grid.addWidget(self.humanObsRange, 6, 0)
+        self.grid.addWidget(self.humanObsRangeEdit, 6, 1)
+        self.grid.addWidget(self.humanObsFactorEdit, 6, 2)
+        self.grid.addWidget(self.robotObsRange, 7, 0)
+        self.grid.addWidget(self.robotObsRangeEdit, 7, 1)
+        self.grid.addWidget(self.robotObsFactorEdit, 7, 2)
 
-        self.grid.addWidget(self.btnApply, 7, 1)
-        self.grid.addWidget(self.btnPlan, 7, 2)
-        self.grid.addWidget(self.btnCancel, 8, 2)       
+        self.grid.addWidget(self.btnApply, 8, 1)
+        self.grid.addWidget(self.btnPlan, 8, 2)
+        self.grid.addWidget(self.btnCancel, 9, 2)       
         
         self.setLayout(self.grid)
         #self.setGeometry(100,100,200,400)
@@ -142,6 +151,23 @@ class MapViewConfigForm(QtGui.QWidget):
         if self.parentWindow.hexaMap != None:
             self.parentWindow.clearRefPath()
             self.parentWindow.update()
+            
+    def initCbViewMode(self):
+        self.cbViewMode.clear()
+        for s in self.parentWindow.dataViewStates:
+            self.cbViewMode.addItem(s)
+            
+    def onSelCbViewMode(self, text):
+        #print text
+        if text==self.parentWindow.dataViewStates[0]:
+            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[0]
+        elif text==self.parentWindow.dataViewStates[1]:
+            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[1]
+        elif text==self.parentWindow.dataViewStates[2]:
+            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[1]
+            
+        if self.parentWindow.hexaMap != None:
+            self.parentWindow.updateCurrentView()
         
     def changeUseObstacle(self):
         if self.useObstacleCheck.checkState() == QtCore.Qt.Checked:

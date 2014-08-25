@@ -109,6 +109,10 @@ class VisibilityDataMgr(object):
             return self.visData[listIdx][x, y]
         return 0.5
     
+    def getValueByHexId(self, hexId, x, y):
+        listIdx = self.hexId[1]*self.width+self.hexId[0]
+        return self.visData[listIdx][x, y]
+    
     def randInit(self, width, height, hexSize):
         
         self.width = width

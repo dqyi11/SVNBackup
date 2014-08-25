@@ -32,6 +32,9 @@ class MapViewForm(QtGui.QMainWindow):
         self.planStates = ["InfoMax", "RiskMin"]
         self.currentPlanState = "InfoMax"
         
+        self.dataViewStates = ["Infomation", "EnemyVisibilty", "PosVisibility"]
+        self.currentDataViewState = "Infomation"
+        
         self.wingmanRadius = 2
         self.humanObsR = 0
         self.robotObsR = 0
@@ -49,6 +52,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.cursorHexIdx = None
         
         self.visbilityDataMgr = VisibilityDataMgr()
+        self.enemyVisibility = None
         
         self.diff = None
         self.mapFilename = ''
@@ -151,6 +155,9 @@ class MapViewForm(QtGui.QMainWindow):
         
         if self.currentPlanState == self.planStates[0]:
             self.hexaMap.hexamapState.loadFromArray(self.diff)
+            
+        enemyHexIds = self.translatePosesToHexIds(self.labelMgr.getEnemyPos())
+        self.generateEnemyVisibility(enemyHexIds)
         
         self.update() 
         
@@ -195,7 +202,8 @@ class MapViewForm(QtGui.QMainWindow):
                 y_pos = e.pos().y()
                 hexIdx = self.hexaMap.hexamap.findHex(x_pos, y_pos)
                 if hexIdx != None:
-                    if self.currentPlanState == self.planStates[1]:
+                    if self.currentDataViewState == self.dataViewStates[2]:
+                    #if self.currentPlanState == self.planStates[1]:
                         self.visbilityDataMgr.currentHexId = hexIdx
                         for i in range(self.hexaMap.hexamap.x_num):
                             for j in range(self.hexaMap.hexamap.y_num):
@@ -359,12 +367,52 @@ class MapViewForm(QtGui.QMainWindow):
     def updateCurrentPlanState(self, state):
         self.currentPlanState = state
         
-        if self.currentPlanState == self.planStates[0]:
-            if self.hexaMap != None:
-                self.hexaMap.hexamapState.loadFromArray(self.diff)
-                self.update()
-        else:
+    def updateCurrentView(self):
+        
+        if self.hexaMap == None:
+            return
+        
+        print self.currentDataViewState
+        
+        if self.currentDataViewState == self.dataViewStates[0]:
+            self.hexaMap.hexamapState.loadFromArray(self.diff)
+            self.update()
+        elif self.currentDataViewState == self.dataViewStates[1]:
+            self.hexaMap.hexamapState.hexVals[0] = self.enemyVisibility
+            self.update()      
+        elif self.currentDataViewState == self.dataViewStates[2]:
             #self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
+            self.visbilityDataMgr.currentHexId = None
+            for i in range(self.hexaMap.hexamap.x_num):
+                for j in range(self.hexaMap.hexamap.y_num):
+                    self.hexaMap.hexamapState.hexVals[0][i,j] = 1.0
             self.update()   
         
+    def translatePosesToHexIds(self, poses):
+        hexIds = []
+        for pos in poses:
+            hexId =  self.hexaMap.hexamap.findHex(pos[0], pos[1])
+            if hexId != None:
+                hexIds.append(hexId)
+        return hexIds
+    
+    def generateEnemyVisibility(self, enemyHexIds):
+        
+        self.enemyVisibility = np.zeros((self.hexaMap.hexamap.x_num, self.hexaMap.hexamap.y_num))
+        
+        for hexId in enemyHexIds:
+            for i in range(self.hexaMap.hexamap.x_num):
+                for j in range(self.hexaMap.hexamap.y_num):
+                    self.enemyVisibility[i,j] += self.visbilityDataMgr.getValueByHexId(hexId, i,j)
+                    
+        minVal = self.enemyVisibility.min()
+        maxVal = self.enemyVisibility.max()
+        ran = float(maxVal - minVal)
+        for i in range(self.x_num):
+            for j in range(self.y_num):
+                self.enemyVisibility[i,j] = (self.enemyVisibility-minVal)/ran
+                
+        
+        
+            
             

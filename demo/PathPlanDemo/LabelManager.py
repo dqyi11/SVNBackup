@@ -69,6 +69,14 @@ class LabelManager(object):
         self.outdoors = []
         self.enemies = []
         
+    def getEnemyPos(self):
+        
+        poses = []
+        for e in self.enemies:
+            poses.append(e.pos)
+        return poses
+            
+        
         
     def loadFile(self, filename):
         
