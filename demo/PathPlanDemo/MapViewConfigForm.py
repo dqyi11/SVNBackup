@@ -164,7 +164,9 @@ class MapViewConfigForm(QtGui.QWidget):
         elif text==self.parentWindow.dataViewStates[1]:
             self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[1]
         elif text==self.parentWindow.dataViewStates[2]:
-            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[1]
+            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[2]
+        elif text==self.parentWindow.dataViewStates[3]:
+            self.parentWindow.currentDataViewState = self.parentWindow.dataViewStates[3]
             
         if self.parentWindow.hexaMap != None:
             self.parentWindow.updateCurrentView()

@@ -32,7 +32,7 @@ class MapViewForm(QtGui.QMainWindow):
         self.planStates = ["InfoMax", "RiskMin"]
         self.currentPlanState = "InfoMax"
         
-        self.dataViewStates = ["Infomation", "EnemyVisibilty", "PosVisibility"]
+        self.dataViewStates = ["Infomation", "EnemyVisibilty", "PosVisibility","AverageVisibility"]
         self.currentDataViewState = "Infomation"
         
         self.wingmanRadius = 2
@@ -334,7 +334,7 @@ class MapViewForm(QtGui.QMainWindow):
             elif self.currentRefState == self.referenceStates[2]:
                 if self.hexaMap.hexamapState.refStartHexIdx != None and self.hexaMap.hexamapState.refEndHexIdx != None:
                     topograph = self.hexaMap.hexamap.generateTopologyGraph()
-                    self.hexaMap.hexamapState.humanPath = topograph.findLeastRiskyPath(self.hexaMap.hexamapState.refStartHexIdx, self.hexaMap.hexamapState.refEndHexIdx)
+                    self.hexaMap.hexamapState.humanPath = topograph.findLeastRiskyPath(self.hexaMap.hexamapState.refStartHexIdx, self.hexaMap.hexamapState.refEndHexIdx,self.enemyVisibility)
                     self.hexaMap.hexamapState.refStartHexIdx = None
                     self.hexaMap.hexamapState.refEndHexIdx = None
                     self.update()
@@ -378,7 +378,7 @@ class MapViewForm(QtGui.QMainWindow):
             self.hexaMap.hexamapState.loadFromArray(self.diff)
             self.update()
         elif self.currentDataViewState == self.dataViewStates[1]:
-            self.hexaMap.hexamapState.hexVals[0] = self.enemyVisibility
+            self.hexaMap.hexamapState.hexVals[0] = copy.deepcopy(self.enemyVisibility)
             self.update()      
         elif self.currentDataViewState == self.dataViewStates[2]:
             #self.visbilityDataMgr.randInit(self.x_num, self.y_num, self.hexSize)
@@ -386,7 +386,11 @@ class MapViewForm(QtGui.QMainWindow):
             for i in range(self.hexaMap.hexamap.x_num):
                 for j in range(self.hexaMap.hexamap.y_num):
                     self.hexaMap.hexamapState.hexVals[0][i,j] = 1.0
-            self.update()   
+            self.update()
+        elif self.currentDataViewState == self.dataViewStates[3]:
+            self.hexaMap.hexamapState.hexVals[0] = copy.deepcopy(self.visbilityDataMgr.visSumData)
+            self.update()
+               
         
     def translatePosesToHexIds(self, poses):
         hexIds = []
@@ -397,20 +401,22 @@ class MapViewForm(QtGui.QMainWindow):
         return hexIds
     
     def generateEnemyVisibility(self, enemyHexIds):
-        
+        #print str(self.hexaMap.hexamap.x_num)+":"+str(self.hexaMap.hexamap.y_num)
+        #print enemyHexIds
         self.enemyVisibility = np.zeros((self.hexaMap.hexamap.x_num, self.hexaMap.hexamap.y_num))
         
         for hexId in enemyHexIds:
             for i in range(self.hexaMap.hexamap.x_num):
                 for j in range(self.hexaMap.hexamap.y_num):
-                    self.enemyVisibility[i,j] += self.visbilityDataMgr.getValueByHexId(hexId, i,j)
+                    val = self.visbilityDataMgr.getValueByHexId(hexId, i,j)
+                    self.enemyVisibility[i,j] += val
                     
         minVal = self.enemyVisibility.min()
         maxVal = self.enemyVisibility.max()
         ran = float(maxVal - minVal)
         for i in range(self.x_num):
             for j in range(self.y_num):
-                self.enemyVisibility[i,j] = (self.enemyVisibility-minVal)/ran
+                self.enemyVisibility[i,j] = (self.enemyVisibility[i,j]-minVal)/ran
                 
         
         

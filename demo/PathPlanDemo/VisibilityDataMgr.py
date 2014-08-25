@@ -50,6 +50,13 @@ class VisibilityDataMgr(object):
         for x in range(self.width):
             for y in range(self.height):
                 self.visSumData[x,y]=np.sum(np.sum(self.visData[x+self.width*y],axis=0))
+                
+        minVal = self.visSumData.min()
+        maxVal = self.visSumData.max()
+        ran = float(maxVal - minVal)
+        for i in range(self.width):
+            for j in range(self.height):
+                self.visSumData[i,j] =  (self.visSumData[i,j]-minVal)/ran
         
 
     def parseFilehead(self, headStr):
@@ -102,15 +109,15 @@ class VisibilityDataMgr(object):
         
         f.close()
         
-    def getValue(self, x, y):
-        
+    def getValue(self, x, y):        
         if self.currentHexId != None:
             listIdx = self.currentHexId[1]*self.width+self.currentHexId[0]
             return self.visData[listIdx][x, y]
         return 0.5
     
     def getValueByHexId(self, hexId, x, y):
-        listIdx = self.hexId[1]*self.width+self.hexId[0]
+        listIdx = hexId[1]*self.width+hexId[0]
+        #print str(listIdx) + " / " + str(len(self.visData))
         return self.visData[listIdx][x, y]
     
     def randInit(self, width, height, hexSize):
