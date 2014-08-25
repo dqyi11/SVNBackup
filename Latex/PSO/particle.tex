@@ -165,7 +165,7 @@ We have Theorem \ref{thm:unimodal:particle:better}.
 
 \begin{mythm}
 \label{thm:unimodal:particle:better}
-In a unimodal case, the particle will almost surly find a $ \hat{x^{*}} $ that $ f(\hat{x^{*}}) > f(x^{G}) $ if $ f( x^{G} ) < f( x^{*}) $.
+In a unimodal case, the particle will almost surely find a $ \hat{x^{*}} $ that $ f(\hat{x^{*}}) > f(x^{G}) $ if $ f( x^{G} ) < f( x^{*}) $.
 \begin{proof}
 Because the particle cannot stop at $ x(k) = x^{G} = x^{P} $.
 It will finally arrives into a region that $ f(x) > f(x^{G}) $.
@@ -189,7 +189,7 @@ When a particle is in this region, it only moves as a random walk.
 \label{fig:categorize_regions}
 \end{figure}
 
-The result of the movement of a particle is determined by which region of the solution space it moves in.
+The result of the movement of a particle is determined by which region of the solution space it moves in, which forms a Markov process.
 The states of the particle can be defined as
 \begin{itemize}
 \item \textbf{A} [$ f(x) \leq f(x^{P}) \leq f(x^{G}) $]
@@ -251,7 +251,7 @@ As we are interested with the probability that the particle gets into a position
 In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
 
 \begin{mycoro}
-\label{lem:nonsingleHill:particle:prob}
+\label{lem:mutimodal:particle:prob}
 \begin{equation}
 \begin{aligned}
 & P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
@@ -279,6 +279,17 @@ in which $ \delta () $ is the boundary function.
 \end{equation}
 \end{proof}
 \end{mycoro}
+
+\begin{mythm}
+\label{thm:multimodal:in_scope}
+\end{mythm}
+
+\begin{mythm}
+\label{thm:multimodal:out_of_scope}
+When $ x^{*} $ is out of the bound formed by $ x^{G} $ and $ x^{P}(k) $, the probability that a particle finds $ x^{*} $ is zero.
+\end{mythm}
+
+
 
 \subsubsection{Exploration}
 
