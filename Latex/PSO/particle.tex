@@ -110,8 +110,33 @@ The particle should gradually converge to the global best if the position-update
 \label{lem:unimodal:particle:input_iss}
 In a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
 \begin{proof}
-By equation \eqref{eq:pso_input_up}, we know the input of the input-update component is zero, as we take $ x^{G} $ as the reference point.
-The output is $ [x] $
+Let $ V(x) = f(x^{G}) - f(x) $.
+Because $ f(x) $ is unimodal, we have
+$ \alpha_{1} (x) \leq V(x) \leq \alpha_{2} (x)  $, 
+which $ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
+Also,
+\begin{equation}
+\begin{aligned}
+& V(x^{P}(k+1)) - V(x^{P}(k)) \\
+= & f(x^{P} (k)) - f(x^{P} (k+1)) \\
+= & f(x^{P}(k)) - f( \arg \max_{ \{ x^{P}(k), x(k+1)  \} } f(x) )  \\
+= & 
+\left\{\begin{matrix}
+0  & \mbox{if } f(x(k+1)) \leq f(x^{P}(k)) \\ 
+f(x^{P}(k)) - f(x(k+1)) & \mbox{if } f(x(k+1)) > f(x^{P}(k))
+\end{matrix}\right. \\
+\leq & 
+\left\{\begin{matrix}
+f(x^{P}(k)) - f(x(k+1))  & \mbox{if } f(x(k+1)) \leq f(x^{P}(k)) \\ 
+f(x^{P}(k)) - f(x(k+1)) & \mbox{if } f(x(k+1)) > f(x^{P}(k))
+\end{matrix}\right. \\
+\leq & f(x^{P}(k)) - f(x(k+1)) \\
+\leq & - V(x^{P}(k)) + V(x(k+1)) \\
+\leq & - \alpha_{1} ( x^{P}(k) ) + \alpha_{2} (x(k+1))).
+\end{aligned}
+\end{equation} 
+$ \alpha_{1} () $ is $ K_{\infty} $-function and $ \alpha_{2} () $ is $ K $-function.
+Thus, in a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
 \end{proof}
 \end{mylem}
 
