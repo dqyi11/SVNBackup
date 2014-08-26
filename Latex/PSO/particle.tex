@@ -27,16 +27,22 @@ corollary 2 $ \rightarrow $ theorem \\
 (theorem) Add the case for $ x^{*} $ outside of bound formed by $ x^{G} $ and $ x^{P} $ in this case (prob of finding $ x^{*} $) = 0.
 \end{itemize}
 
+\bigskip
+\bigskip
+\bigskip
+\bigskip
+
 In this section, we analyze the behavior of one particle in a swarm.
 In one leader stagnation, the global best is unchanged.
 Thus we denote the global best as a constant $ x^{G} $.
+In this case, the particle is isolated from the impacts from other particles till any particle finds a better solution.
 We are interested with 
 \begin{itemize}
 \item whether the particle converges to the global best;
 \item and the probability that the particle find a new global best.
 \end{itemize}
 
-In order to understand how the particle converges to the global best, we let $ x^{G} $ be the reference position and get \eqref{eq:rel_gb}.
+One way of measuring how the particle converges to the global best, we let $ x^{G} $ be the reference position and get \eqref{eq:rel_gb}.
 
 \begin{equation}
 \label{eq:rel_gb}
@@ -75,6 +81,7 @@ $ \gamma () $ is a boundary function.
 \end{mythm}
 
 Apparently if the movement bounded region does not cover the optimal, the particle will not be able to get into the optimal position.
+We have property \ref{prop:particle:nonoptimal}.
 
 \begin{myprop}
 \label{prop:particle:nonoptimal}
@@ -281,9 +288,9 @@ The exploration range is determined by the boundary of a particle's movement.
 \label{lem:particle:bound_mov}
 The bound of a particle's movement is 
 \begin{equation}
-\lVert x(k) - x^{*} \rVert < \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
+\lVert x(k) - x^{*} \rVert < \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
 \end{equation}
-in which $ \delta () $ is a boundary function. 
+in which $ \gamma () $ is a boundary function. 
 \end{mylem}
 
 Lemma \ref{lem:particle:bound_mov} shows that the boundary of a particle's movement is determined by where the global best $ x^{G} $ and the personal best $ x^{P}(k) $ locate at.
@@ -299,10 +306,10 @@ In order to measure how likely the particle can moves to a position that $ f(x) 
 \begin{equation}
 \begin{aligned}
 & P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
-& > 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert },
+& > 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert },
 \end{aligned}
 \end{equation}
-in which $ \delta () $ is a boundary function.
+in which $ \gamma () $ is a boundary function.
 \begin{proof}
 By Markov's inequality, we have
 \begin{equation}
@@ -310,15 +317,15 @@ P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \leq \frac{ E( 
 \end{equation} 
 By the boundary, we have
 \begin{equation}
-E( \lVert x(k) - x^{*} \rVert ) \leq \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
+E( \lVert x(k) - x^{*} \rVert ) \leq \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
 \end{equation}
-in which $ \delta () $ is the boundary function.
+in which $ \gamma () $ is the boundary function.
 \begin{equation}
 \begin{aligned}
 & P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
 = & 1 - P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \\
 > & 1 - \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert } \\
-> & 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert }.
+> & 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert }.
 \end{aligned}
 \end{equation}
 \end{proof}
@@ -326,7 +333,7 @@ in which $ \delta () $ is the boundary function.
 
 \begin{mythm}
 \label{thm:multimodal:in_scope}
-If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert } $
+If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert } $
 \end{mythm} 
 
 \begin{mythm}
@@ -343,7 +350,7 @@ Because $ P = 0 $.
 
 If we take the initial position $ x(0) $ as reference point for analyzing the movement boundary, we can have a form that 
 \begin{equation}
-\lVert x(k) - x(0) \rVert \leq \delta ( \max ( \lVert x^{G} - x(0) \rVert , \lVert x^{P} - x(0) \rVert ) ).
+\lVert x(k) - x(0) \rVert \leq \gamma ( \max ( \lVert x^{G} - x(0) \rVert , \lVert x^{P} - x(0) \rVert ) ).
 \end{equation}
 It means that a particle moves in a bounded region in the multi-modal case.
 The range of this region depends on where the global best $ x^{G} $ and the personal best $ x^{P} $ locate.
