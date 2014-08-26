@@ -158,19 +158,26 @@ By Lemma 3.5 in \cite{Jiang2001857}, in this case, the personal best update comp
 \end{proof}
 \end{mylem}
 
+When both two components of a particle are input-to-state stable, we can have the condition that the particle is input-to-state stable in Lemma \ref{lem:unimodal:particle:iss}.
+
 \begin{mylem}
 \label{lem:unimodal:particle:iss}
-When $ x^{G} = x^{*} $, if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
-$ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
+When the position update component is input-to-state stable,
+$ | x (k) | \leq \max \{ \beta_{1} (| x(0) |, k ), \gamma^{P}_{1} ( | x^{P} (k) | ), \gamma^{G}_{1} ( | x^{G} | ) \} $,
+and the personal best update component is input-to-state stable,
+$ | x^{P} (k) | \leq \max \{ \beta_{2} (| x^{P}(0) |, k ), \gamma_{2} ( | x^{P} (k) | ) $,
+if $ \gamma^{P}_{1} \circ \gamma_{2} (s)  < s $, the feedback model of a particle is input-to-state stable.
 \begin{proof}
-By Lemma \ref{lem:unimodal:particle:input_iss}, we have the input-update component is also input-to-state stable.
-The serial connection of two ISS components still reserves input-to-state stability.
+By Theorem 2 in \cite{Jiang2001857}, we can directly have Lemma \ref{lem:unimodal:particle:iss}.
 \end{proof}
 \end{mylem}
 
+We can have the condition that the particle converge to the optimal $ x^{*} $ in Theorem \ref{thm:unimodal:particle:garuantee_converge}.
+The unimodal fitness distribution is one of the cases that satisfy $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $.
+
 \begin{mythm}
 \label{thm:unimodal:particle:garuantee_converge}
-When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
 $ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
