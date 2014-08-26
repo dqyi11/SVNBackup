@@ -64,6 +64,26 @@ x^{P}(k) - x^{G}
 \end{aligned}
 \end{equation}
 
+Apparently if the movement bounded region does not cover the optimal, the particle will not be able to get into the optimal position.
+We have property \ref{prop:particle:nonoptimal}.
+
+\begin{myprop}
+\label{prop:particle:nonoptimal}
+Whether a particle can reach the optimal is determined by the boundary of its movement.
+\end{myprop}
+
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.7\linewidth]{./simfig/bound/bound_position}
+\caption{The convergence to the optimal of particles with different parameters.}
+\label{fig:bound_position}
+\end{figure}
+
+Not only $ | x^{P} - x^{G} | $ but also the parameters have impact on the size of the boundary.
+Figure \ref{fig:bound_position} gives an example on the boundary impacting the moving toward the optimal.
+Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
+As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
+
 \subsection{Stagnation}
 
 In stagnation, we have both the personal best and the global best are not updated, which are denoted as $ x^{P} $ and $ x^{G} $ respectively.
@@ -80,28 +100,9 @@ $  | x(k) - x^{G} | \leq \gamma ( | x^{P} - x^{G} | ). $
 $ \gamma () $ is a boundary function.
 \end{mythm}
 
-Apparently if the movement bounded region does not cover the optimal, the particle will not be able to get into the optimal position.
-We have property \ref{prop:particle:nonoptimal}.
-
-\begin{myprop}
-\label{prop:particle:nonoptimal}
-Whether a particle can reach the optimal is determined by the boundary of its movement.
-\end{myprop}
-
-Not only $ | x^{P} - x^{G} | $ but also the parameters have impact on the size of the boundary.
-
-\begin{figure}[tbph]
-\centering
-\includegraphics[width=0.7\linewidth]{./simfig/bound/bound_position}
-\caption{The convergence to the optimal of particles with different parameters.}
-\label{fig:bound_position}
-\end{figure}
-
-Figure \ref{fig:bound_position} gives an example on the boundary impacting the moving toward the optimal.
-Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
-As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
-
-In order to analyze the behavior of a particle, we look at what happens to a particle in one ``leader stagnation''. 
+As the process of an optimization process is a sequence of ``leader stagnation''.
+Stagnation usually only is sub-section of a ``leader stagnation''.
+What happens to a particle in ``leader stagnation'' directly impacts the convergence and the optimal search.
 
 \subsection{Unimodal fitness distribution}
 
@@ -151,8 +152,8 @@ Thus, in a unimodal case, when $ x^{G} = x^{*} $, the input-update component is 
 
 \begin{mylem}
 \label{lem:unimodal:particle:iss}
-When $ x^{G} = x^{*} $, if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \delta_{1} \circ \delta_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
-$ \delta_{1} () $ is the gain of the position update component and $ \delta_{2} () $ is the gain of the input update component.
+When $ x^{G} = x^{*} $, if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
+$ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:input_iss}, we have the input-update component is also input-to-state stable.
 The serial connection of two ISS components still reserves input-to-state stability.
@@ -161,8 +162,8 @@ The serial connection of two ISS components still reserves input-to-state stabil
 
 \begin{mythm}
 \label{thm:unimodal:particle:garuantee_converge}
-When $ x^{G} = x^{*} $,  if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \delta_{1} \circ \delta_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
-$ \delta_{1} () $ is the gain of the position update component and $ \delta_{2} () $ is the gain of the input update component.
+When $ x^{G} = x^{*} $,  if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+$ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
 Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ \lVert x^{G} - x^{*} \rVert = 0 $.
