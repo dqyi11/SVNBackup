@@ -10,16 +10,16 @@ It means that the personal best and global best keep constant over some time ste
 Plenty of work have focused on the behavior of a particle when this happens, particularly where it converges to~\cite{Schmitt:2013:PSO:2463372.2463563}\cite{Poli:2008:DSS:1384929.1384944}.
 
 Instead of viewing the optimization process as a random search and stopping at a ``stagnation'', we find that ``stagnation'' happens frequently during the search process.
-The swarm behavior leads that the global best would be unchanged for a great share of the entire search time.
+The swarm behavior leads that the global best would be unchanged for a great portion of the entire search time.
 As a way of finding a new global best, the personal best of a particle is more frequently changed while the global best is unchanged. 
 Define the period of time that the global best is unchanged as one ``global-best stagnation''.
-The process of particle swarm optimization consists of a sequence of stagnations, of which the global best is refined in a newer stagnation.
+The process of particle swarm optimization consists of a sequence of stagnations, of which the global best is refined in a newer ``global-best stagnation''.
 
-While the global best is not changed in a single ``global-best stagnation'', there also exists no information sharing among the particles.
+While the global best is not changed in one ``global-best stagnation'', there also exists no information sharing among the particles.
 The swarm becomes merely a collection of independent agents.
 In the stagnation, the particles have no interaction with each other.
-There exists a potential competition.
-The particle that finds a better solution takes over the global best and triggers a new ``global-best stagnation''.
+There exists a particles' competition.
+The particle that finds a better solution takes over the global best triggers a new ``global-best stagnation''.
 
 Due to the non-zero force on the motion of the particle, when the personal best and the global best are inconsistent, there exists no real convergence of a particle's position, which is given in Property \ref{prop:unconverge_neq_gb}.
 \begin{myprop}
@@ -28,5 +28,5 @@ A particle won't stop moving when its personal best and global best are not the 
 which means that 
 $ \lim_{k \rightarrow \infty} v(k) \neq 0 $, if $ x^{P} \neq x^{G} $.
 \end{myprop}
-It shows that the import of the stochastic factors prevents the existence of an equilibrium position for a particle before its global best and personal best reach a consensus.
+It indicates that the import of the stochastic factors prevents the existence of an equilibrium position for a particle before its global best and personal best reach a consensus.
 It means that the conventional analyses of point-convergence methods are not enough to understand the dynamics of the optimization process of the particle swarm optimization.  
