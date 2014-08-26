@@ -56,15 +56,15 @@ with $ f(0,0) = 0 $
 \end{equation}
 \end{mydef}
 
-The $ \beta () $ term in equation \eqref{eq:def_iss} defines an initial bound with a decaying property.
-The $ \gamma () $ term in equation \eqref{eq:def_iss} defines a bound determined by the input.
+The $ \beta () $ term in \eqref{eq:def_iss} defines an initial bound with a decaying property.
+The $ \gamma () $ term in \eqref{eq:def_iss} defines a bound determined by the input.
 This means that the influence $ \beta () $ term gradually decreases to zero and the position is bounded by a range determined by the bound on the input.
 An ISS-Lyapunov function, defined above, can be used to prove the input-to-state stability of a system and analyze the state bound\cite{Jiang2001857}.
 We will use the ISS-Lyapunov-function approach in the proof given later in this section.
 
 \subsection{Conditions for input-to-state stability for position update in PSO}
 
-Using the definition of the PSO position update as given in equation \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be ISS as defined in definition \ref{def:iss}.
+Using the definition of the PSO position update as given in \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be ISS as defined in definition \ref{def:iss}.
 
 \begin{mythm}
 \label{thm:iss}
@@ -97,7 +97,7 @@ and
 $ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
 we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
 
-By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
+By applying \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
 \begin{equation}
 \label{eq:lyapunov_delta2}
 \begin{aligned}
@@ -139,12 +139,12 @@ and
 $ \sigma ( \xi ) = [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } +  \lVert B' \rVert^{2} ] \xi^{2} $.
 Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
 so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
-Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
+Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
 
 \end{proof}
 \end{mythm}
 
-Note that in using equation \eqref{eq:pso_up_linalg_simp},
+Note that in using \eqref{eq:pso_up_linalg_simp},
 $ [ v(k), x(k) - x^{*} ]^{T} = [0, 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} = [0, 0]^{T} $.
 For an arbitrary optimization problem $ x^{*} $ would typically not be at the origin. 
 In such a problem, input-to-state stability means that the boundaries of $ \lVert v(k) \lVert $ and $ \lVert x(k) - x^{*} \rVert $ would be transformed and thus determined by $ | x^{G}(k) - x^{*} | $ and $ | x^{P}(k) - x^{*} | $,
@@ -154,7 +154,7 @@ Having proven that PSO is ISS we can now state a bound on particle position.
 
 \begin{mythm}
 \label{coro:state_bound}
-Given the bound on the input $ \lVert u \rVert $ in the position update component, we have the bound on the particle position from equation \eqref{eq:pso_up_linalg_simp}.
+Given the bound on the input $ \lVert u \rVert $ in the position update component, we have the bound on the particle position from \eqref{eq:pso_up_linalg_simp}.
 \begin{equation}
 \label{eq:state_bound}
 \forall k, 
@@ -274,11 +274,11 @@ The input-to-state stability of the position update component makes the movement
 This property provides the chance that the particle exploits the regions near around the personal best and the global best.
 We can have:
 \begin{enumerate}
-\item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
+\item If the personal best and global best converge, the bound of the particle position will converge;
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
 \item If the personal best and global best become constant, the particle will converge to a point.
 \end{enumerate}
-Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
+Furthermore, by \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
 In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
 Conversely, if the position update component is not input-to-state stable, the movement of the particle will diverge from the global best and the personal best.
 The design of the exploitation by the personal best and the global best is lost.
