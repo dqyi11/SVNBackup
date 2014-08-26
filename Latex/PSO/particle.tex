@@ -2,7 +2,9 @@
 \label{sec:particle}
 
 ``stagnation'' G and P stop moving
+
 ``leader stagnation'' G stop moving
+
 ``general unimodal'' (ISS of posotion update $ \rightarrow $ parameter values: consistent with past results )
 \begin{itemize}
 \item [theorem] in stagnation, inputs are bounded $ \rightarrow $ $ x(k+1) $ is bounded \\
@@ -108,7 +110,7 @@ The particle should gradually converge to the global best if the position-update
 
 \begin{mylem}
 \label{lem:unimodal:particle:input_iss}
-In a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
+If $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
 \begin{proof}
 Let $ V(x) = f(x^{G}) - f(x) $.
 Because $ f(x) $ is unimodal, we have
@@ -142,7 +144,8 @@ Thus, in a unimodal case, when $ x^{G} = x^{*} $, the input-update component is 
 
 \begin{mylem}
 \label{lem:unimodal:particle:iss}
-In a unimodal case, when $ x^{G} = x^{*} $, the cascade model of a particle is input-to-state stable.
+When $ x^{G} = x^{*} $, if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \delta_{1} \circ \delta_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
+$ \delta_{1} () $ is the gain of the position update component and $ \delta_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:input_iss}, we have the input-update component is also input-to-state stable.
 The serial connection of two ISS components still reserves input-to-state stability.
@@ -150,12 +153,28 @@ The serial connection of two ISS components still reserves input-to-state stabil
 \end{mylem}
 
 \begin{mythm}
-\label{thm:unimodal:particle:converge}
-In a unimodal case, when $ x^{G} = x^{*} $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+\label{thm:unimodal:particle:garuantee_converge}
+When $ x^{G} = x^{*} $,  if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \delta_{1} \circ \delta_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+$ \delta_{1} () $ is the gain of the position update component and $ \delta_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
 Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ \lVert x^{G} - x^{*} \rVert = 0 $.
 By the property of the input-to-state stability, $ | x(k) - x^{*} | $ will converge to zero, which means that the particle will converge to $ x^{*} $.
+\end{proof}
+\end{mythm}
+
+
+
+\begin{mythm}
+\label{thm:unimodal:particle:converge}
+In a unimodal case, when $ x^{G} = x^{*} $, the particle will almost surely converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+\begin{proof}
+The convergence of the particle depends on the convergence of the personal best.
+In this case, given the personal best $ x^{P} $, the solution space $ \Omega = A \cup B \land A \cap B = \phi $, in which 
+$ A = \{ x | f(x) > f(x^{P}) \} $ and $ A = \{ x | f(x) \leq f(x^{P}) \} $.
+As long as the particle gets into the set $ A $, the size of the set $ A $ decreases.
+When $ A = \phi $, $ x^{P} = x^{G} = x^{*} $.
+The probability of moving into set $ A $ is always greater than zero.
 \end{proof}
 \end{mythm}
 
@@ -307,11 +326,15 @@ in which $ \delta () $ is the boundary function.
 
 \begin{mythm}
 \label{thm:multimodal:in_scope}
-\end{mythm}
+If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \delta ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert } $
+\end{mythm} 
 
 \begin{mythm}
 \label{thm:multimodal:out_of_scope}
 When $ x^{*} $ is out of the bound formed by $ x^{G} $ and $ x^{P}(k) $, the probability that a particle finds $ x^{*} $ is zero.
+\begin{proof}
+Because $ P = 0 $.
+\end{proof}
 \end{mythm}
 
 
