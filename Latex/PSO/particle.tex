@@ -113,18 +113,24 @@ We categorize the unimodal into two types of cases, $ x^{G} = x^{*} $ and $ x^{G
 
 \subsubsection{$ x^{G} = x^{*} $}
 
-When the global best is already the optimal solution, there is no chance for the particle to find a better solution and trigger a new global best.
+When the global best is already the optimal solution, there is no chance for the particle to find a better.
 The particle should gradually converge to the global best if the position-update component is input-to-state stable, as in Theorem \ref{thm:unimodal:particle:converge}.
+
+The fitness distribution determines the property of the personal best update component.
+We have the condition of the fitness distribution that makes the personal best update component input-to-state stable.
+It is given in Lemma \ref{lem:unimodal:particle:input_iss}.
 
 \begin{mylem}
 \label{lem:unimodal:particle:input_iss}
-If $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
+If $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $, when $ x^{G} = x^{*} $, the personal best update component is input-to-state stable.
+$ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
 \begin{proof}
 Let $ V(x) = f(x^{G}) - f(x) $.
-Because $ f(x) $ is unimodal, we have
-$ \alpha_{1} (x) \leq V(x) \leq \alpha_{2} (x)  $, 
-which $ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
-Also,
+Because we have
+$ \alpha_{1} ( |x| ) \leq V(x) \leq \alpha_{2} ( |x| )  $.
+We have $ V (x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
+
+We also have
 \begin{equation}
 \begin{aligned}
 & V(x^{P}(k+1)) - V(x^{P}(k)) \\
@@ -142,17 +148,19 @@ f(x^{P}(k)) - f(x(k+1)) & \mbox{if } f(x(k+1)) > f(x^{P}(k))
 \end{matrix}\right. \\
 \leq & f(x^{P}(k)) - f(x(k+1)) \\
 \leq & - V(x^{P}(k)) + V(x(k+1)) \\
-\leq & - \alpha_{1} ( x^{P}(k) ) + \alpha_{2} (x(k+1))).
+\leq & - \alpha_{1} ( | x^{P}(k) | ) + \alpha_{2} ( | x(k+1) | ).
 \end{aligned}
 \end{equation} 
-$ \alpha_{1} () $ is $ K_{\infty} $-function and $ \alpha_{2} () $ is $ K $-function.
-Thus, in a unimodal case, when $ x^{G} = x^{*} $, the input-update component is input-to-state stable.
+We have that $ \alpha_{1} () $ is $ K_{\infty} $-function and $ \alpha_{2} () $ is $ K $-function.
+Thus the condition 2 of the ISS-Lyapunov function definition is also satisfied.
+$ V(x) $ is an ISS-Lyapunov function.
+By Lemma 3.5 in \cite{Jiang2001857}, in this case, the personal best update component is input-to-state stable.
 \end{proof}
 \end{mylem}
 
 \begin{mylem}
 \label{lem:unimodal:particle:iss}
-When $ x^{G} = x^{*} $, if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
+When $ x^{G} = x^{*} $, if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the feedback model of a particle is input-to-state stable.
 $ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:input_iss}, we have the input-update component is also input-to-state stable.
@@ -162,7 +170,7 @@ The serial connection of two ISS components still reserves input-to-state stabil
 
 \begin{mythm}
 \label{thm:unimodal:particle:garuantee_converge}
-When $ x^{G} = x^{*} $,  if $ \alpha_{1} (x) \leq f(x^{*}) - f(x) \leq \alpha_{2} (x) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2}^{-1} (x)  < x $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
 $ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
