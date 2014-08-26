@@ -2,14 +2,8 @@
 \label{sec:rel_work}
 
 Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
-Plenty of works consider the ``stagnation'' that a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $~\cite{Clerc06stagnationanalysis}.
-%Previous work that assumes stagnation can be categorized into two groups each based on how the analysis treats the stochastic factors.
-%The first approach is to ignore the stochastic factors.
-The existence of stochastic factors makes the dynamics of the algorithm hard to be analyzed.
-One approach is replacing stochastic factors with constant factors.
-Using this simplification, the convergence of a particle at stagnation can be analyzed~\cite{985692}. 
-By building a linear system model~\cite{4424687}, the PSO algorithm can be viewed as a closed loop system and the convergence can be analyzed.
-Based on such a convergence analysis, parameters can be set for best effect \cite{Trelea2003317}.
+The initial analysis starts from replacing stochastic factors with constant factors in order to predict the convergence of a particle at stagnation can be analyzed~\cite{985692}~\cite{4424687}.
+Based on such convergence analyses, parameters can be set for best effect \cite{Trelea2003317}.
 Another approach for handling the stochastic factors is based on the stochastic analysis.
 By taking the mean of the stochastic variables, the stochastic terms can be converted into
 constant terms.
