@@ -1,36 +1,36 @@
 \section{Particle analysis}
 \label{sec:particle}
 
-``stagnation'' G and P stop moving
+%``stagnation'' G and P stop moving
 
-``leader stagnation'' G stop moving
+%``leader stagnation'' G stop moving
 
-``general unimodal'' (ISS of posotion update $ \rightarrow $ parameter values: consistent with past results )
-\begin{itemize}
-\item [theorem] in stagnation, inputs are bounded $ \rightarrow $ $ x(k+1) $ is bounded \\
-(like previous results) \\
-$  x^{*} = x^{G} = x^{P} $ \\
-$  \hat{x^{*}} = x^{G} \not = x^{P} $
-\item in unimodal case (smooth?)  \\
-1) (Lemma ?) when $ x^{G} = x^{*} $, input update is ISS \\
-2) (Lemma 1) when $ x^{G} = x^{*} $, ISS position update parameters, then particle is ISS \\
-2) (theorem ?) ..... then $ x \rightarrow x^{G} $ \\
-3) (Lemma 2) if $ x^{G} \not = x^{*} $ surely not stop at $ x^{G} $ \\
-4) (theorem 3) almost surly $ | x^{*} - x(k) | < \epsilon $ \\
-Lemma ? if unimodal then input update is ISS \\
-Needed: lemma 2 (?), Bound covers some non-zero set of points $ X $, where $ \forall x \in X, f(x) > f(x^{G}) $ \\
-Use def of "almost surly" - coin example \\
-maybe use fig. 7 with transition prob > 0 (Markov process) 
-\item in multimodal case \\
-lemma 3 \\
-corollary 2 $ \rightarrow $ theorem \\
-(theorem) Add the case for $ x^{*} $ outside of bound formed by $ x^{G} $ and $ x^{P} $ in this case (prob of finding $ x^{*} $) = 0.
-\end{itemize}
+%``general unimodal'' (ISS of posotion update $ \rightarrow $ parameter values: consistent with past results )
+%\begin{itemize}
+%\item [theorem] in stagnation, inputs are bounded $ \rightarrow $ $ x(k+1) $ is bounded \\
+%(like previous results) \\
+%$  x^{*} = x^{G} = x^{P} $ \\
+%$  \hat{x^{*}} = x^{G} \not = x^{P} $
+%\item in unimodal case (smooth?)  \\
+%1) (Lemma ?) when $ x^{G} = x^{*} $, input update is ISS \\
+%2) (Lemma 1) when $ x^{G} = x^{*} $, ISS position update parameters, then particle is ISS \\
+%2) (theorem ?) ..... then $ x \rightarrow x^{G} $ \\
+%3) (Lemma 2) if $ x^{G} \not = x^{*} $ surely not stop at $ x^{G} $ \\
+%4) (theorem 3) almost surly $ | x^{*} - x(k) | < \epsilon $ \\
+%Lemma ? if unimodal then input update is ISS \\
+%Needed: lemma 2 (?), Bound covers some non-zero set of points $ X $, where $ \forall x \in X, f(x) > f(x^{G}) $ \\
+%Use def of "almost surly" - coin example \\
+%maybe use fig. 7 with transition prob > 0 (Markov process) 
+%\item in multimodal case \\
+%lemma 3 \\
+%corollary 2 $ \rightarrow $ theorem \\
+%(theorem) Add the case for $ x^{*} $ outside of bound formed by $ x^{G} $ and $ x^{P} $ in this case (prob of finding $ x^{*} $) = 0.
+%\end{itemize}
 
-\bigskip
-\bigskip
-\bigskip
-\bigskip
+%\bigskip
+%\bigskip
+%\bigskip
+%\bigskip
 
 In this section, we analyze the behavior of one particle in a swarm.
 In one leader stagnation, the global best is unchanged.
@@ -291,15 +291,6 @@ It means that the particle will almost surely find a better solution.
 \end{proof}
 \end{mythm}
 
-\subsubsection{Exploitation}
-
-The design of the position component of a particle imports the exploitation of the optimal search.
-When input-to-state stability is guaranteed, a single particle shows the convergence in a unimodal case.
-The personal best and the global best attracts the particle moving toward themselves~\cite{Schmitt:2013:PSO:2463372.2463563}.
-
-The input-to-state stability guarantees that the particle could utilize the current information as the heuristic.
-
-
 \subsection{Multi-model fitness distribution}
 
 When there are multiple modalities in the range that the particle moves, it is not easy to figure out a pattern of the behaviors that the particles share.
@@ -378,16 +369,29 @@ When the fitness function coarsely shows some monotonicity, we can measure the p
 If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert } $
 \end{mythm} 
 
+\subsection{Exploitation and exploration}
+
+The property showed above provides the exploitation and exploration at a particle level.
 
 
+\subsubsection{Exploitation}
 
+The convergence property indicates the exploitation of the optimal search.
+In a leader-follower scheme, there always exists an attraction from the global best so that the particles show convergence toward the global best.
+However, the convergence property also enhance the local attraction from maintaining a personal best.
+The inherent input-to-state stability guarantees that the particle could utilize the current information as the heuristic.
+This makes the particle swarm optimization a convergent optimization method.
 
 \subsubsection{Exploration}
 
-If we take the initial position $ x(0) $ as reference point for analyzing the movement boundary, we can have a form that 
-\begin{equation}
-\lVert x(k) - x(0) \rVert \leq \gamma ( \max ( \lVert x^{G} - x(0) \rVert , \lVert x^{P} - x(0) \rVert ) ).
-\end{equation}
+In the exist of the convergence, there are also mechanisms that prevents early premature of the optimal search process.
+The import of the stochastic terms brings nondeterministic and versatile search capability, which indicates varying step length.
+
+However, the varying step length is still limited in a range. 
+With an inertia term, it means the exists of a boundary of the movement.
+This always implies the search capability of a particle.
+As stated in Theorem \ref{thm:multimodal:out_of_scope}, the particle might not able to find a better solution and is stuck in the movement inside a region.
+
 It means that a particle moves in a bounded region in the multi-modal case.
 The range of this region depends on where the global best $ x^{G} $ and the personal best $ x^{P} $ locate.
 By \eqref{eq:bound:final}, we can see that this boundary should include both the global best and the personal best.
