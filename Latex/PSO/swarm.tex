@@ -18,8 +18,8 @@
 %\item Can we look at parameters for the whole swarm?
 %\end{itemize}
 
-In section \ref{sec:particle}, we can see the limitation of the search capacity of a particle.
-The particle is in a randomized walk in an attractive potential fields defined by the global best and the personal best.
+In section \ref{sec:particle}, we can see the pros and cons of the search capacity of a particle.
+The particle is in a randomized walk in an attractive potential field defined by the global best and the personal best.
 There exist a lot of factors that prevents the particle reaching the optimal.
 The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
 The import of interaction topology enhances the search capability, which makes it more than a beam-search style optimization method.
@@ -27,18 +27,29 @@ In this section, we analyze the star topology of global best update.
 In this topology, the global best update imports the competition among the particles.
 The particle finds a new global best becomes the leader of the swarm.
 
+unimodal
+\begin{itemize}
+\item bound -> convergence
+\item swarm converges more quickly
+\end{itemize}
+multimodal
+\begin{itemize}
+\item bounded converge to bound
+\item explore better
+\end{itemize}
+
 \subsection{Unimodal fitness distribution}
 
 Due to the potential competition in the swarm, if there is always a particle finds a better solution till the optimal is reached, the swarm can always find the optimal in the unimodal case.
-We have Theorem \ref{thm:singleHill:swarm:converge}.
+We have Theorem \ref{thm:unimodal:swarm:converge}.
 
 \begin{mythm}
-\label{thm:singleHill:swarm:converge}
-In the unimodal case, when there are more than two particles, $ x^{G} \rightarrow x^{*} $ if all the particles has input-to-state stable position update component.
+\label{thm:unimodal:swarm:converge}
+In the unimodal case, when there are more than two particles, $ x^{G} $ converges to $ x^{*} $ if all the particles has input-to-state stable position update component.
 \begin{proof}
 There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
-If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Lemma \ref{lem:singleHill:particle:nonstop}.
-If the global best is not $ x^{*} $, the particles will take turns to find new global best by Theorem \ref{thm:singleHill:particle:better} till $ x^{*} = x^{G} $.
+If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Lemma \ref{lem:unimodal:particle:nonstop}.
+If the global best is not $ x^{*} $, the particles will take turns to find new global best by Theorem \ref{thm:unimodal:particle:better} till $ x^{*} = x^{G} $.
 Then it becomes the case $ x^{G} = x^{*} $.
 \end{proof}
 \end{mythm}
@@ -53,10 +64,10 @@ Then it becomes the case $ x^{G} = x^{*} $.
 When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
 The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
 The increase of the number of the particles raise the probability that the swarm can find a new global best.
-We have Theorem \ref{thm:nonsingleHill:swarm:prob}.
+We have Theorem \ref{thm:multimodal:swarm:prob}.
 
 \begin{mythm}
-\label{thm:nonsingleHill:swarm:prob}
+\label{thm:multimodal:swarm:prob}
 The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
 \begin{equation}
 \label{eq:prob_sum}

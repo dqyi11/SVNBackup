@@ -93,6 +93,7 @@ Thus we have Theorem \ref{thm:stagnation_bound}.
 \begin{mythm}
 \label{thm:stagnation_bound}
 \begin{equation}
+\label{eq:stagnation_bound}
 | x(k) - x^{G} | \leq \gamma ( | x^{P}(k) - x^{G} | ), 
 \end{equation}
 Particularly, when $ x^{P} $ is constant,
@@ -373,7 +374,6 @@ If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R
 
 The property showed above provides the exploitation and exploration at a particle level.
 
-
 \subsubsection{Exploitation}
 
 The convergence property indicates the exploitation of the optimal search.
@@ -391,11 +391,14 @@ However, the varying step length is still limited in a range.
 With an inertia term, it means the exists of a boundary of the movement.
 This always implies the search capability of a particle.
 As stated in Theorem \ref{thm:multimodal:out_of_scope}, the particle might not able to find a better solution and is stuck in the movement inside a region.
+Moreover, as it is shown in Lemma \ref{thm:stagnation_bound} and Lemma \ref{lem:particle:bound_mov}, the positions of the personal best and the global best can also determine the boundary of the particle's movement.
+By \eqref{eq:stagnation_bound}, we can see that a bigger inconsistence between global best and personal best $ | x^{P} - x^{G} | $ makes a bigger boundary.
 
-It means that a particle moves in a bounded region in the multi-modal case.
-The range of this region depends on where the global best $ x^{G} $ and the personal best $ x^{P} $ locate.
-By \eqref{eq:bound:final}, we can see that this boundary should include both the global best and the personal best.
-Particularly, the larger $ \lVert A \rVert $ is, the larger boundary is.
-It enables the explore capability of a particle.
-A smaller step provides a higher probability of finding a better solution, which locates in between the personal best and the global best.
+
+%It means that a particle moves in a bounded region in the multi-modal case.
+%The range of this region depends on where the global best $ x^{G} $ and the personal best $ x^{P} $ locate.
+%By \eqref{eq:bound:final}, we can see that this boundary should include both the global best and the personal best.
+%Particularly, the larger $ \lVert A \rVert $ is, the larger boundary is.
+%It enables the explore capability of a particle.
+%A smaller step provides a higher probability of finding a better solution, which locates in between the personal best and the global best.
 
