@@ -1,9 +1,9 @@
 import csv
 import numpy as np
 from GeneticAlgorithm import *
-from ParticleSwarmOptimization import *
+from NeuralNetwork import *
 
-class LinearRegressionCalculator(object):
+class NeuralNetworkCalculator(object):
 
     def __init__(self, dimension):
         self.dim = dimension
@@ -17,9 +17,9 @@ class LinearRegressionCalculator(object):
         
         self.mle = 0.0
         self.fitnessVal = []
-        self.runCnt = 2000
+        self.gaRunCnt = 2000
+        self.nn = NeuralNetwork([self.dim, 10, 1])
 
-        
     
     def load(self, filename):        
         with open(filename, 'rb') as csvfile:
@@ -32,23 +32,14 @@ class LinearRegressionCalculator(object):
                 
         self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
         self.Y = np.array(self.outputs).T
-                
-    def calc(self):
         
-        betas = np.dot(np.dot(np.linalg.inv(np.dot(self.X.T, self.X)) , self.X.T) , self.Y)
-        #print betas
-        self.betas = betas
-        
-        delta = self.Y - np.dot(self.X, betas)
-        #print delta
-        self.mle = np.dot(delta.T, delta) / self.dataSize
         
     def calcFitness(self, weight):
         beta = np.array(weight)
         #print beta.shape
         #print self.X.shape
         #print self.Y.shape
-        delta = self.Y - np.dot(self.X, beta)
+        delta = self.Y - self.nn.calcFunc(input)
         return np.dot(delta.T, delta) / self.dataSize 
         
     def calcByGA(self, population_num, geneRange):
@@ -60,38 +51,11 @@ class LinearRegressionCalculator(object):
         ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
         
         self.fitnessVal = []
-        for t in range(self.runCnt):
+        for t in range(self.gaRunCnt):
             ga.next()
             self.fitnessVal.append(ga.population[0].fitness)
-            print t
             
         self.betas = np.array(ga.population[0].genes)
         delta = self.Y - np.dot(self.X, self.betas)
         self.mle = np.dot(delta.T, delta) / self.dataSize
-        
-    def calcByPSO(self, population_num, geneRange):
-        
-        particleDim = self.dim + 1
-        
-        pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
-        
-        self.fitnessVal = []
-        for t in range(self.runCnt):
-            pso.next()
-            self.fitnessVal.append(pso.gbFitness)
-            print t
-            
-        self.betas = np.array(pso.gb)
-        delta = self.Y - np.dot(self.X, self.betas)
-        self.mle = np.dot(delta.T, delta) / self.dataSize
-        
-            
-        
-        
-                    
-
-        
-                
-    
-            
             

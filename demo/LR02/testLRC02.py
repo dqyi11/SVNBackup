@@ -11,10 +11,17 @@ if __name__ == '__main__':
     #print lr.inputs[3]
     #print lr.outputs
     lr.calc()
-    #lr.gaRunCnt = 5000
+    #lr.runCnt = 5000
     #lr.calcByGA(500, [-10.0, 10.0])
+    #lr.calcByPSO(500, [-10.0, 10.0])
     
     print lr.betas
     print lr.mle
     
+    '''
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(np.arange(lr.runCnt), lr.fitnessVal)
+    plt.show()
+    '''
     

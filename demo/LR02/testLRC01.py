@@ -10,9 +10,10 @@ if __name__ == '__main__':
     #print lr.inputs[2]
     #print lr.inputs[3]
     #print lr.outputs
-    lr.calc()
+    #lr.calc()
     
     #lr.calcByGA(200, [-5.0, 5.0])
+    lr.calcByPSO(200, [-5.0, 5.0])
     
     print lr.betas
     #print lr.mle
