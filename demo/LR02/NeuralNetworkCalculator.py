@@ -13,11 +13,11 @@ class NeuralNetworkCalculator(object):
             self.inputs.append([])
         self.outputs = []
         
-        self.betas = np.zeros((1, self.dim+1))
+        #self.betas = np.zeros((1, self.dim+1))
         
         self.mle = 0.0
         self.fitnessVal = []
-        self.gaRunCnt = 2000
+        self.runCnt = 2000
         self.nn = NeuralNetwork([self.dim, 10, 1])
 
     
@@ -30,20 +30,24 @@ class NeuralNetworkCalculator(object):
                     self.inputs[d].append(float(row[d]))
                 self.outputs.append(float(row[self.dim]))
                 
-        self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
-        self.Y = np.array(self.outputs).T
+        self.X = np.array(self.inputs).T
+        self.Y = np.array(self.outputs)
         
         
     def calcFitness(self, weight):
-        beta = np.array(weight)
+        #beta = np.array(weight)
         #print beta.shape
         #print self.X.shape
         #print self.Y.shape
-        delta = self.Y - self.nn.calcFunc(input)
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.nn.calcFunc(weight, x)[0])
+        delta = self.Y - np.array(nY)
         return np.dot(delta.T, delta) / self.dataSize 
         
     def calcByGA(self, population_num, geneRange):
-        chromoLen = self.dim + 1
+        chromoLen = self.nn.weight_num + self.nn.bias_num
         
         #self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
         #self.Y = np.array(self.outputs).T
@@ -51,11 +55,16 @@ class NeuralNetworkCalculator(object):
         ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
         
         self.fitnessVal = []
-        for t in range(self.gaRunCnt):
+        for t in range(self.runCnt):
             ga.next()
             self.fitnessVal.append(ga.population[0].fitness)
+            print t
             
         self.betas = np.array(ga.population[0].genes)
-        delta = self.Y - np.dot(self.X, self.betas)
-        self.mle = np.dot(delta.T, delta) / self.dataSize
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.nn.calcFunc(self.betas, x)[0])
+        delta = self.Y - np.array(nY)
+        self.mle = np.dot(delta.T, delta) / self.dataSize 
             

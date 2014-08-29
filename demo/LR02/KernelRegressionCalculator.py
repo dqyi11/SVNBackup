@@ -4,7 +4,7 @@ from GeneticAlgorithm import *
 
 class KernelRegressionCalculator(object):
 
-    def __init__(self, dimension):
+    def __init__(self, dimension, smooth_factor, kernel_func):
         self.dim = dimension
         self.dataSize = 0
         self.inputs = []
@@ -12,14 +12,9 @@ class KernelRegressionCalculator(object):
             self.inputs.append([])
         self.outputs = []
         
-        self.betas = np.zeros((1, self.dim+1))
+        self.smooth_factor = smooth_factor
+        self.kernel_func = kernel_func
         
-        self.mle = 0.0
-        self.fitnessVal = []
-        self.gaRunCnt = 2000
-
-        
-    
     def load(self, filename):        
         with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile)
@@ -29,5 +24,13 @@ class KernelRegressionCalculator(object):
                     self.inputs[d].append(float(row[d]))
                 self.outputs.append(float(row[self.dim]))
                 
-        self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
-        self.Y = np.array(self.outputs).T
+        self.X = np.array(self.inputs).T
+        self.Y = np.array(self.outputs)
+        
+        
+    def calc(self):
+        self.K = np.zeros((self.dataSize, self.dataSize))
+        for i in range(self.dataSize):
+            for j in range(self.dataSize):
+                self.K[i,j] = self.kernel(self.X[i,:], self.X[j,:])
+        self.C = np.linalg.inv(self.K + self.smooth_factor * np.eye(self.dataSize) ) * self.Y                
