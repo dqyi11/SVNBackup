@@ -22,5 +22,6 @@ class RBFNetwork(object):
             for d in range(self.dim):
                 center[d] = betas[self.weight_num + i * self.dim + d]
             output += betas[i] * self.kernel_func(input, center)        
-            
+        
+        #print output    
         return output
