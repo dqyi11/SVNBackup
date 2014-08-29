@@ -1,25 +1,29 @@
 import csv
 import numpy as np
 from GeneticAlgorithm import *
+from RBFNetwork import *
 from ParticleSwarmOptimization import *
 
-class LinearRegressionCalculator(object):
 
-    def __init__(self, dimension):
+
+class RBFNetworkCalculator(object):
+
+    def __init__(self, dimension, kernel_func):
         self.dim = dimension
         self.dataSize = 0
         self.inputs = []
         for d in range(self.dim):
             self.inputs.append([])
         self.outputs = []
+        self.kernel_func = kernel_func
         
-        self.betas = np.zeros((1, self.dim+1))
+        #self.betas = np.zeros((1, self.dim+1))
         
         self.mle = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
+        self.rbf = RBFNetwork(self.dim, 10, self.kernel_func)
 
-        
     
     def load(self, filename):        
         with open(filename, 'rb') as csvfile:
@@ -30,30 +34,24 @@ class LinearRegressionCalculator(object):
                     self.inputs[d].append(float(row[d]))
                 self.outputs.append(float(row[self.dim]))
                 
-        self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
-        self.Y = np.array(self.outputs).T
-                
-    def calc(self):
+        self.X = np.array(self.inputs).T
+        self.Y = np.array(self.outputs)
         
-        betas = np.dot(np.dot(np.linalg.inv(np.dot(self.X.T, self.X)) , self.X.T) , self.Y)
-        #print betas
-        self.betas = betas
-        
-        delta = self.Y - np.dot(self.X, betas)
-        print delta
-        print np.linalg.norm(delta)
-        self.mle =  np.dot(delta.T, delta) / self.dataSize
         
     def calcFitness(self, weight):
-        beta = np.array(weight)
+        #beta = np.array(weight)
         #print beta.shape
         #print self.X.shape
         #print self.Y.shape
-        delta = self.Y - np.dot(self.X, beta)
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.rbf.calcFunc(weight, x))
+        delta = self.Y - np.array(nY)
         return np.dot(delta.T, delta) / self.dataSize 
         
     def calcByGA(self, population_num, geneRange):
-        chromoLen = self.dim + 1
+        chromoLen = self.rbf.beta_num
         
         #self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
         #self.Y = np.array(self.outputs).T
@@ -64,16 +62,19 @@ class LinearRegressionCalculator(object):
         for t in range(self.runCnt):
             ga.next()
             self.fitnessVal.append(ga.population[0].fitness)
-            print t
+            print str(t) + " : " + str(ga.population[0].fitness)
             
         self.betas = np.array(ga.population[0].genes)
-        delta = self.Y - np.dot(self.X, self.betas)
-
-        self.mle = np.dot(delta.T, delta) / self.dataSize
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.nn.calcFunc(self.betas, x)[0])
+        delta = self.Y - np.array(nY)
+        self.mle = np.dot(delta.T, delta) / self.dataSize 
         
     def calcByPSO(self, population_num, geneRange):
         
-        particleDim = self.dim + 1
+        particleDim = self.nn.weight_num + self.nn.bias_num
         
         pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
         
@@ -81,19 +82,13 @@ class LinearRegressionCalculator(object):
         for t in range(self.runCnt):
             pso.next()
             self.fitnessVal.append(pso.gbFitness)
-            print t
+            print str(t) + " : " + str(pso.gbFitness)
             
         self.betas = np.array(pso.gb)
-        delta = self.Y - np.dot(self.X, self.betas)
-        self.mle = np.dot(delta.T, delta) / self.dataSize
-        
-            
-        
-        
-                    
-
-        
-                
-    
-            
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.nn.calcFunc(self.betas, x)[0])
+        delta = self.Y - np.array(nY)
+        self.mle = np.dot(delta.T, delta) / self.dataSize 
             

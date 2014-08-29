@@ -32,5 +32,12 @@ class KernelRegressionCalculator(object):
         self.K = np.zeros((self.dataSize, self.dataSize))
         for i in range(self.dataSize):
             for j in range(self.dataSize):
-                self.K[i,j] = self.kernel(self.X[i,:], self.X[j,:])
-        self.C = np.linalg.inv(self.K + self.smooth_factor * np.eye(self.dataSize) ) * self.Y                
+                self.K[i,j] = self.kernel_func(self.X[i,:], self.X[j,:])
+        self.C = np.dot( np.linalg.inv(self.K + self.smooth_factor * np.eye(self.dataSize) ) , self.Y )
+        
+        nY = np.zeros(self.dataSize)
+        for i in range(self.dataSize):
+            for j in range(self.dataSize):
+                nY[i] = nY[i] + self.C[j] * self.kernel_func(self.X[j,:], self.X[i,:])
+        delta = np.array(nY) - self.Y
+        self.mle = np.dot(delta.T, delta) / self.dataSize 
