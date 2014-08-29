@@ -68,7 +68,7 @@ class RBFNetworkCalculator(object):
         nY = []
         for i in range(self.dataSize):
             x = self.X[i,:]
-            nY.append(self.nn.calcFunc(self.betas, x)[0])
+            nY.append(self.rbf.calcFunc(self.betas, x)[0])
         delta = self.Y - np.array(nY)
         self.mle = np.dot(delta.T, delta) / self.dataSize 
         

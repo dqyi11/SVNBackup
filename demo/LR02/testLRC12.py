@@ -5,16 +5,17 @@ if __name__ == '__main__':
     
     def kernelFunc(x1, x2):
         p1 = 1
-        deltaX = np.linalg.norm( np.array(x1) - np.array(x2) )
-        
-        return np.exp( - 2 * deltaX**2 )
+        deltaX = np.array(x1) - np.array(x2) 
+        valT = np.dot(deltaX.T, deltaX)
+        val =  np.sqrt(1+valT)
+        return val
     
     
     lr = RBFNetworkCalculator(7, kernelFunc)
     lr.load('auto_mpg.csv')
     #lr.calc()
     lr.runCnt = 100
-    lr.calcByGA(500, [-10.0, 10.0])
+    lr.calcByGA(500, [-50.0, 50.0])
     #lr.calcByPSO(500, [-10.0, 10.0])
     print lr.betas
     print lr.mle
