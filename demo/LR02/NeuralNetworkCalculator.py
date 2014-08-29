@@ -2,6 +2,7 @@ import csv
 import numpy as np
 from GeneticAlgorithm import *
 from NeuralNetwork import *
+from ParticleSwarmOptimization import *
 
 class NeuralNetworkCalculator(object):
 
@@ -61,6 +62,26 @@ class NeuralNetworkCalculator(object):
             print t
             
         self.betas = np.array(ga.population[0].genes)
+        nY = []
+        for i in range(self.dataSize):
+            x = self.X[i,:]
+            nY.append(self.nn.calcFunc(self.betas, x)[0])
+        delta = self.Y - np.array(nY)
+        self.mle = np.dot(delta.T, delta) / self.dataSize 
+        
+    def calcByPSO(self, population_num, geneRange):
+        
+        particleDim = self.nn.weight_num + self.nn.bias_num
+        
+        pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
+        
+        self.fitnessVal = []
+        for t in range(self.runCnt):
+            pso.next()
+            self.fitnessVal.append(pso.gbFitness)
+            print t
+            
+        self.betas = np.array(pso.gb)
         nY = []
         for i in range(self.dataSize):
             x = self.X[i,:]

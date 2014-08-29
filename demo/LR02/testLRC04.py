@@ -27,7 +27,7 @@ if __name__ == '__main__':
     xs = np.arange(minVal, maxVal+0.01, 0.01)
     ys = []
     for x in xs:
-        ys.append(lr.nn.calcFunc(lr.nn.betas, x))
+        ys.append(lr.nn.calcFunc(lr.betas, [x]))
     ax.plot(xs, ys)
     ax.set_title("M.L.E = " + str(lr.mle))
     plt.show()
