@@ -74,7 +74,7 @@ class RBFNetworkCalculator(object):
         
     def calcByPSO(self, population_num, geneRange):
         
-        particleDim = self.nn.weight_num + self.nn.bias_num
+        particleDim = self.rbf.beta_num
         
         pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
         
@@ -88,7 +88,7 @@ class RBFNetworkCalculator(object):
         nY = []
         for i in range(self.dataSize):
             x = self.X[i,:]
-            nY.append(self.nn.calcFunc(self.betas, x)[0])
+            nY.append(self.rbf.calcFunc(self.betas, x)[0])
         delta = self.Y - np.array(nY)
         self.mle = np.dot(delta.T, delta) / self.dataSize 
             

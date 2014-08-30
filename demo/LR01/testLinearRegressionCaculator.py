@@ -7,6 +7,9 @@ if __name__ == '__main__':
     lr.load('testData-200.csv')
     lr.calc()
     
+    print str(lr.beta0)
+    print str(lr.beta1)
+    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(lr.inputs, lr.outputs, '.')

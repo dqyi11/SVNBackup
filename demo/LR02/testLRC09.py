@@ -8,7 +8,7 @@ if __name__ == '__main__':
         deltaX = np.array(x1) - np.array(x2)
         return np.exp( - np.dot(deltaX, deltaX.T) / (2*p1**2) )
     
-    lr = KernelRegressionCalculator(7, 0.5, kernelFunc)
+    lr = KernelRegressionCalculator(7, 0.1, kernelFunc)
     lr.load('auto_mpg.csv')
     lr.calc()
     #lr.runCnt = 1000

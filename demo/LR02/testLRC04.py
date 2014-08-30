@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
     
     lr = NeuralNetworkCalculator(1)
-    lr.load('testData-200.csv')
+    lr.load('testData-20.csv')
     #print lr.inputs[0]
     #print lr.inputs[1]
     #print lr.inputs[2]

@@ -10,13 +10,13 @@ if __name__ == '__main__':
     #print lr.inputs[2]
     #print lr.inputs[3]
     #print lr.outputs
-    lr.calc()
-    #lr.runCnt = 5000
-    #lr.calcByGA(500, [-10.0, 10.0])
-    #lr.calcByPSO(500, [-10.0, 10.0])
+    #lr.calc()
+    lr.runCnt = 5000
+    lr.calcByGA(1000, [-10.0, 10.0])
+    #lr.calcByPSO(1000, [-10.0, 10.0])
     
-    print lr.betas
-    print lr.mle
+    print "BETAS: " + str(lr.betas)
+    print "MSE = " + str(lr.mse)
     
     '''
     fig = plt.figure()

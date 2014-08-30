@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
     
     lr = LinearRegressionCalculator(1)
-    lr.load('testData-200.csv')
+    lr.load('testData-20.csv')
     #print lr.inputs[0]
     #print lr.inputs[1]
     #print lr.inputs[2]
@@ -12,11 +12,12 @@ if __name__ == '__main__':
     #print lr.outputs
     #lr.calc()
     
-    #lr.calcByGA(200, [-5.0, 5.0])
-    lr.calcByPSO(200, [-5.0, 5.0])
+    lr.runCnt = 1000
+    lr.calcByGA(800, [-5.0, 5.0])
+    #lr.calcByPSO(200, [-5.0, 5.0])
     
     print lr.betas
-    #print lr.mle
+    #print lr.mse
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -26,6 +27,9 @@ if __name__ == '__main__':
     xs = np.arange(minVal, maxVal+0.01, 0.01)
     ys = xs * lr.betas[1] + lr.betas[0]
     ax.plot(xs, ys)
-    ax.set_title("M.L.E = " + str(lr.mle))
+    title_str = "M.S.E = " + str(lr.mse) + "\n"
+    title_str += "  beta 0 = " + str(lr.betas[0])
+    title_str += ", beta 1 = " + str(lr.betas[1])
+    ax.set_title(title_str)
     plt.show()
     

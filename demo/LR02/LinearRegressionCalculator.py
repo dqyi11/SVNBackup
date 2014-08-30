@@ -15,7 +15,7 @@ class LinearRegressionCalculator(object):
         
         self.betas = np.zeros((1, self.dim+1))
         
-        self.mle = 0.0
+        self.mse = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
 
@@ -25,6 +25,7 @@ class LinearRegressionCalculator(object):
         with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
+                #print row
                 self.dataSize += 1
                 for d in range(self.dim):
                     self.inputs[d].append(float(row[d]))
@@ -42,7 +43,7 @@ class LinearRegressionCalculator(object):
         delta = self.Y - np.dot(self.X, betas)
         print delta
         print np.linalg.norm(delta)
-        self.mle =  np.dot(delta.T, delta) / self.dataSize
+        self.mse =  np.dot(delta.T, delta) / self.dataSize
         
     def calcFitness(self, weight):
         beta = np.array(weight)
@@ -64,12 +65,12 @@ class LinearRegressionCalculator(object):
         for t in range(self.runCnt):
             ga.next()
             self.fitnessVal.append(ga.population[0].fitness)
-            print t
+            print str(t) + " : " + str(ga.population[0].fitness)
             
         self.betas = np.array(ga.population[0].genes)
         delta = self.Y - np.dot(self.X, self.betas)
 
-        self.mle = np.dot(delta.T, delta) / self.dataSize
+        self.mse = np.dot(delta.T, delta) / self.dataSize
         
     def calcByPSO(self, population_num, geneRange):
         
@@ -81,11 +82,11 @@ class LinearRegressionCalculator(object):
         for t in range(self.runCnt):
             pso.next()
             self.fitnessVal.append(pso.gbFitness)
-            print t
+            print str(t) + " : " + str(pso.gbFitness)
             
         self.betas = np.array(pso.gb)
         delta = self.Y - np.dot(self.X, self.betas)
-        self.mle = np.dot(delta.T, delta) / self.dataSize
+        self.mse = np.dot(delta.T, delta) / self.dataSize
         
             
         

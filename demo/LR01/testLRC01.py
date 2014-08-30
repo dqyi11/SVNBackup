@@ -5,12 +5,12 @@ if __name__ == '__main__':
     
     #lr = NeuralNetworkCalculator(7)
     #lr.load('auto_mpg-norm.csv')
-    lr = NeuralNetworkCalculator(6)
-    lr.load('yacht-norm.csv')
+    lr = NeuralNetworkCalculator(3)
+    lr.load('nn_data.csv')
     #lr.calc()
     lr.runCnt = 100
-    #lr.calcByGA(200, [-10.0, 10.0])
-    lr.calcByPSO(1000, [-5.0, 5.0])
+    lr.calcByGA(1000, [-10.0, 10.0])
+    #lr.calcByPSO(1000, [-5.0, 5.0])
     print lr.betas
     print lr.mle
     

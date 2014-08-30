@@ -15,8 +15,8 @@ if __name__ == '__main__':
     lr.load('auto_mpg.csv')
     #lr.calc()
     lr.runCnt = 100
-    lr.calcByGA(500, [-50.0, 50.0])
-    #lr.calcByPSO(500, [-10.0, 10.0])
+    #lr.calcByGA(500, [-50.0, 50.0])
+    lr.calcByPSO(500, [-50.0, 50.0])
     print lr.betas
     print lr.mle
     
