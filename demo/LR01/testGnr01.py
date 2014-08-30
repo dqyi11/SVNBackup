@@ -8,4 +8,5 @@ if __name__ == '__main__':
         return np.sin(2*np.pi*x) + np.cos(4*np.pi*x)
     
     gnr = RegressionDataGenerator([1,1], func)
-    gnr.geneData(1000, 0.2)
+    gnr.geneData(100, 0.04)
+    gnr.dump("mlp_reg")

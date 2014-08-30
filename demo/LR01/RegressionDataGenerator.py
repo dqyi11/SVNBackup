@@ -23,6 +23,21 @@ class RegressionDataGenerator(object):
                 
         
     def dump(self, filename):
-        pass
+        
+        with open(filename+".csv", "wb") as file:
+            for i in range(self.dataSize):
+                dataTxt = ""
+                for id in range(self.input_dim):
+                    dataTxt += str(self.X[i,id]) + ","
+                if self.output_dim == 1:
+                    dataTxt += str(self.Y[i, 0])
+                else:
+                    for od in range(self.output_dim - 1):
+                        dataTxt += str(self.Y[i, od]) + ","
+                    dataTxt += str(self.Y[i, self.output_dim-1])
+                dataTxt += "\n"
+                
+                file.write(dataTxt)
+            
  
         
