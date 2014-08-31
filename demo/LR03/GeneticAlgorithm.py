@@ -20,7 +20,7 @@ class Chromosome(object):
                 
     def crossover(self, other):
         newChromo = Chromosome(self.chromoLen, self.geneRange, self.mutateVar)
-        crossIdx = int(np.random.random() * (self.chromoLen-1))
+        crossIdx = np.random.randint(0, self.chromoLen, 1)
         for i in range(self.chromoLen):
             if i < crossIdx:
                 newChromo.genes[i] = self.genes[i]
