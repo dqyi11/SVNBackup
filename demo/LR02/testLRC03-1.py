@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    lr = LinearRegressionCalculator(7)
-    lr.load('auto_mpg-norm.csv')
+    lr = LinearRegressionCalculator(6)
+    lr.load('yacht-norm.csv')
     lr.calc()
 
     print lr.betas

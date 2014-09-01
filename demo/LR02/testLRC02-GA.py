@@ -6,8 +6,16 @@ if __name__ == '__main__':
     lr = LinearRegressionCalculator(4)
     lr.load('data1.csv')
 
-    lr.calc()
+    lr.runCnt = 5000
+    lr.calcByGA(1000, [-10.0, 10.0])
     
     print "BETAS: " + str(lr.betas)
     print "MSE = " + str(lr.mse)
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(np.arange(lr.runCnt), lr.fitnessVal)
+    plt.show()
+    
+    print lr.fitnessVal[lr.runCnt-1]
     

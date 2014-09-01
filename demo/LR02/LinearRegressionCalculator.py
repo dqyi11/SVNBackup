@@ -41,8 +41,8 @@ class LinearRegressionCalculator(object):
         self.betas = betas
         
         delta = self.Y - np.dot(self.X, betas)
-        print delta
-        print np.linalg.norm(delta)
+        #print delta
+        #print np.linalg.norm(delta)
         self.mse =  np.dot(delta.T, delta) / self.dataSize
         
     def calcFitness(self, weight):

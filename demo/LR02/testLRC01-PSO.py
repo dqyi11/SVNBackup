@@ -5,7 +5,9 @@ if __name__ == '__main__':
     
     lr = LinearRegressionCalculator(1)
     lr.load('testData-20.csv')
-    lr.calc()
+    
+    lr.runCnt = 100
+    lr.calcByPSO(800, [-5.0, 5.0])
     
     print lr.betas
     print lr.mse
