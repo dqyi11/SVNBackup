@@ -9,10 +9,7 @@ class NeuralNetwork(object):
         self.output_num = shape[2]
         
         self.weight_num = self.input_num * self.hidden_num + self.hidden_num * self.output_num
-        #self.weights = np.zeros(self.weight_num)
-        
         self.bias_num = self.hidden_num + self.output_num
-        #self.biases = np.zeros(self.bias_num)
         
     
     def calcFunc(self, weights, input):

@@ -8,7 +8,7 @@ if __name__ == '__main__':
     lr.runCnt = 500
     lr.calcByGA(2000, [-10.0, 10.0])
     print lr.betas
-    print lr.mle
+    print lr.mse
     
     fig = plt.figure()
     ax = fig.add_subplot(111)

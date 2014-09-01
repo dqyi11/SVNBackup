@@ -14,9 +14,7 @@ class NeuralNetworkCalculator(object):
             self.inputs.append([])
         self.outputs = []
         
-        #self.betas = np.zeros((1, self.dim+1))
-        
-        self.mle = 0.0
+        self.mse = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
         self.nn = NeuralNetwork([self.dim, 10, 1])
@@ -36,10 +34,7 @@ class NeuralNetworkCalculator(object):
         
         
     def calcFitness(self, weight):
-        #beta = np.array(weight)
-        #print beta.shape
-        #print self.X.shape
-        #print self.Y.shape
+
         nY = []
         for i in range(self.dataSize):
             x = self.X[i,:]
@@ -49,9 +44,6 @@ class NeuralNetworkCalculator(object):
         
     def calcByGA(self, population_num, geneRange):
         chromoLen = self.nn.weight_num + self.nn.bias_num
-        
-        #self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
-        #self.Y = np.array(self.outputs).T
         
         ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
         
@@ -67,7 +59,7 @@ class NeuralNetworkCalculator(object):
             x = self.X[i,:]
             nY.append(self.nn.calcFunc(self.betas, x)[0])
         delta = self.Y - np.array(nY)
-        self.mle = np.dot(delta.T, delta) / self.dataSize 
+        self.mse = np.dot(delta.T, delta) / self.dataSize 
         
     def calcByPSO(self, population_num, geneRange):
         
@@ -87,5 +79,5 @@ class NeuralNetworkCalculator(object):
             x = self.X[i,:]
             nY.append(self.nn.calcFunc(self.betas, x)[0])
         delta = self.Y - np.array(nY)
-        self.mle = np.dot(delta.T, delta) / self.dataSize 
+        self.mse = np.dot(delta.T, delta) / self.dataSize 
             

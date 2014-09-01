@@ -5,12 +5,11 @@ if __name__ == '__main__':
     
     lr = NeuralNetworkCalculator(3)
     lr.load('nn_data.csv')
-
     lr.runCnt = 100
-    lr.calcByGA(500, [-10.0, 10.0])
-
+    lr.calcByPSO(500, [-10.0, 10.0])
     print lr.betas
-    print lr.mse
+    print lr.mle
+    
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
