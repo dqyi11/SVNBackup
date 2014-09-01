@@ -9,7 +9,6 @@ if __name__ == '__main__':
     lr.runCnt = 100
     lr.calcByGA(800, [-5.0, 5.0])
     
-    
     print lr.betas
     print lr.mse
     

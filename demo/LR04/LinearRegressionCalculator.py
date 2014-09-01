@@ -1,7 +1,6 @@
 import csv
 import numpy as np
 from GeneticAlgorithm import *
-from ParticleSwarmOptimization import *
 
 class LinearRegressionCalculator(object):
 
@@ -72,21 +71,7 @@ class LinearRegressionCalculator(object):
 
         self.mse = np.dot(delta.T, delta) / self.dataSize
         
-    def calcByPSO(self, population_num, geneRange):
-        
-        particleDim = self.dim + 1
-        
-        pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
-        
-        self.fitnessVal = []
-        for t in range(self.runCnt):
-            pso.next()
-            self.fitnessVal.append(pso.gbFitness)
-            print str(t) + " : " + str(pso.gbFitness)
-            
-        self.betas = np.array(pso.gb)
-        delta = self.Y - np.dot(self.X, self.betas)
-        self.mse = np.dot(delta.T, delta) / self.dataSize
+
         
             
         
