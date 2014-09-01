@@ -7,7 +7,7 @@ if __name__ == '__main__':
     lr.load('auto_mpg-norm.csv')
 
     lr.runCnt = 1000
-    lr.calcByPSO(1000, [-2.0, 2.0])
+    lr.calcByPSO(2000, [-1.0, 1.0])
     print lr.betas
     print lr.mse
     

@@ -5,9 +5,9 @@ if __name__ == '__main__':
     
     lr = LinearRegressionCalculator(6)
     lr.load('yacht-norm.csv')
-    lr.runCnt = 1000
-    lr.calcByPSO(1000, [-2.0, 2.0])
-    
+    lr.runCnt = 100
+    lr.calcByGA(500, [-2.0, 2.0])
+
     print lr.betas
     print lr.mse
     

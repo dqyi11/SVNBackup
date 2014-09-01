@@ -1,14 +1,15 @@
-from NeuralNetworkCalculator import *
+from LinearRegressionCalculator import *
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    lr = NeuralNetworkCalculator(3)
-    lr.load('nn_data.csv')
+    lr = LinearRegressionCalculator(6)
+    lr.load('yacht-norm.csv')
     lr.runCnt = 100
-    lr.calcByPSO(500, [-10.0, 10.0])
+    lr.calcByPSO(4000, [-2.0, 2.0])
+    
     print lr.betas
-    print lr.mle
+    print lr.mse
     
     
     fig = plt.figure()
