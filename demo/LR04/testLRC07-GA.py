@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    lr = NeuralNetworkCalculator(6)
+    lr = NeuralNetworkCalculator(6, 10)
     lr.load('yacht-norm.csv')
     lr.runCnt = 100
-    lr.calcByGA(500, [-10.0, 10.0])
+    lr.calcByGA(1000, [-10.0, 10.0], 0.05)
     print lr.betas
     print lr.mse
     

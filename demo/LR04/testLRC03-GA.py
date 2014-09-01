@@ -1,12 +1,14 @@
-from NeuralNetworkCalculator import *
+from LinearRegressionCalculator import *
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    lr = NeuralNetworkCalculator(7, 10)
+    lr = LinearRegressionCalculator(7)
     lr.load('auto_mpg-norm.csv')
-    lr.runCnt = 500
-    lr.calcByGA(2000, [-10.0, 10.0])
+
+    lr.runCnt = 1000
+    lr.calcByGA(1000, [-1.0, 1.0], 0.001)
+
     print lr.betas
     print lr.mse
     
@@ -16,3 +18,4 @@ if __name__ == '__main__':
     plt.show()
     
     print lr.fitnessVal[lr.runCnt-1]
+    

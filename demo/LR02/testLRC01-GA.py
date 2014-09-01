@@ -24,5 +24,12 @@ if __name__ == '__main__':
     title_str += "  beta 0 = " + str(lr.betas[0])
     title_str += ", beta 1 = " + str(lr.betas[1])
     ax.set_title(title_str)
+    
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111)
+    ax2.plot(np.arange(lr.runCnt), lr.fitnessVal)
+    
+    print lr.fitnessVal[lr.runCnt-1]
+    
     plt.show()
     

@@ -17,8 +17,7 @@ class LinearRegressionCalculator(object):
         self.mse = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
-
-        
+ 
     
     def load(self, filename):        
         with open(filename, 'rb') as csvfile:
@@ -46,10 +45,10 @@ class LinearRegressionCalculator(object):
         delta = self.Y - np.dot(self.X, beta)
         return np.dot(delta.T, delta) / self.dataSize 
         
-    def calcByGA(self, population_num, geneRange):
+    def calcByGA(self, population_num, geneRange, mutateVar):
         chromoLen = self.dim + 1
         
-        ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
+        ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
         
         self.fitnessVal = []
         for t in range(self.runCnt):

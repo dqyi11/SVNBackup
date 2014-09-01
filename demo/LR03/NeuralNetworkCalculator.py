@@ -5,18 +5,18 @@ from NeuralNetwork import *
 
 class NeuralNetworkCalculator(object):
 
-    def __init__(self, dimension):
+    def __init__(self, dimension, hiddenNum):
         self.dim = dimension
         self.dataSize = 0
         self.inputs = []
         for d in range(self.dim):
             self.inputs.append([])
         self.outputs = []
-        
+               
         self.mse = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
-        self.nn = NeuralNetwork([self.dim, 10, 1])
+        self.nn = NeuralNetwork([self.dim, hiddenNum, 1])
 
     
     def load(self, filename):        
@@ -41,10 +41,10 @@ class NeuralNetworkCalculator(object):
         delta = self.Y - np.array(nY)
         return np.dot(delta.T, delta) / self.dataSize 
         
-    def calcByGA(self, population_num, geneRange):
+    def calcByGA(self, population_num, geneRange, mutateVar):
         chromoLen = self.nn.weight_num + self.nn.bias_num
-                
-        ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
+        
+        ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
         
         self.fitnessVal = []
         for t in range(self.runCnt):

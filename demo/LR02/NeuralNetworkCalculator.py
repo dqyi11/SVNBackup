@@ -6,18 +6,18 @@ from ParticleSwarmOptimization import *
 
 class NeuralNetworkCalculator(object):
 
-    def __init__(self, dimension):
+    def __init__(self, dimension, hiddenNum):
         self.dim = dimension
         self.dataSize = 0
         self.inputs = []
         for d in range(self.dim):
             self.inputs.append([])
         self.outputs = []
-        
+               
         self.mse = 0.0
         self.fitnessVal = []
         self.runCnt = 2000
-        self.nn = NeuralNetwork([self.dim, 10, 1])
+        self.nn = NeuralNetwork([self.dim, hiddenNum, 1])
 
     
     def load(self, filename):        
