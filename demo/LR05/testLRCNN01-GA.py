@@ -9,8 +9,8 @@ if __name__ == '__main__':
     lr.loadTrainData('nn_data-train.csv')
     lr.loadTestData('nn_data-test.csv')
 
-    lr.runCnt = 500
-    lr.calcByGA(1000, [-10.0, 10.0], 0.5)
+    lr.runCnt = 200
+    lr.calcByGA(1000, [-10.0, 10.0], 0.1)
     lr.calcTestMSE(lr.betas)
     
     print lr.betas

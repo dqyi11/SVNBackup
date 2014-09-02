@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    testName = "LR05-testLRC03-GBD"
+    testName = "LR05-testLRC05-GBD"
     
     lr = LinearRegressionCalculator(7)
-    lr.loadTrainData('auto_mpg-train.csv')
-    lr.loadTestData('auto_mpg-test.csv')
+    lr.loadTrainData('auto_mpg-norm-train.csv')
+    lr.loadTestData('auto_mpg-norm-test.csv')
 
     #lr.calc()
-    lr.calcByBatchGradientDescent(0.00001, 1000, 3, [-5.0, 5.0])
+    lr.calcByBatchGradientDescent(0.00001, 1, 3, [-1.0, 1.0])
     lr.calcTestMSE(lr.betas)
     
     print lr.betas

@@ -1,16 +1,16 @@
-from NeuralNetworkCalculator import *
+from LinearRegressionCalculator import *
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    testName = "LR05-testLRCNN01-PSO"
+    testName = "LR05-testLRC05-GA"
     
-    lr = NeuralNetworkCalculator(3, 10)
-    lr.loadTrainData('nn_data-train.csv')
-    lr.loadTestData('nn_data-test.csv')
-    
-    lr.runCnt = 200
-    lr.calcByPSO(1000, [-10.0, 10.0])
+    lr = LinearRegressionCalculator(7)
+    lr.loadTrainData('auto_mpg-norm-train.csv')
+    lr.loadTestData('auto_mpg-norm-test.csv')
+
+    lr.runCnt = 100
+    lr.calcByGA(500, [-10.0, 10.0], 1.0)
     lr.calcTestMSE(lr.betas)
     
     print lr.betas
@@ -33,3 +33,4 @@ if __name__ == '__main__':
     
     #plt.show()
     plt.savefig(testName)
+    

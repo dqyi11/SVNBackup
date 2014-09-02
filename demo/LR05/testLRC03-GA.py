@@ -5,7 +5,7 @@ if __name__ == '__main__':
     
     testName = "LR05-testLRC03-GA"
     
-    lr = LinearRegressionCalculator(4)
+    lr = LinearRegressionCalculator(7)
     lr.loadTrainData('auto_mpg-train.csv')
     lr.loadTestData('auto_mpg-test.csv')
 
