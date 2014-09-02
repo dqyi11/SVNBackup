@@ -24,8 +24,8 @@ if __name__ == '__main__':
     ax.plot(np.arange(lr.runCnt), lr.trainFitnessVal)
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Fitness")
-    title_str = "Train M.S.E = " + str(lr.trainMSE) + "\n"
-    title_str = "Test M.S.E = " + str(lr.testMSE) + "\n"
+    title_str = "Train M.S.E = " + str(lr.trainMSE) + " "
+    title_str += "Test M.S.E = " + str(lr.testMSE) + "\n"
     title_str += "  beta 0 = " + str(lr.betas[0])
     title_str += ", beta 1 = " + str(lr.betas[1])
     ax.set_title(title_str)
