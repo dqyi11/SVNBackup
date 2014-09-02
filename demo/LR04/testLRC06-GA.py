@@ -7,8 +7,8 @@ if __name__ == '__main__':
     
     lr = NeuralNetworkCalculator(7, 10)
     lr.load('auto_mpg-norm.csv')
-    lr.runCnt = 500
-    lr.calcByGA(2000, [-10.0, 10.0], 0.05)
+    lr.runCnt = 10
+    lr.calcByGA(100, [-10.0, 10.0], 0.05)
     print lr.betas
     print lr.mse
     

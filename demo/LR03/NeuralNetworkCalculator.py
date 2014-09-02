@@ -18,6 +18,8 @@ class NeuralNetworkCalculator(object):
         self.fitnessVal = []
         self.runCnt = 2000
         self.nn = NeuralNetwork([self.dim, hiddenNum, 1])
+        
+        self.ga = None
 
     
     def load(self, filename):        
@@ -45,15 +47,15 @@ class NeuralNetworkCalculator(object):
     def calcByGA(self, population_num, geneRange, mutateVar):
         chromoLen = self.nn.weight_num + self.nn.bias_num
         
-        ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
+        self.ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
         
         self.fitnessVal = []
         for t in range(self.runCnt):
-            ga.next()
-            self.fitnessVal.append(ga.population[0].fitness)
-            print str(t) + " : " + str(ga.population[0].fitness)
+            self.ga.next()
+            self.fitnessVal.append(self.ga.population[0].fitness)
+            print str(t) + " : " + str(self.ga.population[0].fitness)
             
-        self.betas = np.array(ga.population[0].genes)
+        self.betas = np.array(self.ga.population[0].genes)
         nY = []
         for i in range(self.dataSize):
             x = self.X[i,:]
@@ -72,15 +74,7 @@ class NeuralNetworkCalculator(object):
             paramStr += "\n"
             file.write(paramStr)
             
-            if self.pso != None:
-                psoStr = "PSO "
-                psoStr += "Num: " + str(self.pso.particle_num) + " "
-                psoStr += "Range: " + str(self.pso.posRange) + " "
-                psoStr += "Chi: " + str(self.pso.chi) + " "
-                psoStr += "Phi_G: " + str(self.pso.phi_g) + " "
-                psoStr += "Phi_P: " + str(self.pso.phi_p) + "\n"
-                file.write(psoStr)
-            elif self.ga != None:
+            if self.ga != None:
                 gaStr = "GA "
                 gaStr += "Num: " + str(self.ga.population_num) + " "
                 gaStr += "Range: " + str(self.ga.geneRange) + " "

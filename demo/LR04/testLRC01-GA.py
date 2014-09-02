@@ -9,7 +9,7 @@ if __name__ == '__main__':
     lr.load('testData-20.csv')
     
     lr.runCnt = 100
-    lr.calcByGA(800, [-5.0, 5.0])
+    lr.calcByGA(800, [-5.0, 5.0], 0.5)
     
     print lr.betas
     print lr.mse
