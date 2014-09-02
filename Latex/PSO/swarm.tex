@@ -49,8 +49,11 @@ In the unimodal case, when there are more than two particles, $ x^{G} $ converge
 \begin{proof}
 There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
 If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Lemma \ref{lem:unimodal:particle:nonstop}.
-If the global best is not $ x^{*} $, the particles will take turns to find new global best by Theorem \ref{thm:unimodal:particle:better} till $ x^{*} = x^{G} $.
-Then it becomes the case $ x^{G} = x^{*} $.
+If the global best is not $ x^{*} $, $ x^{G} $ converges to $ x^{*} $.
+This can be proved using contradiction.
+Assume that $ x^{G} $ will not converge to $ x^{*} $.
+It means that at least more than one particle stop finding better solution.
+This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 \end{proof}
 \end{mythm}
 
@@ -59,10 +62,19 @@ Then it becomes the case $ x^{G} = x^{*} $.
 
 %\subsubsection{Simulation}
 
+\begin{mythm}
+
+\end{mythm}
+
 \subsection{Multi-modal fitness distribution}
 
 When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
 The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
+
+\begin{mythm}
+The ISS of the particle swarm
+\end{mythm}
+
 The increase of the number of the particles raise the probability that the swarm can find a new global best.
 We have Theorem \ref{thm:multimodal:swarm:prob}.
 
@@ -77,7 +89,7 @@ $ P_{i} $ is the probability of particle $ i $ finds a new global best
 and $ P $ is the probability that the swarm finds a new global best.
 \begin{equation}
 \label{eq:prob_less}
-\forall i \in [1, N], P_{i} < P.
+\forall i \in [1, N], P > P_{i}.
 \end{equation}
 \begin{proof}
 The search process is a competition among the particles in the swarm.
@@ -87,8 +99,8 @@ Because the global best is constant, the movements of the particles are independ
 Thus, the probability that no particle finds a new global best becomes
 $ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
 Then we can know that the probability that a new global best can be found by the swarm.
-By writing Equation \ref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
-we have Equation \ref{eq:prob_less}.
+By writing \eqref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
+we have \eqref{eq:prob_less}.
 \end{proof}
 \end{mythm}
 
@@ -131,7 +143,7 @@ As a result, the probability that the global optimal can be found would be incre
 Swarm also brings the diversity.
 Because the particles are randomly initialized.
 As the particles are initialized at different positions, the diversity of the probabilities of finding a better solution $ P_{i} $ is increased.
-By Theorem \ref{thm:nonsingleHill:swarm:prob}, we know that the probability of the swarm that finds a better solution is also increased.
+By Theorem \ref{thm:unimodal:swarm:prob}, we know that the probability of the swarm that finds a better solution is also increased.
 
 At the same time, there also exists diversity of the personal best.
 This also enlarges the inconsistencies between the personal best and the global best.
