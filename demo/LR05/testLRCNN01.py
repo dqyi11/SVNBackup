@@ -6,8 +6,8 @@ if __name__ == '__main__':
     testName = "LR05-testLRCNN01"
     
     lr = LinearRegressionCalculator(3)
-    lr.loadTrainData('data1-train.csv')
-    lr.loadTestData('data1-test.csv')
+    lr.loadTrainData('nn_data-train.csv')
+    lr.loadTestData('nn_data-test.csv')
     lr.calc()
     lr.calcTestMSE(lr.betas)
     
