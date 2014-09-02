@@ -1,4 +1,5 @@
 import csv
+import time
 import numpy as np
 from GeneticAlgorithm import *
 
@@ -61,7 +62,18 @@ class LinearRegressionCalculator(object):
 
         self.mse = np.dot(delta.T, delta) / self.dataSize
 
+    def log(self, filename):
         
+        id = str(time.time())
+        with open(filename+"-"+id+".txt", 'w') as file:
+            paramStr = "PARAM: "
+            for b in self.betas:
+                paramStr +=  str(b) + " "
+            paramStr += "\n"
+            file.write(paramStr)
+            
+            for fVal in self.fitnessVal:
+                file.write(str(fVal) + "\n")       
             
         
         

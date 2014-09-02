@@ -3,14 +3,18 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
+    testName = "LR02-testLRC01-GA"
+    
     lr = LinearRegressionCalculator(1)
     lr.load('testData-20.csv')
     
-    lr.runCnt = 100
-    lr.calcByGA(800, [-5.0, 5.0])
+    lr.runCnt = 10
+    lr.calcByGA(100, [-5.0, 5.0])
     
     print lr.betas
     print lr.mse
+    
+    lr.log(testName)
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -31,5 +35,6 @@ if __name__ == '__main__':
     
     print lr.fitnessVal[lr.runCnt-1]
     
-    plt.show()
+    #plt.show()
+    plt.savefig(testName)
     

@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
+    testName = "LR02-testLRC02-PSO"
+    
     lr = LinearRegressionCalculator(4)
     lr.load('data1.csv')
     #print lr.inputs[0]
@@ -15,13 +17,14 @@ if __name__ == '__main__':
     #lr.calcByGA(1000, [-10.0, 10.0])
     lr.calcByPSO(1000, [-10.0, 10.0])
     
+    lr.log(testName)
+    
     print "BETAS: " + str(lr.betas)
     print "MSE = " + str(lr.mse)
     
-    '''
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.plot(np.arange(lr.runCnt), lr.fitnessVal)
-    plt.show()
-    '''
+    #plt.show()
+    plt.savefig(testName)
     

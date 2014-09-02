@@ -1,4 +1,5 @@
 import csv
+import time
 import numpy as np
 from GeneticAlgorithm import *
 from ParticleSwarmOptimization import *
@@ -25,7 +26,6 @@ class LinearRegressionCalculator(object):
         with open(filename, 'rb') as csvfile:
             reader = csv.reader(csvfile)
             for row in reader:
-                #print row
                 self.dataSize += 1
                 for d in range(self.dim):
                     self.inputs[d].append(float(row[d]))
@@ -37,27 +37,18 @@ class LinearRegressionCalculator(object):
     def calc(self):
         
         betas = np.dot(np.dot(np.linalg.inv(np.dot(self.X.T, self.X)) , self.X.T) , self.Y)
-        #print betas
         self.betas = betas
         
         delta = self.Y - np.dot(self.X, betas)
-        #print delta
-        #print np.linalg.norm(delta)
         self.mse =  np.dot(delta.T, delta) / self.dataSize
         
     def calcFitness(self, weight):
         beta = np.array(weight)
-        #print beta.shape
-        #print self.X.shape
-        #print self.Y.shape
         delta = self.Y - np.dot(self.X, beta)
         return np.dot(delta.T, delta) / self.dataSize 
         
     def calcByGA(self, population_num, geneRange):
         chromoLen = self.dim + 1
-        
-        #self.X = np.hstack((np.ones((self.dataSize,1)), np.array(self.inputs).T))
-        #self.Y = np.array(self.outputs).T
         
         ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
         
@@ -87,6 +78,20 @@ class LinearRegressionCalculator(object):
         self.betas = np.array(pso.gb)
         delta = self.Y - np.dot(self.X, self.betas)
         self.mse = np.dot(delta.T, delta) / self.dataSize
+        
+    def log(self, filename):
+        
+        id = str(time.time())
+        with open(filename+"-"+id+".txt", 'w') as file:
+            paramStr = "PARAM: "
+            for b in self.betas:
+                paramStr +=  str(b) + " "
+            paramStr += "\n"
+            file.write(paramStr)
+            
+            for fVal in self.fitnessVal:
+                file.write(str(fVal) + "\n")
+        
         
             
         

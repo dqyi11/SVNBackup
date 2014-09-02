@@ -1,4 +1,5 @@
 import csv
+import time
 import numpy as np
 from GeneticAlgorithm import *
 from NeuralNetwork import *
@@ -60,5 +61,33 @@ class NeuralNetworkCalculator(object):
         delta = self.Y - np.array(nY)
         self.mse = np.dot(delta.T, delta) / self.dataSize 
         
-
+    def log(self, filename):
+        
+        id = str(time.time())
+        with open(filename+"-"+id+".txt", 'w') as file:
+            paramStr = "PARAM: "
+            paramStr += "I: " + str(self.nn.input_num) + " "
+            paramStr += "H: " + str(self.nn.hidden_num) + " "
+            paramStr += "O: " + str(self.nn.output_num) + " "
+            paramStr += "\n"
+            file.write(paramStr)
+            
+            if self.pso != None:
+                psoStr = "PSO "
+                psoStr += "Num: " + str(self.pso.particle_num) + " "
+                psoStr += "Range: " + str(self.pso.posRange) + " "
+                psoStr += "Chi: " + str(self.pso.chi) + " "
+                psoStr += "Phi_G: " + str(self.pso.phi_g) + " "
+                psoStr += "Phi_P: " + str(self.pso.phi_p) + "\n"
+                file.write(psoStr)
+            elif self.ga != None:
+                gaStr = "GA "
+                gaStr += "Num: " + str(self.ga.population_num) + " "
+                gaStr += "Range: " + str(self.ga.geneRange) + " "
+                gaStr += "mutateVar: " + str(self.ga.mutateVar) + " "
+                gaStr += "mutateProb: " + str(self.ga.mutateProb) + "\n"
+                file.write(gaStr)
+            
+            for fVal in self.fitnessVal:
+                file.write(str(fVal) + "\n")
             
