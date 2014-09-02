@@ -27,7 +27,7 @@ class NeuralNetworkCalculator(RegressionCalculator):
             x = self.testX[i,:]
             nTestY.append(self.nn.calcFunc(weight, x)[0])
         delta = self.testY - np.array(nTestY)
-        return np.dot(delta.T, delta) / self.testDataSize     
+        self.testMSE = np.dot(delta.T, delta) / self.testDataSize     
         
     def log(self, filename):
         
