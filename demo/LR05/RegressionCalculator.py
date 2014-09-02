@@ -19,8 +19,6 @@ class RegressionCalculator(object):
         self.trainOutputs = []
         self.testOutputs = []
         
-        self.betas = np.zeros((1, self.dim+1))
-        
         self.trainMSE = 0.0
         self.testMSE = 0.0
         self.trainFitnessVal = []
@@ -41,9 +39,12 @@ class RegressionCalculator(object):
                 for d in range(self.dim):
                     self.trainInputs[d].append(float(row[d]))
                 self.trainOutputs.append(float(row[self.dim]))
-                
-        self.trainX = np.hstack((np.ones((self.trainDataSize,1)), np.array(self.trainInputs).T))
-        self.trainY = np.array(self.trainOutputs).T
+        if self.type == "LINEAR":      
+            self.trainX = np.hstack((np.ones((self.trainDataSize,1)), np.array(self.trainInputs).T))
+            self.trainY = np.array(self.trainOutputs).T
+        elif self.type == "NEURAL_NET":
+            self.trainX = np.array(self.trainInputs).T
+            self.trainY = np.array(self.trainOutputs)
        
     def loadTestData(self, filename):
         self.testDataSize = 0        
@@ -54,9 +55,12 @@ class RegressionCalculator(object):
                 for d in range(self.dim):
                     self.testInputs[d].append(float(row[d]))
                 self.testOutputs.append(float(row[self.dim]))
-                
-        self.testX = np.hstack((np.ones((self.testDataSize,1)), np.array(self.testInputs).T))
-        self.testY = np.array(self.testOutputs).T        
+        if self.type == "LINEAR":        
+            self.testX = np.hstack((np.ones((self.testDataSize,1)), np.array(self.testInputs).T))
+            self.testY = np.array(self.testOutputs).T
+        elif self.type == "NEURAL_NET":
+            self.trainX = np.array(self.trainInputs).T
+            self.trainY = np.array(self.trainOutputs)        
         
         
     def calcByGA(self, population_num, geneRange, mutateVar):

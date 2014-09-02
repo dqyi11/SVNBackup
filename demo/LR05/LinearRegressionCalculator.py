@@ -7,6 +7,7 @@ class LinearRegressionCalculator(RegressionCalculator):
     def __init__(self, dimension):
         super(LinearRegressionCalculator, self).__init__(dimension)
         self.type = "LINEAR"
+        self.betas = np.zeros(self.dim+1)
                 
     def calc(self):
         
@@ -86,7 +87,7 @@ class LinearRegressionCalculator(RegressionCalculator):
                 file.write(str(fVal) + "\n")
                 
             file.write("\n")
-            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE))
+            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE)) + "\n"
             file.write("TEST SIZE: " + str(self.testDataSize) + " MSE: " + str(self.testMSE))
         
         

@@ -9,10 +9,9 @@ class NeuralNetworkCalculator(RegressionCalculator):
         super(NeuralNetworkCalculator, self).__init__(dimension)
         self.nn = NeuralNetwork([self.dim, hiddenNum, 1])
         self.type = "NEURAL_NET"
-        
-
+        self.betas = np.zeros(self.nn.weight_num + self.nn.bias_num)
+            
     def calcFitness(self, weight):
-
         nY = []
         for i in range(self.trainDataSize):
             x = self.trainX[i,:]
@@ -27,8 +26,8 @@ class NeuralNetworkCalculator(RegressionCalculator):
             x = self.testX[i,:]
             nTestY.append(self.nn.calcFunc(weight, x)[0])
         delta = self.testY - np.array(nTestY)
-        self.testMSE = np.dot(delta.T, delta) / self.testDataSize     
-        
+        self.testMSE = np.dot(delta.T, delta) / self.testDataSize
+
     def log(self, filename):
         
         id = str(time.time())
@@ -58,6 +57,6 @@ class NeuralNetworkCalculator(RegressionCalculator):
                 file.write(str(fVal) + "\n")
                 
             file.write("\n")
-            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE))
+            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE)) + "\n"
             file.write("TEST SIZE: " + str(self.testDataSize) + " MSE: " + str(self.testMSE))
             
