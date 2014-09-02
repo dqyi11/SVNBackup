@@ -23,8 +23,8 @@ class LinearRegressionCalculator(RegressionCalculator):
     
     def calcTestMSE(self, weight):
         beta = np.array(weight)
-        delta = self.testY - np.dot(self.testY, beta)
-        return np.dot(delta.T, delta) / self.testDataSize
+        delta = self.testY - np.dot(self.testX, beta)
+        self.testMSE = np.dot(delta.T, delta) / self.testDataSize
       
         
     def log(self, filename):
@@ -39,6 +39,10 @@ class LinearRegressionCalculator(RegressionCalculator):
             
             for fVal in self.trainFitnessVal:
                 file.write(str(fVal) + "\n")
+                
+            file.write("\n")
+            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE))
+            file.write("TEST SIZE: " + str(self.testDataSize) + " MSE: " + str(self.testMSE))
         
         
             

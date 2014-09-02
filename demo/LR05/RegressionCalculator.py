@@ -56,10 +56,11 @@ class RegressionCalculator(object):
         self.testX = np.hstack((np.ones((self.testDataSize,1)), np.array(self.testInputs).T))
         self.testY = np.array(self.testOutputs).T        
         
-    def calcByGA(self, population_num, geneRange):
+        
+    def calcByGA(self, population_num, geneRange, mutateVar):
         chromoLen = self.dim + 1
         
-        self.ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness)
+        self.ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
         
         self.trainFitnessVal = []
         for t in range(self.runCnt):
