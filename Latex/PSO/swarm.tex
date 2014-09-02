@@ -27,16 +27,41 @@ In this section, we analyze the star topology of global best update.
 In this topology, the global best update imports the competition among the particles.
 The particle finds a new global best becomes the leader of the swarm.
 
-unimodal
-\begin{itemize}
-\item bound -> convergence
-\item swarm converges more quickly
-\end{itemize}
-multimodal
-\begin{itemize}
-\item bounded converge to bound
-\item explore better
-\end{itemize}
+%unimodal
+%\begin{itemize}
+%\item bound -> convergence
+%\item swarm converges more quickly
+%\end{itemize}
+%multimodal
+%\begin{itemize}
+%\item bounded converge to bound
+%\item explore better
+%\end{itemize}
+
+As we can see in Figure \ref{fig:pso_sys_flow}, the global best update provides a global best $ x^{G} $ and feedbacks into each particle.
+The update rule of the global best update is the same with that of the personal best update.
+Several of the properties of the personal best update can be derived here.
+We have Lemma \ref{lem:unimodal:swarm:gb_up_iss}.
+
+\begin{mylem}
+\label{lem:unimodal:swarm:gb_up_iss}
+If $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $, when $ x^{G} = x^{*} $, the global best update component is input-to-state stable.
+$ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
+\begin{proof}
+Same as that in the proof of Lemma \ref{lem:unimodal:particle:input_iss}.
+\end{proof}
+\end{mylem}
+
+We can naturally derive Theorem \ref{thm:unimodal:swarm:garuantee_converge}.
+
+\begin{mythm}
+\label{thm:unimodal:swarm:garuantee_converge}
+When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{s} \circ \gamma_{p} (s)  < s $, the particles in the swarm will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+$ \gamma_{s} () $ is the gain of the global best update component and $ \gamma_{p} () $ is the gain of the particle component.
+\begin{proof}
+When both the particles and the global best update are input-to-state stable, we can have the particles all gradually converge to $ x^{*} $, by Corollary 4.2 in \cite{Jiang2001857}.
+\end{proof}
+\end{mythm}
 
 \subsection{Unimodal fitness distribution}
 
@@ -63,20 +88,24 @@ This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 %\subsubsection{Simulation}
 
 \begin{mythm}
-
+The swarm gives better convergence rate
+\begin{proof}
+\end{proof}
 \end{mythm}
+
 
 \subsection{Multi-modal fitness distribution}
 
 When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
 The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
 
-\begin{mythm}
-The ISS of the particle swarm
-\end{mythm}
 
 The increase of the number of the particles raise the probability that the swarm can find a new global best.
 We have Theorem \ref{thm:multimodal:swarm:prob}.
+
+\begin{mythm}
+The swarm gives higher probability of finding better solution.
+\end{mythm}
 
 \begin{mythm}
 \label{thm:multimodal:swarm:prob}
