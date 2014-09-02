@@ -16,6 +16,50 @@ class LinearRegressionCalculator(RegressionCalculator):
         delta = self.trainY - np.dot(self.trainX, betas)
         self.trainMSE =  np.dot(delta.T, delta) / self.trainDataSize
         
+    def calcLin(self, x, w):
+        nX = self.trainX = np.hstack([1], np.array(x).T)
+        nW = np.array(w)
+        print nX.shape
+        print nW.shape
+        return np.dot(nX, nW)
+        
+    def calcByBatchGradientDescent(self, learningRate, iterationNum, batchSize, initRange):
+        
+        betas = np.random.random(self.dim+1) * (initRange[1]-initRange[0]) + initRange[0]
+        for i in range(iterationNum):
+            
+            for j in range(0, self.trainDataSize, batchSize):
+                batchDataSize = batchSize
+                if self.trainDataSize - 1 - j < batchSize:
+                    batchDataSize = self.trainDataSize - 1 - j
+                
+                deltaBetas = np.zeros(self.dim+1)
+                batchDataX = np.zeros((self.dim, batchDataSize))
+                batchDataY = np.zeros(batchDataSize)
+                for d in range(self.dim):
+                    for di in range(j, j+batchDataSize):
+                        batchDataX[d, di-j] = self.trainInputs[d][di]
+                        batchDataY[di-j] = self.trainOutputs[di]
+                batchX = np.hstack((np.ones((batchDataSize,1)), np.array(batchDataX).T))
+                batchY = np.array(batchDataY).T        
+                                
+                batchDelta = batchY - np.dot(batchX, betas)             
+                deltaBetas[0] += learningRate * np.sum(batchDelta)
+                for d in range(self.dim):
+                    deltaBetas[d+1] += learningRate * np.dot(batchDelta, batchDataX[d,:])
+                    
+                betas += deltaBetas
+                
+        self.betas = betas
+        
+        delta = self.trainY - np.dot(self.trainX, betas)
+        self.trainMSE =  np.dot(delta.T, delta) / self.trainDataSize
+        
+    
+    def calcByStochasticGradientDescent(self, learningRate, iterationNum):
+        pass
+
+        
     def calcFitness(self, weight):
         beta = np.array(weight)
         delta = self.trainY - np.dot(self.trainX, beta)

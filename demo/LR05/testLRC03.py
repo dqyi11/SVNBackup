@@ -3,11 +3,11 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    testName = "LR05-testLRC02"
+    testName = "LR05-testLRC03"
     
     lr = LinearRegressionCalculator(4)
-    lr.loadTrainData('data1-train.csv')
-    lr.loadTestData('data1-test.csv')
+    lr.loadTrainData('auto_mpg-train.csv')
+    lr.loadTestData('auto_mpg-test.csv')
     lr.calc()
     lr.calcTestMSE(lr.betas)
     

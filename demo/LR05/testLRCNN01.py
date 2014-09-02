@@ -14,3 +14,5 @@ if __name__ == '__main__':
     print lr.betas
     print "TRAIN SIZE: " + str(lr.trainDataSize) + " MSE: " + str(lr.trainMSE)
     print "TEST SIZE: " + str(lr.testDataSize) + " MSE: " + str(lr.testMSE)
+    
+    lr.log(testName)

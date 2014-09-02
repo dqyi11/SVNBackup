@@ -10,7 +10,7 @@ if __name__ == '__main__':
     lr.loadTestData('data1-test.csv')
 
     lr.runCnt = 100
-    lr.calcByPSO(100, [-10.0, 10.0])
+    lr.calcByPSO(1000, [-10.0, 10.0])
     lr.calcTestMSE(lr.betas)
     
     print lr.betas

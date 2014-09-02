@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    testName = "LR05-testLRC01-PSO"
+    testName = "LR05-testLRC03-GA"
     
-    lr = LinearRegressionCalculator(1)
-    lr.loadTrainData('testData-30-train.csv')
-    lr.loadTestData('testData-30-test.csv')
-    
-    lr.runCnt = 100
-    lr.calcByPSO(500, [-5.0, 5.0])
+    lr = LinearRegressionCalculator(4)
+    lr.loadTrainData('auto_mpg-train.csv')
+    lr.loadTestData('auto_mpg-test.csv')
+
+    lr.runCnt = 1000
+    lr.calcByGA(4000, [-10.0, 10.0], 1.0)
     lr.calcTestMSE(lr.betas)
     
     print lr.betas
