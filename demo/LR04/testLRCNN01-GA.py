@@ -5,11 +5,11 @@ if __name__ == '__main__':
     
     testName = "LR04-testLRCNN01-GA"
     
-    lr = NeuralNetworkCalculator(3, 10)
+    lr = NeuralNetworkCalculator(3, 20)
     lr.load('nn_data.csv')
 
-    lr.runCnt = 100
-    lr.calcByGA(500, [-10.0, 10.0], 0.1)
+    lr.runCnt = 1000
+    lr.calcByGA(2000, [-10.0, 10.0], 0.1)
 
     print lr.betas
     print lr.mse

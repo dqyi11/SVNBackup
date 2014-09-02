@@ -8,8 +8,8 @@ if __name__ == '__main__':
     lr = LinearRegressionCalculator(7)
     lr.load('auto_mpg-norm.csv')
 
-    lr.runCnt = 1000
-    lr.calcByGA(1000, [-1.0, 1.0], 0.001)
+    lr.runCnt = 5000
+    lr.calcByGA(2000, [-1.0, 1.0], 0.001)
 
     print lr.betas
     print lr.mse

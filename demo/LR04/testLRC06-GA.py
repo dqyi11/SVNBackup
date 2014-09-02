@@ -5,10 +5,10 @@ if __name__ == '__main__':
     
     testName = "LR04-testLRC06-GA"
     
-    lr = NeuralNetworkCalculator(7, 10)
+    lr = NeuralNetworkCalculator(7, 20)
     lr.load('auto_mpg-norm.csv')
-    lr.runCnt = 10
-    lr.calcByGA(100, [-10.0, 10.0], 0.05)
+    lr.runCnt = 1000
+    lr.calcByGA(2000, [-10.0, 10.0], 0.05)
     print lr.betas
     print lr.mse
     
