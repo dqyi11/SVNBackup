@@ -6,6 +6,7 @@ class LinearRegressionCalculator(RegressionCalculator):
 
     def __init__(self, dimension):
         super(LinearRegressionCalculator, self).__init__(dimension)
+        self.type = "LINEAR"
                 
     def calc(self):
         

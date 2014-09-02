@@ -8,6 +8,7 @@ class NeuralNetworkCalculator(RegressionCalculator):
     def __init__(self, dimension, hiddenNum):
         super(NeuralNetworkCalculator, self).__init__(dimension)
         self.nn = NeuralNetwork([self.dim, hiddenNum, 1])
+        self.type = "NEURAL_NET"
         
 
     def calcFitness(self, weight):
@@ -30,7 +31,7 @@ class NeuralNetworkCalculator(RegressionCalculator):
         
     def log(self, filename):
         
-        id = str(id = str(time.time()))
+        id = str(time.time())
         with open(filename+"-"+id+".txt", 'w') as file:
             paramStr = "PARAM: "
             paramStr += "I: " + str(self.nn.input_num) + " "

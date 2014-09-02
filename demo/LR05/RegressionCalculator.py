@@ -28,6 +28,8 @@ class RegressionCalculator(object):
         
         self.ga = None
         self.pso = None
+        
+        self.type = None
 
     
     def loadTrainData(self, filename):
@@ -58,7 +60,11 @@ class RegressionCalculator(object):
         
         
     def calcByGA(self, population_num, geneRange, mutateVar):
-        chromoLen = self.dim + 1
+        
+        if self.type == "LINEAR":
+            chromoLen = self.dim + 1
+        elif self.type == "NEURAL_NET":
+            chromoLen = self.nn.weight_num + self.nn.bias_num
         
         self.ga = GeneticAlgorithm(population_num, geneRange, chromoLen, self.calcFitness, mutateVar)
         
@@ -69,13 +75,23 @@ class RegressionCalculator(object):
             print str(t) + " : " + str(self.ga.population[0].fitness)
             
         self.betas = np.array(self.ga.population[0].genes)
-        delta = self.trainY - np.dot(self.trainX, self.betas)
-
+        if self.type == "LINEAR":
+            delta = self.trainY - np.dot(self.trainX, self.betas)
+        elif self.type == "NEURAL_NET":
+            nY = []
+            for i in range(self.trainDataSize):
+                x = self.trainX[i,:]
+                nY.append(self.nn.calcFunc(self.betas, x)[0])
+            delta = self.trainY - np.array(nY)    
+            
         self.trainMSE = np.dot(delta.T, delta) / self.trainDataSize
         
     def calcByPSO(self, population_num, geneRange):
-        
-        particleDim = self.dim + 1
+
+        if self.type == "LINEAR":
+            particleDim = self.dim + 1
+        elif self.type == "NEURAL_NET":
+            particleDim = self.nn.weight_num + self.nn.bias_num
         
         self.pso = Swarm(population_num, particleDim, geneRange, self.calcFitness, 0.4, 1.0, 1.0)
         
@@ -86,5 +102,13 @@ class RegressionCalculator(object):
             print str(t) + " : " + str(self.pso.gbFitness)
             
         self.betas = np.array(self.pso.gb)
-        delta = self.trainY - np.dot(self.trainX, self.betas)
+        if self.type == "LINEAR":
+            delta = self.trainY - np.dot(self.trainX, self.betas)
+        elif self.type == "NEURAL_NET":
+            nY = []
+            for i in range(self.trainDataSize):
+                x = self.trainX[i,:]
+                nY.append(self.nn.calcFunc(self.betas, x)[0])
+            delta = self.trainY - np.array(nY)
+            
         self.trainMSE = np.dot(delta.T, delta) / self.trainDataSize  

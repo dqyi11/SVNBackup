@@ -5,7 +5,7 @@ if __name__ == '__main__':
     
     testName = "LR05-testLRCNN01-PSO"
     
-    lr = NeuralNetworkCalculator(3)
+    lr = NeuralNetworkCalculator(3, 10)
     lr.loadTrainData('nn_data-train.csv')
     lr.loadTestData('nn_data-test.csv')
     
