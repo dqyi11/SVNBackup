@@ -24,9 +24,9 @@ class LinearRegressionCalculator(RegressionCalculator):
         print nW.shape
         return np.dot(nX, nW)
         
-    def calcByBatchGradientDescent(self, learningRate, iterationNum, batchSize, initRange):
+    def calcByBatchGradientDescent(self, learningRate, iterationNum, batchSize, initBetas):
         
-        betas = np.random.random(self.dim+1) * (initRange[1]-initRange[0]) + initRange[0]
+        betas = initBetas#np.random.random(self.dim+1) * (initRange[1]-initRange[0]) + initRange[0]
         for i in range(iterationNum):
             
             for j in range(0, self.trainDataSize, batchSize):

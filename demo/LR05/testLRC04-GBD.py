@@ -10,7 +10,7 @@ if __name__ == '__main__':
     lr.loadTestData('data2-test.csv')
 
     #lr.calc()
-    lr.calcByBatchGradientDescent(0.01, 1000, 3, [-5.0, 5.0])
+    lr.calcByBatchGradientDescent(0.01, 1000000, 1, [-5.0, 5.0])
     lr.calcTestMSE(lr.betas)
     
     print lr.betas

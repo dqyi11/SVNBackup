@@ -10,7 +10,7 @@ if __name__ == '__main__':
     lr.loadTestData('auto_mpg-norm-test.csv')
 
     #lr.calc()
-    lr.calcByBatchGradientDescent(0.00001, 1, 3, [-1.0, 1.0])
+    lr.calcByBatchGradientDescent(0.0000001, 1000000, 1, [-1.0, 1.0])
     lr.calcTestMSE(lr.betas)
     
     print lr.betas
