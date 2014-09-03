@@ -59,8 +59,8 @@ class RegressionCalculator(object):
             self.testX = np.hstack((np.ones((self.testDataSize,1)), np.array(self.testInputs).T))
             self.testY = np.array(self.testOutputs).T
         elif self.type == "NEURAL_NET":
-            self.trainX = np.array(self.trainInputs).T
-            self.trainY = np.array(self.trainOutputs)        
+            self.testX = np.array(self.trainInputs).T
+            self.testY = np.array(self.trainOutputs)        
         
         
     def calcByGA(self, population_num, geneRange, mutateVar):

@@ -57,6 +57,6 @@ class NeuralNetworkCalculator(RegressionCalculator):
                 file.write(str(fVal) + "\n")
                 
             file.write("\n")
-            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE)) + "\n"
+            file.write("TRAIN SIZE: " + str(self.trainDataSize) + " MSE: " + str(self.trainMSE) + "\n") 
             file.write("TEST SIZE: " + str(self.testDataSize) + " MSE: " + str(self.testMSE))
             
