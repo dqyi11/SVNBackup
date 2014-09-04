@@ -1,0 +1,120 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+
+Given a \textbf{multivariate linear regression} problem,
+\begin{equation}
+h_{sw} (\mathbf{x}_{j}) = \omega_{0} + \omega_{1} x_{j,1} + \cdots \omega_{n} x_{j,n}.
+\end{equation}
+Define the squared loss function over a training set of size $ N $ ,
+\begin{equation}
+Loss(h_{sw}) = \sum_{j=1}^{N} ( y_{j} - h_{sw} (\mathbf{x}_{j}) ).
+\end{equation}
+The optimal is obtained by $ \boldsymbol{\omega}^{*} = \arg \min_{\mathbb{\omega}} Loss(h_{sw}) $.
+
+By taking the partial derivatives from $ \frac{\partial Loss(h_{sw}) }{\partial \omega_{0}} $ to $ \frac{\partial Loss(h_{sw}) }{\partial \omega_{n}} $ and let all of them equal to zero, we can have
+\begin{equation}
+\label{eq:partial_der_loss}
+\begin{aligned}
+\omega_{0} n + \omega_{1} \sum_{j=1}^{N} x_{j,1} + \cdots + \omega_{n} \sum_{j=1}^{N} x_{j,n} & = \sum_{j=1}^{N} y_{j} \\
+\omega_{0} \sum_{j=1}^{N} x_{j,1} + \omega_{1} \sum_{j=1}^{N} x_{j,1}^{2} + \cdots + \omega_{n} \sum_{j=1}^{N} x_{j,1} x_{j,n} & =  \sum_{j=1}^{N} x_{j,1} y_{j} \\
+& \vdots \\
+\omega_{0} \sum_{j=1}^{N} x_{j,n} + \omega_{1} \sum_{j=1}^{N} x_{j,1} x_{j,n} + \cdots + \omega_{n} \sum_{j=1}^{N} x_{j,n}^{2} & =  \sum_{j=1}^{N} x_{j,n} y_{j}.
+\end{aligned}
+\end{equation}
+
+We can rewrite \eqref{eq:partial_der_loss} as
+\begin{equation}
+\label{eq:partial_der_loss:matrix}
+\begin{bmatrix}
+n & \sum_{j=1}^{N} x_{j,1} & \cdots & \sum_{j=1}^{N} x_{j,n} \\ 
+\sum_{j=1}^{N} x_{j,1} &  \sum_{j=1}^{N} x_{j,1}^{2} & \cdots & \sum_{j=1}^{N} x_{j,1} x_{j,n} \\
+\vdots & \vdots & & \vdots \\
+\sum_{j=1}^{N} x_{j,n} &  \sum_{j=1}^{N} x_{j,1} x_{j,n} & \cdots & \sum_{j=1}^{N} x_{j,n}^{2}
+\end{bmatrix}
+\begin{bmatrix}
+\omega_{0} \\ 
+\omega_{1} \\
+\vdots \\
+\omega_{n}  
+\end{bmatrix}
+=
+\begin{bmatrix}
+\sum_{j=1}^{N} y_{j} \\ 
+\sum_{j=1}^{N} x_{j,1} y_{j} \\
+\vdots \\
+\sum_{j=1}^{N} x_{j,n} y_{j} 
+\end{bmatrix}.
+\end{equation}
+
+If we write the train data as a $ N \times n $ \textbf{data matrix} $ \mathbf{X} $ and a $ N \times 1 $ matrix $ \mathbf{y} $,
+\begin{equation}
+\mathbf{X} = 
+\begin{bmatrix}
+1 & x_{1,1} & x_{1,2} & \cdots & x_{1, n} \\
+1 & x_{2,1} & x_{2,2} & \cdots & x_{2, n} \\
+\vdots & \vdots & \vdots & & \vdots \\
+1 & x_{N,1} & x_{2,2} & \cdots & x_{2, n} \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & \mathbf{x}_{1} \\
+1 & \mathbf{x}_{2} \\
+\vdots & \vdots \\
+1 & \mathbf{x}_{N}
+\end{bmatrix}
+\end{equation}
+and
+\begin{equation}
+\mathbf{y} = 
+\begin{bmatrix}
+y_{1} \\
+y_{2} \\
+\vdots \\
+y_{N}
+\end{bmatrix}.
+\end{equation}
+
+We can see that
+\begin{equation}
+\mathbf{X}^{T} \mathbf{X} =
+\begin{bmatrix}
+n & \sum_{j=1}^{N} x_{j,1} & \cdots & \sum_{j=1}^{N} x_{j,n} \\ 
+\sum_{j=1}^{N} x_{j,1} &  \sum_{j=1}^{N} x_{j,1}^{2} & \cdots & \sum_{j=1}^{N} x_{j,1} x_{j,n} \\
+\vdots & \vdots & & \vdots \\
+\sum_{j=1}^{N} x_{j,n} &  \sum_{j=1}^{N} x_{j,1} x_{j,n} & \cdots & \sum_{j=1}^{N} x_{j,n}^{2}
+\end{bmatrix}
+\end{equation}
+and
+\begin{equation}
+\mathbf{X}^{T} \mathbf{y} = 
+\begin{bmatrix}
+\sum_{j=1}^{N} y_{j} \\ 
+\sum_{j=1}^{N} x_{j,1} y_{j} \\
+\vdots \\
+\sum_{j=1}^{N} x_{j,n} y_{j} 
+\end{bmatrix}.
+\end{equation}
+
+Thus, \eqref{eq:partial_der_loss:matrix} can be written as
+\begin{equation}
+\mathbf{X}^{T} \mathbf{X} 
+\begin{bmatrix}
+\omega_{0} \\ 
+\omega_{1} \\
+\vdots \\
+\omega_{n}  
+\end{bmatrix}
+ = \mathbf{X}^{T} \mathbf{y}.
+\end{equation}
+
+We can finally have
+\begin{equation}
+\boldsymbol{\omega}^{*} = ( \mathbf{X}^{T} \mathbf{X} )^{-1} \mathbf{X}^{T} \mathbf{y} .
+\end{equation}
+
+\end{document}

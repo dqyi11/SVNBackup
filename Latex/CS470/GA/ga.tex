@@ -1,0 +1,54 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\renewcommand*\Call[2]{\textproc{#1}(#2)}
+
+\begin{document}
+
+\begin{algorithm}
+\caption{Genetic Algorithm}
+\label{alg:genetic_algorithm}
+\begin{algorithmic}[0]
+\Function{Genetic-Algorithm}{$ \mathit{population} , \mathit{topNum}, \textsc{Fitness-Fn} $} \textbf{returns} an individual 
+    \State \textbf{inputs:} $ \mathit{population} $, a set of individuals
+    \State $ \mathit{topNum} $, the number of top population reserved
+    \State \textsc{Fitness-Fn}, a function that measures the fitness of an individual
+     
+    \Statex
+    \Repeat
+    \State  $ \mathit{new} $\underline{ }$ \mathit{population} $ $ \leftarrow $ empty set
+    \State $ \mathit{population} $ $ \leftarrow $ \Call{Sort}{$ \mathit{population} $} 
+    \For{ $ i = 1 $ \textbf{to}  $ \mathit{topNum} $  }
+    \State add \Call{Get}{ $ \mathit{population} , i $ } to $ \mathit{new} $\underline{ }$ \mathit{population} $
+    \EndFor  
+    \For{ $ i = \mathit{topNum} + 1 $ \textbf{to}  \Call{Size}{ $ \mathit{ population } $ } }
+    \State $ x \leftarrow $ \Call{Random-Selection}{$ \mathit{population} $, \textsc{Fitness-Fn} }
+    \State $ y \leftarrow $ \Call{Random-Selection}{$ \mathit{population} $, \textsc{Fitness-Fn} }
+    \State $ \mathit{child} \leftarrow $ \Call{Reproduce}{$x, y$}
+    \If{ (small random probability) } $ \mathit{child} \leftarrow $ \Call{Mutate}{$ \mathit{child} $}
+    \EndIf
+    \State add $ \mathit{child} $ to $ \mathit{new} $\underline{ }$ \mathit{population} $
+    \EndFor
+    \Until some individual is fit enough, or enough time has elapsed
+    \State \Return the best individual in $ \mathit{population} $, according to \textsc{Fitnewss-Fn}
+\EndFunction
+
+\Statex
+\Function{Reproduce}{$x, y$} \textbf{returns} an individual %\funclabel{alg:b}
+    \State \textbf{inputs:} $ x, y $, parent individuals
+    \Statex
+    \State $ n \leftarrow $ \Call{Length}{$ x $}; $ c \leftarrow $ random number from $ 1 $ to $ n $
+    \State \Return \Call{Append}{\Call{Substring}{$ x, 1, c $}, \Call{Substring}{$ y, c+1, n $}}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
