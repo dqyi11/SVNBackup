@@ -131,17 +131,23 @@ There are two factors that determine the capability of the exploration.
 \end{itemize}
 
 \begin{myprop}
-The increase of the particle number makes a bigger number of samplings.
+\label{prop:swarm:more_samplings}
+Running a particle ( with same initial position, global best and personal best ) at different time generates different samplings.
 \end{myprop}
+Naturally, more particles form the parallel sampling, which generate more diverse samplings in one iteration.
 
-It is not surprising that a swarm bring a bigger exploration range.
-Because the exploration range of a swarm 
+It is not surprising that a swarm brings a bigger exploration range.
+Because the exploration range of a swarm is the join of the exploration ranges of all the particles.
+However, the explore range of each single particle might be changed as well, due to the change of the global best.
+We have Theorem \ref{thm:swarm:expand_range}.
 
 \begin{mythm}
-Joining into a swarm expands the explore region of a particle.
+\label{thm:swarm:expand_range}
+When a particle is not in the modal that has the optimal solution, joining into a swarm increases the probability that the particle moves into a better region.
 \begin{proof}
 Because we have that the movement boundary of a particle depends on the difference between the personal best and the global best.
-T
+When a particle is not in the modal that has the optimal solution, the global best is more likely to deviate from the personal best.
+This gives a bigger movement bound to the particle, which makes a higher probability that the particle can move into a better region.
 \end{proof}
 \end{mythm}
 
