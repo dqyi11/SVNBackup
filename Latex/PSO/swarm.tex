@@ -63,6 +63,9 @@ When both the particles and the global best update are input-to-state stable, we
 \end{proof}
 \end{mythm}
 
+As we know, when $ x^{G}(k) = x^{*} $, the swarm becomes only a set of particles without interactions.
+Thus, we are here interested with how the global best $ x^{G} $ can converge to $ x^{*} $.
+
 \subsection{Unimodal fitness distribution}
 
 Due to the potential competition in the swarm, if there is always a particle finds a better solution till the optimal is reached, the swarm can always find the optimal in the unimodal case.
@@ -87,9 +90,27 @@ This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 
 %\subsubsection{Simulation}
 
-\begin{mythm}
-The swarm gives better convergence rate
+\begin{mylem}
+The probability that a swarm finds a better solution is higher than that of any particle.
+The bigger number of the particles is, the higher probability that a swarm finds a better solution is.
 \begin{proof}
+Let $ P_{s} $ be the probability that a swarm of size $ N $ finds a better solution.
+Let $ P_{i}, i \in [1, N] $ be the probability that particle $ i $ finds a better solution.
+We can have  $ P_{s} = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ) $.
+By writing it as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $, we know $ \forall i \in [1, N], P > P_{i} $.
+If we add a new particle to the swarm, we have
+$ P_{s'}  = 1 - (1- P_{s}) *(1-P_{i+1}) $. 
+Similarly, $ P_{s'} \geq P_{s} $.
+Thus we can say that the increase of the particle number will not decrease the probability that the swarm finds a better solution.
+\end{proof}
+\end{mylem}
+
+\begin{mythm}
+The make of a swarm brings higher convergence rate.
+\begin{proof}
+Define the convergence rate as $ $.
+Because the probability that a swarm finds a better solution is higher than the probability that any particle finds a better solution.
+We know that the swarm has a higher convergence rate.
 \end{proof}
 \end{mythm}
 
@@ -99,49 +120,66 @@ The swarm gives better convergence rate
 When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
 The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
 
-
 The increase of the number of the particles raise the probability that the swarm can find a new global best.
 We have Theorem \ref{thm:multimodal:swarm:prob}.
 
-\begin{mythm}
-The swarm gives higher probability of finding better solution.
-\end{mythm}
+As we know that the movement of a particle is bounded, because of the import of the stochastic terms, we can view the exploration as sequentially sampling on the solution space.
+There are two factors that determine the capability of the exploration.
+\begin{itemize}
+\item how the samples are distributed;
+\item how is the boundary of the samples.
+\end{itemize}
+
+\begin{myprop}
+The increase of the particle number makes a bigger number of samplings.
+\end{myprop}
+
+It is not surprising that a swarm bring a bigger exploration range.
+Because the exploration range of a swarm 
 
 \begin{mythm}
-\label{thm:multimodal:swarm:prob}
-The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
-\begin{equation}
-\label{eq:prob_sum}
-P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
-\end{equation}
-$ P_{i} $ is the probability of particle $ i $ finds a new global best
-and $ P $ is the probability that the swarm finds a new global best.
-\begin{equation}
-\label{eq:prob_less}
-\forall i \in [1, N], P > P_{i}.
-\end{equation}
+Joining into a swarm expands the explore region of a particle.
 \begin{proof}
-The search process is a competition among the particles in the swarm.
-If the swarm does not find a better global best, it means that none of the particle finds a better global best.
-For particle $ i $, the probability that a new global best cannot be found is $ 1 - P_{i} $.
-Because the global best is constant, the movements of the particles are independent in the search process.
-Thus, the probability that no particle finds a new global best becomes
-$ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
-Then we can know that the probability that a new global best can be found by the swarm.
-By writing \eqref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
-we have \eqref{eq:prob_less}.
+Because we have that the movement boundary of a particle depends on the difference between the personal best and the global best.
+T
 \end{proof}
 \end{mythm}
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{./fig/probRise}
-\caption{The probability increases with the particle number.}
-\label{fig:probRise}
-\end{figure}
+%\begin{mythm}
+%\label{thm:multimodal:swarm:prob}
+%The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
+%\begin{equation}
+%\label{eq:prob_sum}
+%P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
+%\end{equation}
+%$ P_{i} $ is the probability of particle $ i $ finds a new global best
+%and $ P $ is the probability that the swarm finds a new global best.
+%\begin{equation}
+%\label{eq:prob_less}
+%\forall i \in [1, N], P > P_{i}.
+%\end{equation}
+%\begin{proof}
+%The search process is a competition among the particles in the swarm.
+%If the swarm does not find a better global best, it means that none of the particle finds a better global best.
+%For particle $ i $, the probability that a new global best cannot be found is $ 1 - P_{i} $.
+%Because the global best is constant, the movements of the particles are independent in the search process.
+%Thus, the probability that no particle finds a new global best becomes
+%$ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
+%Then we can know that the probability that a new global best can be found by the swarm.
+%By writing \eqref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
+%we have \eqref{eq:prob_less}.
+%\end{proof}
+%\end{mythm}
 
-Figure \ref{fig:probRise} illustrates how the probability of the swarm increases with the number of the particles, assuming that the probabilities of all the particles are the same.
-The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
+%\begin{figure}
+%\centering
+%includegraphics[width=0.7\linewidth]{./fig/probRise}
+%\caption{The probability increases with the particle number.}
+%\label{fig:probRise}
+%\end{figure}
+
+%Figure \ref{fig:probRise} illustrates how the probability of the swarm increases with the number of the particles, assuming that the probabilities of all the particles are the same.
+%The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
 
 %\subsubsection{Simulation}
 
