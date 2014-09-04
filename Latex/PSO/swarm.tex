@@ -18,12 +18,12 @@
 %\item Can we look at parameters for the whole swarm?
 %\end{itemize}
 
-In section \ref{sec:particle}, we can see the pros and cons of the search capacity of a particle.
-The particle is in a randomized walk in an attractive potential field defined by the global best and the personal best.
-There exist a lot of factors that prevents the particle reaching the optimal.
+In section \ref{sec:particle}, we can see the pros and cons of the search capability of a particle.
+The movement of a particle is a randomized walk in an attractive potential field defined by the global best and the personal best.
+There exist a lot of factors that prevent the particle reaching the optimal.
 The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
-The import of interaction topology enhances the search capability, which makes it more than a beam-search style optimization method.
-In this section, we analyze the star topology of global best update.
+The import of interaction topology enhances the search capability, which adds information exchange to a beam-search style optimization.
+In this section, our analysis is based on the star topology of global best update.
 In this topology, the global best update imports the competition among the particles.
 The particle finds a new global best becomes the leader of the swarm.
 
@@ -38,9 +38,9 @@ The particle finds a new global best becomes the leader of the swarm.
 %\item explore better
 %\end{itemize}
 
-As we can see in Figure \ref{fig:pso_sys_flow}, the global best update provides a global best $ x^{G} $ and feedbacks into each particle.
+As we can see in Figure \ref{fig:pso_sys_flow}, the system of a swarm can be viewed as that the global best update provides a global best $ x^{G} $ and feedbacks into each particle.
 The update rule of the global best update is the same with that of the personal best update.
-Several of the properties of the personal best update can be derived here.
+Several of the properties of the personal best update can be inherited here.
 We have Lemma \ref{lem:unimodal:swarm:gb_up_iss}.
 
 \begin{mylem}
@@ -64,11 +64,13 @@ When both the particles and the global best update are input-to-state stable, we
 \end{mythm}
 
 As we know, when $ x^{G}(k) = x^{*} $, the swarm becomes only a set of particles without interactions.
-Thus, we are here interested with how the global best $ x^{G} $ can converge to $ x^{*} $.
+The problem falls into how each particle can solve the inconsistency between the personal best and the global best so that it could converge to the optimal.
+In analyzing the swarm behavior, here we are interested with the phenomenon of pre-stage, which is how the global best $ x^{G} $ can converge to $ x^{*} $.
 
 \subsection{Unimodal fitness distribution}
 
-Due to the potential competition in the swarm, if there is always a particle finds a better solution till the optimal is reached, the swarm can always find the optimal in the unimodal case.
+Because of the competition exists in the swarm, a guarantee that finds a better solution can make a guarantee that finds the optimal.
+The refinement will never stop till the optimal is reached.
 We have Theorem \ref{thm:unimodal:swarm:converge}.
 
 \begin{mythm}
@@ -90,7 +92,11 @@ This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 
 %\subsubsection{Simulation}
 
+When finding a better solution cannot be guaranteed by the particles, a swarm could still enhance the search capability.
+We have Lemma \ref{lem:swarm:prob_find_better}.
+
 \begin{mylem}
+\label{lem:swarm:prob_find_better}
 The probability that a swarm finds a better solution is higher than that of any particle.
 The bigger number of the particles is, the higher probability that a swarm finds a better solution is.
 \begin{proof}
@@ -104,6 +110,9 @@ Similarly, $ P_{s'} \geq P_{s} $.
 Thus we can say that the increase of the particle number will not decrease the probability that the swarm finds a better solution.
 \end{proof}
 \end{mylem}
+
+Define the rate of convergence in the fitness space, we have
+$ \frac{| f(x(k+1)) - f(x^{*}) |}{| f(x(k)) - f(x^{*}) |} $
 
 \begin{mythm}
 The make of a swarm brings higher convergence rate.
