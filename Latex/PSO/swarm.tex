@@ -92,7 +92,7 @@ This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 
 %\subsubsection{Simulation}
 
-When finding a better solution cannot be guaranteed by the particles, a swarm could still enhance the search capability.
+Even though there are cases that finding a better solution cannot be guaranteed by the particles, a swarm could still enhance the search capability.
 We have Lemma \ref{lem:swarm:prob_find_better}.
 
 \begin{mylem}
@@ -103,7 +103,7 @@ The bigger number of the particles is, the higher probability that a swarm finds
 Let $ P_{s} $ be the probability that a swarm of size $ N $ finds a better solution.
 Let $ P_{i}, i \in [1, N] $ be the probability that particle $ i $ finds a better solution.
 We can have  $ P_{s} = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ) $.
-By writing it as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $, we know $ \forall i \in [1, N], P > P_{i} $.
+By writing it as $ P_{s} = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $, we know $ \forall i \in [1, N], P_{s} > P_{i} $.
 If we add a new particle to the swarm, we have
 $ P_{s'}  = 1 - (1- P_{s}) *(1-P_{i+1}) $. 
 Similarly, $ P_{s'} \geq P_{s} $.
@@ -111,16 +111,27 @@ Thus we can say that the increase of the particle number will not decrease the p
 \end{proof}
 \end{mylem}
 
-Define $ \Delta = f(x^{G}(k+1)) - f(x^{G}(k)) $ as the improvement of the search.
-The mean of $ \Delta $ indicates the general convergence rate of different position. 
+Define $ \Delta = f(x^{G}(k+1)) - f(x^{G}(k)) $ as the improvement of the search in one iteration.
+The mean of $ \Delta $ indicates the general convergence rate of different position.
 
-\begin{mythm}
-The make of a swarm brings higher convergence rate.
+\begin{mylem}
+\label{lem:swarm:higher_improve}
+The swarm has a higher expected improvement than any particle.
 \begin{proof}
-Define $ p( \Delta \mid  x^{k} ) $ as the probability of having different $ \Delta $ given particle position $ x^{k} $.
-$ E( \Delta ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k) ) } \Delta \int p( \Delta \mid  x^{k} ) d  x^{k} d \Delta $.
+Define $ p( \Delta \mid  x^{k} ) $ as the probability of having different improvement $ \Delta $ given particle position $ x^{k} $.
+The improvement $ \Delta \in [0, f(x^{*}) - f(x^{G}(k))] $.
+We can have the mean of $ \Delta $ as
+$ E( \Delta ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta \int p( \Delta \mid  x^{k} ) d  x^{k} d \Delta $.
 Because the probability that a swarm finds a better solution is higher than the probability that any particle finds a better solution.
 We know that $ E_{s} ( \Delta ) \geq E_{i} ( \Delta )  $.
+\end{proof}
+\end{mylem}
+
+\begin{mythm}
+\label{thm:swarm:higher_conv_rate}
+The make of a swarm brings higher convergence rate.
+\begin{proof}
+
 The swarm has a higher convergence rate.
 \end{proof}
 \end{mythm}
@@ -130,9 +141,7 @@ The swarm has a higher convergence rate.
 When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
 The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
 
-The increase of the number of the particles raise the probability that the swarm can find a new global best.
-We have Theorem \ref{thm:multimodal:swarm:prob}.
-
+The increase of the number of the particles raise the probability that the swarm can find a new global best, as in Lemma \ref{lem:swarm:prob_find_better}.
 As we know that the movement of a particle is bounded, because of the import of the stochastic terms, we can view the exploration as sequentially sampling on the solution space.
 There are two factors that determine the capability of the exploration.
 \begin{itemize}
@@ -145,6 +154,7 @@ There are two factors that determine the capability of the exploration.
 Running a particle ( with same initial position, global best and personal best ) at different time generates different samplings.
 \end{myprop}
 Naturally, more particles form the parallel sampling, which generate more diverse samplings in one iteration.
+As a result, the swarm could generate more diverse samplings on a search region.
 
 It is not surprising that a swarm brings a bigger exploration range.
 Because the exploration range of a swarm is the join of the exploration ranges of all the particles.
@@ -160,6 +170,8 @@ When a particle is not in the modal that has the optimal solution, the global be
 This gives a bigger movement bound to the particle, which makes a higher probability that the particle can move into a better region.
 \end{proof}
 \end{mythm}
+
+Theorem \ref{thm:swarm:expand_range} also indicates how the swarm could influence the explore capacity of each single particle.
 
 %\begin{mythm}
 %\label{thm:multimodal:swarm:prob}
@@ -225,13 +237,12 @@ As a result, the probability that the global optimal can be found would be incre
 Swarm also brings the diversity.
 Because the particles are randomly initialized.
 As the particles are initialized at different positions, the diversity of the probabilities of finding a better solution $ P_{i} $ is increased.
-By Theorem \ref{thm:unimodal:swarm:prob}, we know that the probability of the swarm that finds a better solution is also increased.
+By Lemma \ref{lem:swarm:prob_find_better}, we know that the probability of the swarm that finds a better solution is also increased.
 
 At the same time, there also exists diversity of the personal best.
 This also enlarges the inconsistencies between the personal best and the global best.
-By Lemma \ref{lem:particle:bound_mov}, we know that the explore range of each particle can be increased.
-As a result, the swarm could explore a larger region.
-
+Not only that the swarm enables a parallel exploration on a bigger joint search range,
+, but also, by Theorem \ref{thm:swarm:expand_range}, the swarm also impacts the explore range of each particle.
 
 \subsection{Diversity injection}
 
