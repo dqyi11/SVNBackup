@@ -111,18 +111,19 @@ Thus we can say that the increase of the particle number will not decrease the p
 \end{proof}
 \end{mylem}
 
-Define the rate of convergence in the fitness space, we have
-$ \frac{| f(x(k+1)) - f(x^{*}) |}{| f(x(k)) - f(x^{*}) |} $
+Define $ \Delta = f(x^{G}(k+1)) - f(x^{G}(k)) $ as the improvement of the search.
+The mean of $ \Delta $ indicates the general convergence rate of different position. 
 
 \begin{mythm}
 The make of a swarm brings higher convergence rate.
 \begin{proof}
-Define the convergence rate as $ $.
+Define $ p( \Delta \mid  x^{k} ) $ as the probability of having different $ \Delta $ given particle position $ x^{k} $.
+$ E( \Delta ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k) ) } \Delta \int p( \Delta \mid  x^{k} ) d  x^{k} d \Delta $.
 Because the probability that a swarm finds a better solution is higher than the probability that any particle finds a better solution.
-We know that the swarm has a higher convergence rate.
+We know that $ E_{s} ( \Delta ) \geq E_{i} ( \Delta )  $.
+The swarm has a higher convergence rate.
 \end{proof}
 \end{mythm}
-
 
 \subsection{Multi-modal fitness distribution}
 
@@ -212,7 +213,6 @@ This gives a bigger movement bound to the particle, which makes a higher probabi
 %try to use bound as a function of hill width metric
 
 %Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
-
 
 \subsubsection{Competition}
 
