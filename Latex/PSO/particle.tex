@@ -347,7 +347,8 @@ By Markov's inequality, we have
 \begin{equation}
 P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \leq \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert }.
 \end{equation} 
-By the boundary, we have
+By the mean of the position update component (details in Appendix \ref{app:mean_pso})
+we can have the boundary of the mean
 \begin{equation}
 E( \lVert x(k) - x^{*} \rVert ) \leq \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
 \end{equation}

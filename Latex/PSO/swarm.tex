@@ -118,21 +118,24 @@ The mean of $ \Delta $ indicates the general convergence rate of different posit
 \label{lem:swarm:higher_improve}
 The swarm has a higher expected improvement than any particle.
 \begin{proof}
-Define $ p( \Delta \mid  x^{k} ) $ as the probability of having different improvement $ \Delta $ given particle position $ x^{k} $.
+Define $ p( \Delta \geq \Delta_{c} \mid  x_{i}(k) ) $ as the probability of having improvement larger than or equal to $ \Delta_{c} $ given particle $ i $'s position $ x_{i}(k) $,
+and $ p( \Delta \geq \Delta_{c} \mid x_{1}(k) \cdots x_{N}(k ) $ as the probability that the swarm has improvement larger than or equal to $ \Delta_{c} $ given all the particles' positions.
 The improvement $ \Delta \in [0, f(x^{*}) - f(x^{G}(k))] $.
-We can have the mean of $ \Delta $ as
-$ E( \Delta ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta \int p( \Delta \mid  x^{k} ) d  x^{k} d \Delta $.
-Because the probability that a swarm finds a better solution is higher than the probability that any particle finds a better solution.
+We can have the mean of $ \Delta $ for particle $ i $ as
+$ E( \Delta \mid x_{i}(k) ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta p( \Delta \mid  x_{i}(k) ) d \Delta $
+and that for the swarm as 
+$ E( \Delta \mid x_{i}(k) ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta p( \Delta \mid  x_{1}(k) \cdots x_{N}(k) ) d \Delta $
+By Lemma \ref{lem:swarm:prob_find_better}, we have $ p( \Delta \mid  x_{1}(k) \cdots x_{N}(k) ) \geq  p( \Delta \mid  x_{i}(k) ) $.
 We know that $ E_{s} ( \Delta ) \geq E_{i} ( \Delta )  $.
 \end{proof}
 \end{mylem}
 
 \begin{mythm}
 \label{thm:swarm:higher_conv_rate}
-The make of a swarm brings higher convergence rate.
+The make of a swarm accelerates the expected convergence rate.
 \begin{proof}
-
-The swarm has a higher convergence rate.
+By Lemma \ref{lem:swarm:higher_improve}, the swarm has a higher expected improvement.
+Thus it leads to a higher expected convergence rate.
 \end{proof}
 \end{mythm}
 
