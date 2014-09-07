@@ -103,6 +103,7 @@ def main():
 
     # apply the otsu thresholding
     thresh = otsu2( hist, rows * cols )
+    print thresh
     
     figure  = pyplot.figure( figsize=(14, 6) )
     figure.canvas.set_window_title( 'Otsu thresholding' )

@@ -11,6 +11,7 @@ def otsu(hist, total):
     sum = 0
     for i in range(intensity_level_num):
         sum += i * hist[i]
+    #print sum
         
     background_weight = 0
     background_mean = 0.0
@@ -20,7 +21,7 @@ def otsu(hist, total):
     foreground_mean = 0.0
     foreground_sum = 0
     
-    max_interclass_variance = 0.0
+    max_intraclass_variance = 0.0
     
     threshold_low = 0
     threshold_high = 0
@@ -38,15 +39,15 @@ def otsu(hist, total):
         background_mean = float(background_sum) / background_weight
         foreground_mean = float(foreground_sum) / background_weight
         
-        interclass_variance = (float(background_weight)/sum) * (float(foreground_weight) / sum) * ( background_mean - foreground_mean  )**2
+        intraclass_variance = (float(background_weight)/sum) * (float(foreground_weight) / sum) * ( background_mean - foreground_mean  )**2
         
-        print "I:" + str(i) + " var:" + str(interclass_variance)
+        print "I:" + str(i) + " var:" + str(intraclass_variance)
         
-        if interclass_variance >= max_interclass_variance:
+        if intraclass_variance >= max_intraclass_variance:
             threshold_low = i
-            if interclass_variance > max_interclass_variance:
+            if intraclass_variance > max_intraclass_variance:
                 threshold_high = i
-            max_interclass_variance = interclass_variance
+            max_intraclass_variance = intraclass_variance
             
     return (threshold_low + threshold_high)/2.0
     
