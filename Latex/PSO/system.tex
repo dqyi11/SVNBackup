@@ -38,8 +38,8 @@ x^{G}(k) = \arg \max_{ x \in \{ x(k), x^{G}(k-1) \} } f(x).
 The share of the global best makes a star topology in the swarm.
 
 %The organization of the swarm is implemented by the star topology.
-When the position of a particle is chosen to be the global best, its personal best is updated to this position as well.
-In this case, $ x(k) = x^{P}(k) = x^{G}(k) $, which means the movement of this particle will only be driven by the inertia of the previous velocity till a new global best is found.
+When a particle finds a new global best, it triggers a new ``global-best stagnation'' and its personal best is updated as well.
+In this case, $ x(k) = x^{P}(k) = x^{G}(k) $, which means that the movement of this particle will only be driven by the inertia of the previous velocity till a new global best is found.
 This particle can be viewed as a leader of this swarm.
 The topology is given in Figure \ref{fig:leader_follower}.
 \begin{figure}[tbph]
@@ -49,8 +49,8 @@ The topology is given in Figure \ref{fig:leader_follower}.
 \label{fig:leader_follower}
 \end{figure}
 
-The star topology provides a way of maintaining a leader competition among the particles.
-Once a particle finds a new global best, it becomes the leader of the swarm.
+The star topology also supports a leader competition among the particles.
+The particle that finds a new global best becomes the leader of the swarm.
 The other particles are the followers, which are attracted to the leader by the impact of the global best.
 By Property \ref{prop:unconverge_neq_gb}, we know that a particle will never stop moving if the personal best and the global best are inconsistent.
 Thus, we can view the movements of the followers are sampling in the solution space to solve the inconsistency between its own personal best and the global best.
@@ -58,12 +58,12 @@ The input to each particle from the topology of the swarm is only the global bes
 
 \subsection{A feedback model in a particle}
 
-In this paper, we model the behavior of a particle as a \emph{feedback system}.
+With the global best as the input, we model the behavior of a particle as a \emph{feedback system}.
 %This enables analysis of PSO with stochastic factors preserved and without the stagnation assumption.
 As shown in Figure \ref{fig:sys_flow}, this system is comprised of two components that form a feedback system structure.
 These two components are the 
-\emph{input update component} for the global best ($ x^{G}_{i}(k) $) and the personal best ($ x^{P}_{i}(k) $), and the 
-\emph{personal best update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $ and the swarm topology.
+\emph{personal best update component} for the personal best ($ x^{P}_{i}(k) $), and the 
+\emph{position update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $.
 
 \begin{figure}
 \centering
@@ -103,10 +103,10 @@ We use it as a reference point to check the bounds.}
 With a new $ x(k+1) $, the personal best update component will update the personal best $ x^{P}(k+1) $ that are fed into the position update component.
 
 Because the position update works independently at each dimension.
-When the solution space is multi-dimension, there is just a parallel-interconnection of the position update components of all the dimension.
+When the solution space is multi-dimension, there is just a parallel connection of the position update components of all the dimensions.
 
 The output of the personal update component is one of the inputs of the position-update component.
-Take the same reference point $ x^{*} $, we can write the input-update component as 
+Take the same reference point $ x^{*} $, we can write the personal best update component as 
 \begin{equation}
 \label{eq:pso_input_up}
 U = g(V)
@@ -121,6 +121,6 @@ The position update components of all the dimensions work in a parallel structur
 The updated state $ x (k) $ will be sent into the personal best update component.
 The output of the personal best component is fed back into the position update components.
 With the input and output defined for a particle, we can have the system structure of the swarm in Figure \ref{fig:pso_sys_flow}.
-The states of all the particles are sent into a global update component to determine whether a new global best is found.
+The states of all the particles are sent into a global best update component to determine whether a new global best is found.
 The global best is fed back to all the particles for the next optimization iteration.
 
