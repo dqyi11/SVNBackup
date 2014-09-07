@@ -14,7 +14,11 @@ from binarization import *
 
 if __name__ == '__main__':
     
-    img = Image.open('0397.pgm')
+    #img = Image.open('0397.pgm')
+    #img = Image.open('020206_131612_bp001_folio_094_k639_1837.ppm')
+    #img = Image.open('Declaration_Pg1of1_AC_crop.pgm')
+    #img = Image.open('Scan_half_crop_norm_009_small.pgm')
+    img = Image.open('seq-4_small.pgm')
     img_width = img.size[0]
     img_height = img.size[1]
     print "W:"+str(img_width) + " H:" + str(img_height)

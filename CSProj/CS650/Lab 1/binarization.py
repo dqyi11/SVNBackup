@@ -37,9 +37,10 @@ def otsu(hist, total):
         foreground_sum = sum - background_sum
         
         background_mean = float(background_sum) / background_weight
-        foreground_mean = float(foreground_sum) / background_weight
+        foreground_mean = float(foreground_sum) / foreground_weight
         
-        intraclass_variance = (float(background_weight)/sum) * (float(foreground_weight) / sum) * ( background_mean - foreground_mean  )**2
+                
+        intraclass_variance = float(background_weight) * float(foreground_weight) * ( background_mean - foreground_mean  )**2
         
         print "I:" + str(i) + " var:" + str(intraclass_variance)
         
