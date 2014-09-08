@@ -37,7 +37,7 @@ def countNum(img_data, maskSize):
             else:
                 height_range[1] = data_height - 1    
                 
-            maskSizeData[i,j] = (width_range[1] - width_range[0])*(height_range[1] - height_range[0])
+            maskSizeData[i,j] = (width_range[1] - width_range[0] + 1)*(height_range[1] - height_range[0] + 1)
             for mi in range(width_range[0], width_range[1]+1):
                 for mj in range(height_range[0], height_range[1]+1):
                     countData[i,j] += img_data[i,j]
@@ -52,6 +52,7 @@ def dataThreshold(data, threshold, ratio=1.0):
     
     for i in range(data_width):
         for j in range(data_height):
+            #print str(data[i,j]) + " : " + str(threshold[i,j])
             if data[i,j] >= threshold[i,j]*ratio:
                 threshold_data[i,j] = 1
                 

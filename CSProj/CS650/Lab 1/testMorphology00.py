@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     binary_data = binarize(img_data, threshold)
     
-    mf = NorphologicalFiltering(binary_data, [3,3])
+    mf = NorphologicalFiltering(binary_data, [5,5])
     dilate_data = mf.dilate()
     erode_data = mf.erode()
     #open_data = mf.open()
@@ -43,7 +43,11 @@ if __name__ == '__main__':
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.imshow(img, cmap = cm.Greys_r)
+    ax.imshow(binary_data, cmap = cm.Greys_r)
+    
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.imshow(mf.maskSizeData)
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
