@@ -3,6 +3,7 @@ Created on Sep 6, 2014
 
 @author: daqing_yi
 '''
+import numpy as np
 
 def otsu(hist, total):
     
@@ -42,7 +43,7 @@ def otsu(hist, total):
                 
         intraclass_variance = float(background_weight) * float(foreground_weight) * ( background_mean - foreground_mean  )**2
         
-        print "I:" + str(i) + " var:" + str(intraclass_variance)
+        #print "I:" + str(i) + " var:" + str(intraclass_variance)
         
         if intraclass_variance >= max_intraclass_variance:
             threshold_low = i
@@ -52,6 +53,15 @@ def otsu(hist, total):
             
     return (threshold_low + threshold_high)/2.0
     
+def binarize(img_data, threshold):
+        
+    binary_data = np.zeros(img_data.shape, np.int)
+    for i in range(img_data.shape[0]):
+        for j in range(img_data.shape[1]):
+            if img_data[i,j] > threshold:
+                binary_data[i,j] = 1
+                
+    return binary_data
 
             
             

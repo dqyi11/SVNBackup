@@ -1,11 +1,12 @@
 '''
-Created on Sep 6, 2014
+Created on Sep 8, 2014
 
 @author: daqing_yi
 '''
 
 from PIL import Image
 from binarization import *
+from morphology import *
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -36,14 +37,21 @@ if __name__ == '__main__':
     
     binary_data = binarize(img_data, threshold)
     
+    mf = NorphologicalFiltering(binary_data, [3,3])
+    open_data = mf.open()
+    close_data = mf.close()
+    
+    
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.imshow(img, cmap = cm.Greys_r)
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2.imshow(binary_data, cmap = cm.Greys_r)
+    ax2.imshow(open_data, cmap = cm.Greys_r)
+    
+    fig2 = plt.figure()
+    ax2 = fig2.add_subplot(111)
+    ax2.imshow(close_data, cmap = cm.Greys_r)
+    
     plt.show()
-    
-    
-    
