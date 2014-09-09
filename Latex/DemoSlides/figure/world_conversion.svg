@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="New document 1">
+   sodipodi:docname="world_conversion.svg">
   <defs
      id="defs4">
     <marker
@@ -70,7 +70,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -115,7 +115,7 @@
          sodipodi:role="line"
          id="tspan3759-4"
          x="80"
-         y="606.64789">pgm</tspan></text>
+         y="606.64789">ppm</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -144,14 +144,14 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="500"
-       y="609.50507"
+       x="497.14285"
+       y="606.64795"
        id="text3757-1"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3759-7"
-         x="500"
-         y="609.50507">dat</tspan></text>
+         x="497.14285"
+         y="606.64795">dat</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:4.61862516;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:none;marker-end:url(#TriangleOutL)"
        d="m 320,406.4929 0,102.39216"
