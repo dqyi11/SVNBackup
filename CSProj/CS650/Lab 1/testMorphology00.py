@@ -37,17 +37,13 @@ if __name__ == '__main__':
     mf = NorphologicalFiltering(binary_data, [5,5])
     dilate_data = mf.dilate()
     erode_data = mf.erode()
-    #open_data = mf.open()
-    #close_data = mf.close()
+    open_data = mf.open()
+    close_data = mf.close()
     
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.imshow(binary_data, cmap = cm.Greys_r)
-    
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
-    ax1.imshow(mf.maskSizeData)
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
@@ -56,5 +52,13 @@ if __name__ == '__main__':
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
     ax3.imshow(erode_data, cmap = cm.Greys_r)
+    
+    fig4 = plt.figure()
+    ax4 = fig4.add_subplot(111)
+    ax4.imshow(open_data, cmap = cm.Greys_r)
+    
+    fig5 = plt.figure()
+    ax5 = fig5.add_subplot(111)
+    ax5.imshow(close_data, cmap = cm.Greys_r)
     
     plt.show()
