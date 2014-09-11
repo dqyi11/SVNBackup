@@ -144,12 +144,11 @@ Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO \eq
 \end{proof}
 \end{mythm}
 
-Note that in using \eqref{eq:pso_up_linalg_simp},
+Note that in using \eqref{eq:pso_up_linalg_simp} with $ x^{R} = x^{*} $,
 $ [ v(k), x(k) - x^{*} ]^{T} = [0, 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} = [0, 0]^{T} $.
-For an arbitrary optimization problem $ x^{*} $ would typically not be at the origin. 
-In such a problem, input-to-state stability means that the boundaries of $ \lVert v(k) \lVert $ and $ \lVert x(k) - x^{*} \rVert $ would be transformed and thus determined by $ | x^{G}(k) - x^{*} | $ and $ | x^{P}(k) - x^{*} | $,
+For an arbitrary optimization problem $ x^{R} $ would typically not be at the origin. 
+In such a problem, input-to-state stability means that the boundaries of $ \lVert v(k) \lVert $ and $ \lVert x(k) - x^{R} \rVert $ would be transformed and thus determined by $ | x^{G}(k) - x^{R} | $ and $ | x^{P}(k) - x^{R} | $,
 but the properties of ISS still apply independent of where the function is centered.
-
 Having proven that PSO is ISS we can now state a bound on particle position.
 
 \begin{mythm}
@@ -158,7 +157,7 @@ Given the bound on the input $ \lVert u \rVert $ in the position update componen
 \begin{equation}
 \label{eq:state_bound}
 \forall k, 
-| x(k) - x^{*} | \leq \max ( | x(0) - x^{*} | , \gamma ( | [ x^{G}(k) - x^{*}, x^{P}(k) - x^{*} ]^{T} | ) ),
+| x(k+1) - x^{R} | \leq \max ( | x(0) - x^{R} | , \gamma ( | [ x^{G}(k) - x^{R}, x^{P}(k) - x^{R} ]^{T} | ) ),
 \end{equation}
 in which $ \gamma = \alpha_{3}^{-1} \circ \sigma $.
 
@@ -166,7 +165,7 @@ The $ \max $ part is needed to account for the effect of the starting point, rep
 \begin{equation}
 \label{eq:state_bound:conv}
 \exists T, \forall k \geq T, 
-|  x(k) - x^{*} | \leq \gamma ( | [ x^{G}(k) - x^{*}, x^{P}(k) - x^{*} ]^{T} | ).
+|  x(k+1) - x^{R} | \leq \gamma ( | [ x^{G}(k) - x^{R}, x^{P}(k) - x^{R} ]^{T} | ).
 \end{equation}
 \begin{proof}
 As we have the update equation as
@@ -181,22 +180,25 @@ By the property of matrix norm, we have
 | X(k+1) | \leq ( \prod_{i=0}^{k} \lVert A(i) \rVert ) | X(0) | + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} \lVert A(j) \rVert ) \lVert B(i) \rVert | U(i) |  ].
 \end{equation}
 
-$ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(i) | \leq | U | $, we have
+$ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(k) | = [ x^{G}(k) - x^{R}, x^{P}(k) - x^{R} ]^{T} $, we have
 \begin{equation}
 \label{eq:bound:final}
 \begin{aligned}
-| X(k+1) | & \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U |  ] \\
-& = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U |
+& |  x(k+1) - x^{R} | \leq | X(k+1) | \\
+& \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U(i) |  ] \\
+& = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U(i) |
 \end{aligned}
 \end{equation}
 
-The boundary will be a function of $ bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
-Thus the minimum boundary is $ \min_{k} bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+%The boundary will be a function of $ bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+%Thus the minimum boundary is $ \min_{k} bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+%When we have $ \lVert A \rVert < 1 $, 
+%$ ( \lVert A \rVert )^{k+1} \rightarrow 0 $ and
+%$ \frac{1 - (\lVert A \rVert )^{k+1} }{1 - \lVert A \rVert} \rightarrow \frac{1}{1 - \lVert A \rVert } $
+%as $ k \rightarrow \infty $.
 
-When we have $ \lVert A \rVert < 1 $, 
-$ ( \lVert A \rVert )^{k+1} \rightarrow 0 $ and
-$ \frac{1 - (\lVert A \rVert )^{k+1} }{1 - \lVert A \rVert} \rightarrow \frac{1}{1 - \lVert A \rVert } $
-as $ k \rightarrow \infty $.
+$ ( \lVert A \rVert )^{k+1} $ shows the decay term and $ \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert $ makes the boundary function $ \gamma () $.
+
 \end{proof}
 \end{mythm}
 
@@ -278,12 +280,12 @@ We can have:
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
 \item If the personal best and global best become constant, the particle will converge to a point.
 \end{enumerate}
-Furthermore, by \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
-In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
+Furthermore, by \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{R} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{R} $, if the position update component is input-to-state stable.
+In particular, the boundary of the distance between a particle's position and  $ x^{R} $ is determined by the initial distance $ x(0) -  x^{R} $, $ x^{P}(k) -  x^{R} $ and $ x^{G}(k) -  x^{R} $.
 Conversely, if the position update component is not input-to-state stable, the movement of the particle will diverge from the global best and the personal best.
 The design of the exploitation by the personal best and the global best is lost.
-As in Figure \ref{fig:sys_flow}, the position update component and the input update component are serially connected.
-When the position update component is input-to-state stable, the input-to-state stability of the particle is determined by the input-to-state stability of the input update component.
+%As in Figure \ref{fig:sys_flow}, the position update component and the input update component are serially connected.
+When the position update component is input-to-state stable, the input-to-state stability of the particle is determined by the input-to-state stability of the personal best update component.
 However, the input-to-state stability of the input update component depends on the fitness distribution, which could not be guaranteed in many cases.
 In section \ref{sec:particle}, we will analyze the behavior of the particle when the position update component is input-to-state stable.
 We will later extend the analysis to the swarm in section \ref{sec:swarm}.

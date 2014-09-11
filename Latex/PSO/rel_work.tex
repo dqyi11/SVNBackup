@@ -19,6 +19,7 @@ There are also several works involving the consideration of the stochastic behav
 All the stochastic terms can be modeled as a bounded nonlinear feedback in \cite{1637686}.
 The global best and the personal best are integrated into the nonlinear feedback, which depends an assumption of the constant personal best and constant global best.
 The analysis tool of $ l-2 $ stability has also been imported to understand the impact of the stochastic terms on the convergence~\cite{5160341}.
+As the global best and personal best are plugged into feedback term, it becomes hard to evaluate the impacts from the updates of the global best and personal best.
 
 There is also some work that addresses the dynamics when a particle is not in the stagnation phase.
 The discrete-time dynamics of PSO, that is, the dynamics of particle trajectory, can be approximated
@@ -31,7 +32,7 @@ Most of the efforts are still made on analyzing the particle level.
 The influence from the swarm on the behavior of the particle has not been considered enough.
 An analysis with the swarm level will help to understand better on what happens in the optimization process.
 
-In this paper, we firstly model the process of the particle swarm optimization for analysis purpose in section \ref{sec:system}.
+In this paper, we firstly model the personal best and global best as the input to the position update component in order to evaluate the influence from the swarm in section \ref{sec:system}.
 We provide the input-to-state stability of the position update component of a particle in section \ref{sec:iss}.
 We use this tool to analyze the behavior of a particle in section \ref{sec:particle}.
 Then we extend the analysis to the scope of a swarm in section \ref{sec:swarm}.

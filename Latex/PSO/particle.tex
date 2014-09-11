@@ -33,16 +33,16 @@
 %\bigskip
 
 In this section, we analyze the behavior of one particle in a swarm.
-In one leader stagnation, the global best is unchanged.
-Thus we denote the global best as a constant $ x^{G} $.
-In this case, the particle is isolated from the impacts from other particles till any particle finds a better solution.
+In one global-best stagnation, the global best is unchanged.
+Thus we denote the global best as a constant $ x^{G} $ in one global-best stagnation.
+In this case, the particle is isolated from the impacts from other particles till any particle in the swarm finds a better solution.
 We are interested with 
 \begin{itemize}
 \item whether the particle converges to the global best;
 \item and the probability that the particle find a new global best.
 \end{itemize}
 
-One way of measuring how the particle converges to the global best, we let $ x^{G} $ be the reference position and get \eqref{eq:rel_gb}.
+One way of measuring how the particle converges to the global best, we let $ x^{G} $ be the reference position $ x^{R} $ and get \eqref{eq:rel_gb}.
 
 \begin{equation}
 \label{eq:rel_gb}
@@ -101,16 +101,17 @@ $  | x(k) - x^{G} | \leq \gamma ( | x^{P} - x^{G} | ). $
 $ \gamma () $ is a boundary function.
 \end{mythm}
 
-As the process of an optimization process is a sequence of ``leader stagnation''.
-Stagnation usually only is sub-section of a ``leader stagnation''.
-What happens to a particle in ``leader stagnation'' directly impacts the convergence and the optimal search.
+As the process of an optimization process is a sequence of ``global-bestder stagnation''.
+Stagnation usually only is sub-section of a ``global-best stagnation''.
+What happens to a particle in ``global-best stagnation'' directly impacts the convergence and the optimal search.
 
 \subsection{Unimodal fitness distribution}
 
-Unimodal is the most typical fitness distribution.
-It provides a partial monotonic form and most of the cases the final convergence happens on a unimodal fitness distribution.
+Unimodal is one of the most typical fitness distributions.
+It provides a partial monotonic form.
+In most of the cases the final convergence happens on one unimodal of a fitness distribution.
 Any other form can usually be viewed as a combination of unimodalities as well.
-We categorize the unimodal into two types of cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $.
+The are two type of cases in a unimodal fitness distribution, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $.
 
 \subsubsection{$ x^{G} = x^{*} $}
 
@@ -123,13 +124,13 @@ It is given in Lemma \ref{lem:unimodal:particle:input_iss}.
 
 \begin{mylem}
 \label{lem:unimodal:particle:input_iss}
-If $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $, when $ x^{G} = x^{*} $, the personal best update component is input-to-state stable.
+If $ f(x^{*}) - \alpha_{2} ( |x| ) <  f(x) < f(x^{*}) - \alpha_{1} ( |x| ) $, when $ x^{G} = x^{*} $, the personal best update component is input-to-state stable.
 $ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
 \begin{proof}
-Let $ V(x) = f(x^{G}) - f(x) $.
+Let $ V(x^{P}(k)) = f(x^{G}) - f(x^{P}(k)) $.
 Because we have
-$ \alpha_{1} ( |x| ) \leq V(x) \leq \alpha_{2} ( |x| )  $.
-We have $ V (x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
+$ \alpha_{1} ( |x^{P}(k)| ) \leq V( x^{P}(k) ) \leq \alpha_{2} ( |x^{P}(k)| )  $.
+We have $ V ( x^{P}(k) ) $ satisfying condition 1 of the ISS-Lyapunov function definition.
 
 We also have
 \begin{equation}
@@ -181,7 +182,7 @@ The unimodal fitness distribution is one of the cases that satisfy $ f(x^{*}) - 
 When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{1} \circ \gamma_{2} (s)  < s $, the particle will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
 $ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
-By Lemma \ref{lem:unimodal:particle:iss}, we have the cascade model of the particle is input-to-state stable.
+By Lemma \ref{lem:unimodal:particle:iss}, we have the feedback model of the particle is input-to-state stable.
 Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ \lVert x^{G} - x^{*} \rVert = 0 $.
 By the property of the input-to-state stability, $ | x(k) - x^{*} | $ will converge to zero, which means that the particle will converge to $ x^{*} $.
 \end{proof}
@@ -199,13 +200,22 @@ In a unimodal case, when $ x^{G} = x^{*} $, the particle will almost surely conv
 \begin{proof}
 The convergence of the particle depends on the convergence of the personal best.
 In this case, given the personal best $ x^{P} $, the solution space $ \Omega = A \cup B \land A \cap B = \phi $, in which 
-$ A = \{ x | f(x) > f(x^{P}) \} $ and $ A = \{ x | f(x) \leq f(x^{P}) \} $.
+$ A = \{ x | f(x) > f(x^{P}) \} $ and $ B = \{ x | f(x) \leq f(x^{P}) \} $.
 As long as the particle gets into the set $ A $, the size of the set $ A $ decreases.
 When $ A = \phi $, $ x^{P} = x^{G} = x^{*} $.
 Set $ A $ should either be kept unchanged or be decreased.
 The probability that set $ A $ is decreased should always be bigger than zero.
 Thus, the size of $ A $ will almost surely converge to zero.
 It means that the personal best will almost surely converge to the global best, which leads to that the particle almost surely converge to $ x^{G}  = x^{*} $.
+
+\begin{figure}[tbph]
+\centering
+\includegraphics[width=0.4
+\linewidth]{./fig/two_sets_split}
+\caption{How sets $ A $ and $ B $ are defined.}
+\label{fig:two_sets_split}
+\end{figure}
+
 \end{proof}
 \end{mythm}
 

@@ -96,16 +96,16 @@ $ B(k) = \begin{bmatrix}
 \\ 
 \chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
 \end{bmatrix} $.
-The system state is $ X(k) = [ v(k), x(k) - x^{R} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{R} , x^{P}(k) - x^{R} ]^{T} $
-\footnote{$ x^{*} $ means an equilibrium point to the system.
+The system state is $ X(k) = [ v(k), x(k) - x^{R} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{R} , x^{P}(k) - x^{R} ]^{T} $.
+\footnote{$ x^{R} $ means a reference point to the system.
 When applying to the PSO, it can be a local optimum, a global optimum, or an estimated optimum.
 We use it as a reference point to check the bounds.}
 With a new $ x(k+1) $, the personal best update component will update the personal best $ x^{P}(k+1) $ that are fed into the position update component.
 
 Because the position update works independently at each dimension.
-When the solution space is multi-dimension, there is just a parallel connection of the position update components of all the dimensions.
+When the solution space is multi-dimension, the particle maintains a parallel connection of the position update components of all the dimensions.
 
-The output of the personal update component is one of the inputs of the position-update component.
+The output of the personal best update component is one of the inputs of the position-update component.
 Take the same reference point $ x^{*} $, we can write the personal best update component as 
 \begin{equation}
 \label{eq:pso_input_up}
