@@ -18,8 +18,8 @@ The process of particle swarm optimization consists of a sequence of stagnations
 While the global best is not changed in one ``global-best stagnation'', there also exists no information sharing among the particles.
 The swarm becomes merely a collection of independent agents.
 In the stagnation, the particles have no interaction with each other.
-There exists a particles' competition.
-The particle that finds a better solution takes over the global best triggers a new ``global-best stagnation''.
+There exists a competition among the particles.
+A particle that finds a better solution takes over the global best and triggers a new ``global-best stagnation''.
 
 Due to the non-zero force on the motion of the particle, when the personal best and the global best are inconsistent, there exists no real convergence of a particle's position, which is given in Property \ref{prop:unconverge_neq_gb}.
 \begin{myprop}
@@ -29,5 +29,5 @@ which means that
 $ \lim_{k \rightarrow \infty} v(k) \neq 0 $, if $ x^{P} \neq x^{G} $.
 \end{myprop}
 It indicates that the import of the stochastic factors prevents the existence of an equilibrium position for a particle before its global best and personal best reach a consensus.
-It means that the conventional analyses of point-convergence methods are not enough to understand the dynamics of the optimization process of the particle swarm optimization.
+It means that the conventional analyses of point convergence methods are not enough to understand the dynamics of the optimization process in PSO.
 In this paper, we will analyze the region convergence in the particle swarm optimization.
