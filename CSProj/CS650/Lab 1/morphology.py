@@ -40,7 +40,8 @@ def countNum(img_data, maskSize):
             maskSizeData[i,j] = (width_range[1] - width_range[0] + 1)*(height_range[1] - height_range[0] + 1)
             for mi in range(width_range[0], width_range[1]+1):
                 for mj in range(height_range[0], height_range[1]+1):
-                    countData[i,j] += img_data[mi,mj]
+                    if img_data[mi, mj] == 0:
+                        countData[i,j] += 1 #img_data[mi,mj]
                     
     return countData, maskSizeData
 
@@ -52,11 +53,12 @@ def dataThreshold(data, threshold, ratio=1.0):
     
     for i in range(data_width):
         for j in range(data_height):
-            #print str(data[i,j]) + " : " + str(threshold[i,j])
+            
             if data[i,j] >= threshold[i,j]:
-                threshold_data[i,j] = 1
-            else:
                 threshold_data[i,j] = 0
+            else:
+                threshold_data[i,j] = 1
+            #print str(data[i,j]) + " : " + str(threshold[i,j]) + " = " + str(threshold_data[i,j])
                 
     return threshold_data
     
@@ -65,24 +67,37 @@ class NorphologicalFiltering(object):
     def __init__(self, img_data, maskSize):
         self.img_data = img_data
         self.maskSize = maskSize
-        self.countData, self.maskSizeData = countNum(img_data, maskSize)    
+           
     
-    def dilate(self):
-        return dataThreshold(self.countData, np.ones(self.countData.shape, int))
+    def dilate(self, binData = None):
+        if binData == None:
+            binData = self.img_data            
+        countData, maskSizeData = countNum(binData, self.maskSize)     
+        return dataThreshold(countData, np.ones(countData.shape, int))
     
-    def erode(self):
-        return dataThreshold(self.countData, self.maskSizeData)
+    def erode(self, binData = None):
+        if binData == None:
+            binData = self.img_data
+        countData, maskSizeData = countNum(binData, self.maskSize) 
+        return dataThreshold(countData, maskSizeData)
     
-    def major(self):
-        return dataThreshold(self.countData, self.maskSizeData, 0.5)
+    def major(self, binData = None):
+        if binData == None:
+            binData = self.img_data
+        countData, maskSizeData = countNum(binData, self.maskSize) 
+        return dataThreshold(countData, maskSizeData, 0.5)
     
-    def open(self):
-        erosion = self.erode()
-        return dataThreshold(erosion, np.ones(erosion.shape, int))
+    def open(self, binData = None):
+        if binData == None:
+            binData = self.img_data
+        erosion = self.erode(binData)
+        return self.dilate(erosion)
     
-    def close(self):
-        dilation = self.dilate()
-        return dataThreshold(dilation, self.maskSizeData)
+    def close(self, binData = None):
+        if binData == None:
+            binData = self.img_data
+        dilation = self.dilate(binData)
+        return self.erode(dilation)
     
     
             
