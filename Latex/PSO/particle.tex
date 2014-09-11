@@ -222,7 +222,8 @@ It means that the personal best will almost surely converge to the global best, 
 \subsubsection{ $ x^{G} \not = x^{*}  $ }
 
 When the global best is not yet the optimal solution, the convergence of the particle will be harder to evaluate.
-If the particle accidentally reaches into a region that the fitness is better than the current global best, a new global best is found.
+If  $ f(x^{*}) - \alpha_{2} ( |x| ) <  f(x) < f(x^{*}) - \alpha_{1} ( |x| ) $ is still satisfied, we can similarly have the result in Theorem \ref{thm:unimodal:particle:converge}.
+Otherwise, if the particle accidentally reaches into a region that the fitness is better than the current global best, a new global best is found.
 The particle might also runs stochastically in a region that the fitness is worse than both the personal best and the global best.
 If the particle at least gets into a position that is better than the current personal best, the personal best will be updated. 
 We notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:unimodal:particle:nonstop}.
