@@ -8,10 +8,12 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from utilities import *
 
 if __name__ == '__main__':
     
-    img = cv2.imread('Morphology_1.png', 0)
+    img_filename = 'Morphology_1.png'
+    img = cv2.imread(img_filename, 0)
     kernel = np.ones((5,5), np.uint8)
     
     dilate_data = cv2.dilate(img, kernel, iterations=1)
@@ -23,6 +25,7 @@ if __name__ == '__main__':
     '''
     cv2.imshow('Dilate', dilate_data)
     cv2.waitKey(0)
+    writeToCsv(img_filename+'.dilate.REF.csv', dilate_data)
     
     erode_data = cv2.erode(img, kernel, iterations=1)
     '''
@@ -33,6 +36,7 @@ if __name__ == '__main__':
     '''
     cv2.imshow('Erode', erode_data)
     cv2.waitKey(0)
+    writeToCsv(img_filename+'.erode.REF.csv', erode_data)
     
     open_data = cv2.morphologyEx(img, cv2.MORPH_OPEN, kernel)
     '''
@@ -43,6 +47,7 @@ if __name__ == '__main__':
     '''
     cv2.imshow('Open', open_data)
     cv2.waitKey(0)
+    writeToCsv(img_filename+'.open.REF.csv', open_data)
     
     close_data = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
     '''
@@ -55,5 +60,6 @@ if __name__ == '__main__':
     '''
     cv2.imshow('Close', close_data)
     cv2.waitKey(0)
+    writeToCsv(img_filename+'.close.REF.csv', close_data)
     
     

@@ -53,13 +53,13 @@ def otsu(hist, total):
             
     return (threshold_low + threshold_high)/2.0
     
-def binarize(img_data, threshold):
+def binarize(img_data, threshold, on_value=1):
         
     binary_data = np.zeros(img_data.shape, np.int)
     for i in range(img_data.shape[0]):
         for j in range(img_data.shape[1]):
             if img_data[i,j] > threshold:
-                binary_data[i,j] = 1
+                binary_data[i,j] = on_value
                 
     return binary_data
 
