@@ -61,6 +61,7 @@ def binarize(img_data, threshold, on_value=1):
     binary_data = np.zeros(img_data.shape, np.int)
     for i in range(img_data.shape[0]):
         for j in range(img_data.shape[1]):
+            #print str(img_data[i,j]) + " : " + str(threshold)
             if img_data[i,j] > threshold:
                 binary_data[i,j] = on_value
                 

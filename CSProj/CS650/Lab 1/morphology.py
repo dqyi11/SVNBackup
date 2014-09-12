@@ -57,7 +57,7 @@ def dataThreshold(data, threshold, ratio=1.0):
             if data[i,j] >= threshold[i,j]:
                 threshold_data[i,j] = 0
             else:
-                threshold_data[i,j] = 1
+                threshold_data[i,j] = 255
             #print str(data[i,j]) + " : " + str(threshold[i,j]) + " = " + str(threshold_data[i,j])
                 
     return threshold_data

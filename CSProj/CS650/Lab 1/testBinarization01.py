@@ -20,7 +20,7 @@ if __name__ == '__main__':
     #img_filename = 'Scan_half_crop_norm_009_small.pgm'
     #img_filename = 'seq-4_small.pgm'
     
-    img = Image.open(img_filename)
+    img = Image.open(img_filename).convert("L")
     
     img_width = img.size[0]
     img_height = img.size[1]

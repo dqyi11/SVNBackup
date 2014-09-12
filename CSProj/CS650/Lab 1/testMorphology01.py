@@ -28,7 +28,7 @@ if __name__ == '__main__':
     
     #print img_data.shape
 
-    hist, bin_edges = np.histogram(img_data, 256)
+    hist, bin_edges = np.histogram(img_data, np.arange(256))
     
     #print hist
     threshold = otsu(hist, img_width*img_height)
