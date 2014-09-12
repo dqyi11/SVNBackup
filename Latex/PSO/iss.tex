@@ -52,7 +52,7 @@ with $ f(0,0) = 0 $
 \footnote{This means that $ x = 0 $ is an equilibrium of the 0-input system.}, the system is \emph{(globally) input-to-state stable} if there exist a $ KL $-function $ \beta  $ and a $ K $-function $ \gamma $ such that, for each input $ u \in l^{m}_{\infty} $ and each $ \xi \in \mathbb{R}^{n} $, it holds that $  \forall k \in \mathbb{Z}^{+} $,
 \begin{equation}
 \label{eq:def_iss}
-| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma ( \lVert u \rVert ).
+| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma ( | u | ).
 \end{equation}
 \end{mydef}
 
@@ -129,7 +129,7 @@ Since the identity matrix $ P $ has $ || P || = 1 $:
 \label{eq:lyapunov_delta5}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] \lVert U(k) \rVert^{2}.
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] | U(k) |^{2}.
 \end{aligned}
 \end{equation}
 
@@ -147,7 +147,7 @@ Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO \eq
 Note that in using \eqref{eq:pso_up_linalg_simp} with $ x^{R} = x^{*} $,
 $ [ v(k), x(k) - x^{*} ]^{T} = [0, 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} = [0, 0]^{T} $.
 For an arbitrary optimization problem $ x^{R} $ would typically not be at the origin. 
-In such a problem, input-to-state stability means that the boundaries of $ \lVert v(k) \lVert $ and $ \lVert x(k) - x^{R} \rVert $ would be transformed and thus determined by $ | x^{G}(k) - x^{R} | $ and $ | x^{P}(k) - x^{R} | $,
+In such a problem, input-to-state stability means that the boundaries of $ | v(k) | $ and $ | x(k) - x^{R} | $ would be transformed and thus determined by $ | x^{G}(k) - x^{R} | $ and $ | x^{P}(k) - x^{R} | $,
 but the properties of ISS still apply independent of where the function is centered.
 Having proven that PSO is ISS we can now state a bound on particle position.
 

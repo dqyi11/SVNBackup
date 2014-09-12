@@ -183,7 +183,7 @@ When $ x^{G} = x^{*} $,  if $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^
 $ \gamma_{1} () $ is the gain of the position update component and $ \gamma_{2} () $ is the gain of the input update component.
 \begin{proof}
 By Lemma \ref{lem:unimodal:particle:iss}, we have the feedback model of the particle is input-to-state stable.
-Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ \lVert x^{G} - x^{*} \rVert = 0 $.
+Because $ x^{G} = x^{*} $, the input to the cascade model of the particle is zero, $ | x^{G} - x^{*} | = 0 $.
 By the property of the input-to-state stability, $ | x(k) - x^{*} | $ will converge to zero, which means that the particle will converge to $ x^{*} $.
 \end{proof}
 \end{mythm}
@@ -345,35 +345,35 @@ Thus the boundary will also not be changed.
 \end{proof}
 \end{mythm}
 
-In order to measure how likely the particle can move to a position that $ f(x) > f(x^{G}) $, we can measure the probability that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
+In order to measure how likely the particle can move to a position that $ f(x) > f(x^{G}) $, we can measure the probability that $ | x(k) - x^{*} | < | x^{G} - x^{*} | $ indirectly.
 We then have Corollary \ref{lem:mutimodal:particle:prob}.
 \begin{mycoro}
 \label{lem:mutimodal:particle:prob}
 \begin{equation}
 \begin{aligned}
-& P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
-& > 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert },
+& P( | - x^{*} | < | x^{G} - x^{*} | ) \\
+& > 1 - \frac{ \gamma ( \max ( E( | x^{G} - x^{*} | ), E( | x^{P}(k) - x^{*}  | ) ) ) }{ | x^{G} - x^{*} | },
 \end{aligned}
 \end{equation}
 in which $ \gamma () $ is a boundary function.
 \begin{proof}
 By Markov's inequality, we have
 \begin{equation}
-P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \leq \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert }.
+P( | x(k) - x^{*} | \geq | x^{G} - x^{*} | ) \leq \frac{ E( | x(k) - x^{*} | ) }{ | x^{G} - x^{*} | }.
 \end{equation} 
 By the mean of the position update component (details in Appendix \ref{app:mean_pso})
 we can have the boundary of the mean
 \begin{equation}
 \label{eq:mean:opt_bound}
-E( \lVert x(k) - x^{*} \rVert ) \leq \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ),
+E( | x(k) - x^{*} | ) \leq \gamma ( \max ( E( | x^{G} - x^{*} | ), E( | x^{P}(k) - x^{*} | ) ) ),
 \end{equation}
 in which $ \gamma () $ is the boundary function.
 \begin{equation}
 \begin{aligned}
-& P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
-= & 1 - P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \\
-> & 1 - \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert } \\
-> & 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ) , E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert }.
+& P( | x(k) - x^{*} | < | x^{G} - x^{*} | ) \\
+= & 1 - P( | x(k) - x^{*} | \geq | x^{G} - x^{*} | ) \\
+> & 1 - \frac{ E( | x(k) - x^{*} | ) }{ | x^{G} - x^{*} | } \\
+> & 1 - \frac{ \gamma ( \max ( E( | x^{G} - x^{*} | ) , E( | x^{P}(k) - x^{*}  | ) ) ) }{ | x^{G} - x^{*} | }.
 \end{aligned}
 \end{equation}
 \end{proof}
@@ -383,7 +383,7 @@ When the fitness function coarsely shows some monotonicity, we can measure the p
 
 \begin{mythm}
 \label{thm:multimodal:in_scope}
-If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert } $
+If the region $ R $ of $ | x - x^{*} | < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( E( | x^{G} - x^{*} | ), E( | x^{P}(k) - x^{*}  | ) ) ) }{ | x^{G} - x^{*} | } $
 \end{mythm} 
 
 \subsection{Exploitation and exploration}
