@@ -331,7 +331,7 @@ in which $ \beta^{*} $ is $ KL $-function , $ \gamma^{*}  $ and $ \gamma^{0} () 
 These can be obtained by applying $ x^{*} $ and $ x^{0} $ to Theorem \ref{thm:state_bound}.
 \end{proof}
 \end{mylem}
-Lemma \ref{lem:particle:bound_mov} shows that the boundary of a particle's movement is determined by where the global best $ x^{G} $ and the personal best $ x^{P}(k) $ locate at.
+Lemma \ref{lem:particle:bound_mov} shows that the boundary of a particle's movement is determined by where the global best $ x^{G} $ and the personal best $ x^{P}(k) $ locate.
 
 As we are interested with the probability that the particle gets into a position that is better than the current global best, we hope the distance from this position to the optimal is closer than that from the global best to the optimal.
 
@@ -345,14 +345,14 @@ Thus the boundary will also not be changed.
 \end{proof}
 \end{mythm}
 
-In order to measure how likely the particle can moves to a position that $ f(x) > f(x^{G}) $, we can measure the probability of that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
+In order to measure how likely the particle can move to a position that $ f(x) > f(x^{G}) $, we can measure the probability that $ \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert $ indirectly.
 We then have Corollary \ref{lem:mutimodal:particle:prob}.
 \begin{mycoro}
 \label{lem:mutimodal:particle:prob}
 \begin{equation}
 \begin{aligned}
 & P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
-& > 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert },
+& > 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert },
 \end{aligned}
 \end{equation}
 in which $ \gamma () $ is a boundary function.
@@ -364,7 +364,8 @@ P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \leq \frac{ E( 
 By the mean of the position update component (details in Appendix \ref{app:mean_pso})
 we can have the boundary of the mean
 \begin{equation}
-E( \lVert x(k) - x^{*} \rVert ) \leq \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ),
+\label{eq:mean:opt_bound}
+E( \lVert x(k) - x^{*} \rVert ) \leq \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ),
 \end{equation}
 in which $ \gamma () $ is the boundary function.
 \begin{equation}
@@ -372,7 +373,7 @@ in which $ \gamma () $ is the boundary function.
 & P( \lVert x(k) - x^{*} \rVert < \lVert x^{G} - x^{*} \rVert ) \\
 = & 1 - P( \lVert x(k) - x^{*} \rVert \geq \lVert x^{G} - x^{*} \rVert ) \\
 > & 1 - \frac{ E( \lVert x(k) - x^{*} \rVert ) }{ \lVert x^{G} - x^{*} \rVert } \\
-> & 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert }.
+> & 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ) , E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert }.
 \end{aligned}
 \end{equation}
 \end{proof}
@@ -382,7 +383,7 @@ When the fitness function coarsely shows some monotonicity, we can measure the p
 
 \begin{mythm}
 \label{thm:multimodal:in_scope}
-If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( \lVert x^{G} - x^{*} \rVert , \lVert x^{P}(k) - x^{*}  \rVert ) ) }{ \lVert x^{G} - x^{*} \rVert } $
+If the region $ R $ of $ || x - x^{*} || < \epsilon $ is monotonic, $ x(k) \in R $ and $ x^{G} \in R $, the probability that the particle find a better solution is $ P > 1 - \frac{ \gamma ( \max ( E( \lVert x^{G} - x^{*} \rVert ), E( \lVert x^{P}(k) - x^{*}  \rVert ) ) ) }{ \lVert x^{G} - x^{*} \rVert } $
 \end{mythm} 
 
 \subsection{Exploitation and exploration}
@@ -391,23 +392,23 @@ The property showed above provides the exploitation and exploration at a particl
 
 \subsubsection{Exploitation}
 
-The convergence property indicates the exploitation of the optimal search.
+The exploitation of the optimal search means the convergence property.
 In a leader-follower scheme, there always exists an attraction from the global best so that the particles show convergence toward the global best.
-However, the convergence property also enhance the local attraction from maintaining a personal best.
+However, the convergence property also enhance the local attraction by maintaining a personal best.
 The inherent input-to-state stability guarantees that the particle could utilize the current information as the heuristic.
 This makes the particle swarm optimization a convergent optimization method.
 
 \subsubsection{Exploration}
 
-In the exist of the convergence, there are also mechanisms that prevents early premature of the optimal search process.
+There are also mechanisms that prevent early premature of the optimal search process, which indicates the exploration.
 The import of the stochastic terms brings nondeterministic and versatile search capability, which indicates varying step length.
 
 However, the varying step length is still limited in a range. 
-With an inertia term, it means the exists of a boundary of the movement.
-This always implies the search capability of a particle.
-As stated in Theorem \ref{thm:multimodal:out_of_scope}, the particle might not able to find a better solution and is stuck in the movement inside a region.
-Moreover, as it is shown in Lemma \ref{thm:stagnation_bound} and Lemma \ref{lem:particle:bound_mov}, the positions of the personal best and the global best can also determine the boundary of the particle's movement.
-By \eqref{eq:stagnation_bound}, we can see that a bigger inconsistence between global best and personal best $ | x^{P} - x^{G} | $ makes a bigger boundary.
+There exists a boundary of the movement, as in Theorem \ref{thm:state_bound}.
+This boundary implies the search capability of a particle.
+As stated in Theorem \ref{thm:multimodal:out_of_scope}, the particle might not able to find a better solution and is stuck in the movement inside such a region.
+Moreover, as it is shown in Lemma \ref{thm:stagnation_bound} and Lemma \ref{lem:particle:bound_mov}, the positions of the personal best and the global best can also influence the boundary of the particle's movement.
+By \eqref{eq:stagnation_bound}, we can see that a bigger inconsistence between global best and personal best $ | x^{P} - x^{G} | $ usually means a bigger boundary.
 
 
 %It means that a particle moves in a bounded region in the multi-modal case.
