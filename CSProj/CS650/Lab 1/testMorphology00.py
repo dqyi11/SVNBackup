@@ -34,7 +34,8 @@ if __name__ == '__main__':
     
     binary_data = binarize(img_data, threshold)
     
-    mf = NorphologicalFiltering(binary_data, [5,5])
+    maskSize = [5,5]
+    mf = NorphologicalFiltering(binary_data, maskSize)
     
     
     fig = plt.figure()
@@ -45,14 +46,14 @@ if __name__ == '__main__':
     dilate_data = mf.dilate()
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2.set_title('Dilate')
+    ax2.set_title('Dilate ' + str(mf.maskSize))
     ax2.imshow(dilate_data, cmap = cm.Greys_r)
     writeToCsv(img_filename+'.dilate.csv', dilate_data)
     
     erode_data = mf.erode()
     fig3 = plt.figure()
     ax3 = fig3.add_subplot(111)
-    ax3.set_title('Erode')
+    ax3.set_title('Erode '  + str(mf.maskSize))
     ax3.imshow(erode_data, cmap = cm.Greys_r)
     writeToCsv(img_filename+'.erode.csv', erode_data)
     
@@ -60,14 +61,14 @@ if __name__ == '__main__':
     open_data = mf.dilate(erode_data) #mf.open()
     fig4 = plt.figure()
     ax4 = fig4.add_subplot(111)
-    ax4.set_title('Open')
+    ax4.set_title('Open ' + str(mf.maskSize))
     ax4.imshow(open_data, cmap = cm.Greys_r)
     writeToCsv(img_filename+'.open.csv', open_data)
     
     close_data = mf.erode(dilate_data) #mf.close()
     fig5 = plt.figure()
     ax5 = fig5.add_subplot(111)
-    ax5.set_title('Close')
+    ax5.set_title('Close ' + str(mf.maskSize))
     ax5.imshow(close_data, cmap = cm.Greys_r)
     writeToCsv(img_filename+'.close.csv', close_data)    
     
