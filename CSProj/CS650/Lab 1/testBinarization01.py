@@ -30,10 +30,10 @@ if __name__ == '__main__':
     
     #print img_data.shape
 
-    hist, bin_edges = np.histogram(img_data, 256)
+    hist, bin_edges = np.histogram(img_data, np.arange(256))
     
     #print hist
-    threshold = otsu(hist, img_width*img_height)
+    threshold, intraclass_variances = otsu(hist, img_width*img_height)
     
     print "Threshold: " + str(threshold)    
     
@@ -45,6 +45,12 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.imshow(img, cmap = cm.Greys_r)
+    
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.step(np.arange(len(intraclass_variances)), intraclass_variances)
+    ax1.plot(threshold, intraclass_variances[threshold], 'rs')
+    ax1.annotate(str(threshold), xy=(threshold, intraclass_variances[threshold]), xytext=(threshold+2, intraclass_variances[threshold]))
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)

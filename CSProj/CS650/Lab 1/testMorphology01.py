@@ -48,10 +48,12 @@ if __name__ == '__main__':
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
+    ax2.set_title('opening')
     ax2.imshow(open_data, cmap = cm.Greys_r)
     
     fig3 = plt.figure()
-    ax3 = fig2.add_subplot(111)
+    ax3 = fig3.add_subplot(111)
+    ax3.set_title('closing')
     ax3.imshow(close_data, cmap = cm.Greys_r)
     
     plt.show()

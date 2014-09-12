@@ -32,7 +32,8 @@ if __name__ == '__main__':
     
     csv_filename = img_filename + ".REF.csv"
     writeToCsv(csv_filename, threshold)
-
+    
+    print ret
     
     fig = plt.figure()
     ax = fig.add_subplot(111)
