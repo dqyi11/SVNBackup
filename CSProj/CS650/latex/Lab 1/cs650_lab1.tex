@@ -66,10 +66,32 @@ Include some images to illustrate your results (you may need to crop and zoom so
 
 \section{Binarization}
 
+\subsection{Implementation}
+
+\subsection{Results}
+
+\begin{table}
+\label{tab:title}
+\caption {Comparison on the results of \textbf{threshold} obtained from different implementations of Otsu's method.}
+\begin{center}
+\begin{tabular}{ | l | l | l | }
+\hline
+test file & Threshold (My code) & Threshold (Open CV)  \\ \hline
+0397.pgm                                          & 134 & 134 \\ \hline
+020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm & 182 & 182 \\ \hline
+Declaration\_Pg1of1\_AC\_crop.pgm                 & 186 & 186 \\ \hline
+Scan\_half\_crop\_norm\_009\_small.pgm            & 134 & 134 \\ \hline
+seq-4\_small.pgm                                  & 152 & 152 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
 
 
 \section{Morphology}
 
+\subsection{Implementation}
 
+\subsection{Results}
 
 \end{document}
