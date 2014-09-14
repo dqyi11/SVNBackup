@@ -7,6 +7,7 @@
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
 \usepackage[pdftex]{graphicx}	
 \usepackage{url}
+\usepackage{hyperref}
 
 
 %%% Custom sectioning
@@ -76,7 +77,7 @@ $ \mu_{f} (t) $ and $ \mu_{b} (t) $ are the means of two classes, which are comp
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\linewidth]{./figure/interclass_variances}
+\includegraphics[width=0.5\linewidth]{./figure/interclass_variances}
 \caption{Finding the maximum interclass variance}
 \label{fig:interclass_variances}
 \end{figure}
@@ -97,7 +98,9 @@ On\_value indicates the number stored for representing ON pixel.
 
 \subsubsection{0397.pgm}
 
-\begin{figure}
+The results of testing \emph{0397.pgm} are illustrated in Figure \ref{fig:binary:01}.
+
+\begin{figure}[h]
 \centering
 \subfigure[Origin]{
 \includegraphics[width=.45\textwidth]{./figure/0397_pgm_origin}
@@ -108,15 +111,18 @@ On\_value indicates the number stored for representing ON pixel.
 \caption{Binarization of 0397.pgm using Otsu's method.}\label{fig:binary:01}
 \end{figure}
 
-\subsubsection{other cases}
+\subsubsection{Other test files}
 
+In order to check the correctness of the implementation, I compared the results from my implementation with the results from modules provided by open cv.
+They are given in Table 1.1. %\ref{tab:title}.
+When the thresholds are the same, the generated binary images should be consistent as well.
 \begin{table}
-\label{tab:title}
+\label{tab:binary_comp}
 \caption {Comparison on the results of \textbf{threshold} obtained from different implementations of Otsu's method.}
 \begin{center}
 \begin{tabular}{ | l | l | l | }
 \hline
-test file & Threshold (My code) & Threshold (Open CV)  \\ \hline
+Test file & Threshold (My code) & Threshold (Open CV)  \\ \hline
 0397.pgm                                          & 134 & 134 \\ \hline
 020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm & 182 & 182 \\ \hline
 Declaration\_Pg1of1\_AC\_crop.pgm                 & 186 & 186 \\ \hline
@@ -129,20 +135,28 @@ seq-4\_small.pgm                                  & 152 & 152 \\ \hline
 
 \section{Morphology}
 
+The morphology filter uses a mask to count the number of ON pixels of the neighborhood of each pixel.
+For a binary image that is represented by 0 and 1, either pixel of 0 or pixel of 1 can be defined as ON pixel. 
+In this lab, I choose pixel of 0 (BLACK pixel) as ON pixel.
 
+The \textbf{dilate} operation requires all the neighbor pixels in the mask are all ON so that the pixel can be set as ON, 
+while the \textbf{erode} operation requires only one of the neighbor pixles.
+The \texbtf{open} and \textbf{close} operations are combinations of the \textbf{dilate} and \textbf{erode} operations.
+The \textbf{open} operation means doing \textbf{dilate} firstly and then \textbf{erode}.
+THe \textbf{close} operation follows a reversed sequence.
 
 \subsection{Implementation}
 
 The functions are written in \emph{morphology.py}.
 
 \begin{itemize}
-\item \textbf{ countNum( img\_data, maskSize ) } xcxx
-\item \textbf{ dataThreshold( data, threshold, ratio=1.0 ) }  xxx
+\item \textbf{ countNum( img\_data, maskSize ) } counts the number of ON pixels in the neighboring of each pixels. 
+Because the mask cannot be completely applied in the corners, an array of mask data size for each pixel is returned as well.
+\item \textbf{ dataThreshold( data, threshold, ratio=1.0 ) } determines whether the number of ON pixels can surpass the threshold defined.
 \end{itemize}
 
-There is also a class \emph{NorphologicalFiltering}.
+There is also a class \emph{MorphologicalFiltering}.
 It stores the \emph{maskSizeData} used for operations \textbf{dilate}, \textbf{erode}, \textbf{open} and \textbf{close}.
-
 
 \subsection{Results}
 
@@ -151,23 +165,59 @@ It stores the \emph{maskSizeData} used for operations \textbf{dilate}, \textbf{e
 \begin{figure}
 \centering
 \subfigure[Binary]{
-\includegraphics[width=.3\textwidth]{./figure/J_binary}
+\includegraphics[width=.18\textwidth]{./figure/J_binary}
 \label{fig:j_binary} }
 \subfigure[Dilate]{
-\includegraphics[width=.3\textwidth]{./figure/J_dilate}
+\includegraphics[width=.18\textwidth]{./figure/J_dilate}
 \label{fig:j_dilate} }
 \subfigure[Erode]{
-\includegraphics[width=.3\textwidth]{./figure/J_erode}
+\includegraphics[width=.18\textwidth]{./figure/J_erode}
 \label{fig:j_erode} }
 \subfigure[Open]{
-\includegraphics[width=.3\textwidth]{./figure/J_open}
+\includegraphics[width=.18\textwidth]{./figure/J_open}
 \label{fig:j_open} }
 \subfigure[Close]{
-\includegraphics[width=.3\textwidth]{./figure/J_close}
+\includegraphics[width=.18\textwidth]{./figure/J_close}
 \label{fig:j_close} }
 \caption{Morphology operations of Letter J.}\label{fig:j_letter}
 \end{figure}
 
-\subsubsection{Yihi}
+\subsubsection{0397.pgm}
+
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.45\textwidth]{./figure/0397_pgm_open}
+\label{fig:morph:01:open} }
+\subfigure[Binary]{
+\includegraphics[width=.45\textwidth]{./figure/0397_pgm_close}
+\label{fig:morph:01:close} }
+\caption{Open and close operations of 0397.pgm.}\label{fig:morph:01}
+\end{figure}
+
+\subsubsection{Other test files}
+
+In order to verify the correctness of the generated results, I use $ mean( abs( img - img\_ref ) ) $ to compare the result of my implementation with the result of open cv.
+$ img $ is the data array from my implementation and $ img\_ref $ is the data array from open cv.
+Because open cv use pixel of 1 as ON pixel, which is the reverse of my way.
+In comparison, I compare my ``dilate'' to with the ``erode'' in open cv, and my ``erode'' with ``dilate'' in open cv.
+Similarly, because ``open'' and ``close'' are reversed operation, I compare them in the same way. 
+
+\begin{table}
+\label{tab:morphology_comp}
+\caption {Comparison on the results of \textbf{threshold} obtained from different implementations of Morphological filter.}
+\begin{center}
+\begin{tabular}{ | l | l | l | l | l | }
+\hline
+Test file & Dilate & Erode & Open & Close  \\ \hline
+Letter J                                          & 0.0            & 0.0           & 0.0            & 0.0            \\ \hline
+0397.pgm                                          & 0.0            & 0.0           & 0.0            & 0.0            \\ \hline
+020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm & 0.694292911729 & 1.11458020782 & 0.789870370183 & 0.623459113607 \\ \hline
+Declaration\_Pg1of1\_AC\_crop.pgm                 & 0.0            & 0.0           & 0.0            & 0.0 \\ \hline
+Scan\_half\_crop\_norm\_009\_small.pgm            & 0.0 & 0.0 & 0.0 & 0.0 \\ \hline
+seq-4\_small.pgm                                  & 0.0 & 0.0 & 0.0 & 0.0 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
 
 \end{document}
