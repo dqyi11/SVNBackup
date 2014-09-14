@@ -57,15 +57,21 @@
 \begin{document}
 \maketitle
 
-Prepare a brief (but specific and well-articulated) write-up about your methods, observations, and conclusions.
-Include some images to illustrate your results (you may need to crop and zoom so we can see detail - we do not necessarily need entire images or all results, but enough to be representative of what you have done and demonstrate what you are writing about).
+%Prepare a brief (but specific and well-articulated) write-up about your methods, observations, and conclusions.
+%Include some images to illustrate your results (you may need to crop and zoom so we can see detail - we do not necessarily need entire %images or all results, but enough to be representative of what you have done and demonstrate what you are writing about).
 
-\begin{itemize}
-\item What do you conclude about binarization? 
-\item What do you conclude about the use of morphological open and close operations?
-\end{itemize}
+%\begin{itemize}
+%\item What do you conclude about binarization? 
+%\item What do you conclude about the use of morphological open and close operations?
+%\end{itemize}
 
-There are no specific right or wrong answers--do your best to think about the methods, their strengths, and their weaknesses.
+%There are no specific right or wrong answers--do your best to think about the methods, their strengths, and their weaknesses.
+
+This lab consists of two parts, binarization and morphology.
+The implementation is written in Python.
+PIL is used for reading image files into data arrays.
+Matplotlib is used for visualizing data.
+Open CV is used to verify the correctness.
 
 \section{Binarization}
 
@@ -263,8 +269,23 @@ seq-4\_small.pgm                                  & 0.0    & 0.0    & 0.0    & 0
 I choose the black pixel as the ON pixel.
 Because I would like to show the dilate and erode effects on the foreground objects.
 
-Figure \ref{fig:j_letter} shows 
+Figure \ref{fig:j_letter} shows the morphology operations.
+The effects of the \textbf{dilate} and the \textbf{erode} are obvious in Figure \ref{fig:j_letter}.
+\textbf{Open}
+\textbf{Close} 
 
+As it is shown in Figure \ref{fig:morph:01}, \textbf{open} is vulnerable to the size of mask.
+In order to have 
 
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_open}
+\label{fig:morph:02:open} }
+\subfigure[Binary]{
+\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_close}
+\label{fig:morph:02:close} }
+\caption{Open and close operations of 020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm.}\label{fig:morph:02}
+\end{figure}
 
 \end{document}
