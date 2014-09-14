@@ -96,7 +96,7 @@ On\_value indicates the number stored for representing ON pixel.
 
 \subsection{Results}
 
-\subsubsection{0397.pgm}
+%\subsubsection{0397.pgm}
 
 The results of testing \emph{0397.pgm} are illustrated in Figure \ref{fig:binary:01}.
 
@@ -111,7 +111,18 @@ The results of testing \emph{0397.pgm} are illustrated in Figure \ref{fig:binary
 \caption{Binarization of 0397.pgm using Otsu's method.}\label{fig:binary:01}
 \end{figure}
 
-\subsubsection{Other test files}
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_origin}
+\label{fig:binary:02:origin} }
+\subfigure[Binary]{
+\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_binary}
+\label{fig:binary:02:binary} }
+\caption{Binarization of 0397.pgm using Otsu's method.}\label{fig:binary:02}
+\end{figure}
+
+%\subsubsection{Other test files}
 
 In order to check the correctness of the implementation, I compared the results from my implementation with the results from modules provided by open cv.
 They are given in Table 1.1. %\ref{tab:title}.
@@ -132,6 +143,18 @@ seq-4\_small.pgm                                  & 152 & 152 \\ \hline
 \end{center}
 \end{table}
 
+\subsection{Conclusion}
+
+Otsu's method finds a threshold to separate the gray-scale pixels into two classes, which minimizes the intra-class variance.
+The two classes are usually viewed as foreground and background.
+When gray-scale values of the foreground pixels have significant difference with the gray-scale values of the background, Otsu's method shows good performance.
+Figure \ref{fig:binary:01} is such an example.
+The foreground pixels can be extracted as a result.
+However, there are a lot of reasons that the difference is not significant, which can be caused by the light condition, stain and etc.
+In these cases, the performance might not be ideal, as much information would be lost.
+Figure \ref{fig:binary:02} gives an example like these.
+In these cases, we could possibly cluster the background into several subregions.
+Doing Otsu's method separately in each subregion might bring better performance.
 
 \section{Morphology}
 
@@ -160,7 +183,7 @@ It stores the \emph{maskSizeData} used for operations \textbf{dilate}, \textbf{e
 
 \subsection{Results}
 
-\subsubsection{Letter J}
+%\subsubsection{Letter J}
 
 \begin{figure}
 \centering
@@ -179,29 +202,44 @@ It stores the \emph{maskSizeData} used for operations \textbf{dilate}, \textbf{e
 \subfigure[Close]{
 \includegraphics[width=.18\textwidth]{./figure/J_close}
 \label{fig:j_close} }
-\caption{Morphology operations of Letter J.}\label{fig:j_letter}
+\caption{Morphology operations of Letter J [$ 5 \times 5 $].}
+\label{fig:j_letter}
 \end{figure}
 
-\subsubsection{0397.pgm}
+%\subsubsection{0397.pgm}
 
 \begin{figure}[h]
 \centering
-\subfigure[Origin]{
-\includegraphics[width=.45\textwidth]{./figure/0397_pgm_open}
-\label{fig:morph:01:open} }
-\subfigure[Binary]{
-\includegraphics[width=.45\textwidth]{./figure/0397_pgm_close}
-\label{fig:morph:01:close} }
+\subfigure[Open $ 5 \times 5 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_open_5}
+\label{fig:morph:01:open:5} }
+\subfigure[Open $ 7 \times 7 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_open_7}
+\label{fig:morph:01:open:7} }
+\subfigure[Open $ 9 \times 9 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_open_9}
+\label{fig:morph:01:open:9} }
+\\
+\subfigure[Colse $ 5 \times 5 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_close_5}
+\label{fig:morph:01:close:5} }
+\subfigure[Colse $ 5 \times 5 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_close_7}
+\label{fig:morph:01:close:7} }
+\subfigure[Colse $ 9 \times 9 $]{
+\includegraphics[width=.31\textwidth]{./figure/0397_pgm_close_9}
+\label{fig:morph:01:close:9} }
 \caption{Open and close operations of 0397.pgm.}\label{fig:morph:01}
 \end{figure}
 
-\subsubsection{Other test files}
+%\subsubsection{Other test files}
 
 In order to verify the correctness of the generated results, I use $ mean( abs( img - img\_ref ) ) $ to compare the result of my implementation with the result of open cv.
 $ img $ is the data array from my implementation and $ img\_ref $ is the data array from open cv.
 Because open cv use pixel of 1 as ON pixel, which is the reverse of my way.
 In comparison, I compare my ``dilate'' to with the ``erode'' in open cv, and my ``erode'' with ``dilate'' in open cv.
-Similarly, because ``open'' and ``close'' are reversed operation, I compare them in the same way. 
+Similarly, because ``open'' and ``close'' are reversed operation, I compare them in the same way.
+The results are given in Table 2.1.
 
 \begin{table}
 \label{tab:morphology_comp}
@@ -210,14 +248,23 @@ Similarly, because ``open'' and ``close'' are reversed operation, I compare them
 \begin{tabular}{ | l | l | l | l | l | }
 \hline
 Test file & Dilate & Erode & Open & Close  \\ \hline
-Letter J                                          & 0.0            & 0.0           & 0.0            & 0.0            \\ \hline
-0397.pgm                                          & 0.0            & 0.0           & 0.0            & 0.0            \\ \hline
-020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm & 0.694292911729 & 1.11458020782 & 0.789870370183 & 0.623459113607 \\ \hline
-Declaration\_Pg1of1\_AC\_crop.pgm                 & 0.0            & 0.0           & 0.0            & 0.0 \\ \hline
-Scan\_half\_crop\_norm\_009\_small.pgm            & 0.0 & 0.0 & 0.0 & 0.0 \\ \hline
-seq-4\_small.pgm                                  & 0.0 & 0.0 & 0.0 & 0.0 \\ \hline
+Letter J                                          & 0.0    & 0.0    & 0.0    & 0.0    \\ \hline
+0397.pgm                                          & 0.0    & 0.0    & 0.0    & 0.0    \\ \hline
+020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm & 0.6943 & 1.1146 & 0.7899 & 0.6237 \\ \hline
+Declaration\_Pg1of1\_AC\_crop.pgm                 & 0.0    & 0.0    & 0.0    & 0.0    \\ \hline
+Scan\_half\_crop\_norm\_009\_small.pgm            & 0.0    & 0.0    & 0.0    & 0.0    \\ \hline
+seq-4\_small.pgm                                  & 0.0    & 0.0    & 0.0    & 0.0    \\ \hline
 \end{tabular}
 \end{center}
 \end{table}
+
+\subsection{Conclusion}
+
+I choose the black pixel as the ON pixel.
+Because I would like to show the dilate and erode effects on the foreground objects.
+
+Figure \ref{fig:j_letter} shows 
+
+
 
 \end{document}
