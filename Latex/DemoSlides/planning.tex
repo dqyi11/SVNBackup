@@ -33,6 +33,7 @@ Support round observation range and motion constraint
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+Prior information distribution
 \end{minipage}
 \end{columns}
 
@@ -49,6 +50,7 @@ Support round observation range and motion constraint
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+The join of the visible regions of the enemies
 \end{minipage}
 \end{columns}
 
@@ -67,7 +69,7 @@ Support round observation range and motion constraint
 \begin{minipage}{\textwidth}
 \end{minipage}
 \end{columns}
-
+The visible region from standing at one position 
 \end{frame}
 
 \begin{frame}{View}{Position visibility}
@@ -81,6 +83,7 @@ Support round observation range and motion constraint
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+The visible region from standing at another position 
 \end{minipage}
 \end{columns}
 
@@ -97,6 +100,7 @@ Support round observation range and motion constraint
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+The size of visible region from standing at each hexagon
 \end{minipage}
 \end{columns}
 
@@ -142,6 +146,8 @@ Support round observation range and motion constraint
 
 \column{0.35\textwidth}
 \begin{minipage}{\textwidth}
+\emph{metric:} maximize the information
+\bigskip
 Using $ A^{*} $ or visibility graph
 \begin{itemize}
 \item \textbf{Start point}
@@ -163,6 +169,8 @@ Using $ A^{*} $ or visibility graph
 
 \column{0.35\textwidth}
 \begin{minipage}{\textwidth}
+\emph{metric:} minimize the visibility of the enemies
+\bigskip
 Using $ A^{*} $
 \begin{itemize}
 \item \textbf{Start point}

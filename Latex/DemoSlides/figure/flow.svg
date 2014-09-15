@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1330.875"
-   height="608.25"
+   width="1565.6694"
+   height="611.08813"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="New document 1">
+   sodipodi:docname="flow.svg">
   <defs
      id="defs4">
     <marker
@@ -73,6 +73,20 @@
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
          transform="scale(0.8,0.8)" />
     </marker>
+    <marker
+       inkscape:stockid="TriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="TriangleOutL-5-3-6"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4018-7-5-1"
+         d="m 5.77,0 -8.65,5 0,-10 8.65,5 z"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.8,0.8)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -82,8 +96,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="614.72321"
-     inkscape:cy="2.8253174"
+     inkscape:cx="798.45409"
+     inkscape:cy="5.6600509"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -112,7 +126,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -120,7 +134,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(685.4375,73.0625)">
+     transform="translate(768.27223,73.065919)">
     <rect
        style="fill:none;stroke:#000000;stroke-width:10.85620308;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2987"
@@ -145,12 +159,12 @@
        id="rect2987-9"
        width="360"
        height="200"
-       x="-680"
-       y="332.36218" />
+       x="-765.4375"
+       y="335.1875" />
     <rect
-       style="fill:none;stroke:#000000;stroke-width:5.66946697;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       style="fill:none;stroke:#000000;stroke-width:6.22898245;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect2987-9-4"
-       width="360"
+       width="434.5625"
        height="200"
        x="-200"
        y="332.36218" />
@@ -159,63 +173,63 @@
        id="rect2987-9-7"
        width="360"
        height="200"
-       x="280"
-       y="332.36218" />
+       x="434.5625"
+       y="335.1875" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-640"
-       y="452.36218"
+       x="-725.4375"
+       y="455.1875"
        id="text3765-3"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3767-4"
-         x="-640"
-         y="452.36218"
+         x="-725.4375"
+         y="455.1875"
          style="font-size:70px">Labeling</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-200"
-       y="452.36218"
+       x="-165.4375"
+       y="455.1875"
        id="text3765-3-5"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3767-4-2"
-         x="-200"
-         y="452.36218"
+         x="-165.4375"
+         y="455.1875"
          style="font-size:70px">Processing</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="320"
-       y="452.36218"
+       x="474.5625"
+       y="455.1875"
        id="text3765-3-7"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3767-4-0"
-         x="320"
-         y="452.36218"
+         x="474.5625"
+         y="455.1875"
          style="font-size:70px">Planning</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL)"
-       d="m -480,132.36218 0,120"
+       d="m -565.4375,135.1875 0,120"
        id="path3870"
        inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL)"
-       d="m 440,332.36218 0,-120"
+       d="m 554.5625,335.1875 0,-120"
        id="path3870-6"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL-5)"
-       d="m -320,412.36218 40,0"
+       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL-5-3)"
+       d="m -365.4375,412.36218 85.4375,0"
        id="path4364"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL-5)"
-       d="m 160,412.36218 40,0"
-       id="path4364-4"
+       style="fill:none;stroke:#000000;stroke-width:8;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#TriangleOutL-5-3)"
+       d="m 269.125,415.1875 85.4375,0"
+       id="path4364-1"
        inkscape:connector-curvature="0" />
   </g>
 </svg>
