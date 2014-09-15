@@ -264,19 +264,6 @@ seq-4\_small.pgm                                  & 0.0    & 0.0    & 0.0    & 0
 \end{center}
 \end{table}
 
-\subsection{Conclusion}
-
-I choose the black pixel as the ON pixel.
-Because I would like to show the dilate and erode effects on the foreground objects.
-
-Figure \ref{fig:j_letter} shows the morphology operations.
-The effects of the \textbf{dilate} and the \textbf{erode} are obvious in Figure \ref{fig:j_letter}.
-\textbf{Open}
-\textbf{Close} 
-
-As it is shown in Figure \ref{fig:morph:01}, \textbf{open} is vulnerable to the size of mask.
-In order to have 
-
 \begin{figure}[h]
 \centering
 \subfigure[Origin]{
@@ -285,7 +272,30 @@ In order to have
 \subfigure[Binary]{
 \includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_close}
 \label{fig:morph:02:close} }
-\caption{Open and close operations of 020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm.}\label{fig:morph:02}
+\caption{Open and close operations of 020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm.}
+\label{fig:morph:02}
 \end{figure}
+
+\subsection{Conclusion}
+
+I choose the black pixel as the ON pixel.
+Because I would like to show the dilate and erode effects on the foreground objects.
+
+Figure \ref{fig:j_letter} shows the morphology operations.
+The effects of the \textbf{dilate} and the \textbf{erode} are obvious in Figure \ref{fig:j_letter}.
+Because \textbf{open} operation does \textbf{erode} firstly then \textbf{dilate}.
+Small objects tend to be removed.
+\textbf{Close} does \textbf{dilate} before \textbf{erode}.
+Pixels near enough should be filled to be connected.
+We can see this in the \textbf{close} of Figure \ref{fig:j_close}.
+
+Thus the growth of the mask size can influence the \textbf{open} significantly, as it is shown in Figure \ref{fig:morph:01}.
+In Figure \ref{fig:morph:02}, \textbf{open} cleaned some noise but some useful information are also removed.
+Because the size of each character is small.
+\textbf{Close} is more likely to fill the ``holes'' inside the foreground objects when the mask size is larger.
+It is shown in Figure \ref{fig:morph:01}.
+
+Selecting a good mask size, \textbf{open} can be used to denoise in an image with reasonable resolution.
+Similarly, \textbf{close} can be used to make the foreground objects more convex or become closed objects.
 
 \end{document}
