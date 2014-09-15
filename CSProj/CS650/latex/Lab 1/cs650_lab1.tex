@@ -113,10 +113,10 @@ The results of testing \emph{0397.pgm} are illustrated in Figure \ref{fig:binary
 \begin{figure}[h]
 \centering
 \subfigure[Origin]{
-\includegraphics[width=.45\textwidth]{./figure/0397_pgm_origin}
+\includegraphics[width=.47\textwidth]{./figure/0397_pgm_origin}
 \label{fig:binary:01:origin} }
 \subfigure[Binary]{
-\includegraphics[width=.45\textwidth]{./figure/0397_pgm_binary}
+\includegraphics[width=.47\textwidth]{./figure/0397_pgm_binary}
 \label{fig:binary:01:binary} }
 \caption{Binarization of \emph{0397.pgm} using Otsu's method.}\label{fig:binary:01}
 \end{figure}
@@ -140,7 +140,7 @@ The result is given in Figure \ref{fig:binary:02}.
 In order to check the correctness of the implementation, I compared the results from my implementation with the results from modules provided by open cv.
 They are given in Table 1.1. %\ref{tab:title}.
 When the thresholds are the same, the generated binary images should be consistent as well.
-It is shown in Table 1.1 that the results are consistent.
+It is shown in Table 1.1 that the results are all consistent.
 
 \begin{table}[h]
 \label{tab:binary_comp}
@@ -260,7 +260,7 @@ The effect of changing the size of box filter is illustrated in Figure \ref{fig:
 
 In order to verify the correctness of the generated results, I use $ mean( abs( img - img\_ref ) ) $ to compare the data arrays from my implementation with the data arrays from open cv.
 $ img $ is the data array from my implementation and $ img\_ref $ is the data array from open cv.
-Because open cv use pixel of 1 as ON pixel, which is the reverse of my way.
+Because open cv use pixel of 1(WHITE pixel) as ON pixel, which is the reverse of my way.
 In comparison, I compare my ``dilate'' to with the ``erode'' in open cv, and my ``erode'' with ``dilate'' in open cv.
 Similarly, because ``open'' and ``close'' are reversed operation, I compare them in the same way.
 The results are given in Table 2.1.
@@ -268,6 +268,7 @@ It is noticeable the results match for most of the files.
 The difference is very small for the unmatch one, \emph{020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm}.
 Because I convert 1 to 255 before comapring.
 Mean difference less than 1, relative to 255, means only several pixels are different.
+
 
 \begin{table}
 \label{tab:morphology_comp}
@@ -286,13 +287,13 @@ Letter J                                                 & 0.0    & 0.0    & 0.0
 \end{center}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}
 \centering
 \subfigure[Origin]{
-\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_open}
+\includegraphics[width=.47\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_open}
 \label{fig:morph:02:open} }
 \subfigure[Binary]{
-\includegraphics[width=.45\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_close}
+\includegraphics[width=.47\textwidth]{./figure/020206_131612_bp001_folio_094_k639_1837_ppm_close}
 \label{fig:morph:02:close} }
 \caption{Open and close operations of \emph{020206\_131612\_bp001\_folio\_094\_k639\_1837.ppm}.}
 \label{fig:morph:02}
