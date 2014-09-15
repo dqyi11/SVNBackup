@@ -13,11 +13,11 @@ from utilities import *
 
 if __name__ == '__main__':
     
-    img_filename = '0397.pgm'
+    #img_filename = '0397.pgm'
     #img_filename = '020206_131612_bp001_folio_094_k639_1837.ppm'
     #img_filename = 'Declaration_Pg1of1_AC_crop.pgm'
     #img_filename = 'Scan_half_crop_norm_009_small.pgm'
-    #img_filename = 'seq-4_small.pgm'
+    img_filename = 'seq-4_small.pgm'
     
     img = cv2.imread(img_filename,0) 
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     ret,threshold = cv2.threshold(img,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     
     csv_filename = img_filename + ".REF.csv"
-    writeToCsv(csv_filename, threshold)
+    #writeToCsv(csv_filename, threshold)
     
     print ret
     

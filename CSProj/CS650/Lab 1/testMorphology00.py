@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     binary_data = binarize(img_data, threshold)
     
-    maskSize = [5,5]
+    maskSize = [13,13]
     mf = NorphologicalFiltering(binary_data, maskSize)
     
     

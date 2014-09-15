@@ -56,14 +56,14 @@ def otsu(hist, total):
     print "LOW: " + str(threshold_low) + " HIGH: " + str(threshold_high)        
     return (threshold_low + threshold_high)/2.0, intraclass_variances
     
-def binarize(img_data, threshold, on_value=1):
+def binarize(img_data, threshold, scale_value=1):
         
     binary_data = np.zeros(img_data.shape, np.int)
     for i in range(img_data.shape[0]):
         for j in range(img_data.shape[1]):
             #print str(img_data[i,j]) + " : " + str(threshold)
             if img_data[i,j] > threshold:
-                binary_data[i,j] = on_value
+                binary_data[i,j] = scale_value
                 
     return binary_data
 

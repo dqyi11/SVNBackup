@@ -14,11 +14,11 @@ from utilities import *
 
 if __name__ == '__main__':
        
-    img_filename = '0397.pgm'
+    #img_filename = '0397.pgm'
     #img_filename = '020206_131612_bp001_folio_094_k639_1837.ppm'
     #img_filename = 'Declaration_Pg1of1_AC_crop.pgm'
     #img_filename = 'Scan_half_crop_norm_009_small.pgm'
-    #img_filename = 'seq-4_small.pgm'
+    img_filename = 'seq-4_small.pgm'
     
     img = Image.open(img_filename).convert("L")
     
@@ -50,6 +50,7 @@ if __name__ == '__main__':
     ax1 = fig1.add_subplot(111)
     ax1.step(np.arange(len(intraclass_variances)), intraclass_variances)
     ax1.plot(threshold, intraclass_variances[threshold], 'rs')
+    ax1.set_xlim([0, len(intraclass_variances)])
     ax1.annotate(str(threshold), xy=(threshold, intraclass_variances[threshold]), xytext=(threshold+2, intraclass_variances[threshold]))
     
     fig2 = plt.figure()
