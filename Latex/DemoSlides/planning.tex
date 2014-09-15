@@ -2,10 +2,23 @@
 
 \begin{frame}{Discretization}{Hexagonal map}
 
+\begin{columns}
+\column{0.7\textwidth}
 \begin{figure}
 \centering
 \includegraphics[width = 0.9\textwidth]{./screenshot/discretization.png}
 \end{figure}
+
+\column{0.3\textwidth}
+\begin{minipage}{\textwidth}
+Hexagonal discretization
+\begin{figure}
+\centering
+\includegraphics[width = 0.9\textwidth]{./figure/wingman}
+\end{figure}
+Support round observation range and motion constraint
+\end{minipage}
+\end{columns}
 
 \end{frame}
 
@@ -129,6 +142,7 @@
 
 \column{0.35\textwidth}
 \begin{minipage}{\textwidth}
+Using $ A^{*} $ or visibility graph
 \begin{itemize}
 \item \textbf{Start point}
 \item \textbf{End point}
@@ -149,6 +163,7 @@
 
 \column{0.35\textwidth}
 \begin{minipage}{\textwidth}
+Using $ A^{*} $
 \begin{itemize}
 \item \textbf{Start point}
 \item \textbf{End point}
@@ -169,6 +184,10 @@
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+\begin{itemize}
+\item \emph{Informatively} (Adverb) $ \rightarrow $ maximize information
+\item \emph{motion constraint} from reference path
+\end{itemize}
 \end{minipage}
 \end{columns}
 
@@ -185,6 +204,10 @@
 
 \column{0.3\textwidth}
 \begin{minipage}{\textwidth}
+\begin{itemize}
+\item \emph{Covertly} (Adverb) $ \rightarrow $ maximize visibility
+\item \emph{motion constraint} from reference path
+\end{itemize}
 \end{minipage}
 \end{columns}
 
