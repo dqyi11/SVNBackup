@@ -8,7 +8,8 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img_filename = '2D_White_Box.pgm'
+#img_filename = '2D_White_Box.pgm'
+img_filename = 'blocks.pgm'
 img = cv2.imread(img_filename, 0)
 
 img_sobel_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)

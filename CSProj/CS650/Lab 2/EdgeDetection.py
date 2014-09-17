@@ -15,19 +15,21 @@ def sobel(img_data):
     sobel_x_kernel = np.array([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]])
     sobel_y_kernel = np.array([[-1, -2, -1], [0, 0, 0], [1, 2, 1]])
     
-    g_x = np.zeros(img_data.shape, np.float)
-    g_y = np.zeros(img_data.shape, np.float)
-    g_m = np.zeros(img_data.shape, np.float)
+    gradient_x = np.zeros(img_data.shape, np.float)
+    gradient_y = np.zeros(img_data.shape, np.float)
+    gradient_magnitude = np.zeros(img_data.shape, np.float)
+    gradient_orientation = np.zeros(img_data.shape, np.float)
     
     for i in range(1, img_width-1):
         for j in range(1, img_height-1):
             
             img_data_seg = np.array(img_data[i-1:i+2, j-1:j+2])
-            g_x[i,j] = np.sum( np.sum( sobel_x_kernel * img_data_seg ) )
-            g_y[i,j] = np.sum( np.sum( sobel_y_kernel * img_data_seg ) )
-            g_m[i,j] = np.sqrt(g_x[i,j]**2 + g_y[i,j]**2)
+            gradient_x[i,j] = np.sum( np.sum( sobel_x_kernel * img_data_seg ) )
+            gradient_y[i,j] = np.sum( np.sum( sobel_y_kernel * img_data_seg ) )
+            gradient_magnitude[i,j] = np.sqrt(gradient_x[i,j]**2 + gradient_y[i,j]**2)
+            gradient_orientation[i,j] = np.arctan2(gradient_y[i,j], gradient_x[i,j])
             
-    return g_m
+    return gradient_magnitude, gradient_orientation
 
 def laplacian(img_data):
             
