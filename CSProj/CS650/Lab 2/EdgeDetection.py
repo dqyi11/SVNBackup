@@ -77,40 +77,47 @@ def canny(img_data):
     img_gm, img_go = sobel(img_data)
     hessian = laplacian(img_data)
     
-    img_can = np.ones(img_data.shape, np.float)
+    img_can = np.zeros(img_data.shape, np.float)
+    
+    img_gm_min = np.min(np.min(img_gm))
+    img_gm_max = np.max(np.max(img_gm))
+    threshold = (img_gm_max - img_gm_min) * 0.1 + img_gm_min
+    
+    print threshold
     
     for i in range(1, img_width-1):
         for j in range(1, img_height-1):
             
-            if img_go[i,j] == 0:
-                delta_i = 1
-                delta_j = 0
-            elif img_go[i,j] == np.pi/4:
-                delta_i = 1
-                delta_j = 1
-            elif img_go[i,j] == np.pi/2:
-                delta_i = 0
-                delta_j = 1
-            elif img_go[i,j] == 3*np.pi/4:
-                delta_i = -1
-                delta_j = 1
-            elif img_go[i,j] == - np.pi:
-                delta_i = -1
-                delta_j = 0
-            elif img_go[i,j] == - 3*np.pi/4:
-                delta_i = -1
-                delta_j = -1
-            elif img_go[i,j] == - np.pi/2:
-                delta_i = 0
-                delta_j = -1
-            elif img_go[i,j] == - np.pi/4:
-                delta_i = 1
-                delta_j = -1 
-            
-            if hessian[i,j] == 0:
-                img_can[i,j] = 0
-            elif (hessian[i,j] > 0 and hessian[i+delta_i, j+delta_j] < 0 ) or (hessian[i,j] < 0 and hessian[i+delta_i,j+delta_j] > 0):
-                img_can[i,j] = 0
+            if img_gm[i, j] > threshold:            
+                if img_go[i,j] == 0:
+                    delta_i = 1
+                    delta_j = 0
+                elif img_go[i,j] == np.pi/4:
+                    delta_i = 1
+                    delta_j = 1
+                elif img_go[i,j] == np.pi/2:
+                    delta_i = 0
+                    delta_j = 1
+                elif img_go[i,j] == 3*np.pi/4:
+                    delta_i = -1
+                    delta_j = 1
+                elif img_go[i,j] == - np.pi:
+                    delta_i = -1
+                    delta_j = 0
+                elif img_go[i,j] == - 3*np.pi/4:
+                    delta_i = -1
+                    delta_j = -1
+                elif img_go[i,j] == - np.pi/2:
+                    delta_i = 0
+                    delta_j = -1
+                elif img_go[i,j] == - np.pi/4:
+                    delta_i = 1
+                    delta_j = -1 
+                
+                if hessian[i,j] == 0:
+                    img_can[i,j] = 1
+                elif (hessian[i,j] > 0 and hessian[i+delta_i, j+delta_j] < 0 ) or (hessian[i,j] < 0 and hessian[i+delta_i,j+delta_j] > 0):
+                    img_can[i,j] = 1
             
     return img_can
             
