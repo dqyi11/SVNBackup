@@ -9,7 +9,6 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'  
 img = Image.open(img_filename).convert("L")
