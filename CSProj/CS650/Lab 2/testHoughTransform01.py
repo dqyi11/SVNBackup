@@ -10,7 +10,6 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 #img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
 #img_filename = 'simplecircles.ppm'
@@ -49,7 +48,7 @@ ax3.set_yticks([])
 ax4 = fig.add_subplot(144)
 ax4.imshow(img,cmap = 'gray')
 for center in centers:
-    circ = plt.Circle((center[0], center[1]),32,color='b',fill=False)
+    circ = plt.Circle((center[0]-16, center[1]+16),32,color='b',fill=False)
     ax4.add_artist(circ)
 ax4.set_title('Result')
 ax4.set_xticks([])
