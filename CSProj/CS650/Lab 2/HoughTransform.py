@@ -26,6 +26,21 @@ def houghCircle(bi_img, radius):
 def findLocalMax(hough_img):
     local_max = []
     
+    hough_img_min = np.min(np.min(hough_img))
+    hough_img_max = np.max(np.max(hough_img))
+    img_width = hough_img.shape[0]
+    img_height = hough_img.shape[1]
+    
+    print hough_img_min
+    print hough_img_max
+    
+    threshold = 0.7 *(hough_img_max - hough_img_min) + hough_img_min
+    
+    for i in range(img_width):
+        for j in range(img_height):
+            if hough_img[i,j] > threshold:
+                local_max.append([i,j])
+    
     return local_max
         
 
