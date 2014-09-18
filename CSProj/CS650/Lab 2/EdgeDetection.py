@@ -5,6 +5,30 @@ Created on Sep 17, 2014
 '''
 import numpy as np
 
+def discretizeAngle(angle):
+    
+    d_angle = 0.0
+    if angle <= np.pi/8 and angle > -np.pi/8:
+        d_angle = 0.0
+    elif angle <= 3 *np.pi/8 and angle > np.pi/8:
+        d_angle = np.pi/4
+    elif angle <= 5 * np.pi/8 and angle > 3 * np.pi/4:
+        d_angle = np.pi/2
+    elif angle <= 7 * np.pi/8 and angle > 5 * np.pi/8:
+        d_angle = 3 * np.pi/4
+    elif (angle <= np.pi and angle > 7 * np.pi/8) or (angle <= -7 * np.pi/8 and angle >= - np.pi):
+        d_angle = - np.pi
+    elif angle <= - 5 * np.pi/8 and angle > -7 * np.pi/8:
+        d_angle = - 3 * np.pi/4
+    elif angle <= - 3 * np.pi/8 and angle > - 5 * np.pi/8:
+        d_angle = - np.pi/2
+    elif angle <= - np.pi/8 and angle > - 3 * np.pi/8:
+        d_angle = - np.pi/4
+        
+    return d_angle
+        
+    
+
 def sobel(img_data):
     
     img_width = img_data.shape[0]
@@ -25,7 +49,7 @@ def sobel(img_data):
             gradient_x[i,j] = np.sum( np.sum( sobel_x_kernel * img_data_seg ) )
             gradient_y[i,j] = np.sum( np.sum( sobel_y_kernel * img_data_seg ) )
             gradient_magnitude[i,j] = np.sqrt(gradient_x[i,j]**2 + gradient_y[i,j]**2)
-            gradient_orientation[i,j] = np.arctan2(gradient_y[i,j], gradient_x[i,j])
+            gradient_orientation[i,j] = discretizeAngle( np.arctan2(gradient_y[i,j], gradient_x[i,j]) )
             
     return gradient_magnitude, gradient_orientation
 
@@ -47,7 +71,52 @@ def laplacian(img_data):
 
 def canny(img_data):
     
+    img_width = img_data.shape[0]
+    img_height = img_data.shape[1]
+    
     img_gm, img_go = sobel(img_data)
+    hessian = laplacian(img_data)
+    
+    img_can = np.ones(img_data.shape, np.float)
+    
+    for i in range(1, img_width-1):
+        for j in range(1, img_height-1):
+            
+            if img_go[i,j] == 0:
+                delta_i = 1
+                delta_j = 0
+            elif img_go[i,j] == np.pi/4:
+                delta_i = 1
+                delta_j = 1
+            elif img_go[i,j] == np.pi/2:
+                delta_i = 0
+                delta_j = 1
+            elif img_go[i,j] == 3*np.pi/4:
+                delta_i = -1
+                delta_j = 1
+            elif img_go[i,j] == - np.pi:
+                delta_i = -1
+                delta_j = 0
+            elif img_go[i,j] == - 3*np.pi/4:
+                delta_i = -1
+                delta_j = -1
+            elif img_go[i,j] == - np.pi/2:
+                delta_i = 0
+                delta_j = -1
+            elif img_go[i,j] == - np.pi/4:
+                delta_i = 1
+                delta_j = -1 
+            
+            if hessian[i,j] == 0:
+                img_can[i,j] = 0
+            elif (hessian[i,j] > 0 and hessian[i+delta_i, j+delta_j] < 0 ) or (hessian[i,j] < 0 and hessian[i+delta_i,j+delta_j] > 0):
+                img_can[i,j] = 0
+            
+    return img_can
+            
+            
+    
+    
            
             
             
