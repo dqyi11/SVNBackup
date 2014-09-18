@@ -81,7 +81,7 @@ def canny(img_data):
     
     img_gm_min = np.min(np.min(img_gm))
     img_gm_max = np.max(np.max(img_gm))
-    threshold = (img_gm_max - img_gm_min) * 0.1 + img_gm_min
+    threshold = (img_gm_max - img_gm_min) * 0.2 + img_gm_min
     
     print threshold
     
