@@ -1,0 +1,82 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+
+\usepackage[english]{babel}															% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}	
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[pdftex]{graphicx}	
+\usepackage{url}
+\usepackage{hyperref}
+
+
+%%% Custom sectioning
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape}
+\usepackage{subfigure}
+
+
+%%% Custom headers/footers (fancyhdr package)
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}											% No page header
+\fancyfoot[L]{}											% Empty 
+\fancyfoot[C]{}											% Empty
+\fancyfoot[R]{\thepage}									% Pagenumbering
+\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
+\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
+\setlength{\headheight}{13.6pt}
+
+
+%%% Equation and float numbering
+\numberwithin{equation}{section}		% Equationnumbering: section.eq#
+\numberwithin{figure}{section}			% Figurenumbering: section.fig#
+%\numberwithin{table}{section}				% Tablenumbering: section.tab#
+
+
+%%% Maketitle metadata
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{CS650 - Computer Vision} \\ [25pt]
+		\horrule{0.5pt} \\[0.4cm]
+		\huge Programming Lab 2 \\ Edge Detection / Hough Transform \\
+		\horrule{2pt} \\[0.5cm]
+}
+\author{
+		\normalfont 								\normalsize
+        Daqing Yi\\[-3pt]		\normalsize
+        \today
+}
+\date{}
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+
+Prepare a brief writeup that includes each part and submit it as a PDF through Canvas.
+Your writeup should document your findings for Part 1 but otherwise focus on your methods and results for Part 2.
+
+Note: many of the images for Part 1 will contain negative numbers or numbers larger than 255.
+Make sure you appropriately scale the output images to display all of the information.
+(Hint: if there are negative values, try mapping 0 to 128 with positive values mapped to the range (128,255] and negative values to the range [0,128).]
+
+This lab consists of two parts, binarization and morphology.
+The implementations are written in Python.
+PIL is used for reading image files into data arrays.
+Numpy is used for array operations.
+Matplotlib is used for visualizing data.
+Open CV is used to verify the correctness.
+
+\section{Edge detection}
+
+\section{Hough transformation}
+
+\subsection{Conclusion}
+
+
+
+\end{document}
