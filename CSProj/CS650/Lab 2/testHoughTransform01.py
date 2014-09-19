@@ -9,6 +9,7 @@ from HoughTransform import *
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 
 #img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
@@ -23,7 +24,10 @@ img_hough = houghCircle(img_canny, 32)
 img_hough_max = np.max(np.max(img_hough))
 img_hough_norm = img_hough / float(img_hough_max)
 
-centers = findLocalMax(img_hough)
+img_hough_gm, img_hough_go = sobel(img_hough)
+img_hough_sup = nonMaximalSuppresion(img_hough_norm, img_hough_go)
+
+centers = findLocalMax(img_hough_sup)
 print centers
 
 fig = plt.figure()
@@ -46,12 +50,19 @@ ax3.set_xticks([])
 ax3.set_yticks([])
 
 ax4 = fig.add_subplot(144)
-ax4.imshow(img,cmap = 'gray')
-for center in centers:
-    circ = plt.Circle((center[0]-16, center[1]+16),32,color='b',fill=False)
-    ax4.add_artist(circ)
-ax4.set_title('Result')
+ax4.imshow(img_hough_sup,cmap = 'gray')
+ax4.set_title('Hough suppressed')
 ax4.set_xticks([])
 ax4.set_yticks([])
 
 plt.show()
+
+cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
+for c in centers:
+    # draw the outer circle
+    cv2.circle(cimg,(c[0],c[1]),32,(0,255,0),2)
+    # draw the center of the circle
+    cv2.circle(cimg,(c[0],c[1]),2,(0,0,255),3)
+
+cv2.imshow('detected circles',cimg)
+cv2.waitKey(0)

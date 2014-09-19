@@ -34,7 +34,7 @@ def findLocalMax(hough_img):
     print hough_img_min
     print hough_img_max
     
-    threshold = 0.8 *(hough_img_max - hough_img_min) + hough_img_min
+    threshold = 0.9 *(hough_img_max - hough_img_min) + hough_img_min
     
     for i in range(img_width):
         for j in range(img_height):

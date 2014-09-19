@@ -26,8 +26,6 @@ def discretizeAngle(angle):
         d_angle = - np.pi/4
         
     return d_angle
-        
-    
 
 def sobel(img_data):
     
@@ -68,6 +66,35 @@ def laplacian(img_data):
             hessian[i, j] = np.sum( np.sum( img_data_seg * laplacian_kernel ) )
             
     return hessian
+
+def nonMaximalSuppresion(gradient_magnitude, gradient_orientation):
+    
+    gm_sup = np.zeros(gradient_magnitude.shape, gradient_magnitude.dtype)
+    gm_width = gm_sup.shape[0]
+    gm_height = gm_sup.shape[1]
+    
+    for i in range(1, gm_width-1):
+        for j in range(1, gm_height-1):
+            if gradient_orientation[i,j] == 0 or gradient_orientation[i,j] == - np.pi:
+                delta_i = 1
+                delta_j = 0
+            elif gradient_orientation[i,j] == np.pi/4 or gradient_orientation[i,j] == - 3*np.pi/4:
+                delta_i = 1
+                delta_j = 1
+            elif gradient_orientation[i,j] == np.pi/2 or gradient_orientation[i,j] == - np.pi/2:
+                delta_i = 0
+                delta_j = 1
+            elif gradient_orientation[i,j] == 3*np.pi/4 or gradient_orientation[i,j] == - np.pi/4:
+                delta_i = -1
+                delta_j = 1
+            
+            if gradient_magnitude[i,j] > gradient_magnitude[i-delta_i, j-delta_j] and gradient_magnitude[i,j] > gradient_magnitude[i+delta_i, j+delta_j]:
+                gm_sup[i,j] = gradient_magnitude[i,j]
+            else:
+                gm_sup[i,j] = 0
+                
+    return gm_sup
+           
 
 def canny(img_data):
     
