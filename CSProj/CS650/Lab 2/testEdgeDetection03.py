@@ -1,7 +1,7 @@
 '''
-Created on Sep 17, 2014
+Created on 2014-9-21
 
-@author: daqing_yi
+@author: Walter
 '''
 
 from EdgeDetection import *
@@ -17,7 +17,7 @@ img = np.array(Image.open(img_filename).convert("L"))
 
 img_gauss = gaussianFilter(img)
 
-img_canny = canny(img_gauss)
+img_mh = MarrHildreth(img_gauss)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)
@@ -27,7 +27,7 @@ ax1.set_xticks([])
 ax1.set_yticks([])
 
 ax2 = fig.add_subplot(122)
-ax2.imshow(img_canny,cmap = 'gray')
+ax2.imshow(img_mh,cmap = 'gray')
 ax2.set_title('Canny')
 ax2.set_xticks([])
 ax2.set_yticks([])

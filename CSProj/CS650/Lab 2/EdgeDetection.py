@@ -5,6 +5,22 @@ Created on Sep 17, 2014
 '''
 import numpy as np
 
+def gaussianFilter(img_data):
+    
+    img_gf = np.zeros(img_data.shape, np.float)
+    img_width = img_data.shape[0]
+    img_height = img_data.shape[1]
+    gaussian_kernel = np.array([[0, 0, 1, 0, 0], [0, 1, 2, 1, 0], [1, 2, -16, 2, 1], [0, 1, 2, 1, 0], [0, 0, 1, 0, 0]])
+    for i in range(2, img_width-2):
+        for j in range(2, img_height-2):
+            
+            img_data_seg = np.array(img_data[i-2:i+3, j-2:j+3])
+            img_gf[i, j] = np.sum( np.sum( img_data_seg * gaussian_kernel ) )
+                
+    return img_gf
+
+
+
 def discretizeAngle(angle):
     
     d_angle = 0.0
@@ -102,7 +118,6 @@ def canny(img_data):
     img_height = img_data.shape[1]
     
     img_gm, img_go = sobel(img_data)
-    hessian = laplacian(img_data)
     
     img_can = np.zeros(img_data.shape, np.float)
     
@@ -112,41 +127,29 @@ def canny(img_data):
     
     print threshold
     
+    img_gm_proc = nonMaximalSuppresion(img_gm, img_go)
+    
     for i in range(1, img_width-1):
         for j in range(1, img_height-1):
             
-            if img_gm[i, j] > threshold:            
-                if img_go[i,j] == 0:
-                    delta_i = 1
-                    delta_j = 0
-                elif img_go[i,j] == np.pi/4:
-                    delta_i = 1
-                    delta_j = 1
-                elif img_go[i,j] == np.pi/2:
-                    delta_i = 0
-                    delta_j = 1
-                elif img_go[i,j] == 3*np.pi/4:
-                    delta_i = -1
-                    delta_j = 1
-                elif img_go[i,j] == - np.pi:
-                    delta_i = -1
-                    delta_j = 0
-                elif img_go[i,j] == - 3*np.pi/4:
-                    delta_i = -1
-                    delta_j = -1
-                elif img_go[i,j] == - np.pi/2:
-                    delta_i = 0
-                    delta_j = -1
-                elif img_go[i,j] == - np.pi/4:
-                    delta_i = 1
-                    delta_j = -1 
-                
-                if hessian[i,j] == 0:
-                    img_can[i,j] = 1
-                elif (hessian[i,j] > 0 and hessian[i+delta_i, j+delta_j] < 0 ) or (hessian[i,j] < 0 and hessian[i+delta_i,j+delta_j] > 0):
-                    img_can[i,j] = 1
+            if img_gm_proc[i, j] > threshold:            
+                img_can[i,j] = 1
             
     return img_can
+
+def MarrHildreth(img_data):
+    
+    img_width = img_data.shape[0]
+    img_height = img_data.shape[1]
+    
+    img_gm, img_go = sobel(img_data)
+    hessian = laplacian(img_data)
+    
+    img_mh = np.zeros(img_data.shape, np.float)
+    
+
+    
+    
             
             
     
