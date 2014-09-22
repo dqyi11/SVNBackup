@@ -17,7 +17,7 @@ img = np.array(Image.open(img_filename).convert("L"))
 
 img_gauss = gaussianFilter(img)
 
-img_canny = canny(img_gauss)
+img_canny = canny(img_gauss, 70, 150)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)

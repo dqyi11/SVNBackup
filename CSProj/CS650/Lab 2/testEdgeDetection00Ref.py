@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
+#img_filename = 'simplecircles.ppm'
+#img_filename = 'circles.ppm'
 img = cv2.imread(img_filename, 0)
 
 img_g_x = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
