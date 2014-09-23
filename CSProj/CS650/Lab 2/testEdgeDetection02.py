@@ -8,6 +8,7 @@ from EdgeDetection import *
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
+import copy
 
 img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
@@ -15,7 +16,8 @@ img_filename = '2D_White_Box.pgm'
 #img_filename = 'circles.ppm'
 img = np.array(Image.open(img_filename).convert("L"))
 
-img_gauss = gaussianFilter(img)
+#img_gauss = gaussianFilter(img)
+img_gauss = copy.deepcopy(img)
 
 img_canny = canny(img_gauss, 70, 150)
 

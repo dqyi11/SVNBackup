@@ -8,12 +8,14 @@ import cv2
 import numpy as np
 
 img_filename = 'simplecircles.ppm'
-#img_filename = 'circles.ppm'
+img_filename = 'circles.ppm'
+img_filename = 'coins.jpg'
+
 img = cv2.imread(img_filename,0)
 img = cv2.medianBlur(img,5)
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 
-circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,20,param1=50,param2=30,minRadius=0,maxRadius=0)
+circles = cv2.HoughCircles(img,cv2.cv.CV_HOUGH_GRADIENT,1,10,param1=200,param2=100,minRadius=0,maxRadius=0)
 
 print circles
 

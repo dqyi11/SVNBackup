@@ -13,19 +13,23 @@ import cv2
 
 #img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
-#img_filename = 'simplecircles.ppm'
+img_filename = 'simplecircles.ppm'
 img_filename = 'circles.ppm'
+img_filename = 'coins.jpg'
+
 img = Image.open(img_filename).convert("L")
 img = np.array(img)
 
-img_canny = canny(img)
+img_gauss = gaussianFilter(img)
+
+img_canny = canny(img_gauss, 70, 150)
 
 img_hough = houghCircle(img_canny, 32)
 img_hough_max = np.max(np.max(img_hough))
 img_hough_norm = img_hough / float(img_hough_max)
 
 img_hough_gm, img_hough_go = sobel(img_hough)
-img_hough_sup = nonMaximalSuppresion(img_hough_norm, img_hough_go)
+img_hough_sup = nonmaximalSuppresion(img_hough_norm, img_hough_go)
 
 centers = findLocalMax(img_hough_sup)
 print centers
@@ -44,7 +48,7 @@ ax2.set_xticks([])
 ax2.set_yticks([])
 
 ax3 = fig.add_subplot(143)
-ax3.imshow(img_hough_norm,cmap = 'gray')
+ax3.imshow(255*img_hough_norm,cmap = 'gray')
 ax3.set_title('Hough')
 ax3.set_xticks([])
 ax3.set_yticks([])

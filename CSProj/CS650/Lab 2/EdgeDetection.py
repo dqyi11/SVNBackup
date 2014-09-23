@@ -8,14 +8,14 @@ import copy
 
 def gaussianFilter(img_data):
     
-    img_gf = np.zeros(img_data.shape, np.float)
+    img_gf = np.zeros(img_data.shape, np.int)
     img_width = img_data.shape[0]
     img_height = img_data.shape[1]
     gaussian_kernel = np.array([[0, 0, 1, 0, 0], [0, 1, 2, 1, 0], [1, 2, -16, 2, 1], [0, 1, 2, 1, 0], [0, 0, 1, 0, 0]])
     for i in range(2, img_width-2):
         for j in range(2, img_height-2):            
             img_data_seg = np.array(img_data[i-2:i+3, j-2:j+3])
-            img_gf[i, j] = np.sum( np.sum( img_data_seg * gaussian_kernel ) )
+            img_gf[i, j] = int( np.sum( np.sum( img_data_seg * gaussian_kernel ) ) )
                           
     return img_gf
 
