@@ -39,7 +39,10 @@ def sobel(img_data):
             gradient_y[i,j] = np.sum( np.sum( sobel_y_kernel * img_data_seg ) )
             gradient_magnitude[i,j] = np.sqrt(gradient_x[i,j]**2 + gradient_y[i,j]**2)
             gradient_orientation[i,j] = np.arctan2(gradient_y[i,j], gradient_x[i,j])
-            
+    
+    gradient_magnitude_min = np.min(np.min(gradient_magnitude))
+    gradient_magnitude_max = np.max(np.max(gradient_magnitude))
+    gradient_magnitude = 255*(gradient_magnitude-gradient_magnitude_min)/(gradient_magnitude_max-gradient_magnitude_min)   
     return gradient_magnitude, gradient_orientation
 
 def laplacian(img_data):
@@ -84,12 +87,6 @@ def nonmaximalSuppresion(gradient_magnitude, gradient_orientation):
             if gradient_magnitude[i,j]>=gradient_magnitude[i-delta_i, j-delta_j] and gradient_magnitude[i,j]>=gradient_magnitude[i+delta_i, j+delta_j]:
                 gm_sup[i,j] = gradient_magnitude[i,j]
     
-    gm_sup_min = np.min(np.min(gm_sup))
-    gm_sup_max = np.max(np.max(gm_sup))
-    gm_sup = 255*(gm_sup-gm_sup_min)/(gm_sup_max-gm_sup_min)
-    
-    print np.max(np.max(gm_sup))
-    print np.min(np.min(gm_sup))
     return gm_sup
 
 def hysteresisThreshold(img_data, threshold_lo, threshold_hi):
@@ -118,15 +115,42 @@ def canny(img_data, threshold_lo, threshold_hi):
     #img_can = copy.deepcopy(img_gm_proc)
     return img_can
 
-def MarrHildreth(img_data):
+def MarrHildreth(img_data, threshold):
     
     img_width = img_data.shape[0]
     img_height = img_data.shape[1]
     
-    img_gm, img_go = gradientImg(img_data)
+    img_gm, img_go = sobel(img_data)
     hessian = laplacian(img_data)
     
     img_mh = np.zeros(img_data.shape, np.float)
+
+    for i in range(1, img_width-1):
+        for j in range(1, img_height-1):
+            
+            if img_gm[i,j] >= threshold:
+                degree = (180/np.pi)*img_go[i,j]
+                
+                if (degree<=22.5 and degree>-22.5) or degree<=-157.5 or degree>157.5:
+                    delta_i = 0
+                    delta_j = 1
+                elif (degree>-67.5 and degree <= -22.5) or (degree>112.5 and degree<=157.5):
+                    delta_i = 1
+                    delta_j = -1
+                elif (degree>-112.5 and degree<=-67.5) or (degree>67.5 and degree<=112.5):
+                    delta_i = 1
+                    delta_j = 0
+                elif (degree>-157.5 and degree<=-112.5) or (degree>67.5 and degree<=22.5):
+                    delta_i = 1
+                    delta_j = 1
+                    
+                if (hessian[i+delta_i, j+delta_j] <= 0 and hessian[i-delta_i, j-delta_j]> 0):
+                    img_mh[i,j] = 255
+                elif (hessian[i+delta_i, j+delta_j] > 0 and hessian[i-delta_i, j-delta_j]<=0):
+                    img_mh[i,j] = 255
+                
+                
+    return img_mh
     
 
     
