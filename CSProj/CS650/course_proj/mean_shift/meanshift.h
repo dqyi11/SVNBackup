@@ -69,7 +69,7 @@ inline int getLabel2( std::vector<int>& unionfind, int l )
     }
 }
 
-
+IplImage* mean_shift_filter2(const IplImage* img, int spatial_radius, int range_radius, int iteration=100);
 IplImage* mean_shift_filter(const IplImage* img, int spatial_radius, int range_radius, int iteration=100);
 
 // RAList from EDISON

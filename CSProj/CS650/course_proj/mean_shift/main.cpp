@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     IplImage *img = cvLoadImage(filename);
 
     // Mean shift
-    IplImage *img_filtered = mean_shift_filter(img, 10, 7.5);
+    IplImage *img_filtered = mean_shift_filter2(img, 10, 7.5);
 
     cvNamedWindow("Mean Shift Filter",CV_WINDOW_AUTOSIZE);
     cvShowImage("Mean Shift Filter",img_filtered);
