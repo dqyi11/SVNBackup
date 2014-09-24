@@ -14,12 +14,13 @@ import copy
 #img_filename = 'blocks.pgm'
 img_filename = 'simplecircles.ppm'
 #img_filename = 'circles.ppm'
+img_filename = 'coins.png'
 img = np.array(Image.open(img_filename).convert("L"))
 
 #img_gauss = gaussianFilter(img)
 img_gauss = copy.deepcopy(img)
 
-img_mh = MarrHildreth(img_gauss,100)
+img_mh = MarrHildreth(img_gauss,70)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)

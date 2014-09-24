@@ -67,7 +67,7 @@ def nonmaximalSuppresion(gradient_magnitude, gradient_orientation):
     
     for i in range(1, gm_width-1):
         for j in range(1, gm_height-1):
-            orientation = gradient_orientation[i,j]
+            #orientation = gradient_orientation[i,j]
             
             degree = (180/np.pi)*gradient_orientation[i,j]
             

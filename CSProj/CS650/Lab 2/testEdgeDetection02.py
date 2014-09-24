@@ -14,12 +14,13 @@ img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
 #img_filename = 'simplecircles.ppm'
 #img_filename = 'circles.ppm'
+img_filename = 'coins.png'
 img = np.array(Image.open(img_filename).convert("L"))
 
-#img_gauss = gaussianFilter(img)
-img_gauss = copy.deepcopy(img)
+img_gauss = gaussianFilter(img)
+#img_gauss = copy.deepcopy(img)
 
-img_canny = canny(img_gauss, 70, 150)
+img_canny = canny(img_gauss, 30, 100)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)

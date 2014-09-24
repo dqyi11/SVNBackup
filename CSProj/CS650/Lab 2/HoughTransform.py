@@ -23,6 +23,18 @@ def houghCircle(bi_img, radius):
                         hough_img[pix_x, pix_y] += 1
     return hough_img
 
+def findByThreshold(img_data, threshold):
+    
+    results = []
+    img_width = img_data.shape[0]
+    img_height = img_data.shape[1]
+    
+    for i in range(img_width):
+        for j in range(img_height):
+            if img_data[i,j] > threshold:
+                results.append([i,j])
+    return results
+
 def findLocalMax(hough_img):
     local_max = []
     
