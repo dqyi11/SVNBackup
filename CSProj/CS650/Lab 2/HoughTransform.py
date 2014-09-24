@@ -4,6 +4,7 @@ Created on Sep 17, 2014
 @author: daqing_yi
 '''
 import numpy as np
+from AccumulatorMgr import *
 
 def houghCircle(bi_img, radius):
     img_width = bi_img.shape[0]
@@ -23,6 +24,34 @@ def houghCircle(bi_img, radius):
                         hough_img[pix_x, pix_y] += 1
     return hough_img
 
+def houghCircles(bi_img, radii):
+    radiiLen = len(radii)
+    radiiMax = np.max(radii)
+    
+    img_width = bi_img.shape[0]
+    img_height = bi_img.shape[1]
+    
+    accumulators = AccumulatorMgr()
+    
+    for r in radii:
+        for i in range(img_width):
+            for j in range(img_height):
+                if bi_img[i,j] > 0:
+                    pixels = getCircleEdgePixels([i,j], r)
+                    for pix in pixels:
+                        pix_x, pix_y = pix[0], pix[1]
+                        if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
+                            accumulators.vote(pix_x, pix_y, r, [i,j])
+                                      
+    return accumulators
+
+def oneVoterPerVoteMethod():
+    pass
+
+def recursiveWeighterVoteMethod():
+    pass
+                    
+
 def findByThreshold(img_data, threshold):
     
     results = []
@@ -34,6 +63,7 @@ def findByThreshold(img_data, threshold):
             if img_data[i,j] > threshold:
                 results.append([i,j])
     return results
+
 
 def findLocalMax(hough_img):
     local_max = []
@@ -57,7 +87,6 @@ def findLocalMax(hough_img):
         
 
 def getCircleEdgePixels(center, radius):
-    
     pixels = []
     for theta in range(0, 360, 2):
         theta_radius = theta*np.pi/180.0
