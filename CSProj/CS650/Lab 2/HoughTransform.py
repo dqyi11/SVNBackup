@@ -45,11 +45,13 @@ def houghCircles(bi_img, radii):
                                       
     return accumulators
 
-def oneVoterPerVoteMethod():
+def oneVoterPerVoteMethod(accumulators, img_data):
     pass
 
-def recursiveWeighterVoteMethod():
+def recursiveWeightedVoteMethod(accumulators, img_data):
     pass
+
+def weightedRevote(accumulators, img_data):
                     
 
 def findByThreshold(img_data, threshold):
