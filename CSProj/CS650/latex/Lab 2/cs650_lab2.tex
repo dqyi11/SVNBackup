@@ -73,11 +73,85 @@ Open CV is used to verify the correctness.
 
 \section{Edge detection}
 
-\subsection{Gradient of an Image}
+\subsection{First and Second Order Derivatives of an Image}
 
-\subsection{Second order derivative of an Image}
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.23\textwidth]{./figure/2D_White_Box_origin}
+\label{fig:edge:01:origin} }
+\subfigure[Gradient Magnitude]{
+\includegraphics[width=.23\textwidth]{./figure/2D_White_Box_gradient_magnitude} 
+\label{fig:edge:01:gradient_magnitude} }
+\subfigure[Gradient Orientation]{
+\includegraphics[width=.23\textwidth]{./figure/2D_White_Box_gradient_orientation}
+\label{fig:edge:01:gradient_orientation} }
+\subfigure[Laplacian]{
+\includegraphics[width=.23\textwidth]{./figure/2D_White_Box_laplacian} 
+\label{fig:edge:01:laplacian} }
+\caption{Derivatives of \emph{2D\_White\_Box.pgm} by 1st order and 2nd order.}
+\label{fig:edge:01}
+\end{figure}
 
-\subsection{Canny edge detection}
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.47\textwidth]{./figure/blocks_origin}
+\label{fig:edge:02:origin} }
+\subfigure[Gradient Magnitude]{
+\includegraphics[width=.47\textwidth]{./figure/blocks_gradient_magnitude} 
+\label{fig:edge:02:gradient_magnitude} } \\
+\subfigure[Gradient Orientation]{
+\includegraphics[width=.47\textwidth]{./figure/blocks_gradient_orientation}
+\label{fig:edge:02:gradient_orientation} }
+\subfigure[Laplacian]{
+\includegraphics[width=.47\textwidth]{./figure/blocks_laplacian} 
+\label{fig:edge:02:laplacian} }
+\caption{Derivatives of \emph{blocks.pgm} by 1st order and 2nd order.}
+\label{fig:edge:02}
+\end{figure}
+
+\subsection{edge detection}
+
+\subsubsection{Canny edge detector}
+
+\begin{figure}[h]
+\centering
+\subfigure[hi\_thresh=40, lo\_thresho=20]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_canny_20_40}
+\label{fig:edge:02:canny:1} }
+\subfigure[hi\_thresh=60, lo\_thresho=30]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_canny_30_60} 
+\label{fig:edge:02:canny:2} } 
+\subfigure[hi\_thresh=80, lo\_thresho=40]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_canny_40_80}
+\label{fig:edge:02:canny:3} }
+\subfigure[hi\_thresh=60, lo\_thresho=30, with Gaussian filter]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_canny_gauss_30_60} 
+\label{fig:edge:02:canny:gauss} }
+\caption{Canny edge detector on \emph{blocks.pgm} using different parameters.}
+\label{fig:edge:02:canny}
+\end{figure}
+
+\subsection{Laplacian zero-crossing edge detector}
+
+\begin{figure}[h]
+\centering
+\subfigure[Threshold=40]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_mh_40}
+\label{fig:edge:02:mh:1} }
+\subfigure[Threshold=60]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_mh_60} 
+\label{fig:edge:02:mh:2} } 
+\subfigure[Threshold=80]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_mh_80}
+\label{fig:edge:02:mh:3} }
+\subfigure[Threshold=40, with Gaussian filter]{
+\includegraphics[width=.235\textwidth]{./figure/blocks_mh_gauss_40} 
+\label{fig:edge:02:mh:gauss} }
+\caption{Laplacian zero-crossing edge detector on \emph{blocks.pgm} using different parameters.}
+\label{fig:edge:02:mh}
+\end{figure}
 
 \section{Hough transformation}
 

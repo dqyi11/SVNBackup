@@ -107,11 +107,16 @@ def hysteresisThreshold(img_data, threshold_lo, threshold_hi):
 def canny(img_data, threshold_lo, threshold_hi):
     #calculate gradient
     img_gm, img_go = sobel(img_data)
+    
+    img_gm_max = np.max(np.max(img_gm))
+    img_gm_min = np.min(np.min(img_gm))
+    img_gm = (img_gm - img_gm_min) / (img_gm_max - img_gm_min) 
+    
     #nonmaxial suppression
     img_gm_proc = nonmaximalSuppresion(img_gm, img_go)
     #img_gm_proc = copy.deepcopy(img_gm)
     #hysteresis threshold
-    img_can = hysteresisThreshold(img_gm_proc, threshold_lo, threshold_hi)
+    img_can = hysteresisThreshold(img_gm_proc*255, threshold_lo, threshold_hi)
     #img_can = copy.deepcopy(img_gm_proc)
     return img_can
 
@@ -121,6 +126,11 @@ def MarrHildreth(img_data, threshold):
     img_height = img_data.shape[1]
     
     img_gm, img_go = sobel(img_data)
+    
+    img_gm_max = np.max(np.max(img_gm))
+    img_gm_min = np.min(np.min(img_gm))
+    img_gm = (img_gm - img_gm_min) / (img_gm_max - img_gm_min) 
+    
     hessian = laplacian(img_data)
     
     img_mh = np.zeros(img_data.shape, np.float)
@@ -128,9 +138,11 @@ def MarrHildreth(img_data, threshold):
     for i in range(1, img_width-1):
         for j in range(1, img_height-1):
             
-            if img_gm[i,j] >= threshold:
+            if img_gm[i,j]*255 >= threshold:
                 degree = (180/np.pi)*img_go[i,j]
                 
+                delta_i = 0
+                delta_j = 0
                 if (degree<=22.5 and degree>-22.5) or degree<=-157.5 or degree>157.5:
                     delta_i = 0
                     delta_j = 1

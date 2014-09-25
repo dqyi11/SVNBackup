@@ -16,8 +16,8 @@ import cv2
 #img_filename = 'blocks.pgm'
 img_filename = 'simplecircles.ppm'
 img_filename = 'circles.ppm'
-img_filename = 'coins.jpg'
-img_filename = 'circle_1.png'
+#img_filename = 'coins.jpg'
+#img_filename = 'circle_1.png'
 
 img = Image.open(img_filename).convert("L")
 img = np.array(img)
@@ -28,11 +28,19 @@ img_edge = canny(img_gauss, 50, 100)
 
 vg = houghCircle(img_edge, [32])
 img_hough = vg.dumpHoughImgByRadusIndex(0)
-img_hough_max = np.max(np.max(img_hough))
-img_hough_norm = img_hough / float(img_hough_max)
 
+for i in range(2):
+    print i
+    vg = weightedRevote(vg)
+
+'''
 img_hough_gm, img_hough_go = sobel(img_hough)
 img_hough_sup = nonmaximalSuppresion(img_hough_norm, img_hough_go)
+'''
+
+img_hough_sup = vg.dumpHoughImgByRadusIndex(0)
+img_hough_sup_max = np.max(np.max(img_hough_sup))
+img_hough_sup = img_hough_sup / float(img_hough_sup_max)
 
 centers = findByThreshold(img_hough_sup*255, 200)
 print centers
@@ -66,9 +74,7 @@ plt.show(block=False)
 
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 for c in centers:
-    # draw the outer circle
     cv2.circle(cimg,(c[0],c[1]),32,(0,255,0),2)
-    # draw the center of the circle
     cv2.circle(cimg,(c[0],c[1]),2,(0,0,255),3)
 
 cv2.imshow('detected circles',cimg)

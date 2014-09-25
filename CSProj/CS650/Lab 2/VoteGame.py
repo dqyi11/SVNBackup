@@ -76,6 +76,7 @@ class VoteGame(object):
         self.voterMgr = VoterMgr()
         self.votes = []
         
+        
     def vote(self, x, y, r, voter_x, voter_y, weight=1):
         voter = self.voterMgr.findVoter(voter_x, voter_y)
         if voter==None:

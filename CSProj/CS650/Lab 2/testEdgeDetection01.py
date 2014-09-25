@@ -16,14 +16,15 @@ img = np.array(img)
 
 img_laplacian = laplacian(img)
 
-fig = plt.figure()
-ax1 = fig.add_subplot(121)
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
 ax1.imshow(img,cmap = 'gray')
 ax1.set_title('Original')
 ax1.set_xticks([])
 ax1.set_yticks([])
 
-ax2 = fig.add_subplot(122)
+fig2 = plt.figure()
+ax2 = fig2.add_subplot(111)
 ax2.imshow(img_laplacian,cmap = 'gray')
 ax2.set_title('Laplacian')
 ax2.set_xticks([])

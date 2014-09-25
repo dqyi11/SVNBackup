@@ -34,12 +34,14 @@ def oneVoterPerVoteMethod(vote_game, img_data):
 def recursiveWeightedVoteMethod(vote_game, img_data):
     pass
 
-def weightedRevote(vote_game, img_data):
+def weightedRevote(vote_game):
                 
     for voter in vote_game.voterMgr.voters:
         weightSum = voter.getWeightedVoteSum()
         for v in voter.votes:
             v.weight /= weightSum
+            
+    return vote_game
         
 
 def findByThreshold(img_data, threshold):
