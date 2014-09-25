@@ -6,6 +6,7 @@ Created on Sep 18, 2014
 
 from EdgeDetection import *
 from HoughTransform import *
+from VoteGame import *
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,7 +26,8 @@ img_gauss = gaussianFilter(img)
 
 img_edge = canny(img_gauss, 50, 100)
 
-img_hough = houghCircle(img_edge, 32)
+vg = houghCircle(img_edge, [32])
+img_hough = vg.dumpHoughImgByRadusIndex(0)
 img_hough_max = np.max(np.max(img_hough))
 img_hough_norm = img_hough / float(img_hough_max)
 

@@ -4,34 +4,17 @@ Created on Sep 17, 2014
 @author: daqing_yi
 '''
 import numpy as np
-from AccumulatorMgr import *
+from VoteGame import *
 
-def houghCircle(bi_img, radius):
-    img_width = bi_img.shape[0]
-    img_height = bi_img.shape[1]
-    hough_img = np.zeros(bi_img.shape, np.int)
-    
-    print bi_img.shape
-    
-    for i in range(img_width):
-        for j in range(img_height):
-            if bi_img[i,j] > 0:
-                pixels = getCircleEdgePixels([i,j], radius)
-                for pix in pixels:
-                    pix_x = pix[0]
-                    pix_y = pix[1]
-                    if pix_x >= 0 and pix_x < img_width and pix_y >= 0 and pix_y < img_height:
-                        hough_img[pix_x, pix_y] += 1
-    return hough_img
 
-def houghCircles(bi_img, radii):
+def houghCircle(bi_img, radii):
     radiiLen = len(radii)
     radiiMax = np.max(radii)
     
     img_width = bi_img.shape[0]
     img_height = bi_img.shape[1]
     
-    accumulators = AccumulatorMgr()
+    vote_game = VoteGame(img_width+radiiMax, img_height+radiiMax, radii)
     
     for r in radii:
         for i in range(img_width):
@@ -41,18 +24,24 @@ def houghCircles(bi_img, radii):
                     for pix in pixels:
                         pix_x, pix_y = pix[0], pix[1]
                         if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
-                            accumulators.vote(pix_x, pix_y, r, [i,j])
+                            vote_game.vote(pix_x, pix_y, r, i, j)
                                       
-    return accumulators
+    return vote_game
 
-def oneVoterPerVoteMethod(accumulators, img_data):
+def oneVoterPerVoteMethod(vote_game, img_data):
     pass
 
-def recursiveWeightedVoteMethod(accumulators, img_data):
+def recursiveWeightedVoteMethod(vote_game, img_data):
     pass
 
-def weightedRevote(accumulators, img_data):
-                    
+def weightedRevote(vote_game, img_data):
+                
+    for voter in vote_game.voterMgr.voters:
+        weightSum = voter.getWeightedVoteSum()
+        for v in voter.votes:
+            v.weight /= weightSum
+
+        
 
 def findByThreshold(img_data, threshold):
     
@@ -84,7 +73,7 @@ def findLocalMax(hough_img):
         for j in range(img_height):
             if hough_img[i,j] > threshold:
                 local_max.append([i,j])
-    
+                
     return local_max
         
 
@@ -96,8 +85,7 @@ def getCircleEdgePixels(center, radius):
         y = int(center[1] + radius * np.sin(theta_radius))
         if [x,y] not in pixels:
             pixels.append([x, y])
-        #else:
-        #    print 'dup'
+
     return pixels
 
 

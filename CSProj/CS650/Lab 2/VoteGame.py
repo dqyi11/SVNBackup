@@ -3,6 +3,7 @@ Created on Sep 23, 2014
 
 @author: daqing_yi
 '''
+import numpy as np
 
 class Vote(object):
     
@@ -17,6 +18,12 @@ class Voter(object):
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.votes = []
+        
+    def getWeightedVoteSum(self):
+        weightedSum = 0.0
+        for v in self.votes:
+            weightedSum += v.weight        
+        return weightedSum
 
 class Accumulator(object):
     
@@ -28,6 +35,12 @@ class Accumulator(object):
         
     def addVote(self, vote):
         self.votes.append(vote)
+        
+    def getWeightedVoteSum(self):
+        weightedSum = 0.0
+        for v in self.votes:
+            weightedSum += v.weight        
+        return weightedSum
 
 class AccumulatorMgr(object):
 
@@ -50,10 +63,15 @@ class VoterMgr(object):
             if v.pos_x == pos_x and v.pos_y == pos_y:
                 return v
         return None
+
         
 class VoteGame(object):
     
-    def __init__(self):
+    def __init__(self, width, height, radii):
+        self.width = width
+        self.height = height
+        self.radii = radii
+        
         self.accumulatorMgr = AccumulatorMgr()
         self.voterMgr = VoterMgr()
         self.votes = []
@@ -62,15 +80,34 @@ class VoteGame(object):
         voter = self.voterMgr.findVoter(voter_x, voter_y)
         if voter==None:
             voter = Voter(voter_x, voter_y)
-            self.voterMgr.append(voter)
+            self.voterMgr.voters.append(voter)
             
         accumulator = self.accumulatorMgr.findAccumulator(x, y, r)
         if accumulator==None:
             accumulator = Accumulator(x, y, r)
-            self.accumulatorMgr.append(accumulator)
+            self.accumulatorMgr.accumulators.append(accumulator)
             
         vote = Vote(accumulator, voter, weight)
         voter.votes.append(vote)
         accumulator.votes.append(vote)
+        
+    def dumpHoughImg(self):
+        
+        hough_img = np.zeros((self.width, self.height, len(self.radii)), np.float)
+        
+        for a in self.accumulatorMgr.accumulators:
+            hough_img[a.x, a.y, a.r] = a.getWeightedVoteSum()
+            
+        return hough_img
+    
+    def dumpHoughImgByRadusIndex(self, r_idx):
+        
+        hough_img = np.zeros((self.width, self.height), np.float)
+        
+        for a in self.accumulatorMgr.accumulators:
+            if a.r == self.radii[r_idx]:
+                hough_img[a.x, a.y] = a.getWeightedVoteSum()
+            
+        return hough_img
         
         

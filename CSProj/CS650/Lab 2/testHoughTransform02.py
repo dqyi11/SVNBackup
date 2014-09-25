@@ -23,7 +23,7 @@ img_gauss = gaussianFilter(img)
 
 img_edge = MarrHildreth(img_gauss, 50)
 
-img_hough = houghCircle(img_edge, 32)
+img_hough = houghCircle(img_edge, [32])
 img_hough_max = np.max(np.max(img_hough))
 img_hough_norm = img_hough / float(img_hough_max)
 
