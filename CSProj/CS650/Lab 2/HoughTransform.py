@@ -40,7 +40,6 @@ def weightedRevote(vote_game, img_data):
         weightSum = voter.getWeightedVoteSum()
         for v in voter.votes:
             v.weight /= weightSum
-
         
 
 def findByThreshold(img_data, threshold):
