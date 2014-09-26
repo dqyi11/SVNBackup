@@ -7,13 +7,13 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-img_filename = '2D_White_Box.pgm'
+#img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
 #img_filename = 'simplecircles.ppm'
-#img_filename = 'circles.ppm'
+img_filename = 'circles.ppm'
 img = cv2.imread(img_filename, 0)
         
-img_canny = cv2.Canny(img, 100, 200)
+img_canny = cv2.Canny(img, 160, 200)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(121)

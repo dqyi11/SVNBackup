@@ -21,13 +21,15 @@ img_filename = 'circles.ppm'
 
 detect_radius = 48
 
-img = Image.open(img_filename).convert("L")
+img = cv2.imread(img_filename,0)
+img = cv2.medianBlur(img,5)
 img = np.array(img)
 
-img_gauss = gaussianFilter(img)
+#img_gauss = gaussianFilter(img)
+img_gauss = copy.deepcopy(img)
 
-#img_edge = canny(img_gauss, 40, 80)
-img_edge = MarrHildreth(img_gauss, 60)
+img_edge = canny(img_gauss, 40, 80)
+#img_edge = MarrHildreth(img_gauss, 60)
 
 img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
 
@@ -35,7 +37,7 @@ img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
 for threshold in np.arange(0.8, 0.2, -0.1):
     centers = findLocalMax(img_hough, threshold)
     print threshold
-    if len(centers) > 0:
+    if len(centers) > 1:
         break
 
 print centers

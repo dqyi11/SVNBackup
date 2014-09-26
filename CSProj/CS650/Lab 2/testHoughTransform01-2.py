@@ -19,24 +19,18 @@ img_filename = 'circles.ppm'
 #img_filename = 'coins.jpg'
 #img_filename = 'circle_1.png'
 
-detect_radius = 48
+detect_radius = 64
 
 img = Image.open(img_filename).convert("L")
 img = np.array(img)
 
 img_gauss = gaussianFilter(img)
 
-#img_edge = canny(img_gauss, 40, 80)
-img_edge = MarrHildreth(img_gauss, 60)
+img_edge = canny(img_gauss, 40, 80)
 
 img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
 
-
-for threshold in np.arange(0.8, 0.2, -0.1):
-    centers = findLocalMax(img_hough, threshold)
-    print threshold
-    if len(centers) > 0:
-        break
+centers = findLocalMax(img_hough, 0.2)
 
 print centers
 
