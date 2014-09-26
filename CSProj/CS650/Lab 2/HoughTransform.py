@@ -58,24 +58,15 @@ def findByThreshold(img_data, threshold):
 
 
 def findLocalMax(hough_img):
-    local_max = []
+    #local_max = []
     
-    hough_img_min = np.min(np.min(hough_img))
-    hough_img_max = np.max(np.max(hough_img))
-    img_width = hough_img.shape[0]
-    img_height = hough_img.shape[1]
-    
-    print hough_img_min
-    print hough_img_max
-    
-    threshold = 0.9 *(hough_img_max - hough_img_min) + hough_img_min
-    
-    for i in range(img_width):
-        for j in range(img_height):
-            if hough_img[i,j] > threshold:
-                local_max.append([i,j])
+    # find top peak candidates above a threshold
+    peak_threshold = max(np.max(hough_img.ravel()) * 0.1, 0)
+
+    # get coordinates of peaks
+    coordinates = np.transpose((hough_img > peak_threshold).nonzero())
                 
-    return local_max
+    return coordinates
         
 
 def getCircleEdgePixels(center, radius):

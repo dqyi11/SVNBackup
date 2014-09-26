@@ -33,12 +33,9 @@ img_hough_max = np.max(np.max(img_hough))
 img_hough_norm = img_hough / float(img_hough_max)
 
 
-img_hough_gm, img_hough_go = sobel(img_hough)
-img_hough_sup = nonmaximalSuppresion(img_hough_norm, img_hough_go)
-
-#img_hough_sup = vg.dumpHoughImgByRadusIndex(0)
-#img_hough_sup_max = np.max(np.max(img_hough_sup))
-#img_hough_sup = img_hough_sup / float(img_hough_sup_max)
+img_hough_sup = vg.dumpHoughImgByRadusIndex(0)
+img_hough_sup_max = np.max(np.max(img_hough_sup))
+img_hough_sup = img_hough_sup / float(img_hough_sup_max)
 
 centers = findByThreshold(img_hough_sup*255, 200)
 print centers
