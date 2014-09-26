@@ -15,7 +15,7 @@ import cv2
 #img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
 img_filename = 'simplecircles.ppm'
-img_filename = 'circles.ppm'
+#img_filename = 'circles.ppm'
 #img_filename = 'coins.jpg'
 #img_filename = 'circle_1.png'
 
@@ -29,9 +29,9 @@ img_edge = canny(img_gauss, 50, 100)
 vg = houghCircle(img_edge, [32])
 img_hough = vg.dumpHoughImgByRadusIndex(0)
 
-for i in range(2):
-    print i
-    vg = weightedRevote(vg)
+img_hough_max = np.max(np.max(img_hough))
+img_hough_norm = img_hough / float(img_hough_max)
+
 
 '''
 img_hough_gm, img_hough_go = sobel(img_hough)
