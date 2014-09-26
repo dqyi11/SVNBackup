@@ -24,20 +24,12 @@ img = np.array(img)
 
 img_gauss = gaussianFilter(img)
 
-img_edge = canny(img_gauss, 50, 100)
+img_edge = canny(img_gauss, 40, 80)
 
-vg = houghCircle(img_edge, [32])
-img_hough = vg.dumpHoughImgByRadusIndex(0)
+img_hough = houghCircle(img_edge, [32])[:,:,0]
 
-img_hough_max = np.max(np.max(img_hough))
-img_hough_norm = img_hough / float(img_hough_max)
+centers = findLocalMax(img_hough, 0.2)
 
-
-img_hough_sup = vg.dumpHoughImgByRadusIndex(0)
-img_hough_sup_max = np.max(np.max(img_hough_sup))
-img_hough_sup = img_hough_sup / float(img_hough_sup_max)
-
-centers = findByThreshold(img_hough_sup*255, 200)
 print centers
 
 fig = plt.figure()
@@ -54,23 +46,19 @@ ax2.set_xticks([])
 ax2.set_yticks([])
 
 ax3 = fig.add_subplot(223)
-ax3.imshow(255*img_hough_norm,cmap = 'gray')
+ax3.imshow(255*img_hough,cmap = 'gray')
 ax3.set_title('Hough')
 ax3.set_xticks([])
 ax3.set_yticks([])
 
-ax4 = fig.add_subplot(224)
-ax4.imshow(img_hough_sup,cmap = 'gray')
-ax4.set_title('Hough suppressed')
-ax4.set_xticks([])
-ax4.set_yticks([])
 
 plt.show(block=False)
 
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 for c in centers:
-    cv2.circle(cimg,(c[0],c[1]),32,(0,255,0),2)
-    cv2.circle(cimg,(c[0],c[1]),2,(0,0,255),3)
+    cv2.circle(cimg,(c[0]-32,c[1]-32),32,(0,255,0),2)
+    cv2.circle(cimg,(c[0]-32,c[1]-32),2,(0,0,255),3)
 
 cv2.imshow('detected circles',cimg)
 cv2.waitKey(0)
+

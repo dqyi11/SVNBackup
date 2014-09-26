@@ -5,6 +5,8 @@ Created on Sep 17, 2014
 '''
 import numpy as np
 from VoteGame import *
+import scipy.ndimage as ndimage
+import scipy.ndimage.filters as filters
 
 
 def houghCircle(bi_img, radii):
@@ -14,9 +16,11 @@ def houghCircle(bi_img, radii):
     img_width = bi_img.shape[0]
     img_height = bi_img.shape[1]
     
-    vote_game = VoteGame(img_width+radiiMax, img_height+radiiMax, radii)
+    #vote_game = VoteGame(img_width+radiiMax, img_height+radiiMax, radii)
+    img_hough = np.zeros((img_width+2*radiiMax, img_height+2*radiiMax,radiiLen), np.float)
     
-    for r in radii:
+    for ri in range(len(radii)):
+        r = radii[ri]
         for i in range(img_width):
             for j in range(img_height):
                 if bi_img[i,j] > 0:
@@ -24,9 +28,14 @@ def houghCircle(bi_img, radii):
                     for pix in pixels:
                         pix_x, pix_y = pix[0], pix[1]
                         if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
-                            vote_game.vote(pix_x, pix_y, r, i, j)
+                            img_hough[pix_x + r, pix_y + r, ri] += 1
+                            
+    img_hough_max = np.max(img_hough.flatten())
+    img_hough_min = np.min(img_hough.flatten())
+    
+    img_hough = (img_hough - img_hough_min) / (img_hough_max - img_hough_min)
                                       
-    return vote_game
+    return img_hough
 
 def oneVoterPerVoteMethod(vote_game, img_data):
     pass
@@ -57,16 +66,24 @@ def findByThreshold(img_data, threshold):
     return results
 
 
-def findLocalMax(hough_img):
-    #local_max = []
+def findLocalMax(data, threshold, neighborhood_size = 5):
     
-    # find top peak candidates above a threshold
-    peak_threshold = max(np.max(hough_img.ravel()) * 0.1, 0)
+    detected_peaks = []
+    data_max = filters.maximum_filter(data, neighborhood_size)
+    maxima = (data == data_max)
+    data_min = filters.minimum_filter(data, neighborhood_size)
+    diff = ((data_max - data_min) > threshold)
+    maxima[diff == 0] = 0
+    
+    labeled, num_objects = ndimage.label(maxima)
+    slices = ndimage.find_objects(labeled)
+    x, y = [], []
+    for dy,dx in slices:
+        x_center = (dx.start + dx.stop - 1)/2
+        y_center = (dy.start + dy.stop - 1)/2    
+        detected_peaks.append([x_center, y_center])
 
-    # get coordinates of peaks
-    coordinates = np.transpose((hough_img > peak_threshold).nonzero())
-                
-    return coordinates
+    return detected_peaks
         
 
 def getCircleEdgePixels(center, radius):
