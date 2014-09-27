@@ -7,6 +7,7 @@ import numpy as np
 from VoteGame import *
 import scipy.ndimage as ndimage
 import scipy.ndimage.filters as filters
+import copy
 
 
 def houghCircle(bi_img, radii):
@@ -19,16 +20,22 @@ def houghCircle(bi_img, radii):
     #vote_game = VoteGame(img_width+radiiMax, img_height+radiiMax, radii)
     img_hough = np.zeros((img_width+2*radiiMax, img_height+2*radiiMax,radiiLen), np.float)
     
-    for ri in range(len(radii)):
-        r = radii[ri]
-        for i in range(img_width):
-            for j in range(img_height):
-                if bi_img[i,j] > 0:
+    
+    for i in range(img_width):
+        for j in range(img_height):
+            if bi_img[i,j] > 0:
+                votes_to = []
+                sum_votes_to = 0.0
+                for ri in range(len(radii)):
+                    r = radii[ri]
                     pixels = getCircleEdgePixels([i,j], r)
                     for pix in pixels:
                         pix_x, pix_y = pix[0], pix[1]
                         if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
-                            img_hough[pix_x + r, pix_y + r, ri] += 1
+                            votes_to.append([pix_x + r, pix_y + r, ri])
+                            sum_votes_to += 1.0
+                for v in votes_to:
+                    img_hough[v[0], v[1], v[2]] += 1/sum_votes_to
                             
     img_hough_max = np.max(img_hough.flatten())
     img_hough_min = np.min(img_hough.flatten())
@@ -36,22 +43,7 @@ def houghCircle(bi_img, radii):
     img_hough = (img_hough - img_hough_min) / (img_hough_max - img_hough_min)
                                       
     return img_hough
-
-def oneVoterPerVoteMethod(vote_game, img_data):
-    pass
-
-def recursiveWeightedVoteMethod(vote_game, img_data):
-    pass
-
-def weightedRevote(vote_game):
-                
-    for voter in vote_game.voterMgr.voters:
-        weightSum = voter.getWeightedVoteSum()
-        for v in voter.votes:
-            v.weight /= weightSum
-            
-    return vote_game
-        
+          
 
 def findByThreshold(img_data, threshold):
     

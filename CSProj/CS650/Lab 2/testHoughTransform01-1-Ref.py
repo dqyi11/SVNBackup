@@ -33,7 +33,6 @@ img_edge = canny(img_gauss, 40, 80)
 
 img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
 
-
 for threshold in np.arange(0.8, 0.2, -0.1):
     centers = findLocalMax(img_hough, threshold)
     print threshold
