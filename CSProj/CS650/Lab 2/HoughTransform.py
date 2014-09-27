@@ -49,16 +49,21 @@ def houghCircleVariant(bi_img, radii):
     
     img_width = bi_img.shape[0]
     img_height = bi_img.shape[1]
-    img_hough = np.zeros((img_width+2*radiiMax, img_height+2*radiiMax,radiiLen), np.float)
     
-    voters = []
-    accumulators = []
+    voteGame = VoteGame(img_width+2*radiiMax, img_height+2*radiiMax,radiiLen)
     for i in range(img_width):
         for j in range(img_height):
             if bi_img[i,j] > 0:
+                print "working on " + str(i) + ", " + str(j)
                 for ri in range(len(radii)):
                     r = radii[ri]
-                
+                    
+                    pixels = getCircleEdgePixels([i,j], r)
+                    for pix in pixels:
+                        pix_x, pix_y = pix[0], pix[1]
+                        if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
+                            voteGame.vote(pix_x + r, pix_y + r, ri, i, j)
+    return voteGame              
 
                 
               
@@ -83,6 +88,25 @@ def findLocalMax(data, threshold, neighborhood_size = 5):
     maxima = (data == data_max)
     data_min = filters.minimum_filter(data, neighborhood_size)
     diff = ((data_max - data_min) > threshold)
+    maxima[diff == 0] = 0
+    
+    labeled, num_objects = ndimage.label(maxima)
+    slices = ndimage.find_objects(labeled)
+    x, y = [], []
+    for dy,dx in slices:
+        x_center = (dx.start + dx.stop - 1)/2
+        y_center = (dy.start + dy.stop - 1)/2    
+        detected_peaks.append([x_center, y_center])
+
+    return detected_peaks
+
+def findLocalMaxUsingDifferentThreshold(data, threshold, corner_threshold, neighborhood_size = 5):
+    
+    detected_peaks = []
+    data_max = filters.maximum_filter(data, neighborhood_size)
+    maxima = (data == data_max)
+    data_min = filters.minimum_filter(data, neighborhood_size)
+    diff = ((data_max - data_min) > corner_threshold)
     maxima[diff == 0] = 0
     
     labeled, num_objects = ndimage.label(maxima)

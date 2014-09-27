@@ -34,20 +34,22 @@ centers = findLocalMax(img_hough, 0.2)
 
 print centers
 
-fig = plt.figure()
-ax1 = fig.add_subplot(221)
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
 ax1.imshow(img,cmap = 'gray')
 ax1.set_title('Original')
 ax1.set_xticks([])
 ax1.set_yticks([])
 
-ax2 = fig.add_subplot(222)
+fig2 = plt.figure()
+ax2 = fig2.add_subplot(111)
 ax2.imshow(img_edge,cmap = 'gray')
 ax2.set_title('Canny')
 ax2.set_xticks([])
 ax2.set_yticks([])
 
-ax3 = fig.add_subplot(223)
+fig3 = plt.figure()
+ax3 = fig3.add_subplot(111)
 ax3.imshow(255*img_hough,cmap = 'gray')
 ax3.set_title('Hough')
 ax3.set_xticks([])

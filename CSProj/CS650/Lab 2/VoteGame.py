@@ -17,6 +17,7 @@ class Voter(object):
     def __init__(self, pos_x, pos_y):
         self.pos_x = pos_x
         self.pos_y = pos_y
+        self.votes = []
         self.totalWeights = 0.0
 
 class Accumulator(object):
@@ -25,6 +26,7 @@ class Accumulator(object):
         self.x = x
         self.y = y
         self.r = r
+        self.votes = []
         self.totalWeights = 0.0
         
 class AccumulatorMgr(object):
@@ -77,6 +79,26 @@ class VoteGame(object):
         voter.votes.append(vote)
         accumulator.votes.append(vote)
         
+    def updateWeightSum(self):
+        for accumulator in self.accumulatorMgr.accumulators:
+            accumulator.totalWeights = 0.0
+            for v in accumulator.votes:
+                accumulator.totalWeights += v.weight
+                
+        for voter in self.voteMgr.voters:
+            voter.totalWeights = 0.0
+            for v in voter.votes:
+                voter.totalWeights += v.weight
+        
+    def weigthedRevote(self):
+        
+        self.updateWeightSum()
+        
+        for v in self.votes:
+            v.weight = v.accumulator.totalWeights / v.voter.totalWeights
+        
+        
+        
     def dumpHoughImg(self):
         
         hough_img = np.zeros((self.width, self.height, len(self.radii)), np.float)
@@ -93,6 +115,11 @@ class VoteGame(object):
         for a in self.accumulatorMgr.accumulators:
             if a.r == self.radii[r_idx]:
                 hough_img[a.x, a.y] = a.getWeightedVoteSum()
+        
+        hough_img_min = np.min(hough_img.flatten())
+        hough_img_max = np.max(hough_img.flatten())
+        
+        hough_img = (hough_img - hough_img_min) /(hough_img_max - hough_img_min)    
             
         return hough_img
         
