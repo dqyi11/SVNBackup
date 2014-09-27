@@ -17,13 +17,7 @@ class Voter(object):
     def __init__(self, pos_x, pos_y):
         self.pos_x = pos_x
         self.pos_y = pos_y
-        self.votes = []
-        
-    def getWeightedVoteSum(self):
-        weightedSum = 0.0
-        for v in self.votes:
-            weightedSum += v.weight        
-        return weightedSum
+        self.totalWeights = 0.0
 
 class Accumulator(object):
     
@@ -31,17 +25,8 @@ class Accumulator(object):
         self.x = x
         self.y = y
         self.r = r
-        self.votes = []
+        self.totalWeights = 0.0
         
-    def addVote(self, vote):
-        self.votes.append(vote)
-        
-    def getWeightedVoteSum(self):
-        weightedSum = 0.0
-        for v in self.votes:
-            weightedSum += v.weight        
-        return weightedSum
-
 class AccumulatorMgr(object):
 
     def __init__(self):

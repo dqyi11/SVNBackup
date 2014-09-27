@@ -20,7 +20,6 @@ def houghCircle(bi_img, radii):
     #vote_game = VoteGame(img_width+radiiMax, img_height+radiiMax, radii)
     img_hough = np.zeros((img_width+2*radiiMax, img_height+2*radiiMax,radiiLen), np.float)
     
-    
     for i in range(img_width):
         for j in range(img_height):
             if bi_img[i,j] > 0:
@@ -43,7 +42,26 @@ def houghCircle(bi_img, radii):
     img_hough = (img_hough - img_hough_min) / (img_hough_max - img_hough_min)
                                       
     return img_hough
-          
+
+def houghCircleVariant(bi_img, radii):
+    radiiLen = len(radii)
+    radiiMax = np.max(radii)
+    
+    img_width = bi_img.shape[0]
+    img_height = bi_img.shape[1]
+    img_hough = np.zeros((img_width+2*radiiMax, img_height+2*radiiMax,radiiLen), np.float)
+    
+    voters = []
+    accumulators = []
+    for i in range(img_width):
+        for j in range(img_height):
+            if bi_img[i,j] > 0:
+                for ri in range(len(radii)):
+                    r = radii[ri]
+                
+
+                
+              
 
 def findByThreshold(img_data, threshold):
     
