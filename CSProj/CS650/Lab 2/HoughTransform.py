@@ -50,19 +50,21 @@ def houghCircleVariant(bi_img, radii):
     img_width = bi_img.shape[0]
     img_height = bi_img.shape[1]
     
-    voteGame = VoteGame(img_width+2*radiiMax, img_height+2*radiiMax,radiiLen)
+    voteGame = VoteGame(img_width+2*radiiMax, img_height+2*radiiMax,radii)
     for i in range(img_width):
         for j in range(img_height):
             if bi_img[i,j] > 0:
                 print "working on " + str(i) + ", " + str(j)
+                voter = Voter(i, j)
+                voteGame.voterMgr.append(voter)
                 for ri in range(len(radii)):
                     r = radii[ri]
-                    
                     pixels = getCircleEdgePixels([i,j], r)
                     for pix in pixels:
                         pix_x, pix_y = pix[0], pix[1]
                         if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
-                            voteGame.vote(pix_x + r, pix_y + r, ri, i, j)
+                            #voteGame.vote(pix_x + r, pix_y + r, ri, i, j)
+                            voteGame.votesByUser(pix_x + r, pix_y + r, ri, voter)
     return voteGame              
 
                 

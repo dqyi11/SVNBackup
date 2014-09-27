@@ -63,6 +63,15 @@ class VoteGame(object):
         self.voterMgr = VoterMgr()
         self.votes = []
         
+    def votesByUser(self, x, y, r, voter, weight=1):
+        accumulator = self.accumulatorMgr.findAccumulator(x, y, r)
+        if accumulator==None:
+            accumulator = Accumulator(x, y, r)
+            self.accumulatorMgr.accumulators.append(accumulator)
+            
+        vote = Vote(accumulator, voter, weight)
+        voter.votes.append(vote)
+        accumulator.votes.append(vote)
         
     def vote(self, x, y, r, voter_x, voter_y, weight=1):
         voter = self.voterMgr.findVoter(voter_x, voter_y)
