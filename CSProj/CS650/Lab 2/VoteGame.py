@@ -113,7 +113,7 @@ class VoteGame(object):
         hough_img = np.zeros((self.width, self.height, len(self.radii)), np.float)
         
         for a in self.accumulatorMgr.accumulators:
-            hough_img[a.x, a.y, a.r] = a.getWeightedVoteSum()
+            hough_img[a.x, a.y, a.r] = a.totalWeights
             
         return hough_img
     
@@ -123,7 +123,7 @@ class VoteGame(object):
         
         for a in self.accumulatorMgr.accumulators:
             if a.r == self.radii[r_idx]:
-                hough_img[a.x, a.y] = a.getWeightedVoteSum()
+                hough_img[a.x, a.y] = a.totalWeights
         
         hough_img_min = np.min(hough_img.flatten())
         hough_img_max = np.max(hough_img.flatten())
