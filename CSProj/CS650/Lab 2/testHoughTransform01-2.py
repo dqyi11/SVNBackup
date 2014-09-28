@@ -19,7 +19,7 @@ img_filename = 'circles.ppm'
 #img_filename = 'coins.jpg'
 #img_filename = 'circle_1.png'
 
-detect_radius = 64
+detect_radius = 32
 
 img = Image.open(img_filename).convert("L")
 img = np.array(img)

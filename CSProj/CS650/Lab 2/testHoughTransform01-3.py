@@ -37,12 +37,6 @@ img_gauss = copy.deepcopy(img)
 img_edge = cv2.Canny(img, 160, 200)
 #img_edge = canny(img_gauss, 40, 80)
 
-img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
-
-centers = findLocalMaxUsingDifferentThreshold(img_hough, 0.4, 0.2, detect_radius)
-
-print centers
-
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(111)
 ax1.imshow(img,cmap = 'gray')
@@ -56,6 +50,13 @@ ax2.imshow(img_edge,cmap = 'gray')
 ax2.set_title('Canny')
 ax2.set_xticks([])
 ax2.set_yticks([])
+
+img_hough = houghCircle(img_edge, [detect_radius])[:,:,0]
+
+centers = findLocalMaxUsingDifferentThreshold(img_hough, 0.6, 0.12, detect_radius)
+
+print centers
+
 
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(111)

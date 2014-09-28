@@ -65,10 +65,9 @@ def houghCircleVariant(bi_img, radii):
                         if pix_x >= -r and pix_x < img_width+r and pix_y >= -r and pix_y < img_height+r:
                             #voteGame.vote(pix_x + r, pix_y + r, ri, i, j)
                             voteGame.votesByUser(pix_x + r, pix_y + r, ri, voter)
-    return voteGame              
-
-                
-              
+                #print len(voter.votes)
+    voteGame.updateWeightSum()
+    return voteGame   
 
 def findByThreshold(img_data, threshold):
     
