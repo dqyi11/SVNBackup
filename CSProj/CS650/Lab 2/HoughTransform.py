@@ -56,7 +56,7 @@ def houghCircleVariant(bi_img, radii):
             if bi_img[i,j] > 0:
                 print "working on " + str(i) + ", " + str(j)
                 voter = Voter(i, j)
-                voteGame.voterMgr.append(voter)
+                voteGame.voterMgr.voters.append(voter)
                 for ri in range(len(radii)):
                     r = radii[ri]
                     pixels = getCircleEdgePixels([i,j], r)
@@ -102,7 +102,7 @@ def findLocalMax(data, threshold, neighborhood_size = 5):
 
     return detected_peaks
 
-def findLocalMaxUsingDifferentThreshold(data, threshold, corner_threshold, neighborhood_size = 5):
+def findLocalMaxUsingDifferentThreshold(data, threshold, corner_threshold, corner_size, neighborhood_size = 5):
     
     detected_peaks = []
     data_max = filters.maximum_filter(data, neighborhood_size)
@@ -116,8 +116,12 @@ def findLocalMaxUsingDifferentThreshold(data, threshold, corner_threshold, neigh
     x, y = [], []
     for dy,dx in slices:
         x_center = (dx.start + dx.stop - 1)/2
-        y_center = (dy.start + dy.stop - 1)/2    
-        detected_peaks.append([x_center, y_center])
+        y_center = (dy.start + dy.stop - 1)/2
+        if (x_center < corner_size or x_center > data.shape[0] - x_center) or (y_center < corner_size or y_center > data.shape[1] - corner_size):
+            detected_peaks.append([x_center, y_center])
+        else:
+            if data[x_center, y_center] > threshold:
+                detected_peaks.append([x_center, y_center])
 
     return detected_peaks
         

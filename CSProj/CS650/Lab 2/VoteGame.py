@@ -94,7 +94,7 @@ class VoteGame(object):
             for v in accumulator.votes:
                 accumulator.totalWeights += v.weight
                 
-        for voter in self.voteMgr.voters:
+        for voter in self.voterMgr.voters:
             voter.totalWeights = 0.0
             for v in voter.votes:
                 voter.totalWeights += v.weight
