@@ -102,6 +102,9 @@ The implementation is in \emph{EdgeDetection.py}.
 
 The clues for finding the edges are obtained from differential geometry.
 Figure \ref{fig:edge:01} and Figure \ref{fig:edge:02} give the examples on 1st order and 2nd order derivatives.
+Figure \ref{fig:edge:01:gradient_magnitude} and Figure \ref{fig:edge:02:gradient_magnitude} illustrate the gradient magnitude, which shows the strength of intensity variation of each pixel.
+Figure \ref{fig:edge:01:gradient_orientation} and Figure \ref{fig:edge:02:gradient_orientation} provide the gradient orientation, which provides the direction of intensity variation of each pixel.
+Figure \ref{fig:edge:01:laplacian} and Figure \ref{fig:edge:02:laplacian} offer the 2nd derivatives, which can be used to identify the local maximum or minimum.
 
 \begin{figure}[h]
 \centering
@@ -123,7 +126,19 @@ Figure \ref{fig:edge:01} and Figure \ref{fig:edge:02} give the examples on 1st o
 
 \subsection{edge detection}
 
+With the clues given, edge detection methods can be applied.
+Two types of methods are implemented in \emph{EdegDetection.py}, which are \textbf{canny edge detector} and \textbf{zero-crossing edge detector}.
+
 \subsubsection{Canny edge detector}
+
+Canny edge detector is implemented in \emph{canny} in \emph{EdegDetection.py}.
+Methods \emph{nonmaximalSuppresion()} and \emph{gaussianFilter()} are used to preprocess before applying the threshold binarization.
+\emph{gaussianFilter()} can smooth the distribution.
+\emph{nonmaximalSuppresion()} can thinner the cluster of the points by comparing the neighborhood.
+It relies on the gradient orientation.
+A \emph{hysteresisThreshold()} is applied for binarization based on the gradient magnitude.
+A pixel above the low threshold but below the high threshold needs checking its connected pixels in determining whether it is an edge point.
+
 
 \begin{figure}[h]
 \centering
@@ -143,7 +158,15 @@ Figure \ref{fig:edge:01} and Figure \ref{fig:edge:02} give the examples on 1st o
 \label{fig:edge:02:canny}
 \end{figure}
 
+Different parameters are tried. 
+The difference on the edges found are illustrated in Figure {fig:edge:02:canny}.
+Lowering the low threshold tends to connect the disconnected edges.
+Increasing the high threshold decreases the edge details that can be found.
+
 \subsection{Laplacian zero-crossing edge detector}
+
+A variant of canny edge detector uses the zero-crossing of the 2nd derivatives.
+Because it is linked to Marr–Hildreth (zero crossing of the Laplacian) edge detector \footnote{\url{http://en.wikipedia.org/wiki/Canny_edge_detector}}, the function name is \emph{mh()} in \emph{EdgeDetection.py}.
 
 \begin{figure}[h]
 \centering
@@ -163,17 +186,55 @@ Figure \ref{fig:edge:01} and Figure \ref{fig:edge:02} give the examples on 1st o
 \label{fig:edge:02:mh}
 \end{figure}
 
-\subsection{Conclusion}
+This method checks whether there exists a zero crossing in a pixel along the direction of the gradient orientation.
+If the pixel is a zero-crossing point, it means that it is likely to be a local maximum or minimum. 
+A threshold is also applied here to filter some levels of noise.
+Increasing the threshold removes the noise and small details, which is illustrated in Figure \ref{fig:edge:02:mh}.
+
+\subsection{Discussion}
+
+
+
+When a smooth filter is needed?
+Figure \ref{fig:edge:02:mh:gauss} gives an example.
 
 \section{Hough transformation}
 
+Hough transform is used for finding the features from detected edges.
+It tries to find the points in the parameter space that maximize the likelihood of the distribution of the edge points.
+From an edge point, all possible solutions in the parameter space could be found.
+By accumulating all the possible parameters, we can have a parameter that connects to more edge points with a relatively higher value.
+The local maximum then are chosen as the features found in the hough space.
+
 \subsection{Hough circle transformation}
 
-\subsubsection{simple\_circle.pgm}
+This lab aims at finding the circles in the pictures. 
+Only three radii are tried, which are $ 16 $, $ 32 $ and $ 48 $ respectively.
+Thus only two parameters, which are the x-coordinate and the y-coordinate of the centers of the circles, are left to explore.
+The implementation is in \emph{HoughTransform.py}.
+\emph{houghCircle()} provides a 2-D array for the accumulations of two parameters, which can be visualized into a 2-D image for the hough space.
 
-(124L, 127L)
+\emph{simple\_circle.pgm} provides a simple case to verify the correctness of the function. 
+Figure \ref{fig:hough:simple_circle} gives the process of finding the simple circle using a radius of 32.
+The center found by running the code is $ (124, 127) $.
 
-\subsubsection{circles.ppm}
+\begin{figure}[h]
+\centering
+\subfigure[Edges]{
+\includegraphics[width=.31\textwidth]{./figure/simplecircles_ppm_canny}
+\label{fig:hough:simple_circle:edge} }
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/simplecircles_ppm_hough} 
+\label{fig:hough:simple_circle:hough} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/simplecircles_ppm_circles}
+\label{fig:hough:simple_circle:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:simple_circle}
+\end{figure}
+
+\subsection{Finding complicated feature }
+\subsubsection{circles.ppm} 
 
 radius = 16
 (89L, 115L)
@@ -280,7 +341,7 @@ radius = 32
 Weighted revote
 
 
-\subsection{Conclusion}
+\subsection{Discussion}
 
 
 
