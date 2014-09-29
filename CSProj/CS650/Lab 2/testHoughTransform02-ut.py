@@ -12,6 +12,13 @@ import matplotlib.pyplot as plt
 import cv2
 from utilities import *
 
+img_filename = 'circles.ppm'
+
+detect_radius = 32
+
+img = Image.open(img_filename).convert("L")
+img = np.array(img)
+
 img_hough = readFromCsv('img_hough.csv')
 
 fig3 = plt.figure()
@@ -34,20 +41,23 @@ ax4.set_yticks([])
 
 #writeToCsv('img_hough_sup.csv', img_hough_sup)
 
-plt.show()
-'''
+#plt.show()
+
 plt.show(block=False)
 
-centers = findByThreshold(img_hough_sup, 0.5)
-print centers
+centers = findByThreshold(img_hough_sup, 0.06)
+#print centers
 
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 for c in centers:
     # draw the outer circle
-    cv2.circle(cimg,(c[0],c[1]),32,(0,255,0),2)
+    cv2.circle(cimg,(c[0]-detect_radius,c[1]-detect_radius),detect_radius,(0,255,0),2)
     # draw the center of the circle
-    cv2.circle(cimg,(c[0],c[1]),2,(0,0,255),3)
+    cv2.circle(cimg,(c[0]-detect_radius,c[1]-detect_radius),2,(0,0,255),3)
+    
+    print str((c[0]-detect_radius,c[1]-detect_radius))
 
 cv2.imshow('detected circles',cimg)
+cv2.imwrite(img_filename+"-testHF02.png", cimg)
 cv2.waitKey(0)
-'''
+

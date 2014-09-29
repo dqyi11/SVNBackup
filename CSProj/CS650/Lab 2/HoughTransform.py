@@ -78,7 +78,8 @@ def findByThreshold(img_data, threshold):
     for i in range(img_width):
         for j in range(img_height):
             if img_data[i,j] > threshold:
-                results.append([i,j])
+                #results.append([i,j])
+                results.append([j,i])
     return results
 
 
