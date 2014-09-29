@@ -99,7 +99,7 @@ plt.show(block=True)
 centers = findByThreshold(img_hough, 0.5)
 #centers = findLocalMax(img_hough, 0.35)
 #centers = findByThreshold(img_hough_sup, 0.5)
-print centers
+#print centers
 
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 for c in centers:
@@ -107,6 +107,7 @@ for c in centers:
     cv2.circle(cimg,(c[0]-detect_radius,c[1]-detect_radius),detect_radius,(0,255,0),2)
     # draw the center of the circle
     cv2.circle(cimg,(c[0]-detect_radius,c[1]-detect_radius),2,(0,0,255),3)
+    print str((c[0]-detect_radius,c[1]-detect_radius))
 
 cv2.imshow('detected circles',cimg)
 cv2.imwrite(img_filename+'-detected.png',cimg)
