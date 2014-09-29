@@ -15,6 +15,8 @@
 \allsectionsfont{\centering \normalfont\scshape}
 \usepackage{subfigure}
 
+\usepackage{comment}
+
 
 %%% Custom headers/footers (fancyhdr package)
 \usepackage{fancyhdr}
@@ -57,21 +59,26 @@
 \begin{document}
 \maketitle
 
+\begin{comment}
 Prepare a brief writeup that includes each part and submit it as a PDF through Canvas.
 Your writeup should document your findings for Part 1 but otherwise focus on your methods and results for Part 2.
 
 Note: many of the images for Part 1 will contain negative numbers or numbers larger than 255.
 Make sure you appropriately scale the output images to display all of the information.
 (Hint: if there are negative values, try mapping 0 to 128 with positive values mapped to the range (128,255] and negative values to the range [0,128).]
+\end{comment}
 
-This lab consists of two parts, binarization and morphology.
+This lab consists of two parts, edge detection and hough transform.
 The implementations are written in Python.
 PIL is used for reading image files into data arrays.
 Numpy is used for array operations.
-Matplotlib is used for visualizing data.
-Open CV is used to verify the correctness.
+Matplotlib and imshow (from openCV) is used for visualizing data.
 
 \section{Edge detection}
+
+Edge detection aims at finding the edges inside the images by the clues.
+The representation is usually a set of points.
+The implementation is in \emph{EdgeDetection.py}.
 
 \subsection{First and Second Order Derivatives of an Image}
 
@@ -93,19 +100,22 @@ Open CV is used to verify the correctness.
 \label{fig:edge:01}
 \end{figure}
 
+The clues for finding the edges are obtained from differential geometry.
+Figure \ref{fig:edge:01} and Figure \ref{fig:edge:02} give the examples on 1st order and 2nd order derivatives.
+
 \begin{figure}[h]
 \centering
 \subfigure[Origin]{
-\includegraphics[width=.47\textwidth]{./figure/blocks_origin}
+\includegraphics[width=.23\textwidth]{./figure/blocks_origin}
 \label{fig:edge:02:origin} }
 \subfigure[Gradient Magnitude]{
-\includegraphics[width=.47\textwidth]{./figure/blocks_gradient_magnitude} 
-\label{fig:edge:02:gradient_magnitude} } \\
+\includegraphics[width=.23\textwidth]{./figure/blocks_gradient_magnitude} 
+\label{fig:edge:02:gradient_magnitude} } 
 \subfigure[Gradient Orientation]{
-\includegraphics[width=.47\textwidth]{./figure/blocks_gradient_orientation}
+\includegraphics[width=.23\textwidth]{./figure/blocks_gradient_orientation}
 \label{fig:edge:02:gradient_orientation} }
 \subfigure[Laplacian]{
-\includegraphics[width=.47\textwidth]{./figure/blocks_laplacian} 
+\includegraphics[width=.23\textwidth]{./figure/blocks_laplacian} 
 \label{fig:edge:02:laplacian} }
 \caption{Derivatives of \emph{blocks.pgm} by 1st order and 2nd order.}
 \label{fig:edge:02}
@@ -153,7 +163,122 @@ Open CV is used to verify the correctness.
 \label{fig:edge:02:mh}
 \end{figure}
 
+\subsection{Conclusion}
+
 \section{Hough transformation}
+
+\subsection{Hough circle transformation}
+
+\subsubsection{simple\_circle.pgm}
+
+(124L, 127L)
+
+\subsubsection{circles.ppm}
+
+radius = 16
+(89L, 115L)
+(-7L, 122L)
+(28L, 144L)
+(28L, 149L)
+(25L, 150L)
+(90L, 196L)
+(52L, 197L)
+
+\begin{figure}[h]
+\centering
+\subfigure[Edges]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_canny_16}
+\label{fig:hough:circle:16:edge} }
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_hough_16} 
+\label{fig:hough:circle:16:hough} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_16}
+\label{fig:hough:circle:16:circles} }
+\caption{Detecting circles (radius=16) on \emph{circles.ppm}.}
+\label{fig:hough:circle:16}
+\end{figure}
+
+
+radius = 32
+
+(46L, 32L)
+(57L, 34L)
+(150L, 34L)
+(220L, 37L)
+(158L, 67L)
+(79L, 102L)
+(89L, 115L)
+(173L, 189L)
+(186L, 208L)
+
+\begin{figure}[h]
+\centering
+\subfigure[Edges]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_canny_32}
+\label{fig:hough:circle:32:edge} }
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_hough_32} 
+\label{fig:hough:circle:32:hough} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_32}
+\label{fig:hough:circle:32:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:circle:32}
+\end{figure}
+
+radius = 64
+
+(0L, 103L)
+(0L, 108L)
+(89L, 115L)
+(71L, 206L)
+
+\begin{figure}[h]
+\centering
+\subfigure[Edges]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_canny_48}
+\label{fig:hough:circle:48:edge} }
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_hough_48} 
+\label{fig:hough:circle:48:hough} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_48}
+\label{fig:hough:circle:48:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:circle:48}
+\end{figure}
+
+Different rules for margin 
+
+radius = 32
+(-7L, -8L)
+(200L, -4L)
+(150L, 34L)
+(220L, 37L)
+(158L, 67L)
+(199L, 116L)
+(208L, 178L)
+(173L, 189L)
+(186L, 208L)
+
+\begin{figure}[h]
+\centering
+\subfigure[Edges]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_canny_32_cv}
+\label{fig:hough:circle:32:cv:edge} }
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_hough_32_cv} 
+\label{fig:hough:circle:32:cv:hough} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_32_cv}
+\label{fig:hough:circle:32:cv:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:circle:32:cv}
+\end{figure}
+
+Weighted revote
+
 
 \subsection{Conclusion}
 
