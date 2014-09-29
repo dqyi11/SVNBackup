@@ -194,25 +194,25 @@ Increasing the threshold removes the noise and small details, which is illustrat
 \subsection{Discussion}
 
 \begin{itemize}
-\item \emph{Threshold determines the levels of details.} \\
+\item \emph{Threshold determines the scale of edge details.} \\
 Sliding the threshold can help finding the edge details needed in different applications.
 The difference is illustrated in Figure \ref{fig:edge:02:canny} and Figure \ref{fig:edge:02:mh}.
 \item \emph{Apply smooth filter only when necessary. } \\
 Figure \ref{fig:edge:02:mh:gauss} gives an example.
-When the picture has not a lot of noise, applying inappropriate smooth filter only bring side effects to edge detection.
+When the picture has not a lot of noise, applying inappropriate smooth filter only brings side effects to edge detection.
 \end{itemize}
 
 \section{Hough transformation}
 
 Hough transform is used for finding the features from detected edges.
 It tries to find the points in the parameter space that maximize the likelihood of the distribution of the edge points.
-From an edge point, all possible solutions in the parameter space could be found.
+From an edge point, a set of possible solutions in the parameter space could be found.
 By accumulating all the possible parameters, we can have a parameter that connects to more edge points with a relatively higher value.
 The local maximum then are chosen as the features found in the hough space.
 
 \subsection{Hough circle transformation}
 
-This lab aims at finding the circles in the pictures. 
+This lab aims at finding the circles in the images. 
 Only three radii are tried, which are $ 16 $, $ 32 $ and $ 48 $ respectively.
 Thus only two parameters, which are the x-coordinate and the y-coordinate of the centers of the circles, are left to explore.
 The implementation is in \emph{HoughTransform.py}.
@@ -301,14 +301,15 @@ They are shown in Figure \ref{fig:hough:circle:48:circles}.
 Figure \ref{fig:hough:circle:16}, Figure \ref{fig:hough:circle:32} and Figure \ref{fig:hough:circle:48} provide the visualized processes and results of finding circles with different radii.
 By human's visual experience, it is obvious that whether the circles are easy to tell depends on the edges detected.
 In order to enhance the performance of edge detection, different parameters are applied to edge detection so that different patterns of edges could be detected.
+Different patterns of edges facilitates the finding process of the expected features.
 
 \subsection{Apply different threshold for the centers outside of the image}
 
-Because the center outside the image tends to make less edge points in the image, applying same threshold to these regions might miss some circles. 
+Because the center outside the image tends to make less edge points in the image, applying same threshold to these regions might miss to find some circles. 
 Thus I tried to apply a different threshold in finding the local maximum in the region outside of the image.
-The result on radius = 32 is tested and given.
+I only tested the case of radius = 32.
 The centers of the circles found are (-7, -8), (200, -4), (150, 34), (220, 37), (158, 67), (199, 116), (208, 178), (173, 189), (186, 208) .
-As it is shown in Figure \ref{fig:hough:circle:32:cv:circles}, some circles that have the center outside of the image can also be found.
+As it is shown in Figure \ref{fig:hough:circle:32:cv:circles}, some circles that have the centers outside of the image can also be found.
 
 \begin{figure}[h]
 \centering
@@ -328,7 +329,7 @@ As it is shown in Figure \ref{fig:hough:circle:32:cv:circles}, some circles that
 \subsection{Apply weighted revote}
 
 The local maximum finding is not easy to support multiple radii (when a set of radii is given).
-Weighted revoting described in the slides is tried as well.
+Weighted revoting described in the slides is implemented as well.
 Because the weights usually converge quickly.
 Instead of checking weight convergence, I only run a fixed number of iterations in the revote process for simplicity.
 
@@ -348,7 +349,7 @@ Instead of checking weight convergence, I only run a fixed number of iterations 
 \end{figure}
 
 Figure \ref{fig:hough:simple_circle:32:weighted_vote} gives the application on a simple case. 
-As shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:hough_sup}, the most likely parameter has been strengthened and the other parameters have been weakened by this revote process.
+As shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:hough_sup}, the most likely parameters have been strengthened and the other parameters have been weakened by this revote process.
 A simple threshold can be applied to find the parameter in this case, which is shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:circles}.
 
 \begin{figure}[h]
@@ -381,7 +382,10 @@ Due to the limitation of time, finding different size of radii at the same time 
 The threshold chosen for edge detection has impact on the feature detection. 
 Different sets of edge points might provide significantly different clues which support different features.
 In detecting radius = 64, I choose to allow more details on the edges so that the circle of the ``face'' can be detected.
-\item \emph{ Weighted revote works good but take longer time. } 
+\item \emph{Allowing some false detection can help find some insignificant features.} \\
+Adjusting the threshold in finding the local maximum brings different set of features.
+Lowering the threshold might bring some false detections but reserve some insignificant features.
+\item \emph{ Weighted revote works good but take longer time. } \\
 The revote process successfully strengthens the ``strong'' accumulators and suppresses the ``weak'' accumulators.
 Constructing the data structure of the relationships between accumulators and edge points requires more processing time.
 \end{itemize}
