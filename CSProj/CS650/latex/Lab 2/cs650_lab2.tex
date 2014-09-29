@@ -246,8 +246,6 @@ If the image size is $ (img_width, img_height) $, a range of $ [-radius, img_wid
 (0, 108), (89, 115), (71, 206) .
 \end{itemize}
 
-
-
 \begin{figure}[h]
 \centering
 \subfigure[Edges]{
@@ -290,9 +288,13 @@ If the image size is $ (img_width, img_height) $, a range of $ [-radius, img_wid
 \subfigure[Circles found]{
 \includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_48}
 \label{fig:hough:circle:48:circles} }
-\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\caption{Detecting circles (radius=48) on \emph{circles.ppm}.}
 \label{fig:hough:circle:48}
 \end{figure}
+
+Figure \ref{fig:hough:circle:16}, Figure \ref{fig:hough:circle:32} and Figure \ref{fig:hough:circle:48} provide the visualized processes and results of finding circles with different radii.
+By human's visual experience, it is obvious that whether the circles are easy to tell depends on the edges detected.
+In order to enhance the performance of edge detection, different parameters are applied to edge detection so that different patterns of edges could be detected.
 
 \subsection{Apply different threshold for the centers outside of the image}
 
@@ -317,6 +319,11 @@ $ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150
 
 \subsection{Apply weighted revote}
 
+The local maximum finding is not easy to support multiple radii (when a set of radii is given).
+Weighted revoting is tried here, which could be a feasible method in this case.
+Because the weights usually converge quickly.
+Instead of checking weight convergence, a fixed iteration is run for the revote process.
+
 \begin{figure}[h]
 \centering
 \subfigure[Hough space]{
@@ -331,6 +338,10 @@ $ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150
 \caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
 \label{fig:hough:simple_circle:32:weighted_vote}
 \end{figure}
+
+Figure \ref{fig:hough:simple_circle:32:weighted_vote} gives the application on a simple case. 
+As shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:hough_sup}, the most likely parameter has been strengthened and the other parameters have been weakened by this revote process.
+A simple threshold can be applied to find the parameter in this case.
 
 \begin{figure}[h]
 \centering
@@ -347,6 +358,9 @@ $ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150
 \label{fig:hough:circle:32:weighted_vote}
 \end{figure}
 
+However, the result on \emph{circles.ppm} is not good as expected.
+The reason might be from the code bugs.
+Another guess is that the performance of this method also relies on the distribution of the edge points.
 
 \subsection{Discussion}
 
