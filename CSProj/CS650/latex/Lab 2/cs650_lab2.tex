@@ -233,17 +233,20 @@ The center found by running the code is $ (124, 127) $.
 \label{fig:hough:simple_circle}
 \end{figure}
 
-\subsection{Finding complicated feature }
-\subsubsection{circles.ppm} 
+\subsection{Finding different circle features}
 
-radius = 16
-(89L, 115L)
-(-7L, 122L)
-(28L, 144L)
-(28L, 149L)
-(25L, 150L)
-(90L, 196L)
-(52L, 197L)
+\emph{circles.ppm} is used to find the features in an image mixed with a lot of different features and additive noise.
+Because the center might locate outside of the image.
+If the image size is $ (img_width, img_height) $, a range of $ [-radius, img_width + radius] $ will be scanned for the x coordinate and a range of $ [-radius, img_height + radius ] $ will be scanned for the y coordinate.
+
+\begin{itemize}
+\item $ radius = 16 $ : The centers of the circles found are (89, 115), (-7, 122), (28, 144), (28, 149), (25, 150), (90, 196), (52, 197) .
+\item $ radius = 32 $ : The centers of the circles found are (46, 32), (57, 34), (150, 34), (220, 37), (158, 67), (79, 102), (89, 115), (173, 189), (186, 208) .
+\item $ radius = 48 $ : The centers of the circles found are  (0, 103), 
+(0, 108), (89, 115), (71, 206) .
+\end{itemize}
+
+
 
 \begin{figure}[h]
 \centering
@@ -261,18 +264,6 @@ radius = 16
 \end{figure}
 
 
-radius = 32
-
-(46L, 32L)
-(57L, 34L)
-(150L, 34L)
-(220L, 37L)
-(158L, 67L)
-(79L, 102L)
-(89L, 115L)
-(173L, 189L)
-(186L, 208L)
-
 \begin{figure}[h]
 \centering
 \subfigure[Edges]{
@@ -287,13 +278,6 @@ radius = 32
 \caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
 \label{fig:hough:circle:32}
 \end{figure}
-
-radius = 64
-
-(0L, 103L)
-(0L, 108L)
-(89L, 115L)
-(71L, 206L)
 
 \begin{figure}[h]
 \centering
@@ -310,18 +294,11 @@ radius = 64
 \label{fig:hough:circle:48}
 \end{figure}
 
-Different rules for margin 
+\subsection{Apply different threshold for the centers outside of the image}
 
-radius = 32
-(-7L, -8L)
-(200L, -4L)
-(150L, 34L)
-(220L, 37L)
-(158L, 67L)
-(199L, 116L)
-(208L, 178L)
-(173L, 189L)
-(186L, 208L)
+Because the center outside the image tends to make less edge points in the image, a different threshold is applied in finding the local maximum in the region outside of the image.
+
+$ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150, 34), (220, 37), (158, 67), (199, 116), (208, 178), (173, 189), (186, 208) .
 
 \begin{figure}[h]
 \centering
@@ -338,7 +315,37 @@ radius = 32
 \label{fig:hough:circle:32:cv}
 \end{figure}
 
-Weighted revote
+\subsection{Apply weighted revote}
+
+\begin{figure}[h]
+\centering
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/simple_circle_hough_img}
+\label{fig:hough:simple_circle:32:weighted_vote:hough} }
+\subfigure[Hough space after weighted revoting]{
+\includegraphics[width=.31\textwidth]{./figure/simple_circle_hough_img_sup} 
+\label{fig:hough:simple_circle:32:weighted_vote:hough_sup} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/simple_circle_pgm_circles_32_revote}
+\label{fig:hough:simple_circle:32:weighted_vote:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:simple_circle:32:weighted_vote}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\subfigure[Hough space]{
+\includegraphics[width=.31\textwidth]{./figure/circles_hough_img}
+\label{fig:hough:circle:32:weighted_vote:hough} }
+\subfigure[Hough space after weighted revoting]{
+\includegraphics[width=.31\textwidth]{./figure/circles_hough_img_sup} 
+\label{fig:hough:circle:32:weighted_vote:hough_sup} } 
+\subfigure[Circles found]{
+\includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_32_revote}
+\label{fig:hough:circle:32:weighted_vote:circles} }
+\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\label{fig:hough:circle:32:weighted_vote}
+\end{figure}
 
 
 \subsection{Discussion}
