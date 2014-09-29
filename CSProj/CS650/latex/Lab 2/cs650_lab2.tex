@@ -31,8 +31,8 @@
 
 
 %%% Equation and float numbering
-\numberwithin{equation}{section}		% Equationnumbering: section.eq#
-\numberwithin{figure}{section}			% Figurenumbering: section.fig#
+%\numberwithin{equation}{section}		% Equationnumbering: section.eq#
+%\numberwithin{figure}{section}			% Figurenumbering: section.fig#
 %\numberwithin{table}{section}				% Tablenumbering: section.tab#
 
 
@@ -159,14 +159,14 @@ A pixel above the low threshold but below the high threshold needs checking its 
 \end{figure}
 
 Different parameters are tried. 
-The difference on the edges found are illustrated in Figure {fig:edge:02:canny}.
+The difference on the edges found are illustrated in Figure \ref{fig:edge:02:canny}.
 Lowering the low threshold tends to connect the disconnected edges.
 Increasing the high threshold decreases the edge details that can be found.
 
 \subsection{Laplacian zero-crossing edge detector}
 
 A variant of canny edge detector uses the zero-crossing of the 2nd derivatives.
-Because it is linked to Marr–Hildreth (zero crossing of the Laplacian) edge detector \footnote{\url{http://en.wikipedia.org/wiki/Canny_edge_detector}}, the function name is \emph{mh()} in \emph{EdgeDetection.py}.
+Because it is linked to Marr$-$Hildreth (zero crossing of the Laplacian) edge detector \footnote{\url{http://en.wikipedia.org/wiki/Canny_edge_detector}}, the function name is chosen as \emph{mh()} in \emph{EdgeDetection.py}.
 
 \begin{figure}[h]
 \centering
@@ -193,10 +193,14 @@ Increasing the threshold removes the noise and small details, which is illustrat
 
 \subsection{Discussion}
 
-
-
-When a smooth filter is needed?
+\begin{itemize}
+\item \emph{Threshold determines the levels of details.} \\
+Sliding the threshold can help finding the edge details needed in different applications.
+The difference is illustrated in Figure \ref{fig:edge:02:canny} and Figure \ref{fig:edge:02:mh}.
+\item \emph{Apply smooth filter only when necessary. } \\
 Figure \ref{fig:edge:02:mh:gauss} gives an example.
+When the picture has not a lot of noise, applying inappropriate smooth filter only bring side effects to edge detection.
+\end{itemize}
 
 \section{Hough transformation}
 
@@ -235,15 +239,17 @@ The center found by running the code is $ (124, 127) $.
 
 \subsection{Finding different circle features}
 
-\emph{circles.ppm} is used to find the features in an image mixed with a lot of different features and additive noise.
-Because the center might locate outside of the image.
-If the image size is $ (img_width, img_height) $, a range of $ [-radius, img_width + radius] $ will be scanned for the x coordinate and a range of $ [-radius, img_height + radius ] $ will be scanned for the y coordinate.
-
+\emph{circles.ppm} is used to test the features finding capability in an image mixed with a lot of different features and additive noise.
+Because the centers of some circles might locate outside of the image.
+If the image size is (img\_width, img\_height), a range of [-radius, img\_width + radius] will be scanned for the x coordinate and a range of [-radius, img\_height + radius ] will be scanned for the y coordinate.
+The test results are as following.
 \begin{itemize}
-\item $ radius = 16 $ : The centers of the circles found are (89, 115), (-7, 122), (28, 144), (28, 149), (25, 150), (90, 196), (52, 197) .
-\item $ radius = 32 $ : The centers of the circles found are (46, 32), (57, 34), (150, 34), (220, 37), (158, 67), (79, 102), (89, 115), (173, 189), (186, 208) .
-\item $ radius = 48 $ : The centers of the circles found are  (0, 103), 
-(0, 108), (89, 115), (71, 206) .
+\item radius = 16 : The centers of the circles found are (89, 115), (-7, 122), (28, 144), (28, 149), (25, 150), (90, 196), (52, 197) .
+They are shown in Figure \ref{fig:hough:circle:16:circles}.
+\item radius = 32 : The centers of the circles found are (46, 32), (57, 34), (150, 34), (220, 37), (158, 67), (79, 102), (89, 115), (173, 189), (186, 208) .
+They are shown in Figure \ref{fig:hough:circle:32:circles}.
+\item radius = 48 : The centers of the circles found are  (0, 103), (0, 108), (89, 115), (71, 206) .
+They are shown in Figure \ref{fig:hough:circle:48:circles}.
 \end{itemize}
 
 \begin{figure}[h]
@@ -298,9 +304,11 @@ In order to enhance the performance of edge detection, different parameters are 
 
 \subsection{Apply different threshold for the centers outside of the image}
 
-Because the center outside the image tends to make less edge points in the image, a different threshold is applied in finding the local maximum in the region outside of the image.
-
-$ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150, 34), (220, 37), (158, 67), (199, 116), (208, 178), (173, 189), (186, 208) .
+Because the center outside the image tends to make less edge points in the image, applying same threshold to these regions might miss some circles. 
+Thus I tried to apply a different threshold in finding the local maximum in the region outside of the image.
+The result on radius = 32 is tested and given.
+The centers of the circles found are (-7, -8), (200, -4), (150, 34), (220, 37), (158, 67), (199, 116), (208, 178), (173, 189), (186, 208) .
+As it is shown in Figure \ref{fig:hough:circle:32:cv:circles}, some circles that have the center outside of the image can also be found.
 
 \begin{figure}[h]
 \centering
@@ -313,16 +321,16 @@ $ radius = 32 $ : The centers of the circles found are (-7, -8), (200, -4), (150
 \subfigure[Circles found]{
 \includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_32_cv}
 \label{fig:hough:circle:32:cv:circles} }
-\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\caption{Detecting circles (radius=32) on \emph{circles.ppm} using different threshold for accumulators locating outside the image.}
 \label{fig:hough:circle:32:cv}
 \end{figure}
 
 \subsection{Apply weighted revote}
 
 The local maximum finding is not easy to support multiple radii (when a set of radii is given).
-Weighted revoting is tried here, which could be a feasible method in this case.
+Weighted revoting described in the slides is tried as well.
 Because the weights usually converge quickly.
-Instead of checking weight convergence, a fixed iteration is run for the revote process.
+Instead of checking weight convergence, I only run a fixed number of iterations in the revote process for simplicity.
 
 \begin{figure}[h]
 \centering
@@ -335,13 +343,13 @@ Instead of checking weight convergence, a fixed iteration is run for the revote 
 \subfigure[Circles found]{
 \includegraphics[width=.31\textwidth]{./figure/simple_circle_pgm_circles_32_revote}
 \label{fig:hough:simple_circle:32:weighted_vote:circles} }
-\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\caption{Detecting circles (radius=32) on \emph{circles.ppm} using weighted revote.}
 \label{fig:hough:simple_circle:32:weighted_vote}
 \end{figure}
 
 Figure \ref{fig:hough:simple_circle:32:weighted_vote} gives the application on a simple case. 
 As shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:hough_sup}, the most likely parameter has been strengthened and the other parameters have been weakened by this revote process.
-A simple threshold can be applied to find the parameter in this case.
+A simple threshold can be applied to find the parameter in this case, which is shown in Figure \ref{fig:hough:simple_circle:32:weighted_vote:circles}.
 
 \begin{figure}[h]
 \centering
@@ -354,32 +362,29 @@ A simple threshold can be applied to find the parameter in this case.
 \subfigure[Circles found]{
 \includegraphics[width=.31\textwidth]{./figure/circles_ppm_circles_32_revote}
 \label{fig:hough:circle:32:weighted_vote:circles} }
-\caption{Detecting circles (radius=32) on \emph{circles.ppm}.}
+\caption{Detecting circles (radius=32) on \emph{circles.ppm} using weighted revote.}
 \label{fig:hough:circle:32:weighted_vote}
 \end{figure}
 
-(46, 32)
-(46, 33)
-(72, 33)
-(73, 33)
-(57, 34)
-(149, 34)
-(150, 34)
-(151, 34)
-(220, 37)
-(158, 67)
-(158, 68)
-(89, 114)
-(89, 115)
-(208, 178)
-(0, 184)
-(173, 189)
-(186, 208)
+For normalized data array (between 0.0 and 1.0) after a bunch of weighted revote process, applying a small threshold of only $ 0.06 $ can return a set of centers found for circles with radius = 32 , which are (46, 32), (46, 33), (72, 33), (73, 33), (57, 34), (149, 34), (150, 34), (151, 34), (220, 37), (158, 67), (158, 68), (89, 114), (89, 115), (208, 178), (0, 184), (173, 189), (186, 208).
+The visualized results are given in Figure \ref{fig:hough:circle:32:weighted_vote}.
+This result significantly beats the results given in Figure \ref{fig:hough:circle:32:circles} and Figure \ref{fig:hough:circle:32:cv:circles}.
 
-
+The revote process takes very little time. 
+However, constructing the ``Bayesian'' network for the edge points (evidence) and the accumulators take pretty much time.
+Due to the limitation of time, finding different size of radii at the same time is not tested.
 
 \subsection{Discussion}
 
+\begin{itemize}
+\item \emph{ Choose different set of edge points to find the features with different size. } \\
+The threshold chosen for edge detection has impact on the feature detection. 
+Different sets of edge points might provide significantly different clues which support different features.
+In detecting radius = 64, I choose to allow more details on the edges so that the circle of the ``face'' can be detected.
+\item \emph{ Weighted revote works good but take longer time. } 
+The revote process successfully strengthens the ``strong'' accumulators and suppresses the ``weak'' accumulators.
+Constructing the data structure of the relationships between accumulators and edge points requires more processing time.
+\end{itemize}
 
 
 \end{document}
