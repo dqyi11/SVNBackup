@@ -10,20 +10,24 @@ from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
+from utilities import *
 
 #img_filename = '2D_White_Box.pgm'
 #img_filename = 'blocks.pgm'
-img_filename = 'simplecircles.ppm'
-img_filename = 'circles_s.ppm'
-#img_filename = 'circles.ppm'
+#img_filename = 'simplecircles.ppm'
+#img_filename = 'circles_s.ppm'
+img_filename = 'circles.ppm'
 #img_filename = 'coins.png'
 
 img = Image.open(img_filename).convert("L")
 img = np.array(img)
 
-img_gauss = gaussianFilter(img)
+#img_gauss = gaussianFilter(img)
+img_gauss = cv2.medianBlur(img, 3)
 
-img_edge = MarrHildreth(img_gauss, 50)
+#img_edge = MarrHildreth(img_gauss, 50)
+#img_edge = canny(img_gauss, 20, 40)
+img_edge = cv2.Canny(img_gauss, 80, 100)
 
 print "generate hough circles"
 
@@ -44,6 +48,7 @@ ax2.set_title('Canny')
 ax2.set_xticks([])
 ax2.set_yticks([])
 
+
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(111)
 ax3.imshow(255*img_hough,cmap = 'gray')
@@ -51,7 +56,9 @@ ax3.set_title('Hough')
 ax3.set_xticks([])
 ax3.set_yticks([])
 
-for i in range(20):
+writeToCsv('img_hough.csv', img_hough)
+
+for i in range(40):
     #print "revoting " + str(i)
     vg.weigthedRevote()
 
@@ -63,6 +70,8 @@ ax4.imshow(255*img_hough_sup,cmap = 'gray')
 ax4.set_title('Hough suppressed')
 ax4.set_xticks([])
 ax4.set_yticks([])
+
+writeToCsv('img_hough_sup.csv', img_hough_sup)
 
 plt.show(block=False)
 
