@@ -28,14 +28,20 @@ def zdt1(x):
 
 def calcFitness(x):
     
-    return 0.0
+    weights = [0.1, 0.9]
+    reference_fitness = [0.0, 0.0]
+    f_val = zdt1(x)
+    g_val = np.zeros(2, np.float)
+    for d in range(2):
+        g_val[d] = weights[d] * np.abs(f_val[d] - reference_fitness[d])
+    return np.max(g_val)
 
-def showFit(swm):  
+def showFit(ga):  
           
     val_x = []
     val_y = []
-    for p in swm.particles:
-        val = zdt1(p.pos)
+    for p in ga.population:
+        val = zdt1(p.genes)
         val_x.append(val[0])
         val_y.append(val[1])
         
@@ -54,8 +60,8 @@ if __name__ == '__main__':
     
     for i in range(50):
         ga.next()
-        print swm.gbFitness
+        print ga.population[0].fitness
         
-    #print zdt1(ga.gbPos)
+    print zdt1(ga.population[0].genes)
         
     showFit(ga)
