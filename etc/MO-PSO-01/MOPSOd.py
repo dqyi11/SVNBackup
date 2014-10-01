@@ -54,13 +54,14 @@ class Swarm(object):
                 
     def updatePos(self):
         # update position
-        rnd_p = np.random.random(self.particleNum)
-        rnd_g = np.random.random(self.particleNum)
-        for i in range(self.particleNum):
-            p = self.particles[i]
-            p.vel = self.chi * (p.vel + self.phi_p * rnd_p[i] *(p.pbPos -p.pos) + self.phi_g * rnd_g[i] * (self.gbPos - p.pos))
-            p.pos = p.pos + p.vel    
-        
+        for d in range(self.dim):
+            rnd_p = np.random.random(self.particleNum)
+            rnd_g = np.random.random(self.particleNum)
+            for i in range(self.particleNum):
+                p = self.particles[i]
+                p.vel[d] = self.chi * (p.vel[d] + self.phi_p * rnd_p[i] *(p.pbPos[d] - p.pos[d]) + self.phi_g * rnd_g[i] * (self.gbPos[d] - p.pos[d]))
+                p.pos[d] = p.pos[d] + p.vel[d]
+                
         
     def updateFitness(self):    
         # update fitness
@@ -71,11 +72,11 @@ class Swarm(object):
                 g_val[d] = self.weights[d] * np.abs(f_val[d] - self.reference_fitness[d])
             p.fitness = np.max(g_val)
             
-            if p.pbFitness == None or p.pbFitness < p.fitness:
+            if p.pbFitness == None or p.pbFitness > p.fitness:
                 p.pbFitness = p.fitness
                 p.pbPos = copy.deepcopy(p.pos)
             
-            if self.gbFitness == None or self.gbFitness < p.fitness:
+            if self.gbFitness == None or self.gbFitness > p.fitness:
                 self.gbFitness = p.fitness
                 self.gbPos = copy.deepcopy(p.pos)
         
