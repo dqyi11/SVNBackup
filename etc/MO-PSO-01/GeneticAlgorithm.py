@@ -37,10 +37,11 @@ class Chromosome(object):
 
 class GeneticAlgorithm(object):
 
-    def __init__(self, population_num, geneRange, chromoLen, fitnessFunc, mutateVar=1.0, mutateProb = 0.2):
+    def __init__(self, population_num, geneRange, chromoLen, fitnessFunc, weight, mutateVar=1.0, mutateProb = 0.2):
         self.population_num = population_num
         self.chromoLen = chromoLen
         self.geneRange = geneRange
+        self.weight = weight
         self.population = []
         self.fitnessFunc = fitnessFunc
         self.itrCnt = 0
@@ -53,7 +54,7 @@ class GeneticAlgorithm(object):
         
         for i in range(self.population_num):
             chromo = Chromosome(self.chromoLen, self.geneRange, self.mutateVar)
-            chromo.fitness = self.fitnessFunc(chromo.genes)
+            chromo.fitness = self.fitnessFunc(chromo.genes, self.weight)
             self.population.append(chromo)
             
     def normalizeWeights(self):
@@ -77,7 +78,7 @@ class GeneticAlgorithm(object):
             if val >= cumVal and val < cumVal + p.normalizedWeight:
                 return p
             cumVal += p.normalizedWeight
-        return None
+        return self.population[len(self.population)-1]
          
 
     def next(self):
@@ -132,7 +133,7 @@ class GeneticAlgorithm(object):
         
         for i in range(self.population_num):
             chromo = self.population[i]
-            chromo.fitness = self.fitnessFunc(chromo.genes)
+            chromo.fitness = self.fitnessFunc(chromo.genes, self.weight)
             
         self.population.sort(key=lambda Chromosome: Chromosome.fitness, reverse=False)
             

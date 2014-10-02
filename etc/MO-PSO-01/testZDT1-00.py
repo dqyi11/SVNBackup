@@ -52,7 +52,6 @@ if __name__ == '__main__':
         initRange.append([0.0, 1.0])
     initRange = np.array(initRange)
         
-        
     swm = Swarm(500, 30, 2, zdt1, [0.0, 0.0], [0.1, 0.9])
     swm.initSwarm(initRange, chi, phi_p, phi_g)
     

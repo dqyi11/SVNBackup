@@ -26,9 +26,8 @@ def zdt1(x):
         vals[1] = g * (1.0 - np.sqrt(vals[0] / g))
     return vals
 
-def calcFitness(x):
-    
-    weights = [0.1, 0.9]
+def calcFitness(x, weights):
+
     reference_fitness = [0.0, 0.0]
     f_val = zdt1(x)
     g_val = np.zeros(2, np.float)
@@ -48,13 +47,15 @@ def showFit(ga):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.scatter(val_x, val_y)
+    ax.plot(val_x[0], val_y[0], 'rs')
     plt.show()
 
 if __name__ == '__main__':
     
     initRange = [0.0, 1.0]
+    weight = [0.1, 0.9]
         
-    ga = GeneticAlgorithm(500, initRange, 30, calcFitness, 0.01, 0.01) 
+    ga = GeneticAlgorithm(500, initRange, 30, calcFitness, weight, 0.01, 0.01) 
     
     showFit(ga)
     
