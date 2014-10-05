@@ -40,12 +40,19 @@ def showFit(ga):
     val_x = []
     val_y = []
     for p in ga.population:
-        val = zdt1(p.genes)
-        val_x.append(val[0])
-        val_y.append(val[1])
+        #val = zdt1(p.genes)
+        #val_x.append(val[0])
+        #val_y.append(val[1])
+        val_x.append(p.genes[0])
+        val_y.append(p.genes[1])
+        
+        
+    pf1 = np.arange(0.0, 1.0, 0.01)
+    pf2 = 1.0 - np.sqrt(pf1)
         
     fig = plt.figure()
     ax = fig.add_subplot(111)
+    ax.plot(pf1, pf2, 'r')
     ax.scatter(val_x, val_y)
     ax.plot(val_x[0], val_y[0], 'rs')
     plt.show()
@@ -53,13 +60,13 @@ def showFit(ga):
 if __name__ == '__main__':
     
     initRange = [0.0, 1.0]
-    weight = [0.1, 0.9]
+    weight = [0.5, 0.5]
         
-    ga = GeneticAlgorithm(500, initRange, 30, calcFitness, weight, 0.01, 0.01) 
+    ga = GeneticAlgorithm(500, initRange, 30, calcFitness, weight, 0.05, 0.05) 
     
     showFit(ga)
     
-    for i in range(50):
+    for i in range(1000):
         ga.next()
         print ga.population[0].fitness
         

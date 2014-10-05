@@ -49,9 +49,9 @@ if __name__ == '__main__':
     pareto_set = []        
     for weight in weights:
         print weight
-        ga = GeneticAlgorithm(500, initRange, 30, calcFitness, weight, 0.01, 0.01) 
+        ga = GeneticAlgorithm(500, initRange, 30, calcFitness, weight, 0.1, 0.1) 
     
-        for i in range(500):
+        for i in range(5000):
             ga.next()
             
         pareto_set.append(ga.population[0].genes)
