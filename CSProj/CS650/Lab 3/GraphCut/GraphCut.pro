@@ -25,13 +25,15 @@ SOURCES += main.cpp\
     maxflow/maxflow.cpp \
     imagedatagraph.cpp \
     interactivewindow.cpp \
-    interactivelabel.cpp
+    interactivelabel.cpp \
+    segmentation.cpp
 
 HEADERS  += \
     maxflow/block.h \
     maxflow/graph.h \
     imagedatagraph.h \
     interactivewindow.h \
-    interactivelabel.h
+    interactivelabel.h \
+    segmentation.h
 
 FORMS    +=

@@ -1,6 +1,7 @@
 #include "interactivewindow.h"
 #include "ui_interactivewindow.h"
 #include <QtGui>
+#include "imagedatagraph.h"
 
 InteractiveWindow::InteractiveWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -19,17 +20,18 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     setCentralWidget(mpImageLabel);
 
 
-    mpOpenAction = new QAction(tr("&Open..."), this);
+    mpOpenAction = new QAction(tr("&Open"), this);
     connect(mpOpenAction, SIGNAL(triggered()), this, SLOT(on_open_clicked()));
-    mpClearAction = new QAction(tr("&Clear..."), this);
+    mpClearAction = new QAction(tr("&Clear"), this);
     connect(mpClearAction, SIGNAL(triggered()), this, SLOT(on_clear_clicked()));
-    mpSegmentAction = new QAction(tr("&Segment..."), this);
+    mpSegmentAction = new QAction(tr("&Segment"), this);
     connect(mpSegmentAction, SIGNAL(triggered()), this, SLOT(on_segment_clicked()));
 
     mpFileMenu = new QMenu(tr("&File"), this);
     mpFileMenu->addAction(mpOpenAction);
     mpEditMenu = new QMenu(tr("&Edit"), this);
     mpEditMenu->addAction(mpClearAction);
+    mpEditMenu->addAction(mpSegmentAction);
 
     this->menuBar()->addMenu(mpFileMenu);
     this->menuBar()->addMenu(mpEditMenu);
@@ -38,12 +40,40 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     this->resize(200, 200);
 
     //qDebug() << "Here";
-
 }
 
 InteractiveWindow::~InteractiveWindow()
 {
-
+    if(mpImageLabel)
+    {
+        delete mpImageLabel;
+        mpImageLabel = NULL;
+    }
+    if(mpOpenAction)
+    {
+        delete mpOpenAction;
+        mpOpenAction = NULL;
+    }
+    if(mpClearAction)
+    {
+        delete mpClearAction;
+        mpClearAction = NULL;
+    }
+    if(mpSegmentAction)
+    {
+        delete mpSegmentAction;
+        mpSegmentAction = NULL;
+    }
+    if(mpFileMenu)
+    {
+        delete mpFileMenu;
+        mpFileMenu = NULL;
+    }
+    if(mpEditMenu)
+    {
+        delete mpEditMenu;
+        mpEditMenu = NULL;
+    }
 }
 
 void InteractiveWindow::on_open_clicked()
@@ -78,7 +108,6 @@ void InteractiveWindow::on_open_clicked()
         setWindowTitle(fileName);
         resize(mpImageLabel->width(), mpImageLabel->height()+menuBar()->height());
         update();
-
     }
 
 }
@@ -94,6 +123,7 @@ void InteractiveWindow::on_clear_clicked()
 
 void InteractiveWindow::on_segment_clicked()
 {
+    qDebug() << "Generating graph";
 
 }
 

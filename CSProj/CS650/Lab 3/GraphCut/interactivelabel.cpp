@@ -1,51 +1,6 @@
 #include "interactivelabel.h"
 #include <QtGui>
-
-SeedManager::SeedManager()
-{
-    mpSeeds = new std::list<QPoint>();
-}
-
-SeedManager::~SeedManager()
-{
-    if (mpSeeds)
-    {
-        mpSeeds->clear();
-        delete mpSeeds;
-        mpSeeds = NULL;
-    }
-}
-
-void SeedManager::clear()
-{
-    if(mpSeeds)
-    {
-        mpSeeds->clear();
-    }
-}
-
-bool SeedManager::hasSeed(int x, int y)
-{
-    for(std::list<QPoint>::iterator it=mpSeeds->begin();it!=mpSeeds->end();it++)
-    {
-        if(it->x()==x && it->y()==y)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-void SeedManager::addSeed(int x, int y)
-{
-    if(mpSeeds)
-    {
-        if(false == hasSeed(x,y))
-        {
-            mpSeeds->push_back(QPoint(x, y));
-        }
-    }
-}
+#include "segmentation.h"
 
 InteractiveLabel::InteractiveLabel(QWidget * parent) :
     QLabel(parent)
@@ -148,20 +103,16 @@ void InteractiveLabel::paintEvent(QPaintEvent* e)
 
     painter.setPen(red_pen);
     painter.setBrush(red_brush);
-    for(std::list<QPoint>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
+    for(std::list<PixelPosition>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
     {
-        int x_pos = (*it).x();
-        int y_pos = (*it).y();
-        painter.drawPoint(x_pos, y_pos);
+        painter.drawPoint((*it).x, (*it).y);
     }
 
     painter.setPen(blue_pen);
     painter.setBrush(blue_brush);
-    for(std::list<QPoint>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
+    for(std::list<PixelPosition>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
     {
-        int x_pos = (*it).x();
-        int y_pos = (*it).y();
-        painter.drawPoint(x_pos, y_pos);
+        painter.drawPoint((*it).x, (*it).y);
     }
 
 }

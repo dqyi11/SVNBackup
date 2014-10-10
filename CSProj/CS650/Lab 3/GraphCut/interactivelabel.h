@@ -3,18 +3,7 @@
 
 #include <QLabel>
 
-class SeedManager
-{
-public:
-    SeedManager();
-    ~SeedManager();
-
-    void clear();
-    void addSeed(int x, int y);
-    bool hasSeed(int x, int y);
-
-    std::list<QPoint> * mpSeeds;
-};
+class SeedManager;
 
 class InteractiveLabel : public QLabel
 {
