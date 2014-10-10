@@ -55,7 +55,6 @@ InteractiveLabel::InteractiveLabel(QWidget * parent) :
 
      mpForegroundSeedMgr = new SeedManager();
      mpBackgroundSeedMgr = new SeedManager();
-
 }
 
 InteractiveLabel::~InteractiveLabel()
@@ -89,7 +88,6 @@ void InteractiveLabel::mousePressEvent ( QMouseEvent * e )
         mCurrentState = ADD_FOREGROUND;
         setPixmap(mGrayPixmap);
         update();
-
     }
     else if(e->button()==Qt::RightButton)
     {
