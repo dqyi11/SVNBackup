@@ -11,6 +11,7 @@ public:
 
     void clear();
     void addSeed(int x, int y);
+    bool hasSeed(int x, int y);
 
     std::list<QPoint> * mpSeeds;
 };

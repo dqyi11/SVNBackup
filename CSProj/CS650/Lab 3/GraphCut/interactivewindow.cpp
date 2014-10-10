@@ -84,7 +84,6 @@ void InteractiveWindow::on_open_clicked()
 }
 
 
-
 void InteractiveWindow::on_clear_clicked()
 {
     if(mpImageLabel)

@@ -24,11 +24,26 @@ void SeedManager::clear()
     }
 }
 
+bool SeedManager::hasSeed(int x, int y)
+{
+    for(std::list<QPoint>::iterator it=mpSeeds->begin();it!=mpSeeds->end();it++)
+    {
+        if(it->x()==x && it->y()==y)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void SeedManager::addSeed(int x, int y)
 {
     if(mpSeeds)
     {
-        mpSeeds->push_back(QPoint(x, y));
+        if(false == hasSeed(x,y))
+        {
+            mpSeeds->push_back(QPoint(x, y));
+        }
     }
 }
 
