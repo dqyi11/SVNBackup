@@ -15,6 +15,10 @@ private:
     char * mpFilename;
     PixelGraph * mpGraph;
 
+    int img_width;
+    int img_height;
+    int connect_num;
+
 };
 
 #endif // PIXELGRAPH_H
