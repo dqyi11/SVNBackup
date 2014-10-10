@@ -38,10 +38,10 @@ private:
     SeedManager * mpForegroundSeedMgr;
     SeedManager * mpBackgroundSeedMgr;
 
+
 signals:
 
 public slots:
-    void setPixmap(const QPixmap & pixmap);
 
 
 };

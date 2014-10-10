@@ -128,22 +128,3 @@ void InteractiveLabel::paintEvent(QPaintEvent* e)
     }
 
 }
-
-void InteractiveLabel::setPixmap(const QPixmap & pixmap)
-{
-    QLabel::setPixmap(pixmap);
-
-    QImage img = pixmap.toImage();
-    QImage grayImag(img);
-    mColorPixmap.fromImage(img);
-    for(int i=0;i<mColorPixmap.width();i++)
-    {
-        for(int j=0;j<mColorPixmap.height();j++)
-        {
-            QRgb col = img.pixel(i,j);
-            int gray = qGray(col);
-            grayImag.setPixel(i,j,qRgb(gray,gray,gray));
-        }
-    }
-    mGrayPixmap.fromImage(grayImag);
-}

@@ -37,6 +37,9 @@ private:
     InteractiveLabel *mpImageLabel;
     //QScrollArea *mpScrollArea;
 
+
+
+
 };
 
 #endif // MAINWINDOW_H

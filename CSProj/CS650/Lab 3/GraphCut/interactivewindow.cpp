@@ -57,8 +57,23 @@ void InteractiveWindow::on_open_clicked()
             QMessageBox::information(this, tr("Image Viewer"), tr("Cannot load %1.").arg(fileName));
             return;
         }
-        mpImageLabel->setPixmap(QPixmap::fromImage(image));
+        mpImageLabel->mColorPixmap = QPixmap::fromImage(image);
+        mpImageLabel->setPixmap(mpImageLabel->mColorPixmap);
         mpImageLabel->resize(image.width(), image.height());
+
+
+        QImage grayImg = mpImageLabel->mColorPixmap.toImage();
+
+        for(int i=0;i<image.width();i++)
+        {
+            for(int j=0;j<image.height();j++)
+            {
+                QRgb col = image.pixel(i,j);
+                int gray = qGray(col);
+                grayImg.setPixel(i,j,qRgb(gray,gray,gray));
+            }
+        }
+        mpImageLabel->mGrayPixmap = QPixmap::fromImage(grayImg);
 
         setWindowTitle(fileName);
         resize(mpImageLabel->width(), mpImageLabel->height()+menuBar()->height());
