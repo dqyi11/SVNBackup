@@ -39,6 +39,8 @@ private:
     SeedManager * mpForegroundSeedMgr;
     SeedManager * mpBackgroundSeedMgr;
 
+    int mPointerRadius;
+
 
 signals:
 

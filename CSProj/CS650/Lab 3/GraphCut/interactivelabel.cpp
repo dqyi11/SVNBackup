@@ -51,6 +51,8 @@ InteractiveLabel::InteractiveLabel(QWidget * parent) :
     QLabel(parent)
 {
      mCurrentState = NORMAL;
+     mPointerRadius = 2;
+
      mpForegroundSeedMgr = new SeedManager();
      mpBackgroundSeedMgr = new SeedManager();
 
@@ -73,7 +75,7 @@ InteractiveLabel::~InteractiveLabel()
 
 void InteractiveLabel::mouseReleaseEvent ( QMouseEvent * e )
 {
-    qDebug() << "Release";
+    //qDebug() << "Release";
     setPixmap(mColorPixmap);
     mCurrentState = NORMAL;
     update();
@@ -103,12 +105,34 @@ void InteractiveLabel::mouseMoveEvent( QMouseEvent * e )
     if(mCurrentState == ADD_FOREGROUND)
     {
         //qDebug() << "F: " << e->pos();
-        mpForegroundSeedMgr->addSeed(e->x(), e->y());
+        int cursor_x = e->x();
+        int cursor_y = e->y();
+        for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
+        {
+            for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
+            {
+                if(i>=0 && i<width() && j>=0 && j<height())
+                {
+                    mpForegroundSeedMgr->addSeed(i, j);
+                }
+            }
+        }
         update();
     }
     else if(mCurrentState == ADD_BACKGROUND)
     {
-        mpBackgroundSeedMgr->addSeed(e->x(), e->y());
+        int cursor_x = e->x();
+        int cursor_y = e->y();
+        for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
+        {
+            for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
+            {
+                if(i>=0 && i<width() && j>=0 && j<height())
+                {
+                    mpBackgroundSeedMgr->addSeed(i, j);
+                }
+            }
+        }
         update();
     }
 }
