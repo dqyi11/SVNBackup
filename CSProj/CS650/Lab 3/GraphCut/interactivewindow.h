@@ -3,9 +3,9 @@
 
 #include <QMainWindow>
 #include <list>
+#include "interactivelabel.h"
 
 class QAction;
-class QLabel;
 class QMenu;
 //class QScrollArea;
 class QPoint;
@@ -18,14 +18,9 @@ public:
     explicit InteractiveWindow(QWidget *parent = 0);
     ~InteractiveWindow();
 
-    enum WindowState {NORMAL, ADD_FOREGROUND, ADD_BACKGROUND};
 
-protected:
-    void mouseReleaseEvent ( QMouseEvent * e );
-    void mousePressEvent ( QMouseEvent * e );
-    void mouseMoveEvent( QMouseEvent * e );
 
-    void paintEvent(QPaintEvent* e);
+
 
 private slots:
     void on_open_clicked();
@@ -39,14 +34,8 @@ private:
 
     QMenu * mpFileMenu;
     QMenu * mpEditMenu;
-    QLabel *mpImageLabel;
+    InteractiveLabel *mpImageLabel;
     //QScrollArea *mpScrollArea;
-
-    WindowState mCurrentState;
-
-    std::list<QPoint> mForegroundSeeds;
-    std::list<QPoint> mBackgroundSeeds;
-
 
 };
 

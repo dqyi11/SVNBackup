@@ -5,7 +5,7 @@
 InteractiveWindow::InteractiveWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    mpImageLabel = new QLabel();
+    mpImageLabel = new InteractiveLabel();
     mpImageLabel->setBackgroundRole(QPalette::Base);
     mpImageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     //mpImageLabel->setScaledContents(true);
@@ -37,7 +37,7 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     this->setWindowTitle(tr("Interactive Window"));
     this->resize(200, 200);
 
-    mCurrentState = NORMAL;
+    //qDebug() << "Here";
 
 }
 
@@ -68,52 +68,14 @@ void InteractiveWindow::on_open_clicked()
 
 }
 
-void InteractiveWindow::mouseReleaseEvent ( QMouseEvent * e )
-{
-    mCurrentState = NORMAL;
-}
 
-void InteractiveWindow::mousePressEvent ( QMouseEvent * e )
-{
-    if (e->button()==Qt::LeftButton)
-    {
-        qDebug() << "Left";
-        mCurrentState = ADD_FOREGROUND;
-
-    }
-    else if(e->button()==Qt::RightButton)
-    {
-        qDebug() << "Right";
-        mCurrentState = ADD_BACKGROUND;
-    }
-}
-
-void InteractiveWindow::mouseMoveEvent( QMouseEvent * e )
-{
-    int x_bias = 0;
-    int y_bias = menuBar()->height();
-
-    if(mCurrentState == ADD_FOREGROUND)
-    {
-        //qDebug() << "F: " << e->pos();
-        mForegroundSeeds.push_back(QPoint(e->x()-x_bias, e->y()-y_bias));
-
-        update();
-    }
-    else if(mCurrentState == ADD_BACKGROUND)
-    {
-        //qDebug() << "B: " << e->pos();
-        mBackgroundSeeds.push_back(QPoint(e->x()-x_bias, e->y()-y_bias));
-
-        update();
-    }
-
-}
 
 void InteractiveWindow::on_clear_clicked()
 {
-    mForegroundSeeds.clear();
-    mBackgroundSeeds.clear();
+    if(mpImageLabel)
+    {
+        mpImageLabel->clear();
+    }
 }
 
 void InteractiveWindow::on_segment_clicked()
@@ -121,36 +83,4 @@ void InteractiveWindow::on_segment_clicked()
 
 }
 
-void InteractiveWindow::paintEvent(QPaintEvent* e)
-{
-    QMainWindow::paintEvent(e);
 
-    QPainter painter(this);
-    QPen blue_pen(QColor(0,0,255));
-    QBrush blue_brush(QColor(0,0,255));
-    QPen red_pen(QColor(255,0,0));
-    QBrush red_brush(QColor(255,0,0));
-
-    int x_bias = 0;
-    int y_bias = menuBar()->height();
-
-    painter.setPen(red_pen);
-    painter.setBrush(red_brush);
-    for(std::list<QPoint>::iterator it=mForegroundSeeds.begin();it!=mForegroundSeeds.end();it++)
-    {
-        int x_pos = (*it).x() + x_bias;
-        int y_pos = (*it).y() + y_bias;
-        painter.drawPoint(x_pos, y_pos);
-    }
-
-    painter.setPen(blue_pen);
-    painter.setBrush(blue_brush);
-    for(std::list<QPoint>::iterator it=mBackgroundSeeds.begin();it!=mBackgroundSeeds.end();it++)
-    {
-        int x_pos = (*it).x() + x_bias;
-        int y_pos = (*it).y() + y_bias;
-        painter.drawPoint(x_pos, y_pos);
-    }
-
-
-}

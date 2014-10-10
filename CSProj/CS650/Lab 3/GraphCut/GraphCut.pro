@@ -24,12 +24,14 @@ SOURCES += main.cpp\
     maxflow/graph.cpp \
     maxflow/maxflow.cpp \
     imagedatagraph.cpp \
-    interactivewindow.cpp
+    interactivewindow.cpp \
+    interactivelabel.cpp
 
 HEADERS  += \
     maxflow/block.h \
     maxflow/graph.h \
     imagedatagraph.h \
-    interactivewindow.h
+    interactivewindow.h \
+    interactivelabel.h
 
 FORMS    +=
