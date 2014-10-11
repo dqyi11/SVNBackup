@@ -7,6 +7,7 @@ class SeedManager;
 
 class InteractiveLabel : public QLabel
 {
+    friend class InteractiveWindow;
     Q_OBJECT
 public:
     explicit InteractiveLabel (QWidget * parent = 0);
@@ -17,17 +18,19 @@ public:
     QPixmap mColorPixmap;
     QPixmap mGrayPixmap;
 
+
+
 protected:
     void mouseReleaseEvent(QMouseEvent * e);
     void mousePressEvent(QMouseEvent * e);
     void mouseMoveEvent(QMouseEvent * e);
 
     void paintEvent(QPaintEvent* e);
-private:
-    WidgetState mCurrentState;
+
     SeedManager * mpForegroundSeedMgr;
     SeedManager * mpBackgroundSeedMgr;
-
+private:
+    WidgetState mCurrentState;
     int mPointerRadius;
 
 

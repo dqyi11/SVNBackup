@@ -1,7 +1,7 @@
 #include "interactivewindow.h"
-#include "ui_interactivewindow.h"
 #include <QtGui>
 #include "imagedatagraph.h"
+#include "segmentation.h"
 
 InteractiveWindow::InteractiveWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -39,7 +39,7 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     this->setWindowTitle(tr("Interactive Window"));
     this->resize(200, 200);
 
-    //qDebug() << "Here";
+    qDebug() << "Here";
 }
 
 InteractiveWindow::~InteractiveWindow()
@@ -78,13 +78,13 @@ InteractiveWindow::~InteractiveWindow()
 
 void InteractiveWindow::on_open_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
-    if (!fileName.isEmpty())
+    mFilename = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath());
+    if (!mFilename.isEmpty())
     {
-        QImage image(fileName);
+        QImage image(mFilename);
         if (image.isNull())
         {
-            QMessageBox::information(this, tr("Image Viewer"), tr("Cannot load %1.").arg(fileName));
+            QMessageBox::information(this, tr("Image Viewer"), tr("Cannot load %1.").arg(mFilename));
             return;
         }
         mpImageLabel->mColorPixmap = QPixmap::fromImage(image);
@@ -105,7 +105,7 @@ void InteractiveWindow::on_open_clicked()
         }
         mpImageLabel->mGrayPixmap = QPixmap::fromImage(grayImg);
 
-        setWindowTitle(fileName);
+        setWindowTitle(mFilename);
         resize(mpImageLabel->width(), mpImageLabel->height()+menuBar()->height());
         update();
     }
@@ -124,6 +124,9 @@ void InteractiveWindow::on_clear_clicked()
 void InteractiveWindow::on_segment_clicked()
 {
     qDebug() << "Generating graph";
+
+    Segmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
+    seg.visualize();
 
 }
 

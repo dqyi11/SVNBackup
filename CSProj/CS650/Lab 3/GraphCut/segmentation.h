@@ -26,11 +26,14 @@ public:
 class Segmentation
 {
 public:
-    Segmentation(SeedManager * foreground, SeedManager * background);
+    Segmentation(const char* filename, SeedManager * foreground, SeedManager * background);
     ~Segmentation();
+
+    void visualize();
 
     std::list<PixelPosition> * mpForegroundSet;
     std::list<PixelPosition> * mpBackgroundSet;
+    char * mpFilename;
 };
 
 #endif // SEGMENTATION_H

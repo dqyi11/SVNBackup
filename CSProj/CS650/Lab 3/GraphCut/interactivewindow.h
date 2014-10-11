@@ -37,6 +37,8 @@ private:
     InteractiveLabel *mpImageLabel;
     //QScrollArea *mpScrollArea;
 
+    QString mFilename;
+
 
 
 
