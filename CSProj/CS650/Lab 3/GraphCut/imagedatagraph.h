@@ -3,6 +3,7 @@
 
 #include "maxflow/graph.h"
 #include "segmentation.h"
+#include "kerneldensityestimator.h"
 
 typedef Graph<int,int,int> PixelGraph;
 
@@ -27,6 +28,9 @@ private:
     int connect_num;
 
     float mSigmaNeighborhood;
+
+    GaussianKernelDensityEstimator * mpForegroundEstimator;
+    GaussianKernelDensityEstimator * mpBackgroundEstimator;
 
 };
 

@@ -15,6 +15,9 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb)
     img_height = img->height;
     connect_num = 4;
 
+    mpForegroundEstimator = new GaussianKernelDensityEstimator();
+    mpBackgroundEstimator = new GaussianKernelDensityEstimator();
+
     mSigmaNeighborhood = sigma_nb;
 
     mpRVals = new int[img_width*img_height];
