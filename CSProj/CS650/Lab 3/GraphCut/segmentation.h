@@ -6,9 +6,13 @@
 
 typedef struct
 {
-  int x;
-  int y;
+    int vals[2];
 }PixelPosition;
+
+typedef struct
+{
+    int vals[3];
+}PixelColor;
 
 class SeedManager
 {
@@ -31,8 +35,8 @@ public:
 
     void visualize();
 
-    std::list<PixelPosition> * mpForegroundSet;
-    std::list<PixelPosition> * mpBackgroundSet;
+    std::list<PixelPosition> mForegroundSet;
+    std::list<PixelPosition> mBackgroundSet;
     char * mpFilename;
 };
 

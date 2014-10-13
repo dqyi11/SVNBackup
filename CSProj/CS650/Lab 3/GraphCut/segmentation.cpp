@@ -32,7 +32,7 @@ bool SeedManager::hasSeed(int x, int y)
 {
     for(std::list<PixelPosition>::iterator it=mpSeeds->begin();it!=mpSeeds->end();it++)
     {
-        if(it->x==x && it->y==y)
+        if(it->vals[0]==x && it->vals[1]==y)
         {
             return true;
         }
@@ -46,10 +46,10 @@ void SeedManager::addSeed(int x, int y)
     {
         if(false == hasSeed(x,y))
         {
-            PixelPosition pos;
-            pos.x = x;
-            pos.y = y;
-            mpSeeds->push_back(pos);
+            PixelPosition pixel_pos;
+            pixel_pos.vals[0] = x;
+            pixel_pos.vals[1] = y;
+            mpSeeds->push_back(pixel_pos);
         }
     }
 }
@@ -60,31 +60,21 @@ Segmentation::Segmentation(const char* filename, SeedManager * foreground, SeedM
     mpFilename = new char[strlen(filename)+1];
     strcpy(mpFilename, filename);
 
-    mpForegroundSet = new std::list<PixelPosition>();
-    mpBackgroundSet = new std::list<PixelPosition>();
+    mForegroundSet.clear();
+    mBackgroundSet.clear();
 
     for(std::list<PixelPosition>::iterator it=foreground->mpSeeds->begin();it!=foreground->mpSeeds->end();it++)
     {
-        mpForegroundSet->push_back(*it);
+        mForegroundSet.push_back(*it);
     }
     for(std::list<PixelPosition>::iterator it=background->mpSeeds->begin();it!=background->mpSeeds->end();it++)
     {
-        mpBackgroundSet->push_back(*it);
+        mBackgroundSet.push_back(*it);
     }
 }
 
 Segmentation::~Segmentation()
 {
-    if(mpForegroundSet)
-    {
-        delete mpForegroundSet;
-        mpForegroundSet = NULL;
-    }
-    if(mpBackgroundSet)
-    {
-        delete mpBackgroundSet;
-        mpBackgroundSet = NULL;
-    }
 }
 
 void Segmentation:: visualize()
@@ -102,26 +92,23 @@ void Segmentation:: visualize()
 
     IplImage * imgData = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
 
-    for(std::list<PixelPosition>::iterator it=mpForegroundSet->begin();it!=mpForegroundSet->end();it++)
+    for(std::list<PixelPosition>::iterator it=mForegroundSet.begin();it!=mForegroundSet.end();it++)
     {
-        //std::cout << imgData.at<uchar>(it->x, it->y) << std::endl;
-        //std::cout << it->x << " " << it->y << " " << (int)imgData.at<uchar>(it->x, it->y) << std::endl;
-        ((uchar *)(imgData->imageData + it->y*imgData->widthStep))[it->x*imgData->nChannels + 0] = 255;
-        ((uchar *)(imgData->imageData + it->y*imgData->widthStep))[it->x*imgData->nChannels + 1] = 255;
-        ((uchar *)(imgData->imageData + it->y*imgData->widthStep))[it->x*imgData->nChannels + 2] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 255;
     }
-    for(std::list<PixelPosition>::iterator it=mpBackgroundSet->begin();it!=mpBackgroundSet->end();it++)
+    for(std::list<PixelPosition>::iterator it=mBackgroundSet.begin();it!=mBackgroundSet.end();it++)
     {
-        // imgData.at<uchar>(it->x, it->y) = (uchar)122;
-        //std::cout << imgData.at<uchar>(it->x, it->y) << std::endl;
-        //std::cout << it->x << " " << it->y << " " << imgData.at<uchar>(it->x, it->y) << std::endl;
-        ((uchar *)(imgData->imageData + it->y*imgData->widthStep))[it->x*imgData->nChannels + 1] = 255;
-        ((uchar *)(imgData->imageData + it->y*imgData->widthStep))[it->x*imgData->nChannels + 2] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 255;
     }
 
     std::string newFilename(mpFilename);
     newFilename += "-vis.png";
-    cvSaveImage(newFilename.c_str(), imgData);
+    //cvSaveImage(newFilename.c_str(), imgData);
+    cvNamedWindow(newFilename.c_str()); //create a window with the name "MyWindow"
+    cvShowImage(newFilename.c_str(), imgData);
 
     std::cout << "Writing file ... " << std::endl;
 

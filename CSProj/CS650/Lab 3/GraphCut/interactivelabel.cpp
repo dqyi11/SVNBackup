@@ -105,14 +105,14 @@ void InteractiveLabel::paintEvent(QPaintEvent* e)
     painter.setBrush(red_brush);
     for(std::list<PixelPosition>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
     {
-        painter.drawPoint((*it).x, (*it).y);
+        painter.drawPoint((*it).vals[0], (*it).vals[1]);
     }
 
     painter.setPen(blue_pen);
     painter.setBrush(blue_brush);
     for(std::list<PixelPosition>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
     {
-        painter.drawPoint((*it).x, (*it).y);
+        painter.drawPoint((*it).vals[0], (*it).vals[1]);
     }
 
 }

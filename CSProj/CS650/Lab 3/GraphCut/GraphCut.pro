@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     imagedatagraph.cpp \
     interactivewindow.cpp \
     interactivelabel.cpp \
-    segmentation.cpp
+    segmentation.cpp \
+    kerneldensityestimator.cpp
 
 HEADERS  += \
     maxflow/block.h \
@@ -34,6 +35,7 @@ HEADERS  += \
     imagedatagraph.h \
     interactivewindow.h \
     interactivelabel.h \
-    segmentation.h
+    segmentation.h \
+    kerneldensityestimator.h
 
 FORMS    +=

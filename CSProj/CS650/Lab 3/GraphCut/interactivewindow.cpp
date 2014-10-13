@@ -39,7 +39,7 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     this->setWindowTitle(tr("Interactive Window"));
     this->resize(200, 200);
 
-    qDebug() << "Here";
+    qDebug() << "UI Initalized";
 }
 
 InteractiveWindow::~InteractiveWindow()
