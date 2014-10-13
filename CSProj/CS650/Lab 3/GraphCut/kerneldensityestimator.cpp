@@ -21,15 +21,17 @@ GaussianKernelDensityEstimator::GaussianKernelDensityEstimator(float sigma)
 
 float GaussianKernelDensityEstimator::getEstimation(PixelColor color)
 {
-    float estimation = 0.0;
+    double estimation = 0.0;
 
     for(std::list<PixelColor>::iterator it=mSampleColors.begin();it!=mSampleColors.end();it++)
     {
-        float distance = sqrt( pow((float)(color.vals[0]-it->vals[0]),2)
-                +pow((float)(color.vals[1]-it->vals[1]),2)
-                +pow((float)(color.vals[2]-it->vals[2]),2) );
-        estimation += exp(distance / (2 * pow((float)mSigma,2)) );
+        float distance = sqrt( pow((double)(color.vals[0]-it->vals[0]),2)
+                +pow((double)(color.vals[1]-it->vals[1]),2)
+                +pow((double)(color.vals[2]-it->vals[2]),2) );
+        estimation += exp(distance / (2 * pow((double)mSigma,2)) );
     }
 
-    return estimation;
+    estimation /= mSampleNumber;
+
+    return (float)estimation;
 }
