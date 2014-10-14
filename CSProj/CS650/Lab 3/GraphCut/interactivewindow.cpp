@@ -126,6 +126,7 @@ void InteractiveWindow::on_segment_clicked()
     qDebug() << "Generating graph";
 
     Segmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
+    seg.process();
     seg.visualize();
 
 }
