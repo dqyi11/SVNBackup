@@ -34,6 +34,7 @@ public:
     ~Segmentation();
 
     void visualize();
+    void process();
 
     std::list<PixelPosition> mForegroundSet;
     std::list<PixelPosition> mBackgroundSet;

@@ -163,3 +163,8 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
     }
 
 }
+
+int ImageDataGraph::maxFlowCut()
+{
+    return mpGraph->maxflow();
+}

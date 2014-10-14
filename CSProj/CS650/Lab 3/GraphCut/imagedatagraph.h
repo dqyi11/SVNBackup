@@ -9,6 +9,7 @@ typedef Graph<int,int,int> PixelGraph;
 
 class ImageDataGraph
 {
+    friend class Segmentation;
 public:
     ImageDataGraph(const char* filename, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();
@@ -16,7 +17,9 @@ public:
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
     void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
 
-private:
+    int maxFlowCut();
+
+protected:
     char * mpFilename;
     PixelGraph * mpGraph;
 

@@ -4,6 +4,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/imgproc_c.h"
 #include <iostream>
+#include "imagedatagraph.h"
+#include "qdebug.h"
 
 SeedManager::SeedManager()
 {
@@ -77,9 +79,39 @@ Segmentation::~Segmentation()
 {
 }
 
+void Segmentation::process()
+{
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+
+    pGraph->importPrior(mForegroundSet, mBackgroundSet);
+
+    int flow =  pGraph->maxFlowCut();
+    qDebug() << "Flow: " << flow;
+
+    mForegroundSet.clear();
+    mBackgroundSet.clear();
+    for(int j=0;j<pGraph->mImgHeight;j++)
+    {
+        for(int i=0;i<pGraph->mImgWidth;i++)
+        {
+            PixelPosition pos;
+            pos.vals[0] = i;
+            pos.vals[1] = j;
+            int node_id = i + j * pGraph->mImgWidth;
+            if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SOURCE)
+            {
+                mForegroundSet.push_back(pos);
+            }
+            else
+            {
+                mBackgroundSet.push_back(pos);
+            }
+        }
+    }
+}
+
 void Segmentation:: visualize()
 {
-
     std::cout << "Loading ... " << mpFilename << std::endl;
 
     IplImage* img = cvLoadImage(mpFilename);
