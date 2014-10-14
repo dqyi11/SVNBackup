@@ -13,12 +13,13 @@ public:
     explicit InteractiveLabel (QWidget * parent = 0);
     ~InteractiveLabel();
 
-    enum WidgetState {NORMAL, ADD_FOREGROUND, ADD_BACKGROUND};
+    enum LabelingState {NORMAL, ADD_FOREGROUND, ADD_BACKGROUND};
+    enum WorkingState {GRAPH_CUT_SEGMENTATION, GRAB_CUT_SEGMENTATION};
 
     QPixmap mColorPixmap;
     QPixmap mGrayPixmap;
 
-
+    void setWorkingState(WorkingState state);
 
 protected:
     void mouseReleaseEvent(QMouseEvent * e);
@@ -29,10 +30,13 @@ protected:
 
     SeedManager * mpForegroundSeedMgr;
     SeedManager * mpBackgroundSeedMgr;
+    WorkingState mCurrentWorkingState;
 private:
-    WidgetState mCurrentState;
+    LabelingState mCurrentLabelingState;
     int mPointerRadius;
 
+    QPoint * mpInitPoint;
+    QPoint * mpEndPoint;
 
 signals:
 

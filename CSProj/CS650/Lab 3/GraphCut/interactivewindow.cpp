@@ -27,17 +27,37 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     mpSegmentAction = new QAction(tr("&Segment"), this);
     connect(mpSegmentAction, SIGNAL(triggered()), this, SLOT(on_segment_clicked()));
 
+    mpWorkStateGroup = new QActionGroup(this);
+
+    mpGraphCutAction = new QAction(tr("&Graph Cut"), this);
+    mpGraphCutAction->setCheckable(true);
+    mpGraphCutAction->setActionGroup(mpWorkStateGroup);
+    connect(mpGraphCutAction, SIGNAL(triggered()), this, SLOT(on_graphcut_clicked()));
+    mpGrabCutAction = new QAction(tr("&Grab Cut"), this);
+    mpGrabCutAction->setCheckable(true);
+    mpGrabCutAction->setActionGroup(mpWorkStateGroup);
+    connect(mpGrabCutAction, SIGNAL(triggered()), this, SLOT(on_grabcut_clicked()));
+
+
     mpFileMenu = new QMenu(tr("&File"), this);
     mpFileMenu->addAction(mpOpenAction);
     mpEditMenu = new QMenu(tr("&Edit"), this);
     mpEditMenu->addAction(mpClearAction);
     mpEditMenu->addAction(mpSegmentAction);
+    mpModeMenu = new QMenu(tr("&Mode"), this);
+    mpModeMenu->addAction(mpGraphCutAction);
+    mpModeMenu->addAction(mpGrabCutAction);
+
 
     this->menuBar()->addMenu(mpFileMenu);
     this->menuBar()->addMenu(mpEditMenu);
+    this->menuBar()->addMenu(mpModeMenu);
 
     this->setWindowTitle(tr("Interactive Window"));
     this->resize(200, 200);
+
+    mpGraphCutAction->setChecked(true);
+    mpImageLabel->mCurrentWorkingState = InteractiveLabel::GRAPH_CUT_SEGMENTATION;
 
     qDebug() << "UI Initalized";
 }
@@ -109,9 +129,7 @@ void InteractiveWindow::on_open_clicked()
         resize(mpImageLabel->width(), mpImageLabel->height()+menuBar()->height());
         update();
     }
-
 }
-
 
 void InteractiveWindow::on_clear_clicked()
 {
@@ -128,7 +146,14 @@ void InteractiveWindow::on_segment_clicked()
     Segmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
     seg.process();
     seg.visualize();
-
 }
 
+void InteractiveWindow::on_graphcut_clicked()
+{
+    mpImageLabel->setWorkingState(InteractiveLabel::GRAPH_CUT_SEGMENTATION);
+}
 
+void InteractiveWindow::on_grabcut_clicked()
+{
+    mpImageLabel->setWorkingState(InteractiveLabel::GRAB_CUT_SEGMENTATION);
+}

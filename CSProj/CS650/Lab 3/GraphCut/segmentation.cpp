@@ -149,9 +149,10 @@ void Segmentation:: visualize()
 
     std::string newFilename(mpFilename);
     newFilename += "-vis.png";
-    //cvSaveImage(newFilename.c_str(), imgData);
+
     cvNamedWindow(newFilename.c_str()); //create a window with the name "MyWindow"
     cvShowImage(newFilename.c_str(), imgData);
+    cvSaveImage(newFilename.c_str(), imgData);
 
     std::cout << "Writing file ... " << std::endl;
 

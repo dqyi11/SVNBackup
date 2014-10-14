@@ -5,11 +5,15 @@
 InteractiveLabel::InteractiveLabel(QWidget * parent) :
     QLabel(parent)
 {
-     mCurrentState = NORMAL;
+     mCurrentLabelingState = NORMAL;
+     mCurrentWorkingState = GRAPH_CUT_SEGMENTATION;
      mPointerRadius = 2;
 
      mpForegroundSeedMgr = new SeedManager();
      mpBackgroundSeedMgr = new SeedManager();
+
+     mpInitPoint = new QPoint(0,0);
+     mpEndPoint = new QPoint(0,0);
 }
 
 InteractiveLabel::~InteractiveLabel()
@@ -24,14 +28,31 @@ InteractiveLabel::~InteractiveLabel()
         delete mpBackgroundSeedMgr;
         mpBackgroundSeedMgr = NULL;
     }
+    if(mpInitPoint)
+    {
+        delete mpInitPoint;
+        mpInitPoint = NULL;
+    }
+    if(mpEndPoint)
+    {
+        delete mpEndPoint;
+        mpEndPoint = NULL;
+    }
     QLabel::~QLabel();
 }
 
 void InteractiveLabel::mouseReleaseEvent ( QMouseEvent * e )
 {
-    //qDebug() << "Release";
+    if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
+    {
+        if(e->button()==Qt::LeftButton)
+        {
+            mpEndPoint->setX(e->x());
+            mpEndPoint->setY(e->y());
+        }
+    }
     setPixmap(mColorPixmap);
-    mCurrentState = NORMAL;
+    mCurrentLabelingState = NORMAL;
     update();
 }
 
@@ -39,54 +60,76 @@ void InteractiveLabel::mousePressEvent ( QMouseEvent * e )
 {
     if (e->button()==Qt::LeftButton)
     {
-        //qDebug() << "Left";
-        mCurrentState = ADD_FOREGROUND;
+        if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
+        {
+            mCurrentLabelingState = ADD_FOREGROUND;
+        }
+        else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
+        {
+            mpInitPoint->setX(e->x());
+            mpInitPoint->setY(e->y());
+        }
+
         setPixmap(mGrayPixmap);
         update();
     }
     else if(e->button()==Qt::RightButton)
     {
-        //qDebug() << "Right";
-        mCurrentState = ADD_BACKGROUND;
-        setPixmap(mGrayPixmap);
-        update();
+        if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
+        {
+            mCurrentLabelingState = ADD_BACKGROUND;
+            setPixmap(mGrayPixmap);
+            update();
+        }
     }
 }
 
 void InteractiveLabel::mouseMoveEvent( QMouseEvent * e )
 {
-    if(mCurrentState == ADD_FOREGROUND)
+    if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
     {
-        //qDebug() << "F: " << e->pos();
-        int cursor_x = e->x();
-        int cursor_y = e->y();
-        for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
+        if(mCurrentLabelingState == ADD_FOREGROUND)
         {
-            for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
+            //qDebug() << "F: " << e->pos();
+            int cursor_x = e->x();
+            int cursor_y = e->y();
+            for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
             {
-                if(i>=0 && i<width() && j>=0 && j<height())
+                for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
                 {
-                    mpForegroundSeedMgr->addSeed(i, j);
+                    if(i>=0 && i<width() && j>=0 && j<height())
+                    {
+                        mpForegroundSeedMgr->addSeed(i, j);
+                    }
                 }
             }
+            update();
         }
-        update();
+        else if(mCurrentLabelingState == ADD_BACKGROUND)
+        {
+            int cursor_x = e->x();
+            int cursor_y = e->y();
+            for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
+            {
+                for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
+                {
+                    if(i>=0 && i<width() && j>=0 && j<height())
+                    {
+                        mpBackgroundSeedMgr->addSeed(i, j);
+                    }
+                }
+            }
+            update();
+        }
     }
-    else if(mCurrentState == ADD_BACKGROUND)
+    else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
     {
-        int cursor_x = e->x();
-        int cursor_y = e->y();
-        for(int i=cursor_x - mPointerRadius;i<=cursor_x + mPointerRadius;i++)
+        if(e->button()==Qt::LeftButton)
         {
-            for(int j=cursor_y - mPointerRadius;j<=cursor_y + mPointerRadius;j++)
-            {
-                if(i>=0 && i<width() && j>=0 && j<height())
-                {
-                    mpBackgroundSeedMgr->addSeed(i, j);
-                }
-            }
+            mpEndPoint->setX(e->x());
+            mpEndPoint->setY(e->y());
+            update();
         }
-        update();
     }
 }
 
@@ -94,25 +137,69 @@ void InteractiveLabel::paintEvent(QPaintEvent* e)
 {
     QLabel::paintEvent(e);
 
-    QPainter painter(this);
-    QPen blue_pen(QColor(0,0,255));
-    QBrush blue_brush(QColor(0,0,255));
-    QPen red_pen(QColor(255,0,0));
-    QBrush red_brush(QColor(255,0,0));
-
-
-    painter.setPen(red_pen);
-    painter.setBrush(red_brush);
-    for(std::list<PixelPosition>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
+    if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
     {
-        painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        QPainter painter(this);
+        QPen blue_pen(QColor(0,0,255));
+        QBrush blue_brush(QColor(0,0,255));
+        QPen red_pen(QColor(255,0,0));
+        QBrush red_brush(QColor(255,0,0));
+
+
+        painter.setPen(red_pen);
+        painter.setBrush(red_brush);
+        for(std::list<PixelPosition>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
+        {
+            painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        }
+
+        painter.setPen(blue_pen);
+        painter.setBrush(blue_brush);
+        for(std::list<PixelPosition>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
+        {
+            painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        }
     }
-
-    painter.setPen(blue_pen);
-    painter.setBrush(blue_brush);
-    for(std::list<PixelPosition>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
+    else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
     {
-        painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        if(mpInitPoint->x()!= mpEndPoint->x() || mpInitPoint->y()!=mpEndPoint->y())
+        {
+            QPainter painter(this);
+            QPen green_pen(QColor(0,255,0));
+            painter.setPen(green_pen);
+
+            int start_x = mpInitPoint->x()<= mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            int start_y = mpInitPoint->y()<= mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+            int end_x   = mpInitPoint->x()> mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            int end_y   = mpInitPoint->y()> mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+
+            painter.drawRect(start_x, start_y, end_x - start_x, end_y - start_y);
+        }
+    }
+}
+
+void InteractiveLabel::setWorkingState(WorkingState state)
+{
+    if(mCurrentWorkingState == state)
+    {
+        return;
+    }
+    mCurrentWorkingState = state;
+
+    if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
+    {
+        mCurrentLabelingState = NORMAL;
+        mpForegroundSeedMgr->clear();
+        mpBackgroundSeedMgr->clear();
+        update();
+    }
+    else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
+    {
+        mpInitPoint->setX(0);
+        mpInitPoint->setY(0);
+        mpEndPoint->setX(0);
+        mpEndPoint->setY(0);
+        update();
     }
 
 }
