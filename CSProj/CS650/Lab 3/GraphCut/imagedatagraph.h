@@ -9,7 +9,7 @@ typedef Graph<int,int,int> PixelGraph;
 
 class ImageDataGraph
 {
-    friend class Segmentation;
+    friend class GraphCutSegmentation;
 public:
     ImageDataGraph(const char* filename, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();

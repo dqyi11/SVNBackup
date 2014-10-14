@@ -30,15 +30,23 @@ public:
 class Segmentation
 {
 public:
-    Segmentation(const char* filename, SeedManager * foreground, SeedManager * background);
+    Segmentation(const char* filename);
     ~Segmentation();
 
     void visualize();
-    void process();
-
+    virtual void process() = 0;
+protected:
+    char * mpFilename;
     std::list<PixelPosition> mForegroundSet;
     std::list<PixelPosition> mBackgroundSet;
-    char * mpFilename;
+};
+
+class GraphCutSegmentation : public Segmentation
+{
+public:
+    GraphCutSegmentation(const char* filename, SeedManager * foreground, SeedManager * background);
+
+    virtual void process();
 };
 
 #endif // SEGMENTATION_H
