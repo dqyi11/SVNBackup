@@ -63,6 +63,8 @@ public:
     int mRectUpperLeftY;
     int mRectLowerRightX;
     int mRectLowerRightY;
+
+    int mIterationNum;
 };
 
 #endif // SEGMENTATION_H

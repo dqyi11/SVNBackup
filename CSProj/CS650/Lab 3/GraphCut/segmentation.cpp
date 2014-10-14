@@ -226,6 +226,8 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
     mRectUpperLeftY = rect_y;
     mRectLowerRightX = rect_x + rect_w;
     mRectLowerRightY = rect_y + rect_h;
+
+    mIterationNum = 2;
 }
 
 void GrabCutSegmentation::process()
@@ -238,19 +240,58 @@ void GrabCutSegmentation::process()
     {
         for(int i=0;i<pGraph->mImgWidth;i++)
         {
+            PixelPosition pos;
+            pos.vals[0] = i;
+            pos.vals[1] = j;
             mpTrimap[i+j*pGraph->mImgWidth] = ImageDataGraph::BACKGROUND_PIXEL;
+
             if(i>=mRectUpperLeftX && i<mRectLowerRightX && j>=mRectUpperLeftY && j<mRectLowerRightY)
             {
                 mpTrimap[i+j*pGraph->mImgWidth] = ImageDataGraph::UNKNOWN_PIXEL;
+                mForegroundSet.push_back(pos);
             }
             else
+            {
+                mBackgroundSet.push_back(pos);
+            }
+        }
+    }
+
+    int iterationCnt = 0;
+    while(iterationCnt < mIterationNum)
+    {
+        ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+        pGraph->mpGridPrior = mpTrimap;
+        pGraph->importPrior(mForegroundSet, mBackgroundSet);
+        pGraph->initializeGraph();
+        int flow =  pGraph->maxFlowCut();
+
+        mForegroundSet.clear();
+        mBackgroundSet.clear();
+        for(int j=0;j<pGraph->mImgHeight;j++)
+        {
+            for(int i=0;i<pGraph->mImgWidth;i++)
             {
                 PixelPosition pos;
                 pos.vals[0] = i;
                 pos.vals[1] = j;
-                mBackgroundSet.push_back(pos);
+
+                int node_id = i + j * pGraph->mImgWidth;
+                if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SINK)
+                {
+                    mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
+                    mForegroundSet.push_back(pos);
+                }
+                else
+                {
+                    mpTrimap[node_id] = ImageDataGraph::BACKGROUND_PIXEL;
+                    mBackgroundSet.push_back(pos);
+                }
             }
         }
+
+        iterationCnt ++;
+        qDebug() << "Iteration " << iterationCnt;
     }
 
 }
