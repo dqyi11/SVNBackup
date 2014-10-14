@@ -14,6 +14,12 @@ InteractiveLabel::InteractiveLabel(QWidget * parent) :
 
      mpInitPoint = new QPoint(0,0);
      mpEndPoint = new QPoint(0,0);
+
+     mDrawingRect = false;
+     mRectStartX = 0;
+     mRectStartY = 0;
+     mRectEndX = 0;
+     mRectEndY = 0;
 }
 
 InteractiveLabel::~InteractiveLabel()
@@ -41,21 +47,6 @@ InteractiveLabel::~InteractiveLabel()
     QLabel::~QLabel();
 }
 
-void InteractiveLabel::mouseReleaseEvent ( QMouseEvent * e )
-{
-    if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
-    {
-        if(e->button()==Qt::LeftButton)
-        {
-            mpEndPoint->setX(e->x());
-            mpEndPoint->setY(e->y());
-        }
-    }
-    setPixmap(mColorPixmap);
-    mCurrentLabelingState = NORMAL;
-    update();
-}
-
 void InteractiveLabel::mousePressEvent ( QMouseEvent * e )
 {
     if (e->button()==Qt::LeftButton)
@@ -68,6 +59,9 @@ void InteractiveLabel::mousePressEvent ( QMouseEvent * e )
         {
             mpInitPoint->setX(e->x());
             mpInitPoint->setY(e->y());
+            mpEndPoint->setX(e->x());
+            mpEndPoint->setY(e->y());
+            mDrawingRect = true;
         }
 
         setPixmap(mGrayPixmap);
@@ -124,13 +118,41 @@ void InteractiveLabel::mouseMoveEvent( QMouseEvent * e )
     }
     else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
     {
-        if(e->button()==Qt::LeftButton)
+        //if(e->button()==Qt::LeftButton)
+        if(mDrawingRect==true)
         {
             mpEndPoint->setX(e->x());
             mpEndPoint->setY(e->y());
             update();
         }
     }
+}
+
+void InteractiveLabel::mouseReleaseEvent ( QMouseEvent * e )
+{
+    if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
+    {
+        if(e->button()==Qt::LeftButton)
+        {
+            mpEndPoint->setX(e->x());
+            mpEndPoint->setY(e->y());
+
+            mRectStartX = mpInitPoint->x()<= mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectStartY = mpInitPoint->y()<= mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+            mRectEndX   = mpInitPoint->x()> mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectEndY   = mpInitPoint->y()> mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+
+            mRectStartX = mRectStartX >= 0 ? mRectStartX : 0;
+            mRectStartY = mRectStartY >= 0 ? mRectStartY : 0;
+            mRectEndX   = mRectEndX < this->width() ?  mRectEndX : this->width()-1;
+            mRectEndY   = mRectEndY < this->height() ?  mRectEndY : this->height()-1;
+
+        }
+    }
+    setPixmap(mColorPixmap);
+    mCurrentLabelingState = NORMAL;
+    mDrawingRect = false;
+    update();
 }
 
 void InteractiveLabel::paintEvent(QPaintEvent* e)
@@ -168,12 +190,12 @@ void InteractiveLabel::paintEvent(QPaintEvent* e)
             QPen green_pen(QColor(0,255,0));
             painter.setPen(green_pen);
 
-            int start_x = mpInitPoint->x()<= mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
-            int start_y = mpInitPoint->y()<= mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
-            int end_x   = mpInitPoint->x()> mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
-            int end_y   = mpInitPoint->y()> mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+            mRectStartX = mpInitPoint->x()<= mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectStartY = mpInitPoint->y()<= mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+            mRectEndX   = mpInitPoint->x()> mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectEndY   = mpInitPoint->y()> mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
 
-            painter.drawRect(start_x, start_y, end_x - start_x, end_y - start_y);
+            painter.drawRect(mRectStartX, mRectStartY, mRectEndX - mRectStartX, mRectEndY - mRectStartY);
         }
     }
 }

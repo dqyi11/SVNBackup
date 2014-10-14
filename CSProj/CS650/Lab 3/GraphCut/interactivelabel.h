@@ -37,6 +37,12 @@ private:
 
     QPoint * mpInitPoint;
     QPoint * mpEndPoint;
+    bool mDrawingRect;
+
+    int mRectStartX;
+    int mRectStartY;
+    int mRectEndX;
+    int mRectEndY;
 
 signals:
 
