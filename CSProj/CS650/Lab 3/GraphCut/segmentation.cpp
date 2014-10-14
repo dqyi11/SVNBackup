@@ -260,6 +260,7 @@ void GrabCutSegmentation::process()
     int iterationCnt = 0;
     while(iterationCnt < mIterationNum)
     {
+        qDebug() << "Iteration " << iterationCnt;
         ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
         pGraph->mpGridPrior = mpTrimap;
         pGraph->importPrior(mForegroundSet, mBackgroundSet);
@@ -291,7 +292,6 @@ void GrabCutSegmentation::process()
         }
 
         iterationCnt ++;
-        qDebug() << "Iteration " << iterationCnt;
     }
 
 }
