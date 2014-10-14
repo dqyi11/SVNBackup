@@ -11,7 +11,9 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma
 {
     mpFilename = const_cast<char *>(filename);
 
-    IplImage  * img = cvLoadImage(mpFilename);
+    IplImage * img_rgb = cvLoadImage(mpFilename);
+    IplImage * img = cvCreateImage(cvGetSize(img_rgb), img_rgb->depth, img_rgb->nChannels);
+    cvCvtColor(img_rgb, img, CV_RGB2Luv);
     mImgWidth = img->width;
     mImgHeight = img->height;
     mConnectNum = 4;
@@ -42,6 +44,7 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma
     }
 
     cvReleaseImage(&img);
+    cvReleaseImage(&img_rgb);
 }
 
 ImageDataGraph::~ImageDataGraph()

@@ -82,7 +82,7 @@ Segmentation::~Segmentation()
     mBackgroundSet.clear();
 }
 
-void Segmentation:: visualize()
+void Segmentation:: visualize(bool includeMask)
 {
     std::cout << "Loading ... " << mpFilename << std::endl;
 
@@ -103,22 +103,56 @@ void Segmentation:: visualize()
             int node_id = i + j * imgData->width;
             if (mpTrimap[node_id] == ImageDataGraph::FOREGROUND_PIXEL)
             {
-                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 0] = 153;
-                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 1] = 255;
-                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 2] = 51;
-
+                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 0] = ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 0];
+                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 1] = ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 1];
+                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 2] = ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 2];
             }
-            else if (mpTrimap[node_id] == ImageDataGraph::BACKGROUND_PIXEL)
+            else
             {
-                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 0] = 102;
-                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 1] = 102;
+                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 0] = 255;
+                ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 1] = 255;
                 ((uchar *)(imgData->imageData + j*imgData->widthStep))[i*imgData->nChannels + 2] = 255;
             }
         }
     }
 
+    if(includeMask==true)
+    {
+        IplImage * imgMaskData = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
+
+        for(int j=0;j<imgMaskData->height;j++)
+        {
+            for(int i=0;i<imgMaskData->width;i++)
+            {
+                int node_id = i + j * imgData->width;
+                if (mpTrimap[node_id] == ImageDataGraph::FOREGROUND_PIXEL)
+                {
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 0] = 153;
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 1] = 255;
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 2] = 51;
+
+                }
+                else if (mpTrimap[node_id] == ImageDataGraph::BACKGROUND_PIXEL)
+                {
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 0] = 102;
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 1] = 102;
+                    ((uchar *)(imgMaskData->imageData + j*imgMaskData->widthStep))[i*imgMaskData->nChannels + 2] = 255;
+                }
+            }
+        }
+
+        std::string newMaskFilename(mpFilename);
+        newMaskFilename += "-mask.png";
+
+        cvNamedWindow(newMaskFilename.c_str());
+        cvShowImage(newMaskFilename.c_str(), imgMaskData);
+        cvSaveImage(newMaskFilename.c_str(), imgMaskData);
+
+        cvReleaseImage(&imgMaskData);
+    }
+
     std::string newFilename(mpFilename);
-    newFilename += "-vis.png";
+    newFilename += "-foreground.png";
 
     cvNamedWindow(newFilename.c_str());
     cvShowImage(newFilename.c_str(), imgData);
@@ -168,7 +202,7 @@ void GraphCutSegmentation::process()
         for(int i=0;i<pGraph->mImgWidth;i++)
         {
             int node_id = i + j * pGraph->mImgWidth;
-            if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SOURCE)
+            if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SINK)
             {
                 mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
             }

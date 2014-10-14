@@ -33,7 +33,7 @@ public:
     Segmentation(const char* filename, int width, int height);
     ~Segmentation();
 
-    void visualize();
+    void visualize(bool includeMask=true);
     virtual void process() = 0;
 protected:
     char * mpFilename;
