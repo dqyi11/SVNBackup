@@ -81,9 +81,13 @@ Segmentation::~Segmentation()
 
 void Segmentation::process()
 {
+    qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
 
+    qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
+
+    qDebug() << "Graph cutting ";
 
     int flow =  pGraph->maxFlowCut();
     qDebug() << "Flow: " << flow;
@@ -108,6 +112,12 @@ void Segmentation::process()
             }
         }
     }
+
+    if(pGraph)
+    {
+        delete pGraph;
+        pGraph = NULL;
+    }
 }
 
 void Segmentation:: visualize()
@@ -126,13 +136,14 @@ void Segmentation:: visualize()
 
     for(std::list<PixelPosition>::iterator it=mForegroundSet.begin();it!=mForegroundSet.end();it++)
     {
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 153;
         ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 255;
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 51;
     }
     for(std::list<PixelPosition>::iterator it=mBackgroundSet.begin();it!=mBackgroundSet.end();it++)
     {
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 255;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 102;
+        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 102;
         ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 255;
     }
 

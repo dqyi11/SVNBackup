@@ -20,7 +20,7 @@ protected:
     std::list<PixelColor>    mSampleColors;
 };
 
-class GaussianKernelDensityEstimator : KernelDensityEstimator
+class GaussianKernelDensityEstimator : public KernelDensityEstimator
 {
 public:
     GaussianKernelDensityEstimator(float sigma);

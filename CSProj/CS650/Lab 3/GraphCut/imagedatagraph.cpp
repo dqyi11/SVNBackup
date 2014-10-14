@@ -82,6 +82,8 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[2] = mpBVals[index];
 
         mpGridPrior[index] = 1;
+
+        mpForegroundEstimator->addSample(pos, color);
     }
 
     for(std::list<PixelPosition>::iterator it=background_set.begin();it!=background_set.end();it++)
@@ -94,6 +96,8 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[2] = mpBVals[index];
 
         mpGridPrior[index] = -1;
+
+        mpBackgroundEstimator->addSample(pos, color);
     }
 
     for(int j=0;j<mImgHeight;j++)
