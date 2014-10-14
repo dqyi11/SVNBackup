@@ -83,7 +83,6 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[1] = mpGVals[index];
         color.vals[2] = mpBVals[index];
 
-        mpGridPrior[index] = FOREGROUND_PIXEL;
         mpForegroundEstimator->addSample(pos, color);
     }
 
@@ -96,7 +95,6 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[1] = mpGVals[index];
         color.vals[2] = mpBVals[index];
 
-        mpGridPrior[index] = BACKGROUND_PIXEL;
         mpBackgroundEstimator->addSample(pos, color);
     }
 }
@@ -181,16 +179,16 @@ void ImageDataGraph::initializeGraph()
         for(int i=0;i<mImgWidth;i++)
         {
             int node_id = i + j*mImgWidth;
-            /*
+
             if(mpGridPrior[node_id]==BACKGROUND_PIXEL)
-            {
-                mpGraph->add_tweights( node_id, 0.0 , 1+mMaxNeighborhood );
-            }
-            else if(mpGridPrior[node_id]==FOREGROUND_PIXEL)
             {
                 mpGraph->add_tweights( node_id, 1+mMaxNeighborhood , 0.0 );
             }
-            else */
+            else if(mpGridPrior[node_id]==FOREGROUND_PIXEL)
+            {
+                mpGraph->add_tweights( node_id, 0.0 , 1+mMaxNeighborhood );
+            }
+            else
             {
                 PixelColor color;
                 color.vals[0] = mpRVals[node_id];

@@ -56,16 +56,19 @@ void SeedManager::addSeed(int x, int y)
     }
 }
 
-Segmentation::Segmentation(const char* filename)
+Segmentation::Segmentation(const char* filename, int width, int height)
 {
-    std::cout << "Assigning ... " << filename << std::endl;
+    //std::cout << "Assigning ... " << filename << std::endl;
     mpFilename = new char[strlen(filename)+1];
     strcpy(mpFilename, filename);
 
     mForegroundSet.clear();
     mBackgroundSet.clear();
 
-    mpTrimap = NULL;
+    mImgWidth = width;
+    mImgHeight = height;
+
+    mpTrimap = new int[mImgWidth * mImgHeight];
  }
 
 Segmentation::~Segmentation()
@@ -93,20 +96,6 @@ void Segmentation:: visualize()
 
     IplImage * imgData = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
 
-    /*
-    for(std::list<PixelPosition>::iterator it=mForegroundSet.begin();it!=mForegroundSet.end();it++)
-    {
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 153;
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 255;
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 51;
-    }
-    for(std::list<PixelPosition>::iterator it=mBackgroundSet.begin();it!=mBackgroundSet.end();it++)
-    {
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 0] = 102;
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 1] = 102;
-        ((uchar *)(imgData->imageData + it->vals[1]*imgData->widthStep))[it->vals[0]*imgData->nChannels + 2] = 255;
-    }
-    */
     for(int j=0;j<imgData->height;j++)
     {
         for(int i=0;i<imgData->width;i++)
@@ -131,7 +120,7 @@ void Segmentation:: visualize()
     std::string newFilename(mpFilename);
     newFilename += "-vis.png";
 
-    cvNamedWindow(newFilename.c_str()); //create a window with the name "MyWindow"
+    cvNamedWindow(newFilename.c_str());
     cvShowImage(newFilename.c_str(), imgData);
     cvSaveImage(newFilename.c_str(), imgData);
 
@@ -142,15 +131,19 @@ void Segmentation:: visualize()
 
 }
 
-GraphCutSegmentation::GraphCutSegmentation(const char* filename, SeedManager * foreground, SeedManager * background) : Segmentation(filename)
+GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background) : Segmentation(filename, width, height)
 {
     for(std::list<PixelPosition>::iterator it=foreground->mpSeeds->begin();it!=foreground->mpSeeds->end();it++)
     {
         mForegroundSet.push_back(*it);
+        int index = it->vals[0] + it->vals[1]* mImgWidth;
+        mpTrimap[index] = ImageDataGraph::FOREGROUND_PIXEL;
     }
     for(std::list<PixelPosition>::iterator it=background->mpSeeds->begin();it!=background->mpSeeds->end();it++)
     {
         mBackgroundSet.push_back(*it);
+        int index = it->vals[0] + it->vals[1]* mImgWidth;
+        mpTrimap[index] = ImageDataGraph::BACKGROUND_PIXEL;
     }
 }
 
@@ -159,7 +152,7 @@ void GraphCutSegmentation::process()
 {
     qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
-    mpTrimap = new int[pGraph->mImgHeight*pGraph->mImgWidth];
+    //mpTrimap = new int[pGraph->mImgHeight*pGraph->mImgWidth];
     pGraph->mpGridPrior = mpTrimap;
     qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
@@ -170,24 +163,17 @@ void GraphCutSegmentation::process()
     int flow =  pGraph->maxFlowCut();
     qDebug() << "Flow: " << flow;
 
-    //mForegroundSet.clear();
-    //mBackgroundSet.clear();
     for(int j=0;j<pGraph->mImgHeight;j++)
     {
         for(int i=0;i<pGraph->mImgWidth;i++)
         {
-            //PixelPosition pos;
-            //pos.vals[0] = i;
-            //pos.vals[1] = j;
             int node_id = i + j * pGraph->mImgWidth;
             if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SOURCE)
             {
-                //mForegroundSet.push_back(pos);
                 mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
             }
             else
             {
-                //mBackgroundSet.push_back(pos);
                 mpTrimap[node_id] = ImageDataGraph::BACKGROUND_PIXEL;
             }
         }
@@ -200,7 +186,7 @@ void GraphCutSegmentation::process()
     }
 }
 
-GrabCutSegmentation::GrabCutSegmentation(const char* filename, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename)
+GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height)
 {
     mRectUpperLeftX = rect_x;
     mRectUpperLeftY = rect_y;

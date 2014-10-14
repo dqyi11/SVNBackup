@@ -30,13 +30,15 @@ public:
 class Segmentation
 {
 public:
-    Segmentation(const char* filename);
+    Segmentation(const char* filename, int width, int height);
     ~Segmentation();
 
     void visualize();
     virtual void process() = 0;
 protected:
     char * mpFilename;
+    int mImgWidth;
+    int mImgHeight;
     std::list<PixelPosition> mForegroundSet;
     std::list<PixelPosition> mBackgroundSet;
     int * mpTrimap;
@@ -45,7 +47,7 @@ protected:
 class GraphCutSegmentation : public Segmentation
 {
 public:
-    GraphCutSegmentation(const char* filename, SeedManager * foreground, SeedManager * background);
+    GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background);
 
     virtual void process();
 };
@@ -53,7 +55,7 @@ public:
 class GrabCutSegmentation : public Segmentation
 {
 public:
-    GrabCutSegmentation(const char* filename, int rect_x, int rect_y, int rect_w, int rect_h);
+    GrabCutSegmentation(const char* filename, int width, int height, int rect_x, int rect_y, int rect_w, int rect_h);
 
     virtual void process();
 
