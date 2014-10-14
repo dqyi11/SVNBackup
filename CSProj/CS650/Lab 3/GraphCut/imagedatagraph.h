@@ -10,10 +10,11 @@ typedef Graph<int,int,int> PixelGraph;
 class ImageDataGraph
 {
 public:
-    ImageDataGraph(const char* filename, float sigma_nb=2.0);
+    ImageDataGraph(const char* filename, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();
 
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
+    void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
 
 private:
     char * mpFilename;
@@ -23,11 +24,14 @@ private:
     int * mpGVals;
     int * mpBVals;
 
-    int img_width;
-    int img_height;
-    int connect_num;
+    int mImgWidth;
+    int mImgHeight;
+    int mConnectNum;
+
+    int * mpGridPrior;
 
     float mSigmaNeighborhood;
+    float mSigmaKDE;
 
     GaussianKernelDensityEstimator * mpForegroundEstimator;
     GaussianKernelDensityEstimator * mpBackgroundEstimator;
