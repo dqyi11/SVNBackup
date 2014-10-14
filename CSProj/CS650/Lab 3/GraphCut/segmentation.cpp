@@ -171,3 +171,16 @@ void GraphCutSegmentation::process()
         pGraph = NULL;
     }
 }
+
+GrabCutSegmentation::GrabCutSegmentation(const char* filename, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename)
+{
+    mRectUpperLeftX = rect_x;
+    mRectUpperLeftY = rect_y;
+    mRectLowerRightX = rect_x + rect_w;
+    mRectLowerRightY = rect_y + rect_h;
+}
+
+void GrabCutSegmentation::process()
+{
+
+}

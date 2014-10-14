@@ -143,9 +143,19 @@ void InteractiveWindow::on_segment_clicked()
 {
     qDebug() << "Generating graph";
 
-    GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
-    seg.process();
-    seg.visualize();
+    if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAPH_CUT_SEGMENTATION)
+    {
+        GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
+        seg.process();
+        seg.visualize();
+    }
+    else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
+    {
+        GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->mRectStartX, mpImageLabel->mRectStartY,
+                                mpImageLabel->mRectEndX - mpImageLabel->mRectStartX, mpImageLabel->mRectEndY - mpImageLabel->mRectStartY);
+        seg.process();
+        seg.visualize();
+    }
 }
 
 void InteractiveWindow::on_graphcut_clicked()

@@ -49,4 +49,17 @@ public:
     virtual void process();
 };
 
+class GrabCutSegmentation : public Segmentation
+{
+public:
+    GrabCutSegmentation(const char* filename, int rect_x, int rect_y, int rect_w, int rect_h);
+
+    virtual void process();
+
+    int mRectUpperLeftX;
+    int mRectUpperLeftY;
+    int mRectLowerRightX;
+    int mRectLowerRightY;
+};
+
 #endif // SEGMENTATION_H
