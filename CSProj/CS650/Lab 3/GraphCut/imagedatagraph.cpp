@@ -5,6 +5,7 @@
 #include <math.h>
 
 #include "imagedatagraph.h"
+#include "qdebug.h"
 
 ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma_kde)
 {
@@ -17,6 +18,7 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma
 
     mSigmaNeighborhood = sigma_nb;
     mSigmaKDE = sigma_kde;
+    mMaxNeighborhood = 0.0;
 
     mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
     mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
@@ -25,7 +27,7 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma
     mpGVals = new int[mImgWidth*mImgHeight];
     mpBVals = new int[mImgWidth*mImgHeight];
 
-    mpGridPrior = new int[mImgWidth*mImgHeight];
+    mpGridPrior = NULL;
 
     mpGraph = new PixelGraph(mImgWidth*mImgHeight, mImgWidth*mImgHeight*mConnectNum);
 
@@ -81,8 +83,7 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[1] = mpGVals[index];
         color.vals[2] = mpBVals[index];
 
-        mpGridPrior[index] = 1;
-
+        mpGridPrior[index] = FOREGROUND_PIXEL;
         mpForegroundEstimator->addSample(pos, color);
     }
 
@@ -95,33 +96,34 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[1] = mpGVals[index];
         color.vals[2] = mpBVals[index];
 
-        mpGridPrior[index] = -1;
-
+        mpGridPrior[index] = BACKGROUND_PIXEL;
         mpBackgroundEstimator->addSample(pos, color);
     }
+}
 
+void ImageDataGraph::initializeGraph()
+{
+    qDebug() << "Adding nodes";
+    // Add nodes
     for(int j=0;j<mImgHeight;j++)
     {
         for(int i=0;i<mImgWidth;i++)
         {
             int node_id = mpGraph->add_node();
-            PixelColor color;
-            color.vals[0] = mpRVals[node_id];
-            color.vals[1] = mpGVals[node_id];
-            color.vals[2] = mpBVals[node_id];
-            double foregroundWeight = mpForegroundEstimator->getEstimation(color);
-            double backgroundWeight = mpBackgroundEstimator->getEstimation(color);
-            mpGraph->add_tweights( node_id, foregroundWeight , backgroundWeight );
         }
     }
 
+    qDebug() << "Adding neighborhood links";
+    // Add neighborhood links
+    mMaxNeighborhood = 0.0;
     for(int j=0;j<mImgHeight;j++)
     {
         for(int i=0;i<mImgWidth;i++)
         {
             int node_id = i+j*mImgWidth;
-            //qDebug() << node_id;
+
             std::list<int> neighbor_ids = std::list<int>();
+
             if(j>0 && i>0)
             {
                 neighbor_ids.push_back(node_id-mImgWidth);
@@ -152,6 +154,7 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
                 neighbor_ids.push_back(node_id+1);
             }
 
+            double neighbor_weight_sum = 0.0;
             PixelPosition p;
             p.vals[0] = i;
             p.vals[1] = j;
@@ -162,13 +165,49 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
                 q.vals[1] = (int)(*it/mImgWidth);
                 float neighbor_weight = getNeighborhoodWeight(p, q);
                 mpGraph->add_edge(node_id, *it, neighbor_weight, neighbor_weight);
+                neighbor_weight_sum += neighbor_weight;
+            }
+            if (neighbor_weight_sum > mMaxNeighborhood)
+            {
+                mMaxNeighborhood = neighbor_weight_sum;
             }
         }
     }
 
+    qDebug() << "Adding terminal links";
+    //Add terminal links
+    for(int j=0;j<mImgHeight;j++)
+    {
+        for(int i=0;i<mImgWidth;i++)
+        {
+            int node_id = i + j*mImgWidth;
+            /*
+            if(mpGridPrior[node_id]==BACKGROUND_PIXEL)
+            {
+                mpGraph->add_tweights( node_id, 0.0 , 1+mMaxNeighborhood );
+            }
+            else if(mpGridPrior[node_id]==FOREGROUND_PIXEL)
+            {
+                mpGraph->add_tweights( node_id, 1+mMaxNeighborhood , 0.0 );
+            }
+            else */
+            {
+                PixelColor color;
+                color.vals[0] = mpRVals[node_id];
+                color.vals[1] = mpGVals[node_id];
+                color.vals[2] = mpBVals[node_id];
+                double foregroundWeight = mpForegroundEstimator->getEstimation(color);
+                double backgroundWeight = mpBackgroundEstimator->getEstimation(color);
+                mpGraph->add_tweights( node_id, foregroundWeight , backgroundWeight );
+            }
+        }
+    }
+
+    qDebug() << "Finish initialization";
 }
 
 int ImageDataGraph::maxFlowCut()
 {
+    qDebug() << "max flow cut";
     return mpGraph->maxflow();
 }

@@ -9,13 +9,18 @@ typedef Graph<int,int,int> PixelGraph;
 
 class ImageDataGraph
 {
+    friend class Segmentation;
     friend class GraphCutSegmentation;
+    friend class GrabCutSegmentation;
 public:
     ImageDataGraph(const char* filename, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();
 
+    enum PixelClass {UNKNOWN_PIXEL = 0, FOREGROUND_PIXEL = 1, BACKGROUND_PIXEL = 2};
+
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
     void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
+    void initializeGraph();
 
     int maxFlowCut();
 
@@ -35,6 +40,8 @@ protected:
 
     float mSigmaNeighborhood;
     float mSigmaKDE;
+
+    double mMaxNeighborhood;
 
     GaussianKernelDensityEstimator * mpForegroundEstimator;
     GaussianKernelDensityEstimator * mpBackgroundEstimator;

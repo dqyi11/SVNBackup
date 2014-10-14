@@ -39,6 +39,7 @@ protected:
     char * mpFilename;
     std::list<PixelPosition> mForegroundSet;
     std::list<PixelPosition> mBackgroundSet;
+    int * mpTrimap;
 };
 
 class GraphCutSegmentation : public Segmentation
