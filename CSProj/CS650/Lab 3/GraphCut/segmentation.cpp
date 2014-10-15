@@ -227,7 +227,7 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
     mRectLowerRightX = rect_x + rect_w;
     mRectLowerRightY = rect_y + rect_h;
 
-    mIterationNum = 2;
+    mIterationNum = 20;
 }
 
 void GrabCutSegmentation::process()
