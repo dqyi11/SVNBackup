@@ -1,3 +1,18 @@
 \section{Introduction}
 
 Path planning is a fundamental problem in the autonomy of the mobile robot.
+Commonly it branches into low-level planning and high-level planning.
+Low-level planning considers how an action should be completed.
+The planned path will be applied to trajectory following in a relatively high accuracy.
+The dynamics of the actuator should be included in the planning process.
+For example, how a robotic arm moves in the assembling some parts. 
+High-level planning is usually used for generating task-level behaviors.
+The target is having a sequence of waypoints that defines a motion pattern that satisfies the task requirement.
+
+As the most natural way of human communications, the semantic commands contain the objectives for task-level planning.
+In order to understand the human's purpose exactly, the adverb in the human's semantic command cannot be ignored.
+Involving adverb in defining the objectives of a task leads to the multi-objective optimization.
+
+The problem becomes how to place a sequence of waypoints to optimize several objectives.
+
+
