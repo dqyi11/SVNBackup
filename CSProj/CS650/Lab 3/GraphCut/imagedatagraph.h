@@ -13,7 +13,7 @@ class ImageDataGraph
     friend class GraphCutSegmentation;
     friend class GrabCutSegmentation;
 public:
-    ImageDataGraph(const char* filename, float sigma_nb=2.0, float sigma_kde=2.0);
+    ImageDataGraph(const char* filename, float regionImportance, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();
 
     enum PixelClass {UNKNOWN_PIXEL = 0, FOREGROUND_PIXEL = 1, BACKGROUND_PIXEL = 2};
@@ -27,6 +27,7 @@ public:
 protected:
     char * mpFilename;
     PixelGraph * mpGraph;
+    float mRegionImportance;
 
     int * mpRVals;
     int * mpGVals;

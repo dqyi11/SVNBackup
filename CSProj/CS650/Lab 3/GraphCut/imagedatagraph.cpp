@@ -7,7 +7,7 @@
 #include "imagedatagraph.h"
 #include "qdebug.h"
 
-ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma_kde)
+ImageDataGraph::ImageDataGraph(const char* filename, float regionImportance, float sigma_nb, float sigma_kde)
 {
     mpFilename = const_cast<char *>(filename);
 
@@ -20,6 +20,7 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_nb, float sigma
 
     mSigmaNeighborhood = sigma_nb;
     mSigmaKDE = sigma_kde;
+    mRegionImportance = regionImportance;
     mMaxNeighborhood = 0.0;
 
     mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);

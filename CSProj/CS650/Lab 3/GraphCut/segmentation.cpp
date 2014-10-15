@@ -56,7 +56,7 @@ void SeedManager::addSeed(int x, int y)
     }
 }
 
-Segmentation::Segmentation(const char* filename, int width, int height)
+Segmentation::Segmentation(const char* filename, int width, int height, float regionImportance)
 {
     //std::cout << "Assigning ... " << filename << std::endl;
     mpFilename = new char[strlen(filename)+1];
@@ -67,6 +67,7 @@ Segmentation::Segmentation(const char* filename, int width, int height)
 
     mImgWidth = width;
     mImgHeight = height;
+    mRegionImportance = regionImportance;
 
     mpTrimap = new int[mImgWidth * mImgHeight];
  }
@@ -165,7 +166,7 @@ void Segmentation:: visualize(bool includeMask)
 
 }
 
-GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background) : Segmentation(filename, width, height)
+GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int height, float regionImportance, SeedManager * foreground, SeedManager * background) : Segmentation(filename, width, height, regionImportance)
 {
     for(std::list<PixelPosition>::iterator it=foreground->mpSeeds->begin();it!=foreground->mpSeeds->end();it++)
     {
@@ -185,7 +186,7 @@ GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int 
 void GraphCutSegmentation::process()
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
     //mpTrimap = new int[pGraph->mImgHeight*pGraph->mImgWidth];
     pGraph->mpGridPrior = mpTrimap;
     qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
@@ -220,7 +221,7 @@ void GraphCutSegmentation::process()
     }
 }
 
-GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height)
+GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, float regionImportance, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height, regionImportance)
 {
     mRectUpperLeftX = rect_x;
     mRectUpperLeftY = rect_y;
@@ -233,7 +234,7 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
 void GrabCutSegmentation::process()
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
 
     mpTrimap = new int[pGraph->mImgWidth*pGraph->mImgHeight];
     for(int j=0;j<pGraph->mImgHeight;j++)
@@ -261,7 +262,7 @@ void GrabCutSegmentation::process()
     while(iterationCnt < mIterationNum)
     {
         qDebug() << "Iteration " << iterationCnt;
-        ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+        ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
         pGraph->mpGridPrior = mpTrimap;
         pGraph->importPrior(mForegroundSet, mBackgroundSet);
         pGraph->initializeGraph();
