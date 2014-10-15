@@ -14,5 +14,12 @@ In order to understand the human's purpose exactly, the adverb in the human's se
 Involving adverb in defining the objectives of a task leads to the multi-objective optimization.
 
 The problem becomes how to place a sequence of waypoints to optimize several objectives.
-
+In order to guarantee the paths are metrically comparable, we use a fixed number of waypoints for the planned representation of each task.
+Let a path being a sequence of $ T $ waypoints, $ x_{1} , \cdots , x_{T} $.
+There exists $ K $ objectives, the utility functions of which can be written as a vector $ F(x) = [ f_{1}(x) , \cdots , f_{K}(x) ]^{T} $.
+The optimization problem is defined as
+\begin{equation}
+\max_{ x_{1} \in \mathbf{X}_{1} , \cdots , x_{T} \in \mathbf{X}_{T} } \sum_{t=1}^{T} F(x_{t}),
+\end{equation}
+in which $ \mathbf{X}_{t}  $ is the subsolution space for subsolution $ x_{t} $.
 
