@@ -178,6 +178,7 @@ void InteractiveWindow::on_segment_clicked()
 
     if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAPH_CUT_SEGMENTATION)
     {
+        mpConfigDialog->exec();
         qDebug() << "Generating Graph-cut based segmentation " << mpParamMgr->mRegionImportance;
         GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(), mpParamMgr->mRegionImportance,
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
@@ -187,6 +188,7 @@ void InteractiveWindow::on_segment_clicked()
     }
     else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
     {
+        mpConfigDialog->exec();
         qDebug() << "Generating Grab-cut based segmentation" << mpParamMgr->mRegionImportance;
         GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(), mpParamMgr->mRegionImportance,
                                 mpImageLabel->mRectStartX, mpImageLabel->mRectStartY,
