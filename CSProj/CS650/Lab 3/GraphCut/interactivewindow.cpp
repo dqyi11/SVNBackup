@@ -2,6 +2,8 @@
 #include <QtGui>
 #include "imagedatagraph.h"
 #include "segmentation.h"
+#include "configdialog.h"
+#include "parametermanager.h"
 
 InteractiveWindow::InteractiveWindow(QWidget *parent) :
     QMainWindow(parent)
@@ -26,6 +28,8 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     connect(mpClearAction, SIGNAL(triggered()), this, SLOT(on_clear_clicked()));
     mpSegmentAction = new QAction(tr("&Segment"), this);
     connect(mpSegmentAction, SIGNAL(triggered()), this, SLOT(on_segment_clicked()));
+    mpConfigAction = new QAction(tr("&Config"), this);
+    connect(mpConfigAction, SIGNAL(triggered()), this, SLOT(on_config_clicked()));
 
     mpWorkStateGroup = new QActionGroup(this);
 
@@ -43,6 +47,7 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     mpFileMenu->addAction(mpOpenAction);
     mpEditMenu = new QMenu(tr("&Edit"), this);
     mpEditMenu->addAction(mpClearAction);
+    mpEditMenu->addAction(mpConfigAction);
     mpEditMenu->addAction(mpSegmentAction);
     mpModeMenu = new QMenu(tr("&Mode"), this);
     mpModeMenu->addAction(mpGraphCutAction);
@@ -58,6 +63,9 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
 
     mpGraphCutAction->setChecked(true);
     mpImageLabel->mCurrentWorkingState = InteractiveLabel::GRAPH_CUT_SEGMENTATION;
+
+    mpParamMgr = new ParameterManager();
+    mpConfigDialog = new ConfigDialog(mpParamMgr, this);
 
     qDebug() << "UI Initalized";
 }
@@ -84,6 +92,26 @@ InteractiveWindow::~InteractiveWindow()
         delete mpSegmentAction;
         mpSegmentAction = NULL;
     }
+    if(mpConfigAction)
+    {
+        delete mpConfigAction;
+        mpConfigAction = NULL;
+    }
+    if(mpGraphCutAction)
+    {
+        delete mpGraphCutAction;
+        mpGraphCutAction = NULL;
+    }
+    if(mpGrabCutAction)
+    {
+        delete mpGrabCutAction;
+        mpGrabCutAction = NULL;
+    }
+    if(mpWorkStateGroup)
+    {
+        delete mpWorkStateGroup;
+        mpWorkStateGroup = NULL;
+    }
     if(mpFileMenu)
     {
         delete mpFileMenu;
@@ -93,6 +121,11 @@ InteractiveWindow::~InteractiveWindow()
     {
         delete mpEditMenu;
         mpEditMenu = NULL;
+    }
+    if(mpConfigDialog)
+    {
+        delete mpConfigDialog;
+        mpConfigDialog = NULL;
     }
 }
 
@@ -145,19 +178,21 @@ void InteractiveWindow::on_segment_clicked()
 
     if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAPH_CUT_SEGMENTATION)
     {
-        qDebug() << "Generating Graph-cut based segmentation";
-        GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),1.1,
+        qDebug() << "Generating Graph-cut based segmentation " << mpParamMgr->mRegionImportance;
+        GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(), mpParamMgr->mRegionImportance,
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
-        seg.process();
+        qDebug() << "Neighborhood Sigma " << mpParamMgr->mNeighborhoodSigma << " KDE Sigma " << mpParamMgr->mKDESigma;
+        seg.process(mpParamMgr->mNeighborhoodSigma, mpParamMgr->mKDESigma);
         seg.visualize();
     }
     else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
     {
-        qDebug() << "Generating Grab-cut based segmentation";
-        GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(), 0.5,
+        qDebug() << "Generating Grab-cut based segmentation" << mpParamMgr->mRegionImportance;
+        GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(), mpParamMgr->mRegionImportance,
                                 mpImageLabel->mRectStartX, mpImageLabel->mRectStartY,
                                 mpImageLabel->mRectEndX - mpImageLabel->mRectStartX, mpImageLabel->mRectEndY - mpImageLabel->mRectStartY);
-        seg.process();
+        qDebug() << "Neighborhood Sigma " << mpParamMgr->mNeighborhoodSigma << " KDE Sigma " << mpParamMgr->mKDESigma;
+        seg.process(mpParamMgr->mNeighborhoodSigma, mpParamMgr->mKDESigma);
         seg.visualize();
     }
 }
@@ -170,4 +205,9 @@ void InteractiveWindow::on_graphcut_clicked()
 void InteractiveWindow::on_grabcut_clicked()
 {
     mpImageLabel->setWorkingState(InteractiveLabel::GRAB_CUT_SEGMENTATION);
+}
+
+void InteractiveWindow::on_config_clicked()
+{
+    mpConfigDialog->exec();
 }

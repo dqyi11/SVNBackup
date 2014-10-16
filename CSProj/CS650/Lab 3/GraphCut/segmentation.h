@@ -34,7 +34,7 @@ public:
     ~Segmentation();
 
     void visualize(bool includeMask=true);
-    virtual void process() = 0;
+    virtual void process(float sigma_nb, float sigma_kde) = 0;
 protected:
     char * mpFilename;
     int mImgWidth;
@@ -50,7 +50,7 @@ class GraphCutSegmentation : public Segmentation
 public:
     GraphCutSegmentation(const char* filename, int width, int height, float regionImportance, SeedManager * foreground, SeedManager * background);
 
-    virtual void process();
+    virtual void process(float sigma_nb, float sigma_kde);
 };
 
 class GrabCutSegmentation : public Segmentation
@@ -58,7 +58,7 @@ class GrabCutSegmentation : public Segmentation
 public:
     GrabCutSegmentation(const char* filename, int width, int height, float regionImportance, int rect_x, int rect_y, int rect_w, int rect_h);
 
-    virtual void process();
+    virtual void process(float sigma_nb, float sigma_kde);
 
     int mRectUpperLeftX;
     int mRectUpperLeftY;

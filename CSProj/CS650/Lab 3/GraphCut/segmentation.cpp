@@ -183,11 +183,10 @@ GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int 
 }
 
 
-void GraphCutSegmentation::process()
+void GraphCutSegmentation::process(float sigma_nb, float sigma_kde)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
-    //mpTrimap = new int[pGraph->mImgHeight*pGraph->mImgWidth];
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance, sigma_nb, sigma_kde);
     pGraph->mpGridPrior = mpTrimap;
     qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
@@ -231,10 +230,10 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
     mIterationNum = 20;
 }
 
-void GrabCutSegmentation::process()
+void GrabCutSegmentation::process(float sigma_nb, float sigma_kde)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance, sigma_nb, sigma_kde);
 
     mpTrimap = new int[pGraph->mImgWidth*pGraph->mImgHeight];
     for(int j=0;j<pGraph->mImgHeight;j++)

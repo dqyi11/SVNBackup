@@ -27,9 +27,7 @@ SOURCES += main.cpp\
     interactivewindow.cpp \
     interactivelabel.cpp \
     segmentation.cpp \
-    kerneldensityestimator.cpp \
-    configdialog.cpp \
-    parametermanager.cpp
+    kerneldensityestimator.cpp
 
 HEADERS  += \
     maxflow/block.h \
@@ -38,8 +36,6 @@ HEADERS  += \
     interactivewindow.h \
     interactivelabel.h \
     segmentation.h \
-    kerneldensityestimator.h \
-    configdialog.h \
-    parametermanager.h
+    kerneldensityestimator.h
 
 FORMS    +=
