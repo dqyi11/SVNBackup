@@ -146,7 +146,7 @@ void InteractiveWindow::on_segment_clicked()
     if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAPH_CUT_SEGMENTATION)
     {
         qDebug() << "Generating Graph-cut based segmentation";
-        GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),0.5,
+        GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),1.1,
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
         seg.process();
         seg.visualize();

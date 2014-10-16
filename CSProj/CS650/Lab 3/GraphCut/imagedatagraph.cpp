@@ -200,7 +200,9 @@ void ImageDataGraph::initializeGraph()
                 color.vals[2] = mpBVals[node_id];
                 double foregroundWeight = mpForegroundEstimator->getEstimation(color);
                 double backgroundWeight = mpBackgroundEstimator->getEstimation(color);
-                mpGraph->add_tweights( node_id, foregroundWeight , backgroundWeight );
+                double normalizedForegroundWeight = mRegionImportance * foregroundWeight / (foregroundWeight+backgroundWeight);
+                double normalizedBackgroundWeight = mRegionImportance * backgroundWeight / (foregroundWeight+backgroundWeight);
+                mpGraph->add_tweights( node_id, normalizedForegroundWeight , normalizedBackgroundWeight );
             }
         }
     }
