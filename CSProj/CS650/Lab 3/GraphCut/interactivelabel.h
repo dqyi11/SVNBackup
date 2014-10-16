@@ -20,6 +20,7 @@ public:
     QPixmap mGrayPixmap;
 
     void setWorkingState(WorkingState state);
+    void clearLabel();
 
 protected:
     void mouseReleaseEvent(QMouseEvent * e);

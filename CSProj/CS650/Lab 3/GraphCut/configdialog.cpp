@@ -109,7 +109,7 @@ void ConfigDialog::on_ok_clicked()
 {
     mpParamMgr->mIterationNumber = mpEditIterationNumber->text().toInt();
     mpParamMgr->mRegionImportance = mpEditRegionImportance->text().toFloat();
-    mpParamMgr->mNeighborhoodSigma = mpEditIterationNumber->text().toFloat();
+    mpParamMgr->mNeighborhoodSigma = mpEditNeighborhoodSigma->text().toFloat();
     mpParamMgr->mKDESigma = mpEditKDESigma->text().toFloat();
     close();
 }

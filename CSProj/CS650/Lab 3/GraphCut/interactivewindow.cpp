@@ -168,7 +168,7 @@ void InteractiveWindow::on_clear_clicked()
 {
     if(mpImageLabel)
     {
-        mpImageLabel->clear();
+        mpImageLabel->clearLabel();
     }
 }
 

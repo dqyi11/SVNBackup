@@ -78,6 +78,19 @@ void InteractiveLabel::mousePressEvent ( QMouseEvent * e )
     }
 }
 
+void InteractiveLabel::clearLabel()
+{
+    if(mpForegroundSeedMgr)
+    {
+        mpForegroundSeedMgr->clear();
+    }
+    if(mpBackgroundSeedMgr)
+    {
+        mpBackgroundSeedMgr->clear();
+    }
+    update();
+}
+
 void InteractiveLabel::mouseMoveEvent( QMouseEvent * e )
 {
     if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
