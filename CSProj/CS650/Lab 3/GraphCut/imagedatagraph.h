@@ -16,11 +16,14 @@ public:
     ImageDataGraph(const char* filename, float regionImportance, float sigma_nb=2.0, float sigma_kde=2.0);
     ~ImageDataGraph();
 
+    enum Neighborhood { N = 0, NE, E, SE, S, SW, W, NW };
+
     enum PixelClass {UNKNOWN_PIXEL = 0, FOREGROUND_PIXEL = 1, BACKGROUND_PIXEL = 2};
 
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
     void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
     void initializeGraph();
+    void initializeNeighborhoodWeights();
 
     int maxFlowCut();
 
@@ -32,6 +35,8 @@ protected:
     int * mpRVals;
     int * mpGVals;
     int * mpBVals;
+
+    double ** mpNeighborhoodWeights;
 
     int mImgWidth;
     int mImgHeight;

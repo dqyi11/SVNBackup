@@ -202,7 +202,7 @@ void GraphCutSegmentation::process(float sigma_nb, float sigma_kde)
         for(int i=0;i<pGraph->mImgWidth;i++)
         {
             int node_id = i + j * pGraph->mImgWidth;
-            if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SINK)
+            if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SOURCE)
             {
                 mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
             }

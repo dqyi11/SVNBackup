@@ -159,7 +159,6 @@ void InteractiveLabel::mouseReleaseEvent ( QMouseEvent * e )
             mRectStartY = mRectStartY >= 0 ? mRectStartY : 0;
             mRectEndX   = mRectEndX < this->width() ?  mRectEndX : this->width()-1;
             mRectEndY   = mRectEndY < this->height() ?  mRectEndY : this->height()-1;
-
         }
     }
     setPixmap(mColorPixmap);
