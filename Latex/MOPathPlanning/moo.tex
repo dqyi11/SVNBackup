@@ -1,0 +1,24 @@
+\section{Multi-objective optimization}
+
+The multi-objective optimization can be solved using a Tchebycheff method.
+With a utopia objective vector, we can have weighted Tchebycheff metric.
+The function to be minimized is  
+\begin{equation}
+\max_{k=1, \cdots , K} [ \omega_{k}  ( f_{k} (x) - z^{**}_{k} ) ],
+\end{equation}
+where $ \mathbf{\omega} \in W = \{ \mathbf{\omega} \in \mathbf{\mathbb{R}}^{K} \mid 0 < \omega_{i} < 1 , \sum^{K}_{k=1} \omega_{k} = 1 \} $ .
+The weakly Pareto optimal solutions can be avoided by a \emph{lexicographic weighted Tchebycheff problem}.
+\begin{equation}
+\mbox{lex minimize} \max_{k=1, \cdots , K} [ \omega_{k}  ( f_{k} (x) - z^{**}_{k} ) ], \\
+\mbox{subject to } x \in S.
+\end{equation}
+
+Benefits of using a decomposed method
+\begin{itemize}
+\item Each sub-problem becomes a single objective optimization problem.
+It is easier to decompose a solution into sub-solution for a single-objective problem than a multi-objective problem.
+Hope it can benefit the distributed optimization.
+\item Each Pareto optimal solution is paired with a weight vector.
+The selected Pareto optimal solution by a human can be used to interpret the human's intent.
+\item It should be easier to inherit the theoretic analysis methods in single-objective optimization.
+\end{itemize}
