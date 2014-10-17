@@ -229,7 +229,7 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
     mRectLowerRightX = rect_x + rect_w;
     mRectLowerRightY = rect_y + rect_h;
 
-    mIterationNum = 20;
+    mIterationNum = 5;
 }
 
 void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect_min_x, int rect_min_y, int rect_max_x, int rect_max_y, float inner_ratio, float outer_ratio)

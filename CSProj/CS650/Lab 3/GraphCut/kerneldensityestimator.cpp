@@ -1,9 +1,10 @@
 #include "kerneldensityestimator.h"
 #include <math.h>
 
-KernelDensityEstimator::KernelDensityEstimator()
+KernelDensityEstimator::KernelDensityEstimator(float bandwidth)
 {
     mSampleNumber = 0;
+    mBandWidth = bandwidth;
 }
 
 KernelDensityEstimator::~KernelDensityEstimator()
@@ -19,24 +20,25 @@ void KernelDensityEstimator::addSample(PixelPosition pos, PixelColor color)
     mSampleNumber++;
 }
 
-GaussianKernelDensityEstimator::GaussianKernelDensityEstimator(float sigma)
+GaussianKernelDensityEstimator::GaussianKernelDensityEstimator(float bandwidth) : KernelDensityEstimator(bandwidth)
 {
-    mSigma = sigma;
 }
 
 float GaussianKernelDensityEstimator::getEstimation(PixelColor color)
 {
     double estimation = 0.0;
+    float norm_term = sqrt(2 * 3.1415926);
 
     for(std::list<PixelColor>::iterator it=mSampleColors.begin();it!=mSampleColors.end();it++)
     {
-        float distance = sqrt( pow((double)(color.vals[0]-it->vals[0]),2)
-                +pow((double)(color.vals[1]-it->vals[1]),2)
-                +pow((double)(color.vals[2]-it->vals[2]),2) );
-        estimation += exp(distance / (2 * pow((double)mSigma,2)) );
+        float squared_distance = pow((double)(color.vals[0]-it->vals[0])/mBandWidth,2)
+                +pow((double)(color.vals[1]-it->vals[1])/mBandWidth,2)
+                +pow((double)(color.vals[2]-it->vals[2])/mBandWidth,2);
+        estimation += exp(squared_distance / 2 );
     }
 
-    estimation /= mSampleNumber;
+    estimation *= norm_term/mSampleNumber;
+    //estimation /= mSampleNumber;
 
     return (float)estimation;
 }

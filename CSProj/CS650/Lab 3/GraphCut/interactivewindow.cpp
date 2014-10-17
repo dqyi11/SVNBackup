@@ -184,6 +184,7 @@ void InteractiveWindow::on_segment_clicked()
         qDebug() << "Generating Grab-cut based segmentation" << mpParamMgr->mRegionImportance;
         GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),
                                 mpImageLabel->mRectStartX, mpImageLabel->mRectStartY, mpImageLabel->mRectEndX, mpImageLabel->mRectEndY);
+        seg.mIterationNum = mpParamMgr->mIterationNumber;
         qDebug() << "Neighborhood Sigma " << mpParamMgr->mNeighborhoodSigma << " KDE Sigma " << mpParamMgr->mKDESigma;
         seg.process(mpParamMgr->mNeighborhoodSigma, mpParamMgr->mKDESigma);
         seg.visualize();

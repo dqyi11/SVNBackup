@@ -7,7 +7,7 @@
 class KernelDensityEstimator
 {
 public:
-    KernelDensityEstimator();
+    KernelDensityEstimator(float bandwidth);
     ~KernelDensityEstimator();
 
     void addSample(PixelPosition pos, PixelColor color);
@@ -16,6 +16,8 @@ public:
 
 protected:
     int mSampleNumber;
+    float mBandWidth;
+
     std::list<PixelPosition> mSamplePositions;
     std::list<PixelColor>    mSampleColors;
 };
@@ -23,10 +25,8 @@ protected:
 class GaussianKernelDensityEstimator : public KernelDensityEstimator
 {
 public:
-    GaussianKernelDensityEstimator(float sigma);
+    GaussianKernelDensityEstimator(float bandwith);
     float getEstimation(PixelColor color);
-
-    float mSigma;
 };
 
 #endif // KERNELDENSITYESTIMATOR_H
