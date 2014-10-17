@@ -27,7 +27,9 @@ public:
 
     int maxFlowCut();
 
-    double getGibbsEnergy();
+    double getGibbsEnergy() { return mTotalGibbsEnergy; }
+    double getDataEnergy() { return mDataGibbsEnergy; }
+    double getSmoothnessEnergy() { return mSmoothnessGibbsEnergy; }
 
 protected:
 

@@ -7,6 +7,9 @@
 #include "imagedatagraph.h"
 #include "qdebug.h"
 
+#define GET_MAX(a, b) a>b?a:b
+#define GET_MIN(a, b) a<=b?a:b
+
 SeedManager::SeedManager()
 {
     mpSeeds = new std::list<PixelPosition>();
@@ -56,7 +59,7 @@ void SeedManager::addSeed(int x, int y)
     }
 }
 
-Segmentation::Segmentation(const char* filename, int width, int height, float regionImportance)
+Segmentation::Segmentation(const char* filename, int width, int height)
 {
     //std::cout << "Assigning ... " << filename << std::endl;
     mpFilename = new char[strlen(filename)+1];
@@ -67,7 +70,6 @@ Segmentation::Segmentation(const char* filename, int width, int height, float re
 
     mImgWidth = width;
     mImgHeight = height;
-    mRegionImportance = regionImportance;
 
     mpTrimap = new int[mImgWidth * mImgHeight];
  }
@@ -166,7 +168,7 @@ void Segmentation:: visualize(bool includeMask)
 
 }
 
-GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int height, float regionImportance, SeedManager * foreground, SeedManager * background) : Segmentation(filename, width, height, regionImportance)
+GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background) : Segmentation(filename, width, height)
 {
     for(std::list<PixelPosition>::iterator it=foreground->mpSeeds->begin();it!=foreground->mpSeeds->end();it++)
     {
@@ -220,7 +222,7 @@ void GraphCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
     }
 }
 
-GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, float regionImportance, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height, regionImportance)
+GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height)
 {
     mRectUpperLeftX = rect_x;
     mRectUpperLeftY = rect_y;
@@ -228,6 +230,43 @@ GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int he
     mRectLowerRightY = rect_y + rect_h;
 
     mIterationNum = 20;
+}
+
+void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect_min_x, int rect_min_y, int rect_max_x, int rect_max_y, float inner_ratio, float outer_ratio)
+{
+    int rect_w = rect_max_x - rect_min_x;
+    int rect_h = rect_max_y - rect_min_y;
+    int center_x = (int)((rect_min_x + rect_max_x) / 2);
+    int center_y = (int)((rect_min_y + rect_max_y) / 2);
+
+    int foreground_seed_min_x = center_x - (int)(rect_w * inner_ratio);
+    int foreground_seed_max_x = center_x + (int)(rect_w * inner_ratio);
+    int foreground_seed_min_y = center_y - (int)(rect_h * inner_ratio);
+    int foreground_seed_max_y = center_y + (int)(rect_h * inner_ratio);
+
+    int background_seed_min_x = GET_MIN(0, rect_min_x - (int)(rect_w * outer_ratio));
+    int background_seed_max_x = GET_MAX(mImgWidth, rect_max_x + (int)(rect_w * outer_ratio));
+    int background_seed_min_y = GET_MIN(0, rect_min_y - (int)(rect_h * outer_ratio));
+    int background_seed_max_y = GET_MAX(mImgHeight-1, rect_max_y + (int)(rect_h * outer_ratio));
+    for(int j=0;j<img_height;j++)
+    {
+        for(int i=0;i<img_width;i++)
+        {
+            PixelPosition pos;
+            pos.vals[0] = i;
+            pos.vals[1] = j;
+
+            if(i>=foreground_seed_min_x  && i<foreground_seed_max_x && j>=foreground_seed_min_y && j<foreground_seed_max_y)
+            {
+                mForegroundSet.push_back(pos);
+            }
+            else if( ( (i>=background_seed_min_x && i<rect_min_x) || (i>=rect_max_x && i<background_seed_max_x) )
+                     && ( (j>=background_seed_min_y && j<rect_min_y) || (j>=rect_max_y && j<background_seed_max_y) )  )
+            {
+                mBackgroundSet.push_back(pos);
+            }
+        }
+    }
 }
 
 void GrabCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
@@ -240,31 +279,34 @@ void GrabCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
     {
         for(int i=0;i<pGraph->mImgWidth;i++)
         {
-            PixelPosition pos;
-            pos.vals[0] = i;
-            pos.vals[1] = j;
-            mpTrimap[i+j*pGraph->mImgWidth] = ImageDataGraph::BACKGROUND_PIXEL;
-
             if(i>=mRectUpperLeftX && i<mRectLowerRightX && j>=mRectUpperLeftY && j<mRectLowerRightY)
             {
                 mpTrimap[i+j*pGraph->mImgWidth] = ImageDataGraph::UNKNOWN_PIXEL;
-                mForegroundSet.push_back(pos);
             }
             else
             {
-                mBackgroundSet.push_back(pos);
+                mpTrimap[i+j*pGraph->mImgWidth] = ImageDataGraph::BACKGROUND_PIXEL;
             }
         }
     }
 
+    initalizeSeeds(pGraph->mImgWidth, pGraph->mImgHeight, mRectUpperLeftX, mRectUpperLeftY, mRectLowerRightX, mRectLowerRightY, 0.1, 0.1);
+
     int iterationCnt = 0;
     while(iterationCnt < mIterationNum)
     {
-        qDebug() << "Iteration " << iterationCnt;
-        ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, mRegionImportance);
+        if(pGraph)
+        {
+            delete pGraph;
+            pGraph = NULL;
+        }
+        pGraph = new ImageDataGraph(mpFilename);
         pGraph->mpGridPrior = mpTrimap;
         pGraph->importPrior(mForegroundSet, mBackgroundSet);
         pGraph->initializeGraph();
+
+        qDebug() << "Iteration " << iterationCnt << " T: " << pGraph->getGibbsEnergy() << " D: " << pGraph->getDataEnergy() << " S: " << pGraph->getSmoothnessEnergy();
+
         int flow =  pGraph->maxFlowCut();
 
         mForegroundSet.clear();
@@ -292,6 +334,12 @@ void GrabCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
         }
 
         iterationCnt ++;
+    }
+
+    if(pGraph)
+    {
+        delete pGraph;
+        pGraph = NULL;
     }
 
 }

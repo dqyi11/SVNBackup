@@ -109,7 +109,7 @@ ImageDataGraph::~ImageDataGraph()
 float ImageDataGraph::getNeighborhoodWeight(PixelPosition p, PixelPosition q, float gamma, float beta, float spatial_distance)
 {
     float weight = 0.0;
-    double color_distance_square = getColorSquaredDistance(p.vals[1]*mImgWidth+p.vals[0], q.vals[1]*mImgWidth+q.vals[0]);
+    float color_distance_square = getColorSquaredDistance(p.vals[1]*mImgWidth+p.vals[0], q.vals[1]*mImgWidth+q.vals[0]);
 
     weight = gamma * exp(- color_distance_square * beta ) / spatial_distance;
     return weight;
@@ -334,23 +334,27 @@ void ImageDataGraph::initializeGraph()
             {
                 int neighbor_id = node_id - 1; // W
                 mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[W][node_id], mpNeighborhoodWeights[W][node_id]);
+                mSmoothnessGibbsEnergy += 2 * mpNeighborhoodWeights[W][node_id];
 
             }
             if( i > 0 && j > 0)
             {
                 int neighbor_id = node_id - mImgWidth - 1; // NW
                 mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[NW][node_id], mpNeighborhoodWeights[NW][node_id]);
+                mSmoothnessGibbsEnergy += 2 * mpNeighborhoodWeights[NW][node_id];
             }
             if( j > 0 )
             {
                 int neighbor_id = node_id - mImgWidth; // N
                 mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[N][node_id], mpNeighborhoodWeights[N][node_id]);
+                mSmoothnessGibbsEnergy += 2 * mpNeighborhoodWeights[N][node_id];
 
             }
             if( j > 0 && i < mImgWidth-1 )
             {
                 int neighbor_id = node_id - mImgWidth + 1; // NE
                 mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[NE][node_id], mpNeighborhoodWeights[NE][node_id]);
+                mSmoothnessGibbsEnergy += 2 * mpNeighborhoodWeights[NE][node_id];
             }
         }
     }
@@ -383,9 +387,13 @@ void ImageDataGraph::initializeGraph()
                 double normalizedForegroundWeight = - log( foregroundWeight / (foregroundWeight+backgroundWeight) );
                 double normalizedBackgroundWeight = - log( backgroundWeight / (foregroundWeight+backgroundWeight) );
                 mpGraph->add_tweights( node_id, normalizedForegroundWeight , normalizedBackgroundWeight );
+                mDataGibbsEnergy += normalizedForegroundWeight;
+                mDataGibbsEnergy += normalizedBackgroundWeight;
             }
         }
     }
+
+    mTotalGibbsEnergy = mDataGibbsEnergy + mSmoothnessGibbsEnergy;
 
     qDebug() << "Finish initialization";
 }
