@@ -11,16 +11,8 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
     mpImageLabel = new InteractiveLabel();
     mpImageLabel->setBackgroundRole(QPalette::Base);
     mpImageLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    //mpImageLabel->setScaledContents(true);
 
-    /*
-    mpScrollArea = new QScrollArea;
-    mpScrollArea->setBackgroundRole(QPalette::Dark);
-    mpScrollArea->setWidget(mpImageLabel);
-    setCentralWidget(mpScrollArea);
-    */
     setCentralWidget(mpImageLabel);
-
 
     mpOpenAction = new QAction(tr("&Open"), this);
     connect(mpOpenAction, SIGNAL(triggered()), this, SLOT(on_open_clicked()));

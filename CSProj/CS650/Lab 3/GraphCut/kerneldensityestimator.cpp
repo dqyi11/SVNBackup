@@ -6,6 +6,11 @@ KernelDensityEstimator::KernelDensityEstimator()
     mSampleNumber = 0;
 }
 
+KernelDensityEstimator::~KernelDensityEstimator()
+{
+     mSampleColors.clear();
+}
+
 
 void KernelDensityEstimator::addSample(PixelPosition pos, PixelColor color)
 {

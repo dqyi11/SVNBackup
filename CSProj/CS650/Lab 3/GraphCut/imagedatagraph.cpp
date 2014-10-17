@@ -7,7 +7,7 @@
 #include "imagedatagraph.h"
 #include "qdebug.h"
 
-ImageDataGraph::ImageDataGraph(const char* filename, float regionImportance, float sigma_nb, float sigma_kde)
+ImageDataGraph::ImageDataGraph(const char* filename, float sigma_kde, float neighborhood_gamma)
 {
     mpFilename = const_cast<char *>(filename);
 
@@ -17,16 +17,20 @@ ImageDataGraph::ImageDataGraph(const char* filename, float regionImportance, flo
     mImgWidth = img->width;
     mImgHeight = img->height;
     mConnectNum = 8;
-    mpNeighborhoodWeights = new double * [mConnectNum];
+    mTotalGibbsEnergy = 0.0;
+    mDataGibbsEnergy = 0.0;
+    mSmoothnessGibbsEnergy = 0.0;
+
+    mpNeighborhoodWeights = new float * [mConnectNum];
     for(int k=0;k<mConnectNum;k++)
     {
-        mpNeighborhoodWeights[k] = new double[mImgWidth*mImgHeight];
+        mpNeighborhoodWeights[k] = new float[mImgWidth*mImgHeight];
     }
 
-    mSigmaNeighborhood = sigma_nb;
     mSigmaKDE = sigma_kde;
-    mRegionImportance = regionImportance;
-    mMaxNeighborhood = 0.0;
+
+    mNeighborhoodGamma = neighborhood_gamma;
+    mNeighborhoodBeta = 0.0;
 
     mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
     mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
@@ -61,27 +65,112 @@ ImageDataGraph::~ImageDataGraph()
         delete mpGraph;
         mpGraph = NULL;
     }
+    for(int k=0;k<mConnectNum;k++)
+    {
+        if(mpNeighborhoodWeights[k])
+        {
+            delete mpNeighborhoodWeights[k];
+            mpNeighborhoodWeights[k] = NULL;
+        }
+    }
+    if(mpNeighborhoodWeights)
+    {
+        delete mpNeighborhoodWeights;
+        mpNeighborhoodWeights = NULL;
+    }
+    if(mpForegroundEstimator)
+    {
+        delete mpForegroundEstimator;
+        mpForegroundEstimator = NULL;
+    }
+    if(mpBackgroundEstimator)
+    {
+        delete mpBackgroundEstimator;
+        mpBackgroundEstimator = NULL;
+    }
+    if(mpRVals)
+    {
+        delete mpRVals;
+        mpRVals = NULL;
+    }
+    if(mpGVals)
+    {
+        delete mpGVals;
+        mpGVals = NULL;
+    }
+    if(mpBVals)
+    {
+        delete mpBVals;
+        mpBVals = NULL;
+    }
 }
 
 
-float ImageDataGraph::getNeighborhoodWeight(PixelPosition p, PixelPosition q)
+float ImageDataGraph::getNeighborhoodWeight(PixelPosition p, PixelPosition q, float gamma, float beta, float spatial_distance)
 {
-    double weight = 0.0;
+    float weight = 0.0;
+    double color_distance_square = getColorSquaredDistance(p.vals[1]*mImgWidth+p.vals[0], q.vals[1]*mImgWidth+q.vals[0]);
 
-    double spatial_distance = 1.0; sqrt( pow((double)(p.vals[0]-q.vals[0]), 2) + pow((double)(p.vals[1]-q.vals[1]), 2) );
-    int p_r = mpRVals[p.vals[1]*mImgWidth+p.vals[0]];
-    int p_g = mpGVals[p.vals[1]*mImgWidth+p.vals[0]];
-    int p_b = mpBVals[p.vals[1]*mImgWidth+p.vals[0]];
-    int q_r = mpRVals[q.vals[1]*mImgWidth+q.vals[0]];
-    int q_g = mpGVals[q.vals[1]*mImgWidth+q.vals[0]];
-    int q_b = mpBVals[q.vals[1]*mImgWidth+q.vals[0]];
-    double color_distance = sqrt( pow((double)(p_r - q_r), 2) + pow((double)(p_g - q_g), 2) + pow((double)(p_b - q_b), 2) );
+    weight = gamma * exp(- color_distance_square * beta ) / spatial_distance;
+    return weight;
+}
 
-    weight = exp(-pow(color_distance, 2)/(2*pow((double)mSigmaNeighborhood, 2))) / spatial_distance;
-    return (float)weight;
+float ImageDataGraph::getColorSquaredDistance(int p_idx, int q_idx)
+{
+    float distance = 0.0;
+    //qDebug() << " P " << p_idx << " + Q " << q_idx;
+    distance = pow((double)(mpRVals[p_idx] - mpRVals[q_idx]), 2) + pow((double)(mpGVals[p_idx] - mpGVals[q_idx]), 2) + pow((double)(mpBVals[p_idx] - mpBVals[q_idx]), 2) ;
+    return distance;
+}
+
+float ImageDataGraph::calcNeighborhoodBeta()
+{
+    int pixelCnt = 0;
+    double diff = 0.0;
+    for(int j=0;j<mImgHeight;j++)
+    {
+        for(int i=0;i<mImgWidth;i++)
+        {
+            //qDebug() << i << " + " << j;
+            int p_idx = i + j*mImgWidth;
+            if( i > 0)
+            {
+                int q_idx = p_idx - 1; // W
+                diff += getColorSquaredDistance(p_idx, q_idx);
+                pixelCnt ++;
+            }
+            if( i > 0 && j > 0)
+            {
+                int q_idx = p_idx - mImgWidth - 1; // NW
+                diff += getColorSquaredDistance(p_idx, q_idx);
+                pixelCnt ++;
+            }
+            if( j > 0 )
+            {
+                int q_idx = p_idx - mImgWidth; // N
+                diff += getColorSquaredDistance(p_idx, q_idx);
+                pixelCnt ++;
+            }
+            if( j > 0 && i < mImgWidth-1 )
+            {
+                int q_idx = p_idx - mImgWidth + 1; // NE
+                diff += getColorSquaredDistance(p_idx, q_idx);
+                pixelCnt ++;
+            }
+        }
+    }
+    //qDebug() << "diff " << diff;
+    return 1.0 / (2 *diff / pixelCnt);
 }
 
 void ImageDataGraph::initializeNeighborhoodWeights()
+{
+    mNeighborhoodBeta = calcNeighborhoodBeta();
+    qDebug() << "Neighborhood beta " << mNeighborhoodBeta;
+    calcNeighborhoodWeights(mNeighborhoodGamma, mNeighborhoodBeta);
+}
+
+void ImageDataGraph::calcNeighborhoodWeights(float gamma, float beta)
 {
     for(int j=0;j<mImgHeight;j++)
     {
@@ -101,7 +190,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i;
                         q.vals[1] = j-1;
-                        mpNeighborhoodWeights[0][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[0][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.0);
                     }
                     break;
                 case 1:    //NE
@@ -112,7 +201,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i+1;
                         q.vals[1] = j-1;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.414);
                     }
                     break;
                 case 2:    //E
@@ -123,7 +212,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i+1;
                         q.vals[1] = j;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[2][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.0);
                     }
                     break;
                 case 3:    //SE
@@ -134,7 +223,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i+1;
                         q.vals[1] = j+1;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[3][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.414);
                     }
                     break;
                 case 4:    //S
@@ -145,7 +234,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i;
                         q.vals[1] = j+1;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[4][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.0);
                     }
                     break;
                 case 5:    //SW
@@ -156,7 +245,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i-1;
                         q.vals[1] = j+1;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[5][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.414);
                     }
                     break;
                 case 6:    //W
@@ -167,7 +256,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i-1;
                         q.vals[1] = j;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[6][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.0);
                     }
                     break;
                 case 7:    //NW
@@ -178,7 +267,7 @@ void ImageDataGraph::initializeNeighborhoodWeights()
                         p.vals[1] = j;
                         q.vals[0] = i-1;
                         q.vals[1] = j-1;
-                        mpNeighborhoodWeights[1][idx] = getNeighborhoodWeight(p, q);
+                        mpNeighborhoodWeights[7][idx] = getNeighborhoodWeight(p, q, gamma, beta, 1.414);
                     }
                     break;
                 }
@@ -216,6 +305,9 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
 
 void ImageDataGraph::initializeGraph()
 {
+    qDebug() << "Initialize neighborhood weights";
+    initializeNeighborhoodWeights();
+
     qDebug() << "Adding nodes";
     // Add nodes
     for(int j=0;j<mImgHeight;j++)
@@ -227,63 +319,38 @@ void ImageDataGraph::initializeGraph()
         }
     }
 
+    mTotalGibbsEnergy = 0.0;
+    mDataGibbsEnergy = 0.0;
+    mSmoothnessGibbsEnergy = 0.0;
+
     qDebug() << "Adding neighborhood links";
     // Add neighborhood links
-    mMaxNeighborhood = 0.0;
     for(int j=0;j<mImgHeight;j++)
     {
         for(int i=0;i<mImgWidth;i++)
         {
             int node_id = i+j*mImgWidth;
+            if( i > 0)
+            {
+                int neighbor_id = node_id - 1; // W
+                mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[W][node_id], mpNeighborhoodWeights[W][node_id]);
 
-            std::list<int> neighbor_ids = std::list<int>();
+            }
+            if( i > 0 && j > 0)
+            {
+                int neighbor_id = node_id - mImgWidth - 1; // NW
+                mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[NW][node_id], mpNeighborhoodWeights[NW][node_id]);
+            }
+            if( j > 0 )
+            {
+                int neighbor_id = node_id - mImgWidth; // N
+                mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[N][node_id], mpNeighborhoodWeights[N][node_id]);
 
-            if(j>0 && i>0)
-            {
-                neighbor_ids.push_back(node_id-mImgWidth);
-                neighbor_ids.push_back(node_id-1);
-                neighbor_ids.push_back(node_id-mImgWidth-1);
             }
-            else if(j>0)
+            if( j > 0 && i < mImgWidth-1 )
             {
-                neighbor_ids.push_back(node_id-mImgWidth);
-            }
-            else if(i>0)
-            {
-                neighbor_ids.push_back(node_id-1);
-            }
-
-            if(j<mImgHeight-1 && i<mImgWidth-1)
-            {
-                neighbor_ids.push_back(node_id+mImgWidth);
-                neighbor_ids.push_back(node_id+1);
-                neighbor_ids.push_back(node_id+mImgWidth+1);
-            }
-            else if(j<mImgHeight-1)
-            {
-                neighbor_ids.push_back(node_id+mImgWidth);
-            }
-            else if(i<mImgWidth-1)
-            {
-                neighbor_ids.push_back(node_id+1);
-            }
-
-            double neighbor_weight_sum = 0.0;
-            PixelPosition p;
-            p.vals[0] = i;
-            p.vals[1] = j;
-            for (std::list<int>::iterator it = neighbor_ids.begin(); it != neighbor_ids.end(); it++)
-            {
-                PixelPosition q;
-                q.vals[0] = (*it)%mImgWidth;
-                q.vals[1] = (int)(*it/mImgWidth);
-                float neighbor_weight = getNeighborhoodWeight(p, q);
-                mpGraph->add_edge(node_id, *it, neighbor_weight, neighbor_weight);
-                neighbor_weight_sum += neighbor_weight;
-            }
-            if (neighbor_weight_sum > mMaxNeighborhood)
-            {
-                mMaxNeighborhood = neighbor_weight_sum;
+                int neighbor_id = node_id - mImgWidth + 1; // NE
+                mpGraph->add_edge(node_id, neighbor_id, mpNeighborhoodWeights[NE][node_id], mpNeighborhoodWeights[NE][node_id]);
             }
         }
     }
@@ -296,6 +363,7 @@ void ImageDataGraph::initializeGraph()
         {
             int node_id = i + j*mImgWidth;
 
+            /*
             if(mpGridPrior[node_id]==BACKGROUND_PIXEL)
             {
                 mpGraph->add_tweights( node_id, 0.0, 1+mMaxNeighborhood );
@@ -304,7 +372,7 @@ void ImageDataGraph::initializeGraph()
             {
                 mpGraph->add_tweights( node_id, 1+mMaxNeighborhood, 0.0 );
             }
-            else
+            else */
             {
                 PixelColor color;
                 color.vals[0] = mpRVals[node_id];
@@ -312,8 +380,8 @@ void ImageDataGraph::initializeGraph()
                 color.vals[2] = mpBVals[node_id];
                 double foregroundWeight = mpForegroundEstimator->getEstimation(color);
                 double backgroundWeight = mpBackgroundEstimator->getEstimation(color);
-                double normalizedForegroundWeight = - log( mRegionImportance * foregroundWeight / (foregroundWeight+backgroundWeight) );
-                double normalizedBackgroundWeight = - log( mRegionImportance * backgroundWeight / (foregroundWeight+backgroundWeight) );
+                double normalizedForegroundWeight = - log( foregroundWeight / (foregroundWeight+backgroundWeight) );
+                double normalizedBackgroundWeight = - log( backgroundWeight / (foregroundWeight+backgroundWeight) );
                 mpGraph->add_tweights( node_id, normalizedForegroundWeight , normalizedBackgroundWeight );
             }
         }
