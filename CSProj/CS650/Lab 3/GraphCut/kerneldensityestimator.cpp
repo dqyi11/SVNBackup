@@ -12,7 +12,6 @@ KernelDensityEstimator::~KernelDensityEstimator()
      mSampleColors.clear();
 }
 
-
 void KernelDensityEstimator::addSample(PixelPosition pos, PixelColor color)
 {
     mSamplePositions.push_back(pos);
@@ -37,7 +36,7 @@ float GaussianKernelDensityEstimator::getEstimation(PixelColor color)
         estimation += exp(squared_distance / 2 );
     }
 
-    estimation *= norm_term/mSampleNumber;
+    estimation *= norm_term/(mSampleNumber * mBandWidth);
     //estimation /= mSampleNumber;
 
     return (float)estimation;
