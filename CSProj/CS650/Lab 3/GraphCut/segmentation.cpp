@@ -192,6 +192,9 @@ void GraphCutSegmentation::process(float sigma_kde)
     pGraph->mpGridPrior = mpTrimap;
     qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
+
+    qDebug() << "Foreground bandwidth " << pGraph->mpForegroundEstimator->estimateOptimalBandwidth();
+    qDebug() << "Background bandwidth " << pGraph->mpBackgroundEstimator->estimateOptimalBandwidth();
     pGraph->initializeGraph();
 
     qDebug() << "Graph cutting ";

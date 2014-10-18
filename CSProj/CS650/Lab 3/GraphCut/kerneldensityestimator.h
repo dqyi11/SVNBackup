@@ -27,6 +27,8 @@ class GaussianKernelDensityEstimator : public KernelDensityEstimator
 public:
     GaussianKernelDensityEstimator(float bandwith);
     float getEstimation(PixelColor color);
+
+    float estimateOptimalBandwidth();
 };
 
 #endif // KERNELDENSITYESTIMATOR_H
