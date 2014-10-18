@@ -7,17 +7,13 @@ ConfigDialog::ConfigDialog(ParameterManager * paramMgr, QWidget *parent) :
 {
     mpParamMgr = paramMgr;
 
-    mpEditRegionImportance = new QLineEdit(this);
-    mpLabelRegionImportance = new QLabel(tr("Region Importance"), this);
-    mpEditRegionImportance->setText(QString::number(mpParamMgr->mRegionImportance, 'g', 4));
+    mpEditSmoothnessRatio = new QLineEdit(this);
+    mpLabelSmoothnessRatio = new QLabel(tr("Region Importance"), this);
+    mpEditSmoothnessRatio->setText(QString::number(mpParamMgr->mSmoothnessRatio, 'g', 4));
 
-    mpEditNeighborhoodSigma = new QLineEdit(this);
-    mpLabelNeighborhoodSimga = new QLabel(tr("Neighborhood Sigma"), this);
-    mpEditNeighborhoodSigma->setText(QString::number(mpParamMgr->mNeighborhoodSigma, 'g', 4));
-
-    mpEditKDESigma = new QLineEdit(this);
-    mpLabelKDESigma = new QLabel(tr("Kernel Density Estimator Sigma"), this);
-    mpEditKDESigma->setText(QString::number(mpParamMgr->mKDESigma, 'g', 4));
+    mpEditKDEBandwidth = new QLineEdit(this);
+    mpLabelKDEBandwidth = new QLabel(tr("Kernel Density Estimator Sigma"), this);
+    mpEditKDEBandwidth->setText(QString::number(mpParamMgr->mKDEBandWidth, 'g', 4));
 
     mpEditIterationNumber = new QLineEdit(this);
     mpLabelIterationNumber = new QLabel(tr("Iteration Number"), this);
@@ -29,12 +25,10 @@ ConfigDialog::ConfigDialog(ParameterManager * paramMgr, QWidget *parent) :
     connect(mpCancelBtn, SIGNAL(released()), this, SLOT(on_cancel_clicked()));
     mpLayout = new QGridLayout(this);
 
-    mpLayout->addWidget(mpLabelRegionImportance, 0, 0);
-    mpLayout->addWidget(mpEditRegionImportance, 0, 1);
-    mpLayout->addWidget(mpLabelNeighborhoodSimga, 1, 0);
-    mpLayout->addWidget(mpEditNeighborhoodSigma, 1, 1);
-    mpLayout->addWidget(mpLabelKDESigma, 2, 0);
-    mpLayout->addWidget(mpEditKDESigma, 2, 1);
+    mpLayout->addWidget(mpLabelSmoothnessRatio, 0, 0);
+    mpLayout->addWidget(mpEditSmoothnessRatio, 0, 1);
+    mpLayout->addWidget(mpLabelKDEBandwidth, 2, 0);
+    mpLayout->addWidget(mpEditKDEBandwidth, 2, 1);
     mpLayout->addWidget(mpLabelIterationNumber, 3, 0);
     mpLayout->addWidget(mpEditIterationNumber, 3, 1);
 
@@ -48,35 +42,25 @@ ConfigDialog::ConfigDialog(ParameterManager * paramMgr, QWidget *parent) :
 
 ConfigDialog::~ConfigDialog()
 {
-    if(mpEditRegionImportance)
+    if(mpEditSmoothnessRatio)
     {
-        delete mpEditRegionImportance;
-        mpEditRegionImportance = NULL;
+        delete mpEditSmoothnessRatio;
+        mpEditSmoothnessRatio = NULL;
     }
-    if(mpLabelRegionImportance)
+    if(mpLabelSmoothnessRatio)
     {
-        delete mpLabelRegionImportance;
-        mpLabelRegionImportance = NULL;
+        delete mpLabelSmoothnessRatio;
+        mpLabelSmoothnessRatio = NULL;
     }
-    if(mpEditNeighborhoodSigma)
+    if(mpEditKDEBandwidth)
     {
-        delete mpEditNeighborhoodSigma;
-        mpEditNeighborhoodSigma = NULL;
+        delete mpEditKDEBandwidth;
+        mpEditKDEBandwidth = NULL;
     }
-    if(mpLabelNeighborhoodSimga)
+    if(mpLabelKDEBandwidth)
     {
-        delete mpLabelNeighborhoodSimga;
-        mpLabelNeighborhoodSimga = NULL;
-    }
-    if(mpEditKDESigma)
-    {
-        delete mpEditKDESigma;
-        mpEditKDESigma = NULL;
-    }
-    if(mpLabelKDESigma)
-    {
-        delete mpLabelKDESigma;
-        mpLabelKDESigma = NULL;
+        delete mpLabelKDEBandwidth;
+        mpLabelKDEBandwidth = NULL;
     }
     if(mpEditIterationNumber)
     {
@@ -108,9 +92,8 @@ ConfigDialog::~ConfigDialog()
 void ConfigDialog::on_ok_clicked()
 {
     mpParamMgr->mIterationNumber = mpEditIterationNumber->text().toInt();
-    mpParamMgr->mRegionImportance = mpEditRegionImportance->text().toFloat();
-    mpParamMgr->mNeighborhoodSigma = mpEditNeighborhoodSigma->text().toFloat();
-    mpParamMgr->mKDESigma = mpEditKDESigma->text().toFloat();
+    mpParamMgr->mSmoothnessRatio = mpEditSmoothnessRatio->text().toFloat();
+    mpParamMgr->mKDEBandWidth = mpEditKDEBandwidth->text().toFloat();
     close();
 }
 

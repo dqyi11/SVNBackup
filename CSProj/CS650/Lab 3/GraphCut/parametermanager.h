@@ -7,9 +7,8 @@ public:
     ParameterManager();
 
     int mIterationNumber;
-    float mRegionImportance;
-    float mNeighborhoodSigma;
-    float mKDESigma;
+    float mSmoothnessRatio;
+    float mKDEBandWidth;
 };
 
 #endif // PARAMETERMANAGER_H

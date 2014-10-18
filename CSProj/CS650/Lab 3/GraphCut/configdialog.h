@@ -23,13 +23,10 @@ public slots:
     void on_cancel_clicked();
 
 private:
-    QLineEdit * mpEditRegionImportance;
-    QLabel    * mpLabelRegionImportance;
-    QLineEdit * mpEditNeighborhoodSigma;
-    QLabel    * mpLabelNeighborhoodSimga;
-    QLineEdit * mpEditKDESigma;
-    QLabel    * mpLabelKDESigma;
-
+    QLineEdit * mpEditSmoothnessRatio;
+    QLabel    * mpLabelSmoothnessRatio;
+    QLineEdit * mpEditKDEBandwidth;
+    QLabel    * mpLabelKDEBandwidth;
     QLineEdit * mpEditIterationNumber;
     QLabel    * mpLabelIterationNumber;
 

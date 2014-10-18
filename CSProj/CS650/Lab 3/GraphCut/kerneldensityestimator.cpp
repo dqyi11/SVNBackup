@@ -26,7 +26,7 @@ GaussianKernelDensityEstimator::GaussianKernelDensityEstimator(float bandwidth) 
 float GaussianKernelDensityEstimator::getEstimation(PixelColor color)
 {
     double estimation = 0.0;
-    float norm_term = sqrt(2 * 3.1415926);
+    float norm_term = 1 / sqrt(2 * 3.1415926);
 
     for(std::list<PixelColor>::iterator it=mSampleColors.begin();it!=mSampleColors.end();it++)
     {

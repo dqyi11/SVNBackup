@@ -185,7 +185,7 @@ GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int 
 }
 
 
-void GraphCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
+void GraphCutSegmentation::process(float sigma_kde)
 {
     qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, sigma_kde);
@@ -269,7 +269,7 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
     }
 }
 
-void GrabCutSegmentation::process(float gamma_neighborhood, float sigma_kde)
+void GrabCutSegmentation::process(float sigma_kde)
 {
     qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, sigma_kde);

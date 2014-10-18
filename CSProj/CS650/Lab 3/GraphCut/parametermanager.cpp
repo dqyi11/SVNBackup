@@ -2,8 +2,7 @@
 
 ParameterManager::ParameterManager()
 {
-    mIterationNumber = 20;
-    mRegionImportance = 2.0;
-    mNeighborhoodSigma = 1.0;
-    mKDESigma = 1.0;
+    mIterationNumber = 4;
+    mSmoothnessRatio = 1.0;
+    mKDEBandWidth = 40.0;
 }

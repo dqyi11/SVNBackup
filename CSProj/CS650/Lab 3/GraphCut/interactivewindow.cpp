@@ -166,27 +166,25 @@ void InteractiveWindow::on_clear_clicked()
 
 void InteractiveWindow::on_segment_clicked()
 {
-
-
     if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAPH_CUT_SEGMENTATION)
     {
         mpConfigDialog->exec();
-        qDebug() << "Generating Graph-cut based segmentation " << mpParamMgr->mRegionImportance;
+        qDebug() << "Generating Graph-cut based segmentation " << mpParamMgr->mSmoothnessRatio;
         GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
-        qDebug() << "Neighborhood Sigma " << mpParamMgr->mNeighborhoodSigma << " KDE Sigma " << mpParamMgr->mKDESigma;
-        seg.process(mpParamMgr->mNeighborhoodSigma, mpParamMgr->mKDESigma);
+        qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
+        seg.process(mpParamMgr->mKDEBandWidth);
         seg.visualize();
     }
     else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
     {
         mpConfigDialog->exec();
-        qDebug() << "Generating Grab-cut based segmentation" << mpParamMgr->mRegionImportance;
+        qDebug() << "Generating Grab-cut based segmentation" << mpParamMgr->mSmoothnessRatio;
         GrabCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),
                                 mpImageLabel->mRectStartX, mpImageLabel->mRectStartY, mpImageLabel->mRectEndX, mpImageLabel->mRectEndY);
         seg.mIterationNum = mpParamMgr->mIterationNumber;
-        qDebug() << "Neighborhood Sigma " << mpParamMgr->mNeighborhoodSigma << " KDE Sigma " << mpParamMgr->mKDESigma;
-        seg.process(mpParamMgr->mNeighborhoodSigma, mpParamMgr->mKDESigma);
+        qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
+        seg.process(mpParamMgr->mKDEBandWidth);
         seg.visualize();
     }
 }
