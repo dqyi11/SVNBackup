@@ -103,16 +103,18 @@ class NSGAII(object):
         P = self.population
         
         for i in range(generation_num):
-            print "@Generation  " + str(i)
+            print "@Generation  " + str(i) + " : " + str(len(P))
              
             R = []
             R.extend(P)
             R.extend(Q)
             
+            #print "fast non dominated sort"
             fronts = self.fastNondominatedSort(R)
             
             del P[:]
             
+            #print "crowding distance assignment"
             for front in fronts:
                 if len(front) == 0:
                     break
@@ -123,11 +125,13 @@ class NSGAII(object):
                 if len(P) >= self.population_size:
                     break
             
+            #print "sort by crowding"
             self.sortByCrowding(P)
             
             if len(P) > self.population_size:
                 del P[self.population_size:]
                 
+            #print "Make new pop"
             Q = self.makeNewPop(P)
             
         self.population = P
@@ -216,20 +220,33 @@ class NSGAII(object):
                
         while len(Q) != len(P):
             selected_solutions = [None, None]
+            #print "Q " + str(len(Q)) + " P " + str(len(P))
             
+            '''
             while selected_solutions[0] == selected_solutions[1]:
                 for i in range(2):
+                    
                     s1 = np.random.choice(P)
                     s2 = s1
                     while s1 == s2:
                         s2 = np.random.choice(P)
+                    s2 = np.random.choice(P)
                     
                     if s1.compareCrowding(s2) > 0:
-                        selected_solutions[i] = s1
-                        
+                        selected_solutions[i] = s1                        
                     else:
                         selected_solutions[i] = s2
-            
+            '''
+            for i in range(2):
+                s1 = np.random.choice(P)
+                s2 = np.random.choice(P)
+                s2 = np.random.choice(P)
+                
+                if s1.compareCrowding(s2) > 0:
+                    selected_solutions[i] = s1                        
+                else:
+                    selected_solutions[i] = s2
+
             if np.random.random() < self.crossover_rate:
                 child_solution = selected_solutions[0].crossover(selected_solutions[1])
                 
@@ -240,7 +257,6 @@ class NSGAII(object):
                 
                 Q.append(child_solution)
 
-        
         return Q
         
                         
