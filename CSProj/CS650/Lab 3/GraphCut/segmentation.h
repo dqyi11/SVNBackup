@@ -36,6 +36,9 @@ public:
 
     void visualize(bool includeMask=true);
     virtual void process(EstimatorType type=KDE) = 0;
+
+    float mKDESigma;
+    float mSmoothnessRatio;
 protected:
     char * mpFilename;
     int mImgWidth;
@@ -54,7 +57,6 @@ public:
 
     virtual void process(EstimatorType type=KDE);
 
-    float mKDESigma;
 };
 
 class GrabCutSegmentation : public Segmentation
@@ -69,7 +71,7 @@ public:
     int mRectLowerRightX;
     int mRectLowerRightY;
 
-    float mKDESigma;
+
     int mIterationNum;
 
 protected:

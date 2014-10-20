@@ -9,13 +9,20 @@
 #include "gmmdensityestimator.h"
 #include "qdebug.h"
 
-ImageDataGraph::ImageDataGraph(const char* filename, float neighborhood_gamma)
+//#define USE_LUV_COLOR
+
+ImageDataGraph::ImageDataGraph(const char* filename)
 {
     mpFilename = const_cast<char *>(filename);
 
+#ifdef USE_LUV_COLOR
     IplImage * img_rgb = cvLoadImage(mpFilename);
     IplImage * img = cvCreateImage(cvGetSize(img_rgb), img_rgb->depth, img_rgb->nChannels);
     cvCvtColor(img_rgb, img, CV_RGB2Luv);
+#else
+    IplImage * img = cvLoadImage(mpFilename);
+#endif
+
     mImgWidth = img->width;
     mImgHeight = img->height;
     mConnectNum = 8;
@@ -29,9 +36,9 @@ ImageDataGraph::ImageDataGraph(const char* filename, float neighborhood_gamma)
         mpNeighborhoodWeights[k] = new float[mImgWidth*mImgHeight];
     }
 
-    mSigmaKDE = 2.0;
+    mSigmaKDE = 80.0;
+    mNeighborhoodGamma = 50.0;
 
-    mNeighborhoodGamma = neighborhood_gamma;
     mNeighborhoodBeta = 0.0;
 
     mpForegroundEstimator = NULL;
@@ -56,7 +63,9 @@ ImageDataGraph::ImageDataGraph(const char* filename, float neighborhood_gamma)
     }
 
     cvReleaseImage(&img);
+#ifdef USE_LUV_COLOR
     cvReleaseImage(&img_rgb);
+#endif
 }
 
 ImageDataGraph::~ImageDataGraph()

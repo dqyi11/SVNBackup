@@ -8,7 +8,7 @@ ConfigDialog::ConfigDialog(ParameterManager * paramMgr, QWidget *parent) :
     mpParamMgr = paramMgr;
 
     mpEditSmoothnessRatio = new QLineEdit(this);
-    mpLabelSmoothnessRatio = new QLabel(tr("Region Importance"), this);
+    mpLabelSmoothnessRatio = new QLabel(tr("Smoothness Ratio"), this);
     mpEditSmoothnessRatio->setText(QString::number(mpParamMgr->mSmoothnessRatio, 'g', 4));
 
     mpEditKDEBandwidth = new QLineEdit(this);

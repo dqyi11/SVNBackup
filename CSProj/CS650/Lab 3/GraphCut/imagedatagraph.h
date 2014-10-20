@@ -18,7 +18,7 @@ public:
 
     enum PixelClass {UNKNOWN_PIXEL = 0, FOREGROUND_PIXEL = 1, BACKGROUND_PIXEL = 2};
 
-    ImageDataGraph(const char* filename, float neighborhood_gamma=50.0);
+    ImageDataGraph(const char* filename);
     ~ImageDataGraph();
 
     void initalizeType(EstimatorType type = KDE);

@@ -72,6 +72,8 @@ Segmentation::Segmentation(const char* filename, int width, int height)
     mImgHeight = height;
 
     mpTrimap = new int[mImgWidth * mImgHeight];
+    mKDESigma = 80.0;
+    mSmoothnessRatio = 50.0;
  }
 
 Segmentation::~Segmentation()
@@ -161,7 +163,7 @@ void Segmentation:: visualize(bool includeMask)
     cvShowImage(newFilename.c_str(), imgData);
     cvSaveImage(newFilename.c_str(), imgData);
 
-    std::cout << "Writing file ... " << std::endl;
+    qDebug() << "Writing file ... ";
 
     cvReleaseImage(&img);
     cvReleaseImage(&imgData);
@@ -188,13 +190,14 @@ GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int 
 void GraphCutSegmentation::process(EstimatorType type)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, type);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+    pGraph->mNeighborhoodGamma = mSmoothnessRatio;
     if(type==KDE)
     {
         pGraph->mSigmaKDE = mKDESigma;
     }
     pGraph->mpGridPrior = mpTrimap;
-    qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
+    //qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
 
     pGraph->initalizeType(type);
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
@@ -279,7 +282,8 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
 void GrabCutSegmentation::process(EstimatorType type)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, type);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
+    pGraph->mNeighborhoodGamma = mSmoothnessRatio;
     if(type==KDE)
     {
         pGraph->mSigmaKDE = mKDESigma;

@@ -187,6 +187,7 @@ void InteractiveWindow::on_segment_clicked()
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
+        seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
         seg.process();
         seg.visualize();
     }
@@ -199,6 +200,7 @@ void InteractiveWindow::on_segment_clicked()
         seg.mIterationNum = mpParamMgr->mIterationNumber;
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
+        seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
         seg.process();
         seg.visualize();
     }
