@@ -17,6 +17,6 @@ if __name__ == '__main__':
         position_range.append([0.0, 1.0])
         
     moead = MOEAD(2, 30, zdt1_func)
-    moead.initPopulation(20, position_range)
+    moead.initPopulation(position_range)
     
     moead.run(50)

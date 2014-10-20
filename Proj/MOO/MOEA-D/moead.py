@@ -25,22 +25,30 @@ class MOEAD(object):
         self.population = []
         self.utopia_position = np.zeros(self.objective_num, np.float)
         for k in range(self.objective_num):
-            self.utopia_position[k] = np.iinfo(float).max
+            self.utopia_position[k] = np.inf
         
     def initPopulation(self, position_range, population_size=100, neighbor_num=30 ):
         
         self.population_size = population_size
         self.neighbor_num = neighbor_num
         self.position_range = position_range
-        rndSeeds = np.random.random(self.population_size*self.solution_dim)
+        
         weights, weight_distances = self.initWeights()
         self.population = []
+        
+        fitness_list = []
         for i in range(self.population_size):
             p = Solution(self.objective_num, self.solution_dim, self.neighbor_num, weights[i])
+            rndSeeds = np.random.random(self.solution_dim)
             for k in range(self.solution_dim):
-                p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
+                p.position[k] = rndSeeds[k] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
             self.population.append(p)
             p.neighbor_indices = np.argsort(weight_distances[i])
+            p.fitness = self.fitness_func(p.position)
+            fitness_list.append(p.fitness)
+        
+        self.utopia_position = np.array(fitness_list).argmin(0)
+        #print self.utopia_position
             
     def run(self, generation_num):
            
@@ -68,7 +76,7 @@ class MOEAD(object):
             weight_distances.append(np.zeros(self.population_size,np.float))
         for i in range(self.population_size):
             for j  in range(1, self.population_size, 1):
-                dist = np.linalg.norm(self.population[i].position - self.population[j].position, 2)
+                dist = np.linalg.norm(weights[i] - weights[j], 2)
                 weight_distances[i][j] = dist
                 weight_distances[j][i] = dist
         return weights, weight_distances
