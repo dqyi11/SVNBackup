@@ -232,12 +232,12 @@ void GraphCutSegmentation::process(EstimatorType type)
     }
 }
 
-GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, int rect_x, int rect_y, int rect_w, int rect_h) : Segmentation(filename, width, height)
+GrabCutSegmentation::GrabCutSegmentation(const char* filename, int width, int height, int rect_min_x, int rect_min_y, int rect_max_x, int rect_max_y) : Segmentation(filename, width, height)
 {
-    mRectUpperLeftX = rect_x;
-    mRectUpperLeftY = rect_y;
-    mRectLowerRightX = rect_x + rect_w;
-    mRectLowerRightY = rect_y + rect_h;
+    mRectUpperLeftX = rect_min_x;
+    mRectUpperLeftY = rect_min_y;
+    mRectLowerRightX = rect_max_x;
+    mRectLowerRightY = rect_max_y;
 
     mIterationNum = 5;
 }
@@ -254,10 +254,10 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
     int foreground_seed_min_y = center_y - (int)(rect_h * inner_ratio);
     int foreground_seed_max_y = center_y + (int)(rect_h * inner_ratio);
 
-    int background_seed_min_x = GET_MIN(0, rect_min_x - (int)(rect_w * outer_ratio));
-    int background_seed_max_x = GET_MAX(mImgWidth, rect_max_x + (int)(rect_w * outer_ratio));
-    int background_seed_min_y = GET_MIN(0, rect_min_y - (int)(rect_h * outer_ratio));
-    int background_seed_max_y = GET_MAX(mImgHeight-1, rect_max_y + (int)(rect_h * outer_ratio));
+    int background_seed_min_x = GET_MAX(0, rect_min_x - (int)(rect_w * outer_ratio));
+    int background_seed_max_x = GET_MIN(mImgWidth, rect_max_x + (int)(rect_w * outer_ratio));
+    int background_seed_min_y = GET_MAX(0, rect_min_y - (int)(rect_h * outer_ratio));
+    int background_seed_max_y = GET_MIN(mImgHeight-1, rect_max_y + (int)(rect_h * outer_ratio));
     for(int j=0;j<img_height;j++)
     {
         for(int i=0;i<img_width;i++)
@@ -270,8 +270,10 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
             {
                 mForegroundSet.push_back(pos);
             }
-            else if( ( (i>=background_seed_min_x && i<rect_min_x) || (i>=rect_max_x && i<background_seed_max_x) )
-                     && ( (j>=background_seed_min_y && j<rect_min_y) || (j>=rect_max_y && j<background_seed_max_y) )  )
+            else if( (i>=background_seed_min_x && i<rect_min_x && j>=background_seed_min_y && j<background_seed_max_y)
+                     || (i>=rect_max_x && i<background_seed_max_x && j>=background_seed_min_y && j<background_seed_max_y)
+                     || (j>=background_seed_min_y && j<rect_min_y && i>=rect_min_x && i<rect_max_x)
+                     || (j>=rect_max_y && j<background_seed_max_y && i>=rect_min_x && i<rect_max_x)  )
             {
                 mBackgroundSet.push_back(pos);
             }

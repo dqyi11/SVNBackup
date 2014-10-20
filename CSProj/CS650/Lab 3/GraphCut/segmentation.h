@@ -66,6 +66,8 @@ public:
 
     virtual void process(EstimatorType type=KDE);
 
+    void visualizeSeed();
+
     int mRectUpperLeftX;
     int mRectUpperLeftY;
     int mRectLowerRightX;
