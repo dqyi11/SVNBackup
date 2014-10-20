@@ -12,6 +12,8 @@ def zdt1_func(position):
 
 if __name__ == '__main__':
 
+    generation_num = 2
+
     position_range = []
     for i in range(30):
         position_range.append([0.0, 1.0])
@@ -19,4 +21,4 @@ if __name__ == '__main__':
     moead = MOEAD(2, 30, zdt1_func)
     moead.initPopulation(position_range)
     
-    moead.run(50)
+    moead.run(generation_num)

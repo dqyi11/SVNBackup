@@ -18,10 +18,12 @@ class Solution(object):
 
 class MOEAD(object):
 
-    def __init__(self, objective_num, solution_dim,  fitness_func):
+    def __init__(self, objective_num, solution_dim,  fitness_func, mutation_rate=0.5, crossover_rate=0.5):
         self.objective_num = objective_num
         self.solution_dim = solution_dim
         self.fitness_func = fitness_func
+        self.mutation_rate = mutation_rate
+        self.crossover_rate = crossover_rate
         self.population = []
         self.utopia_position = np.zeros(self.objective_num, np.float)
         for k in range(self.objective_num):
@@ -52,14 +54,25 @@ class MOEAD(object):
             
     def run(self, generation_num):
            
-        # update fitness
-        for p in self.population:
-            p.fitness = self.fitness_func(p.position)
-            
-        
         for i in range(generation_num):
             print "@Generation  " + str(i)
-            continue
+            
+            #generate new population
+            self.geneticOperation()
+            
+            #update fitness and the utopia position
+            fitness_list = []
+            fitness_list.append(self.utopia_position)
+            for i in range(self.population_size):
+                p = self.population[i]
+                p.fitness = self.fitness_func(p.position)
+                fitness_list.append(p.fitness)
+        
+            self.utopia_position = np.array(fitness_list).argmin(0)
+            
+            #update the neighbors
+            
+            
         
         
     def initWeights(self):
@@ -80,5 +93,22 @@ class MOEAD(object):
                 weight_distances[i][j] = dist
                 weight_distances[j][i] = dist
         return weights, weight_distances
+    
+    def geneticOperation(self):
+        #generate a new individual from a subproblem and its neighbors
+        for p in self.population:
+            
+            neighborIndices = p.neighbor_indices[0:self.neighbor_num]
+            
+            print "len(neighborIndices) "+str(len(neighborIndices))
+            print neighborIndices
+            
+            p1_idx = np.random.choice(neighborIndices)
+            p2_idx = np.random.choice(neighborIndices)
+            
+            p1 = self.population[p1_idx]
+            p2 = self.population[p2_idx]
+            
+            
         
         
