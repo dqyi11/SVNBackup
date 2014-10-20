@@ -27,6 +27,7 @@ public:
 
 private slots:
     void on_open_clicked();
+    void on_export_clicked();
     void on_clear_clicked();
     void on_segment_clicked();
     void on_graphcut_clicked();
@@ -35,6 +36,7 @@ private slots:
 
 private:
     QAction * mpOpenAction;
+    QAction * mpExportAction;
     QAction * mpClearAction;
     QAction * mpSegmentAction;
     QAction * mpConfigAction;

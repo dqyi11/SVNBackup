@@ -16,6 +16,9 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
 
     mpOpenAction = new QAction(tr("&Open"), this);
     connect(mpOpenAction, SIGNAL(triggered()), this, SLOT(on_open_clicked()));
+    mpExportAction = new QAction(tr("&Export"), this);
+    connect(mpExportAction, SIGNAL(triggered()), this, SLOT(on_export_clicked()));;
+
     mpClearAction = new QAction(tr("&Clear"), this);
     connect(mpClearAction, SIGNAL(triggered()), this, SLOT(on_clear_clicked()));
     mpSegmentAction = new QAction(tr("&Segment"), this);
@@ -37,6 +40,7 @@ InteractiveWindow::InteractiveWindow(QWidget *parent) :
 
     mpFileMenu = new QMenu(tr("&File"), this);
     mpFileMenu->addAction(mpOpenAction);
+    mpFileMenu->addAction(mpExportAction);
     mpEditMenu = new QMenu(tr("&Edit"), this);
     mpEditMenu->addAction(mpClearAction);
     mpEditMenu->addAction(mpConfigAction);
@@ -153,6 +157,15 @@ void InteractiveWindow::on_open_clicked()
         setWindowTitle(mFilename);
         resize(mpImageLabel->width(), mpImageLabel->height()+menuBar()->height());
         update();
+    }
+}
+
+void InteractiveWindow::on_export_clicked()
+{
+    QString saveFilename = QFileDialog::getSaveFileName(this, tr("Open File"), QDir::currentPath());
+    if (!saveFilename.isEmpty())
+    {
+        mpImageLabel->saveLabeledImage(saveFilename);
     }
 }
 

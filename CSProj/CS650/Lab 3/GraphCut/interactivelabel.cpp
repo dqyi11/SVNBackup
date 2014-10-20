@@ -1,5 +1,6 @@
 #include "interactivelabel.h"
 #include <QtGui>
+#include <QIODevice>
 #include "segmentation.h"
 
 InteractiveLabel::InteractiveLabel(QWidget * parent) :
@@ -236,4 +237,52 @@ void InteractiveLabel::setWorkingState(WorkingState state)
         update();
     }
 
+}
+
+void InteractiveLabel::saveLabeledImage(QString filename)
+{
+    QFile exportFile(filename);
+    exportFile.open(QIODevice::WriteOnly);
+    QPixmap exportPixmap = pixmap()->copy(0, 0, pixmap()->width(), pixmap()->height());
+    QPainter painter(&exportPixmap);
+
+    if(mCurrentWorkingState == GRAPH_CUT_SEGMENTATION)
+    {
+        QPen blue_pen(QColor(0,0,255));
+        QBrush blue_brush(QColor(0,0,255));
+        QPen red_pen(QColor(255,0,0));
+        QBrush red_brush(QColor(255,0,0));
+
+
+        painter.setPen(red_pen);
+        painter.setBrush(red_brush);
+        for(std::list<PixelPosition>::iterator it=mpForegroundSeedMgr->mpSeeds->begin();it!=mpForegroundSeedMgr->mpSeeds->end();it++)
+        {
+            painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        }
+
+        painter.setPen(blue_pen);
+        painter.setBrush(blue_brush);
+        for(std::list<PixelPosition>::iterator it=mpBackgroundSeedMgr->mpSeeds->begin();it!=mpBackgroundSeedMgr->mpSeeds->end();it++)
+        {
+            painter.drawPoint((*it).vals[0], (*it).vals[1]);
+        }
+    }
+    else if(mCurrentWorkingState == GRAB_CUT_SEGMENTATION)
+    {
+        if(mpInitPoint->x()!= mpEndPoint->x() || mpInitPoint->y()!=mpEndPoint->y())
+        {
+            QPen green_pen(QColor(0,255,0));
+            painter.setPen(green_pen);
+
+            mRectStartX = mpInitPoint->x()<= mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectStartY = mpInitPoint->y()<= mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+            mRectEndX   = mpInitPoint->x()> mpEndPoint->x() ?  mpInitPoint->x(): mpEndPoint->x();
+            mRectEndY   = mpInitPoint->y()> mpEndPoint->y() ?  mpInitPoint->y(): mpEndPoint->y();
+
+            painter.drawRect(mRectStartX, mRectStartY, mRectEndX - mRectStartX, mRectEndY - mRectStartY);
+        }
+    }
+
+    exportPixmap.save(&exportFile, "PNG");
 }

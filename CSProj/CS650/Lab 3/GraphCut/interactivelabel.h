@@ -22,6 +22,8 @@ public:
     void setWorkingState(WorkingState state);
     void clearLabel();
 
+    void saveLabeledImage(QString filename);
+
 protected:
     void mouseReleaseEvent(QMouseEvent * e);
     void mousePressEvent(QMouseEvent * e);
