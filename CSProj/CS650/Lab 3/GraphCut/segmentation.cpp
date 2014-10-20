@@ -279,6 +279,39 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
     }
 }
 
+void GrabCutSegmentation::visualizeSeed()
+{
+    IplImage* img = cvLoadImage(mpFilename);
+
+    qDebug() << "channel num " << img->nChannels;
+    for(std::list<PixelPosition>::iterator it=mForegroundSet.begin(); it!=mForegroundSet.end();it++)
+    {
+        int i = it->vals[0];
+        int j = it->vals[1];
+        ((uchar *)(img->imageData + i*img->widthStep))[i*img->nChannels + 0] = 255;
+        ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 1] = 0;
+        ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 2] = 255;
+    }
+    for(std::list<PixelPosition>::iterator it=mBackgroundSet.begin(); it!=mBackgroundSet.end();it++)
+    {
+        int i = it->vals[0];
+        int j = it->vals[1];
+        ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 0] = 255;
+        ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 1] = 255;
+        ((uchar *)(img->imageData + j*img->widthStep))[i*img->nChannels + 2] = 0;
+    }
+
+    std::string seedVisFilename(mpFilename);
+    seedVisFilename += "-seedVis.png";
+
+    cvNamedWindow(seedVisFilename.c_str());
+    cvShowImage(seedVisFilename.c_str(), img);
+    cvSaveImage(seedVisFilename.c_str(), img);
+    cvWaitKey(0);
+
+    cvReleaseImage(&img);
+}
+
 void GrabCutSegmentation::process(EstimatorType type)
 {
     qDebug() << "Create graph from " << mpFilename;
@@ -308,6 +341,8 @@ void GrabCutSegmentation::process(EstimatorType type)
     pGraph->initalizeType(type);
     initalizeSeeds(pGraph->mImgWidth, pGraph->mImgHeight, mRectUpperLeftX, mRectUpperLeftY, mRectLowerRightX, mRectLowerRightY, 0.1, 0.1);
 
+    visualizeSeed();
+
     int iterationCnt = 0;
     while(iterationCnt < mIterationNum)
     {
@@ -317,7 +352,14 @@ void GrabCutSegmentation::process(EstimatorType type)
             pGraph = NULL;
         }
         pGraph = new ImageDataGraph(mpFilename);
+        pGraph->mNeighborhoodGamma = mSmoothnessRatio;
+        if(type==KDE)
+        {
+            pGraph->mSigmaKDE = mKDESigma;
+        }
+
         pGraph->mpGridPrior = mpTrimap;
+        pGraph->initalizeType(type);
         pGraph->importPrior(mForegroundSet, mBackgroundSet);
         pGraph->initializeGraph();
 
