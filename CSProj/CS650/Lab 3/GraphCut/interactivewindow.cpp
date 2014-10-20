@@ -186,7 +186,8 @@ void InteractiveWindow::on_segment_clicked()
         GraphCutSegmentation seg(mFilename.toStdString().c_str(), mpImageLabel->width(), mpImageLabel->height(),
                                  mpImageLabel->mpForegroundSeedMgr, mpImageLabel->mpBackgroundSeedMgr);
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
-        seg.process(mpParamMgr->mKDEBandWidth);
+        seg.mKDESigma = mpParamMgr->mKDEBandWidth;
+        seg.process();
         seg.visualize();
     }
     else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
@@ -197,7 +198,8 @@ void InteractiveWindow::on_segment_clicked()
                                 mpImageLabel->mRectStartX, mpImageLabel->mRectStartY, mpImageLabel->mRectEndX, mpImageLabel->mRectEndY);
         seg.mIterationNum = mpParamMgr->mIterationNumber;
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
-        seg.process(mpParamMgr->mKDEBandWidth);
+        seg.mKDESigma = mpParamMgr->mKDEBandWidth;
+        seg.process();
         seg.visualize();
     }
 }

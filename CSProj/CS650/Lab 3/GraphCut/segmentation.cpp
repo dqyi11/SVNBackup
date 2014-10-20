@@ -185,16 +185,20 @@ GraphCutSegmentation::GraphCutSegmentation(const char* filename, int width, int 
 }
 
 
-void GraphCutSegmentation::process(float sigma_kde)
+void GraphCutSegmentation::process(EstimatorType type)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, sigma_kde);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, type);
+    if(type==KDE)
+    {
+        pGraph->mSigmaKDE = mKDESigma;
+    }
     pGraph->mpGridPrior = mpTrimap;
     qDebug() << "Import prior, foreground num " << mForegroundSet.size() << " and background num " << mBackgroundSet.size();
+
+    pGraph->initalizeType(type);
     pGraph->importPrior(mForegroundSet, mBackgroundSet);
 
-    qDebug() << "Foreground bandwidth " << pGraph->mpForegroundEstimator->estimateOptimalBandwidth();
-    qDebug() << "Background bandwidth " << pGraph->mpBackgroundEstimator->estimateOptimalBandwidth();
     pGraph->initializeGraph();
 
     qDebug() << "Graph cutting ";
@@ -272,10 +276,14 @@ void GrabCutSegmentation::initalizeSeeds(int img_width, int img_height, int rect
     }
 }
 
-void GrabCutSegmentation::process(float sigma_kde)
+void GrabCutSegmentation::process(EstimatorType type)
 {
     qDebug() << "Create graph from " << mpFilename;
-    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, sigma_kde);
+    ImageDataGraph * pGraph = new ImageDataGraph(mpFilename, type);
+    if(type==KDE)
+    {
+        pGraph->mSigmaKDE = mKDESigma;
+    }
 
     mpTrimap = new int[pGraph->mImgWidth*pGraph->mImgHeight];
     for(int j=0;j<pGraph->mImgHeight;j++)
@@ -293,6 +301,7 @@ void GrabCutSegmentation::process(float sigma_kde)
         }
     }
 
+    pGraph->initalizeType(type);
     initalizeSeeds(pGraph->mImgWidth, pGraph->mImgHeight, mRectUpperLeftX, mRectUpperLeftY, mRectLowerRightX, mRectLowerRightY, 0.1, 0.1);
 
     int iterationCnt = 0;

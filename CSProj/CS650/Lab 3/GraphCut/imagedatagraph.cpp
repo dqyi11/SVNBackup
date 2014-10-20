@@ -5,9 +5,11 @@
 #include <math.h>
 
 #include "imagedatagraph.h"
+#include "kerneldensityestimator.h"
+#include "gmmdensityestimator.h"
 #include "qdebug.h"
 
-ImageDataGraph::ImageDataGraph(const char* filename, float sigma_kde, float neighborhood_gamma)
+ImageDataGraph::ImageDataGraph(const char* filename, float neighborhood_gamma)
 {
     mpFilename = const_cast<char *>(filename);
 
@@ -27,13 +29,13 @@ ImageDataGraph::ImageDataGraph(const char* filename, float sigma_kde, float neig
         mpNeighborhoodWeights[k] = new float[mImgWidth*mImgHeight];
     }
 
-    mSigmaKDE = sigma_kde;
+    mSigmaKDE = 2.0;
 
     mNeighborhoodGamma = neighborhood_gamma;
     mNeighborhoodBeta = 0.0;
 
-    mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
-    mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
+    mpForegroundEstimator = NULL;
+    mpBackgroundEstimator = NULL;
 
     mpRVals = new int[mImgWidth*mImgHeight];
     mpGVals = new int[mImgWidth*mImgHeight];
@@ -103,6 +105,22 @@ ImageDataGraph::~ImageDataGraph()
         delete mpBVals;
         mpBVals = NULL;
     }
+}
+
+void ImageDataGraph::initalizeType(EstimatorType type)
+{
+    mEstimatorType = type;
+    if(type==KDE)
+    {
+        mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
+        mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
+    }
+    else
+    {
+        mpForegroundEstimator = new GMMDensityEstimator();
+        mpBackgroundEstimator = new GMMDensityEstimator();
+    }
+
 }
 
 

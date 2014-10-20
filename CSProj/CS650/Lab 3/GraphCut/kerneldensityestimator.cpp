@@ -10,6 +10,7 @@ KernelDensityEstimator::KernelDensityEstimator(float bandwidth)
 KernelDensityEstimator::~KernelDensityEstimator()
 {
      mSampleColors.clear();
+     mSamplePositions.clear();
 }
 
 void KernelDensityEstimator::addSample(PixelPosition pos, PixelColor color)

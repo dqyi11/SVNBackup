@@ -2,7 +2,8 @@
 #define SEGMENTATION_H
 
 #include <list>
-#include <QPoint>
+//#include <QPoint>
+#include "globaldef.h"
 
 typedef struct
 {
@@ -34,7 +35,7 @@ public:
     ~Segmentation();
 
     void visualize(bool includeMask=true);
-    virtual void process(float sigma_kde) = 0;
+    virtual void process(EstimatorType type=KDE) = 0;
 protected:
     char * mpFilename;
     int mImgWidth;
@@ -44,12 +45,16 @@ protected:
     int * mpTrimap;
 };
 
+
+
 class GraphCutSegmentation : public Segmentation
 {
 public:
     GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background);
 
-    virtual void process(float sigma_kde);
+    virtual void process(EstimatorType type=KDE);
+
+    float mKDESigma;
 };
 
 class GrabCutSegmentation : public Segmentation
@@ -57,13 +62,14 @@ class GrabCutSegmentation : public Segmentation
 public:
     GrabCutSegmentation(const char* filename, int width, int height, int rect_min_x, int rect_min_y, int rect_max_x, int rect_max_y);
 
-    virtual void process(float sigma_kde);
+    virtual void process(EstimatorType type=KDE);
 
     int mRectUpperLeftX;
     int mRectUpperLeftY;
     int mRectLowerRightX;
     int mRectLowerRightY;
 
+    float mKDESigma;
     int mIterationNum;
 
 protected:

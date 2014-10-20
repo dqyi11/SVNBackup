@@ -3,7 +3,8 @@
 
 #include "maxflow/graph.h"
 #include "segmentation.h"
-#include "kerneldensityestimator.h"
+#include "densityestimator.h"
+#include "globaldef.h"
 
 typedef Graph<int,int,int> PixelGraph;
 
@@ -13,13 +14,14 @@ class ImageDataGraph
     friend class GraphCutSegmentation;
     friend class GrabCutSegmentation;
 public:
-    ImageDataGraph(const char* filename, float sigma_kde=2.0, float neighborhood_gamma=50.0);
-    ~ImageDataGraph();
-
     enum Neighborhood { N = 0, NE, E, SE, S, SW, W, NW };
 
     enum PixelClass {UNKNOWN_PIXEL = 0, FOREGROUND_PIXEL = 1, BACKGROUND_PIXEL = 2};
 
+    ImageDataGraph(const char* filename, float neighborhood_gamma=50.0);
+    ~ImageDataGraph();
+
+    void initalizeType(EstimatorType type = KDE);
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
     void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
     void initializeGraph();
@@ -38,6 +40,7 @@ protected:
     float calcNeighborhoodBeta();
     void calcNeighborhoodWeights(float gamma, float beta);
 
+    EstimatorType mEstimatorType;
     char * mpFilename;
     PixelGraph * mpGraph;
     float mRegionImportance;
@@ -62,8 +65,8 @@ protected:
     double mDataGibbsEnergy;
     double mSmoothnessGibbsEnergy;
 
-    GaussianKernelDensityEstimator * mpForegroundEstimator;
-    GaussianKernelDensityEstimator * mpBackgroundEstimator;
+    DensityEstimator * mpForegroundEstimator;
+    DensityEstimator * mpBackgroundEstimator;
 
 };
 

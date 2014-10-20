@@ -1,18 +1,16 @@
 #ifndef KERNELDENSITYESTIMATOR_H
 #define KERNELDENSITYESTIMATOR_H
-
+#include "densityestimator.h"
 #include "segmentation.h"
 #include <list>
 
-class KernelDensityEstimator
+class KernelDensityEstimator : public DensityEstimator
 {
 public:
     KernelDensityEstimator(float bandwidth);
     ~KernelDensityEstimator();
 
     void addSample(PixelPosition pos, PixelColor color);
-
-    virtual float getEstimation(PixelColor color) = 0;
 
 protected:
     int mSampleNumber;

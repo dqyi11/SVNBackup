@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     segmentation.cpp \
     kerneldensityestimator.cpp \
     configdialog.cpp \
-    parametermanager.cpp
+    parametermanager.cpp \
+    densityestimator.cpp \
+    gmmdensityestimator.cpp
 
 HEADERS  += \
     maxflow/block.h \
@@ -40,6 +42,9 @@ HEADERS  += \
     segmentation.h \
     kerneldensityestimator.h \
     configdialog.h \
-    parametermanager.h
+    parametermanager.h \
+    densityestimator.h \
+    gmmdensityestimator.h \
+    globaldef.h
 
 FORMS    +=
