@@ -8,11 +8,12 @@ import numpy as np
 
 class Solution(object):
     
-    def __init__(self, objective_num, solution_dim, subproblem_weight):
+    def __init__(self, objective_num, solution_dim, neighbor_num, subproblem_weight):
         self.objective_num = objective_num
         self.solution_dim = solution_dim
         self.fitness = np.zeros(objective_num, np.float)
         self.position = np.zeros(solution_dim, np.float)
+        self.neighbor_num = neighbor_num
         self.subproblem_weight = subproblem_weight
 
 class MOEAD(object):
@@ -22,19 +23,24 @@ class MOEAD(object):
         self.solution_dim = solution_dim
         self.fitness_func = fitness_func
         self.population = []
+        self.utopia_position = np.zeros(self.objective_num, np.float)
+        for k in range(self.objective_num):
+            self.utopia_position[k] = np.iinfo(float).max
         
-    def initPopulation(self, population_size, position_range):
+    def initPopulation(self, position_range, population_size=100, neighbor_num=30 ):
         
         self.population_size = population_size
-        self.range = range
+        self.neighbor_num = neighbor_num
+        self.position_range = position_range
         rndSeeds = np.random.random(self.population_size*self.solution_dim)
-        weights = self.initWeights()
+        weights, weight_distances = self.initWeights()
         self.population = []
         for i in range(self.population_size):
-            p = Solution(self.objective_num, self.solution_dim, weights[i])
+            p = Solution(self.objective_num, self.solution_dim, self.neighbor_num, weights[i])
             for k in range(self.solution_dim):
                 p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
             self.population.append(p)
+            p.neighbor_indices = np.argsort(weight_distances[i])
             
     def run(self, generation_num):
            
@@ -57,12 +63,14 @@ class MOEAD(object):
                 weight[1] = float(self.population_size - i) / float(self.population_size)
             weights.append(weight)
             
-        distanceMatrix = np.zeros((self.population_size, self.population_size), np.float)
+        weight_distances = []
+        for i in range(self.population_size):
+            weight_distances.append(np.zeros(self.population_size,np.float))
         for i in range(self.population_size):
             for j  in range(1, self.population_size, 1):
                 dist = np.linalg.norm(self.population[i].position - self.population[j].position, 2)
-                distanceMatrix[i, j] = dist
-                distanceMatrix[j, i] = dist
-        return weights
+                weight_distances[i][j] = dist
+                weight_distances[j][i] = dist
+        return weights, weight_distances
         
         
