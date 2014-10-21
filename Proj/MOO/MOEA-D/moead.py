@@ -66,6 +66,7 @@ class MOEAD(object):
         self.F = 0.5
         self.CR = 0.5
         self.population = []
+        self.external_population = []
         self.utopia_fitness = np.zeros(self.objective_num, np.float)
         for k in range(self.objective_num):
             self.utopia_fitness[k] = np.inf
@@ -121,7 +122,19 @@ class MOEAD(object):
                     q_val = self.calcSubObjective(q.fitness, q.subproblem_weight)
                     if p_val <= q_val:
                         q.position = p.position
-                        q.fitness = self.fitness_func(q.position)   
+                        q.fitness = self.fitness_func(q.position)
+                        
+            # update EP (external population)
+            for i in range(self.population_size):
+                p = self.population[i]
+                nondominance = True
+                for ep in self.external_population:
+                    if p >> ep:
+                        self.external_population.remove(ep)
+                    if ep >> p:
+                        nondominance = False
+                if nondominance == True:
+                    self.external_population.append(p)
         
     def initWeights(self):
         weights = []

@@ -41,18 +41,19 @@ class dMOPSO(object):
     def initPopulation(self, population_size, position_range):
         
         self.population_size = population_size
-        self.range = range
+        self.position_range = position_range
+        self.weights = self.initWeights()
         rndSeeds = np.random.random(self.population_size*self.solution_dim)
         self.population = []
         for i in range(self.population_size):
-            p = Solution(self.objective_num, self.solution_dim)
+            p = Solution(self.objective_num, self.solution_dim, self.weights[i])
             for k in range(self.solution_dim):
                 p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0]
                 p.fitness = self.fitness_func(p.position)
             self.population.append(p)
             self.gb_set.append(p)
         
-        self.weights = self.initWeights()
+        
             
     def run(self, generation_num):
   
@@ -79,11 +80,11 @@ class dMOPSO(object):
                     
                 # repair bounds
                 for d in range(self.solution_dim):
-                    if p.position[d] > self.range[i][1]:
-                        p.position[d] = self.range[i][1]
+                    if p.position[d] > self.position_range[i][1]:
+                        p.position[d] = self.position_range[i][1]
                         p.velocity[d] = - self.gamma * p.velocity[d]
-                    elif p.position[d] < self.range[i][0]:
-                        p.position[d] = self.range[i][0]
+                    elif p.position[d] < self.position_range[i][0]:
+                        p.position[d] = self.position_range[i][0]
                         p.velocity[d] = - self.gamma * p.velocity[d]
         
             # update fitness
