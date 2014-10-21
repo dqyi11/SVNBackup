@@ -22,14 +22,14 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 50
+    generation_number = 10
 
     position_range = []
     for i in range(30):
         position_range.append([0.0, 1.0])
         
     nsga2 = NSGAII(2, 30, zdt1_func)
-    nsga2.initPopulation(20, position_range)
+    nsga2.initPopulation(50, position_range)
     
     nsga2.run(generation_number)
     

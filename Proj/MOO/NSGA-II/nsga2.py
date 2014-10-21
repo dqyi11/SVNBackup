@@ -8,9 +8,10 @@ import numpy as np
 
 class Solution(object):
     
-    def __init__(self, objective_num, solution_dim):
+    def __init__(self, objective_num, solution_dim, mutate_var):
         self.objective_num = objective_num
         self.solution_dim = solution_dim
+        self.mutate_var = mutate_var
         self.fitness = np.zeros(objective_num, np.float)
         self.position = np.zeros(solution_dim, np.float)
         
@@ -21,18 +22,16 @@ class Solution(object):
         '''
         Crossover operator.
         '''
-        child_solution = Solution(self.objective_num, self.solution_dim)
-        
+        child_solution = Solution(self.objective_num, self.solution_dim, self.mutate_var)
         for i in range(self.solution_dim):
             child_solution.position[i] = np.sqrt(self.position[i] * other.position[i])
-        
         return child_solution
     
     def mutate(self):
         '''
         Mutation operator.
         '''
-        self.position[np.random.randint(self.solution_dim)] = np.random.random()
+        self.position[np.random.randint(self.solution_dim)] += np.random.normal(loc=0.0, scale=self.mutate_var)
         
     def __rshift__(self, other):
         '''
@@ -72,12 +71,13 @@ class Solution(object):
 
 class NSGAII(object):
 
-    def __init__(self, objective_num, solution_dim,  fitness_func, mutation_rate=0.1, crossover_rate=1.0):
+    def __init__(self, objective_num, solution_dim,  fitness_func, crossover_rate=1.0, mutation_rate=0.1, mutation_var=0.1):
 
         self.objective_num = objective_num
         self.solution_dim = solution_dim
-        self.mutation_rate = mutation_rate
         self.crossover_rate = crossover_rate
+        self.mutation_rate = mutation_rate
+        self.mutation_var = mutation_var
         self.fitness_func = fitness_func
         self.population = []
         
@@ -88,7 +88,7 @@ class NSGAII(object):
         rndSeeds = np.random.random(self.population_size*self.solution_dim)
         self.population = []
         for i in range(self.population_size):
-            p = Solution(self.objective_num, self.solution_dim)
+            p = Solution(self.objective_num, self.solution_dim, self.mutation_var)
             for k in range(self.solution_dim):
                 p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
             self.population.append(p)
