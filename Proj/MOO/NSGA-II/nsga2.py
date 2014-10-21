@@ -5,6 +5,7 @@ Created on Oct 18, 2014
 '''
 
 import numpy as np
+import sys, copy
 
 class Solution(object):
     
@@ -14,8 +15,7 @@ class Solution(object):
         self.mutate_var = mutate_var
         self.fitness = np.zeros(objective_num, np.float)
         self.position = np.zeros(solution_dim, np.float)
-        
-        self.rank = np.iinfo(np.int).max
+        self.rank = sys.maxint
         self.distance = 0.0
         
     def crossover(self, other):
@@ -75,10 +75,10 @@ class NSGAII(object):
 
         self.objective_num = objective_num
         self.solution_dim = solution_dim
+        self.fitness_func = fitness_func
         self.crossover_rate = crossover_rate
         self.mutation_rate = mutation_rate
         self.mutation_var = mutation_var
-        self.fitness_func = fitness_func
         self.population = []
         
     def initPopulation(self, population_size, position_range):
@@ -100,7 +100,7 @@ class NSGAII(object):
             p.fitness = self.fitness_func(p.position)
             
         Q = []
-        P = self.population
+        P = copy.deepcopy(self.population)
         
         for i in range(generation_num):
             print "@Generation  " + str(i) + " : " + str(len(P))

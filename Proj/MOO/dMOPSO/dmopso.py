@@ -43,15 +43,18 @@ class dMOPSO(object):
         self.population_size = population_size
         self.position_range = position_range
         self.weights = self.initWeights()
-        rndSeeds = np.random.random(self.population_size*self.solution_dim)
+        
         self.population = []
         for i in range(self.population_size):
             p = Solution(self.objective_num, self.solution_dim, self.weights[i])
+            rndSeeds = np.random.random(self.solution_dim)
             for k in range(self.solution_dim):
-                p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0]
+                p.position[k] = rndSeeds[k] * (position_range[k][1]-position_range[k][0]) + position_range[k][0]
                 p.fitness = self.fitness_func(p.position)
+                p.pb_position = copy.deepcopy(p.position)
+                p.pb_fitness = copy.deepcopy(p.fitness)
             self.population.append(p)
-            self.gb_set.append(p)
+            self.gb_set.append(copy.deepcopy(p))
         
         
             
@@ -76,15 +79,20 @@ class dMOPSO(object):
                     p.age = 0
                     # reinitialize position
                     for d in range(self.solution_dim):
-                        p.position[d] = np.random.normal((self.gb_set[i].position[d]-p.pb_position[d])/2.0, np.abs(self.gb_set[i].position[d]-p.pb_position[d]))
+                        norm_mean = (self.gb_set[i].position[d]-p.pb_position[d])/2.0
+                        norm_var = np.abs(self.gb_set[i].position[d]-p.pb_position[d])
+                        if norm_var == 0:
+                            norm_var = 0.00000001
+                        p.position[d] = np.random.normal(loc=norm_mean, scale=norm_var)
                     
+
                 # repair bounds
                 for d in range(self.solution_dim):
-                    if p.position[d] > self.position_range[i][1]:
-                        p.position[d] = self.position_range[i][1]
+                    if p.position[d] > self.position_range[d][1]:
+                        p.position[d] = self.position_range[d][1]
                         p.velocity[d] = - self.gamma * p.velocity[d]
-                    elif p.position[d] < self.position_range[i][0]:
-                        p.position[d] = self.position_range[i][0]
+                    elif p.position[d] < self.position_range[d][0]:
+                        p.position[d] = self.position_range[d][0]
                         p.velocity[d] = - self.gamma * p.velocity[d]
         
             # update fitness
@@ -97,14 +105,15 @@ class dMOPSO(object):
             # update personal best 
             for p in self.population:
                 if self.calcSubObjective(p.position, p.subproblem_weight) <= self.calcSubObjective(p.pb_position, p.subproblem_weight):
-                    p.pb_position = p.position
+                    p.pb_position = copy.deepcopy(p.position)
                     p.age = 0
                 else:
                     p.age += 1
                     
             # update global best
             P = copy.deepcopy(self.gb_set) 
-            P.extend(self.population)
+            currentPopulation = copy.deepcopy(self.population)
+            P.extend(currentPopulation)
             
             self.gb_set = self.updateGlobalBest(self.weights, P)  
                     

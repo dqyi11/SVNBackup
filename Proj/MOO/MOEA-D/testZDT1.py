@@ -6,9 +6,7 @@ Created on Oct 18, 2014
 
 def zdt1_func(x):
     y = np.zeros(2, np.float)
-    
     y[0] = x[0]
-    
     sum = 0.0
     for i in range(1, 30):
         sum += x[i];
