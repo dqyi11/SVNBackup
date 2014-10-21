@@ -72,12 +72,51 @@ The minimum cut operation can segment the pixels into foreground and background 
 
 In this lab, the code is written in C++.
 Qt4.8 is used for the implement of GUI interaction.
-The Vladimir Kolmogorov's C++ Implementation is chosen for doing minimum cut.
+The Vladimir Kolmogorov's C++ Implementation ( \emph{ maxflow-v3.03.src } ) is chosen for doing minimum cut.
 
 \section{Graph Cut Segmentation}
 
+% Smoothness Ratio 50
+% Kernel Density Estimator Bandwidth 80
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.23\textwidth]{./figure/horse.jpg}
+\label{fig:graph_cut:01:origin} }
+\subfigure[Labeling]{
+\includegraphics[width=.23\textwidth]{./figure/horse-label.png} 
+\label{fig:graph_cut:01:labeling} }
+\subfigure[Foreground mask]{
+\includegraphics[width=.23\textwidth]{./figure/horse-mask.png} 
+\label{fig:graph_cut:01:foreground_mask} }
+\subfigure[Foreground cutted]{
+\includegraphics[width=.23\textwidth]{./figure/horse-foreground.png}
+\label{fig:graph_cut:01:foreground} }
+\caption{Graph cut segmentation on \emph{horse.jpg}. }
+\label{fig:graph_cut:01}
+\end{figure}
 
-\section{Grab Cut}
+\begin{figure}[h]
+\centering
+\subfigure[Origin]{
+\includegraphics[width=.23\textwidth]{./figure/carsten-label.png}
+\label{fig:graph_cut:02:labeling} }
+\subfigure[Labeling]{
+\includegraphics[width=.23\textwidth]{./figure/carsten-foreground2.png} 
+\label{fig:graph_cut:02:less_smooth} } % smooth ratio 25
+\subfigure[Foreground mask]{
+\includegraphics[width=.23\textwidth]{./figure/carsten-foreground1.png} 
+\label{fig:graph_cut:02:normal_smooth} } % smooth ratio 50
+\subfigure[Foreground cutted]{
+\includegraphics[width=.23\textwidth]{./figure/carsten-foreground3.png}
+\label{fig:graph_cut:02:more_smooth} }  % smooth ratio 120
+\caption{Graph cut segmentation on \emph{carsten.jpg}. }
+\label{fig:graph_cut:02}
+\end{figure}
+
+\section{Grab Cut Segmentation}
+
+\cite{rother2004grabcut}
 
 Plot energy decrease
 
