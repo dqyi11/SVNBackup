@@ -301,6 +301,27 @@ void ImageDataGraph::calcNeighborhoodWeights(float gamma, float beta)
             }
         }
     }
+
+    mMaxNeighborhoodWeights = 0.0;
+    for(int j=0;j<mImgHeight;j++)
+    {
+        for(int i=0;i<mImgWidth;i++)
+        {
+            int node_id = i+j*mImgWidth;
+            double neighborhoodWeights = mpNeighborhoodWeights[W][node_id]
+                    + mpNeighborhoodWeights[NW][node_id]
+                    + mpNeighborhoodWeights[N][node_id]
+                    + mpNeighborhoodWeights[NE][node_id]
+                    + mpNeighborhoodWeights[E][node_id]
+                    + mpNeighborhoodWeights[SE][node_id]
+                    + mpNeighborhoodWeights[S][node_id]
+                    + mpNeighborhoodWeights[SW][node_id];
+            if (neighborhoodWeights > mMaxNeighborhoodWeights)
+            {
+                mMaxNeighborhoodWeights = neighborhoodWeights;
+            }
+        }
+    }
 }
 
 void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set)
@@ -397,11 +418,11 @@ void ImageDataGraph::initializeGraph()
             /*
             if(mpGridPrior[node_id]==BACKGROUND_PIXEL)
             {
-                mpGraph->add_tweights( node_id, 0.0, 1+mMaxNeighborhood );
+                mpGraph->add_tweights( node_id, 0.0, 1+mMaxNeighborhoodWeights );
             }
             else if(mpGridPrior[node_id]==FOREGROUND_PIXEL)
             {
-                mpGraph->add_tweights( node_id, 1+mMaxNeighborhood, 0.0 );
+                mpGraph->add_tweights( node_id, 1+mMaxNeighborhoodWeights, 0.0 );
             }
             else */
             {

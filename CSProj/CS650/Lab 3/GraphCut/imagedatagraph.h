@@ -51,6 +51,8 @@ protected:
 
     float ** mpNeighborhoodWeights;
 
+    double mMaxNeighborhoodWeights;
+
     int mImgWidth;
     int mImgHeight;
     int mConnectNum;

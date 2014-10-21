@@ -12,7 +12,7 @@ ConfigDialog::ConfigDialog(ParameterManager * paramMgr, QWidget *parent) :
     mpEditSmoothnessRatio->setText(QString::number(mpParamMgr->mSmoothnessRatio, 'g', 4));
 
     mpEditKDEBandwidth = new QLineEdit(this);
-    mpLabelKDEBandwidth = new QLabel(tr("Kernel Density Estimator Sigma"), this);
+    mpLabelKDEBandwidth = new QLabel(tr("Kernel Density Estimator Bandwidth"), this);
     mpEditKDEBandwidth->setText(QString::number(mpParamMgr->mKDEBandWidth, 'g', 4));
 
     mpEditIterationNumber = new QLineEdit(this);
