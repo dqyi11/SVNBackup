@@ -105,9 +105,12 @@ class MOEAD(object):
             
             p1_idx = np.random.choice(neighborIndices)
             p2_idx = np.random.choice(neighborIndices)
+            p3_idx = np.random.choice(neighborIndices)
             
             p1 = self.population[p1_idx]
             p2 = self.population[p2_idx]
+            p3 = self.population[p3_idx]
+            
             
             
         

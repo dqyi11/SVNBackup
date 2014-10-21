@@ -98,16 +98,16 @@ The Vladimir Kolmogorov's C++ Implementation ( \emph{ maxflow-v3.03.src } ) is c
 
 \begin{figure}[h]
 \centering
-\subfigure[Origin]{
+\subfigure[Labeling]{
 \includegraphics[width=.23\textwidth]{./figure/carsten-label.png}
 \label{fig:graph_cut:02:labeling} }
-\subfigure[Labeling]{
+\subfigure[Foreground 1]{
 \includegraphics[width=.23\textwidth]{./figure/carsten-foreground2.png} 
 \label{fig:graph_cut:02:less_smooth} } % smooth ratio 25
-\subfigure[Foreground mask]{
+\subfigure[Foreground 2]{
 \includegraphics[width=.23\textwidth]{./figure/carsten-foreground1.png} 
 \label{fig:graph_cut:02:normal_smooth} } % smooth ratio 50
-\subfigure[Foreground cutted]{
+\subfigure[Foreground 3]{
 \includegraphics[width=.23\textwidth]{./figure/carsten-foreground3.png}
 \label{fig:graph_cut:02:more_smooth} }  % smooth ratio 120
 \caption{Graph cut segmentation on \emph{carsten.jpg}. }
@@ -119,6 +119,24 @@ The Vladimir Kolmogorov's C++ Implementation ( \emph{ maxflow-v3.03.src } ) is c
 \cite{rother2004grabcut}
 
 Plot energy decrease
+
+\begin{figure}[h]
+\centering
+\subfigure[Labeling]{
+\includegraphics[width=.23\textwidth]{./figure/flowers-label.png}
+\label{fig:grab_cut:01:labeling} }
+\subfigure[Seeds distribution]{
+\includegraphics[width=.23\textwidth]{./figure/flowers-seedVis.png} 
+\label{fig:grab_cut:01:less_smooth} } % smooth ratio 25
+\subfigure[Foreground mask]{
+\includegraphics[width=.23\textwidth]{./figure/flowers-mask.png} 
+\label{fig:grab_cut:01:normal_smooth} } % smooth ratio 50
+\subfigure[Foreground cutted]{
+\includegraphics[width=.23\textwidth]{./figure/flowers-foreground.png}
+\label{fig:grab_cut:01:more_smooth} }  % smooth ratio 120
+\caption{Grab cut segmentation on \emph{flowers.jpg}. }
+\label{fig:grab_cut:01}
+\end{figure}
 
 \begin{comment}
 As before, prepare a write-up that describes your work.  Show examples of your code applied to different images.  What kinds of images does graph-cut segmentation (or Grab Cut respectively) work well for? What kinds of images do you find it struggles with? 
