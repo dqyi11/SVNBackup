@@ -95,8 +95,8 @@ class MOEAD(object):
             
     def run(self, generation_num):
            
-        for i in range(generation_num):
-            print "@Generation  " + str(i)
+        for t in range(generation_num):
+            print "@Generation  " + str(t)
             
             #generate new population
             self.geneticOperation(self.F, self.CR)
@@ -111,10 +111,17 @@ class MOEAD(object):
         
             self.utopia_fitness = np.array(fitness_list).argmin(0)
             
-            #update the neighbors
-            
-            
-        
+            #update the neighboring solutions
+            for i in range(self.population_size):
+                p = self.population[i]
+                for j in range(p.neighbor_num):
+                    q_idx = p.neighbor_indices[j]
+                    q = self.population[q_idx]
+                    p_val = self.calcSubObjective(p.fitness, q.subproblem_weight)
+                    q_val = self.calcSubObjective(q.fitness, q.subproblem_weight)
+                    if p_val <= q_val:
+                        q.position = p.position
+                        q.fitness = self.fitness_func(q.position)   
         
     def initWeights(self):
         weights = []
