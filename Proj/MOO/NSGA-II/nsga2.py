@@ -31,7 +31,7 @@ class Solution(object):
         '''
         Mutation operator.
         '''
-        self.position[np.random.randint(self.solution_dim)] += np.random.normal(loc=0.0, scale=self.mutate_var)
+        self.position[np.random.randint(self.solution_dim)] = np.random.random()
         
     def __rshift__(self, other):
         '''
@@ -85,12 +85,13 @@ class NSGAII(object):
         
         self.population_size = population_size
         self.range = range
-        rndSeeds = np.random.random(self.population_size*self.solution_dim)
+        
         self.population = []
         for i in range(self.population_size):
             p = Solution(self.objective_num, self.solution_dim, self.mutation_var)
+            rndSeeds = np.random.random(self.solution_dim)
             for k in range(self.solution_dim):
-                p.position[k] = rndSeeds[k+i*self.solution_dim] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
+                p.position[k] = rndSeeds[k] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
             self.population.append(p)
             
     def run(self, generation_num):
@@ -100,7 +101,7 @@ class NSGAII(object):
             p.fitness = self.fitness_func(p.position)
             
         Q = []
-        P = copy.deepcopy(self.population)
+        P = self.population
         
         for i in range(generation_num):
             print "@Generation  " + str(i) + " : " + str(len(P))
@@ -109,13 +110,13 @@ class NSGAII(object):
             R.extend(P)
             R.extend(Q)
             
-            #print "fast non dominated sort"
+            print "fast non dominated sort"
             fronts = self.fastNondominatedSort(R)
             
             del P[:]
             
-            #print "crowding distance assignment"
-            for front in fronts:
+            print "crowding distance assignment"
+            for front in fronts.values():
                 if len(front) == 0:
                     break
                 
@@ -125,26 +126,25 @@ class NSGAII(object):
                 if len(P) >= self.population_size:
                     break
             
-            #print "sort by crowding"
+            print "sort by crowding"
             self.sortByCrowding(P)
             
             if len(P) > self.population_size:
                 del P[self.population_size:]
                 
-            #print "Make new pop"
+            print "Make new pop"
             Q = self.makeNewPop(P)
             
         self.population = P
             
     def fastNondominatedSort(self, P):
         
-        fronts = []
+        fronts = {}
         
         S = {}
         n = {}
         
-        front = []
-        fronts.append(front)    
+        fronts[1] = [] 
         
         for p in P:
             S[p] = []
@@ -160,9 +160,9 @@ class NSGAII(object):
                     n[p] += 1
                     
                 if n[p] == 0:
-                    front.append(p)
+                    fronts[1].append(p)
         
-        i = 0
+        i = 1
         while len(fronts[i]) != 0:
             next_front = []
             for p in fronts[i]:
@@ -171,7 +171,7 @@ class NSGAII(object):
                     if n[q] == 0:
                         next_front.append(q)
             i +=1
-            fronts.append(next_front)
+            fronts[i] = next_front
             
         return fronts
             
@@ -193,23 +193,15 @@ class NSGAII(object):
     def sortByObjective(self, P, obj_idx):
         
         for i in range(len(P)-1, -1, -1):
-            for j in range(1, i + 1):
-                s1 = P[j - 1]
-                s2 = P[j]
-                
-                if s1.fitness[obj_idx] > s2.fitness[obj_idx]:
-                    P[j - 1] = s2
-                    P[j] = s1
+            for j in range(1, i + 1): 
+                if P[j - 1].fitness[obj_idx] > P[j].fitness[obj_idx]:
+                    P[j-1], P[j] = P[j], P[j-1]
                     
     def sortByCrowding(self, P):
         for i in range(len(P) - 1, -1, -1):
             for j in range(1, i + 1):
-                s1 = P[j - 1]
-                s2 = P[j]
-                
-                if s1.compareCrowding(s2) < 0:
-                    P[j - 1] = s2
-                    P[j] = s1
+                if P[j - 1].compareCrowding(P[j]) < 0:
+                    P[j-1], P[j] = P[j], P[j-1]
                                 
                     
     def makeNewPop(self, P):
@@ -221,29 +213,16 @@ class NSGAII(object):
         while len(Q) != len(P):
             selected_solutions = [None, None]
             #print "Q " + str(len(Q)) + " P " + str(len(P))
-            
-            '''
-            while selected_solutions[0] == selected_solutions[1]:
-                for i in range(2):
-                    
-                    s1 = np.random.choice(P)
-                    s2 = s1
-                    while s1 == s2:
-                        s2 = np.random.choice(P)
-                    s2 = np.random.choice(P)
-                    
-                    if s1.compareCrowding(s2) > 0:
-                        selected_solutions[i] = s1                        
-                    else:
-                        selected_solutions[i] = s2
-            '''
+                        
             for i in range(2):
                 s1 = np.random.choice(P)
                 s2 = np.random.choice(P)
-                s2 = np.random.choice(P)
+                while s1 == s2:
+                    print "resample"
+                    s2 = np.random.choice(P)
                 
                 if s1.compareCrowding(s2) > 0:
-                    selected_solutions[i] = s1                        
+                    selected_solutions[i] = s1                       
                 else:
                     selected_solutions[i] = s2
 
