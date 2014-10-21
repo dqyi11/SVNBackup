@@ -71,7 +71,7 @@ class MOEAD(object):
         for k in range(self.objective_num):
             self.utopia_fitness[k] = np.inf
         
-    def initPopulation(self, position_range, population_size=100, neighbor_num=30 ):
+    def initPopulation(self, population_size, neighbor_num, position_range ):
         
         self.population_size = population_size
         self.neighbor_num = neighbor_num

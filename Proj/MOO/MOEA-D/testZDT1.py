@@ -21,17 +21,19 @@ from moead import *
 from Visualization import *
 
 if __name__ == '__main__':
-
-    generation_num = 2
+    
+    generation_number = 10
+    population_size = 5
+    neighbor_num = 30
 
     position_range = []
     for i in range(30):
         position_range.append([0.0, 1.0])
         
     moead = MOEAD(2, 30, zdt1_func)
-    moead.initPopulation(position_range)
+    moead.initPopulation(population_size, neighbor_num, position_range)
     
-    moead.run(generation_num)
+    moead.run(generation_number)
     
     paretoX = np.arange(0.0,1.0,0.005);
     paretoY = np.zeros(len(paretoX));
