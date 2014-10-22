@@ -32,7 +32,7 @@ if __name__ == '__main__':
     
     nsga2.run(generation_number)
     
-    paretoX = np.arange(0.0,1.0,0.005);
+    paretoX = np.arange(0.0,1.0,0.01);
     paretoY = np.zeros(len(paretoX));
     paretoPos = [];
     for i in range(len(paretoX)):

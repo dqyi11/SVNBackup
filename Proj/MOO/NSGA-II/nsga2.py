@@ -110,12 +110,12 @@ class NSGAII(object):
             R.extend(P)
             R.extend(Q)
             
-            print "fast non dominated sort"
+            #print "fast non dominated sort"
             fronts = self.fastNondominatedSort(R)
             
             del P[:]
             
-            print "crowding distance assignment"
+            #print "crowding distance assignment"
             for front in fronts.values():
                 if len(front) == 0:
                     break
@@ -126,13 +126,13 @@ class NSGAII(object):
                 if len(P) >= self.population_size:
                     break
             
-            print "sort by crowding"
+            #print "sort by crowding"
             self.sortByCrowding(P)
             
             if len(P) > self.population_size:
                 del P[self.population_size:]
                 
-            print "Make new pop"
+            #print "Make new pop"
             Q = self.makeNewPop(P)
             
         self.population = P
@@ -144,12 +144,13 @@ class NSGAII(object):
         S = {}
         n = {}
         
-        fronts[1] = [] 
-        
         for p in P:
             S[p] = []
             n[p] = 0
+            
+        fronts[1] = [] 
           
+        for p in P:
             for q in P:
                 if p == q:
                     continue
@@ -159,8 +160,8 @@ class NSGAII(object):
                 elif q >> p:
                     n[p] += 1
                     
-                if n[p] == 0:
-                    fronts[1].append(p)
+            if n[p] == 0:
+                fronts[1].append(p)
         
         i = 1
         while len(fronts[i]) != 0:
@@ -195,13 +196,19 @@ class NSGAII(object):
         for i in range(len(P)-1, -1, -1):
             for j in range(1, i + 1): 
                 if P[j - 1].fitness[obj_idx] > P[j].fitness[obj_idx]:
-                    P[j-1], P[j] = P[j], P[j-1]
+                    #P[j-1], P[j] = P[j], P[j-1]
+                    temp = P[j-1]
+                    P[j-1] = P[j]
+                    P[j] = temp
                     
     def sortByCrowding(self, P):
         for i in range(len(P) - 1, -1, -1):
             for j in range(1, i + 1):
                 if P[j - 1].compareCrowding(P[j]) < 0:
-                    P[j-1], P[j] = P[j], P[j-1]
+                    #P[j-1], P[j] = P[j], P[j-1]
+                    temp = P[j-1]
+                    P[j-1] = P[j]
+                    P[j] = temp
                                 
                     
     def makeNewPop(self, P):
@@ -218,7 +225,7 @@ class NSGAII(object):
                 s1 = np.random.choice(P)
                 s2 = np.random.choice(P)
                 while s1 == s2:
-                    print "resample"
+                    #print "resample"
                     s2 = np.random.choice(P)
                 
                 if s1.compareCrowding(s2) > 0:

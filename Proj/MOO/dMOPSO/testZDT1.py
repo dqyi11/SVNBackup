@@ -30,8 +30,8 @@ if __name__ == '__main__':
     age_threshold = 3
     gamma = 0.5
     
-    generation_number = 20
-    population_size = 200
+    generation_number = 100
+    population_size = 1000
         
     dmopso = dMOPSO(2, 30, zdt1_func)
     dmopso.setParameters(chi, phi_p, phi_g, age_threshold, gamma)
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     
     dmopso.run(generation_number)
     
-    paretoX = np.arange(0.0,1.0,0.005);
+    paretoX = np.arange(0.0,1.0,0.01);
     paretoY = np.zeros(len(paretoX));
     paretoPos = [];
     for i in range(len(paretoX)):
