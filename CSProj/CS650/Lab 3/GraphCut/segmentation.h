@@ -35,7 +35,7 @@ public:
     ~Segmentation();
 
     void visualize(bool includeMask=true);
-    virtual void process(EstimatorType type=KERNAL) = 0;
+    virtual void process(EstimatorType type=KERNEL) = 0;
 
     float mKDESigma;
     float mSmoothnessRatio;
@@ -55,7 +55,7 @@ class GraphCutSegmentation : public Segmentation
 public:
     GraphCutSegmentation(const char* filename, int width, int height, SeedManager * foreground, SeedManager * background);
 
-    virtual void process(EstimatorType type=KERNAL);
+    virtual void process(EstimatorType type=KERNEL);
 
 };
 
@@ -64,7 +64,7 @@ class GrabCutSegmentation : public Segmentation
 public:
     GrabCutSegmentation(const char* filename, int width, int height, int rect_min_x, int rect_min_y, int rect_max_x, int rect_max_y);
 
-    virtual void process(EstimatorType type=KERNAL);
+    virtual void process(EstimatorType type=KERNEL);
 
     void visualizeSeed();
 

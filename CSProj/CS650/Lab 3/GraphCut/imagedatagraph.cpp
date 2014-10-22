@@ -119,17 +119,16 @@ ImageDataGraph::~ImageDataGraph()
 void ImageDataGraph::initalizeType(EstimatorType type)
 {
     mEstimatorType = type;
-    if(type==KERNAL)
+    if(mEstimatorType==KERNEL)
     {
         mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
         mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
     }
-    else
+    else if(mEstimatorType==GMM)
     {
         mpForegroundEstimator = new GMMDensityEstimator(5);
         mpBackgroundEstimator = new GMMDensityEstimator(5);
     }
-
 }
 
 
@@ -348,6 +347,12 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         color.vals[2] = mpBVals[index];
 
         mpBackgroundEstimator->addSample(pos, color);
+    }
+
+    if(mEstimatorType==GMM)
+    {
+        mpForegroundEstimator->learningModel();
+        mpBackgroundEstimator->learningModel();
     }
 }
 

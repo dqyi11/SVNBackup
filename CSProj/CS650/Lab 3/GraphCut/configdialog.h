@@ -6,6 +6,7 @@
 class QLineEdit;
 class QLabel;
 class QPushButton;
+class QRadioButton;
 class QGridLayout;
 class ParameterManager;
 
@@ -29,6 +30,9 @@ private:
     QLabel    * mpLabelKDEBandwidth;
     QLineEdit * mpEditIterationNumber;
     QLabel    * mpLabelIterationNumber;
+
+    QRadioButton * mpBtnKDE;
+    QRadioButton * mpBtnGMM;
 
     QPushButton * mpOKBtn;
     QPushButton * mpCancelBtn;

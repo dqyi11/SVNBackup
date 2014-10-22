@@ -10,6 +10,7 @@ public:
 
     virtual void addSample(PixelPosition pos, PixelColor color) = 0;
     virtual float getEstimation(PixelColor color) = 0;
+    virtual void learningModel() {};
 };
 
 #endif // DENSITYESTIMATOR_H

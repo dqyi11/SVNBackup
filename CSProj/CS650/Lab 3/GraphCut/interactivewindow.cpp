@@ -188,7 +188,7 @@ void InteractiveWindow::on_segment_clicked()
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
         seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
-        seg.process();
+        seg.process(mpParamMgr->mDEType);
         seg.visualize();
     }
     else if(mpImageLabel->mCurrentWorkingState == InteractiveLabel::GRAB_CUT_SEGMENTATION)
@@ -201,7 +201,7 @@ void InteractiveWindow::on_segment_clicked()
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
         seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
-        seg.process();
+        seg.process(mpParamMgr->mDEType);
         seg.visualize();
     }
 }

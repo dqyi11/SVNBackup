@@ -3,6 +3,8 @@
 
 #include "densityestimator.h"
 
+class GaussianMixtureModel;
+
 class GMMDensityEstimator : public DensityEstimator
 {
 public:
@@ -20,6 +22,7 @@ public:
 
 private:
 
+    GaussianMixtureModel * mpGMM;
 
     int mComponentNumber;
 
