@@ -99,9 +99,11 @@ class MOEAD(object):
         for t in range(generation_num):
             print "@Generation  " + str(t)
             
+            #print "generate new population"
             #generate new population
             self.geneticOperation(self.F, self.CR)
             
+            #print "update fitness and the utopia position"
             #update fitness and the utopia position
             fitness_list = []
             fitness_list.append(self.utopia_fitness)
@@ -112,6 +114,7 @@ class MOEAD(object):
         
             self.utopia_fitness = np.array(fitness_list).argmin(0)
             
+            #print "update the neighboring solutions"
             #update the neighboring solutions
             for i in range(self.population_size):
                 p = self.population[i]
@@ -123,7 +126,8 @@ class MOEAD(object):
                     if p_val <= q_val:
                         q.position = p.position
                         q.fitness = self.fitness_func(q.position)
-                        
+            
+            #print "update EP"            
             # update EP (external population)
             for i in range(self.population_size):
                 p = self.population[i]
@@ -161,8 +165,8 @@ class MOEAD(object):
             
             neighborIndices = p.neighbor_indices[0:self.neighbor_num]
             
-            print "len(neighborIndices) "+str(len(neighborIndices))
-            print neighborIndices
+            #print "len(neighborIndices) "+str(len(neighborIndices))
+            #print neighborIndices
             
             p1_idx = np.random.choice(neighborIndices)
             p2_idx = np.random.choice(neighborIndices)

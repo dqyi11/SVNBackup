@@ -20,9 +20,9 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 10
-    population_size = 5
-    neighbor_num = 30
+    generation_number = 100
+    population_size = 500
+    neighbor_num = 100
 
     position_range = []
     for i in range(30):
