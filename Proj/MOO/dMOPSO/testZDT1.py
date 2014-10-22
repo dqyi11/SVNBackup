@@ -20,7 +20,7 @@ if __name__ == '__main__':
     age_threshold = 3
     gamma = 0.5
     
-    generation_number = 100
+    generation_number = 400
     population_size = 1000
         
     dmopso = dMOPSO(2, 30, zdt1_func)
