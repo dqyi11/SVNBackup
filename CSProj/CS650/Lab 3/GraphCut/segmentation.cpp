@@ -87,7 +87,7 @@ Segmentation::~Segmentation()
     mBackgroundSet.clear();
 }
 
-void Segmentation:: visualize(bool includeMask)
+void Segmentation:: visualize(bool includeMask, std::string extensionInsertion, bool enableWindow)
 {
     std::cout << "Loading ... " << mpFilename << std::endl;
 
@@ -147,20 +147,28 @@ void Segmentation:: visualize(bool includeMask)
         }
 
         std::string newMaskFilename(mpFilename);
+        newMaskFilename += extensionInsertion;
         newMaskFilename += "-mask.png";
 
-        cvNamedWindow(newMaskFilename.c_str());
-        cvShowImage(newMaskFilename.c_str(), imgMaskData);
+        if(enableWindow==true)
+        {
+            cvNamedWindow(newMaskFilename.c_str());
+            cvShowImage(newMaskFilename.c_str(), imgMaskData);
+        }
         cvSaveImage(newMaskFilename.c_str(), imgMaskData);
 
         cvReleaseImage(&imgMaskData);
     }
 
     std::string newFilename(mpFilename);
+    newFilename += extensionInsertion;
     newFilename += "-foreground.png";
 
-    cvNamedWindow(newFilename.c_str());
-    cvShowImage(newFilename.c_str(), imgData);
+    if(enableWindow==true)
+    {
+        cvNamedWindow(newFilename.c_str());
+        cvShowImage(newFilename.c_str(), imgData);
+    }
     cvSaveImage(newFilename.c_str(), imgData);
 
     qDebug() << "Writing file ... ";
@@ -392,6 +400,10 @@ void GrabCutSegmentation::process(EstimatorType type)
                 }
             }
         }
+
+        std::string iterationMark = "-";
+        iterationMark += std::to_string((_Longlong)iterationCnt);
+        visualize(false, iterationMark, false);
 
         iterationCnt ++;
     }

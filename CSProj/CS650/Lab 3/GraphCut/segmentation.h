@@ -34,7 +34,8 @@ public:
     Segmentation(const char* filename, int width, int height);
     ~Segmentation();
 
-    void visualize(bool includeMask=true);
+    void visualize(bool includeMask=true, std::string extensionInsertion="", bool enableWindow=true);
+    
     virtual void process(EstimatorType type=KERNEL) = 0;
 
     float mKDESigma;
