@@ -23,14 +23,14 @@ if __name__ == '__main__':
     generation_number = 100
     population_size = 1000
         
-    dmopso = dMOPSO(2, 30, zdt1_func)
+    dmopso = dMOPSO(2, 30, zdt2_func)
     dmopso.setParameters(chi, phi_p, phi_g, age_threshold, gamma)
     dmopso.initPopulation(population_size, position_range)
 
     
     dmopso.run(generation_number)
     
-    paretoFront = getParetoFrontZDT1()
+    paretoFront = getParetoFrontZDT2()
     
     fitnessX = []
     fitnessY = []

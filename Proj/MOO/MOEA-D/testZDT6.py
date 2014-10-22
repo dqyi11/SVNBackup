@@ -5,31 +5,31 @@ Created on Oct 18, 2014
 '''
 
 from zdt import *
-from nsga2 import *
+from moead import *
 from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 10
-    population_size = 50
+    generation_number = 50
+    population_size = 200
+    neighbor_num = 50
 
     position_range = []
     for i in range(30):
         position_range.append([0.0, 1.0])
         
-    nsga2 = NSGAII(2, 30, zdt1_func)
-    nsga2.initPopulation(population_size, position_range)
+    moead = MOEAD(2, 30, zdt1_func)
+    moead.initPopulation(population_size, neighbor_num, position_range)
     
-    nsga2.run(generation_number)
+    moead.run(generation_number)
     
-    paretoFront = getParetoFrontZDT1()
+    paretoFront = getParetoFrontZDT6()
     
     fitnessX = []
     fitnessY = []
-    for p in nsga2.population:
+    for p in moead.population:
         fitnessX.append(p.fitness[0])
         fitnessY.append(p.fitness[1])
     populationFitness = np.vstack((fitnessX, fitnessY))
-      
-    VisualizeParetoFront(populationFitness, paretoFront, "ZDT1")
     
+    VisualizeParetoFront(populationFitness, paretoFront)

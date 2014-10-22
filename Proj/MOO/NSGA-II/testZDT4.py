@@ -1,5 +1,5 @@
 '''
-Created on Oct 18, 2014
+Created on Oct 21, 2014
 
 @author: daqing_yi
 '''
@@ -17,12 +17,12 @@ if __name__ == '__main__':
     for i in range(30):
         position_range.append([0.0, 1.0])
         
-    nsga2 = NSGAII(2, 30, zdt1_func)
+    nsga2 = NSGAII(2, 30, zdt4_func)
     nsga2.initPopulation(population_size, position_range)
     
     nsga2.run(generation_number)
     
-    paretoFront = getParetoFrontZDT1()
+    paretoFront = getParetoFrontZDT4()
     
     fitnessX = []
     fitnessY = []
@@ -31,5 +31,5 @@ if __name__ == '__main__':
         fitnessY.append(p.fitness[1])
     populationFitness = np.vstack((fitnessX, fitnessY))
       
-    VisualizeParetoFront(populationFitness, paretoFront, "ZDT1")
+    VisualizeParetoFront(populationFitness, paretoFront, "ZDT4")
     
