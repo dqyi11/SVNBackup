@@ -38,6 +38,7 @@ ImageDataGraph::ImageDataGraph(const char* filename)
 
     mSigmaKDE = 80.0;
     mNeighborhoodGamma = 50.0;
+    mNeighhorhoodLambda = 9 * mNeighborhoodGamma;
 
     mNeighborhoodBeta = 0.0;
 
@@ -302,6 +303,7 @@ void ImageDataGraph::calcNeighborhoodWeights(float gamma, float beta)
     }
 
     mMaxNeighborhoodWeights = 0.0;
+    /*
     for(int j=0;j<mImgHeight;j++)
     {
         for(int i=0;i<mImgWidth;i++)
@@ -320,7 +322,7 @@ void ImageDataGraph::calcNeighborhoodWeights(float gamma, float beta)
                 mMaxNeighborhoodWeights = neighborhoodWeights;
             }
         }
-    }
+    }*/
 }
 
 void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set)
@@ -420,16 +422,16 @@ void ImageDataGraph::initializeGraph()
         {
             int node_id = i + j*mImgWidth;
 
-            /*
+
             if(mpGridPrior[node_id]==BACKGROUND_PIXEL)
             {
-                mpGraph->add_tweights( node_id, 0.0, 1+mMaxNeighborhoodWeights );
+                mpGraph->add_tweights( node_id, 0.0, mNeighhorhoodLambda );
             }
             else if(mpGridPrior[node_id]==FOREGROUND_PIXEL)
             {
-                mpGraph->add_tweights( node_id, 1+mMaxNeighborhoodWeights, 0.0 );
+                mpGraph->add_tweights( node_id, mNeighhorhoodLambda, 0.0 );
             }
-            else */
+            else
             {
                 PixelColor color;
                 color.vals[0] = mpRVals[node_id];

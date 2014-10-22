@@ -63,6 +63,8 @@ protected:
     float mNeighborhoodBeta;
     float mNeighborhoodGamma;
 
+    float mNeighhorhoodLambda;
+
     double mTotalGibbsEnergy;
     double mDataGibbsEnergy;
     double mSmoothnessGibbsEnergy;
