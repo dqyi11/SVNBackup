@@ -21,7 +21,7 @@ public:
     ImageDataGraph(const char* filename);
     ~ImageDataGraph();
 
-    void initalizeType(EstimatorType type = KDE);
+    void initalizeType(EstimatorType type = KERNAL);
     float getNeighborhoodWeight(PixelPosition p, PixelPosition q);
     void importPrior(std::list<PixelPosition> foreground_set, std::list<PixelPosition> background_set);
     void initializeGraph();

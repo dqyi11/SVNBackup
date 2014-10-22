@@ -192,7 +192,7 @@ void GraphCutSegmentation::process(EstimatorType type)
     qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
     pGraph->mNeighborhoodGamma = mSmoothnessRatio;
-    if(type==KDE)
+    if(type==KERNAL)
     {
         pGraph->mSigmaKDE = mKDESigma;
     }
@@ -319,7 +319,7 @@ void GrabCutSegmentation::process(EstimatorType type)
     qDebug() << "Create graph from " << mpFilename;
     ImageDataGraph * pGraph = new ImageDataGraph(mpFilename);
     pGraph->mNeighborhoodGamma = mSmoothnessRatio;
-    if(type==KDE)
+    if(type==KERNAL)
     {
         pGraph->mSigmaKDE = mKDESigma;
     }
@@ -355,7 +355,7 @@ void GrabCutSegmentation::process(EstimatorType type)
         }
         pGraph = new ImageDataGraph(mpFilename);
         pGraph->mNeighborhoodGamma = mSmoothnessRatio;
-        if(type==KDE)
+        if(type==KERNAL)
         {
             pGraph->mSigmaKDE = mKDESigma;
         }

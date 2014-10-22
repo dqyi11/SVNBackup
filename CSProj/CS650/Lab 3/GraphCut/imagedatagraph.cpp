@@ -119,15 +119,15 @@ ImageDataGraph::~ImageDataGraph()
 void ImageDataGraph::initalizeType(EstimatorType type)
 {
     mEstimatorType = type;
-    if(type==KDE)
+    if(type==KERNAL)
     {
         mpForegroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
         mpBackgroundEstimator = new GaussianKernelDensityEstimator(mSigmaKDE);
     }
     else
     {
-        mpForegroundEstimator = new GMMDensityEstimator();
-        mpBackgroundEstimator = new GMMDensityEstimator();
+        mpForegroundEstimator = new GMMDensityEstimator(5);
+        mpBackgroundEstimator = new GMMDensityEstimator(5);
     }
 
 }

@@ -6,16 +6,23 @@
 class GMMDensityEstimator : public DensityEstimator
 {
 public:
-    GMMDensityEstimator();
+    GMMDensityEstimator(int componentNum);
     ~GMMDensityEstimator();
 
     void addSample(PixelPosition pos, PixelColor color);
     float getEstimation(PixelColor color);
 
-    int mSampleNumber;
+    void learningModel();
 
+    int mSampleNumber;
     std::list<PixelPosition> mSamplePositions;
     std::list<PixelColor>    mSampleColors;
+
+private:
+
+
+    int mComponentNumber;
+
 };
 
 #endif // GMMDENSITYESTIMATOR_H

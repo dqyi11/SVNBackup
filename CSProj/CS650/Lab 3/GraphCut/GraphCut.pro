@@ -31,7 +31,9 @@ SOURCES += main.cpp\
     configdialog.cpp \
     parametermanager.cpp \
     densityestimator.cpp \
-    gmmdensityestimator.cpp
+    gmmdensityestimator.cpp \
+    kmean.cpp \
+    gmm.cpp
 
 HEADERS  += \
     maxflow/block.h \
@@ -45,6 +47,8 @@ HEADERS  += \
     parametermanager.h \
     densityestimator.h \
     gmmdensityestimator.h \
-    globaldef.h
+    globaldef.h \
+    kmean.h \
+    gmm.h
 
 FORMS    +=
