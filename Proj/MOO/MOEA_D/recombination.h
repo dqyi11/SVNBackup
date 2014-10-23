@@ -38,9 +38,13 @@ void realmutation(T &ind, double rate)
             }
             y = y + deltaq*(yu-yl);
             if (y<yl)
+            {
                 y = yl;
+            }
             if (y>yu)
+            {
                 y = yu;
+            }
             ind.x_var[j] = y;
         }
     }

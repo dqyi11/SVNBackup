@@ -43,9 +43,15 @@ void main()
             rnd_uni_init = -(long)seed;
             TMOEAD  MOEAD;
 
-            if(numObjectives==3)  MOEAD.run(23, niche, max_gen, run);  //23 -3  popsize 300
+            if(numObjectives==3)
+            {
+                MOEAD.run(23, niche, max_gen, run);  //23 -3  popsize 300
+            }
 
-            if(numObjectives==2)  MOEAD.run(99, niche, max_gen, run);  //99 -2  popsize 100
+            if(numObjectives==2)
+            {
+                MOEAD.run(99, niche, max_gen, run);  //99 -2  popsize 100
+            }
         }
     }
     return;

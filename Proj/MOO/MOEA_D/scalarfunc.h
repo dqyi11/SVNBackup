@@ -19,10 +19,14 @@ double scalar_func(vector <double> &y_obj, vector <double> &namda, TIndividual* 
 		{
 			double diff = fabs(y_obj[n] - idealpoint[n] );
 			double feval;
-			if(namda[n]==0) 
+            if(namda[n]==0)
+            {
 				feval = 0.00001*diff;
+            }
 			else
+            {
 			    feval = diff*namda[n];
+            }
 			if(feval>max_fun) max_fun = feval;
 
 		}
@@ -40,11 +44,20 @@ double scalar_func(vector <double> &y_obj, vector <double> &namda, TIndividual* 
 			for(int j=0; j<numObjectives; j++)
 			{
 				double tp = nbi_node[j].y_obj[i];
-				if(tp>max) max = tp;
-				if(tp<min) min = tp;
+                if(tp>max)
+                {
+                    max = tp;
+                }
+                if(tp<min)
+                {
+                    min = tp;
+                }
 			}
 			scale.push_back(max-min);
-			if(max-min==0) return 1.0e+30;
+            if(max-min==0)
+            {
+                return 1.0e+30;
+            }
 		}
 
 		double max_fun = -1.0e+30;
@@ -52,12 +65,18 @@ double scalar_func(vector <double> &y_obj, vector <double> &namda, TIndividual* 
 		{
 			double diff = (y_obj[n] - idealpoint[n])/scale[n];
 			double feval;
-			if(namda[n]==0) 
+            if(namda[n]==0)
+            {
 				feval = 0.0001*diff;
+            }
 			else
+            {
 			    feval = diff*namda[n];
-			if(feval>max_fun) max_fun = feval;
-
+            }
+            if(feval>max_fun)
+            {
+                max_fun = feval;
+            }
 		}
 		fvalue = max_fun;
 	}
@@ -70,14 +89,18 @@ double scalar_func(vector <double> &y_obj, vector <double> &namda, TIndividual* 
 		// normalize the weight vector (line segment)
 		double nd = norm_vector(namda);
 		for(int i=0; i<numObjectives; i++)
+        {
 			namda[i] = namda[i]/nd;
+        }
 
 		vector <double> realA(numObjectives);
 		vector <double> realB(numObjectives);
 
 		// difference beween current point and reference point
 		for(int n=0; n<numObjectives; n++)
+        {
 			realA[n] = (y_obj[n] - idealpoint[n]);
+        }
 
 		// distance along the line segment
 		double d1 = fabs(innerproduct(realA,namda));
