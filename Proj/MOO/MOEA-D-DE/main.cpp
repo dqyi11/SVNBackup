@@ -37,7 +37,7 @@ void main()
     int pop[] = {300, 300, 300, 300, 300, 595, 300, 300, 300};     // population size
     int gen[] = {500, 500, 500, 500, 500, 500, 500, 500, 500};     // number of generations
 
-    int i = 2;
+    int i = 1;
     //for(int i=0; i<9; i++)
     {
         // the parameter setting of test instance
