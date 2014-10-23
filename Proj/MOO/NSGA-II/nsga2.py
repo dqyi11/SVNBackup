@@ -18,20 +18,42 @@ class Solution(object):
         self.rank = sys.maxint
         self.distance = 0.0
         
-    def crossover(self, other):
+        self.fraction = 2.0 / self.solution_dim
+        
+    def crossover(self, other, data_range):
         '''
         Crossover operator.
         '''
-        child_solution = Solution(self.objective_num, self.solution_dim, self.mutate_var)
+        # Intermediate crossover
+        child_1 = Solution(self.objective_num, self.solution_dim, self.mutate_var)
+        child_2 = Solution(self.objective_num, self.solution_dim, self.mutate_var)
+        rndVals = np.random.random(self.solution_dim)
+        crossFlags = np.random.random(self.solution_dim) < self.fraction
+        crossFlagIdx = 1 * crossFlags
         for i in range(self.solution_dim):
-            child_solution.position[i] = np.sqrt(self.position[i] * other.position[i])
-        return child_solution
+            child_1.position[i] = self.position[i] + crossFlagIdx[i] * rndVals[i] * 1.2 * (self.position[i] - other.position[i])
+            child_2.position[i] = other.position[i] - crossFlagIdx[i] * rndVals[i] * 1.2 * (self.position[i] - other.position[i])
+            
+            child_1.position[i] = np.max([ data_range[i][0],  child_1.position[i] ])
+            child_1.position[i] = np.min([ data_range[i][1],  child_1.position[i] ])
+            child_2.position[i] = np.max([ data_range[i][0],  child_2.position[i] ])
+            child_2.position[i] = np.min([ data_range[i][1],  child_2.position[i] ])
+        return child_1, child_2
     
-    def mutate(self):
+    def mutate(self, data_range):
         '''
         Mutation operator.
         '''
-        self.position[np.random.randint(self.solution_dim)] = np.random.random()
+        rndVals = np.random.random(self.solution_dim)
+        drange = np.array(data_range)
+        scales = drange[:,1] - drange[:,0]
+        for i in range(self.solution_dim):
+            if rndVals[i] < self.fraction:
+                self.position[i] = self.position[i] + scales[i] * np.random.normal()
+                
+                self.position[i] = np.max([ data_range[i][0],  self.position[i] ])
+                self.position[i] = np.min([ data_range[i][1],  self.position[i] ])
+                
         
     def __rshift__(self, other):
         '''
@@ -84,7 +106,7 @@ class NSGAII(object):
     def initPopulation(self, population_size, position_range):
         
         self.population_size = population_size
-        self.range = range
+        self.position_range = position_range
         
         self.population = []
         for i in range(self.population_size):
@@ -100,8 +122,8 @@ class NSGAII(object):
         for p in self.population:
             p.fitness = self.fitness_func(p.position)
             
-        Q = []
         P = self.population
+        Q = self.makeNewPop(P)
         
         for i in range(generation_num):
             print "@Generation  " + str(i) + " : " + str(len(P))
@@ -216,32 +238,37 @@ class NSGAII(object):
         Make new population Q, offspring of P. 
         '''
         Q = []
+        P_size = len(P)
                
-        while len(Q) != len(P):
-            selected_solutions = [None, None]
-            #print "Q " + str(len(Q)) + " P " + str(len(P))
-                        
-            for i in range(2):
-                s1 = np.random.choice(P)
+        # select       
+        for i in range(P_size):
+            s1 = np.random.choice(P)
+            s2 = np.random.choice(P)
+            while s1 == s2:
+                #print "resample"
                 s2 = np.random.choice(P)
-                while s1 == s2:
-                    #print "resample"
-                    s2 = np.random.choice(P)
-                
-                if s1.compareCrowding(s2) > 0:
-                    selected_solutions[i] = s1                       
-                else:
-                    selected_solutions[i] = s2
-
-            if np.random.random() < self.crossover_rate:
-                child_solution = selected_solutions[0].crossover(selected_solutions[1])
-                
-                if np.random.random() < self.mutation_rate:
-                    child_solution.mutate()
+            
+            if s1.compareCrowding(s2) > 0:
+                Q.append(s1)                       
+            else:
+                Q.append(s2)
                     
-                child_solution.fitness = self.fitness_func(child_solution.position)
-                
-                Q.append(child_solution)
+        # crossover
+        for i in range(0, P_size, 2):
+            s1 = Q[i]
+            s2 = Q[i+1]
+            ns1, ns2 = s1.crossover(s2, self.position_range)
+            Q[i] = ns1
+            Q[i+1] = ns2
+        
+        # mutation
+        for i in range(P_size):
+            if np.random.random() < self.mutation_rate:
+                Q[i].mutate(self.position_range)
+        
+        # update fitness
+        for i in range(P_size):
+            Q[i].fitness =self.fitness_func(Q[i].position)
 
         return Q
         
