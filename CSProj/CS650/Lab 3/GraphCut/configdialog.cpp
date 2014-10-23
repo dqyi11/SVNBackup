@@ -117,11 +117,14 @@ void ConfigDialog::on_ok_clicked()
     mpParamMgr->mKDEBandWidth = mpEditKDEBandwidth->text().toFloat();
     if(mpBtnKDE->isChecked()==true)
     {
-        mpParamMgr->mDEType == KERNEL;
+
+        mpParamMgr->mDEType = KERNEL;
+        qDebug() << "KDE checked " << mpParamMgr->mDEType;
     }
     else if(mpBtnGMM->isChecked()==true)
     {
-        mpParamMgr->mDEType == GMM;
+        mpParamMgr->mDEType = GMM;
+        qDebug() << "GMM checked " << mpParamMgr->mDEType;
     }
 
     close();

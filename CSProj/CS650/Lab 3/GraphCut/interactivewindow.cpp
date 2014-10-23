@@ -188,6 +188,7 @@ void InteractiveWindow::on_segment_clicked()
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
         seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
+        qDebug() << " process, type input " << mpParamMgr->mDEType;
         seg.process(mpParamMgr->mDEType);
         seg.visualize();
     }
@@ -201,6 +202,7 @@ void InteractiveWindow::on_segment_clicked()
         qDebug() << " KDE Sigma " << mpParamMgr->mKDEBandWidth;
         seg.mKDESigma = mpParamMgr->mKDEBandWidth;
         seg.mSmoothnessRatio = mpParamMgr->mSmoothnessRatio;
+        qDebug() << " process, type input " << mpParamMgr->mDEType;
         seg.process(mpParamMgr->mDEType);
         seg.visualize();
     }

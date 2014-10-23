@@ -350,12 +350,64 @@ void GrabCutSegmentation::process(EstimatorType type)
 
     pGraph->initalizeType(type);
     initalizeSeeds(pGraph->mImgWidth, pGraph->mImgHeight, mRectUpperLeftX, mRectUpperLeftY, mRectLowerRightX, mRectLowerRightY, 0.1, 0.1);
+    pGraph->mpGridPrior = mpTrimap;
 
     visualizeSeed();
 
     int iterationCnt = 0;
     while(iterationCnt < mIterationNum)
     {
+
+        pGraph->importPrior(mForegroundSet, mBackgroundSet);
+        pGraph->initializeGraph();
+
+        qDebug() << "Iteration " << iterationCnt << " T: " << pGraph->getGibbsEnergy() << " D: " << pGraph->getDataEnergy() << " S: " << pGraph->getSmoothnessEnergy();
+
+        int flow =  pGraph->maxFlowCut();
+
+        mForegroundSet.clear();
+        mBackgroundSet.clear();
+        int pix_changed = 0;
+        for(int j=0;j<pGraph->mImgHeight;j++)
+        {
+            for(int i=0;i<pGraph->mImgWidth;i++)
+            {
+                PixelPosition pos;
+                pos.vals[0] = i;
+                pos.vals[1] = j;
+
+                int node_id = i + j * pGraph->mImgWidth;
+                if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SOURCE)
+                {
+                    if(mpTrimap[node_id] != ImageDataGraph::FOREGROUND_PIXEL)
+                    {
+                        pix_changed ++;
+                        mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
+                    }
+                    mForegroundSet.push_back(pos);
+                }
+                else
+                {
+                    if(mpTrimap[node_id] != ImageDataGraph::BACKGROUND_PIXEL)
+                    {
+                        pix_changed ++;
+                        mpTrimap[node_id] = ImageDataGraph::BACKGROUND_PIXEL;
+                    }
+                    mBackgroundSet.push_back(pos);
+                }
+            }
+        }
+
+        qDebug() << "changed " << pix_changed;
+        qDebug() << "Foreground " << mForegroundSet.size() << " Background " << mBackgroundSet.size();
+
+        std::string iterationMark = "-";
+        iterationMark += std::to_string((_Longlong)iterationCnt);
+        qDebug() << " visualize " << iterationCnt;
+        visualize(false, iterationMark, false);
+
+        iterationCnt ++;
+
         if(pGraph)
         {
             delete pGraph;
@@ -367,45 +419,9 @@ void GrabCutSegmentation::process(EstimatorType type)
         {
             pGraph->mSigmaKDE = mKDESigma;
         }
-
-        pGraph->mpGridPrior = mpTrimap;
         pGraph->initalizeType(type);
-        pGraph->importPrior(mForegroundSet, mBackgroundSet);
-        pGraph->initializeGraph();
+        pGraph->mpGridPrior = mpTrimap;
 
-        qDebug() << "Iteration " << iterationCnt << " T: " << pGraph->getGibbsEnergy() << " D: " << pGraph->getDataEnergy() << " S: " << pGraph->getSmoothnessEnergy();
-
-        int flow =  pGraph->maxFlowCut();
-
-        mForegroundSet.clear();
-        mBackgroundSet.clear();
-        for(int j=0;j<pGraph->mImgHeight;j++)
-        {
-            for(int i=0;i<pGraph->mImgWidth;i++)
-            {
-                PixelPosition pos;
-                pos.vals[0] = i;
-                pos.vals[1] = j;
-
-                int node_id = i + j * pGraph->mImgWidth;
-                if (pGraph->mpGraph->what_segment(node_id) == PixelGraph::SINK)
-                {
-                    mpTrimap[node_id] = ImageDataGraph::FOREGROUND_PIXEL;
-                    mForegroundSet.push_back(pos);
-                }
-                else
-                {
-                    mpTrimap[node_id] = ImageDataGraph::BACKGROUND_PIXEL;
-                    mBackgroundSet.push_back(pos);
-                }
-            }
-        }
-
-        std::string iterationMark = "-";
-        iterationMark += std::to_string((_Longlong)iterationCnt);
-        visualize(false, iterationMark, false);
-
-        iterationCnt ++;
     }
 
     if(pGraph)

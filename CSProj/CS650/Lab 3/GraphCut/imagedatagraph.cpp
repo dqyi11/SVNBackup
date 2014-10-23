@@ -351,8 +351,10 @@ void ImageDataGraph::importPrior(std::list<PixelPosition> foreground_set, std::l
         mpBackgroundEstimator->addSample(pos, color);
     }
 
+    qDebug() << " estimator type " << mEstimatorType;
     if(mEstimatorType==GMM)
     {
+        qDebug() << "Learning GMM";
         mpForegroundEstimator->learningModel();
         mpBackgroundEstimator->learningModel();
     }
