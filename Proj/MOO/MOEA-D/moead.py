@@ -16,25 +16,6 @@ class Solution(object):
         self.neighbor_num = neighbor_num
         self.subproblem_weight = subproblem_weight
         
-    def crossover(self, otherPosition, CR):
-        '''
-        Crossover operator.
-        '''
-        child_solution = Solution(self.objective_num, self.solution_dim, self.neighbor_num, self.subproblem_weight)
-        
-        for i in range(self.solution_dim):
-            if np.random.random() < CR:
-                child_solution.position[i] = otherPosition[i]
-            else:
-                child_solution.position[i] = self.position[i]
-        
-        return child_solution
-    
-    def mutate(self):
-        '''
-        Mutation operator.
-        '''
-        self.position[np.random.randint(self.solution_dim)] = np.random.random()
         
     def __rshift__(self, other):
         '''
@@ -77,56 +58,52 @@ class MOEAD(object):
         self.neighbor_num = neighbor_num
         self.position_range = position_range
         
-        weights, weight_distances = self.initWeights()
+        self.initWeights()
         self.population = []
         
-        fitness_list = []
         for i in range(self.population_size):
-            p = Solution(self.objective_num, self.solution_dim, self.neighbor_num, weights[i])
+            p = Solution(self.objective_num, self.solution_dim, self.neighbor_num, self.weights[i])
             rndSeeds = np.random.random(self.solution_dim)
             for k in range(self.solution_dim):
                 p.position[k] = rndSeeds[k] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
             self.population.append(p)
-            p.neighbor_indices = np.argsort(weight_distances[i])
-            p.fitness = self.fitness_func(p.position)
-            fitness_list.append(p.fitness)
-        
-        self.utopia_fitness = np.array(fitness_list).argmin(0)
-        #print self.utopia_fitness
             
+        self.initNeighborhood()
+        self.updateFitness()
+        
     def run(self, generation_num):
            
         for t in range(generation_num):
             print "@Generation  " + str(t)
             
+            self.evolve()
+            
+    def evolve(self):
+        
+        for i in range(self.population_size):
+        
             #print "generate new population"
-            #generate new population
-            self.geneticOperation(self.F, self.CR)
+            np = self.geneticOperation(i, self.F)
             
             #print "update fitness and the utopia position"
-            #update fitness and the utopia position
-            fitness_list = []
-            fitness_list.append(self.utopia_fitness)
-            for i in range(self.population_size):
-                p = self.population[i]
-                p.fitness = self.fitness_func(p.position)
-                fitness_list.append(p.fitness)
-        
-            self.utopia_fitness = np.array(fitness_list).argmin(0)
+            np.fitness = self.fitness_func(np.position)
+            
+            for k in range(self.objective_num):
+                if np.fitness[k] < self.utopia_fitness[k]:
+                    self.utopia_fitness[k] = np.fitness[k]
             
             #print "update the neighboring solutions"
-            #update the neighboring solutions
-            for i in range(self.population_size):
-                p = self.population[i]
-                for j in range(p.neighbor_num):
-                    q_idx = p.neighbor_indices[j]
-                    q = self.population[q_idx]
-                    p_val = self.calcSubObjective(p.fitness, q.subproblem_weight)
-                    q_val = self.calcSubObjective(q.fitness, q.subproblem_weight)
-                    if p_val <= q_val:
-                        q.position = p.position
-                        q.fitness = self.fitness_func(q.position)
+            p = self.population[i]
+            for j in range(p.neighbor_num):
+                q_idx = p.neighbor_indices[j]
+                q = self.population[q_idx]
+                np_val = self.calcSubObjective(np.fitness, p.subproblem_weight)
+                q_val = self.calcSubObjective(q.fitness, p.subproblem_weight)
+                if np_val <= q_val:
+                    q.position = np.position
+                    q.fitness = self.fitness_func(q.position)
             
+            '''
             #print "update EP"            
             # update EP (external population)
             for i in range(self.population_size):
@@ -139,48 +116,87 @@ class MOEAD(object):
                         nondominance = False
                 if nondominance == True:
                     self.external_population.append(p)
+            '''
+
         
     def initWeights(self):
-        weights = []
+        
+        self.weights = []
         for i in range(self.population_size):
             weight = np.zeros(self.objective_num, np.float)
             if self.objective_num == 2:
                 weight[0] = float(i) / float(self.population_size)
                 weight[1] = float(self.population_size - i) / float(self.population_size)
-            weights.append(weight)
+            self.weights.append(weight)
             
-        weight_distances = []
-        for i in range(self.population_size):
-            weight_distances.append(np.zeros(self.population_size,np.float))
-        for i in range(self.population_size):
-            for j  in range(1, self.population_size, 1):
-                dist = np.linalg.norm(weights[i] - weights[j], 2)
-                weight_distances[i][j] = dist
-                weight_distances[j][i] = dist
-        return weights, weight_distances
     
-    def geneticOperation(self, F, CR):
+    def initNeighborhood(self):
+        
+        for i in range(self.population_size):
+            p = self.population[i]
+            dist = np.zeros(self.population_size, np.float)
+            for j  in range(self.population_size):
+                if i != j:
+                    dist[i] = np.linalg.norm(self.weights[i] - self.weights[j], 2)
+            
+            sorted_idx = np.argsort(dist)    
+            p.neighbor_indices = sorted_idx[:self.neighbor_num]
+            
+
+    def updateFitness(self):
+        
+        fitness_list = []
+        for i in range(self.population_size):
+            p = self.population[i]    
+            p.fitness = self.fitness_func(p.position)
+            fitness_list.append(p.fitness)
+        
+        self.utopia_fitness = np.array(fitness_list).argmin(0)
+        #print self.utopia_fitness            
+
+    
+    def geneticOperation(self, idx, F):
         #generate a new individual from a subproblem and its neighbors
-        for p in self.population:
-            
-            neighborIndices = p.neighbor_indices[0:self.neighbor_num]
-            
-            #print "len(neighborIndices) "+str(len(neighborIndices))
-            #print neighborIndices
-            
-            p1_idx = np.random.choice(neighborIndices)
-            p2_idx = np.random.choice(neighborIndices)
-            p3_idx = np.random.choice(neighborIndices)
-            p1 = self.population[p1_idx]
-            p2 = self.population[p2_idx]
-            p3 = self.population[p3_idx]
-            
-            new_position = p1.position + F * (p2.position - p3.position)
-            
-            p = p.crossover(new_position, CR)
-            
-            if np.random.random() < self.mutation_rate:
-                p.mutate()     
+        
+        p = self.population[idx]
+        
+        nb1_idx = idx
+        nb2_idx = idx
+        nb3_idx = idx
+        while nb1_idx == idx:
+            nb1_idx = np.random.choice(p.neighbor_indices)
+        while nb2_idx == idx or nb2_idx == nb1_idx:
+            nb2_idx = np.random.choice(p.neighbor_indices)
+        while nb3_idx == idx or nb3_idx == nb2_idx or nb3_idx == nb1_idx:
+            nb3_idx = np.random.choice(p.neighbor_indices)
+
+        nb1_pos = self.population[nb1_idx].position
+        nb2_pos = self.population[nb2_idx].position
+        nb3_pos = self.population[nb3_idx].position
+        newPos = nb1_pos + F * (nb2_pos - nb3_pos)
+        
+        newSolution = Solution(p.objective_num, p.solution_dim, p.neighbor_num, p.subproblem_weight)
+        
+        rndVals = np.random.random(p.solution_dim)
+        for i in range(p.solution_dim):
+            if rndVals[i] < self.crossover_rate:
+                newSolution.position[i] = newPos[i]
+            else:
+                newSolution.position[i] = p.position[i]
+                
+            newSolution.position[i] = np.max([ self.position_range[i][0],  newSolution.position[i] ])
+            newSolution.position[i] = np.min([ self.position_range[i][1],  newSolution.position[i] ])
+
+        rndSeeds = np.random.random(p.solution_dim)
+        for i in range(p.solution_dim):
+            if rndSeeds[i] < self.mutation_rate:
+                val_min = self.position_range[i][0]
+                val_max = self.position_range[i][1]
+                rndVal = np.random.normal(newSolution.position[i], (val_max-val_min)/20)
+                new_val = np.min([np.max([rndVal, val_min]), val_max])
+                newSolution.position[i] = new_val
+                
+        return newSolution            
             
             
     def calcSubObjective(self, fitness, weight):

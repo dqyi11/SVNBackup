@@ -11,8 +11,8 @@ from Visualization import *
 if __name__ == '__main__':
     
     generation_number = 500
-    population_size = 1000
-    neighbor_num = 300
+    population_size = 400
+    neighbor_num = 80
 
     position_range = []
     for i in range(30):
