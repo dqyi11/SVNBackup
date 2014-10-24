@@ -9,17 +9,21 @@ import numpy as np
 def zdt1_func(x):
     y = np.zeros(2, np.float)
     y[0] = x[0]
-    sum = 0.0
-    for i in range(1, 30):
-        sum += x[i];
-    g = 1 + 9 * (sum / 29.0);
-    h = 1 - np.sqrt(x[0]/g);           
-    y[1] = g * h;
+    sum_x = np.sum(x) - x[0]
+    g = 1 + 9 * (float(sum_x) / (len(x) - 1))
+    h = 1 - np.sqrt(x[0]/g)           
+    y[1] = g * h
     return y
+
+def getPositionRangeZDT1():    
+    position_range = []
+    for i in range(30):
+        position_range.append([0.0, 1.0])
+    return position_range
 
 def getParetoFrontZDT1():
     
-    paretoX = np.arange(0.0,1.0,0.0001);
+    paretoX = np.arange(0.0,1.0,0.01);
     paretoY = np.zeros(len(paretoX));
     for i in range(len(paretoX)):
         paretoY[i] = 1 - np.sqrt(paretoX[i]);
@@ -38,9 +42,15 @@ def zdt2_func(x):
     y[1] = g * h;
     return y
 
+def getPositionRangeZDT2():    
+    position_range = []
+    for i in range(30):
+        position_range.append([0.0, 1.0])
+    return position_range
+
 def getParetoFrontZDT2():
     
-    paretoX = np.arange(0.0,1.0,0.0001);
+    paretoX = np.arange(0.0,1.0,0.01);
     paretoY = np.zeros(len(paretoX));
     paretoPos = [];
     for i in range(len(paretoX)):
@@ -60,6 +70,12 @@ def zdt3_func(x):
     h = 1 - np.sqrt(x[0]/g) - x[0]/(g*np.sin(10*np.pi*x[0]))          
     y[1] = g * h;
     return y
+
+def getPositionRangeZDT3():    
+    position_range = []
+    for i in range(30):
+        position_range.append([0.0, 1.0])
+    return position_range
 
 def getParetoFrontZDT3():
     
@@ -87,6 +103,12 @@ def zdt4_func(x):
     y[1] = g * h;
     return y
 
+def getPositionRangeZDT4():    
+    position_range = []
+    for i in range(30):
+        position_range.append([0.0, 1.0])
+    return position_range
+
 def getParetoFrontZDT4():
     
     paretoX = np.arange(0.0,1.0,0.0001)
@@ -106,6 +128,12 @@ def zdt6_func(x):
     g = 1 + 9 * ((sum/29)**0.25)    
     y[1] = 1 - (y[0]/g)**2
     return y
+
+def getPositionRangeZDT6():    
+    position_range = []
+    for i in range(30):
+        position_range.append([0.0, 1.0])
+    return position_range
 
 def getParetoFrontZDT6():
     

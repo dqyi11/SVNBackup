@@ -37,7 +37,7 @@ class Solution(object):
 
 class MOEAD(object):
 
-    def __init__(self, objective_num, solution_dim,  fitness_func, crossover_rate=0.5, mutation_rate=0.5, mutation_var = 0.1):
+    def __init__(self, objective_num, solution_dim,  fitness_func, crossover_rate=1.0, mutation_rate=1.0, mutation_var = 0.1):
         self.objective_num = objective_num
         self.solution_dim = solution_dim
         self.fitness_func = fitness_func
@@ -125,8 +125,8 @@ class MOEAD(object):
         for i in range(self.population_size):
             weight = np.zeros(self.objective_num, np.float)
             if self.objective_num == 2:
-                weight[0] = float(i) / float(self.population_size)
-                weight[1] = float(self.population_size - i) / float(self.population_size)
+                weight[0] = float(i) / self.population_size
+                weight[1] = float(self.population_size - i) / self.population_size
             self.weights.append(weight)
             
     

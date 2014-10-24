@@ -10,26 +10,29 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 500
+    generation_number = 400
     population_size = 100
 
-    position_range = []
-    for i in range(30):
-        position_range.append([0.0, 1.0])
+    position_range = getPositionRangeZDT1()
         
     nsga2 = NSGAII(2, 30, zdt1_func)
     nsga2.initPopulation(population_size, position_range)
     
-    nsga2.run(generation_number)
-    
     paretoFront = getParetoFrontZDT1()
     
-    fitnessX = []
-    fitnessY = []
-    for p in nsga2.population:
-        fitnessX.append(p.fitness[0])
-        fitnessY.append(p.fitness[1])
-    populationFitness = np.vstack((fitnessX, fitnessY))
-      
-    VisualizeParetoFront(populationFitness, paretoFront, "ZDT1", False)
+    #nsga2.run(generation_number)
+    for i in range(generation_number):
+        print "iteration " + str(i)
+        nsga2.evolve()
+    
+        if i%100 == 0:
+    
+            fitnessX = []
+            fitnessY = []
+            for p in nsga2.population:
+                fitnessX.append(p.fitness[0])
+                fitnessY.append(p.fitness[1])
+            populationFitness = np.vstack((fitnessX, fitnessY))
+              
+            VisualizeParetoFront(populationFitness, paretoFront, "NSGA-II ZDT1", False)
     

@@ -62,61 +62,65 @@ class dMOPSO(object):
   
         for t in range(generation_num):
             print "@Generation  " + str(t)
-            
-            random.shuffle(self.gb_set)
-                
-            # update position
-            for i in range(self.population_size):
-                p = self.population[i]
-                if p.age < self.age_threshold:
-                    rndPbVal = np.random.random(self.solution_dim)
-                    rndGbVal = np.random.random(self.solution_dim)
-                    for d in range(self.solution_dim):
-                        p.velocity[d] = self.chi * p.velocity[d] + self.phi_p * rndPbVal[d] * (p.pb_position[d] - p.position[d]) + self.phi_g * rndGbVal[d] * (self.gb_set[i].position[d] - p.position[d])
-                        p.position[d] = p.position[d] + p.velocity[d]
-                else:
-                    p.velocity = np.zeros(self.solution_dim, np.float)
-                    p.age = 0
-                    # reinitialize position
-                    for d in range(self.solution_dim):
-                        norm_mean = (self.gb_set[i].position[d]-p.pb_position[d])/2.0
-                        norm_var = np.abs(self.gb_set[i].position[d]-p.pb_position[d])
-                        if norm_var == 0:
-                            norm_var = 0.00000001
-                        p.position[d] = np.random.normal(loc=norm_mean, scale=norm_var)
-                    
+            self.evolve()
 
-                # repair bounds
-                for d in range(self.solution_dim):
-                    if p.position[d] > self.position_range[d][1]:
-                        p.position[d] = self.position_range[d][1]
-                        p.velocity[d] = - self.gamma * p.velocity[d]
-                    elif p.position[d] < self.position_range[d][0]:
-                        p.position[d] = self.position_range[d][0]
-                        p.velocity[d] = - self.gamma * p.velocity[d]
-        
-            # update fitness
-            for p in self.population:
-                p.fitness = self.fitness_func(p.position)
-                for k in range(self.objective_num):
-                    if p.fitness[k] < self.utopia_fitness[k]:
-                        self.utopia_fitness[k] = p.fitness[k]
-                        
-            # update personal best 
-            for p in self.population:
-                if self.calcSubObjective(p.position, p.subproblem_weight) <= self.calcSubObjective(p.pb_position, p.subproblem_weight):
-                    p.pb_position = copy.deepcopy(p.position)
-                    p.age = 0
-                else:
-                    p.age += 1
-                    
-            # update global best
-            P = copy.deepcopy(self.gb_set) 
-            currentPopulation = copy.deepcopy(self.population)
-            P.extend(currentPopulation)
+
+    def evolve(self):
             
-            self.gb_set = self.updateGlobalBest(self.weights, P)  
+        random.shuffle(self.gb_set)
+            
+        # update position
+        for i in range(self.population_size):
+            p = self.population[i]
+            if p.age < self.age_threshold:
+                rndPbVal = np.random.random(self.solution_dim)
+                rndGbVal = np.random.random(self.solution_dim)
+                for d in range(self.solution_dim):
+                    p.velocity[d] = self.chi * p.velocity[d] + self.phi_p * rndPbVal[d] * (p.pb_position[d] - p.position[d]) + self.phi_g * rndGbVal[d] * (self.gb_set[i].position[d] - p.position[d])
+                    p.position[d] = p.position[d] + p.velocity[d]
+            else:
+                p.velocity = np.zeros(self.solution_dim, np.float)
+                p.age = 0
+                # reinitialize position
+                for d in range(self.solution_dim):
+                    norm_mean = (self.gb_set[i].position[d]-p.pb_position[d])/2.0
+                    norm_var = np.abs(self.gb_set[i].position[d]-p.pb_position[d])
+                    if norm_var == 0:
+                        norm_var = 0.00000001
+                    p.position[d] = np.random.normal(loc=norm_mean, scale=norm_var)
+                
+
+            # repair bounds
+            for d in range(self.solution_dim):
+                if p.position[d] > self.position_range[d][1]:
+                    p.position[d] = self.position_range[d][1]
+                    p.velocity[d] = - self.gamma * p.velocity[d]
+                elif p.position[d] < self.position_range[d][0]:
+                    p.position[d] = self.position_range[d][0]
+                    p.velocity[d] = - self.gamma * p.velocity[d]
+    
+        # update fitness
+        for p in self.population:
+            p.fitness = self.fitness_func(p.position)
+            for k in range(self.objective_num):
+                if p.fitness[k] < self.utopia_fitness[k]:
+                    self.utopia_fitness[k] = p.fitness[k]
                     
+        # update personal best 
+        for p in self.population:
+            if self.calcSubObjective(p.position, p.subproblem_weight) <= self.calcSubObjective(p.pb_position, p.subproblem_weight):
+                p.pb_position = copy.deepcopy(p.position)
+                p.age = 0
+            else:
+                p.age += 1
+                
+        # update global best
+        P = copy.deepcopy(self.gb_set) 
+        currentPopulation = copy.deepcopy(self.population)
+        P.extend(currentPopulation)
+        
+        self.gb_set = self.updateGlobalBest(self.weights, P)  
+                
             
         
     def initWeights(self):

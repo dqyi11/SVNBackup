@@ -114,48 +114,48 @@ class NSGAII(object):
             rndSeeds = np.random.random(self.solution_dim)
             for k in range(self.solution_dim):
                 p.position[k] = rndSeeds[k] * (position_range[k][1]-position_range[k][0]) + position_range[k][0] 
+                p.fitness = self.fitness_func(p.position)
             self.population.append(p)
             
     def run(self, generation_num):
+        for i in range(generation_num):
+            print "@Generation  " + str(i) 
+            self.evolve()
         
-        # update fitness
-        for p in self.population:
-            p.fitness = self.fitness_func(p.position)
-            
+        
+    def evolve(self):
+        
         P = self.population
         Q = self.makeNewPop(P)
+
+        R = []
+        R.extend(P)
+        R.extend(Q)
         
-        for i in range(generation_num):
-            print "@Generation  " + str(i) + " : " + str(len(P))
-             
-            R = []
-            R.extend(P)
-            R.extend(Q)
+        #print "fast non dominated sort"
+        fronts = self.fastNondominatedSort(R)
+        
+        del P[:]
+        
+        #print "crowding distance assignment"
+        for front in fronts.values():
+            if len(front) == 0:
+                break
             
-            #print "fast non dominated sort"
-            fronts = self.fastNondominatedSort(R)
+            self.crowdingDistanceAssignment(front);
+            P.extend(front)
             
-            del P[:]
+            if len(P) >= self.population_size:
+                break
+        
+        #print "sort by crowding"
+        self.sortByCrowding(P)
+        
+        if len(P) > self.population_size:
+            del P[self.population_size:]
             
-            #print "crowding distance assignment"
-            for front in fronts.values():
-                if len(front) == 0:
-                    break
-                
-                self.crowdingDistanceAssignment(front);
-                P.extend(front)
-                
-                if len(P) >= self.population_size:
-                    break
-            
-            #print "sort by crowding"
-            self.sortByCrowding(P)
-            
-            if len(P) > self.population_size:
-                del P[self.population_size:]
-                
-            #print "Make new pop"
-            Q = self.makeNewPop(P)
+        #print "Make new pop"
+        #Q = self.makeNewPop(P)
             
         self.population = P
             
@@ -192,6 +192,7 @@ class NSGAII(object):
                 for q in S[p]:
                     n[q] -= 1
                     if n[q] == 0:
+                        q.rank = i+1
                         next_front.append(q)
             i +=1
             fronts[i] = next_front
@@ -207,8 +208,8 @@ class NSGAII(object):
         for k in range(self.objective_num):
             self.sortByObjective(front, k)
             
-            front[0].distance = float('inf')
-            front[len(front) - 1].distance = float('inf')
+            front[0].distance = np.inf
+            front[len(front) - 1].distance = np.inf
             
             for i in range(1, len(front) - 1):
                 front[i].distance += (front[i + 1].distance - front[i - 1].distance)
