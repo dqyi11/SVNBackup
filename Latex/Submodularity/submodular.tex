@@ -1,26 +1,25 @@
 \section{Submodular}
 
-\begin{frame}{Submodular}{Submodular}
-	\begin{block}{}
-		\begin{equation}
-		\nonumber
-		f(x_{1} , \cdots , x_{N} )= f(x_{1}) + \cdots + f(x_{N})
-		\end{equation}
-	\end{block}
-\end{frame}
-
 \begin{frame}{Sensor placement}{Maximum coverage}
 \begin{figure}
 	\centering
 	\includegraphics[width = \textwidth]{./figure/maximum_coverage}
-\end{figure}	
+\end{figure}
+\begin{equation}
+\nonumber
+f( s_{1} , s_{2} , s_{3} , s_{4} ) \neq f( s_{1} ) + f( s_{2} ) + f( s_{3} ) + f( s_{4} )
+\end{equation}	
 \end{frame}
 
 \begin{frame}{Sensor placement}{MAP inference}
 \begin{figure}
 	\centering
-	\includegraphics[width = \textwidth]{./figure/map_inference}
-\end{figure}		
+	\includegraphics[width = .7 \textwidth]{./figure/map_inference}
+\end{figure}
+\begin{equation}
+\nonumber
+\log P( y \mid x_{1} , x_{2} , \cdots , x_{6} ) \neq \log P( y \mid x_{1} ) + \log P( y \mid x_{2} ) + \cdots + \log f( y \mid x_{6} )
+\end{equation}		
 \end{frame}
 
 \begin{frame}{Submodularity}{Definition}
@@ -48,16 +47,16 @@ f( \mathbf{X} ) = \sum_{ x_{i} \in \mathbf{X} } f(x_{i})
 \end{frame}
 
 \begin{frame}{Submodular}{Performance guarantee}
-\begin{block}{Theorem [Nemhauser et al `78]}
+\begin{block}{Theorem (Nemhauser 1978)~\cite{nemhauser1978}}
 Suppose $ f $ is monotonic and submodular. 
 Then greedy algorithm gives constant factor approximation.
 \begin{equation}
 \nonumber
-f()
+f(S_{greedy}) \geq (1 - \frac{1}{e}) f(S^{*})
 \end{equation}	
 \end{block}
 \begin{itemize}
-\item Near-optimal
-\item 
+\item Provable near-optimal
+\item Efficiency
 \end{itemize}
 \end{frame}
