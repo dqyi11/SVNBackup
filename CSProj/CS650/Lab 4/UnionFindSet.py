@@ -41,6 +41,7 @@ class UnionFindSet(object):
             self.setRoot(j, root)
             self.setRoot(i, root)
     
+    '''
     def flatten(self):
         for i in range(1, len(self.P)):
             self.P[i] = self.P[self.P[i]]
@@ -53,5 +54,6 @@ class UnionFindSet(object):
             else:
                 self.P[i] = k
                 k += 1
+    '''
         
         

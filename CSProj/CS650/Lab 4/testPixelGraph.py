@@ -9,17 +9,19 @@ import cv2
 
 if __name__ == '__main__':
     
+    #img_file = "simplecircles.ppm"
     img_file = "shapes.pgm"
     img = cv2.imread(img_file, 0)
- 
-    graph = PixelGraph(img)
+    print img.shape
+
+    img_bi = 1*(img >= 100)
     
-    '''
-    remap = {v: i for i ,v in enumerate(unique(graph.labelData))}
-    assert remap [0]==0
-    for i in range (1, graph.labelData.shape[0]):
-        for j in range (1 , graph.labelData.shape[1]):
-            graph.labelData[i,j] = remap[graph.labelData[i,j]]
-       
-    cv2.imshow( recolor(graph.labelData), cmap = cm.spectral )
-    '''       
+    graph = PixelGraph(img_bi)
+    
+    print graph.getComponentNum()
+    
+    #graph.dump(img_file+'.csv')
+    #graph.visualize(img_file)
+    graph.visualizeComponent(img_file, 3)
+    
+    
