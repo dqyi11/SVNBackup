@@ -15,6 +15,37 @@ class ShapeDescriptor(object):
         
     def findChainCode(self):
         
+        start = self.findChainCodeStart()
+        cc = []
+        dir = 0
+        coord = start
+        while True:
+            newcoord = coord + neighbor_operators[dir]
+            if self.isBoundaryPixel(newcoord[0], newcoord[1]):
+                cc.append(dir)
+                coord = newcoord
+                dir = (dir+2) % 8
+            else:
+                dir = (dir-1) % 8
+            if coord[0]==newcoord[0] and coord[1]==newcoord[1] and dir==1:
+                break
+            
+        chain = []
+        chain.append(start)
+        
+        
+        
+        
+        
+    def findChainCodeStart(self):
+        
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.isBoundaryPixel(i, j) == True:
+                    return [i, j]
+        return None
+        
+        
     def isBoundaryPixel(self, i, j):
     
         for no in neighbor_operators:
