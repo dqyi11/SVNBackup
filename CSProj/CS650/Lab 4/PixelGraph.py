@@ -91,6 +91,21 @@ class PixelGraph(object):
         plt.imshow(color_img)
         plt.show()     
         
+    def visualizeConvexHull(self, name, idx):
+        
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+
+        bp = self.shapeDescriptors[idx].getBoundaryPixel()  
+        for c in bp:
+            ax.plot(c[0], c[1], 'b.')
+ 
+        convexHull = self.shapeDescriptors[idx].getConvexHull()
+        for c in convexHull:
+            ax.plot(c[0], c[1], 'rx')
+        
+        plt.show()     
+        
     def dump(self, filename):
         with open(filename, 'wb') as f:
             writer = csv.writer(f)
