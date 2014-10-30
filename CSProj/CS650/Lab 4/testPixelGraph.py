@@ -18,10 +18,12 @@ if __name__ == '__main__':
     
     graph = PixelGraph(img_bi)
     
-    print graph.getComponentNum()
+    print graph.componentMgr.getComponentNum()
     
     #graph.dump(img_file+'.csv')
     #graph.visualize(img_file)
-    graph.visualizeComponent(img_file, 3)
+    graph.visualizeComponentBoundary(img_file, 2)
+    graph.visualizeComponentChainCode(img_file, 2)
+
     
     

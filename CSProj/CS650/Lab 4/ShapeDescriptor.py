@@ -17,25 +17,28 @@ class ShapeDescriptor(object):
         
         start = self.findChainCodeStart()
         cc = []
+        chain = []
         dir = 0
-        coord = start
+        coord = [0, 0]
+        coord[0], coord[1] = start[0], start[1]
         while True:
-            newcoord = coord + neighbor_operators[dir]
-            if self.isBoundaryPixel(newcoord[0], newcoord[1]):
+            newcoord = [0, 0]
+            newcoord[0] = coord[0] + neighbor_operators[dir][0]
+            newcoord[1] = coord[1] + neighbor_operators[dir][1]
+            if True == self.isBoundaryPixel(newcoord[0], newcoord[1]):
                 cc.append(dir)
-                coord = newcoord
+                chain.append(newcoord)
+                coord[0] = newcoord[0]
+                coord[1] = newcoord[1]
                 dir = (dir+2) % 8
+                #print chain
             else:
                 dir = (dir-1) % 8
-            if coord[0]==newcoord[0] and coord[1]==newcoord[1] and dir==1:
+            if coord[0]==start[0] and coord[1]==start[1]:
                 break
             
-        chain = []
-        chain.append(start)
-        
-        
-        
-        
+        return cc, chain
+
         
     def findChainCodeStart(self):
         
@@ -44,23 +47,28 @@ class ShapeDescriptor(object):
                 if self.isBoundaryPixel(i, j) == True:
                     return [i, j]
         return None
+    
+    def getBoundaryPixel(self):
+        boundaryPixels = []
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.isBoundaryPixel(i, j) == True:
+                    boundaryPixels.append( [i, j] )
+        return boundaryPixels
         
         
     def isBoundaryPixel(self, i, j):
-    
-        for no in neighbor_operators:
-            nx = i + no[0]
-            ny = j + no[1]
-            if nx < 0 or nx >= self.width or ny < 0 or ny >= self.height:
-                return True
-            if self.data[nx, ny] == 0:
-                return True
-        return False
-            
-        
-        
-        
-        
+        # val = 1 means a ON pixel
+        boundary = False
+        if self.data[i,j] == 1:
+            for no in neighbor_operators:
+                nx = i + no[0]
+                ny = j + no[1]
+                if nx < 0 or nx >= self.width or ny < 0 or ny >= self.height:
+                    return False
+                if self.data[nx, ny] == 0:
+                    boundary = True
+        return boundary
         
     def getPerimeter(self):
         return 0.0
