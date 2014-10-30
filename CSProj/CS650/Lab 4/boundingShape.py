@@ -4,6 +4,8 @@ Created on 2014-10-30
 @author: Walter
 '''
 
+import numpy as np
+
 def getConvexHull(points):
  
     """Computes the convex hull of a set of 2D points.
@@ -46,9 +48,57 @@ def getConvexHull(points):
     # Last point of each list is omitted because it is repeated at the beginning of the other list. 
     return lower[:-1] + upper[:-1]
     
-def getMinimumBoundingBox(self):
+def findFurthest(j, n, s, c, mx, my, hull): # advance j to extreme point
+    xn, yn = hull[j][0], hull[j][1]
+    rx, ry = xn*c - yn*s, xn*s + yn*c
+    best = mx*rx + my*ry
+    while True:
+        x, y = rx, ry
+        xn, yn = hull[(j+1)%n][0], hull[(j+1)%n][1]
+        rx, ry = xn*c - yn*s, xn*s + yn*c
+        if mx*rx + my*ry >= best:
+            j = (j+1)%n
+            best = mx*rx + my*ry
+        else:
+            return (x, y, j)
+
+ 
     
-    return None
+def getMinimumBoundingBox(points):
+    
+    hull = getConvexHull(points)
+    n = len(hull)
+    iL = iR = iP = 1                # indexes left, right, opposite
+    # add after pi = ... line:
+    minRect = (1e33, 0, 0, 0, 0, 0, 0) # area, dx, dy, i, iL, iP, iR
+    for i in range(n-1):
+        dx = hull[i+1][0] - hull[i][0]
+        dy = hull[i+1][1] - hull[i][1]
+        theta = np.pi-np.arctan2(dy, dx)
+        s, c = np.sin(theta), np.cos(theta)
+        yC = hull[i][0]*s + hull[i][1]*c
+    
+        xP, yP, iP = findFurthest(iP, n, s, c, 0, 1, hull)
+        if i==0:
+            iR = iP
+        xR, yR, iR = findFurthest(iR, n, s, c,  1, 0, hull)
+        xL, yL, iL = findFurthest(iL, n, s, c, -1, 0, hull)
+        area = (yP-yC)*(xR-xL)
+        print '    {:2d} {:2d} {:2d} {:2d} {:9.3f}'.format(i, iL, iP, iR, area)   
+        # add after area = ... line:
+        if area < minRect[0]:
+            minRect = (area, xR-xL, yP-yC, i, iL, iP, iR)
+            
+    # add after print ... line:
+    print 'Min rectangle:', minRect
+    # or instead of that print, add:
+    print 'Min rectangle: ',
+    for x in ['{:3d} '.format(x) if isinstance(x, int) else '{:7.3f} '.format(x) for x in minRect]:
+        print x,
+    print
+    
+    
+    #return None
     
     
         

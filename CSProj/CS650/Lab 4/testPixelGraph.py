@@ -29,7 +29,8 @@ if __name__ == '__main__':
     graph.visualizeComponentChainCode(img_file, 2)
     '''
     #print str(graph.shapeDescriptors[2].getConvexHull())
-    graph.visualizeConvexHull(img_file, 2)
+    graph.visualizeConvexHull(img_file, 6)
+    #graph.shapeDescriptors[3].getMinimumBoundingRectangle()
 
     
     

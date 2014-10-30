@@ -127,3 +127,11 @@ class ShapeDescriptor(object):
                     points.add((i,j))
         convexHulls = getConvexHull(points)
         return convexHulls
+    
+    def getMinimumBoundingRectangle(self):
+        points = Set()
+        for i in range(self.width):
+            for j in range(self.width):
+                if self.data[i,j]==1:
+                    points.add((i,j))
+        getMinimumBoundingBox(points)

@@ -98,13 +98,21 @@ class PixelGraph(object):
 
         bp = self.shapeDescriptors[idx].getBoundaryPixel()  
         for c in bp:
-            ax.plot(c[0], c[1], 'b.')
+            ax.plot(c[0], c[1], 'bx')
  
         convexHull = self.shapeDescriptors[idx].getConvexHull()
-        for c in convexHull:
-            ax.plot(c[0], c[1], 'rx')
+        hull_num = len(convexHull)
+        if hull_num > 0:
+            for i in range(hull_num-1):
+                ax.plot([convexHull[i][0], convexHull[i+1][0]], [convexHull[i][1], convexHull[i+1][1]], 'r-')
+            ax.plot([convexHull[hull_num-1][0], convexHull[0][0]], [convexHull[hull_num-1][1], convexHull[0][1]], 'r-')
         
-        plt.show()     
+        
+        plt.show()
+        
+    def visualizeMinimumBoundingRect(self, name, id):
+        
+        pass
         
     def dump(self, filename):
         with open(filename, 'wb') as f:
