@@ -22,6 +22,8 @@ if __name__ == '__main__':
     
     #graph.dump(img_file+'.csv')
     #graph.visualize(img_file)
+    
+    print "perimeter " + str(graph.shapeDescriptors[2].getPerimeter())
     graph.visualizeComponentBoundary(img_file, 2)
     graph.visualizeComponentChainCode(img_file, 2)
 
