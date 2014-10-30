@@ -106,13 +106,24 @@ class PixelGraph(object):
             for i in range(hull_num-1):
                 ax.plot([convexHull[i][0], convexHull[i+1][0]], [convexHull[i][1], convexHull[i+1][1]], 'r-')
             ax.plot([convexHull[hull_num-1][0], convexHull[0][0]], [convexHull[hull_num-1][1], convexHull[0][1]], 'r-')
-        
-        
         plt.show()
         
-    def visualizeMinimumBoundingRect(self, name, id):
+    def visualizeMinimumBoundingRect(self, name, idx):
         
-        pass
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+
+        bp = self.shapeDescriptors[idx].getBoundaryPixel()  
+        for c in bp:
+            ax.plot(c[0], c[1], 'bx')
+ 
+        rect_points = self.shapeDescriptors[idx].getMinimumBoundingRectangle()
+        rect_len = len(rect_points)
+        if rect_len > 0:
+            for i in range(rect_len-1):
+                ax.plot([rect_points[i][0], rect_points[i+1][0]], [rect_points[i][1], rect_points[i+1][1]], 'r-')
+            ax.plot([rect_points[rect_len-1][0], rect_points[0][0]], [rect_points[rect_len-1][1], rect_points[0][1]], 'r-')
+        plt.show()
         
     def dump(self, filename):
         with open(filename, 'wb') as f:
