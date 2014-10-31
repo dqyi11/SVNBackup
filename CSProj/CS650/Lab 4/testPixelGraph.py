@@ -18,16 +18,16 @@ if __name__ == '__main__':
     
     graph = PixelGraph(img_bi)
     
-    print graph.componentMgr.getComponentNum()
+    #print graph.componentMgr.getComponentNum()
     
     #graph.dump(img_file+'.csv')
     #graph.visualize(img_file)
     
-    '''
-    print "perimeter " + str(graph.shapeDescriptors[2].getPerimeter())
+    
+    #print "perimeter " + str(graph.shapeDescriptors[2].getPerimeter())
     graph.visualizeComponentBoundary(img_file, 2)
-    graph.visualizeComponentChainCode(img_file, 2)
-    '''
+    #graph.visualizeComponentChainCode(img_file, 2)
+    
     #print str(graph.shapeDescriptors[2].getConvexHull())
     #graph.visualizeConvexHull(img_file, 6)
     

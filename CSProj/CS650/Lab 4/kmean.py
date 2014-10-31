@@ -20,7 +20,6 @@ class KMeanCluster(object):
         self.data_size = len(data)
         self.labels = np.zeros(self.data_size, np.int)
         
-        
         self.means = []
         for i in range(self.cluster_num):
             self.means.append(np.zeros(self.data_dim))

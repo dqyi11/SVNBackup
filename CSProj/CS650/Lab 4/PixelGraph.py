@@ -48,7 +48,7 @@ class PixelGraph(object):
                     color_img[i, j, 1] = 255
                     color_img[i, j, 2] = 255
                             
-        plt.imshow(color_img)
+        plt.imshow(color_img/255)
         plt.show()
         
         
@@ -64,7 +64,7 @@ class PixelGraph(object):
             color_img[c[0], c[1], 1] = g_val
             color_img[c[0], c[1], 2] = b_val
                             
-        plt.imshow(color_img)
+        plt.imshow(color_img/255)
         plt.show()
         
     def visualizeComponentChainCode(self, name, idx):
@@ -77,7 +77,7 @@ class PixelGraph(object):
             color_img[c[0], c[1], 1] = 122
             color_img[c[0], c[1], 2] = 122   
                             
-        plt.imshow(color_img)
+        plt.imshow(color_img/255)
         plt.show() 
         
     def visualizeComponentBoundary(self, name, idx):
@@ -88,7 +88,7 @@ class PixelGraph(object):
             color_img[c[0], c[1], 1] = 122
             color_img[c[0], c[1], 2] = 122   
                             
-        plt.imshow(color_img)
+        plt.imshow(color_img/255)
         plt.show()     
         
     def visualizeConvexHull(self, name, idx):

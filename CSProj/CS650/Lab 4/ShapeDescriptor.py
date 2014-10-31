@@ -110,8 +110,21 @@ class ShapeDescriptor(object):
     def getPsi_s_curve(self):
         return 0.0
     
-    def getProfiles(self):
-        return 0.0
+    def getHorizontalProfile(self):
+        profile = np.zeros(self.height, np.int)
+        for j in range(self.height):
+            for i in range(self.width):
+                if self.data[i,j]==1:
+                    profile[j] += 1
+        return profile
+    
+    def getVerticalProfile(self):
+        profile = np.zeros(self.width, np.int)
+        for i in range(self.width):
+            for j in range(self.width):
+                if self.data[i,j]==1:
+                    profile[i] += 1
+        return profile        
     
     def getHoles(self):
         return 0.0
