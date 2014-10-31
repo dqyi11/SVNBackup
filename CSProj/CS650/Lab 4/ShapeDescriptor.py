@@ -101,9 +101,39 @@ class ShapeDescriptor(object):
     def getEccentricity(self):
         return 0.0
     
-    def getMoments(self):
-        return 0.0
+    def getMean(self):
+        meanVal = np.zeros(2, np.float)
+        cnt = 0
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.data[i,j] == 1:
+                    cnt += 1
+                    meanVal[0] += i
+                    meanVal[1] += j
+        meanVal = meanVal / cnt      
+        return meanVal
     
+    def getVar(self, mean):
+        var = np.zeros((2,2), np.float)
+        mu_x = 0.0
+        mu_y = 0.0
+        mu_xy = 0.0
+        cnt = 0
+        for i in range(self.width):
+            for j in range(self.height):
+                cnt += 1
+                mu_x += (i-mean[0])**2
+                mu_y += (j-mean[1])**2
+                mu_xy += (i-mean[0])*(j-mean[1])
+        mu_x = mu_x / cnt
+        mu_y = mu_y / cnt
+        mu_xy = mu_xy / cnt
+        var[0,0] = mu_x
+        var[1,1] = mu_y
+        var[0,1] = var[1,0] = mu_xy
+        
+        return var       
+                
     def getElongation(self):
         return 0.0
     

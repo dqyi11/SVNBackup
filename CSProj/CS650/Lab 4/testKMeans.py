@@ -11,8 +11,8 @@ from kmean import KMeanCluster
 if __name__ == '__main__':
     
     data_dim = 2
-    data_size = 80
-    cluster_num = 4
+    data_size = 200
+    cluster_num = 6
     seeds = []
     for i in range(data_size):
         seeds.append(np.random.random(data_dim))
