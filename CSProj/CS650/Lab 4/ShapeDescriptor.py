@@ -15,6 +15,12 @@ class ShapeDescriptor(object):
         self.data = data
         self.width = data.shape[0]
         self.height = data.shape[1]
+        self.label = None
+        
+    def getFeatureVector(self):
+        #feature = np.zeros()
+        feature = np.random.random(10)
+        return feature
         
     def findChainCode(self):        
         start = self.findChainCodeStart()
