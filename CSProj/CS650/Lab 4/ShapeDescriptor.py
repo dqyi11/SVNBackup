@@ -16,6 +16,11 @@ class ShapeDescriptor(object):
         self.width = data.shape[0]
         self.height = data.shape[1]
         self.label = None
+        self.pixels = []
+        for i in range(self.width):
+            for j in range(self.height):
+                if self.data[i,j] == 1:
+                    self.pixels.append([i,j])
         
     def getFeatureVector(self):
         #feature = np.zeros()

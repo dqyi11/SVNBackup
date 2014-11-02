@@ -17,6 +17,8 @@ if __name__ == '__main__':
     for i in range(data_size):
         seeds.append(np.random.random(data_dim))
         
+    markers = ['p', 'v', '^', '>', '<', 'D']    
+        
     km = KMeanCluster(data_dim, cluster_num)
     km.cluster(seeds)
     
@@ -31,8 +33,9 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(111)
     for i in range(data_size):
-        ax.plot(seeds[i][0], seeds[i][1],'x',color=label_color[labels[i]])
+        ax.plot(seeds[i][0], seeds[i][1],marker=markers[labels[i]],color=label_color[labels[i]])
     for j in range(cluster_num):
-        ax.plot(km.means[j][0], km.means[j][1], 'o', color=label_color[j])
+        ax.plot(km.means[j][0], km.means[j][1], 'o', color=label_color[j], markersize=10)
+        ax.plot(km.means[j][0], km.means[j][1], 'x', color=(1, 0, 0))
     plt.show()
     

@@ -29,8 +29,7 @@ class PixelGraph(object):
    
     
     def visualize(self, name):
-        
-        color_img = np.zeros((self.width, self.height, 3), np.int)
+        color_img = np.zeros((self.width, self.height, 3), np.float)
         componenet_num = self.componentMgr.getComponentNum()
         r_vals = np.random.randint(0, 256, componenet_num)
         g_vals = np.random.randint(0, 256, componenet_num)
@@ -51,6 +50,27 @@ class PixelGraph(object):
         plt.imshow(color_img/255)
         plt.show()
         
+    def visualizeByLabel(self, name, label_colors):
+        pixel_label = -1 * np.ones((self.width, self.height), np.int)
+        for s in self.shapeDescriptors:
+            for pix in s.pixels:
+                pixel_label[pix[0], pix[1]] = s.label
+                
+        color_img = np.zeros((self.width, self.height, 3), np.float)
+        
+        for i in range(self.width):
+            for j in range(self.height):
+                if pixel_label[i,j] >= 0:
+                    color_img[i, j, 0] = label_colors[pixel_label[i,j]][0]
+                    color_img[i, j, 1] = label_colors[pixel_label[i,j]][1]
+                    color_img[i, j, 2] = label_colors[pixel_label[i,j]][2]
+                else:
+                    color_img[i, j, 0] = 255
+                    color_img[i, j, 1] = 255
+                    color_img[i, j, 2] = 255
+                            
+        plt.imshow(color_img/255)
+        plt.show()        
         
     def visualizeComponent(self, name, idx):
         
@@ -69,7 +89,7 @@ class PixelGraph(object):
         
     def visualizeComponentChainCode(self, name, idx):
         
-        color_img = np.zeros((self.width, self.height, 3), np.int)
+        color_img = np.zeros((self.width, self.height, 3), np.float)
 
         cc, chain = self.shapeDescriptors[idx].findChainCode()
         for c in chain:
@@ -81,7 +101,7 @@ class PixelGraph(object):
         plt.show() 
         
     def visualizeComponentBoundary(self, name, idx):
-        color_img = np.zeros((self.width, self.height, 3), np.int)
+        color_img = np.zeros((self.width, self.height, 3), np.float)
         bp = self.shapeDescriptors[idx].getBoundaryPixel()  
         for c in bp:
             color_img[c[0], c[1], 0] = 255

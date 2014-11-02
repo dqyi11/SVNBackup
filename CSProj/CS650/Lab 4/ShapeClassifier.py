@@ -27,8 +27,8 @@ class ShapeClassifier(object):
         km.cluster(self.feature_vec)
         
         for i in range(len(self.shapes)):
-            self.shape_label[i] = km.getLabel(self.feature_vec[i])
-            self.
+            dist, self.shape_label[i] = km.getLabel(self.feature_vec[i])
+            self.shapes[i].label = self.shape_label[i]
             
     
         
