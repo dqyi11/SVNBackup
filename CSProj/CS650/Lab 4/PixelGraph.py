@@ -48,6 +48,7 @@ class PixelGraph(object):
                     color_img[i, j, 2] = 255
                             
         plt.imshow(color_img/255)
+        plt.title(name)
         plt.show()
         
     def visualizeByLabel(self, name, label_colors):
@@ -70,6 +71,7 @@ class PixelGraph(object):
                     color_img[i, j, 2] = 255
                             
         plt.imshow(color_img/255)
+        plt.title(name)
         plt.show()        
         
     def visualizeComponent(self, name, idx):
@@ -85,6 +87,7 @@ class PixelGraph(object):
             color_img[c[0], c[1], 2] = b_val
                             
         plt.imshow(color_img/255)
+        plt.title(name)
         plt.show()
         
     def visualizeComponentChainCode(self, name, idx):
@@ -98,6 +101,7 @@ class PixelGraph(object):
             color_img[c[0], c[1], 2] = 122   
                             
         plt.imshow(color_img/255)
+        plt.title(name)
         plt.show() 
         
     def visualizeComponentBoundary(self, name, idx):

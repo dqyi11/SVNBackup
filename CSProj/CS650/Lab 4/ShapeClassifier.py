@@ -23,12 +23,16 @@ class ShapeClassifier(object):
         for s in self.shapes:
             self.feature_vec.append(s.getFeatureVector())
             
-        km = KMeanCluster(self.feature_dim, self.cluster_num)
-        km.cluster(self.feature_vec)
+        self.km = KMeanCluster(self.feature_dim, self.cluster_num)
+        self.km.cluster(self.feature_vec)
         
         for i in range(len(self.shapes)):
-            dist, self.shape_label[i] = km.getLabel(self.feature_vec[i])
+            dist, self.shape_label[i] = self.km.getLabel(self.feature_vec[i])
             self.shapes[i].label = self.shape_label[i]
+            
+    def getLabel(self, shape):
+        dist, label = self.km.getLabel(shape.getFeatureVector())
+        return label
             
     
         

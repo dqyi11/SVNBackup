@@ -11,10 +11,11 @@ neighbor_operators = [ [1, 0], [1,-1], [0,-1], [-1,-1], [-1, 0], [-1, 1], [0, 1]
 
 class ShapeDescriptor(object):
 
-    def __init__(self, data):
+    def __init__(self, data, feature_num=2):
         self.data = data
         self.width = data.shape[0]
         self.height = data.shape[1]
+        self.feature_num = feature_num
         self.label = None
         self.pixels = []
         for i in range(self.width):
@@ -23,8 +24,10 @@ class ShapeDescriptor(object):
                     self.pixels.append([i,j])
         
     def getFeatureVector(self):
-        #feature = np.zeros()
-        feature = np.random.random(10)
+        feature = np.zeros(self.feature_num, np.int)
+        feature[0] = self.getCompactness()
+        feature[1] = self.getRectangularity()
+       
         return feature
         
     def findChainCode(self):        
