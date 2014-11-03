@@ -8,7 +8,7 @@ import numpy as np
 
 class KMeanCluster(object):
 
-    def __init__(self, data_dim, cluster_num, max_iter=100, stop_err=0.001):
+    def __init__(self, data_dim, cluster_num, max_iter=1000, stop_err=0.00001):
         self.data_dim = data_dim
         self.cluster_num = cluster_num
         self.max_iter = max_iter
@@ -30,7 +30,7 @@ class KMeanCluster(object):
                 
         next_sums = []
         for j in range(self.cluster_num):
-            next_sums.append(np.zeros(self.cluster_num, np.double))
+            next_sums.append(np.zeros(self.data_dim, np.double))
         counts = np.zeros(self.cluster_num, np.int)
         iter_cnt = 0
         current_cost = 0.0
@@ -46,6 +46,9 @@ class KMeanCluster(object):
                 cost, l = self.getLabel(self.data[i])
                 current_cost += cost
                 counts[l] += 1
+                print next_sums
+                print self.data[i]
+                print ""
                 for d in range(self.data_dim):
                     next_sums[l][d] += self.data[i][d]
                     

@@ -25,14 +25,15 @@ if __name__ == '__main__':
     
     
     #print "perimeter " + str(graph.shapeDescriptors[2].getPerimeter())
-    graph.visualizeComponentBoundary(img_file, 2)
+    #graph.visualizeComponentBoundary(img_file, 5)
     #graph.visualizeComponentChainCode(img_file, 2)
     
     #print str(graph.shapeDescriptors[2].getConvexHull())
     #graph.visualizeConvexHull(img_file, 6)
     
     #print graph.shapeDescriptors[3].getMinimumBoundingRectangle()
-    graph.visualizeMinimumBoundingRect(img_file, 3)
+    graph.visualizeMinimumBoundingRect(img_file, 6)
+    print graph.shapeDescriptors[6].getRectangularity()
 
     
     

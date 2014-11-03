@@ -23,7 +23,7 @@ if __name__ == '__main__':
     pxg2 = PixelGraph(img2_bi)
     
     cluster_num = 5
-    feature_num = 2
+    feature_num = 4
     shpXfier = ShapeClassifier(feature_num, cluster_num)
     
     for s in pxg1.shapeDescriptors:
@@ -34,6 +34,6 @@ if __name__ == '__main__':
     shpXfier.classify()
     
     colors = [(255,0,0), (0,255,0), (0,0,255),(255,122,0),(0,122,122)]
-    pxg1.visualizeByLabel("pxg1", colors)
-    pxg2.visualizeByLabel("pxg2", colors)
+    pxg1.visualizeByLabel(img1_file, colors)
+    pxg2.visualizeByLabel(img2_file, colors)
     

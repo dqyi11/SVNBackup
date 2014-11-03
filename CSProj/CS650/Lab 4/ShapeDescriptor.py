@@ -11,7 +11,7 @@ neighbor_operators = [ [1, 0], [1,-1], [0,-1], [-1,-1], [-1, 0], [-1, 1], [0, 1]
 
 class ShapeDescriptor(object):
 
-    def __init__(self, data, feature_num=2):
+    def __init__(self, data, feature_num=4):
         self.data = data
         self.width = data.shape[0]
         self.height = data.shape[1]
@@ -24,10 +24,18 @@ class ShapeDescriptor(object):
                     self.pixels.append([i,j])
         
     def getFeatureVector(self):
-        feature = np.zeros(self.feature_num, np.int)
+        feature = np.zeros(self.feature_num, np.double)
         feature[0] = self.getCompactness()
         feature[1] = self.getRectangularity()
-       
+        feature[2] = self.getEccentricity()
+        feature[3] = self.getElongation()
+        
+        '''
+        mean = self.getMean()
+        feature[4] = mean[0]
+        feature[5] = mean[1]
+        '''
+        
         return feature
         
     def findChainCode(self):        
@@ -110,10 +118,21 @@ class ShapeDescriptor(object):
         return (perimeter**2)/area
     
     def getRectangularity(self):
-        return 0.0
+        rect_box = self.getMinimumBoundingRectangle()
+        rect_width = np.sqrt((rect_box[0][0] - rect_box[1][0])**2+(rect_box[0][1] - rect_box[1][1])**2)
+        rect_height = np.sqrt((rect_box[1][0] - rect_box[2][0])**2+(rect_box[1][1] - rect_box[2][1])**2)
+        return float(self.getArea())/(rect_width * rect_height)
         
     def getEccentricity(self):
-        return 0.0
+        rect_box = self.getMinimumBoundingRectangle()
+        rect_width = np.sqrt((rect_box[0][0] - rect_box[1][0])**2+(rect_box[0][1] - rect_box[1][1])**2)
+        rect_height = np.sqrt((rect_box[1][0] - rect_box[2][0])**2+(rect_box[1][1] - rect_box[2][1])**2)
+        ratio = 1.0
+        if rect_width < rect_height:
+            ratio = float(rect_width)/rect_height
+        else:
+            ratio = float(rect_height)/rect_width
+        return ratio
     
     def getMean(self):
         meanVal = np.zeros(2, np.float)
@@ -149,7 +168,7 @@ class ShapeDescriptor(object):
         return var       
                 
     def getElongation(self):
-        return 0.0
+        return 1.0 - self.getEccentricity()
     
     def getPsi_s_curve(self):
         return 0.0
