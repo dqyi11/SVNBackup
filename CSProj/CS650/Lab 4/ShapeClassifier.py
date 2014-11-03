@@ -23,6 +23,18 @@ class ShapeClassifier(object):
         for s in self.shapes:
             self.feature_vec.append(s.getFeatureVector())
             
+        # Normalize feature_vec
+        featureVec = np.array(self.feature_vec)
+        self.dimMax = featureVec.max(axis=0)
+        self.dimMin = featureVec.min(axis=0)
+        self.dimRange = self.dimMax - self.dimMin
+        print "max " + str(self.dimMax)
+        print "min " + str(self.dimMin)
+        print "range " + str(self.dimRange)
+        for f in self.feature_vec:
+            for d in range(self.feature_dim):
+                f[d] = (f[d] - self.dimMin[d]) / float(self.dimRange[d])
+      
         self.km = KMeanCluster(self.feature_dim, self.cluster_num)
         self.km.cluster(self.feature_vec)
         
@@ -31,7 +43,10 @@ class ShapeClassifier(object):
             self.shapes[i].label = self.shape_label[i]
             
     def getLabel(self, shape):
-        dist, label = self.km.getLabel(shape.getFeatureVector())
+        feature_label = shape.getFeatureVector()
+        for d in range(self.feature_dim):
+            feature_label[d] = (feature_label[d] - self.dimMin[d]) / float(self.dimRange[d])
+        dist, label = self.km.getLabel(feature_label)
         return label
             
     

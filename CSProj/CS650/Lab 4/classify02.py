@@ -28,12 +28,13 @@ if __name__ == '__main__':
     
     for s in pxg1.shapeDescriptors:
         shpXfier.addShape(s)
-    for s in pxg2.shapeDescriptors:
-        shpXfier.addShape(s)
         
     shpXfier.classify()
     
     colors = [(255,0,0), (0,255,0), (0,0,255),(255,122,0),(0,122,122)]
     pxg1.visualizeByLabel(img1_file, colors)
+    
+    for s in pxg2.shapeDescriptors:
+        s.label = shpXfier.getLabel(s)
     pxg2.visualizeByLabel(img2_file, colors)
     

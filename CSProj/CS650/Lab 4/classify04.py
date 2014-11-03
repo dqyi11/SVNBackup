@@ -43,14 +43,15 @@ if __name__ == '__main__':
         
     shpXfier.classify()
     
+    colors = [(255,0,0), (0,255,0), (0,0,255),(255,122,0),(0,122,122)]
+    pxg1.visualizeByLabel(img1_file, colors)
+    pxg2.visualizeByLabel(img2_file, colors)
+    
     for s in pxg3.shapeDescriptors:
         s.label = shpXfier.getLabel(s)
     for s in pxg4.shapeDescriptors:
         s.label = shpXfier.getLabel(s)
     
-    colors = [(255,0,0), (0,255,0), (0,0,255),(255,122,0),(0,122,122)]
-    pxg1.visualizeByLabel(img1_file, colors)
-    pxg2.visualizeByLabel(img2_file, colors)
     
     pxg3.visualizeByLabel(img3_file, colors)
     pxg4.visualizeByLabel(img4_file, colors)

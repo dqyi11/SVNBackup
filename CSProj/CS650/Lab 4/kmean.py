@@ -46,9 +46,7 @@ class KMeanCluster(object):
                 cost, l = self.getLabel(self.data[i])
                 current_cost += cost
                 counts[l] += 1
-                print next_sums
-                print self.data[i]
-                print ""
+
                 for d in range(self.data_dim):
                     next_sums[l][d] += self.data[i][d]
                     
