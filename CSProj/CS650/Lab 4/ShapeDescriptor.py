@@ -6,12 +6,13 @@ Created on Oct 28, 2014
 
 from boundingShape import *
 from sets import Set
+import cv2
 
 neighbor_operators = [ [1, 0], [1,-1], [0,-1], [-1,-1], [-1, 0], [-1, 1], [0, 1], [1, 1] ];
 
 class ShapeDescriptor(object):
 
-    def __init__(self, data, feature_num=4):
+    def __init__(self, data, feature_num=11):
         self.data = data
         self.width = data.shape[0]
         self.height = data.shape[1]
@@ -25,6 +26,7 @@ class ShapeDescriptor(object):
         
     def getFeatureVector(self):
         feature = np.zeros(self.feature_num, np.double)
+        
         feature[0] = self.getCompactness()
         feature[1] = self.getRectangularity()
         feature[2] = self.getEccentricity()
@@ -35,6 +37,22 @@ class ShapeDescriptor(object):
         feature[4] = mean[0]
         feature[5] = mean[1]
         '''
+        
+        
+        # Hu invariant moments
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        mom = cv2.moments(contours[0])
+        Humoments = cv2.HuMoments(mom)
+        #print Humoments
+        feature[4]  = Humoments[0]
+        feature[5]  = Humoments[1]
+        feature[6]  = Humoments[2]
+        feature[7]  = Humoments[3]
+        feature[8]  = Humoments[4]
+        feature[9]  = Humoments[5]
+        feature[10] = Humoments[6]
+    
+        
         
         return feature
         
@@ -102,6 +120,10 @@ class ShapeDescriptor(object):
                 length += 1.0
             else:
                 length += 1.414
+                
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        arc_length = sum([cv2.arcLength(c,closed=True) for c in contours])
+        print "Arc Length " + str(length) + " - CV2: " + str(arc_length)
         return length
     
     def getArea(self):
@@ -117,21 +139,33 @@ class ShapeDescriptor(object):
         area = self.getArea()
         return (perimeter**2)/area
     
-    def getRectangularity(self):
+    def getRectWidthHeight(self):
         rect_box = self.getMinimumBoundingRectangle()
-        rect_width = np.sqrt((rect_box[0][0] - rect_box[1][0])**2+(rect_box[0][1] - rect_box[1][1])**2)
-        rect_height = np.sqrt((rect_box[1][0] - rect_box[2][0])**2+(rect_box[1][1] - rect_box[2][1])**2)
+        rect_width = np.sqrt((rect_box[0][0] - rect_box[1][0])**2+(rect_box[0][1] - rect_box[1][1])**2) + 2
+        rect_height = np.sqrt((rect_box[1][0] - rect_box[2][0])**2+(rect_box[1][1] - rect_box[2][1])**2) + 2
+        
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours, key=cv2.contourArea,reverse=True)
+        cv2_rect = cv2.minAreaRect(contours[0])
+        cv2_rect_width = int(cv2_rect[1][0])
+        cv2_rect_height = int(cv2_rect[1][1])
+        
+        rW = np.min([rect_width, rect_height])
+        rH = np.max([rect_width, rect_height])
+        
+        cv2_rW = np.min([cv2_rect_width, cv2_rect_height])
+        cv2_rH = np.max([cv2_rect_width, cv2_rect_height])
+         
+        print "Rect W:" + str(int(rW)) + " H:" + str(int(rH)) + " - CV2: W:" + str(int(cv2_rW)) + " H:" + str(int(cv2_rH)) 
+        return rW, rH
+    
+    def getRectangularity(self):
+        rect_width, rect_height = self.getRectWidthHeight()
         return float(self.getArea())/(rect_width * rect_height)
         
     def getEccentricity(self):
-        rect_box = self.getMinimumBoundingRectangle()
-        rect_width = np.sqrt((rect_box[0][0] - rect_box[1][0])**2+(rect_box[0][1] - rect_box[1][1])**2)
-        rect_height = np.sqrt((rect_box[1][0] - rect_box[2][0])**2+(rect_box[1][1] - rect_box[2][1])**2)
-        ratio = 1.0
-        if rect_width < rect_height:
-            ratio = float(rect_width)/rect_height
-        else:
-            ratio = float(rect_height)/rect_width
+        rect_width, rect_height = self.getRectWidthHeight()
+        ratio = float(rect_width)/rect_height
         return ratio
     
     def getMean(self):

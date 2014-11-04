@@ -23,7 +23,7 @@ if __name__ == '__main__':
     pxg2 = PixelGraph(img2_bi)
     
     cluster_num = 5
-    feature_num = 2
+    feature_num = 11
     shpXfier = ShapeClassifier(feature_num, cluster_num)
     
     for s in pxg1.shapeDescriptors:

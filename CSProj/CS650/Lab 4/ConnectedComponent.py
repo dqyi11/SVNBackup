@@ -96,7 +96,7 @@ class ConnectedComponentMgr(object):
    
     def getComponentLabelData(self, idx):
         
-        labelData = np.zeros((self.width, self.height), np.int)
+        labelData = np.zeros((self.width, self.height), np.uint8)
         for i in range(self.width):
             for j in range(self.height):
                 if self.labelData[i, j] == idx:
