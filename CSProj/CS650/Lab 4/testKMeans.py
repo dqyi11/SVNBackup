@@ -12,7 +12,7 @@ from minDistClassifier import *
 if __name__ == '__main__':
     
     data_dim = 2
-    data_size = 200
+    data_size = 400
     cluster_num = 5
     seeds = []
     for i in range(data_size):
@@ -29,11 +29,11 @@ if __name__ == '__main__':
     for i in range(data_size):
         s = seeds[i]
         labels[i] = mdc.getLabel(s)
-    label_color = [(1.0, 128.0/255, 0),
-                   (0, 1.0, 128.0/255),
-                   (0, 128.0/255, 1.0),
-                   (1.0, 0, 128.0/255),
-                   (128.0/255, 0, 1.0)]
+    label_color = [(1.0, 0, 0),
+                   (0, 1.0, 0),
+                   (0, 0, 1.0),
+                   (1.0, 128.0/255, 0),
+                   (0, 128.0/255, 128.0/255)]
         
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -41,6 +41,6 @@ if __name__ == '__main__':
         ax.plot(seeds[i][0], seeds[i][1],marker=markers[labels[i]],color=label_color[labels[i]])
     for j in range(cluster_num):
         ax.plot(km.means[j][0], km.means[j][1], 'o', color=label_color[j], markersize=10)
-        ax.plot(km.means[j][0], km.means[j][1], 'x', color=(0, 0, 0))
+        ax.plot(km.means[j][0], km.means[j][1], 'x', color=(1, 1, 1))
     plt.show()
     

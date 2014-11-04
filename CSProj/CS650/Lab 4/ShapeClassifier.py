@@ -9,8 +9,9 @@ from minDistClassifier import *
 
 class ShapeClassifier(object):
 
-    def __init__(self, feature_dim, cluster_num):
+    def __init__(self, feature_dim, cluster_num, feature_weights):
         self.shapes = []
+        self.feature_weights = feature_weights
         self.feature_dim = feature_dim
         self.cluster_num = cluster_num
 
@@ -34,7 +35,7 @@ class ShapeClassifier(object):
         print "range " + str(self.dimRange)
         for f in self.feature_vec:
             for d in range(self.feature_dim):
-                f[d] = (f[d] - self.dimMin[d]) / float(self.dimRange[d])
+                f[d] = self.feature_weights[d] * (f[d] - self.dimMin[d]) / float(self.dimRange[d])
       
         self.km = KMeanCluster(self.feature_dim, self.cluster_num)
         self.km.cluster(self.feature_vec)
@@ -48,7 +49,7 @@ class ShapeClassifier(object):
     def getLabel(self, shape):
         feature_label = shape.getFeatureVector()
         for d in range(self.feature_dim):
-            feature_label[d] = (feature_label[d] - self.dimMin[d]) / float(self.dimRange[d])
+            feature_label[d] = self.feature_weights[d] * (feature_label[d] - self.dimMin[d]) / float(self.dimRange[d])
         label = self.mdc.getLabel(feature_label)
         return label
     
