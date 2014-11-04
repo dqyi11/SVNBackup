@@ -85,7 +85,6 @@ class ConnectedComponentMgr(object):
     
     
     def getComponent(self, idx):
-        
         pixels = []
         for i in range(self.width):
             for j in range(self.height):
