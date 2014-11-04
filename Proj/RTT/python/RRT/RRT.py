@@ -29,15 +29,26 @@ class RRT(object):
         self.nodes.append(self.root)
         
     def expand(self):
-        
         new_node = None
         while new_node == None:
             rndPos = self.generateRandomPos()
-            
             node = self.findClosetNode(rndPos)
             
-            if self.isCrossingObstacle(rndPos, node.pos):
-                new_node = RRTNode(rndPos)
+            # normalize along direction
+            delta = [0.0,0.0]
+            delta[0] = rndPos[0] - node.pos[0]
+            delta[1] = rndPos[1] - node.pos[1]
+            delta_len = np.sqrt(delta[0]**2+delta[1]**2)
+            scale = self.segmentLength/float(delta_len)
+            delta[0] = delta[0] * scale
+            delta[1] = delta[1] * scale
+            
+            new_pos = [0, 0]
+            new_pos[0] = node.pos[0] + int(delta[0])
+            new_pos[1] = node.pos[1] + int(delta[1])
+            
+            if False == self.isCrossingObstacle(new_pos, node.pos):
+                new_node = RRTNode(new_pos)
                 new_node.cost = node.cost + self.segmentLength
                 self.nodes.append(new_node)
                 node.children.append(new_node)       
