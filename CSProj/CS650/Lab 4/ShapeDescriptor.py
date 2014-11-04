@@ -42,6 +42,14 @@ class ShapeDescriptor(object):
         # Hu invariant moments
         contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
         mom = cv2.moments(contours[0])
+        mean = self.getMean()
+        print "mean X " + str(mean[0]) + "  cv:"  + str(mom["m10"]/mom["m00"])
+        print "mean Y " + str(mean[1]) + "  cv:"  + str(mom["m01"]/mom["m00"])
+        var = self.getVar(mean)
+        print "var 00 " + str(var[0,0]) + "  cv:"  + str(mom["mu20"]/mom["m00"])
+        print "var 01 " + str(var[0,1]) + "  cv:"  + str(mom["mu11"]/mom["m00"])
+        print "var 02 " + str(var[1,0]) + "  cv:"  + str(mom["mu11"]/mom["m00"])
+        print "var 03 " + str(var[1,1]) + "  cv:"  + str(mom["mu02"]/mom["m00"])
         Humoments = cv2.HuMoments(mom)
         #print Humoments
         feature[4]  = Humoments[0]
@@ -188,10 +196,11 @@ class ShapeDescriptor(object):
         cnt = 0
         for i in range(self.width):
             for j in range(self.height):
-                cnt += 1
-                mu_x += (i-mean[0])**2
-                mu_y += (j-mean[1])**2
-                mu_xy += (i-mean[0])*(j-mean[1])
+                if self.data[i,j] == 1:
+                    cnt += 1
+                    mu_x += (i-mean[0])**2
+                    mu_y += (j-mean[1])**2
+                    mu_xy += (i-mean[0])*(j-mean[1])
         mu_x = mu_x / cnt
         mu_y = mu_y / cnt
         mu_xy = mu_xy / cnt

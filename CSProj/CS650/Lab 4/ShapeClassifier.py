@@ -5,6 +5,7 @@ Created on 2014-11-2
 '''
 import numpy as np
 from kmean import *
+from minDistClassifier import *
 
 class ShapeClassifier(object):
 
@@ -37,17 +38,20 @@ class ShapeClassifier(object):
       
         self.km = KMeanCluster(self.feature_dim, self.cluster_num)
         self.km.cluster(self.feature_vec)
+            
+        self.mdc = MinDistClassifier(self.feature_dim, self.cluster_num, self.km.means)
         
         for i in range(len(self.shapes)):
-            dist, self.shape_label[i] = self.km.getLabel(self.feature_vec[i])
+            self.shape_label[i] = self.mdc.getLabel(self.feature_vec[i])
             self.shapes[i].label = self.shape_label[i]
             
     def getLabel(self, shape):
         feature_label = shape.getFeatureVector()
         for d in range(self.feature_dim):
             feature_label[d] = (feature_label[d] - self.dimMin[d]) / float(self.dimRange[d])
-        dist, label = self.km.getLabel(feature_label)
+        label = self.mdc.getLabel(feature_label)
         return label
+    
             
     
         

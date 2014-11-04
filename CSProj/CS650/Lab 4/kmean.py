@@ -78,11 +78,14 @@ class KMeanCluster(object):
                 dist = temp
                 label = i
         return dist, label
+
     
     def getDistance(self, p, q):
+        
         dist = 0.0
         for j in range(self.data_dim):
             dist += (p[j] - q[j])**2
         return np.sqrt(dist)
+    
 
         
