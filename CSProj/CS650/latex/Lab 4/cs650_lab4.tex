@@ -77,10 +77,59 @@ Numpy is used for array operations.
 Matplotlib is used for visualizing data.
 
 In this lab, the objects are firstly extracted from the image.
-The features of the object are quanti
+The features of the object are quantize
+
+\section{Object isolation}
+\label{sec:object_isolation}
+
+The test image files are firstly loaded into binary image.
+The binary image is maintained by a \textbf{PixelGraph} class in \emph{PixelGraph.py}.
+Connected-Component labeling \footnote{\url{http://en.wikipedia.org/wiki/Connected-component_labeling}}
+is used to isolate the objects from binary image.
+Each 
+The implementation follows the ``two-pass algorithm'' described in \cite{wiki:connected_component_labeling}.
+A \textbf{ConnectedComponentMgr} in \emph{ConnectedComponent.py} is used to maintain the connected components found.
+Chain code \footnote{\url{http://en.wikipedia.org/wiki/Chain_code}} is used to find the contour of a connected component.
+The algorithm is implemented following \cite{chaincode}.
+
+
+
+\begin{figure}[h]
+\centering
+\subfigure[Object Index 2 of \emph{shapes.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/shapes_obj2} 
+\label{fig:obj_iso:01} } 
+\subfigure[Object Index 3 of \emph{train1.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/train1_obj3} 
+\label{fig:obj_iso:02} } 
+\subfigure[Object Index 4 of \emph{match1.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/match1_obj4} 
+\label{fig:obj_iso:03} } 
+\caption{Object isolation.}
+\label{fig:obj_iso}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\subfigure[Object Index 2 of \emph{shapes.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/shapes_cc2} 
+\label{fig:obj_cc:01} } 
+\subfigure[Object Index 3 of \emph{train1.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/train1_cc3} 
+\label{fig:obj_cc:02} } 
+\subfigure[Object Index 4 of \emph{match1.pgm}]{
+\includegraphics[width=.3\textwidth]{./figure/match1_cc4} 
+\label{fig:obj_cc:03} } 
+\caption{Object isolation.}
+\label{fig:obj_c}
+\end{figure}
+
+
 
 \section{Feature extraction}
 \label{sec:feature_extraction}
+
+
 
 \begin{itemize}
 \item \textbf{Compactness}
@@ -97,15 +146,60 @@ The features of the object are quanti
 \section{Minimum distance classifier}
 \label{sec:classifier}
 
+A minimum distance classifier is used to classify the objects by features.
+Because a 5 separate pattern clustering is required.
+K-means clustering is firstly used to find the mean of each cluster.
+The means are then used by a minimum-distance classifier.
+In this multiple classes case, there is a single linear discriminant $ g_{i} ( \mathbf{x} ) $ for each class $ \omega_{i} $.
+The class $ \omega_{i} $ is assigned to $ \mathbf{x} $ if $ \forall j \neq i, g_{i} ( \mathbf{x} ) > g_{j} ( \mathbf{x} ) $.
+$ g_{i}( \mathbf{x} ) $ is defined as 
+\begin{equation}
+g_{i}( \mathbf{x} ) = \mathbf{x}^{T} \mathbf{m}_{i} - \frac{1}{2} \mathbf{m}_{i}^{T} \mathbf{m}_{i}.
+\end{equation}
+Because minimizing $ || \mathbf{x} - \mathbf{m}_{i} || $ is equivalent to maximizing $ \mathbf{x}^{T} \mathbf{m}_{i} - \frac{1}{2} \mathbf{m}_{i}^{T} \mathbf{m}_{i} $.
+Figure \ref{fig:min_dist_classifer} gives an example of the minimum distance classifier that is applied on randomly generated 2D data.
+
 \begin{figure}
 \centering
 \includegraphics[width=0.7\linewidth]{./figure/kmean}
-\caption{K-Mean classifier.}
-\label{fig:interclass_variances}
+\caption{Minimum Distance classifier.}
+\label{fig:min_dist_classifer}
 \end{figure}
 
 \section{Pattern recognition}
 \label{sec:pattern_recognition}
+
+
+\begin{figure}[h]
+\centering
+\subfigure[Training]{
+\includegraphics[width=.45\textwidth]{./figure/shapes_pgm-0} 
+\label{fig:class:01:train} } 
+\subfigure[Testing]{
+\includegraphics[width=.45\textwidth]{./figure/testshapes_pgm-0} 
+\label{fig:class:01:test} } 
+\caption{Classifications on \emph{shapes.pgm} and \emph{testshapes.pgm}.}
+\label{fig:class:01}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\subfigure[Training 1]{
+\includegraphics[width=.45\textwidth]{./figure/train1_pgm-0} 
+\label{fig:class:02:train1} } 
+\subfigure[Training 2]{
+\includegraphics[width=.45\textwidth]{./figure/train2_pgm-0} 
+\label{fig:class:02:train2} }
+\\
+\subfigure[Training 1]{
+\includegraphics[width=.45\textwidth]{./figure/match1_pgm-0} 
+\label{fig:class:02:match1} } 
+\subfigure[Training 2]{
+\includegraphics[width=.45\textwidth]{./figure/match2_pgm-0} 
+\label{fig:class:02:match2} }
+\caption{Classifications on \emph{train1.pgm}, \emph{train2.pgm}, \emph{match1.pgm} and \emph{match2.pgm}.}
+\label{fig:class:02}
+\end{figure}
 
 
 
