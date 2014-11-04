@@ -13,13 +13,14 @@ class RRTVisualizer(object):
         self.rrt = rrt
         pygame.init()
         self.screen = pygame.display.set_mode([self.rrt.dimension[0],self.rrt.dimension[1]])
-        self.screen.fill((255,255,255)
-        
+        self.screen.fill((255,255,255))
         
     def update(self):
-        #pygame.draw.line(self.screen,)
+        for n in self.rrt.nodes:
+            for c in n.children:
+                pygame.draw.line(self.screen, (0,0,0), n.pos, c.pos)
+        
         pygame.display.update()
-        #print i, "    ", nodes
 
         for e in pygame.event.get():
             if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):

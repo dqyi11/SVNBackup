@@ -39,18 +39,16 @@ class RRT(object):
             if self.isCrossingObstacle(rndPos, node.pos):
                 new_node = RRTNode(rndPos)
                 new_node.cost = node.cost + self.segmentLength
-                
+                self.nodes.append(new_node)
+                node.children.append(new_node)       
         
-                            
-        
-        
-    def findCLoseNode(self, pos):
+    def findClosetNode(self, pos):
         node_num = len(self.nodes)
         dist = np.zeros(node_num, np.float)
         for i in range(node_num):
             dist[i] = np.sqrt((pos[0]-self.nodes[i].pos[0])**2+(pos[1]-self.nodes[i].pos[1])**2)
-        min_dist_idx = dist.amin()
-        return self.notes[min_dist_idx]
+        min_dist_idx = dist.argmin()
+        return self.nodes[min_dist_idx]
     
     def isConnectableToGoal(self, pos):
         dist = np.sqrt((pos[0]-self.goal[0])**2+(pos[1]-self.goal[1])**2)
