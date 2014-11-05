@@ -12,7 +12,7 @@ neighbor_operators = [ [1, 0], [1,-1], [0,-1], [-1,-1], [-1, 0], [-1, 1], [0, 1]
 
 class ShapeDescriptor(object):
 
-    def __init__(self, data, feature_num=11):
+    def __init__(self, data, feature_num=15):
         self.data = data
         self.width = data.shape[0]
         self.height = data.shape[1]
@@ -31,13 +31,16 @@ class ShapeDescriptor(object):
         feature[1] = self.getRectangularity()
         feature[2] = self.getEccentricity()
         feature[3] = self.getElongation()
+        feature[4] = self.getHoleAreaRatio()
+        feature[5] = self.getSolidity()
+        feature[6] = self.getConvexity()
+        feature[7] = self.getEllipseRatio()
         
         '''
         mean = self.getMean()
         feature[4] = mean[0]
         feature[5] = mean[1]
         '''
-        
         
         # Hu invariant moments
         contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
@@ -52,16 +55,14 @@ class ShapeDescriptor(object):
         print "var 03 " + str(var[1,1]) + "  cv:"  + str(mom["mu02"]/mom["m00"])
         Humoments = cv2.HuMoments(mom)
         #print Humoments
-        feature[4]  = Humoments[0]
-        feature[5]  = Humoments[1]
-        feature[6]  = Humoments[2]
-        feature[7]  = Humoments[3]
-        feature[8]  = Humoments[4]
-        feature[9]  = Humoments[5]
-        feature[10] = Humoments[6]
+        feature[8]  = Humoments[0]
+        feature[9]  = Humoments[1]
+        feature[10]  = Humoments[2]
+        feature[11]  = Humoments[3]
+        feature[12]  = Humoments[4]
+        feature[13]  = Humoments[5]
+        feature[14] = Humoments[6]
     
-        
-        
         return feature
         
     def findChainCode(self):        
@@ -88,7 +89,6 @@ class ShapeDescriptor(object):
                 break
             
         return cc, chain
-
         
     def findChainCodeStart(self):
         
@@ -105,6 +105,14 @@ class ShapeDescriptor(object):
                 if self.isBoundaryPixel(i, j) == True:
                     boundaryPixels.append( [i, j] )
         return boundaryPixels
+    
+    def getConvexity(self):
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours, key=cv2.contourArea,reverse=True)
+        cont_perimeter = cv2.arcLength(contours[0], closed=True)
+        hull = cv2.convexHull(contours[0])
+        hull_perimeter = cv2.arcLength(hull, closed=True)
+        return float(cont_perimeter)/hull_perimeter
         
         
     def isBoundaryPixel(self, i, j):
@@ -141,6 +149,34 @@ class ShapeDescriptor(object):
                 if self.data[i,j]==1:
                     area += 1.0
         return area
+    
+    def getSolidity(self):
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours, key=cv2.contourArea,reverse=True)
+        cont_area = cv2.contourArea(contours[0])
+        hull = cv2.convexHull(contours[0])
+        hull_area = cv2.contourArea(hull)
+        return float(cont_area)/hull_area
+        
+    def getHoleAreaRatio(self):
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours, key=cv2.contourArea,reverse=True)
+        cont_area = cv2.contourArea(contours[0])
+        object_area = self.getArea()
+        return float(object_area)/cont_area
+    
+    def getEllipseRatio(self):
+        contours, hierarchy = cv2.findContours(self.data, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        contours = sorted(contours, key=cv2.contourArea,reverse=True)
+        cont_area = cv2.contourArea(contours[0])
+        
+        cv2_rect = cv2.minAreaRect(contours[0])
+        cv2_rect_width = int(cv2_rect[1][0])
+        cv2_rect_height = int(cv2_rect[1][1])
+        ellipse_area = cv2_rect_width * cv2_rect_height * np.pi
+        
+        return ellipse_area/cont_area
+        
         
     def getCompactness(self):
         perimeter = self.getPerimeter()
@@ -166,6 +202,9 @@ class ShapeDescriptor(object):
          
         print "Rect W:" + str(int(rW)) + " H:" + str(int(rH)) + " - CV2: W:" + str(int(cv2_rW)) + " H:" + str(int(cv2_rH)) 
         return rW, rH
+    
+
+        
     
     def getRectangularity(self):
         rect_width, rect_height = self.getRectWidthHeight()

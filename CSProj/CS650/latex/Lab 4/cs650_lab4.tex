@@ -77,7 +77,9 @@ Numpy is used for array operations.
 Matplotlib is used for visualizing data.
 
 In this lab, the objects are firstly extracted from the image.
-The features of the object are quantize
+The features of the object are quantized into points in feature space.
+A minimum distance classifier is used to separate the objects into five classes by shape features.
+The results are also tested on other image files to verify generalization capability.
 
 \section{Object isolation}
 \label{sec:object_isolation}
@@ -89,10 +91,8 @@ is used to isolate the objects from binary image.
 Each 
 The implementation follows the ``two-pass algorithm'' described in \cite{wiki:connected_component_labeling}.
 A \textbf{ConnectedComponentMgr} in \emph{ConnectedComponent.py} is used to maintain the connected components found.
-Chain code \footnote{\url{http://en.wikipedia.org/wiki/Chain_code}} is used to find the contour of a connected component.
-The algorithm is implemented following \cite{chaincode}.
-
-
+Each component is assigned an index as ID by sequence.
+Seome examples are given in Figure \ref{fig:obj_iso}.
 
 \begin{figure}[h]
 \centering
@@ -120,23 +120,56 @@ The algorithm is implemented following \cite{chaincode}.
 \subfigure[Object Index 4 of \emph{match1.pgm}]{
 \includegraphics[width=.3\textwidth]{./figure/match1_cc4} 
 \label{fig:obj_cc:03} } 
-\caption{Object isolation.}
-\label{fig:obj_c}
+\caption{Contour finding.}
+\label{fig:obj_cc}
 \end{figure}
-
-
 
 \section{Feature extraction}
 \label{sec:feature_extraction}
 
-
+A \emph{ShapeDescriptor} class in \emph{ShapeDescriptor.py} is used to generate shape features of a connected component.
+In this label, the extracted features are listed as following.
 
 \begin{itemize}
-\item \textbf{Compactness}
-\item \textbf{Rectangularity}
+\item \textbf{Compactness} 
+
+Compactness indicates how compact a shape is, which is measured by $ \mbox{perimeter}^{2} / \mbox{area} $.
+$ \mbox{area} $ is counted by the pixel number.
+$ \mbox{perimeter} $ is calculated from the contour. 
+The contour is in the form of the chain code \footnote{\url{http://en.wikipedia.org/wiki/Chain_code}}. 
+The algorithm is implemented following \cite{chaincode}.
+The contours found can be used to calculate the perimeter of the object.
+Figure \ref{fig:obj_cc} shows how the contours of the objects are like.,
+
+\item \textbf{Rectangularity} 
+
+Rectanglarity indicates how close a shape to a rectangle.
+It is defined by the ration of the area of the object and the area of its minimum bounding rectangle.
+
+\begin{figure}[h]
+\centering
+\subfigure[Convex hull]{
+\includegraphics[width=.3\textwidth]{./figure/match1_convex_hull_4} 
+\label{fig:convex_hull} } 
+\subfigure[Minimum bounding rectangle]{
+\includegraphics[width=.3\textwidth]{./figure/match1_min_rect_4} 
+\label{fig:min_bound_box} } 
+\caption{Convex hull and minimum bounding rectangle.}
+\label{fig:convex_hull_min_bound_box}
+\end{figure}
+
 \item \textbf{Eccentricity}
-\item \textbf{Moments}
+
+
+
 \item \textbf{Elongation}
+
+\item \textbf{Aspect ratio}
+
+\item \textbf{Hole area ratio}
+
+\item \textbf{Moments}
+
 \item \textbf{Psi-s curves}
 \item \textbf{Profiles}
 \item \textbf{Holes}
@@ -191,10 +224,10 @@ Figure \ref{fig:min_dist_classifer} gives an example of the minimum distance cla
 \includegraphics[width=.45\textwidth]{./figure/train2_pgm-0} 
 \label{fig:class:02:train2} }
 \\
-\subfigure[Training 1]{
+\subfigure[Testing 1]{
 \includegraphics[width=.45\textwidth]{./figure/match1_pgm-0} 
 \label{fig:class:02:match1} } 
-\subfigure[Training 2]{
+\subfigure[Testing 2]{
 \includegraphics[width=.45\textwidth]{./figure/match2_pgm-0} 
 \label{fig:class:02:match2} }
 \caption{Classifications on \emph{train1.pgm}, \emph{train2.pgm}, \emph{match1.pgm} and \emph{match2.pgm}.}

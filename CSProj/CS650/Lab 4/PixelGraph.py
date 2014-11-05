@@ -76,7 +76,7 @@ class PixelGraph(object):
         
     def visualizeComponent(self, name, idx):
         
-        color_img = np.zeros((self.width, self.height, 3), np.int)
+        color_img = 255 * np.ones((self.width, self.height, 3), np.uint8)
         r_val = np.random.randint(0, 256)
         g_val = np.random.randint(0, 256)
         b_val = np.random.randint(0, 256)  
@@ -86,21 +86,21 @@ class PixelGraph(object):
             color_img[c[0], c[1], 1] = g_val
             color_img[c[0], c[1], 2] = b_val
                             
-        plt.imshow(color_img/255)
+        plt.imshow(color_img)
         plt.title(name)
         plt.show()
         
     def visualizeComponentChainCode(self, name, idx):
         
-        color_img = np.zeros((self.width, self.height, 3), np.float)
+        color_img = 255 * np.ones((self.width, self.height, 3), np.uint8)
 
         cc, chain = self.shapeDescriptors[idx].findChainCode()
         for c in chain:
-            color_img[c[0], c[1], 0] = 122
-            color_img[c[0], c[1], 1] = 122
-            color_img[c[0], c[1], 2] = 122   
+            color_img[c[0], c[1], 0] = 0
+            color_img[c[0], c[1], 1] = 0
+            color_img[c[0], c[1], 2] = 0  
                             
-        plt.imshow(color_img/255)
+        plt.imshow(color_img)
         plt.title(name)
         plt.show() 
         
@@ -130,6 +130,7 @@ class PixelGraph(object):
             for i in range(hull_num-1):
                 ax.plot([convexHull[i][0], convexHull[i+1][0]], [convexHull[i][1], convexHull[i+1][1]], 'r-')
             ax.plot([convexHull[hull_num-1][0], convexHull[0][0]], [convexHull[hull_num-1][1], convexHull[0][1]], 'r-')
+        ax.set_title(name+" (" +str(idx)+")")
         plt.show()
         
     def visualizeMinimumBoundingRect(self, name, idx):
@@ -147,6 +148,7 @@ class PixelGraph(object):
             for i in range(rect_len-1):
                 ax.plot([rect_points[i][0], rect_points[i+1][0]], [rect_points[i][1], rect_points[i+1][1]], 'r-')
             ax.plot([rect_points[rect_len-1][0], rect_points[0][0]], [rect_points[rect_len-1][1], rect_points[0][1]], 'r-')
+        ax.set_title(name+" (" +str(idx)+")")
         plt.show()
         
     def dump(self, filename):
