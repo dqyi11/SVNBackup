@@ -160,21 +160,53 @@ It is defined by the ration of the area of the object and the area of its minimu
 
 \item \textbf{Eccentricity}
 
-
+Eccentricity is also obtained from a minimum bounding rectangle.
+It is calculated by the ratio of its width and height.
+A square object or a circle object should have eccentricity equals to one.
+It can be used to differentiate a rectangle with a square and an ellipse with a circle.
 
 \item \textbf{Elongation}
 
-\item \textbf{Aspect ratio}
+Elongation is defined as $ 1 - \mbox{eccentricity} $.
+It measures the eccentricity in an opposite direction.
 
 \item \textbf{Hole area ratio}
 
+Hole area ratio is used to evaluate the hole area inside an object.
+It is measured by the ratio of the object area and its contour area.
+The hole area ratio of the object in Figure \ref{fig:obj_iso:01} is $ 0.6567 $.
+While the hole area ratio of the object in Figure \ref{fig:obj_iso:03} is $ 0.9439 ( \approx 1 ) $.
+
+\item \textbf{Solidity}
+
+Solidity indicates how an object approximates its convex hull.
+It is measured by the ratio of the contour area and the area of the convex hull.
+If an object is a rectangle, solidity is closed to 1.
+
+\item \textbf{Convexity}
+
+The convexity is another way to indicates an object approximates its convex hull.
+It is measured by the ratio of the perimeter of the contour and the perimeter of the convex hull.
+
+\item \textbf{Ellipse ratio}
+
+Ellipse ratio measures how an object approximates an ellipse.
+From a minimum bounding rectangle, an ellipse can be obtained by its width and height.
+Ellipse ratio is calculated by the ratio of the ellipse area and the contour area. 
+
 \item \textbf{Moments}
+
+
 
 \item \textbf{Psi-s curves}
 \item \textbf{Profiles}
 \item \textbf{Holes}
 \item \textbf{Corners}
 \end{itemize}
+
+All the feature values are normalized into $ [0, 1] $.
+
+
 
 \section{Minimum distance classifier}
 \label{sec:classifier}
