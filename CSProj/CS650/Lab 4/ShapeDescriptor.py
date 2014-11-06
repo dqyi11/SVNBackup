@@ -57,10 +57,10 @@ class ShapeDescriptor(object):
         #print Humoments
         feature[8]  = Humoments[0]
         feature[9]  = Humoments[1]
-        feature[10]  = Humoments[2]
-        feature[11]  = Humoments[3]
-        feature[12]  = Humoments[4]
-        feature[13]  = Humoments[5]
+        feature[10] = Humoments[2]
+        feature[11] = Humoments[3]
+        feature[12] = Humoments[4]
+        feature[13] = Humoments[5]
         feature[14] = Humoments[6]
     
         return feature
@@ -202,9 +202,6 @@ class ShapeDescriptor(object):
          
         print "Rect W:" + str(int(rW)) + " H:" + str(int(rH)) + " - CV2: W:" + str(int(cv2_rW)) + " H:" + str(int(cv2_rH)) 
         return rW, rH
-    
-
-        
     
     def getRectangularity(self):
         rect_width, rect_height = self.getRectWidthHeight()
