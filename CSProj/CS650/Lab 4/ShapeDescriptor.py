@@ -289,5 +289,5 @@ class ShapeDescriptor(object):
             for j in range(self.width):
                 if self.data[i,j]==1:
                     points.add((i,j))
-        info = getMinimumBoundingBox(points)
-        return info[5]
+        rect = getMinimumBoundingBox(points)
+        return rect

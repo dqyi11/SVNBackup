@@ -29,6 +29,14 @@ if __name__ == '__main__':
     feature_weights[1] = 2.0
     feature_weights[5] = 3.0
     feature_weights[7] = 2.0
+    
+    feature_weights[8] = 2.0
+    feature_weights[9] = 2.0
+    feature_weights[10] = 2.0
+    feature_weights[11] = 2.0
+    feature_weights[12] = 2.0
+    feature_weights[13] = 2.0
+    feature_weights[14] = 2.0
     shpXfier = ShapeClassifier(feature_num, cluster_num, feature_weights)
     
     for s in pxg1.shapeDescriptors:

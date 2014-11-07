@@ -19,9 +19,10 @@ if __name__ == '__main__':
     
     cluster_num = 5
     feature_num = 15
-    feature_weights = np.ones(feature_num)
+    feature_weights = np.zeros(feature_num)
     feature_weights[0] = 3.0
     feature_weights[1] = 2.0
+    feature_weights[2] = 1.0
     shpXfier = ShapeClassifier(feature_num, cluster_num, feature_weights)
     
     for s in pxg1.shapeDescriptors:

@@ -21,6 +21,7 @@ class ConnectedComponentMgr(object):
         
         #print str(data.shape[0]) + " : " + str(data.shape[1])
         
+        # first pass
         for i in range(self.width):
             for j in range(self.height):
                 #print data[i,j]
@@ -38,7 +39,7 @@ class ConnectedComponentMgr(object):
                                 if l != nl:
                                     uf.union(l, nl)
 
-        
+        # second pass
         for i in range(self.width):
             for j in range(self.height):  
                 if self.labelData[i, j] >= 0:  
