@@ -108,7 +108,7 @@ class dMOPSO(object):
                     
         # update personal best 
         for p in self.population:
-            if self.calcSubObjective(p.position, p.subproblem_weight) <= self.calcSubObjective(p.pb_position, p.subproblem_weight):
+            if self.calcSubObjective(p.position, p.subproblem_weight) < self.calcSubObjective(p.pb_position, p.subproblem_weight):
                 p.pb_position = copy.deepcopy(p.position)
                 p.age = 0
             else:
@@ -139,7 +139,7 @@ class dMOPSO(object):
         subobj = np.zeros(self.objective_num, np.float)
         fitness = self.fitness_func(position)
         for k in range(self.objective_num):
-            subobj = weight[k] * np.abs(fitness[k] - self.utopia_fitness[k])
+            subobj[k] = weight[k] * np.abs(fitness[k] - self.utopia_fitness[k])
         return subobj.max()
     
     def updateGlobalBest(self, W, P):

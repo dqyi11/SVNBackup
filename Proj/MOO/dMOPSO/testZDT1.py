@@ -19,7 +19,7 @@ if __name__ == '__main__':
     gamma = 3
     
     generation_number = 100
-    population_size = 200
+    population_size = 100
         
     dmopso = dMOPSO(2, 30, zdt1_func)
     dmopso.setParameters(chi, phi_p, phi_g, age_threshold, gamma)
@@ -33,14 +33,13 @@ if __name__ == '__main__':
         print "Iteration " + str(i)
         dmopso.evolve()
         
-        if i%20 == 0:
+
+    fitnessX = []
+    fitnessY = []
+    for p in dmopso.population:
+        fitnessX.append(p.fitness[0])
+        fitnessY.append(p.fitness[1])
+    populationFitness = np.vstack((fitnessX, fitnessY))
     
-            fitnessX = []
-            fitnessY = []
-            for p in dmopso.population:
-                fitnessX.append(p.fitness[0])
-                fitnessY.append(p.fitness[1])
-            populationFitness = np.vstack((fitnessX, fitnessY))
-            
-            VisualizeParetoFront(populationFitness, paretoFront, "dMOPSO ZDT1", False) 
+    VisualizeParetoFront(populationFitness, paretoFront, "dMOPSO ZDT1", False) 
     

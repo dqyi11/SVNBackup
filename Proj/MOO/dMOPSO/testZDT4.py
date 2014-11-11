@@ -26,7 +26,7 @@ if __name__ == '__main__':
         
     dmopso = dMOPSO(2, 30, zdt4_func)
     dmopso.setParameters(chi, phi_p, phi_g, age_threshold, gamma)
-    dmopso.initPopulation(population_size, position_range)
+    dmopso.initPopulation(population_size, position_range, "dMOPSO ZDT4")
 
     
     dmopso.run(generation_number)

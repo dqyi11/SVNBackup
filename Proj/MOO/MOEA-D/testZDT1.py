@@ -10,7 +10,7 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 400
+    generation_number = 100
     population_size = 100
     neighbor_num = 30
 
@@ -25,12 +25,11 @@ if __name__ == '__main__':
         print "@Generation  " + str(t)
         moead.evolve()
         
-        if t%100 == 0:
-            fitnessX = []
-            fitnessY = []
-            for p in moead.population:
-                fitnessX.append(p.fitness[0])
-                fitnessY.append(p.fitness[1])
-            populationFitness = np.vstack((fitnessX, fitnessY))
-        
-            VisualizeParetoFront(populationFitness, paretoFront, "MOEA-D ZDT1", False)
+    fitnessX = []
+    fitnessY = []
+    for p in moead.population:
+        fitnessX.append(p.fitness[0])
+        fitnessY.append(p.fitness[1])
+    populationFitness = np.vstack((fitnessX, fitnessY))
+
+    VisualizeParetoFront(populationFitness, paretoFront, "MOEA-D ZDT1", False)

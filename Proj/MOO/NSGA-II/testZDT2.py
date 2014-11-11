@@ -10,8 +10,8 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 200
-    population_size = 1000
+    generation_number = 300
+    population_size = 100
 
     position_range = []
     for i in range(30):
@@ -31,5 +31,5 @@ if __name__ == '__main__':
         fitnessY.append(p.fitness[1])
     populationFitness = np.vstack((fitnessX, fitnessY))
       
-    VisualizeParetoFront(populationFitness, paretoFront, "ZDT2")
+    VisualizeParetoFront(populationFitness, paretoFront, "NSGA-II ZDT2")
     

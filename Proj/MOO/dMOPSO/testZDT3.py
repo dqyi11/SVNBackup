@@ -22,7 +22,7 @@ if __name__ == '__main__':
     gamma = 0.5
     
     generation_number = 100
-    population_size = 1000
+    population_size = 100
         
     dmopso = dMOPSO(2, 30, zdt3_func)
     dmopso.setParameters(chi, phi_p, phi_g, age_threshold, gamma)
@@ -40,5 +40,5 @@ if __name__ == '__main__':
         fitnessY.append(p.fitness[1])
     populationFitness = np.vstack((fitnessX, fitnessY))
     
-    VisualizeParetoFront(populationFitness, paretoFront)    
+    VisualizeParetoFront(populationFitness, paretoFront, "dMOPSO ZDT3", True, (0.0, 1.0), (-1.0, 1.0))    
     

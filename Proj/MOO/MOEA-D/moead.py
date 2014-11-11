@@ -97,9 +97,9 @@ class MOEAD(object):
             for j in range(p.neighbor_num):
                 q_idx = p.neighbor_indices[j]
                 q = self.population[q_idx]
-                np_val = self.calcSubObjective(np.fitness, p.subproblem_weight)
-                q_val = self.calcSubObjective(q.fitness, p.subproblem_weight)
-                if np_val <= q_val:
+                np_val = self.calcSubObjective(np.fitness, q.subproblem_weight)
+                q_val = self.calcSubObjective(q.fitness, q.subproblem_weight)
+                if np_val < q_val:
                     q.position = np.position
                     q.fitness = self.fitness_func(q.position)
             
@@ -137,7 +137,7 @@ class MOEAD(object):
             dist = np.zeros(self.population_size, np.float)
             for j  in range(self.population_size):
                 if i != j:
-                    dist[i] = np.linalg.norm(self.weights[i] - self.weights[j], 2)
+                    dist[j] = np.sqrt((self.weights[i][0]-self.weights[j][0])**2+(self.weights[i][1]-self.weights[j][1])**2)
             
             sorted_idx = np.argsort(dist)    
             p.neighbor_indices = sorted_idx[:self.neighbor_num]
@@ -203,7 +203,7 @@ class MOEAD(object):
         
         subobj = np.zeros(self.objective_num, np.float)
         for k in range(self.objective_num):
-            subobj = weight[k] * np.abs(fitness[k] - self.utopia_fitness[k])
+            subobj[k] = weight[k] * np.abs(fitness[k] - self.utopia_fitness[k])
         return subobj.max()
             
             
