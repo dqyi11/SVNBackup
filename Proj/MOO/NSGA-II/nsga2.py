@@ -40,6 +40,12 @@ class Solution(object):
             child_2.position[i] = np.min([ data_range[i][1],  child_2.position[i] ])
         return child_1, child_2
     
+    def __eq__(self, other):
+        for i in range(self.solution_dim):
+            if self.position[i] != other.position[i]:
+                return False
+        return True
+    
     def mutate(self, data_range):
         '''
         Mutation operator.
@@ -132,8 +138,17 @@ class NSGAII(object):
         R.extend(P)
         R.extend(Q)
         
+        #print "R Size " + str(len(R))
+        
         #print "fast non dominated sort"
         fronts = self.fastNondominatedSort(R)
+        
+        '''
+        total_num = 0
+        for f in fronts.values():
+            total_num += len(f)
+        print "total num " + str(total_num)
+        '''
         
         del P[:]
         
@@ -151,11 +166,12 @@ class NSGAII(object):
         #print "sort by crowding"
         self.sortByCrowding(P)
         
+        #print "Before P Size " + str(len(P))
+        
         if len(P) > self.population_size:
             del P[self.population_size:]
             
-        #print "Make new pop"
-        #Q = self.makeNewPop(P)
+        #print "After P Size " + str(len(P))
             
         self.population = P
             
@@ -245,35 +261,36 @@ class NSGAII(object):
         Q = []
         P_size = len(P)
                
-        # select       
-        for i in range(P_size):
-            s1 = np.random.choice(P)
-            s2 = np.random.choice(P)
-            while s1 == s2:
-                #print "resample"
-                s2 = np.random.choice(P)
+        
+        while len(Q) <= P_size:
+            tournament_selection = [None, None] 
             
-            if s1.compareCrowding(s2) > 0:
-                Q.append(s1)                       
-            else:
-                Q.append(s2)
+            # select
+            while tournament_selection[0] == tournament_selection[1]:
+                for i in range(2):
+                    s1 = np.random.choice(P)
+                    s2 = s1
+                    while s1 == s2:
+                        s2 = np.random.choice(P)
                     
-        # crossover
-        for i in range(0, P_size, 2):
-            s1 = Q[i]
-            s2 = Q[i+1]
-            ns1, ns2 = s1.crossover(s2, self.position_range)
-            Q[i] = ns1
-            Q[i+1] = ns2
-        
-        # mutation
-        for i in range(P_size):
-            if np.random.random() < self.mutation_rate:
-                Q[i].mutate(self.position_range)
-        
-        # update fitness
-        for i in range(P_size):
-            Q[i].fitness =self.fitness_func(Q[i].position)
+                    if s1.compareCrowding(s2) > 0:
+                        tournament_selection[i] = s1
+                    else:
+                        tournament_selection[i] = s2
+                      
+            # crossover
+            if np.random.random() < self.crossover_rate:
+                child_solution = tournament_selection[0].crossover(tournament_selection[1], self.position_range)[0]
+                    
+                # mutate
+                if np.random.random() < self.mutation_rate:
+                    child_solution.mutate(self.position_range)
+                    
+                    # update fitness
+                    child_solution.fitness =self.fitness_func(child_solution.position)
+
+                    
+                    Q.append(child_solution)
 
         return Q
         
