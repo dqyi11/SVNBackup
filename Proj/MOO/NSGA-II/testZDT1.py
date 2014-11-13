@@ -10,7 +10,7 @@ from Visualization import *
 
 if __name__ == '__main__':
     
-    generation_number = 200
+    generation_number = 100
     population_size = 100
 
     position_range = getPositionRangeZDT1()
@@ -24,8 +24,6 @@ if __name__ == '__main__':
     for i in range(generation_number):
         print "iteration " + str(i)
         nsga2.evolve()
-    
-   
     
     fitnessX = []
     fitnessY = []

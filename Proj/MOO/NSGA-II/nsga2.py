@@ -138,8 +138,6 @@ class NSGAII(object):
         R.extend(P)
         R.extend(Q)
         
-        #print "R Size " + str(len(R))
-        
         #print "fast non dominated sort"
         fronts = self.fastNondominatedSort(R)
         
@@ -199,11 +197,11 @@ class NSGAII(object):
                     n[p] += 1
                     
             if n[p] == 0:
+                p.rank = 1
                 fronts[1].append(p)
         
         i = 1
-        stop = False
-        while stop == False:
+        while len(fronts[i])!=0:
             next_front = []
             for p in fronts[i]:
                 for q in S[p]:
@@ -211,11 +209,8 @@ class NSGAII(object):
                     if n[q] == 0:
                         q.rank = i+1
                         next_front.append(q)
-            if len(next_front) == 0:
-                stop = True
-            else:                        
-                i +=1
-                fronts[i] = next_front
+            i +=1
+            fronts[i] = next_front
             
         return fronts
             

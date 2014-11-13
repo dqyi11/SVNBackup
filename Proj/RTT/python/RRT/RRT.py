@@ -10,9 +10,16 @@ class RRTNode(object):
     
     def __init__(self, pos):
         self.pos = pos
+        self.parent = None
         self.children = []
         self.cost = 0.0
         
+    def __eq__(self, other):
+        if other == None:
+            return False
+        if self.pos[0]==other.pos[0] and self.pos[1]==other.pos[1]:
+            return True
+        return False        
 
 class RRT(object):
     
@@ -32,7 +39,7 @@ class RRT(object):
         new_node = None
         while new_node == None:
             rndPos = self.generateRandomPos()
-            node = self.findClosetNode(rndPos)
+            nearest_node = self.findClosetNode(rndPos)
             
             # normalize along direction
             delta = [0.0,0.0]
@@ -44,14 +51,14 @@ class RRT(object):
             delta[1] = delta[1] * scale
             
             new_pos = [0, 0]
-            new_pos[0] = node.pos[0] + int(delta[0])
-            new_pos[1] = node.pos[1] + int(delta[1])
+            new_pos[0] = nearest_node.pos[0] + int(delta[0])
+            new_pos[1] = nearest_node.pos[1] + int(delta[1])
             
-            if False == self.isCrossingObstacle(new_pos, node.pos):
+            if False == self.isCrossingObstacle(new_pos, nearest_node.pos):
                 new_node = RRTNode(new_pos)
-                new_node.cost = node.cost + self.segmentLength
+                new_node.cost = nearest_node.cost + self.segmentLength
                 self.nodes.append(new_node)
-                node.children.append(new_node)       
+                self.addEdge(nearest_node, new_node)  
         
     def findClosetNode(self, pos):
         node_num = len(self.nodes)
@@ -82,6 +89,20 @@ class RRT(object):
             if False == self.isInObstacle(rndPos):
                 return rndPos
         return None
+    
+    def removeEdge(self, node_a, node_b):
+        for c_a in node_a.children:
+            if c_a == node_b:
+                node_a.children.remove(c_a)
+                return True
+        return False
+    
+    def addEdge(self, node_a, node_b):
+        for c_a in node_a.children:
+            if c_a == node_b:
+                return False
+        node_a.children.append(node_b)
+        return True
     
 
         
