@@ -35,10 +35,6 @@ class RRT(object):
         self.root = RRTNode(start)
         self.nodes.append(self.root)
         
-    def findPath(self, node):
-        edge_list = []
-        return edge_list
-        
     def expand(self):
         new_node = None
         while new_node == None:
@@ -107,8 +103,10 @@ class RRT(object):
                 return False
         node_a.children.append(node_b)
         return True
-    
-
+     
+    def findPath(self, node):
+        edge_list = []
+        return edge_list
         
         
         
