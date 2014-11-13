@@ -35,6 +35,10 @@ class RRT(object):
         self.root = RRTNode(start)
         self.nodes.append(self.root)
         
+    def findPath(self, node):
+        edge_list = []
+        return edge_list
+        
     def expand(self):
         new_node = None
         while new_node == None:
@@ -43,8 +47,8 @@ class RRT(object):
             
             # normalize along direction
             delta = [0.0,0.0]
-            delta[0] = rndPos[0] - node.pos[0]
-            delta[1] = rndPos[1] - node.pos[1]
+            delta[0] = rndPos[0] - nearest_node.pos[0]
+            delta[1] = rndPos[1] - nearest_node.pos[1]
             delta_len = np.sqrt(delta[0]**2+delta[1]**2)
             scale = self.segmentLength/float(delta_len)
             delta[0] = delta[0] * scale
