@@ -181,7 +181,9 @@ class NSGAII(object):
         n = {}
         
         for p in P:
+            # inital the set that contains all the individuals dominted by p
             S[p] = []
+            # number of the individuals dominat p
             n[p] = 0
             
         fronts[1] = [] 
@@ -199,9 +201,10 @@ class NSGAII(object):
             if n[p] == 0:
                 p.rank = 1
                 fronts[1].append(p)
-        
+                
+        # initial front counter to 1
         i = 1
-        while len(fronts[i])!=0:
+        while len(fronts[i])!=0: # ith front is not empty
             next_front = []
             for p in fronts[i]:
                 for q in S[p]:
@@ -220,6 +223,16 @@ class NSGAII(object):
         '''
         for p in front:
             p.distance = 0
+            
+        f_max = np.zeros(self.objective_num, np.float)
+        f_min = np.ones(self.objective_num, np.float) * np.inf
+        for p in front:
+            for k in range(self.objective_num):
+                if p.fitness[k] > f_max[k]:
+                    f_max[k] = p.fitness[k]
+                if p.fitness[k] < f_min[k]:
+                    f_min[k] = p.fitness[k]            
+            
         for k in range(self.objective_num):
             self.sortByObjective(front, k)
             
@@ -227,27 +240,25 @@ class NSGAII(object):
             front[len(front) - 1].distance = np.inf
             
             for i in range(1, len(front) - 1):
-                front[i].distance += (front[i + 1].distance - front[i - 1].distance)
+                front[i].distance += (front[i + 1].fitness[k] - front[i - 1].fitness[k])/(f_max[k] - f_min[k])
                 
     def sortByObjective(self, P, obj_idx):
-        
         for i in range(len(P)-1, -1, -1):
             for j in range(1, i + 1): 
-                if P[j - 1].fitness[obj_idx] > P[j].fitness[obj_idx]:
-                    #P[j-1], P[j] = P[j], P[j-1]
-                    temp = P[j-1]
-                    P[j-1] = P[j]
-                    P[j] = temp
+                s1 = P[j-1]
+                s2 = P[j]
+                if s1.fitness[obj_idx] > s2.fitness[obj_idx]:
+                    P[j-1] = s2
+                    P[j] = s1
                     
     def sortByCrowding(self, P):
         for i in range(len(P) - 1, -1, -1):
             for j in range(1, i + 1):
+                s1 = P[j-1]
+                s2 = P[j]
                 if P[j - 1].compareCrowding(P[j]) < 0:
-                    #P[j-1], P[j] = P[j], P[j-1]
-                    temp = P[j-1]
-                    P[j-1] = P[j]
-                    P[j] = temp
-                                
+                    P[j-1] = s2
+                    P[j] = s1
                     
     def makeNewPop(self, P):
         '''
