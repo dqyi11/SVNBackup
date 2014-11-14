@@ -40,7 +40,7 @@ rsTracker{4}='PF';
 nParticles=100;
 
 %select tracker
-sTracker=rsTracker{3};
+sTracker=rsTracker{1};
 disp(['tracker: ' sTracker])
 
 
