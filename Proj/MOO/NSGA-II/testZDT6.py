@@ -31,5 +31,5 @@ if __name__ == '__main__':
         fitnessY.append(p.fitness[1])
     populationFitness = np.vstack((fitnessX, fitnessY))
       
-    VisualizeParetoFront(populationFitness, paretoFront, "NSGA-II ZDT4")
+    VisualizeParetoFront(populationFitness, paretoFront, "NSGA-II ZDT6")
     
