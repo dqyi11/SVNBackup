@@ -4,7 +4,7 @@ Created on 2014-10-18
 @author: Walter
 '''
 
-import matplotlib.pyplot as plt;
+import matplotlib.pyplot as plt
 
 def VisualizeParetoFront(solutionFitness, paretoFront, title="", enable_lim = True, x_lim=(0.0, 1.0), y_lim=(0.0, 1.0)):
     
