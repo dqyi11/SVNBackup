@@ -39,15 +39,15 @@ class Obstacle(object):
         self.center = self.getCenter()
         self.keypoint = self.samplePosition()
         
-    def initLine(self, center, map_size):
-        t_line = Line(self.center, self.keypoint)
+    def initLine(self, map_center, map_size):
+        t_line = Line(map_center, self.keypoint)
         y_minx = t_line.getY(0)
         x_miny = t_line.getX(0)
         y_maxx = t_line.getY(map_size[0]-1)
         x_maxy = t_line.getX(map_size[1]-1)
 
-        if center[0] <= self.keypoint[0]:
-            if center[1] <= self.keypoint[1]:
+        if map_center[0] <= self.keypoint[0]:
+            if map_center[1] <= self.keypoint[1]:
                 #mode = 4   keypoint in 4th               
                 if y_minx >= 0:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
@@ -59,7 +59,7 @@ class Obstacle(object):
                 elif x_maxy < map_size[0]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
   
-            elif center[1] > self.keypoint[1]:
+            elif map_center[1] > self.keypoint[1]:
                 #mode = 1
                 if y_minx < map_size[1]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
@@ -71,8 +71,8 @@ class Obstacle(object):
                 elif x_miny < map_size[0]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]   
 
-        elif center[0] > self.keypoint[0]:
-            if center[1] <= self.keypoint[1]:
+        elif map_center[0] > self.keypoint[0]:
+            if map_center[1] <= self.keypoint[1]:
                 #mode = 3
                 if y_maxx >= 0:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1,y_maxx]]
@@ -83,7 +83,7 @@ class Obstacle(object):
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
                 elif x_maxy >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]   
-            elif center[1] > self.keypoint[1]:
+            elif map_center[1] > self.keypoint[1]:
                 #mode = 2
                 if y_maxx < map_size[1]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
@@ -170,7 +170,7 @@ class WorldMap(object):
         pygame.display.set_caption('Topological graph')
         self.screen.fill((255,255,255))
         
-        pygame.draw.circle(self.screen, (125,255,255),[10,10],10)
+        #pygame.draw.circle(self.screen, (125,255,255),[10,10],10)
         
         for obs in self.obstacles:
             for o in obs.pixels:
