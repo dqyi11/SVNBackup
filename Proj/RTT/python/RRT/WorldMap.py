@@ -43,8 +43,6 @@ class Obstacle(object):
         self.center = self.getCenter()
         self.keypoint = self.samplePosition()
         
-
-        
     def samplePosition(self):
         rndIdx = np.random.randint(len(self.pixels))
         return self.pixels[rndIdx]
@@ -83,49 +81,65 @@ class Obstacle(object):
                 #mode = 4   keypoint in 4th               
                 if y_minx >= 0:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                    self.alpha_end = [0,y_minx]
                 elif x_miny >= 0:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]  
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]] 
+                    self.alpha_end = [x_miny,0] 
                 
                 if y_maxx < map_size[1]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                    self.beta_end = [map_size[0]-1, y_maxx]
                 elif x_maxy < map_size[0]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
+                    self.beta_end = [x_maxy, map_size[1]-1]
   
             elif map_center[1] > self.keypoint[1]:
                 #mode = 1
                 if y_minx < map_size[1]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                    self.alpha_end = [0, y_minx]
                 elif x_maxy >= 0:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]]]
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
+                    self.alpha_end = [x_maxy, map_size[1]-1]
                 
                 if y_maxx >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                    self.beta_end = [map_size[0]-1, y_maxx]
                 elif x_miny < map_size[0]:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]   
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]
+                    self.beta_end = [x_miny, 0]
 
         elif map_center[0] > self.keypoint[0]:
             if map_center[1] <= self.keypoint[1]:
                 #mode = 3
                 if y_maxx >= 0:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1,y_maxx]]
+                    self.alpha_end = [map_size[0]-1,y_maxx]
                 elif x_miny < map_size[0]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]
+                    self.alpha_end = [x_miny, 0]
                 
                 if y_minx < map_size[1]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                    self.beta_end = [0, y_minx]
                 elif x_maxy >= 0:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]   
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
+                    self.beta_end = [x_maxy, map_size[1]-1]
             elif map_center[1] > self.keypoint[1]:
                 #mode = 2
                 if y_maxx < map_size[1]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                    self.alpha_end = [map_size[0]-1, y_maxx]
                 elif x_maxy < map_size[0]:
                     self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
+                    self.alpha_end = [x_maxy, map_size[1]-1]
                 
                 if y_minx >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                    self.beta_end = [0, y_minx]
                 elif x_miny >= 0:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]  
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]
+                    self.beta_end = [x_miny, 0]
                     
         rad = np.arctan2(float(self.center[0]-self.keypoint[0]), float(self.center[1]-self.keypoint[1]))
         if rad < 0:
@@ -137,20 +151,42 @@ class Obstacle(object):
             rad += np.pi*2
         self.beta_rad = rad         
     
-    
-
-    
+        
 class ReferenceFrameManager(object):
     
-    def __init__(self, obstacles):
+    def __init__(self, worldmap):
         self.frames = []
-        for obs in obstacles:
+        self.worldmap = worldmap
+        for obs in self.worldmap.obstacles:
             self.frames.append({"id":obs.idx, "type":"A", "rad":obs.alpha_rad})
             self.frames.append({"id":obs.idx, "type":"B", "rad":obs.beta_rad})
         self.frames = sorted(self.frames, key=lambda k: k['rad']) 
         
-        for f in self.frames:
-            print f
+        self.frame_num = len(self.frames)
+        self.regions = []
+        for i in range(self.frame_num):
+            if i < self.frame_num - 1:
+                frame_s = self.frames[i]
+                frame_e = self.frames[i+1]
+            else:
+                frame_s = self.frames[i]
+                frame_e = self.frames[0]
+                
+            if frame_s["type"] == "A":
+                point_s = self.worldmap.obstacles[frame_s["id"]].alpha_end
+            else:
+                point_s = self.worldmap.obstacles[frame_s["id"]].beta_end
+            if frame_e["type"] == "A":
+                point_e = self.worldmap.obstacles[frame_e["id"]].alpha_end
+            else:
+                point_e = self.worldmap.obstacles[frame_e["id"]].beta_end
+                
+            region = Region(point_s, point_e, self.worldmap, i)
+            self.regions.append(region)
+            
+        
+        
+        
 
         
 
@@ -213,7 +249,6 @@ class WorldMap(object):
             if current_pixel_obstacle == True:
                 if prev_pixel_obstacle == False:
                     segment_point_list.append([x,y])
-        
             prev_pixel_obstacle = current_pixel_obstacle
             
         lines = []
@@ -228,7 +263,13 @@ class WorldMap(object):
                 lines.append([segment_point_list[idx], segment_point_list[idx+1]])
             lines.append([segment_point_list[point_num-1], end])
             
-        return lines                
+        return lines     
+    
+    def isObstaclePoint(self, x, y):
+        if self.bin_data[x,y] == 0:
+            return True
+        else:
+            return False      
 
         
     def dump(self, filename):
