@@ -10,6 +10,7 @@ from ConnectedComponent import *
 import csv
 import pygame, sys
 from pygame.locals import *
+from Shapes import *
 
 class Obstacle(object):
     
@@ -38,58 +39,60 @@ class Obstacle(object):
         self.center = self.getCenter()
         self.keypoint = self.samplePosition()
         
-    def initLine(self, center):
-        K = float(self.center[1]-self.keypoint[1])/(self.center[0]-self.keypoint[0])
-        y_minx = int(center[1] - K * center[0])
-        x_miny = int(center[0] - float(center[1])/K)
-        y_maxx = int(center[1] + K * (self.width - center[0]))
-        x_maxy = int(center[0] + float(self.height-center[1])/K)
+    def initLine(self, center, map_size):
+        t_line = Line(self.center, self.keypoint)
+        y_minx = t_line.getY(0)
+        x_miny = t_line.getX(0)
+        y_maxx = t_line.getY(map_size[0]-1)
+        x_maxy = t_line.getX(map_size[1]-1)
+
         if center[0] <= self.keypoint[0]:
             if center[1] <= self.keypoint[1]:
-                #mode = 4   keypoint in 4th   
-                if y_maxx < self.height:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_maxx]]
-                else:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, 0]]
+                #mode = 4   keypoint in 4th               
+                if y_minx >= 0:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                elif x_miny >= 0:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]  
                 
-                if y_minx > 0:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
-                else:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]    
-            else:
+                if y_maxx < map_size[1]:
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                elif x_maxy < map_size[0]:
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
+  
+            elif center[1] > self.keypoint[1]:
                 #mode = 1
-                if y_maxx < self.width:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_maxx]]
-                else:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, 0]]
+                if y_minx < map_size[1]:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
+                elif x_maxy >= 0:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]]]
                 
-                if y_minx > 0:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
-                else:
+                if y_maxx >= 0:
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                elif x_miny < map_size[0]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]   
 
-        else:
+        elif center[0] > self.keypoint[0]:
             if center[1] <= self.keypoint[1]:
                 #mode = 3
-                if y_maxx < self.width:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_maxx]]
-                else:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, 0]]
+                if y_maxx >= 0:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1,y_maxx]]
+                elif x_miny < map_size[0]:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]
                 
-                if y_minx > 0:
+                if y_minx < map_size[1]:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
-                else:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]   
-            else:
+                elif x_maxy >= 0:
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]   
+            elif center[1] > self.keypoint[1]:
                 #mode = 2
-                if y_maxx > 0:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [0, y_maxx]]
-                else:
-                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, 0]]
+                if y_maxx < map_size[1]:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [map_size[0]-1, y_maxx]]
+                elif x_maxy < map_size[0]:
+                    self.alpha_line = [[self.keypoint[0],self.keypoint[1]], [x_maxy, map_size[1]-1]]
                 
-                if y_minx > 0:
+                if y_minx >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
-                else:
+                elif x_miny >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]           
     
     
@@ -138,9 +141,6 @@ class WorldMap(object):
             obs.pixels = ccMgr.getComponent(idx)
             obs.initKeypoint()
             self.obstacles.append(obs)
-            
-            
-            
         
         mX, mY = 0.0, 0.0
         for obs in self.obstacles:
@@ -149,6 +149,9 @@ class WorldMap(object):
         mX /= len(self.obstacles)
         mY /= len(self.obstacles)
         self.obsCenter = [int(mX), int(mY)]
+        
+        for obs in self.obstacles:
+            obs.initLine(self.obsCenter, [self.width, self.height])
         
         self.rf_mgrs = []
         for obs in self.obstacles:
@@ -167,11 +170,19 @@ class WorldMap(object):
         pygame.display.set_caption('Topological graph')
         self.screen.fill((255,255,255))
         
+        pygame.draw.circle(self.screen, (125,255,255),[10,10],10)
+        
         for obs in self.obstacles:
             for o in obs.pixels:
                 self.screen.set_at((o[0], o[1]), (122,122,122))
+        for obs in self.obstacles:    
+            if obs.alpha_line != None:
+                pygame.draw.line(self.screen, (0,255,0), obs.alpha_line[0], obs.alpha_line[1], 2)
+            if obs.beta_line != None:
+                pygame.draw.line(self.screen, (0,0,255), obs.beta_line[0], obs.beta_line[1], 2)
+        for obs in self.obstacles:       
             pygame.draw.circle(self.screen, (255,0,0), [obs.keypoint[0],obs.keypoint[1]],3)
-        
+
         pygame.draw.circle(self.screen, (0,0,0), [self.obsCenter[0], self.obsCenter[1]],3)
         
         while True:

@@ -6,9 +6,11 @@ Created on Nov 3, 2014
 
 from WorldMap import *
 
-world_file = 'map01.png'
-world = WorldMap()
-world.load(world_file)
-
-#world.dump(world_file+".csv")
-world.visualize()
+if __name__ == '__main__':
+    
+    world_file = 'map01.png'
+    world = WorldMap()
+    world.load(world_file)
+    
+    #world.dump(world_file+".csv")
+    world.visualize()
