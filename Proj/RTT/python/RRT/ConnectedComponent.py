@@ -20,18 +20,15 @@ class ConnectedComponentMgr(object):
         self.data = data
         self.maxLabel = -1
         
-        #print str(data.shape[0]) + " : " + str(data.shape[1])
+        print str(data.shape[0]) + " : " + str(data.shape[1])
         
         for i in range(self.width):
             for j in range(self.height):
-                #print data[i,j]
                 if data[i,j] == 0:
                     labels = self.getNeighborLabels(i, j)
                     if len(labels) == 0:
                         self.labelData[i,j] = uf.createLabel()
-                        #print self.labelData[i, j]
                     else:
-                        #print labels
                         min_label = np.min(labels)
                         self.labelData[i,j] = min_label
                         for l in labels:
@@ -66,7 +63,7 @@ class ConnectedComponentMgr(object):
         for i in range(self.width):
             for j in range(self.height):  
                 if self.labelData[i, j] >= 0:
-                    self.components[self.labelData[i, j]].append([i, j]) 
+                    self.components[self.labelData[i, j]].append([i,j]) 
                     
     def getNeighborLabels(self, i, j):
         nlabels = []
@@ -83,7 +80,6 @@ class ConnectedComponentMgr(object):
     def getComponentNum(self):        
         return len(self.labels)
     
-    
     def getComponent(self, idx):
         pixels = []
         for i in range(self.width):
@@ -91,10 +87,8 @@ class ConnectedComponentMgr(object):
                 if self.labelData[i,j] == idx:
                     pixels.append([i, j])
         return pixels
-                    
    
-    def getComponentLabelData(self, idx):
-        
+    def getComponentLabelData(self, idx):  
         labelData = np.zeros((self.width, self.height), np.int)
         for i in range(self.width):
             for j in range(self.height):

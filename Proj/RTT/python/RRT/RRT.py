@@ -105,7 +105,9 @@ class RRT(object):
         return True
      
     def findPath(self, node):
+        # the search is in a tree structure
         edge_list = []
+        
         return edge_list
         
         
