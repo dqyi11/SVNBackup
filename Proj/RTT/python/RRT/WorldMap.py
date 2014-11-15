@@ -43,17 +43,7 @@ class Obstacle(object):
         self.center = self.getCenter()
         self.keypoint = self.samplePosition()
         
-        rad = np.arctan2(float(self.alpha_line[0][0]-self.apha_line[1][0]), float(self.alpha_line[0][0]-self.apha_line[1][0]))
-        if rad < 0:
-            rad += np.pi*2
-        self.alpha_rad = rad
-        
-        rad = np.arctan2(float(self.beta_line[0][0]-self.beta_line[1][0]), float(self.beta_line[0][0]-self.beta_line[1][0]))
-        if rad < 0:
-            rad += np.pi*2
-        self.beta_rad = rad
-        
-        
+
         
     def samplePosition(self):
         rndIdx = np.random.randint(len(self.pixels))
@@ -135,27 +125,33 @@ class Obstacle(object):
                 if y_minx >= 0:
                     self.beta_line = [[self.keypoint[0],self.keypoint[1]], [0, y_minx]]
                 elif x_miny >= 0:
-                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]           
+                    self.beta_line = [[self.keypoint[0],self.keypoint[1]], [x_miny, 0]]  
+                    
+        rad = np.arctan2(float(self.center[0]-self.keypoint[0]), float(self.center[1]-self.keypoint[1]))
+        if rad < 0:
+            rad += np.pi*2
+        self.alpha_rad = rad
+        
+        rad = np.arctan2(float(self.keypoint[0]-self.center[0]), float(self.keypoint[1]-self.center[1]))
+        if rad < 0:
+            rad += np.pi*2
+        self.beta_rad = rad         
     
     
 
     
 class ReferenceFrameManager(object):
     
-    def __init__(self, center_pos, obs_pos):
-        self.center_pos = center_pos
-        self.obs_pos = obs_pos
-        self.k = float(self.obs_pos[0]-self.center_pos[0])/(self.obs_pos[1]-self.center_pos[1])
-        #print self.k
-        self.quarant = 0
-        if self.center_pos[0] < self.obs_pos[0]:
-            if self.center_pos[1] >= self.obs_pos[1]:
-                self.quarant = 4
-        else:
-            if self.center_pos[1] >= self.obs_pos[1]:
-                self.quarant = 3
-            else:
-                self.quarant = 2
+    def __init__(self, obstacles):
+        self.frames = []
+        for obs in obstacles:
+            self.frames.append({"id":obs.idx, "type":"A", "rad":obs.alpha_rad})
+            self.frames.append({"id":obs.idx, "type":"B", "rad":obs.beta_rad})
+        self.frames = sorted(self.frames, key=lambda k: k['rad']) 
+        
+        for f in self.frames:
+            print f
+
         
 
 class WorldMap(object):
@@ -197,10 +193,8 @@ class WorldMap(object):
             obs.alpha_lines = self.segementLineByObstacles(Line(obs.alpha_line[0],obs.alpha_line[1]))
             obs.beta_lines = self.segementLineByObstacles(Line(obs.beta_line[0], obs.beta_line[1]))
         
-        self.rf_mgrs = []
-        for obs in self.obstacles:
-            rf_mgr = ReferenceFrameManager(obs.keypoint, self.obsCenter)
-            self.rf_mgrs.append(rf_mgr)
+        self.rf_mgr = ReferenceFrameManager(self.obstacles)
+ 
         
     def segementLineByObstacles(self, line):
         segment_point_list = []
