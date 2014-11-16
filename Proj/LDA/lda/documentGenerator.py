@@ -14,33 +14,31 @@ class documentGenerator(object):
         self.alpha = 0.1
         
         # generate world distribution for each topic
-        width = self.topic_num / 2
-        self.vocab_size = width ** 2
+        self.width = self.topic_num / 2
+        self.vocab_size = self.width ** 2
         self.word_list = np.zeros((self.topic_num, self.vocab_size))
  
-        for k in range(width):
-            self.word_list[k,:] = self.vertical_topic(width, k, self.document_length)
+        for k in range(self.width):
+            self.word_list[k,:] = self.vertical_topic(self.width, k, self.document_length)
  
-        for k in range(width):
-            self.word_list[k+width,:] = self.horizontal_topic(width, k, self.document_length)
- 
-        self.word_list /= self.word_list.sum(axis=1)[:, np.newaxis] # turn counts into probabilities
+        for k in range(self.width):
+            self.word_list[k+self.width,:] = self.horizontal_topic(self.width, k, self.document_length)
+            
+        # turn counts into probabilities
+        self.word_list /= self.word_list.sum(axis=1)[:, np.newaxis] 
         
         
     def generateDocument(self):
         """
         Generate a document:
-            1) Sample topic proportions from the Dirichlet distribution.
-            2) Sample a topic index from the Multinomial with the topic
-               proportions from 1).
-            3) Sample a word from the Multinomial corresponding to the topic
-               index from 2).
-            4) Go to 2) if need another word.
         """
+        # 1) Sample topic proportions from the Dirichlet distribution.
         theta = np.random.mtrand.dirichlet([self.alpha] * self.topic_num)
         v = np.zeros(self.vocab_size)
         for n in range(self.document_length):
+            # 2) Sample a topic index from the Multinomial with the topic proportions from 1).
             z = self.sample_index(theta)
+            # 3) Sample a word from the Multinomial corresponding to the topic index from 2).
             w = self.sample_index(self.word_list[z,:])
             v[w] += 1
         return v

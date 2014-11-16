@@ -13,9 +13,7 @@ if __name__ == '__main__':
     DOCUMENT_LENGTH = 100
     FOLDER = "data"
     
-    width = TOPIC_NUM / 2
-    vocab_size = width ** 2    
-    docGen = documentGenerator(TOPIC_NUM, vocab_size)
+    docGen = documentGenerator(TOPIC_NUM, DOCUMENT_LENGTH)
     matrix = docGen.generateDocuments()
     
     sampler = LDASampler(TOPIC_NUM)
@@ -26,4 +24,4 @@ if __name__ == '__main__':
         if it % 5 == 0:
             for z in range(TOPIC_NUM):
                 sampler.save_document_image("data/topic%d-%d.png" % (it,z),
-                                    phi[z,:].reshape(width,-1))
+                                    phi[z,:].reshape(docGen.width,-1))
