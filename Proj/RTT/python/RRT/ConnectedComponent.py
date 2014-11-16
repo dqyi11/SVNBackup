@@ -49,7 +49,6 @@ class ConnectedComponentMgr(object):
                     if not (self.labelData[i,j] in self.labels):
                         self.labels.append(self.labelData[i,j])    
                         
-                        
         self.components = []
         for l in self.labels:
             self.components.append([])    

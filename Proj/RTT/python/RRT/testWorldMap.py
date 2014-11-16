@@ -13,4 +13,6 @@ if __name__ == '__main__':
     world.load(world_file)
     
     #world.dump(world_file+".csv")
+    #for r in world.rf_mgr.regions:
+    #    r.visualize()
     world.visualize()

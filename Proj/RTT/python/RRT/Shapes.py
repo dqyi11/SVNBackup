@@ -5,6 +5,7 @@ Created on 2014-11-14
 '''
 import numpy as np
 from ConnectedComponent import *
+import matplotlib.pyplot as plt
 
 class Line(object):
 
@@ -35,6 +36,8 @@ class Region(object):
         self.line_s = Line(worldmap.obsCenter, end1)
         self.line_e = Line(worldmap.obsCenter, end2)
         
+        
+        
         self.bin_data = np.ones((worldmap.width, worldmap.height), np.int)
         self.pixels = []
         if self.line_s.rad < np.pi:
@@ -63,6 +66,8 @@ class Region(object):
                 for y in range(y_min, y_max):
                     x_min = 0
                     x_max = self.line_e.getX(y)
+                    if x_max > worldmap.width:
+                        x_max = worldmap.width
                     for x in range(x_min, x_max):
                         if worldmap.isObstaclePoint(x,y)==False:
                             self.pixels.append([x,y])
@@ -74,6 +79,8 @@ class Region(object):
                 for y in range(y_min, y_max):
                     x_min = self.line_e.getX(y)
                     x_max = worldmap.width
+                    if x_min < 0:
+                        x_min = 0
                     for x in range(x_min, x_max):
                         if worldmap.isObstaclePoint(x,y)==False:
                             self.pixels.append([x,y]) 
@@ -93,6 +100,10 @@ class Region(object):
                 for y in range(y_min, y_max):
                     x_min = self.line_s.getX(y)
                     x_max = self.line_e.getX(y)
+                    if x_min < 0:
+                        x_min = 0
+                    if x_max > worldmap.width:
+                        x_max = worldmap.width
                     for x in range(x_min, x_max):
                         if worldmap.isObstaclePoint(x,y)==False:
                             self.pixels.append([x,y])
@@ -104,6 +115,20 @@ class Region(object):
         self.sub_regions = []
         for idx in range(self.sub_region_num):
             self.sub_regions.append(ccMgr.getComponent(idx))
+            
+        self.sub_region_colors = []
+        for i in range(self.sub_region_num):
+            rndVals = np.random.randint(0,255,3)
+            self.sub_region_colors.append((rndVals[0], rndVals[1], rndVals[2]))
+            
+    def visualize(self):
+        
+        #plt.imshow(self.bin_data)
+        plt.imsave("R-"+str(self.idx)+".png", self.bin_data)
+        
+        
+        
+        
 
 
         

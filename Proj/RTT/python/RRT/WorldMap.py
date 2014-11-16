@@ -229,8 +229,8 @@ class WorldMap(object):
             obs.alpha_lines = self.segementLineByObstacles(Line(obs.alpha_line[0],obs.alpha_line[1]))
             obs.beta_lines = self.segementLineByObstacles(Line(obs.beta_line[0], obs.beta_line[1]))
         
-        self.rf_mgr = ReferenceFrameManager(self.obstacles)
- 
+        self.rf_mgr = ReferenceFrameManager(self)
+        
         
     def segementLineByObstacles(self, line):
         segment_point_list = []
@@ -266,6 +266,7 @@ class WorldMap(object):
         return lines     
     
     def isObstaclePoint(self, x, y):
+        #print [x,y]
         if self.bin_data[x,y] == 0:
             return True
         else:
@@ -284,10 +285,16 @@ class WorldMap(object):
         self.screen.fill((255,255,255))
         
         #pygame.draw.circle(self.screen, (125,255,255),[10,10],10)
+        for r in self.rf_mgr.regions:
+            for ri in range(r.sub_region_num):
+                for p in r.sub_regions[ri]:
+                    self.screen.set_at((p[0],p[1]),r.sub_region_colors[ri])
+                
         
         for obs in self.obstacles:
             for o in obs.pixels:
                 self.screen.set_at((o[0], o[1]), (122,122,122))
+                
         for obs in self.obstacles:  
             '''  
             if obs.alpha_line != None:
