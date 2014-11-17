@@ -21,17 +21,15 @@ class LDASampler(object):
         self.beta = beta
  
     def _initialize(self, matrix):
-        n_docs, vocab_size = matrix.shape
- 
         # number of times document m and topic z co-occur
-        self.nmz = np.zeros((n_docs, self.n_topics))
+        self.nmz = np.zeros((self.n_docs, self.n_topics))
         # number of times topic z and word w co-occur
-        self.nzw = np.zeros((self.n_topics, vocab_size))
-        self.nm = np.zeros(n_docs)
+        self.nzw = np.zeros((self.n_topics, self.vocab_size))
+        self.nm = np.zeros(self.n_docs)
         self.nz = np.zeros(self.n_topics)
         self.topics = {}
  
-        for m in xrange(n_docs):
+        for m in xrange(self.n_docs):
             # i is a number between 0 and doc_length-1
             # w is a number between 0 and vocab_size-1
             for i, w in enumerate(self.word_indices(matrix[m, :])):
@@ -43,15 +41,40 @@ class LDASampler(object):
                 self.nz[z] += 1
                 self.topics[(m,i)] = z
  
+    def run(self, matrix, maxiter):
+        # Run the Gibbs sampler.
+        self.n_docs = matrix.shape[0]
+        self.vocab_size = matrix.shape[1]
+        self._initialize(matrix)
+ 
+        for it in xrange(maxiter):
+            for m in xrange(self.n_docs):
+                for i, w in enumerate(self.word_indices(matrix[m, :])):
+                    z = self.topics[(m,i)]
+                    self.nmz[m,z] -= 1
+                    self.nm[m] -= 1
+                    self.nzw[z,w] -= 1
+                    self.nz[z] -= 1
+ 
+                    p_z = self._conditional_distribution(m, w)
+                    z = self.sample_index(p_z)
+ 
+                    self.nmz[m,z] += 1
+                    self.nm[m] += 1
+                    self.nzw[z,w] += 1
+                    self.nz[z] += 1
+                    self.topics[(m,i)] = z
+ 
+            # FIXME: burn-in and lag!
+            yield self.phi()
+            
     def _conditional_distribution(self, m, w):
         """
         Conditional distribution (vector of size n_topics).
         """
         vocab_size = self.nzw.shape[1]
-        left = (self.nzw[:,w] + self.beta) / \
-               (self.nz + self.beta * vocab_size)
-        right = (self.nmz[m,:] + self.alpha) / \
-                (self.nm[m] + self.alpha * self.n_topics)
+        left = (self.nzw[:,w] + self.beta) / (self.nz + self.beta * vocab_size)
+        right = (self.nmz[m,:] + self.alpha) / (self.nm[m] + self.alpha * self.n_topics)
         p_z = left * right
         # normalize to obtain probabilities
         p_z /= np.sum(p_z)
@@ -74,7 +97,7 @@ class LDASampler(object):
             lik -= self.log_multi_beta(self.alpha, self.n_topics)
  
         return lik
- 
+
     def phi(self):
         """
         Compute phi = p(w|z).
@@ -82,35 +105,7 @@ class LDASampler(object):
         V = self.nzw.shape[1]
         num = self.nzw + self.beta
         num /= np.sum(num, axis=1)[:, np.newaxis]
-        return num
- 
-    def run(self, matrix, maxiter=30):
-        # Run the Gibbs sampler.
-        
-        n_docs = matrix.shape[0]
-        vocab_size = matrix.shape[1]
-        self._initialize(matrix)
- 
-        for it in xrange(maxiter):
-            for m in xrange(n_docs):
-                for i, w in enumerate(self.word_indices(matrix[m, :])):
-                    z = self.topics[(m,i)]
-                    self.nmz[m,z] -= 1
-                    self.nm[m] -= 1
-                    self.nzw[z,w] -= 1
-                    self.nz[z] -= 1
- 
-                    p_z = self._conditional_distribution(m, w)
-                    z = self.sample_index(p_z)
- 
-                    self.nmz[m,z] += 1
-                    self.nm[m] += 1
-                    self.nzw[z,w] += 1
-                    self.nz[z] += 1
-                    self.topics[(m,i)] = z
- 
-            # FIXME: burn-in and lag!
-            yield self.phi()
+        return num           
             
     def word_indices(self, vec):
         """

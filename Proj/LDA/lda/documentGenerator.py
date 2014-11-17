@@ -43,7 +43,7 @@ class documentGenerator(object):
             v[w] += 1
         return v
     
-    def generateDocuments(self, num=500):
+    def generateDocuments(self, num):
         """
         Generate a document-term matrix.
         """
