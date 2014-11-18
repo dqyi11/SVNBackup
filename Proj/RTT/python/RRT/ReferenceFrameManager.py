@@ -68,7 +68,8 @@ class ReferenceFrameManager(object):
                 print "B: " + str(e_reg_idx[0])+"-"+str(e_reg_idx[1])
                 node_a = g.findNode(str(s_reg_idx[0])+"-"+str(s_reg_idx[1]))
                 node_b = g.findNode(str(e_reg_idx[0])+"-"+str(e_reg_idx[1]))
-                g.addEdge(node_a, node_b, "beta-"+str(i)+"-"+str(j))
+                if node_a != None and node_b != None:
+                    g.addEdge(node_a, node_b, "beta-"+str(i)+"-"+str(j))
                 
         
         g.visualize("world")
@@ -89,8 +90,9 @@ class ReferenceFrameManager(object):
         
         print region_s_rads
         found_s_idx = sorted_s_idx[0]
+        print sorted_s_idx
         i = 0
-        while rad > region_s_rads[sorted_s_idx[i]] and i < len(region_s_rads):
+        while i < len(region_s_rads) and rad > region_s_rads[sorted_s_idx[i]]:
             if i==len(region_s_rads)-1:
                 found_s_idx = sorted_s_idx[i]
             else:
@@ -110,8 +112,9 @@ class ReferenceFrameManager(object):
         
         print region_e_rads
         found_e_idx = sorted_e_idx[0]
+        print sorted_e_idx
         i = 0
-        while rad > region_e_rads[sorted_e_idx[i]] and i < len(region_e_rads):
+        while i < len(region_e_rads) and rad > region_e_rads[sorted_e_idx[i]]:
             if i==len(region_e_rads)-1:
                 found_e_idx = sorted_e_idx[i]
             else:
