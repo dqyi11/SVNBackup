@@ -61,7 +61,7 @@ class Region(object):
                         if worldmap.isObstaclePoint(x,y)==False:
                             self.pixels.append([x,y])
                             self.bin_data[x,y] = 0
-                y_min = worldmap.obsCenter[1]+1
+                y_min = worldmap.obsCenter[1]
                 y_max = worldmap.height
                 for y in range(y_min, y_max):
                     x_min = 0
@@ -85,7 +85,7 @@ class Region(object):
                         if worldmap.isObstaclePoint(x,y)==False:
                             self.pixels.append([x,y]) 
                             self.bin_data[x,y] = 0
-                y_min = worldmap.obsCenter[1]+1
+                y_min = worldmap.obsCenter[1]
                 y_max = worldmap.height
                 for y in range(y_min, y_max):
                     x_min = self.line_s.getX(y)
