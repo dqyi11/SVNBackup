@@ -41,13 +41,13 @@ class LDASampler(object):
                 self.nz[z] += 1
                 self.topics[(m,i)] = z
  
-    def run(self, matrix, maxiter):
+    def run(self, matrix, max_iter):
         # Run the Gibbs sampler.
         self.n_docs = matrix.shape[0]
         self.vocab_size = matrix.shape[1]
         self._initialize(matrix)
  
-        for it in xrange(maxiter):
+        for it in xrange(max_iter):
             for m in xrange(self.n_docs):
                 for i, w in enumerate(self.word_indices(matrix[m, :])):
                     z = self.topics[(m,i)]
