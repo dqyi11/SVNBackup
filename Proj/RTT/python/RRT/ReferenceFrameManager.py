@@ -39,12 +39,70 @@ class ReferenceFrameManager(object):
             region = Region(point_s, point_e, self.worldmap, i)
             self.regions.append(region)
             
+            
         g = TopologicalGraph()
         for i in range(self.frame_num):
             r = self.regions[i]
             for j in range(r.sub_region_num):
                 g.addNode(str(i)+"-"+str(j))
+                
+        for obs in self.worldmap.obstacles:
+            for a in obs.alpha_lines:
+                print a.rad
+                self.findNeighboringSubregion(a)
+                
+            for b in obs.beta_lines:
+                print b.rad
+                self.findNeighboringSubregion(b)
+        
         g.visualize("world")
+        
+    def findNeighboringSubregion(self, line):
+        
+        # find neighboring subregion
+        rad = line.rad
+        
+        region_s_rads = []
+        region_e_rads = []
+        for r in self.regions:
+            region_s_rads.append(r.line_s.rad)
+            region_e_rads.append(r.line_e.rad)
+        
+        sorted_s_idx = np.argsort(region_s_rads)
+        sorted_e_idx = np.argsort(region_e_rads)
+        
+        print region_s_rads
+        found_s_idx = sorted_s_idx[0]
+        i = 0
+        while rad > region_s_rads[sorted_s_idx[i]] and i < len(region_s_rads):
+            if i==len(region_s_rads)-1:
+                found_s_idx = sorted_s_idx[i]
+            else:
+                if rad < region_s_rads[sorted_s_idx[i+1]]:
+                    if np.abs(rad-region_s_rads[sorted_s_idx[i]]) < np.abs(rad-region_s_rads[sorted_s_idx[i+1]]):
+                        found_s_idx = sorted_s_idx[i]
+                    else:
+                        found_s_idx = sorted_s_idx[i+1]
+            i+=1
+        print "Found S rad " + str(region_s_rads[found_s_idx])
+        
+        print region_e_rads
+        found_e_idx = sorted_e_idx[0]
+        i = 0
+        while rad > region_e_rads[sorted_e_idx[i]] and i < len(region_e_rads):
+            if i==len(region_e_rads)-1:
+                found_e_idx = sorted_e_idx[i]
+            else:
+                if rad < region_e_rads[sorted_e_idx[i+1]]:
+                    if np.abs(rad-region_e_rads[sorted_e_idx[i]]) < np.abs(rad-region_e_rads[sorted_e_idx[i+1]]):
+                        found_e_idx = sorted_e_idx[i]
+                    else:
+                        found_e_idx = sorted_e_idx[i+1]
+            i+=1
+        print "Found E rad " + str(region_e_rads[found_e_idx])
+                    
+        
+        
             
         
         

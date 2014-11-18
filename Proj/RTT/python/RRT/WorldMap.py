@@ -220,12 +220,12 @@ class WorldMap(object):
         print "point num " + str(point_num)
         
         if point_num == 0:
-            lines.append([start, end])     
+            lines.append(Line(start, end))     
         else:
-            lines.append([start, segment_point_list[0]])
+            lines.append(Line(start, segment_point_list[0]))
             for idx in range(0, point_num-1, 1):
-                lines.append([segment_point_list[idx], segment_point_list[idx+1]])
-            lines.append([segment_point_list[point_num-1], end])
+                lines.append(Line(segment_point_list[idx], segment_point_list[idx+1]))
+            lines.append(Line(segment_point_list[point_num-1], end))
             
         return lines     
     
@@ -273,13 +273,13 @@ class WorldMap(object):
                 pygame.draw.line(self.screen, (0,0,255), obs.beta_line[0], obs.beta_line[1], 2)
             '''
             for alpha in obs.alpha_lines:
-                pygame.draw.line(self.screen, (0,255,0), alpha[0], alpha[1], 2)
-                pygame.draw.circle(self.screen, (124,252,0), alpha[0], 8)
-                pygame.draw.circle(self.screen, (25,25,112), alpha[1], 6)
+                pygame.draw.line(self.screen, (0,255,0), alpha.point_s, alpha.point_e, 2)
+                pygame.draw.circle(self.screen, (124,252,0), alpha.point_s, 8)
+                pygame.draw.circle(self.screen, (25,25,112), alpha.point_e, 6)
             for beta in obs.beta_lines:
-                pygame.draw.line(self.screen, (0,0,255), beta[0], beta[1], 2)
-                pygame.draw.circle(self.screen, (34,139,34), beta[0], 8)
-                pygame.draw.circle(self.screen, (135,206,250), beta[1], 6)
+                pygame.draw.line(self.screen, (0,0,255), beta.point_s, beta.point_e, 2)
+                pygame.draw.circle(self.screen, (34,139,34), beta.point_s, 8)
+                pygame.draw.circle(self.screen, (135,206,250), beta.point_e, 6)
         for obs in self.obstacles:       
             pygame.draw.circle(self.screen, (255,0,0), [obs.keypoint[0],obs.keypoint[1]],3)
 

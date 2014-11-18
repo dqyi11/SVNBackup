@@ -31,12 +31,10 @@ class Line(object):
     
 class Region(object):
     
-    def __init__(self, end1, end2, worldmap, idx):
+    def __init__(self, s_end, e_end, worldmap, idx):
         self.idx = idx
-        self.line_s = Line(worldmap.obsCenter, end1)
-        self.line_e = Line(worldmap.obsCenter, end2)
-        
-        
+        self.line_s = Line(worldmap.obsCenter, s_end)
+        self.line_e = Line(worldmap.obsCenter, e_end)
         
         self.bin_data = np.ones((worldmap.width, worldmap.height), np.int)
         self.pixels = []
@@ -120,6 +118,8 @@ class Region(object):
         for i in range(self.sub_region_num):
             rndVals = np.random.randint(0,255,3)
             self.sub_region_colors.append((rndVals[0], rndVals[1], rndVals[2]))
+            
+        
             
     def visualize(self):
         
