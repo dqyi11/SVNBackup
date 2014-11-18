@@ -46,14 +46,30 @@ class ReferenceFrameManager(object):
             for j in range(r.sub_region_num):
                 g.addNode(str(i)+"-"+str(j))
                 
-        for obs in self.worldmap.obstacles:
-            for a in obs.alpha_lines:
+        for i in range(len(self.worldmap.obstacles)):
+            obs = self.worldmap.obstacles[i]    
+            for j in range(len(obs.alpha_lines)):
+                a = obs.alpha_lines[j]
                 print a.rad
-                self.findNeighboringSubregion(a)
+                s_reg_idx, e_reg_idx = self.findNeighboringSubregion(a)
+                print "ALPHA"
+                print "A: " + str(s_reg_idx[0])+"-"+str(s_reg_idx[1])
+                print "B: " + str(e_reg_idx[0])+"-"+str(e_reg_idx[1])
+                node_a = g.findNode(str(s_reg_idx[0])+"-"+str(s_reg_idx[1]))
+                node_b = g.findNode(str(e_reg_idx[0])+"-"+str(e_reg_idx[1]))
+                g.addEdge(node_a, node_b, "alpha-"+str(i)+"-"+str(j))
                 
-            for b in obs.beta_lines:
+            for j in range(len(obs.beta_lines)):    
+                b = obs.beta_lines[j]
                 print b.rad
-                self.findNeighboringSubregion(b)
+                s_reg_idx, e_reg_idx = self.findNeighboringSubregion(b)
+                print "BETA"
+                print "A: " + str(s_reg_idx[0])+"-"+str(s_reg_idx[1])
+                print "B: " + str(e_reg_idx[0])+"-"+str(e_reg_idx[1])
+                node_a = g.findNode(str(s_reg_idx[0])+"-"+str(s_reg_idx[1]))
+                node_b = g.findNode(str(e_reg_idx[0])+"-"+str(e_reg_idx[1]))
+                g.addEdge(node_a, node_b, "beta-"+str(i)+"-"+str(j))
+                
         
         g.visualize("world")
         
@@ -86,6 +102,12 @@ class ReferenceFrameManager(object):
             i+=1
         print "Found S rad " + str(region_s_rads[found_s_idx])
         
+        s_reg = self.regions[found_s_idx]
+        if s_reg.sub_region_num == 1:
+            s_reg_idx = (found_s_idx, 0)
+        else:
+            s_reg_idx = (found_s_idx, 0)
+        
         print region_e_rads
         found_e_idx = sorted_e_idx[0]
         i = 0
@@ -100,6 +122,14 @@ class ReferenceFrameManager(object):
                         found_e_idx = sorted_e_idx[i+1]
             i+=1
         print "Found E rad " + str(region_e_rads[found_e_idx])
+
+        e_reg = self.regions[found_e_idx]
+        if e_reg.sub_region_num == 1:
+            e_reg_idx = (found_e_idx, 0)
+        else:
+            e_reg_idx = (found_e_idx, 0)        
+        
+        return s_reg_idx, e_reg_idx
                     
         
         

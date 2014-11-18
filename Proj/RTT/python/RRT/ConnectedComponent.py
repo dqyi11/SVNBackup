@@ -20,7 +20,7 @@ class ConnectedComponentMgr(object):
         self.data = data
         self.maxLabel = -1
         
-        print str(data.shape[0]) + " : " + str(data.shape[1])
+        #print str(data.shape[0]) + " : " + str(data.shape[1])
         
         for i in range(self.width):
             for j in range(self.height):

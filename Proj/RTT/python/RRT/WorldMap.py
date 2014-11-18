@@ -219,13 +219,22 @@ class WorldMap(object):
         point_num = len(segment_point_list)
         print "point num " + str(point_num)
         
-        if point_num == 0:
-            lines.append(Line(start, end))     
+        if line.rad < np.pi/2 or line.rad > 3*np.pi/2:
+            if point_num == 0:
+                lines.append(Line(start, end))     
+            else:
+                lines.append(Line(start, segment_point_list[0]))
+                for idx in range(0, point_num-1, 1):
+                    lines.append(Line(segment_point_list[idx], segment_point_list[idx+1]))
+                lines.append(Line(segment_point_list[point_num-1], end))
         else:
-            lines.append(Line(start, segment_point_list[0]))
-            for idx in range(0, point_num-1, 1):
-                lines.append(Line(segment_point_list[idx], segment_point_list[idx+1]))
-            lines.append(Line(segment_point_list[point_num-1], end))
+            if point_num == 0:
+                lines.append(Line(end, start))     
+            else:
+                lines.append(Line(segment_point_list[0], start))
+                for idx in range(0, point_num-1, 1):
+                    lines.append(Line(segment_point_list[idx+1], segment_point_list[idx]))
+                lines.append(Line(end, segment_point_list[point_num-1]))
             
         return lines     
     

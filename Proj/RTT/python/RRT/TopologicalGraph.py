@@ -33,6 +33,12 @@ class TopologicalGraph(object):
         e = TopologicalEdge(node_a, node_b, name)
         self.edges.append(e)
         return e
+    
+    def findNode(self, name):
+        for n in self.nodes:
+            if n.name == name:
+                return n
+        return None
         
     def visualize(self, filename):
         
