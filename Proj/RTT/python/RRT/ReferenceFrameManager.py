@@ -57,7 +57,8 @@ class ReferenceFrameManager(object):
                 print "B: " + str(e_reg_idx[0])+"-"+str(e_reg_idx[1])
                 node_a = g.findNode(str(s_reg_idx[0])+"-"+str(s_reg_idx[1]))
                 node_b = g.findNode(str(e_reg_idx[0])+"-"+str(e_reg_idx[1]))
-                g.addEdge(node_a, node_b, "alpha-"+str(i)+"-"+str(j))
+                if node_a != None and node_b != None:
+                    g.addEdge(node_a, node_b, "alpha-"+str(i)+"-"+str(j))
                 
             for j in range(len(obs.beta_lines)):    
                 b = obs.beta_lines[j]

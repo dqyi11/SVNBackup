@@ -47,7 +47,8 @@ class TopologicalGraph(object):
             g.node(n.name)
         
         for e in self.edges:
-            g.edge(e.node_a.name, e.node_b.name, label=e.name)
+            if e!= None:
+                g.edge(e.node_a.name, e.node_b.name, label=e.name)
         
         g.render(filename+'.png', view=True)
         
