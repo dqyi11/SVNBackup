@@ -14,7 +14,7 @@ class MapViewForm(QtGui.QMainWindow):
         
         self.sampleNum = 8
         self.populationNum = 100
-        self.generationNum = 200
+        self.generationNum = 1000
         
         self.fitnessMgr = FitnessSpaceManager()
         
