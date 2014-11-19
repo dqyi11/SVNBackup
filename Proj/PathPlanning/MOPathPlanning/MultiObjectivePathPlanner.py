@@ -32,7 +32,7 @@ class MultiObjectivePathPlanner(object):
         fitness[0] = dist
         for j in range(1, self.obj_num):
             for i in range(0, self.solution_dim, 2):
-                fitness[j] += self.fitnessMgr.getFitnessValue(j, solution[i], solution[i+1])
+                fitness[j] += self.fitnessMgr.getFitnessValue(j-1, solution[i], solution[i+1])
         return fitness
     
     def findSolutions(self, population_num, generation_num, position_range):
@@ -49,7 +49,7 @@ class MultiObjectivePathPlanner(object):
     def convertSolutionToPath(self, solution):
         path = []
         for i in range(self.sample_num):
-            path.append([solution[i*2], solution[i*2+1]])
+            path.append([solution.position[i*2], solution.position[i*2+1]])
         return path
     
         

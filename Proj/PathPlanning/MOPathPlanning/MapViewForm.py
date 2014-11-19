@@ -92,11 +92,17 @@ class MapViewForm(QtGui.QMainWindow):
         self.configWindow.show()
         
     def optimize(self):
+        if len(self.mMapViewer.startPos)==0 or len(self.mMapViewer.endPos)==0:
+            msgBox = QtGui.QMessageBox()
+            msgBox.setText("Start or End has not been set.")
+            msgBox.exec_()
+            return            
+        
         self.planner = MultiObjectivePathPlanner(self.fitnessMgr, self.mMapViewer.startPos, self.mMapViewer.endPos, self.sampleNum)
         position_range = []
         for i in range(self.sampleNum):
-            position_range.append([0, self.formSize[0]])
-            position_range.append([0, self.formSize[1]])
+            position_range.append([0, self.formSize[0]-1])
+            position_range.append([0, self.formSize[1]-1])
         self.mMapViewer.pathList = self.planner.findSolutions(self.populationNum, self.generationNum, position_range)
         self.update()    
         
@@ -109,11 +115,12 @@ class MapViewForm(QtGui.QMainWindow):
           
     def importData(self):
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
+        if fname=="" or fname==None:
+            return
+        
         pixmap = QtGui.QPixmap(fname)
         pixmap = pixmap.scaled(self.formSize[0], self.formSize[1])
-        
         print "W:" + str(pixmap.width()) + " H:" + str(pixmap.height())
-        
         self.fitnessMgr.addFitness(pixmap)
         self.fitnessMgr.currentFitnessIdx = self.fitnessMgr.fitnessNum-1
         self.updateMapviewer()
