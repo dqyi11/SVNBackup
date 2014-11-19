@@ -26,7 +26,7 @@ class FitnessSpaceManager(object):
         int_x = int(x)
         int_y = int(y)
         img = self.pixmaps[idx].toImage()
-        p = img(int_x, int_y)
+        p = img.pixel(int_x, int_y)
         return QtGui.qGray(p)
         
         

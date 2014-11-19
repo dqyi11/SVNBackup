@@ -12,9 +12,9 @@ class MapViewForm(QtGui.QMainWindow):
         self.mMapViewer = MapViewer(self)
         self.resize(self.formSize[0], self.formSize[1])
         
-        self.sampleNum = 15
-        self.populationNum = 50
-        self.generationNum = 100
+        self.sampleNum = 8
+        self.populationNum = 100
+        self.generationNum = 200
         
         self.fitnessMgr = FitnessSpaceManager()
         
@@ -104,7 +104,14 @@ class MapViewForm(QtGui.QMainWindow):
             position_range.append([0, self.formSize[0]-1])
             position_range.append([0, self.formSize[1]-1])
         self.mMapViewer.pathList = self.planner.findSolutions(self.populationNum, self.generationNum, position_range)
-        self.update()    
+        self.update()
+        
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(111) 
+        for p in self.planner.nsga.population:
+            ax.plot(p.fitness[0], p.fitness[1], 'ro')
+        plt.show()
         
     def updateTitle(self):
         self.setWindowTitle(str(self.fitnessMgr.currentFitnessIdx+1)+"/"+str(self.fitnessMgr.fitnessNum))

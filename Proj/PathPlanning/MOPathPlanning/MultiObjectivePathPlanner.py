@@ -36,14 +36,14 @@ class MultiObjectivePathPlanner(object):
         return fitness
     
     def findSolutions(self, population_num, generation_num, position_range):
-        nsga = NSGAII(self.obj_num, self.solution_dim, self.getFitness)
-        nsga.initPopulation(population_num, position_range)
+        self.nsga = NSGAII(self.obj_num, self.solution_dim, self.getFitness)
+        self.nsga.initPopulation(population_num, position_range)
         for i in range(generation_num):
             print "iteration " + str(i)
-            nsga.evolve()
+            self.nsga.evolve()
         solutions = []
-        for i in range(population_num):
-            solutions.append(self.convertSolutionToPath(nsga.population[i]))
+        for i in range(10):
+            solutions.append(self.convertSolutionToPath(self.nsga.population[i]))
         return solutions
         
     def convertSolutionToPath(self, solution):

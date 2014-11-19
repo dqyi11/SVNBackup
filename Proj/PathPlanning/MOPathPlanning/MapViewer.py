@@ -16,14 +16,26 @@ class MapViewer(QtGui.QLabel):
         qp.begin(self)
         
         if len(self.startPos) == 2:
+            inside_size = 4
+            outside_size = 8      
+            delta_size = (outside_size-inside_size)/2
+            qp.setPen(QtGui.QPen(QtGui.QColor(255,255,0)))
+            qp.setBrush(QtGui.QBrush(QtGui.QColor(255,255,0))) 
+            qp.drawRect(self.startPos[0]-delta_size, self.startPos[1]-delta_size, outside_size, outside_size)
             qp.setPen(QtGui.QPen(QtGui.QColor(255,0,0)))
-            qp.setBrush(QtGui.QBrush(QtGui.QColor(255,0,0)))          
-            qp.drawRect(self.startPos[0], self.startPos[1], 4, 4)
+            qp.setBrush(QtGui.QBrush(QtGui.QColor(255,0,0))) 
+            qp.drawRect(self.startPos[0], self.startPos[1], inside_size, inside_size)
         
         if len(self.endPos)==2:
+            inside_size = 4
+            outside_size = 8 
+            delta_size = (outside_size-inside_size)/2
+            qp.setPen(QtGui.QPen(QtGui.QColor(255,255,0)))
+            qp.setBrush(QtGui.QBrush(QtGui.QColor(255,255,0))) 
+            qp.drawRect(self.endPos[0]-delta_size, self.endPos[1]-delta_size, outside_size, outside_size)
             qp.setPen(QtGui.QPen(QtGui.QColor(255,0,255)))
             qp.setBrush(QtGui.QBrush(QtGui.QColor(255,0,255)))
-            qp.drawRect(self.endPos[0], self.endPos[1], 4, 4)
+            qp.drawRect(self.endPos[0], self.endPos[1], inside_size, inside_size)
             
         for path in self.pathList:
             qp.setPen(QtGui.QPen(QtGui.QColor(204,0,204)))
