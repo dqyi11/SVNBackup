@@ -42,7 +42,7 @@ class MultiObjectivePathPlanner(object):
             print "iteration " + str(i)
             self.nsga.evolve()
         solutions = []
-        for i in range(10):
+        for i in range(population_num):
             solutions.append(self.convertSolutionToPath(self.nsga.population[i]))
         return solutions
         
