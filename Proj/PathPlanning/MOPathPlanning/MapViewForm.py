@@ -2,6 +2,7 @@ from PyQt4 import QtGui, QtCore
 from MapViewer import *
 from MapViewConfigForm import *
 from FitnessSpaceManager import *
+from MultiObjectivePathPlanner import *
 
 class MapViewForm(QtGui.QMainWindow):
     
@@ -12,13 +13,16 @@ class MapViewForm(QtGui.QMainWindow):
         self.resize(self.formSize[0], self.formSize[1])
         
         self.sampleNum = 15
-        self.populationNum = 100
+        self.populationNum = 50
+        self.generationNum = 100
         
         self.fitnessMgr = FitnessSpaceManager()
         
         self.configWindow = MapViewConfigForm(self)
         self.initUI()
         self.cursorPos = None
+        
+        self.planner = None
         
     def initUI(self):
         
@@ -58,7 +62,6 @@ class MapViewForm(QtGui.QMainWindow):
         self.actionAddEnd.triggered.connect(self.addEnd)
         
     def showContextMenu(self, pos):
-        
         self.contextMenu.move(self.pos() + pos)
         self.cursorPos = pos
         self.contextMenu.show()
@@ -89,8 +92,13 @@ class MapViewForm(QtGui.QMainWindow):
         self.configWindow.show()
         
     def optimize(self):
-        
-        self.update()
+        self.planner = MultiObjectivePathPlanner(self.fitnessMgr, self.mMapViewer.startPos, self.mMapViewer.endPos, self.sampleNum)
+        position_range = []
+        for i in range(self.sampleNum):
+            position_range.append([0, self.formSize[0]])
+            position_range.append([0, self.formSize[1]])
+        self.mMapViewer.pathList = self.planner.findSolutions(self.populationNum, self.generationNum, position_range)
+        self.update()    
         
     def updateTitle(self):
         self.setWindowTitle(str(self.fitnessMgr.currentFitnessIdx+1)+"/"+str(self.fitnessMgr.fitnessNum))
@@ -98,11 +106,8 @@ class MapViewForm(QtGui.QMainWindow):
     def updateMapviewer(self):
         pixmap = self.fitnessMgr.pixmaps[self.fitnessMgr.currentFitnessIdx]
         self.mMapViewer.setPixmap(pixmap)
-        
-    
-        
+          
     def importData(self):
-        
         fname = QtGui.QFileDialog.getOpenFileName(self, 'Open file')
         pixmap = QtGui.QPixmap(fname)
         pixmap = pixmap.scaled(self.formSize[0], self.formSize[1])

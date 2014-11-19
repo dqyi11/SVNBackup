@@ -13,6 +13,7 @@ class MapViewConfigForm(QtGui.QWidget):
         
         sampleNumVal = self.parentWindow.sampleNum
         populationNumVal = self.parentWindow.populationNum
+        generationNumVal = self.parentWindow.generationNum
         
         self.grid = QtGui.QGridLayout()
         self.grid.setSpacing(10)
@@ -24,7 +25,10 @@ class MapViewConfigForm(QtGui.QWidget):
         self.populationNumLbl = QtGui.QLabel('Population Number')
         self.populationNumEdit = QtGui.QLineEdit()
         self.populationNumEdit.setText(QtCore.QString.number(populationNumVal))
-       
+        
+        self.generationNumLbl = QtGui.QLabel('Generation Number')
+        self.generationNumEdit = QtGui.QLineEdit()
+        self.generationNumEdit.setText(QtCore.QString.number(generationNumVal))
         
         self.btnOK = QtGui.QPushButton("OK")
         self.btnCancel = QtGui.QPushButton("Cancel")
@@ -35,8 +39,10 @@ class MapViewConfigForm(QtGui.QWidget):
         self.grid.addWidget(self.sampleNumberEdit, 1, 1)
         self.grid.addWidget(self.populationNumLbl, 2, 0)
         self.grid.addWidget(self.populationNumEdit, 2, 1)
-        self.grid.addWidget(self.btnOK, 3, 1)
-        self.grid.addWidget(self.btnCancel, 3, 2)       
+        self.grid.addWidget(self.generationNumLbl, 3, 0)
+        self.grid.addWidget(self.generationNumEdit, 3, 1)
+        self.grid.addWidget(self.btnOK, 4, 1)
+        self.grid.addWidget(self.btnCancel, 4, 2)       
         
         self.setLayout(self.grid)
         #self.setGeometry(100,100,200,400)
@@ -44,17 +50,23 @@ class MapViewConfigForm(QtGui.QWidget):
         
     def update(self):
         
-        sampleNumVal = self.sampleNumberEdit.displayText().toFloat()
-        populationNumVal = self.populationNumEdit.displayText().toFloat()
-           
-        self.parentWindow.sampleNum = sampleNumVal
-        self.parentWindow.populationNum = populationNumVal
+        sampleNumVal, sampleNumRet = self.sampleNumberEdit.displayText().toInt()
+        populationNumVal, populationNumRet = self.populationNumEdit.displayText().toInt()
+        generationNumVal, generationNumRet = self.generationNumEdit.displayText().toInt()
+        
+        if sampleNumRet == True:
+            self.parentWindow.sampleNum = sampleNumVal
+        if populationNumRet == True:
+            self.parentWindow.populationNum = populationNumVal
+        if generationNumRet == True:
+            self.parentWindow.generationNum = generationNumVal
         
         self.hide()
         
     def cancel(self):
         self.sampleNumberEdit.undo()
         self.populationNumEdit.undo()
+        self.generationNumEdit.undo()
         self.hide()
         
             
