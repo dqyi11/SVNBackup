@@ -5,20 +5,32 @@ Created on Nov 20, 2014
 '''
 
 import networkx as nx
+import matplotlib.pyplot as plt
+import numpy as np
 
-def visualizeNetwork(matrix):
+def visualizeNetwork(matrix_e, matrix_c, colors):
     
     G = nx.Graph()
-    w = matrix.shape[0]
-    h = matrix.shape[1]
+    h = matrix_e.shape[0]
+    w = matrix_e.shape[1]
     
-    for i in range(w):
-        for j in range(h):
-            t = int(matrix[i,j])
-            #for tt in range(t):
-            if t > 0:
-                G.add_edge(i,j)
+    print list(np.arange(h))
+    
+    print matrix_e.shape
+    for i in range(h):
+        for j in range(w):
+            t = int(matrix_e[i,j])
+            G.add_edge(i,t)
+            c = int(matrix_c[i,j])
+            G[i][t]['edge_color'] = colors[c]
             
-    nx.write_graphml(G, 'so.graphml')
+    pos = nx.spring_layout(G)
+    nx.draw_networkx_nodes(G, pos, nodelist=list(np.arange(h)), node_color='r')
+    for i in range(h):
+        for j in range(w):
+            nx.draw_networkx_edges(G, pos, edgelist=[(i,t)], edge_color=colors[c])
+            
+    #nx.write_graphml(G, 'so.graphml')
+    plt.show()
     
     
