@@ -93,13 +93,97 @@ Four point algorithm
 \section{Computing Homography}
 %DQ
 
+Homography is used to denote the transformation from one image plane to the other.
+It is written as 
+\begin{equation}
+\label{eq:homography}
+\begin{bmatrix}
+x' \\
+y' \\
+1
+\end{bmatrix}
+\sim
+\begin{bmatrix}
+\tilde{x}' \\
+\tilde{y}' \\
+\tilde{w}'
+\end{bmatrix}
+=
+\begin{bmatrix}
+h_{00} & h_{01} & h_{02} \\
+h_{10} & h_{11} & h_{12} \\
+h_{20} & h_{21} & 1 
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y \\
+1
+\end{bmatrix}
+\end{equation}
+By writing Equation \ref{eq:homography} as
+\begin{equation}
+\begin{bmatrix}
+x & y & 1 & 0 & 0 & 0 & -x'x & -x'y \\
+0 & 0 & 0 & x & y & 1 & -y'x & -y'y
+\end{bmatrix}
+\begin{bmatrix}
+h_{00} \\
+h_{01} \\
+h_{02} \\
+h_{10} \\
+h_{11} \\
+h_{12} \\
+h_{20} \\
+h_{21} 
+\end{bmatrix}
+=
+\begin{bmatrix}
+x' \\ y'
+\end{bmatrix},
+\end{equation}
+having four points (no three points in a line) is enough to calculate the homography. 
+The implementation is in \emph{calcHomograph} method in \emph{ImageManager.py}.
+In order to verify the correctness of the homography, the points are mapped into same image plane and the differences are compared.
+
+
+
 \section{Warping the Images}
 %Tim
+\begin{figure}[h]
+\centering
+\subfigure[Warp \emph{IMG\_1343.JPG} to the image plane of \emph{IMG\_1341.JPG}.]{
+\includegraphics[width=.45\textwidth]{./figure/2_to_0.png} 
+\label{fig:warping:01} } 
+\subfigure[Warp \emph{IMG\_1345.JPG} to the image plane of \emph{IMG\_1341.JPG}.]{
+\includegraphics[width=.45\textwidth]{./figure/4_to_0.png} 
+\label{fig:warping:02} } 
+\caption{Image warping.}
+\label{fig:warping}
+\end{figure}
 
 \section{Extra}
 
 \subsection{Stitching the images}
 %Tim
+
+\begin{figure}[h]
+\centering
+\subfigure[Blend \emph{IMG\_1342.JPG} with \emph{IMG\_1341.JPG}.]{
+\includegraphics[width=.45\textwidth]{./figure/1_and_0.png} 
+\label{fig:blending:01} } 
+\subfigure[Blend \emph{IMG\_1344.JPG} with \emph{IMG\_1341.JPG}.]{
+\includegraphics[width=.45\textwidth]{./figure/3_and_0.png} 
+\label{fig:blending:02} } 
+\caption{Image blending.}
+\label{fig:blending}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{./figure/1_2_3_4_and_0.png} 
+\caption{Stitched image.}
+\label{fig:stitched_image}
+\end{figure}
 
 \subsection{Homograph Calculation using linear least squares}
 %DQ
@@ -109,6 +193,29 @@ Four point algorithm
 
 \subsection{Automatic point detection}
 %DQ
+
+\subsubsection{Harris corner detector}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.8\textwidth]{./figure/IMG_1341_hcd.jpg} 
+\caption{Apply Harris corner detector to \emph{IMG\_1341.JPG}.}
+\label{fig:corner_detection}
+\end{figure}
+
+\subsubsection{Prematch - Normalized Cross-Correlation}
+
+\textbf{Normalized Cross-Correlationn} is used to measure the similarities of two points when doing prematch.
+It is defined as 
+\begin{equation}
+\mbox{ncc} = \frac{1}{n} \sum_{x, y} \frac{(I_{1}(x,y)-\bar{I}_{1})(I_{2}(x,y)-\bar{I}_{2})}{\sigma_{1}\sigma_{2}}
+\end{equation}
+
+
+
+\subsubsection{Applying RANSAC}
+
+
 
 \section{Conclusion}
 
