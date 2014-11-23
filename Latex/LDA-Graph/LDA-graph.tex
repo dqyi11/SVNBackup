@@ -70,7 +70,24 @@ The generative process of $ \textbf{w} $ is
 
 \subsection{Graph allocation}
 
+The generative process for an agent $ \omega_{i} $'s social interaction profile $ sip_{i} $ in a social network.
+\begin{itemize}
+\item Sample mixture components $ \vec{\phi}_{k} \sim Dir(\vec{\beta}) $ for $ k \in [1, K] $
+\item Choose $ \vec{\theta}_{i} \sim Dir(\vec{\alpha}) $ 
+\item Choose $ N_{i}  \sim Poisson(\xi) $
+\item For each of the $ N_{i} $ social interactions $ \omega_{ij} $:
+	\begin{itemize}
+		\item Choose a community $ \iota_{ij} \sim Multinomial( \vec{\theta}_{i} ) $
+		\item Choose a social interaction $ \omega_{ij} \sim Multinomial( \vec{\theta}_{\iota_{ij}} ) $	
+	\end{itemize}
+\end{itemize}
 
+The joint distribution of all known and hidden variables is
+\begin{equation}
+p( \vec{\omega}_{i} , \vec{\iota}_{i}, \vec{\theta}_{i} , \underline{\mathbf{\Phi}}  \mid \vec{\alpha} , \vec{\beta} ) = \prod_{j=1}^{N_{i}} 
+p( \omega_{ij} \mid \vec{\phi}_{\iota_{ij}} ) P( \iota_{ij} \mid \vec{\theta}_{i} )
+p( \vec{\theta}_{i} \mid \vec{\alpha} ) p( \underline{\mathbf{\Phi}} \mid \vec{\beta} )
+\end{equation}
 
 \bibliography{reference}
 \bibliographystyle{plain}
