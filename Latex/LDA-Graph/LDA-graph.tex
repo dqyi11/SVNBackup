@@ -1,0 +1,78 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+
+\usepackage[english]{babel}															% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}	
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[pdftex]{graphicx}	
+\usepackage{url}
+\usepackage{hyperref}
+
+
+%%% Custom sectioning
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape}
+\usepackage{subfigure}
+\usepackage{comment}
+
+
+%%% Custom headers/footers (fancyhdr package)
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}											% No page header
+\fancyfoot[L]{}											% Empty 
+\fancyfoot[C]{}											% Empty
+\fancyfoot[R]{\thepage}									% Pagenumbering
+\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
+\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
+\setlength{\headheight}{13.6pt}
+
+
+%%% Equation and float numbering
+%\numberwithin{equation}{section}		% Equationnumbering: section.eq#
+%\numberwithin{figure}{section}			% Figurenumbering: section.fig#
+%\numberwithin{table}{section}				% Tablenumbering: section.tab#
+
+
+%%% Maketitle metadata
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+\title{
+		%\vspace{-1in} 	
+		\usefont{OT1}{bch}{b}{n}
+		\normalfont \normalsize \textsc{CS660 - Computer Networks} \\ [25pt]
+		\horrule{0.5pt} \\[0.4cm]
+		\huge Graph analysis using Latent Dirichlet Allocation \\
+		\horrule{2pt} \\[0.5cm]
+}
+\author{
+		\normalfont %\normalsize
+        Daqing Yi \\
+}
+%\date{}
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+
+\section{Latent Dirichlet Allocation}
+
+Let $ \textbf{w} $ be a document.
+The generative process of $ \textbf{w} $ is
+\begin{itemize}
+\item Generate document length $ N \sim \mbox{Poisson} $
+\item \textbf{document}  
+\item \textbf{topic} A document consists of several topics using a 
+\item \textbf{word} A topic will generate several words.
+\end{itemize}
+
+\subsection{Graph allocation}
+
+
+
+\bibliography{reference}
+\bibliographystyle{plain}
+
+\end{document}
