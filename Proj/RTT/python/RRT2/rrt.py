@@ -90,10 +90,13 @@ def addToGraph(ax, graph, newPoints, point):
             nearest = [nearest for nearest in graph if nearest[0] == [newPoints[p][0], newPoints[p][1]]]
             nearest[0][1].append(newPoints[p+1])
             graph.append((newPoints[p+1], []))
-            if not p==0: ax.plot(newPoints[p][0], newPoints[p][1], '+k')  #First point is already painted
+            if not p==0: 
+                ax.plot(newPoints[p][0], newPoints[p][1], '+k')  #First point is already painted
             ax.plot([newPoints[p][0], newPoints[p+1][0]], [newPoints[p][1], newPoints[p+1][1]], color='k', linestyle='-', linewidth=1)
-    if point in newPoints: ax.plot(point[0], point[1], '.g')    #Last point is green
-    else: ax.plot(newPoints[p+1][0], newPoints[p+1][1], '+k')   #Last point is not green
+        if point in newPoints: 
+            ax.plot(point[0], point[1], '.g')    #Last point is green
+        else: 
+            ax.plot(newPoints[p+1][0], newPoints[p+1][1], '+k')   #Last point is not green
 
 
 def connectPoints(a, b, img):
