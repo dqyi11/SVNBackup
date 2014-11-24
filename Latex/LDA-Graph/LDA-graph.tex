@@ -108,6 +108,15 @@ p( \iota_{i} = j \mid \vec{\iota}_{\neg i}, \vec{\omega}) \propto
 \frac{ n^{\omega_{i}}_{\neg i, j}+\beta }{ n^{\cdot}_{\neg i, j}+W\beta } \ast \frac{ n^{\mbox{sip}_{i}}_{\neg i}+\alpha }{ n^{\mbox{sip}_{i}}_{\neg i}+T\alpha }
 \end{equation}
 
+The update formula for $ $ and $ $ are
+\begin{equation}
+\phi_{k,\omega} = \frac{n^{\omega}_{k}+\beta}{\sum_{v=1}^{V}n^{v}_{k}+W\beta}
+\end{equation}
+and
+\begin{equation}
+\theta_{m,k} = \frac{n^{k}_{m}+\alpha}{\sum_{K}^{\iota=1}+T\alpha}.
+\end{equation}
+
 The pseudo code is given as following.
 \begin{algorithm}
 \begin{algorithmic}[1]
