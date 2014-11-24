@@ -1,0 +1,164 @@
+\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+
+\usepackage[english]{babel}															% English language/hyphenation
+\usepackage[protrusion=true,expansion=true]{microtype}	
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage[pdftex]{graphicx}	
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{algorithm}
+%\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+
+%%% Custom sectioning
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape}
+\usepackage{subfigure}
+\usepackage{comment}
+
+
+%%% Custom headers/footers (fancyhdr package)
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead{}											% No page header
+\fancyfoot[L]{}											% Empty 
+\fancyfoot[C]{}											% Empty
+\fancyfoot[R]{\thepage}									% Pagenumbering
+\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
+\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
+\setlength{\headheight}{13.6pt}
+
+
+%%% Equation and float numbering
+%\numberwithin{equation}{section}		% Equationnumbering: section.eq#
+%\numberwithin{figure}{section}			% Figurenumbering: section.fig#
+%\numberwithin{table}{section}				% Tablenumbering: section.tab#
+
+
+%%% Maketitle metadata
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+
+\title{
+		%\vspace{-1in} 	
+		%\usefont{OT1}{bch}{b}{n}
+		%\normalfont \normalsize \textsc{CS660 - Computer Networks} \\ [25pt]
+		\normalfont
+		\horrule{0.5pt} \\[0.4cm]
+		\huge Multi-objective Rapidly Exploring Random Tree \\
+		\horrule{2pt} \\[0.5cm]
+}
+\author{
+		\normalfont %\normalsize
+        Daqing Yi \\
+}
+%\date{}
+
+
+%%% Begin document
+\begin{document}
+\maketitle
+
+\section{Single-objective}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State $ V \leftarrow \{ x_{init} \} $; $ E \leftarrow \emptyset $; $ i \leftarrow 0 $
+\While{ $ i < N $ }
+\State $ G \leftarrow (V, E) $
+\State $ x_{rand} \leftarrow $ \Call{ Sample }{$ i $} ; $ i \leftarrow i + 1 $
+\State $ (V, E) \leftarrow $ \Call{ Extend }{$ G, x_{rand} $}
+\EndWhile
+\end{algorithmic}
+\label{alg:rapidly_exploring_process}
+\caption{Rapidly exploring process}
+\end{algorithm}
+
+\begin{itemize}
+\item \textbf{Sampling} \\
+$ \mbox{Sample(}) $ returns independent identically distributed samples from $ X_{free} $
+\item \textbf{Steering} \\
+$ \mbox{Steer}(x,y) = \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $
+\item \textbf{Nearest neighbor} \\
+$ \mbox{Nearest}(G = (V,E), x) = \arg \min_{v \in V} \lVert x - v \rVert $ 
+\item \textbf{Near vertices} \\
+$ \mbox{Near}(G, x, \eta) $ returns a set of all vertices within the closed ball of radius $ r_{n} $ centered at $ x $, in which $ r_{n} = \min \{ ( \frac{\gamma}{\xi_{d}} \frac{\log n}{n} )^{1/d}  , \eta \} $.
+The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
+\item \textbf{Collision test} \\
+$ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{free} $, which means the line segment between $ x $ and $ x' $ lies in $ X _{free} $
+\end{itemize}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State $ V' \leftarrow V $; $ E' \leftarrow E $
+\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
+\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
+\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+\State $ E' \leftarrow E' \cup \{ ( x_{nearest} , x_{new} ) \} $
+\EndIf
+\Return $ G' = (V', E') $ 
+\end{algorithmic}
+\label{alg:rrt_extend}
+\caption{ $ \mbox{Extend}_{RRT} (G, x) $}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State $ V' \leftarrow V $; $ E' \leftarrow E $
+\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
+\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
+\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+\State $ E' \leftarrow E' \cup \{ ( x_{nearest} , x_{new} ) , ( x_{new} , x_{nearest} ) \} $
+\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+\For{\textbf{each} $ x_{near} \in X_{near} $ }
+\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+$ E' \leftarrow E' \cup \{ ( x_{near}, x_{new} ) , ( x_{new} , x_{near} ) \} $
+\EndIf
+\EndFor
+\EndIf
+\Return $ G' = (V', E') $ 
+\end{algorithmic}
+\label{alg:rrg_extend}
+\caption{ $ \mbox{Extend}_{RRG} (G, x) $}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State $ V' \leftarrow V $; $ E' \leftarrow E $
+\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
+\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
+\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+\State $ x_{min} \leftarrow x_{nearest} $
+\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+\For{\textbf{each} $ x_{near} \in X_{near} $ }
+\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
+\State $ x_{min} \leftarrow x_{near} $
+\EndIf
+\EndIf
+\EndFor
+\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+\EndIf
+\For{\textbf{each} $ x_{near} \in X_{near} \wr \{ x_{min} \} $ }
+
+\EndFor
+\Return $ G' = (V', E') $ 
+\end{algorithmic}
+\label{alg:rrtstar_extend}
+\caption{ $ \mbox{Extend}_{RRT^{*}} (G, x) $}
+\end{algorithm}
+
+\section{Multi-objective}
+
+
+\bibliography{reference}
+\bibliographystyle{plain}
+
+\end{document}
