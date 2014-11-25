@@ -146,8 +146,12 @@ $ E' \leftarrow E' \cup \{ ( x_{near}, x_{new} ) , ( x_{new} , x_{near} ) \} $
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
 \EndIf
-\For{\textbf{each} $ x_{near} \in X_{near} \wr \{ x_{min} \} $ }
-
+\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+\EndIf
 \EndFor
 \Return $ G' = (V', E') $ 
 \end{algorithmic}
