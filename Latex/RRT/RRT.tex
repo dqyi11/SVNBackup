@@ -62,7 +62,7 @@
 \begin{document}
 \maketitle
 
-\section{Single-objective}
+\section{Single-objective optimization}
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -89,6 +89,11 @@ $ \mbox{Near}(G, x, \eta) $ returns a set of all vertices within the closed ball
 The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
 \item \textbf{Collision test} \\
 $ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{free} $, which means the line segment between $ x $ and $ x' $ lies in $ X _{free} $
+\item \textbf{Line} \\
+$ \mbox{Line}(x, x') : [0, s] \leftarrow X_{free} $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
+\item \textbf{Cost} \\
+$ \mbox{Cost}( v ) $ is defined by the cost of the unique path from $ x_{init} $ to a vertex $ v \in V $.
+$ \mbox{Cost}( x_{init} ) = 0 $.
 \end{itemize}
 
 \begin{algorithm}
@@ -145,7 +150,6 @@ $ E' \leftarrow E' \cup \{ ( x_{near}, x_{new} ) , ( x_{new} , x_{near} ) \} $
 \EndIf
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-\EndIf
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 \If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
 \State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
@@ -153,14 +157,67 @@ $ E' \leftarrow E' \cup \{ ( x_{near}, x_{new} ) , ( x_{new} , x_{near} ) \} $
 \State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
 \EndIf
 \EndFor
+\EndIf
 \Return $ G' = (V', E') $ 
 \end{algorithmic}
 \label{alg:rrtstar_extend}
 \caption{ $ \mbox{Extend}_{RRT^{*}} (G, x) $}
 \end{algorithm}
 
-\section{Multi-objective}
+\section{Multi-objective optimization}
 
+In a multi-objective path planning, the target is finding a set of non-dominant paths, which is a multi-objective optimization problem.
+The multi-objective optimization can be solved using a Tchebycheff method.
+With a utopia objective vector, we can have weighted Tchebycheff metric.
+The function to be minimized is  
+\begin{equation}
+\max_{k=1, \cdots , K} [ \omega_{k}  ( f_{k} (x) - z^{**}_{k} ) ],
+\end{equation}
+where $ \mathbf{\omega} \in W = \{ \mathbf{\omega} \in \mathbf{\mathbb{R}}^{K} \mid 0 < \omega_{i} < 1 , \sum^{K}_{k=1} \omega_{k} = 1 \} $ .
+The weakly Pareto optimal solutions can be avoided by a \emph{lexicographic weighted Tchebycheff problem}.
+\begin{equation}
+\mbox{lex minimize} \max_{k=1, \cdots , K} [ \omega_{k}  ( f_{k} (x) - z^{**}_{k} ) ], \\
+\mbox{subject to } x \in S.
+\end{equation}
+
+Given the problem, we can generate a set of weights $ W $ for a set of sub-problems.
+Each $ \omega \in W $ represents a sub-problem.
+Let the size of set $ W $ be $ N $, which means that there are $ N $ sub-problems.
+We need to change the definition 
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\State $ V' \leftarrow V $; $ E' \leftarrow E $
+\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
+\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
+\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+\State $ x_{min} \leftarrow x_{nearest} $
+\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+\For{\textbf{each} $ x_{near} \in X_{near} $ }
+\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
+\State $ x_{min} \leftarrow x_{near} $
+\EndIf
+\EndIf
+\EndFor
+\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+\EndIf
+\EndFor
+\EndIf
+\Return $ G' = (V', E') $ 
+\end{algorithmic}
+\label{alg:mo_rrtstar_extend}
+\caption{ $ \mbox{Extend}_{MORRT^{*}} (G, x) $}
+\end{algorithm}
+
+\section{Theoretic analysis}
 
 \bibliography{reference}
 \bibliographystyle{plain}
