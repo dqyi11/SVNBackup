@@ -33,12 +33,13 @@ and on any theory of liability, whether in contract, strict liability,
 or tort (including negligence or otherwise) arising in any way out of
 the use of this software, even if advised of the possibility of such damage.*/
 
-#include <opencv2\core\core.hpp>
-#include <opencv2\imgproc\imgproc.hpp>
-#include <opencv2\highgui\highgui.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <math.h>
-#include <conio.h>
+#include <stdio.h>
+//#include <conio.h>
 
 
 cv::Mat kernel;
@@ -63,7 +64,7 @@ void create_kernel(cv:: Mat &kernel);
 cv::Mat kernel_on_patch(cv::Mat &input_image,int *patch_centre,cv::Mat input_kernel);
 cv::Mat index_function(cv::Mat &input_image,int no_of_bins);
 cv::Mat create_target_model(cv::Mat &input_image,int *patch_centre,cv::Mat &input_kernel,int no_of_bins);
-cv::Mat detect_object(cv::Mat &input_image,cv::Rect &box);
+cv::Mat detect_object(cv::Mat &input_image,cv::Rect box);
 cv::Mat assign_weight(cv::Mat &input_image,cv::Mat &target_model,cv::Mat &target_candidate,cv::Rect &box);
 int check_bin_for_pixel(int pixel, int no_of_bins, int range);
 float calc_bhattacharya(cv::Mat &target_model,cv::Mat &target_candidate);
@@ -71,7 +72,7 @@ float calc_bhattacharya(cv::Mat &target_model,cv::Mat &target_candidate);
 void create_mouse_callback(int event,int x,int y,int flag,void* param);
 
 
-void main()
+int main()
 {
     cv::Mat orig_img,temp_img,target_model,target_candidate,weight;
 
@@ -107,24 +108,34 @@ void main()
         if( drawing_box )
             cv::rectangle( temp, box,cv::Scalar(0),2);
 
+
         cv::imshow("original image", temp );
 
         if( cv::waitKey( 15 )==27 )
             break;
     }
 
+    std::cout << "\n Selected Box rect X: " << box.x << " Y:" << box.y << " W: " << box.width << " H: " << box.height << std::endl;
+
     if(box.width%2==0)
         box.width++;
     if(box.height%2==0)
         box.height++;
+
     //cv::imshow("gp",orig_img);
-    cv::waitKey(0);
+    //cv::waitKey(0);
+
+    std::cout << "\n Before detect object Box rect X: " << box.x << " Y:" << box.y << " W: " << box.width << " H: " << box.height << std::endl;
+
     target_model = detect_object(orig_img,box);
+
+    std::cout << "\n Before Loop Box rect X: " << box.x << " Y:" << box.y << " W: " << box.width << " H: " << box.height << std::endl;
 
     cv::waitKey(0);
 
     while(1)
     {
+        std::cout << "\n In Loop Box rect X: " << box.x << " Y:" << box.y << " W: " << box.width << " H: " << box.height << std::endl;
         count++;
         if(!start_capture.read(orig_img))
             break;
@@ -133,6 +144,8 @@ void main()
         //start_capture.read(orig_img);
 
         frame_count++;
+
+        std::cout << "\n Frame count " << frame_count << std::endl;
 
         /*if(frame_count == 10)
         {
@@ -159,6 +172,8 @@ void main()
             next_box.width = box.width;
             next_box.height = box.height;
 
+            std::cout << "\nBox rect X: " << box.x << " Y:" << box.y << " W: " << box.width << " H: " << box.height << std::endl;
+
             for(int i=0;i<weight.rows;i++)
             {
                 for(int j=0;j<weight.cols;j++)
@@ -172,8 +187,12 @@ void main()
                 }
             }
 
-            next_box.x += static_cast<int>((num_x/den)*centre);
-            next_box.y += static_cast<int>((num_y/den)*centre);
+            int d_x = static_cast<int>((num_x/den)*centre);
+            int d_y = static_cast<int>((num_y/den)*centre);
+
+            std::cout << " DX: " << d_x << " DY: " << d_y << std::endl;
+            next_box.x += d_x;
+            next_box.y += d_y;
 
             //std::cout << "\n" << k;
 
@@ -190,14 +209,18 @@ void main()
             }
             if(box.x + box.width >= orig_img.cols || box.x <= 0 || box.y + box.height >= orig_img.rows || box.y <= 0)
             {
-                _getch();
+                //getchar();
+                std::cout << "Error!" << std::endl;
+                std::cout << "Img W: " << orig_img.cols << " H: " << orig_img.rows << std::endl;
+                std::cout << "Box rect X: " << box.x << " Y:" << box.y << " X+W: " << box.x+box.width << " Y+H: " << box.y+box.height << std::endl;
+
             }
 
         }
 
         float dist = 0.0;
         dist = calc_bhattacharya(target_model,target_candidate);
-        //std::cout << '\n' << "Bhattacharya Distance : " << dist;
+        std::cout << '\n' << "Bhattacharya Distance : " << dist;
 
         if(dist < 0.6 && frame_count > 10)
         {
@@ -206,6 +229,8 @@ void main()
             //std::cout << "gp";
         }
 
+
+        std::cout << "\n Detected box X:" << box.x << " Y:" << box.y << " W:" << box.width << " H:" << box.height << std::endl;
 
         cv::rectangle(orig_img,box,cv::Scalar(0));
 
@@ -218,6 +243,7 @@ void main()
 
     cv::waitKey(0);
 
+    return 0;
 
 }
 
@@ -376,7 +402,7 @@ void create_mouse_callback(int event,int x,int y,int flag,void* param)
 
 }
 
-cv::Mat detect_object(cv::Mat &input_image,cv::Rect &box)
+cv::Mat detect_object(cv::Mat &input_image,cv::Rect box)
 {
     int kernel_size = box.height>box.width?box.width:box.height;
     cv::Mat kernel_for_now(kernel_size,kernel_size,CV_32F,cv::Scalar(0));
