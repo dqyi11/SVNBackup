@@ -16,9 +16,9 @@ public:
     bool findTarget(const Mat& candidateImg, Rect& candidateRect);
 
 private:
-    Mat calcWeight(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br);
+    Mat calcWeight(const Mat& prevHistROI, const Mat& nextHistROI, const Mat& bb, const Mat& bg, const Mat& br);
 
-    Rect calcLocationUpdate(const Mat& wi_roi, const Rect& rect);
+    Rect calcLocationUpdate(const Mat& wiROI, const Rect& rect);
 
     Mat calcNormalizedColorHist(const Mat& image, const Mat& histWeights);
     Mat getBinIndices(const Mat& src, int binNum);

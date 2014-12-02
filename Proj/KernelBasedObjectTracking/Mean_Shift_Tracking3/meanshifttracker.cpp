@@ -48,13 +48,13 @@ Mat MeanShiftTracker::buildModel(const Mat& inputImg, cv::Rect rect)
     return ROI_hist;
 }
 
-Mat MeanShiftTracker::calcWeight(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br)
+Mat MeanShiftTracker::calcWeight(const Mat& prevHistROI, const Mat& nextHistROI, const Mat& bb, const Mat& bg, const Mat& br)
 {
-	Mat wi_roi;
-	wi_roi.create(bg.size(), CV_32F);
+    Mat wiROI;
+    wiROI.create(bg.size(), CV_32F);
 
 	float q,p;
-    int histIdx_B, histIdx_G, histIdx_R;
+    int histIdxB, histIdxG, histIdxR;
 
 	for (int row = 0; row < bg.size().height; row++)
 	{
@@ -62,48 +62,48 @@ Mat MeanShiftTracker::calcWeight(const Mat& hist_prev_roi, const Mat& hist_next_
 		{
 			try
 			{
-                histIdx_B = bb.at<uchar>(row, col);
-				histIdx_G = bg.at<uchar>(row, col);
-				histIdx_R = br.at<uchar>(row, col);
+                histIdxB = bb.at<uchar>(row, col);
+                histIdxG = bg.at<uchar>(row, col);
+                histIdxR = br.at<uchar>(row, col);
 
-                q = hist_prev_roi.at<float>(histIdx_B, histIdx_G, histIdx_R);
-                p = hist_next_roi.at<float>(histIdx_B, histIdx_G, histIdx_R);
-				wi_roi.at<float>(row,col) = sqrtf( q / (p+0.000001) );
+                q = prevHistROI.at<float>(histIdxB, histIdxG, histIdxR);
+                p = nextHistROI.at<float>(histIdxB, histIdxG, histIdxR);
+                wiROI.at<float>(row,col) = sqrtf( q / (p+0.000001) );
 			}
 		 	catch (cv::Exception e)
 			{
-				wi_roi.at<float>(row,col) = 0.f;
+                wiROI.at<float>(row,col) = 0.f;
 			}
 		}
 	}
-	return wi_roi;
+    return wiROI;
 }
 
 
-Rect MeanShiftTracker::calcLocationUpdate(const Mat& wi_roi, const Rect& rect)
+Rect MeanShiftTracker::calcLocationUpdate(const Mat& wiROI, const Rect& rect)
 {
     int x = rect.x, y = rect.y;
     Mat x2D, y2D, xi, yi;
-	xi.create(1, wi_roi.size().width, CV_32F);
-	for (int i = 0; i < wi_roi.size().width; i++)
+    xi.create(1, wiROI.size().width, CV_32F);
+    for (int i = 0; i < wiROI.size().width; i++)
 	{
 		xi.at<float>(i) = (float) x+i;
 	}
-	yi.create(wi_roi.size().height, 1, CV_32F);
-	for (int j = 0; j < wi_roi.size().height; j++)
+    yi.create(wiROI.size().height, 1, CV_32F);
+    for (int j = 0; j < wiROI.size().height; j++)
 	{
 		yi.at<float>(j) = (float) y+j;
 	}
 
-	repeat(xi, wi_roi.size().height, 1, x2D);
-	repeat(yi, 1, wi_roi.size().width, y2D);
+    repeat(xi, wiROI.size().height, 1, x2D);
+    repeat(yi, 1, wiROI.size().width, y2D);
 	xi.release();
 	yi.release();
 
     Mat wi_roi_X, wi_roi_Y;
-    multiply(wi_roi, x2D, wi_roi_X);
-    multiply(wi_roi, y2D, wi_roi_Y);
-    double sW = sum(wi_roi)[0];
+    multiply(wiROI, x2D, wi_roi_X);
+    multiply(wiROI, y2D, wi_roi_Y);
+    double sW = sum(wiROI)[0];
     double sWX = sum(wi_roi_X)[0];
     double sWY = sum(wi_roi_Y)[0];
 
