@@ -63,15 +63,28 @@
 
 \section{Graph generative model}
 
-The generative process for an agent $ \omega_{i} $'s social interaction profile $ sip_{i} $ in a social network.
+Here is a list of notations.
 \begin{itemize}
-\item Sample mixture components $ \vec{\phi}_{k} \sim Dir(\vec{\beta}) $ for $ k \in [1, K] $
-\item Choose $ \vec{\theta}_{i} \sim Dir(\vec{\alpha}) $ 
-\item Choose $ N_{i}  \sim Poisson(\xi) $
+\item $ M $ : number of social actors (social interaction profiles) in the social network
+\item $ K $ : number of communities (mixture components)
+\item $ N_{i} $ : number of social interactions in a social interaction profile $ \mbox{sip}_{i} $
+\item $ \vec{\alpha} $ : Dirichlet prior hyperparameter
+\item $ \vec{\beta} $ : Dirichlet prior hyperparameter
+\item $ \iota $ : hidden community variable, $ \iota_{i,j} $ means the community for the $ j $th social interaction in $ \mbox{sip}_{i} $
+\item $ \vec{\theta}_{i} $ : $ p(\iota \mid \mbox{sip}_{j}) $ is the community mixture proportion for $ \mbox{sip}_{j} $ 
+\item $ \vec{\Phi}_{k} $ : $ p(\omega \mid \iota_{k} ) $ is the mixture component of community $ k $
+\item $ \omega $ : social interaction variable, $ $ means the $ j $th social interaction in $ \mbox{sip}_{i} $
+\end{itemize}
+
+The generative process for an agent $ \omega_{i} $'s social interaction profile $ \mbox{sip}_{i} $ in a social network.
+\begin{itemize}
+\item Sample mixture components $ \vec{\phi}_{k} \sim \mbox{Dirichlet}(\vec{\beta}) $ for $ k \in [1, K] $
+\item Choose $ \vec{\theta}_{i} \sim \mbox{Dirichlet}(\vec{\alpha}) $ 
+\item Choose $ N_{i}  \sim \mbox{Poisson}(\xi) $
 \item For each of the $ N_{i} $ social interactions $ \omega_{i,j} $:
 	\begin{itemize}
-		\item Choose a community $ \iota_{i,j} \sim Multinomial( \vec{\theta}_{i} ) $
-		\item Choose a social interaction $ \omega_{i,j} \sim Multinomial( \vec{\theta}_{\iota_{i,j}} ) $	
+		\item Choose a community $ \iota_{i,j} \sim \mbox{Multinomial}( \vec{\theta}_{i} ) $
+		\item Choose a social interaction $ \omega_{i,j} \sim \mbox{Multinomial}( \vec{\theta}_{\iota_{i,j}} ) $	
 	\end{itemize}
 \end{itemize}
 
