@@ -5,20 +5,16 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
-#include "meanshift.h"
-
+#include "meanshifttracker.h"
 
 using namespace std; 
 using namespace cv;
 
-
 Mat image;
-
 bool selectObject = false;
 int trackObject = 0;
 Point origin;
 Rect selection;
-
 
 static void onMouse( int event, int x, int y, int, void* )
 {
@@ -26,8 +22,8 @@ static void onMouse( int event, int x, int y, int, void* )
 	{
 		selection.x = MIN(x, origin.x);
 		selection.y = MIN(y, origin.y);
-		selection.width = std::abs(x - origin.x);
-		selection.height = std::abs(y - origin.y);
+        selection.width = abs(x - origin.x);
+        selection.height = abs(y - origin.y);
 
 		selection &= Rect(0, 0, image.cols, image.rows);
 	}
@@ -90,21 +86,18 @@ int main(int argc, char** argv)
 			if( frame.empty() )
 				break;
 		}
-
 		frame.copyTo(image);
 
 		if( !paused )
 		{
-
 			if( trackObject )
 			{
-
 				if( trackObject < 0 )
 				{
 					trackWindow = selection;
 					trackObject = 1;
 
-                    referenceImg = image;
+                    image.copyTo(referenceImg);
                     referenceRect = trackWindow;
                     candidateRect = trackWindow;
 
@@ -113,6 +106,7 @@ int main(int argc, char** argv)
 				}
 
                 // perform meanshift
+                //if(meanshift.findTarget(image, candidateRect))
                 if(meanshift.findTarget(referenceImg, referenceRect, image, candidateRect))
                 {
                     trackWindow = candidateRect;

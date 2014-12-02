@@ -17,7 +17,7 @@ TEMPLATE = app
 LIBS += -lopencv_core -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_imgproc
 
 SOURCES += main.cpp \
-    meanshift.cpp
+    meanshifttracker.cpp
 
 HEADERS += \
-    meanshift.h
+    meanshifttracker.h
