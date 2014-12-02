@@ -12,19 +12,14 @@ MeanShiftTracker::MeanShiftTracker()
     mColorRange = 256;
     mBinWidth = cvRound(float(mColorRange)/mBinNum);
     mMaxIteration = 20;
-
 }
 
-
-Mat MeanShiftTracker::computeNormalizedColorHist(const Mat& image, const Mat& histWeights)
+Mat MeanShiftTracker::calcNormalizedColorHist(const Mat& image, const Mat& histWeights)
 {
     const int histSize[] = {mBinNum, mBinNum, mBinNum};
 
-	// make sure that the histogram has a proper size and type
     Mat hist = Mat(3, histSize, CV_32F, Scalar::all(0));
 	
-	// the loop below assumes that the image
-	// is a 8-bit 3-channel. check it.
 	CV_Assert(image.type() == CV_8UC3);
 
 	for (int y=0; y<image.size().height; y++)
@@ -40,22 +35,20 @@ Mat MeanShiftTracker::computeNormalizedColorHist(const Mat& image, const Mat& hi
 
 	double s = sum(hist)[0];
 	hist.convertTo(hist, hist.type(), 1./s, 0);
-
     return hist;
 }
 
-cv::Mat MeanShiftTracker::buildModel(const Mat& inputImg, cv::Rect rect)
+Mat MeanShiftTracker::buildModel(const Mat& inputImg, cv::Rect rect)
 {
     Mat imgROI = inputImg(rect);
-    //Mat histWeights = create2dGaussianKernel(rect.width, rect.height, 1, 1);
-    Mat histWeights = createEpanechnikovKernel(rect.width, rect.height);
-    Mat ROI_hist = computeNormalizedColorHist(imgROI, histWeights);
+    Mat histWeights = create2dGaussianKernel(rect.width, rect.height, 1, 1);
+    //Mat histWeights = createEpanechnikovKernel(rect.width, rect.height);
+    Mat ROI_hist = calcNormalizedColorHist(imgROI, histWeights);
 
     return ROI_hist;
 }
 
-// compute weights for the current target location according to equation 10
-cv::Mat MeanShiftTracker::computeWeights(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br)
+Mat MeanShiftTracker::calcWeight(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br)
 {
 	Mat wi_roi;
 	wi_roi.create(bg.size(), CV_32F);
@@ -75,83 +68,56 @@ cv::Mat MeanShiftTracker::computeWeights(const Mat& hist_prev_roi, const Mat& hi
 
                 q = hist_prev_roi.at<float>(histIdx_B, histIdx_G, histIdx_R);
                 p = hist_next_roi.at<float>(histIdx_B, histIdx_G, histIdx_R);
-
 				wi_roi.at<float>(row,col) = sqrtf( q / (p+0.000001) );
 			}
 		 	catch (cv::Exception e)
 			{
-				//cout << e.what() << endl;
 				wi_roi.at<float>(row,col) = 0.f;
 			}
 		}
 	}
-
-
 	return wi_roi;
 }
 
 
-// compute the coordinate of the next pixel location according to equation 13
-// given the upper-left x coordinate of roi
-// given the upper-left y coordinate of roi
-cv::Point2f MeanShiftTracker::computeNextLocation(const Mat& wi_roi, int x, int y)
+Rect MeanShiftTracker::calcLocationUpdate(const Mat& wi_roi, const Rect& rect)
 {
-
-	Mat x2D, y2D;
-
-	// pixel locations as 1D arrays
-	// x = [x0,..,xw]  (row vector)
-	// y = [y0,..,yh]' (column vector)
-	Mat xi, yi;
-
-	// fill the array of x locations for current roi
+    int x = rect.x, y = rect.y;
+    Mat x2D, y2D, xi, yi;
 	xi.create(1, wi_roi.size().width, CV_32F);
 	for (int i = 0; i < wi_roi.size().width; i++)
 	{
 		xi.at<float>(i) = (float) x+i;
 	}
-
-	// fill the array of y locations for current roi
 	yi.create(wi_roi.size().height, 1, CV_32F);
 	for (int j = 0; j < wi_roi.size().height; j++)
 	{
 		yi.at<float>(j) = (float) y+j;
 	}
 
-	// convert 1D array of locations to 2D matrix, by repeating values
-	// along horizontal dims for x, and vertical dims for y.
 	repeat(xi, wi_roi.size().height, 1, x2D);
 	repeat(yi, 1, wi_roi.size().width, y2D);
-
 	xi.release();
 	yi.release();
 
-	// weighting x coordinates
-	Mat wi_roi_X;
-	multiply(wi_roi, x2D, wi_roi_X);	//element-wise multiplication
-	double s1 = sum(wi_roi_X)[0];
-	double s2 = sum(wi_roi)[0];
+    Mat wi_roi_X, wi_roi_Y;
+    multiply(wi_roi, x2D, wi_roi_X);
+    multiply(wi_roi, y2D, wi_roi_Y);
+    double sW = sum(wi_roi)[0];
+    double sWX = sum(wi_roi_X)[0];
+    double sWY = sum(wi_roi_Y)[0];
 
-	float newX = (float)(s1/s2);
-
-	// repeat the same for y coordinates
-	Mat wi_roi_Y;
-	multiply(wi_roi, y2D, wi_roi_Y);
-	s1 = sum(wi_roi_Y)[0];
-
-	float newY = (float)(s1/s2);
-
-	return Point2f(newX, newY);
+    int newX = (int)(sWX/sW);
+    int newY = (int)(sWY/sW);
+    return Rect(newX, newY, rect.width, rect.height);
 }
 
 
-// normalizes histogram so that it sums up to 1
-cv::Mat MeanShiftTracker::getBinIndices(const Mat& src, const int binSize)
+Mat MeanShiftTracker::getBinIndices(const Mat& src, int binNum)
 {
 	Mat dst;
 	dst.create(src.size(), CV_8UC1);
-	dst = src / binSize;
-
+    dst = src / binNum;
 	return dst;
 }
 
@@ -182,7 +148,6 @@ bool MeanShiftTracker::findTarget(const Mat& candidateImg, Rect& candidateRect)
         width = candidateRect.width,
         height = candidateRect.height;
 
-	// initial mean locations
 	int mx = x + width/2;
 	int my = y + height/2;
 
@@ -191,48 +156,35 @@ bool MeanShiftTracker::findTarget(const Mat& candidateImg, Rect& candidateRect)
 	int iter = 0;
 	float prevDiff = -1.0f;
 
-	// repeat until the difference convergences
     while ( (diff != prevDiff || diff > epsilon) && iter < mMaxIteration)
 	{
-		// obtain the current region of interest
         current_roi = candidateImg(Rect(x, y, width, height));
-
-		// compute histogram bin indices of the current region of interest
-		split(current_roi, bgr_planes);
-		
+		split(current_roi, bgr_planes);		
         bb = getBinIndices(bgr_planes[0], mBinNum);
         bg = getBinIndices(bgr_planes[1], mBinNum);
         br = getBinIndices(bgr_planes[2], mBinNum);
 
-		// compute the rgb histogram of the region of interest in current frame
-        //hist_roi = computeNormalizedColorHist(current_roi, mHistWeights);
         hist_roi = buildModel(candidateImg, candidateRect);
 		
-		// compute weights for each pixel location in current roi
-        Mat wi_roi = computeWeights(mTargetModel, hist_roi, bb, bg, br);
+        Mat wi_roi = calcWeight(mTargetModel, hist_roi, bb, bg, br);
 
-		// compute new mean location based on previous locations and weights.
-		Point2f newTargetLoc = computeNextLocation(wi_roi, x, y);
+        Rect newCandidateRect = calcLocationUpdate(wi_roi, candidateRect);
 
 		prevDiff = diff;
 
-		// obtain the difference btw the previous target center and calculated target candidate's center location
-        diff = sqrtf( (newTargetLoc.x-mx) * (newTargetLoc.x-mx) + (newTargetLoc.y-my) * (newTargetLoc.y-my) );
+        diff = sqrtf( (newCandidateRect.x-mx) * (newCandidateRect.x-mx) + (newCandidateRect.y-my) * (newCandidateRect.y-my) );
 
 		if (diff > prevDiff)
 		{
 			break;
 		}
 
-		// update mean locations
-		mx = (int) newTargetLoc.x;
-		my = (int) newTargetLoc.y;
+        mx = newCandidateRect.x;
+        my = newCandidateRect.y;
 
-		// update pixel locations and rectangle dimensions, and continue iterations if needed
 		x = cvFloor( mx - width/2 );
 		y = cvFloor( my - height/2 );
 
-		// ensure that boundaries are ok 
 		if (x < 0)
 			x = 0;
 		if (y < 0)
@@ -242,8 +194,6 @@ bool MeanShiftTracker::findTarget(const Mat& candidateImg, Rect& candidateRect)
         if( y + height > candidateImg.size().height-1 )
             y -= y + height - (candidateImg.size().height-1);
 
-		// update mean location considering a possible update in
-		// x, y, width or height values
 		mx = x + width/2;
 		my = y + height/2;
 

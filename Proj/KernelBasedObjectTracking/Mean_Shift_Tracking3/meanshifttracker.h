@@ -16,15 +16,12 @@ public:
     bool findTarget(const Mat& candidateImg, Rect& candidateRect);
 
 private:
+    Mat calcWeight(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br);
 
-    Mat computeWeights(const Mat& hist_prev_roi, const Mat& hist_next_roi, const Mat& bb, const Mat& bg, const Mat& br);
+    Rect calcLocationUpdate(const Mat& wi_roi, const Rect& rect);
 
-	Point2f computeNextLocation(const Mat& wi_roi, int x, int y);
-
-    Mat computeNormalizedColorHist(const Mat& image, const Mat& histWeights);
-
-
-	Mat getBinIndices(const Mat& src, const int binSize);
+    Mat calcNormalizedColorHist(const Mat& image, const Mat& histWeights);
+    Mat getBinIndices(const Mat& src, int binNum);
 
     Mat create2dGaussianKernel(const int sizeX, const int sizeY, const float sigmaX, const float sigmaY);
     Mat createEpanechnikovKernel(const int sizeX, const int sizeY);
