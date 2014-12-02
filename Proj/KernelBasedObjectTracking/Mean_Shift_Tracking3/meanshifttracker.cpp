@@ -208,7 +208,7 @@ bool MeanShiftTracker::findTarget(const Mat& candidateImg, Rect& candidateRect)
     return true;
 }
 
-Mat MeanShiftTracker::create2dGaussianKernel(const int sizeX, const int sizeY, const float sigmaX=1.0, const float sigmaY=1.0)
+Mat MeanShiftTracker::create2dGaussianKernel(int sizeX, int sizeY, float sigmaX, float sigmaY)
 {
 	Mat kernelX = getGaussianKernel(sizeX, sigmaX, CV_32F); 
 	Mat kernelY = getGaussianKernel(sizeY, sigmaY, CV_32F); 
@@ -217,7 +217,7 @@ Mat MeanShiftTracker::create2dGaussianKernel(const int sizeX, const int sizeY, c
 	return kernel;
 }
 
-Mat MeanShiftTracker::createEpanechnikovKernel(const int sizeX, const int sizeY)
+Mat MeanShiftTracker::createEpanechnikovKernel(int sizeX, int sizeY)
 {
     const int kernel_size[] = {sizeX, sizeY};
     Mat kernel(2, kernel_size, CV_32F, Scalar::all(0));

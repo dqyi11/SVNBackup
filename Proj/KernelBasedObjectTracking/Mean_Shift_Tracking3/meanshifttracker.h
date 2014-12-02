@@ -23,8 +23,8 @@ private:
     Mat calcNormalizedColorHist(const Mat& image, const Mat& histWeights);
     Mat getBinIndices(const Mat& src, int binNum);
 
-    Mat create2dGaussianKernel(const int sizeX, const int sizeY, const float sigmaX, const float sigmaY);
-    Mat createEpanechnikovKernel(const int sizeX, const int sizeY);
+    Mat create2dGaussianKernel(int sizeX, int sizeY, float sigmaX=1.0, float sigmaY=1.0);
+    Mat createEpanechnikovKernel(int sizeX, int sizeY);
 
     Mat mTargetModel;
 
