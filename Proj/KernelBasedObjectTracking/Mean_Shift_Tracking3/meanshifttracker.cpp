@@ -55,7 +55,6 @@ Mat MeanShiftTracker::calcWeight(const Mat& prevHistROI, const Mat& nextHistROI,
 
 	float q,p;
     int histIdxB, histIdxG, histIdxR;
-
 	for (int row = 0; row < bg.size().height; row++)
 	{
 		for (int col = 0; col < bg.size().width; col++)
@@ -172,7 +171,7 @@ bool MeanShiftTracker::findTarget(const Mat& candidateImg, Rect& candidateRect)
 
 		prevDiff = diff;
 
-        diff = sqrtf( (newCandidateRect.x-mx) * (newCandidateRect.x-mx) + (newCandidateRect.y-my) * (newCandidateRect.y-my) );
+        diff = sqrtf( (newCandidateRect.x-mx)*(newCandidateRect.x-mx) + (newCandidateRect.y-my)*(newCandidateRect.y-my) );
 
 		if (diff > prevDiff)
 		{
@@ -213,20 +212,22 @@ Mat MeanShiftTracker::create2dGaussianKernel(int sizeX, int sizeY, float sigmaX,
 	Mat kernelX = getGaussianKernel(sizeX, sigmaX, CV_32F); 
 	Mat kernelY = getGaussianKernel(sizeY, sigmaY, CV_32F); 
 	Mat kernel = kernelY * kernelX.t();
-
 	return kernel;
 }
 
 Mat MeanShiftTracker::createEpanechnikovKernel(int sizeX, int sizeY)
 {
     const int kernel_size[] = {sizeX, sizeY};
+    float norm_x = 0.0, norm_y = 0.0;
     Mat kernel(2, kernel_size, CV_32F, Scalar::all(0));
     double dist = 0.0;
     for(int i=0;i<sizeX;i++)
     {
         for(int j=0;j<sizeY;j++)
         {
-            dist = (i-sizeX/2)*(i-sizeX/2)+(j-sizeY/2)*(j-sizeY/2);
+            norm_x = (i-sizeX/2)/(float)sizeX;
+            norm_y = (j-sizeY/2)/(float)sizeY;
+            dist = norm_x*norm_x + norm_y*norm_y;
             kernel.at<float>(i,j) = 3*(1-dist)/4;
         }
     }
