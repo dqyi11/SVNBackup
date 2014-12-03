@@ -15,17 +15,17 @@ class networkGenerator(object):
         
         # generate world distribution for each topic
         self.width = self.community_num / 2
-        self.vocab_size = self.width ** 2
-        self.word_distribution = np.zeros((self.community_num, self.vocab_size))
+        self.node_size = self.width ** 2
+        self.node_distribution = np.zeros((self.community_num, self.node_size))
  
         for k in range(self.width):
-            self.word_distribution[k,:] = self.vertical_topic(self.width, k, self.neighbor_num)
+            self.node_distribution[k,:] = self.vertical_topic(self.width, k, self.neighbor_num)
  
         for k in range(self.width):
-            self.word_distribution[k+self.width,:] = self.horizontal_topic(self.width, k, self.neighbor_num)
+            self.node_distribution[k+self.width,:] = self.horizontal_topic(self.width, k, self.neighbor_num)
             
         # turn counts into probabilities
-        self.word_distribution /= self.word_distribution.sum(axis=1)[:, np.newaxis] 
+        self.node_distribution /= self.node_distribution.sum(axis=1)[:, np.newaxis] 
         
         
     def generateSocialInteractionProfile(self):
@@ -34,14 +34,14 @@ class networkGenerator(object):
         """
         # 1) Sample topic proportions from the Dirichlet distribution.
         theta = np.random.mtrand.dirichlet([self.alpha] * self.community_num)
-        v = np.zeros(self.vocab_size)
+        v = np.zeros(self.node_size)
         vc = np.zeros(self.neighbor_num)
         ve = np.zeros(self.neighbor_num)
         for n in range(self.neighbor_num):
             # 2) Sample a topic index from the Multinomial with the topic proportions from 1).
             z = self.sample_index(theta)
             # 3) Sample a word from the Multinomial corresponding to the topic index from 2).
-            w = self.sample_index(self.word_distribution[z,:])
+            w = self.sample_index(self.node_distribution[z,:])
             v[w] += 1
             ve[n] = w
             vc[n] = z
@@ -51,7 +51,7 @@ class networkGenerator(object):
         """
         Generate a social agent - social interaction profile matrix.
         """
-        m = np.zeros((node_num, self.vocab_size))
+        m = np.zeros((node_num, self.node_size))
         me = np.zeros((node_num, self.neighbor_num))
         mc = np.zeros((node_num, self.neighbor_num))
         for i in xrange(node_num):

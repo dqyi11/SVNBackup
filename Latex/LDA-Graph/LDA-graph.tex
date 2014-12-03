@@ -63,6 +63,15 @@
 
 \section{Graph generative model}
 
+\emph{Social interaction profile} characterizes each actor.
+For actor $ v_{i} $, it is defined as a set of neighbor $ \omega_{i,j} $ and the corresponding weight $ \mbox{SIW}(v_{i}, \omega_{i,j}) $.
+Thus,
+\begin{equation}
+\mbox{SIP}(v_{i}) = \{ (\omega_{i,1}, \mbox{SIW}(v_{i}, \omega_{i,1})) , \cdots , (\omega_{i,m_{i}}, \mbox{SIW}(v_{i}, \omega_{i,m_{i}}) \},
+\end{equation}
+$ m_{i} $ is the size of $ v_{i} $'s social interaction profile and $ \mbox{SIW}() $ defines the strength of such interaction.
+A social network contains a set of communities $ \iota( \iota_{1} , \iota_{2} , \cdots , \iota_{k} ) $.
+
 Here is a list of notations.
 \begin{itemize}
 \item $ M $ : number of social actors (social interaction profiles) in the social network
