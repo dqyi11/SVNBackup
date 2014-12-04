@@ -6,6 +6,7 @@ Created on Dec 3, 2014
 
 import scipy.io
 from LDASampler import *
+import numpy as np
 
 if __name__ == '__main__':
     
@@ -26,3 +27,17 @@ if __name__ == '__main__':
     for it, phi in enumerate(sampler.run(classic400, ITERATION_NUM)):
         print "Iteration", it
         print "Likelihood", sampler.loglikelihood()
+        
+    phi = sampler.phi()
+    print phi.shape
+    np.savetxt('phi.txt', phi, delimiter= ' ' ,fmt='%1.1f' )
+    
+    wrong_cnt = 0
+    for i in range(classicwordlist.shape[0]):
+        val = phi[:,i]
+        maxIdx = np.argmax(val)
+        if maxIdx != truelabels[0,i]:
+            wrong_cnt += 1
+        
+    print "Wrong count " + str(wrong_cnt)
+    
