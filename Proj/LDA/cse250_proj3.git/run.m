@@ -1,0 +1,10 @@
+LOAD
+fprintf('LOAD OVER\n');
+SETTINGS
+fprintf('SETTING OVER\n');
+INITIALIZATION
+fprintf('INITIALIZATION OVER\n');
+GIBBS
+fprintf('GIBBS OVER\n');
+ANALYSIS
+fprintf('ALL OVER\n');

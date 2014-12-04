@@ -6,6 +6,7 @@ Created on 2014-11-10
 
 from documentGenerator import *
 from LDASampler import *
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
@@ -17,6 +18,18 @@ if __name__ == '__main__':
     
     docGen = documentGenerator(TOPIC_NUM, DOCUMENT_LENGTH)
     matrix = docGen.generateDocuments(DOCUMENT_NUM)
+    
+    #np.savetxt('worldList.txt', docGen.word_list, delimiter= ' ' ,fmt='%1.1f' )
+    
+    for z in range(TOPIC_NUM):
+        data = docGen.word_list[z,:].reshape(docGen.width,-1)
+        height, width = data.shape
+        zoom = np.ones((width*2, width*2))
+        # imsave scales pixels between 0 and 255 automatically
+        plt.imsave('ref/topic'+str(z)+'.png', np.kron(data,zoom))
+        
+    
+    #np.savetxt("docGen.txt", matrix, delimiter= ', ' ,fmt='%1.f')
     
     sampler = LDASampler(TOPIC_NUM)
     for it, phi in enumerate(sampler.run(matrix, ITERATION_NUM)):

@@ -1,0 +1,13 @@
+% THIS FILE IS TO LOAD NEEDED DATASET.
+% I DONT WANT TO LOAD THEM EVERY TIME. = =
+
+%% USED TO STORE DATASET
+addpath('./dataset');
+
+
+%% FIRST EXPER.
+global DATA;	% ALL DATA NEEDED FOR FIRST EXPER.
+DATA=importdata('classic400.mat');
+
+
+%% SECOND EXPER.
