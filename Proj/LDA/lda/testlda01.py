@@ -30,23 +30,30 @@ if __name__ == '__main__':
         print "Likelihood " + str(likelihood)
         
     theta = sampler.theta()
-    theta_i = np.argmax(phi,axis=0)
+    theta_i = np.argmax(theta,axis=1) + 1
     
     print theta.shape
+    print theta_i.shape
     
-    index1 = [index for index,value in enumerate(theta_i) if value == 0]
-    index2 = [index for index,value in enumerate(theta_i) if value == 1]
-    index3 = [index for index,value in enumerate(theta_i) if value == 2]
+    wrong_cnt = 0
+    for i in range(theta_i.shape[0]):
+        if theta_i[i] != truelabels[0, i]:
+            wrong_cnt += 1
+    print " wrong cnt " + str(wrong_cnt)
+    
+    index1 = [index for index,value in enumerate(theta_i) if value == 1]
+    index2 = [index for index,value in enumerate(theta_i) if value == 2]
+    index3 = [index for index,value in enumerate(theta_i) if value == 3]
     import matplotlib.pyplot as plt
     from mpl_toolkits.mplot3d import Axes3D
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     first_list = []
-    ax.scatter(phi[0,index1], phi[1,index1], phi[2,index1],c='r')
-    ax.scatter(phi[0,index2], phi[1,index2], phi[2,index2],c='g')
-    ax.scatter(phi[0,index3], phi[1,index3], phi[2,index3],c='b')
+    ax.scatter(theta[index1, 0], theta[index1, 1], theta[index1, 2],c='r')
+    ax.scatter(theta[index2, 0], theta[index2, 1], theta[index2, 2],c='g')
+    ax.scatter(theta[index3, 0], theta[index3, 1], theta[index3, 2],c='b')
     plt.show()
-    
+
     
     
     
