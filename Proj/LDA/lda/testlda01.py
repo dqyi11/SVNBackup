@@ -17,7 +17,7 @@ if __name__ == '__main__':
     classic400 = np.array(data["classic400"].todense())
     
     TOPIC_NUM = 3
-    ITERATION_NUM = 100
+    ITERATION_NUM = 200
     
     print classicwordlist.shape
     print truelabels.shape
