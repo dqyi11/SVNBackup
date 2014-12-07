@@ -105,8 +105,17 @@ class LDASampler(object):
         V = self.nzw.shape[1]
         num = self.nzw + self.beta
         num /= np.sum(num, axis=1)[:, np.newaxis]
-        return num           
-            
+        return num      
+    
+    def theta(self): 
+        '''
+        Compute theta = p(z|m)
+        '''
+        V = self.nmz.shape[1]
+        num = self.nmz + self.alpha
+        num /= np.sum(num,axis=1)[:, np.newaxis]
+        return num
+             
     def word_indices(self, vec):
         """
         Turn a document vector of size vocab_size to a sequence
