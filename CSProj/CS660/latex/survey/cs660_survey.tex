@@ -30,7 +30,7 @@
 
 \begin{document}
 
-\title{Routing protocols in AD Hoc networks}
+\title{Mobile Indoor Localization}
 \subtitle{CS 660 Computer Networks}
 
 \numberofauthors{1} 
@@ -57,6 +57,36 @@ Daqing Yi\titlenote{Brigham Young University}\\
 %\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
 
 \section{Introduction}
+
+An \emph{Indoor positioning system} locates the objects or people in an indoor environment.
+The information used for localization includes radio waves, magnetic fields, acoustic signals or other sensory information from mobile devices.
+
+Indoor localization enables indoor navigation in shopping malls, indoor location-based advertisements, friends and family member tracking and etc.
+
+\section{GPS assisted localization}
+\label{sec:gps_local}
+
+Due to low signal strength and multipath effect, usually the GPS receiver does not work well in an indoor building.
+The indoor signal strength can be reduced 10 to 100 times of that in outdoor.
+
+\cite{Nirjon:2014:CIL:2594368.2594378} proposes a hardware-software approach \emph{COIN-GPS}, which is a highly-sensitivity cloud-offloaded instant GPS.
+It consists of three components,
+\begin{itemize}
+\item a directional antenna,
+\item a robust acquisition algorithm and
+\item a multi-directional location estimation algorithm.
+\end{itemize}
+
+\subsection{Robust acquisition}
+Because of the signal noise, the peak detection in common acquisition becomes difficult.
+The use of a directional antenna helps reduce the noise.
+ 
+\subsection{Multi-direction location estimation}
+
+
+ 
+\section{}
+ 
 
 \bibliographystyle{abbrv}
 \bibliography{reference}
