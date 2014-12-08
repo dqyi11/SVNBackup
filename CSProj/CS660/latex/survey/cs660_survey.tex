@@ -1,61 +1,32 @@
-% THIS IS SIGPROC-SP.TEX - VERSION 3.1
-% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
-% APRIL 2009
-%
-% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
-% LaTeX2e document class file for Conference Proceedings submissions.
-% ----------------------------------------------------------------------------------------------------------------
-% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
-%       1) The Permission Statement
-%       2) The Conference (location) Info information
-%       3) The Copyright Line with ACM data
-%       4) Page numbering
-% ---------------------------------------------------------------------------------------------------------------
-% It is an example which *does* use the .bib file (from which the .bbl file
-% is produced).
-% REMEMBER HOWEVER: After having produced the .bbl file,
-% and prior to final submission,
-% you need to 'insert'  your .bbl file into your source .tex file so as to provide
-% ONE 'self-contained' source file.
-%
-% Questions regarding SIGS should be sent to
-% Adrienne Griscti ---> griscti@acm.org
-%
-% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
-% Gerald Murray ---> murray@hq.acm.org
-%
-% For tracking purposes - this is V3.1SP - APRIL 2009
-
-\documentclass{acm_proc_article-sp}
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article}
+\usepackage{aaai}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
 \usepackage{hyperref}
-
-\begin{document}
-
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{natbib}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\pdfinfo{
+/Title (Mobile Indoor Localization)
+/Author (Daqing Yi)}
+\setcounter{secnumdepth}{0}  
+ \begin{document}
+% The file aaai.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
 \title{Mobile Indoor Localization}
-\subtitle{CS 660 Computer Networks}
+%\subtitle{CS 660 Computer Networks}
 
-\numberofauthors{1} 
-\author{
-\alignauthor
-Daqing Yi\titlenote{Brigham Young University}\\
-       \email{dqyi11@gmail.com}
+\author{Daqing Yi\\
+Brigham Young University \\
+\emph{dqyi11@gmail.com}
 }
-
-\date{}
-
-
 \maketitle
-%\begin{abstract}
-%\end{abstract}
-
-% A category with the (minimum) three required fields
-%\category{H.4}{Information Systems Applications}{Miscellaneous}
-%A category including the fourth, optional field follows...
-%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
-
-%\terms{Theory}
-
-%\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
 
 \section{Introduction}
 
@@ -64,6 +35,7 @@ The information used for localization includes radio waves, magnetic fields, aco
 
 Indoor localization enables indoor navigation in shopping malls, indoor location-based advertisements, friends and family member tracking and etc.
 
+\begin{comment}
 GPS
 \cite{Nirjon:2014:CIL:2594368.2594378} 
 WiFi
@@ -76,6 +48,7 @@ Acoustic beacon
 \cite{Wang:2012:NNW:2307636.2307655}
 Graphical model
 \cite{Nandakumar:2012:CLD:2348543.2348579}
+\end{comment}
 
 \section{GPS assisted localization}
 \label{sec:gps_local}
@@ -87,33 +60,64 @@ The indoor signal strength can be reduced 10 to 100 times of that in outdoor.
 \cite{Nirjon:2014:CIL:2594368.2594378} proposes a hardware-software approach \emph{COIN-GPS}, which is a highly-sensitivity cloud-offloaded instant GPS.
 It consists of three components,
 \begin{itemize}
-\item a directional antenna,
-\item a robust acquisition algorithm and
-\item a multi-directional location estimation algorithm.
+	\item a directional antenna,
+	\item a robust acquisition algorithm and
+	\item a multi-directional location estimation algorithm.
 \end{itemize}
 
 \subsection{Robust acquisition}
 Because of the signal noise, the peak detection in common acquisition becomes difficult.
 The use of a directional antenna helps reduce the noise.
- 
+
 \subsection{Multi-direction location estimation}
 
 
- 
+
 \section{Wifi assisted localization}
 
 Another popular way of localization is using WiFi signal. 
 Signal strength(RSSI) is used to estimate the distance to the AP, but it is hard to discriminate between multipath reflections and the direct path.
 In \cite{Nirjon:2014:CIL:2594368.2594378}, \emph{CUPID} is proposed by leveraging PHY layer information along with natural human mobility.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{fig/multipath.png}
+	\caption{An example of multiple paths of wireless signal~\cite{Sen:2013:AMR:2462456.2464463}.}
+	\label{fig:multipath}
+\end{figure}
+The localization problem becomes the estimation of the distance and the angle.
+The distance estimation is obtained by \emph{EDP} (Energy of the directed path) instead of RSSI, because it is less susceptible to mutipath reflection
+\footnote{Figure \ref{fig:multipath} gives an example of multipath reflection.}.
+The angle estimation is calculated by \emph{ANDP} (Angle of the directed path).
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{fig/ANDP.png}
+	\caption{Compute the change of angle using human mobility~\cite{Sen:2013:AMR:2462456.2464463}.}
+	\label{fig:andp}
+\end{figure}
+Figure \ref{fig:andp} illustrates the calculation of
+\begin{equation}
+\Delta \theta = \arccos \frac{ d_{A}^{2}+d_{B}^{2}-p_{AB}^{2} }{ 2 * d_{A} * d_{B} }.
+\end{equation}
+The location distance $ p_{AB} $ can be obtained by the accelerometer and gyroscope of the mobile phone.
 
- 
 \section{Acoustic beacon assisted localization}
 
 In \cite{Liu:2013:GEF:2462456.2464450}, 
 
+\section{Hybrid information assisted localization}
+
+In \cite{Nandakumar:2012:CLD:2348543.2348579}
+
+\section{SLAM-based localization}
+
+In \cite{Wang:2012:NNW:2307636.2307655}
+
+
+In \cite{Rai:2012:ZZC:2348543.2348580}
+
+\section{Summary}
+
 \bibliographystyle{abbrv}
 \bibliography{reference}
-
-%\balancecolumns 
 
 \end{document}
