@@ -76,7 +76,7 @@ The use of a directional antenna helps reduce the noise.
 \section{Wifi assisted localization}
 
 Another popular way of localization is using WiFi signal. 
-Signal strength(RSSI) is used to estimate the distance to the AP, but it is hard to discriminate between multipath reflections and the direct path.
+Signal strength(\emph{RSSI}) is used to estimate the distance to the AP, but it is hard to discriminate between multipath reflections and the direct path.
 In \cite{Nirjon:2014:CIL:2594368.2594378}, \emph{CUPID} is proposed by leveraging PHY layer information along with natural human mobility.
 \begin{figure}
 	\centering
@@ -85,8 +85,13 @@ In \cite{Nirjon:2014:CIL:2594368.2594378}, \emph{CUPID} is proposed by leveragin
 	\label{fig:multipath}
 \end{figure}
 The localization problem becomes the estimation of the distance and the angle.
-The distance estimation is obtained by \emph{EDP} (Energy of the directed path) instead of RSSI, because it is less susceptible to mutipath reflection
+The distance estimation is obtained by \emph{EDP} (Energy of the directed path) instead of \emph{RSSI}, because it is less susceptible to mutipath reflection
 \footnote{Figure \ref{fig:multipath} gives an example of multipath reflection.}.
+It is extracted from \emph{CSI} (Channel state information) in the PHY layer. 
+Experiments have been taken to show that this method provides a better accuracy of distance estimation than \emph{RSSI}, which the mean error is reduced from $ 10 $m to $ 4 $m.
+The angle estimation is usually from \emph{AoA} (angle-of-arrival).
+Usually the angle of the highest peak in MUSIC's pseudospectrum is selected as the angle of the directed path.
+However, if the directed path is not blocked, the peak might correspond to a reflected path, as in Figure \ref{fig:multipath}.
 The angle estimation is calculated by \emph{ANDP} (Angle of the directed path).
 \begin{figure}
 	\centering
@@ -102,7 +107,21 @@ The location distance $ p_{AB} $ can be obtained by the accelerometer and gyrosc
 
 \section{Acoustic beacon assisted localization}
 
-In \cite{Liu:2013:GEF:2462456.2464450}, 
+In \cite{Liu:2013:GEF:2462456.2464450}, an anchor network is imported for localization, which is named \emph{Guoguo}
+\footnote{``Guoguo'' means Tettigonia in Chinese.}.
+An anchor could transmit the spatial beacon signal to inform the unique location.
+The use of acoustic communication brings
+\begin{itemize}
+	\item improved scalability and efficiency,
+	\item and reduced hardware requirement.
+\end{itemize}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig/GUOGUO.png}
+	\caption{An anchor network of Guoguo ecosystem.~\cite{Liu:2013:GEF:2462456.2464450}.}
+	\label{fig:guoguo}
+\end{figure}
+
 
 \section{Hybrid information assisted localization}
 
