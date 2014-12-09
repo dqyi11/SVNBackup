@@ -130,18 +130,54 @@ By minimizing the square errors, the position could be estimated.
 
 \section{Hybrid information assisted localization}
 
-\cite{Nandakumar:2012:CLD:2348543.2348579} proposes a sensory information fusion for location estimation by using Bayesian inference.
+\cite{Nandakumar:2012:CLD:2348543.2348579} proposes \emph{Centaur}, a sensory information fusion for location estimation by using Bayesian inference.
+The \emph{Centaur} accommodates both anchors and non-anchors.
+\begin{itemize}
+\item Anchors provide known locations as priori, for example an assigned desktop PC that is not likely to be moved.
+\item Non-anchors are mobile devices, the locations of which need to be estimated.
+\end{itemize}
+
+The \emph{Centaur} adopts a Bayesian network of random variables.
+Random variables that can be measured are labeled as evidence nodes.
+Directed edges represent the relationships between the variables.
+The Bayesian inference could be applied to the network structure so that the location estimation can be obtained.
+
 In this paper, Radio Frequency (RF) and Acoustic Ranging (AR) are used for measurement.
+The WiFi measurements on the locations of non-anchors are fused with geometric constraints obtained from the acoustic measurements.
 
-\emph{EchoBeep} is introduced to make AR more robust in non-line-of-sight setting.
-
-\emph{DeafBeep} is proposed to adapt AR to localize speaker-only devices.
+Two schemes of acoustic ranging are also introduced to enhance the measurement.
+\emph{EchoBeep} is introduced to make acoustic ranging more robust in non-line-of-sight setting.
+It is an enhanced version of BeepBeep, an acoustic signal detection scheme.
+After denoising the signals, the first received copy of the chirp signal is via the direct path (because it is the shortest), though it might be weak.
+It enables reliable detection of the shortest acoustic path by additional cross-correlation processing.
+\emph{DeafBeep} is proposed to adapt acoustic ranging to localize speaker-only devices, such as the desktop PCs in an office with only speakers.
+It utilizes the location constraint in three devices, which is illustrated in Figure \ref{fig:deafbeep}.
+\begin{figure}
+	\centering
+	\includegraphics[width=0.7\linewidth]{fig/DeafBeep.png}
+	\caption{Triangle constraint used in BeafBeep.~\cite{Nandakumar:2012:CLD:2348543.2348579}.}
+	\label{fig:deafbeep}
+\end{figure}
 
 \section{Active learning based localization}
 
 \cite{Rai:2012:ZZC:2348543.2348580} proposed \emph{Zee} as an active learning procedure for location estimation.
 Instead of a labor intensive training set generation process, zero-effort crowdsourcing is reached.
-\emph{Zee} uses WiFi and inertial sensor measurements crowdsourced from the users' smartphones to automatically infer location over time and thereby generate a WiFi training set.
+\emph{Zee} performances WiFi scans and records the results indexed by time while executing the location estimation.
+Each WiFi measurement is paired with an estimated location as a record of the WiFi training set.
+This generated crowdsourced training dataset is fed into ``Horus'' and ``EZ'', two WiFi fingerprinting-based localization techniques.
+Because the training data set is created from the walks that users take through the space of interest in normal courses.
+\emph{Zee} offers a zero-effort crowdsourcing.
+
+Two techniques are used in estimating the locations.
+\begin{itemize}
+\item \emph{Augmented particle filtering} is imported to represent the uncertainty in location estimation.
+Moreover, it helps the tracking of latent variables, like the stride length of a user and the direction of walk.
+\item \emph{Backward belief propagation} is used after the tracking has converged.
+The later point in time with greater certainty could be used to reduce the uncertainty in location at earlier times.
+\end{itemize}
+
+
 
 
 
@@ -158,6 +194,8 @@ There are two types of landmarks.
 	In this regions, the humans are forced to generate certain predictable behaviors.
 	\item \emph{Organic landmarks} are selected from ambient signatures - in magnetic domain, WiFi signal, or even near water-fountain.
 	The generation process is given in Figure \ref{fig:olm}.
+	The sensed data are clustered.
+	If the data in same cluster falls in a small region, an organic landmark will be created.
 \end{itemize}
 \begin{figure}
 	\centering
