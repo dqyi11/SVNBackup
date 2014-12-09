@@ -147,7 +147,24 @@ Instead of a labor intensive training set generation process, zero-effort crowds
 
 \section{SLAM-based localization}
 
-In \cite{Wang:2012:NNW:2307636.2307655}
+\cite{Wang:2012:NNW:2307636.2307655} introduced \emph{UnLoc} framework.
+It simulates the SLAM (simultaneous localization and mapping) in robotics so that unsupervised localization could be reached.
+The devices starts to move from a known reference location, for example, an entrance of a building.
+By using dead-reckoning, the estimated location can be updated while moving.
+Landmarks are also used to correct location estimation.
+There are two types of landmarks.
+\begin{itemize}
+	\item \emph{Seed landmarks} are certain structures in the building - stairs, elevators, entrances, escalators.
+	In this regions, the humans are forced to generate certain predictable behaviors.
+	\item \emph{Organic landmarks} are selected from ambient signatures - in magnetic domain, WiFi signal, or even near water-fountain.
+	The generation process is given in Figure \ref{fig:olm}.
+\end{itemize}
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\linewidth]{fig/OLM.png}
+	\caption{The generation of organic landmarks.~\cite{Wang:2012:NNW:2307636.2307655}.}
+	\label{fig:olm}
+\end{figure}
 
 
 \section{Summary}
