@@ -28,6 +28,12 @@ Brigham Young University \\
 }
 \maketitle
 
+\begin{comment}
+ach student will work individually to write a short survey paper examining a focused area of networking that they are interested in. 
+The goal of this paper is to demonstrate your expertise in understanding Networking as a research area and to give you additional experience conducting a literature search in a new area and presenting your ideas in writing.
+Your paper should summarize the 5 or 6 most important papers on a research topic and should go well beyond the papers from class.
+\end{comment}
+
 \section{Introduction}
 
 An \emph{Indoor positioning system} locates the objects or people in an indoor environment.
@@ -60,17 +66,23 @@ The indoor signal strength can be reduced 10 to 100 times of that in outdoor.
 \cite{Nirjon:2014:CIL:2594368.2594378} proposes a hardware-software approach \emph{COIN-GPS}, which is a highly-sensitivity cloud-offloaded instant GPS.
 It consists of three components,
 \begin{itemize}
-	\item a directional antenna,
-	\item a robust acquisition algorithm and
-	\item a multi-directional location estimation algorithm.
+	\item a \emph{directional antenna},
+	\item a \emph{robust acquisition algorithm} and
+	\item a \emph{multi-directional location estimation algorithm}.
 \end{itemize}
 
-\subsection{Robust acquisition}
 Because of the signal noise, the peak detection in common acquisition becomes difficult.
-The use of a directional antenna helps reduce the noise.
+A patch antenna array is selected in \cite{Nirjon:2014:CIL:2594368.2594378}.
+The use of a \emph{directional antenna} helps reduce the noise.
+The reduction of the noise enable the peak search in frequency domain in weak signal in the indoor environment.
+A non-coherent integrator is also used to remove the wrong peak in the presence of noise.
+Least square optimization is also introduced to eliminates the multipath effect.
 
-\subsection{Multi-direction location estimation}
-
+In practice, because there are $ 5 $ parameters $ (X, Y, Z) $, \emph{common bias} and \emph{coarse time error}, at least $ 5 $ acquired satellites are needed to estimate the location.
+As a result, the indoor location estimation might be a problem due to inadequate satellites.
+Because the steering of the antenna does not change the location, two sets of satellites information at different directions could be merged so that the number of unknown could reduced.
+In \cite{Nirjon:2014:CIL:2594368.2594378}, nine directions are used in the format of $ (R, S) $, in which $ R $ is main beam tilt angle along the X-axis and $ S $ is the tilt angle along the Y-axis.
+The directions are $ (0, 0) $ , $ (\pm 15, 0) $, $ (\pm 30, 0) $, $ (0, \pm 15) $ and $ (0, \pm 30) $.
 
 
 \section{Wifi assisted localization}
@@ -178,9 +190,6 @@ The later point in time with greater certainty could be used to reduce the uncer
 \end{itemize}
 
 
-
-
-
 \section{SLAM-based localization}
 
 \cite{Wang:2012:NNW:2307636.2307655} introduced \emph{UnLoc} framework.
@@ -206,6 +215,25 @@ There are two types of landmarks.
 
 
 \section{Summary}
+
+\begin{comment}
+\begin{table}[ht]
+\caption{Comparison of different methods.}
+\label{tb:comparison}
+\centering
+\begin{center}
+\begin{tabular}{|c|p{2.2cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|p{2.2cm}|}
+	\hline
+	\textbf{Name} & COIN-GPS & CUPID &  Guoguo & Centaur & Zee & UnLoc \\
+	\hline
+	\textbf{Technology} & GPS & WiFi & AR & WiFi, AR & WiFi & Magnetic, WiFi, Accelerometer, gyroscopes \\
+	\hline
+	\textbf{Accuracy} & & & & & & \\         
+	\hline
+\end{tabular}
+\end{center}
+\end{table}
+\end{comment}
 
 \bibliographystyle{abbrv}
 \bibliography{reference}
