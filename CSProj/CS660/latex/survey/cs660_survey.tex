@@ -135,9 +135,23 @@ The use of acoustic communication brings
 \end{figure}
 The operation band is chosen as $ 15 kHz \sim 20 kHz $, which the human's ears are less sensitive to.
 Because the beacon signal is wide-band modulated, it is unnoticeable to the humans.
+
+In order to differentiate anchor nodes, there should be enough code distance redundancy for proper pseudo-codes.
+The distance estimation depends on the TOA (Time-of-Arrival) estimation, which is performed to estimate the firsth path sample $ k^{0}_{j} $ in the whole symbol duration.
+It is calculated by
+\begin{equation}
+\hat{k}^{0}_{j} = \min_{k} ( k \mid r_{j} (k) > \eta_{toa} ) , k \in [ k_{p} - J_{p}, K_{p} + M_{O}  ].
+\end{equation}
+A code matching process is called to synchronize between the anchor node and the smartphone.
+After synchronization, a TOA estimation matrix $ \mathbf{r} $ can be obtained.
+A sliding window of length $ W $  is applied to the TOA estimation matrix to generate a representation of current sparse measurement.
+Thus the estimated distance to the anchor nodes could be updated.
 All the anchor nodes are synchronized by a controller.
-	
-By minimizing the square errors, the position could be estimated.
+With the estimated distances to $ M $ anchor nodes, multilateration can be performed to localize the devices.	
+By minimizing the square errors, the position could be estimated by
+\begin{equation}
+\hat{\theta} = (\mathbf{M}^{T} \tilde{\Sigma}^{-1} A )^{-1} A^{T} \tilde{\Sigma}^{-1} \nu.
+\end{equation}
 
 
 \section{Hybrid information assisted localization}
