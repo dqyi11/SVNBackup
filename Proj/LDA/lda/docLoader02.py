@@ -67,11 +67,21 @@ if __name__ == '__main__':
     print theta.shape
     print theta_i.shape
     
+    phi = sampler.phi()
+    
     wrong_cnt = 0
     for i in range(theta_i.shape[0]):
         if theta_i[i] != type_list[i]:
             wrong_cnt += 1
     print " wrong cnt " + str(wrong_cnt)
+    
+    import scipy.io
+    output_data = {}
+    output_data["PHI"] = phi
+    output_data["THETA"] = theta
+    output_data["THETA_I"] = theta_i
+    
+    scipy.io.savemat("doc_load02.mat", output_data)
     
     
     
