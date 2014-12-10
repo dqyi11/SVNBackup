@@ -1,0 +1,162 @@
+%File: formatting-instruction.tex
+\documentclass[letterpaper]{article}
+\usepackage{aaai}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{hyperref}
+\usepackage{comment}
+\usepackage{graphicx}
+\usepackage{natbib}
+
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{algorithm}
+%\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\pdfinfo{
+/Title (Mobile Indoor Localization)
+/Author (Daqing Yi)}
+\setcounter{secnumdepth}{0}  
+\begin{document}
+% The file aaai.sty is the style file for AAAI Press 
+% proceedings, working notes, and technical reports.
+%
+\title{Community discovery in social networks using Latent Dirichlet Allocation}
+%\subtitle{CS 660 Computer Networks}
+
+\author{ 
+	Joseph Walker 
+	\\ \texttt{joseph.k.walker@gmail.com}
+	\And Seung-Hee Yang 
+	\\ \texttt{yangseung0105@gmail.com}
+	\And Daqing Yi 
+	\\ \texttt{dqyi11@gmail.com}
+}
+\maketitle
+
+\section{Introduction}
+
+\section{Related work}
+
+\section{Graph generative model}
+
+\emph{Social interaction profile} characterizes each actor.
+For actor $ v_{i} $, it is defined as a set of neighbor $ \omega_{i,j} $ and the corresponding weight $ \mbox{SIW}(v_{i}, \omega_{i,j}) $.
+Thus,
+\begin{equation}
+\mbox{SIP}(v_{i}) = \{ (\omega_{i,1}, \mbox{SIW}(v_{i}, \omega_{i,1})) , \cdots , (\omega_{i,m_{i}}, \mbox{SIW}(v_{i}, \omega_{i,m_{i}}) \},
+\end{equation}
+$ m_{i} $ is the size of $ v_{i} $'s social interaction profile and $ \mbox{SIW}() $ defines the strength of such interaction.
+A social network contains a set of communities $ \iota( \iota_{1} , \iota_{2} , \cdots , \iota_{k} ) $.
+
+Here is a list of notations.
+\begin{itemize}
+	\item $ M $ : number of social actors (social interaction profiles) in the social network
+	\item $ K $ : number of communities (mixture components)
+	\item $ N_{i} $ : number of social interactions in a social interaction profile $ \mbox{sip}_{i} $
+	\item $ \vec{\alpha} $ : Dirichlet prior hyperparameter
+	\item $ \vec{\beta} $ : Dirichlet prior hyperparameter
+	\item $ \iota $ : hidden community variable, $ \iota_{i,j} $ means the community for the $ j $th social interaction in $ \mbox{sip}_{i} $
+	\item $ \vec{\theta} $ : $ p(\iota \mid \mbox{sip}_{j}) $ is the community mixture proportion for $ \mbox{sip}_{j} $ 
+	\item $ \vec{\Phi}_{k} $ : $ p(\omega \mid \iota_{k} ) $ is the mixture component of community $ k $
+	\item $ \omega $ : social interaction variable, $ $ means the $ j $th social interaction in $ \mbox{sip}_{i} $
+\end{itemize}
+
+The generative process for an agent $ \omega_{i} $'s social interaction profile $ \mbox{sip}_{i} $ in a social network.
+\begin{itemize}
+	\item Sample mixture components $ \vec{\phi}_{k} \sim \mbox{Dirichlet}(\vec{\beta}) $ for $ k \in [1, K] $
+	\item Choose $ \vec{\theta}_{i} \sim \mbox{Dirichlet}(\vec{\alpha}) $ 
+	\item Choose $ N_{i}  \sim \mbox{Poisson}(\xi) $
+	\item For each of the $ N_{i} $ social interactions $ \omega_{i,j} $:
+	\begin{itemize}
+		\item Choose a community $ \iota_{i,j} \sim \mbox{Multinomial}( \vec{\theta}_{i} ) $
+		\item Choose a social interaction $ \omega_{i,j} \sim \mbox{Multinomial}( \vec{\theta}_{\iota_{i,j}} ) $	
+	\end{itemize}
+\end{itemize}
+
+The probability that the $ j $th social interaction element $ \omega_{i,j} $ in the social actor $ \omega_{i} $'s social interaction profile $ \mbox{sip}_{i} $ instantiates a particular neighboring agent $ \omega_{m} $ is
+\begin{equation}
+p( \omega_{i,j} = \omega_{m} \mid \vec{\theta}_{i} , \underline{\mathbf{\Phi}} ) = \sum_{k=1}^{K} p( \omega_{i,j} = \omega_{m} \mid \vec{\Phi}_{k} ) p( \iota_{i,j} = k \mid \vec{\theta}_{i} ),
+\end{equation}
+where $ \vec{\theta}_{i} $ is the mixing proportion variable for $ \mbox{sip}_{i} $ and $ \vec{\Phi}_{k} $ is the parameter set for the $ k $th community component distribution.
+The joint distribution of all known and hidden variables is
+\begin{equation}
+p( \vec{\omega}_{i} , \vec{\iota}_{i}, \vec{\theta}_{i} , \underline{\mathbf{\Phi}}  \mid \vec{\alpha} , \vec{\beta} ) = \prod_{j=1}^{N_{i}} 
+p( \omega_{i,j} \mid \vec{\phi}_{\iota_{i,j}} ) P( \iota_{i,j} \mid \vec{\theta}_{i} )
+p( \vec{\theta}_{i} \mid \vec{\alpha} ) p( \underline{\mathbf{\Phi}} \mid \vec{\beta} )
+\end{equation}
+
+\section{Latent Dirichlet Allocation}
+
+The desired distribution is the posterior given evidence
+\begin{equation}
+p( \iota \mid \omega ) = \frac{ p( \omega , \iota ) }{ \sum_{ \iota } p( \omega , \iota ) }.
+\end{equation}
+Using a Gibbs sampling, the joint distribution is
+\begin{equation}
+\begin{aligned}
+p( \vec{\omega}, \vec{\iota} \mid \vec{\alpha}, \vec{\beta} )  & = p( \vec{\omega} \mid \vec{\iota}, \vec{\beta} ) p( \vec{\iota} \mid \vec{\alpha} ) \\
+& = \prod_{\iota = 1}^{K} \frac{\Delta(\vec{n}_{\iota}+\vec{\beta})}{\Delta{\vec{\beta}}}
+\prod_{m=1}^{M} \frac{\Delta(\vec{n}_{m}+\vec{\alpha})}{\Delta{\vec{\alpha}}}
+\end{aligned}
+\end{equation}
+
+The update equation for the hidden variables can be derived
+\begin{equation}
+p( \iota_{i} = j \mid \vec{\iota}_{\neg i}, \vec{\omega}) \propto 
+\frac{ n^{\omega_{i}}_{\neg i, j}+\beta }{ n^{\cdot}_{\neg i, j}+W\beta } \ast \frac{ n^{\mbox{sip}_{i}}_{\neg i}+\alpha }{ n^{\mbox{sip}_{i}}_{\neg i}+T\alpha }
+\end{equation}
+
+The update formula for $ $ and $ $ are
+\begin{equation}
+\phi_{k,\omega} = \frac{n^{\omega}_{k}+\beta}{\sum_{v=1}^{V}n^{v}_{k}+W\beta}
+\end{equation}
+and
+\begin{equation}
+\theta_{m,k} = \frac{n^{k}_{m}+\alpha}{\sum_{K}^{\iota=1}+T\alpha}.
+\end{equation}
+
+The pseudo code is given as following.
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\For{\textbf{each} social interaction profile $ \mbox{sip}_{i} \in [1,M] $ }
+		\For{\textbf{each} social interaction $ \omega_{i,j} \in [1, N_{i}] $ }
+		\State sample community index $ \iota_{i,j} \sim \mbox{Mult}(\frac{1}{K}) $
+		\State update counters: $ n^{\iota_{i,j}}_{i} + 1 $, $ n_{i} + 1 $, $ n^{\iota_{i,j}}_{\omega_{i,j}} +1 $ and $ n_{\iota_{i,j}} +1 $
+		\EndFor
+		\EndFor
+		
+		\While{not finished}
+		\For{\textbf{each} SIP $ \mbox{sip}_{i} $}
+		\For{\textbf{each} $ \omega_{i,j} \in [1, N_{i}] $}
+		\State decrement counters and sums:  $ n^{\iota_{i,j}}_{i} - 1 $, $ n_{i} - 1 $, $ n^{\iota_{i,j}}_{\omega_{i,j}} - 1 $ and $ n_{\iota_{i,j}} - 1 $ 
+		\State resample $ \omega_{i,j} $ according to  $ p(\iota_{i}=j \mid \vec{\iota}_{\neg i}, \vec{\omega} ) $
+		\State update counter accordingly
+		\EndFor
+		\EndFor
+		\If{converged and L iterations}
+		\State update parameters $ \phi $ and $ \theta $
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+	\caption{Gibbs sampling process}
+\end{algorithm}
+
+\section{Social Network Structure}
+
+
+\section{Analysis}
+
+\section{Summary}
+
+\bibliographystyle{abbrv}
+\bibliography{reference}
+
+\end{document}
