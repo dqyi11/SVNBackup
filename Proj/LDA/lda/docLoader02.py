@@ -28,11 +28,11 @@ def getIndex(input):
     
 if __name__ == '__main__':
     
-    citeseer_content = np.loadtxt('citeseer.content', delimiter='\t', dtype=str)
-    print citeseer_content.shape   
+    cora_content = np.loadtxt('citeseer.content', delimiter='\t', dtype=str)
+    print cora_content.shape   
     
-    row_num = citeseer_content.shape[0]
-    col_num = citeseer_content.shape[1]
+    row_num = cora_content.shape[0]
+    col_num = cora_content.shape[1]
     
     print row_num
     print col_num
@@ -41,10 +41,10 @@ if __name__ == '__main__':
     doc_list = []
     type_list = np.zeros(row_num, dtype=np.int)
     for i in range(row_num):
-        doc_list.append(citeseer_content[i][0])
+        doc_list.append(cora_content[i][0])
         for j in range(1, col_num-1):
-            data_mat[i,j-1] = int(citeseer_content[i][j])
-        type_list[i] = getIndex(citeseer_content[i][col_num-1])
+            data_mat[i,j-1] = int(cora_content[i][j])
+        type_list[i] = getIndex(cora_content[i][col_num-1])
     
     print data_mat.shape
     print len(doc_list)
@@ -77,6 +77,8 @@ if __name__ == '__main__':
     
     import scipy.io
     output_data = {}
+    output_data["NODES"] = doc_list
+    output_data["TYPES"] = type_list
     output_data["PHI"] = phi
     output_data["THETA"] = theta
     output_data["THETA_I"] = theta_i

@@ -69,6 +69,7 @@ if __name__ == '__main__':
     #nx.write_graphml(G, 'citeseer_cites.graphml')
     
     out_data = {}
+    out_data["NODES"] = G.nodes()
     out_data["DATA_MATRIX"] = data_mat
     
     import scipy.io
