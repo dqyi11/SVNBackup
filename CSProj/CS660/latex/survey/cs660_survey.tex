@@ -12,14 +12,14 @@
 \setlength{\pdfpagewidth}{8.5in}
 \setlength{\pdfpageheight}{11in}
 \pdfinfo{
-/Title (Mobile Indoor Localization)
+/Title (Mobile Computing -  Indoor Localization)
 /Author (Daqing Yi)}
 \setcounter{secnumdepth}{0}  
  \begin{document}
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Mobile Indoor Localization}
+\title{Mobile Computing - Indoor Localization}
 %\subtitle{CS 660 Computer Networks}
 
 \author{Daqing Yi\\
@@ -37,9 +37,17 @@ Your paper should summarize the 5 or 6 most important papers on a research topic
 \section{Introduction}
 
 An \emph{Indoor positioning system} locates the objects or people in an indoor environment.
-The information used for localization includes radio waves, magnetic fields, acoustic signals or other sensory information from mobile devices.
-
 Indoor localization enables indoor navigation in shopping malls, indoor location-based advertisements, friends and family member tracking and etc.
+
+Unlike the popularity of GPS applied in outdoor localization, the GPS signal in an indoor environment can be weak.
+Usually the information used for localization includes radio waves, magnetic fields, acoustic signals or other sensory information from mobile devices.
+In an indoor environment, there are a lot of factors that can influence the detected signals, e.g. moving objects and complex architecture objects.
+A precise localization becomes a challenge as a result.
+
+The localization information can be directly calculated from GPS information~\cite{Nirjon:2014:CIL:2594368.2594378}, but most common ways are using the estimated distance to anchors to locate devices, which includes WiFi~\cite{Sen:2013:AMR:2462456.2464463}~\cite{Wang:2012:NNW:2307636.2307655}~\cite{Rai:2012:ZZC:2348543.2348580}~\cite{Nandakumar:2012:CLD:2348543.2348579}, Acoustic beacon~\cite{Liu:2013:GEF:2462456.2464450}~\cite{Nandakumar:2012:CLD:2348543.2348579}.
+
+
+
 
 \begin{comment}
 GPS
