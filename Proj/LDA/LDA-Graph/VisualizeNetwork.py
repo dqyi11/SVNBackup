@@ -4,9 +4,9 @@ Created on Nov 20, 2014
 @author: daqing_yi
 '''
 
-import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+import networkx as nx
 
 def visualizeNetwork(matrix_e, matrix_c, colors):
     
