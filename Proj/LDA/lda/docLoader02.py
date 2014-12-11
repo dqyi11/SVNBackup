@@ -56,7 +56,7 @@ if __name__ == '__main__':
     alpha_val = 50.0/TOPIC_NUM
     beta_val = 0.1
     
-    print "Start sampling ......"
+    print "Start sampling ......" + "alpha: " + str(alpha_val) + " beta:" + str(beta_val)
     
     sampler = LDASampler(TOPIC_NUM, alpha=alpha_val, beta=beta_val)
     for it, phi in enumerate(sampler.run(data_mat, ITERATION_NUM)):
