@@ -18,14 +18,14 @@ if __name__ == '__main__':
             idx += 1                
         return None
 
-    cora_cites = np.genfromtxt('citeseer.cites', delimiter='\t', dtype=str)
-    print cora_cites.shape
+    citeseer_cites = np.genfromtxt('citeseer.cites', delimiter='\t', dtype=str)
+    print citeseer_cites.shape
     
     G = nx.Graph()
     G1 = nx.Graph()
     G2 = nx.Graph()
 
-    for cite in cora_cites:
+    for cite in citeseer_cites:
         G.add_edge(cite[0], cite[1])
         G1.add_node(cite[0])
         G2.add_node(cite[1])
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     #nx.draw_networkx_nodes(G, pos, node_color='r')
     #nx.draw_networkx_edges(G, pos, edge_color='b')
     
-    #nx.write_graphml(G, 'cora_cites.graphml')
+    #nx.write_graphml(G, 'citeseer_cites.graphml')
     
     out_data = {}
     out_data["NODES"] = G.nodes()
