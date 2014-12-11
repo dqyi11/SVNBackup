@@ -57,7 +57,7 @@ Online document networks such as Google Scholar and Microsoft Academic Search ha
 As of 2014, Google Scholar is reported to contain around 160 million documents with Microsoft Academic Search containing around 40 million documents. 
 
 Unlike Web, which is roughly organized round content, online document networks are organized around authors.
-Participating authors join the network, publish their brief profile. Once other authors cite the original authors’ paper, the authors are linked. Thus, the resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
+Participating authors join the network, publish their brief profile. Once other authors cite the original authorsâ€™ paper, the authors are linked. Thus, the resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
 
 An understanding for the graph structure of online document networks is important to evaluate the current systems and to design future document networks. 
 For example, understanding the structure of the document networks may lead to algorithms that can detect influential authors.
@@ -106,6 +106,7 @@ p( \omega_{i,j} = \omega_{m} \mid \vec{\theta}_{i} , \underline{\mathbf{\Phi}} )
 where $ \vec{\theta}_{i} $ is the mixing proportion variable for $ \mbox{sip}_{i} $ and $ \vec{\Phi}_{k} $ is the parameter set for the $ k $th community component distribution.
 The joint distribution of all known and hidden variables is
 \begin{equation}
+\begin{aligned}
 p( \vec{\omega}_{i} , \vec{\iota}_{i}, \vec{\theta}_{i} , \underline{\mathbf{\Phi}}  \mid \vec{\alpha} , \vec{\beta} ) = \prod_{j=1}^{N_{i}} 
 [ 
 p( \omega_{i,j} \mid \vec{\phi}_{\iota_{i,j}} ) P( \iota_{i,j} \mid \vec{\theta}_{i} ) \\
@@ -233,16 +234,20 @@ The node structure is as follows:
 \}
 \end{framed}
 
+Figure \ref{fig:gene_net_struct} illustrates the network structures of the generated document network and the generated author network.
+And Figure \ref{fig:gene_ad_mat} visualizes the corresponding adjacency matrices.
+Both matrices are very sparse.
+White pixels can be seen after enlarged.
 
 \begin{figure}
 \subfigure[Document network]{
 \centering
-\includegraphics[width=0.45\linewidth]{./fig/doc_net_phishing.png}
+\includegraphics[width=0.47\linewidth]{./fig/doc_net_phishing.png}
 \label{fig:gene_net_struct:doc_net}
 }
 \subfigure[Author network]{
 \centering
-\includegraphics[width=0.45\linewidth]{./fig/auth_net_phishing.png}
+\includegraphics[width=0.47\linewidth]{./fig/auth_net_phishing.png}
 \label{fig:gene_net_struct:auth_net}
 } 
 \caption{The network structure of the generated document network and author network.}
@@ -252,12 +257,12 @@ The node structure is as follows:
 \begin{figure}
 \subfigure[Document network]{
 \centering
-\includegraphics[width=0.45\linewidth]{./fig/doc_net_am}
+\includegraphics[width=0.47\linewidth]{./fig/doc_net_am}
 \label{fig:gene_ad_mat:doc_net}
 }
 \subfigure[Author network]{
 \centering
-\includegraphics[width=0.45\linewidth]{./fig/auth_net_am}
+\includegraphics[width=0.47\linewidth]{./fig/auth_net_am}
 \label{fig:gene_ad_mat:auth_net}
 } 
 \caption{The adjacency matrix of the generated document network and author network.}
