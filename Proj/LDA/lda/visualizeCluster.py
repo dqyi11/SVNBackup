@@ -11,10 +11,11 @@ def visualizeCluster(clustered, type_ref, cluster_num, data_num, name):
     
     clusters = {}
     for k in range(cluster_num):
-        clusters[0, k] = []
+        clusters[k] = []
         
     for i in range(data_num):
-        clusters[clustered[0, i]].append(i)
+        idx = clustered[0, i]
+        clusters[idx].append(i)
     
     for k in range(cluster_num):
         hist_cnt = np.zeros(cluster_num)
@@ -23,7 +24,7 @@ def visualizeCluster(clustered, type_ref, cluster_num, data_num, name):
             
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.bar(hist_cnt)
+        ax.bar(np.arange(cluster_num), hist_cnt, 0.4)
         plt.savefig(name+"-"+str(k)+".png")
             
        

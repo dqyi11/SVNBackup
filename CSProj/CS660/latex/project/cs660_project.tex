@@ -44,24 +44,44 @@
 \maketitle
 
 \begin{abstract}
-Many authors in academic circle publish their papers and their papers are published on-line. Authors of the papers tend to form a network similar to online social networks.
+Connecting the academic papers or the academic authors creates social network structures.
+By different ways of connecting nodes, the social network structure can represent different relationship in academic society.
+Using Latent Dirichlet Allocation to model the generative model of the network supports the analysis on the social network,
+particular the network at large scale.
+Our project collects academic documents from Google Scholar and creates corresponding social network structures.
+After the generative model has been learned from social network structure,
+many potential features could be extracted.
+\begin{comment}
+Many authors in academic circle publish their papers and their papers are published on-line.
+Authors of the papers tend to form a network similar to online social networks.
 Sites that hosts papers such as Google Scholar are popular, and their popularity provides an opportunity to study the characteristics of the document network at large scale.
 Understanding the document network is meaningful in both improving the current document systems and designing new applications for the document network.
 Our project presents a measurement study and analysis of the structure of document network by Google Scholar. 
+\end{comment}
 \end{abstract}
 
 \section{Introduction}
 
-Among various types of information sharing systems provided in the Internet, online document networks have been the popular source for academic papers.
-Online document networks such as Google Scholar and Microsoft Academic Search have gained growing popularity.
+Among various types of information sharing systems provided in the Internet, online academic document database, such as Google Scholar and Microsoft Academic Search, have gained growing popularity.
 As of 2014, Google Scholar is reported to contain around 160 million documents with Microsoft Academic Search containing around 40 million documents. 
 
-Unlike Web, which is roughly organized round content, online document networks are organized around authors.
-Participating authors join the network, publish their brief profile. Once other authors cite the original authors’ paper, the authors are linked. Thus, the resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
+Unlike Web, which is roughly organized round content, academic papers are organized around authors.
+Participating authors join the network, publish their brief profile.
+Once other authors cite the original authors’ paper, the authors are linked.
+The resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
+The document networks are proposed to analyze the latent relationship between papers~\cite{chang2009relational}.
 
 An understanding for the graph structure of online document networks is important to evaluate the current systems and to design future document networks. 
 For example, understanding the structure of the document networks may lead to algorithms that can detect influential authors.
 In this project paper, we present a measurement study and analysis of the structure of the document network formed by Google Scholar. 
+By
+
+Latent Dirichlet Allocation~\cite{Blei:2003:LDA:944919.944937} has been an important method in text mining.
+It uses a Bayesian network structure for a document generative model.
+The words in the documents are used as samples to training the Bayesian network.
+The trained Bayesian network is expected to approximate the latent text data distribution, which could be used for pattern analysis purpose.
+By modeling the social network distribution in a similar way, the Latent Dirichlet Allocation can be applied to analyze the social network structures
+~\cite{4258697} \cite{Cha:2012:SAU:2348283.2348360} \cite{Henderson:2009:ALD:1529282.1529607}.
 
 \section{Graph generative model}
 

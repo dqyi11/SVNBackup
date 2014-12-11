@@ -65,7 +65,7 @@ if __name__ == '__main__':
         print "Likelihood " + str(likelihood)
         
     theta = sampler.theta()
-    theta_i = np.argmax(theta,axis=1) + 1
+    theta_i = np.argmax(theta,axis=1) 
     
     print theta.shape
     print theta_i.shape
