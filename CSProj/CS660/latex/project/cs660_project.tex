@@ -107,8 +107,11 @@ where $ \vec{\theta}_{i} $ is the mixing proportion variable for $ \mbox{sip}_{i
 The joint distribution of all known and hidden variables is
 \begin{equation}
 p( \vec{\omega}_{i} , \vec{\iota}_{i}, \vec{\theta}_{i} , \underline{\mathbf{\Phi}}  \mid \vec{\alpha} , \vec{\beta} ) = \prod_{j=1}^{N_{i}} 
-p( \omega_{i,j} \mid \vec{\phi}_{\iota_{i,j}} ) P( \iota_{i,j} \mid \vec{\theta}_{i} )
+[ 
+p( \omega_{i,j} \mid \vec{\phi}_{\iota_{i,j}} ) P( \iota_{i,j} \mid \vec{\theta}_{i} ) \\
 p( \vec{\theta}_{i} \mid \vec{\alpha} ) p( \underline{\mathbf{\Phi}} \mid \vec{\beta} )
+]
+\end{aligned}
 \end{equation}
 
 \section{Latent Dirichlet Allocation}
