@@ -51,7 +51,8 @@ The methods to enhance the accuracy of estimations can be categorized into
 	\item and Bayseian inference~\cite{Wang:2012:NNW:2307636.2307655}~\cite{Nandakumar:2012:CLD:2348543.2348579}~\cite{Rai:2012:ZZC:2348543.2348580}.
 \end{itemize}
 
-
+In this survey paper, six papers are reviewed.
+Different approaches have been applied in each paper, which are briefly discussed briefly in below sections.
 
 
 \begin{comment}
@@ -72,7 +73,7 @@ Graphical model
 \section{GPS assisted localization}
 \label{sec:gps_local}
 
-GPS has been applied widely into the 
+GPS has been the most popular approach of localization in the outdoor environment.
 Due to low signal strength and multipath effect, usually the GPS receiver does not work well in an indoor building.
 The indoor signal strength can be reduced 10 to 100 times of that in outdoor.
 
@@ -100,8 +101,9 @@ The directions are $ (0, 0) $ , $ (\pm 15, 0) $, $ (\pm 30, 0) $, $ (0, \pm 15) 
 
 \section{Wifi assisted localization}
 
-Another popular way of localization is using WiFi signal. 
-Signal strength(\emph{RSSI}) is used to estimate the distance to the AP, but it is hard to discriminate between multipath reflections and the direct path.
+Currently the most popular way of localization in the indoor environment is using WiFi signal. 
+Signal strength(\emph{RSSI}) is used to estimate the distance to the AP, which could indirectly locate the device position.
+However, there are still many effects that could degrade the localization precision, e.g. the hardness of discriminating between multipath reflections and the direct path.
 In \cite{Nirjon:2014:CIL:2594368.2594378}, \emph{CUPID} is proposed by leveraging PHY layer information along with natural human mobility.
 \begin{figure}
 	\centering
@@ -239,7 +241,9 @@ There are two types of landmarks.
 	\caption{The generation of organic landmarks.~\cite{Wang:2012:NNW:2307636.2307655}.}
 	\label{fig:olm}
 \end{figure}
-
+\emph{UnLoc} uses \emph{seed landmarks} and \emph{organic landmarks} to reset dead reckoning error so that the motion of the user could be better tracked.
+Meanwhile, the landmark locations could also be refined using the dead reckoning paths. 
+This forms the \emph{simultaneous localization and mapping} process, in which the estimation error would converge with the sampling number increases.
 
 \section{Summary}
 
