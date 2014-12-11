@@ -51,12 +51,15 @@ if __name__ == '__main__':
     print len(doc_list)
     print type_list.shape
     
-    TOPIC_NUM = row_num
-    ITERATION_NUM = 10
+    TOPIC_NUM = 6
+    ITERATION_NUM = 600
     
-    print "Start sampling ......"
+    alpha_val = 50.0/TOPIC_NUM
+    beta_val = 0.1
     
-    sampler = LDASampler(TOPIC_NUM, alpha=6.667)
+    print "Start sampling ......" + "alpha: " + str(alpha_val) + " beta:" + str(beta_val)
+    
+    sampler = LDASampler(TOPIC_NUM, alpha=alpha_val, beta=beta_val)
     for it, phi in enumerate(sampler.run(data_mat, ITERATION_NUM)):
         print "Iteration", it
         likelihood = sampler.loglikelihood()
