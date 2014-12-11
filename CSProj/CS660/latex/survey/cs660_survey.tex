@@ -243,9 +243,19 @@ There are two types of landmarks.
 \end{figure}
 \emph{UnLoc} uses \emph{seed landmarks} and \emph{organic landmarks} to reset dead reckoning error so that the motion of the user could be better tracked.
 Meanwhile, the landmark locations could also be refined using the dead reckoning paths. 
-This forms the \emph{simultaneous localization and mapping} process, in which the estimation error would converge with the sampling number increases.
+This forms the \emph{simultaneous localization and mapping} process, in which the estimation error would converge with the observation number increases.
 
 \section{Summary}
+
+All six papers claimed in their experiment results that the localization error could usually be in between $ 1m $ and $ 2m $.
+Particularly, \emph{Guoguo} reported the accuracy could be $ 6 \sim 25 cm $, because the anchor density is relatively higher.
+\emph{COIN-GPS} expects only device hardware change and software upgrade.
+It requires least environment deployment, because it only directly receives information from GPS satellites.
+However, yet in a lot of building, the GPS signal can be too weak to be extracted from noised signal.
+\emph{CUPID} uses WiFi framework, which have already applied to most of the indoor environment with APs deployed.
+
+
+ 
 
 \begin{comment}
 \begin{table}[ht]
