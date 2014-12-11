@@ -8,6 +8,7 @@
 \usepackage{comment}
 \usepackage{graphicx}
 \usepackage{natbib}
+\usepackage{framed}
 
 \usepackage{url}
 \usepackage{hyperref}
@@ -16,6 +17,7 @@
 \usepackage{algorithm}
 %\usepackage{algorithmicx}
 \usepackage[noend]{algpseudocode}
+\usepackage{subfigure}
 
 \frenchspacing
 \setlength{\pdfpagewidth}{8.5in}
@@ -41,9 +43,25 @@
 }
 \maketitle
 
+\begin{abstract}
+Many authors in academic circle publish their papers and their papers are published on-line. Authors of the papers tend to form a network similar to online social networks.
+Sites that hosts papers such as Google Scholar are popular, and their popularity provides an opportunity to study the characteristics of the document network at large scale.
+Understanding the document network is meaningful in both improving the current document systems and designing new applications for the document network.
+Our project presents a measurement study and analysis of the structure of document network by Google Scholar. 
+\end{abstract}
+
 \section{Introduction}
 
-\section{Related work}
+Among various types of information sharing systems provided in the Internet, online document networks have been the popular source for academic papers.
+Online document networks such as Google Scholar and Microsoft Academic Search have gained growing popularity.
+As of 2014, Google Scholar is reported to contain around 160 million documents with Microsoft Academic Search containing around 40 million documents. 
+
+Unlike Web, which is roughly organized round content, online document networks are organized around authors.
+Participating authors join the network, publish their brief profile. Once other authors cite the original authors’ paper, the authors are linked. Thus, the resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
+
+An understanding for the graph structure of online document networks is important to evaluate the current systems and to design future document networks. 
+For example, understanding the structure of the document networks may lead to algorithms that can detect influential authors.
+In this project paper, we present a measurement study and analysis of the structure of the document network formed by Google Scholar. 
 
 \section{Graph generative model}
 
@@ -151,10 +169,134 @@ The pseudo code is given as following.
 
 \section{Social Network Structure}
 
+This project required a set of data that had measurable relationships.
+Google Scholar was chosen because it has a large set of papers that can be connected by citations and authors.
+Unfortunately, Google Scholar does not have an API so we had to come up with a way to get the needed data on our own.
+
+We first looked at any existing tools out there that could get the data we needed.
+Our search came up with some tools but none of them did exactly what we wanted.
+One of them, scholar.py, was able to get the first page of article results from Google Scholar, but we needed more results and also the papers that cited all of those results.
+This led us to building off of scholar.py but in the end creating our own Google Scholar scraping tool.
+
+The specific data we needed from Google Scholar for each paper was the author, title, and also the author and title for any papers that cited the paper.
+In order to obtain this data our tool would first make a request for a given topic.
+Google Scholar would send back the first page of results.
+The tool would then parse the result to obtain the author, title, and html link of the cited by list.
+Next the tool would use the cited by list link to grab the first page of results of papers that cited the original paper.
+It would then continue making a new request for each additional page of cited by papers. Unfortunately Google Scholar limits the results to a maximum of 20 at a time so a new request had to be made for each additional 20 papers.
+After all of the cited by papers were found the tool would then move on to the next paper and continue on grabbing more data.
+
+The methodology for the tool seems pretty straightforward but we ran into problems with actually getting Google Scholar to return data on our requests.
+After a certain number of successive requests Google Scholar utilizes a captcha to make sure there is an actual person using their tool.
+Unfortunately, this would stop our scraping tool dead in its tracks.
+Our tool had to make a new request for every page of results so it was making many, many requests in quick succession.
+In order to get enough data we had to come up with a way to get around the captcha.
+
+We assumed that Google Scholar was tracking our use by IP address, so our first attempt to get around their throttling was to go through VPNs.
+This worked at first but eventually each VPN server we tried would be cut off and we would not be able to get any data at all.
+
+The next method we tried was to pause the tool before each new request.
+We thought that if we slowed down the request rate then Google Scholar might not throttle us.
+This did not work either. After a certain amount of requests again the tool would run into the captcha.
+The last method we tried was going through the Tor network.
+We set up a proxy server that would enable our scraping tool to send our requests to Google Scholar through Tor.
+On every new request to Google Scholar our tool would get a new IP address from Tor.
+This allowed the tool to stay anonymous and not be throttled by Google Scholar.
+
+Once the data was collected from Google Scholar it needed to be parsed and prepared for the LDA tool.
+The LDA tool needed a graph structure fed into it in order to analyze the data.
+For this project we used two different graph structures.
+The first was using each paper as a separate node and then the edges as citations.
+For example, if paper A is cited by paper B then there would be an edge going from paper B to paper A.
+The format for each node is as follows:
+\begin{framed}
+\noindent
+\{\\
+\indent\indent id \\
+\indent\indent title \\
+\indent\indent author(s) \\
+\indent\indent cited by []\\
+\}
+\end{framed}
+
+The second graph structure uses each author as a node and the edges showing other authors that collaborated with that author on a paper.
+This structure allowed for multiple edges connecting the same nodes in order to show weight.
+The node structure is as follows:
+\begin{framed}
+\noindent
+\{\\
+\indent\indent author \\
+\indent\indent co-authors [] \\
+\}
+\end{framed}
+
+
+\begin{figure}
+\subfigure[Document network]{
+\centering
+\includegraphics[width=0.45\linewidth]{./fig/doc_net_phishing.png}
+\label{fig:gene_net_struct:doc_net}
+}
+\subfigure[Author network]{
+\centering
+\includegraphics[width=0.45\linewidth]{./fig/auth_net_phishing.png}
+\label{fig:gene_net_struct:auth_net}
+} 
+\caption{The network structure of the generated document network and author network.}
+\label{fig:gene_net_struct}
+\end{figure}
+
+\begin{figure}
+\subfigure[Document network]{
+\centering
+\includegraphics[width=0.45\linewidth]{./fig/doc_net_am}
+\label{fig:gene_ad_mat:doc_net}
+}
+\subfigure[Author network]{
+\centering
+\includegraphics[width=0.45\linewidth]{./fig/auth_net_am}
+\label{fig:gene_ad_mat:auth_net}
+} 
+\caption{The adjacency matrix of the generated document network and author network.}
+\label{fig:gene_ad_mat}
+\end{figure}
 
 \section{Analysis}
 
-\subsection{The importance in a community}
+\subsection{How the generative model fits the training data}
+
+\emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset.
+It is defined as 
+\begin{equation}
+Perplexity( E_{test} ) = \exp^{- \frac{ \sum_{e \in E_{test}} \log p(e) }{ | E_{test} | } }
+\end{equation}
+
+\subsection{What the generative model tells}
+
+\begin{itemize}
+\item \textbf{Importance of a member in a community} $ p ( \omega_{i}  \mid \iota_{j} ) $ 
+\item \textbf{Association within a community} $ p ( \iota_{j} \mid \omega_{i} ) $
+\item \textbf{Similarity of two community} $ Sim ( \iota_{i}, \iota_{j} ) $
+Because Kullback-Leibler divergence is used to measure the distance between two distributions.
+The similarity between two communities can be defined as 
+\begin{equation}
+Sim ( \iota_{i}, \iota_{j} ) = 10^{ - \xi \ast D_{KL} ( \iota_{i}, \iota_{j} ) },
+\end{equation}
+in which $ D_{KL} ( \iota_{i}, \iota_{j} ) $ is
+\begin{equation}
+D_{KL} ( \iota_{i}, \iota_{j} ) = \sum_{k} p( \omega_{k} \mid \iota_{i} ) \log \frac{ p( \omega_{k} \mid \iota_{i} ) }{ p( \omega_{k} \mid \iota_{j} ) }.
+\end{equation}
+\end{itemize}
+
+\begin{itemize}
+\item \textbf{Identity recognition}
+Same name appears in different and irrelevant community - different person
+
+Similar name appears in same community might be same person
+\end{itemize}
+
+
+How to measure the goodness of learned sampling
 
 \section{Summary}
 
