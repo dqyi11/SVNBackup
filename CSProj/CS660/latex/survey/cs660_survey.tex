@@ -40,19 +40,22 @@ An \emph{Indoor positioning system} locates the objects or people in an indoor e
 Indoor localization enables indoor navigation in shopping malls, indoor location-based advertisements, friends and family member tracking and etc.
 
 Unlike the popularity of GPS applied in outdoor localization, the GPS signal in an indoor environment can be weak.
-Usually the information used for localization includes radio waves, magnetic fields, acoustic signals or other sensory information from mobile devices.
-In an indoor environment, there are a lot of factors that can influence the detected signals, e.g. moving objects and complex architecture objects.
+Therefore, the information used for localization in the indoor environment is from radio waves, magnetic fields, acoustic signals or other sensory information from mobile devices.
+The detections of those sensory information are usually either imprecise or vulnerable to noise pollution.
+The influential factors can be moving objects,  complex architecture obstacles, signal coverage and etc.
 A precise localization becomes a challenge as a result.
 
+The location estimation depends on the information input.
 The localization information can be directly calculated from GPS information~\cite{Nirjon:2014:CIL:2594368.2594378}, but most common ways are using the estimated distance to anchors to locate devices, which includes WiFi~\cite{Sen:2013:AMR:2462456.2464463}~\cite{Wang:2012:NNW:2307636.2307655}~\cite{Rai:2012:ZZC:2348543.2348580}~\cite{Nandakumar:2012:CLD:2348543.2348579}, Acoustic beacon~\cite{Liu:2013:GEF:2462456.2464450}~\cite{Nandakumar:2012:CLD:2348543.2348579}.
-The methods to enhance the accuracy of estimations can be categorized into
+With raw data collected, methods could be applied to enhance the accuracy of estimations, which are usually
 \begin{itemize}
 	\item technology improvement~\cite{Nirjon:2014:CIL:2594368.2594378}~\cite{Sen:2013:AMR:2462456.2464463}~\cite{Liu:2013:GEF:2462456.2464450}, 
 	\item and Bayseian inference~\cite{Wang:2012:NNW:2307636.2307655}~\cite{Nandakumar:2012:CLD:2348543.2348579}~\cite{Rai:2012:ZZC:2348543.2348580}.
 \end{itemize}
 
-In this survey paper, six papers are reviewed.
-Different approaches have been applied in each paper, which are briefly discussed briefly in below sections.
+In this survey paper, six papers are selected and reviewed.
+The selection of the papers are based on the difference of the approaches.
+Each paper is briefly discussed in a single section.
 
 
 \begin{comment}
@@ -85,7 +88,7 @@ It consists of three components,
 	\item a \emph{multi-directional location estimation algorithm}.
 \end{itemize}
 
-Because of the signal noise, the peak detection in common acquisition becomes difficult.
+Because the signal-noise ratio becomes low when the signal is weak, the peak detection in common acquisition becomes difficult.
 A patch antenna array is selected in \cite{Nirjon:2014:CIL:2594368.2594378}.
 The use of a \emph{directional antenna} helps reduce the noise.
 The reduction of the noise enable the peak search in frequency domain in weak signal in the indoor environment.
@@ -97,11 +100,11 @@ As a result, the indoor location estimation might be a problem due to inadequate
 Because the steering of the antenna does not change the location, two sets of satellites information at different directions could be merged so that the number of unknown could reduced.
 In \cite{Nirjon:2014:CIL:2594368.2594378}, nine directions are used in the format of $ (R, S) $, in which $ R $ is main beam tilt angle along the X-axis and $ S $ is the tilt angle along the Y-axis.
 The directions are $ (0, 0) $ , $ (\pm 15, 0) $, $ (\pm 30, 0) $, $ (0, \pm 15) $ and $ (0, \pm 30) $.
-
+Using standard least square method, the location could be estimated from multiple copies of directional acquisitions.
 
 \section{Wifi assisted localization}
 
-Currently the most popular way of localization in the indoor environment is using WiFi signal. 
+Currently the most popular way of localization in the indoor environment relies on WiFi signal. 
 Signal strength(\emph{RSSI}) is used to estimate the distance to the AP, which could indirectly locate the device position.
 However, there are still many effects that could degrade the localization precision, e.g. the hardness of discriminating between multipath reflections and the direct path.
 In \cite{Nirjon:2014:CIL:2594368.2594378}, \emph{CUPID} is proposed by leveraging PHY layer information along with natural human mobility.
@@ -116,26 +119,31 @@ The distance estimation is obtained by \emph{EDP} (Energy of the directed path) 
 \footnote{Figure \ref{fig:multipath} gives an example of multipath reflection.}.
 It is extracted from \emph{CSI} (Channel state information) in the PHY layer. 
 Experiments have been taken to show that this method provides a better accuracy of distance estimation than \emph{RSSI}, which the mean error is reduced from $ 10 $m to $ 4 $m.
-The angle estimation is usually from \emph{AoA} (angle-of-arrival).
-Usually the angle of the highest peak in MUSIC's pseudospectrum is selected as the angle of the directed path.
-However, if the directed path is not blocked, the peak might correspond to a reflected path, as in Figure \ref{fig:multipath}.
-The angle estimation is calculated by \emph{ANDP} (Angle of the directed path).
+The canonical way of angle estimation is by \emph{AoA} (angle-of-arrival).
+The angle of the highest peak in MUSIC's pseudospectrum is selected as the angle of the directed path.
+However, if the directed path is blocked as shown in Figure \ref{fig:multipath}, the peak might correspond to a reflected path.
+Thus in \cite{Sen:2013:AMR:2462456.2464463}, the angle estimation is calculated by \emph{ANDP} (Angle of the directed path).
 \begin{figure}
 	\centering
 	\includegraphics[width=0.7\linewidth]{fig/ANDP.png}
 	\caption{Compute the change of angle using human mobility~\cite{Sen:2013:AMR:2462456.2464463}.}
 	\label{fig:andp}
 \end{figure}
-Figure \ref{fig:andp} illustrates the calculation of
+Figure \ref{fig:andp} illustrates the calculation of Equation \ref{eq:andp}, which is
 \begin{equation}
+\label{eq:andp}
 \Delta \theta = \arccos \frac{ d_{A}^{2}+d_{B}^{2}-p_{AB}^{2} }{ 2 * d_{A} * d_{B} }.
 \end{equation}
 The location distance $ p_{AB} $ can be obtained by the accelerometer and gyroscope of the mobile phone.
+Within the enhancement, the median error of localization would be reduced to $ 2.7m $ by WiFi signal.
 
 \section{Acoustic beacon assisted localization}
 
-In \cite{Liu:2013:GEF:2462456.2464450}, an anchor network is imported for localization, which is named \emph{Guoguo}
-\footnote{``Guoguo'' means Tettigonia in Chinese.}.
+Acoustic beacon can also be used to measure the distance, thus it is used for localization in \cite{Liu:2013:GEF:2462456.2464450}.
+\emph{Guoguo} 
+\footnote{``Guoguo'' means Tettigonia (a sounding insect) in Chinese.}
+is introduced, which consists of an anchor network of acoustic beacon.
+
 An anchor could transmit the spatial beacon signal to inform the unique location.
 The use of acoustic communication brings
 \begin{itemize}
@@ -148,11 +156,11 @@ The use of acoustic communication brings
 	\caption{An anchor network of Guoguo ecosystem.~\cite{Liu:2013:GEF:2462456.2464450}.}
 	\label{fig:guoguo}
 \end{figure}
-The operation band is chosen as $ 15 kHz \sim 20 kHz $, which the human's ears are less sensitive to.
+The operation band is chosen as $ 15 kHz \sim 20 kHz $ (less sensitive to the human's ears).
 Because the beacon signal is wide-band modulated, it is unnoticeable to the humans.
 
 In order to differentiate anchor nodes, there should be enough code distance redundancy for proper pseudo-codes.
-The distance estimation depends on the TOA (Time-of-Arrival) estimation, which is performed to estimate the firsth path sample $ k^{0}_{j} $ in the whole symbol duration.
+The distance estimation depends on the TOA (Time-of-Arrival) estimation, which is performed to estimate the first path sample $ k^{0}_{j} $ in the whole symbol duration.
 It is calculated by
 \begin{equation}
 \hat{k}^{0}_{j} = \min_{k} ( k \mid r_{j} (k) > \eta_{toa} ) , k \in [ k_{p} - J_{p}, K_{p} + M_{O}  ].
@@ -168,9 +176,13 @@ By minimizing the square errors, the position could be estimated by
 \hat{\theta} = (\mathbf{M}^{T} \tilde{\Sigma}^{-1} A )^{-1} A^{T} \tilde{\Sigma}^{-1} \nu.
 \end{equation}
 
+The experiments are taken in relative small environment, a classroom and an office.
+With relatively high density of anchors, the localization accuracy could reach centimeter level.
+
 
 \section{Hybrid information assisted localization}
 
+With different ways of measuring distance, some of the research work go into how to fuse information from different information formats.
 \cite{Nandakumar:2012:CLD:2348543.2348579} proposes \emph{Centaur}, a sensory information fusion for location estimation by using Bayesian inference.
 The \emph{Centaur} accommodates both anchors and non-anchors.
 \begin{itemize}
@@ -182,8 +194,9 @@ The \emph{Centaur} adopts a Bayesian network of random variables.
 Random variables that can be measured are labeled as evidence nodes.
 Directed edges represent the relationships between the variables.
 The Bayesian inference could be applied to the network structure so that the location estimation can be obtained.
+Variational approximate inference is used to train the Bayesian network.
 
-In this paper, Radio Frequency (RF) and Acoustic Ranging (AR) are used for measurement.
+In this paper, both Radio Frequency (RF) and Acoustic Ranging (AR) are used for measurement.
 The WiFi measurements on the locations of non-anchors are fused with geometric constraints obtained from the acoustic measurements.
 
 Two schemes of acoustic ranging are also introduced to enhance the measurement.
@@ -200,15 +213,20 @@ It utilizes the location constraint in three devices, which is illustrated in Fi
 	\label{fig:deafbeep}
 \end{figure}
 
+The experiments show that \emph{Centaur} reduces the localization error through information fusion.
+However, the processing time cost (mostly due to the training of Bayesian network) is relatively expensive.
+
 \section{Active learning based localization}
 
+The localization problem could also be viewed as a mapping from the sensory information to the location information.
+Thus, a labor intensive crowdsourcing could be executed to generate the training set of this mapping relationship.
 \cite{Rai:2012:ZZC:2348543.2348580} proposed \emph{Zee} as an active learning procedure for location estimation.
-Instead of a labor intensive training set generation process, zero-effort crowdsourcing is reached.
+In this case, zero-effort crowdsourcing is reached.
 \emph{Zee} performances WiFi scans and records the results indexed by time while executing the location estimation.
 Each WiFi measurement is paired with an estimated location as a record of the WiFi training set.
-This generated crowdsourced training dataset is fed into ``Horus'' and ``EZ'', two WiFi fingerprinting-based localization techniques.
+This generated crowdsourced training dataset is fed into ``Horus'' and ``EZ'', two WiFi fingerprinting-based localization techniques, to generate the estimation results.
 Because the training data set is created from the walks that users take through the space of interest in normal courses.
-\emph{Zee} offers a zero-effort crowdsourcing.
+\emph{Zee} claims a zero-effort crowdsourcing.
 
 Two techniques are used in estimating the locations.
 \begin{itemize}
@@ -217,12 +235,14 @@ Moreover, it helps the tracking of latent variables, like the stride length of a
 \item \emph{Backward belief propagation} is used after the tracking has converged.
 The later point in time with greater certainty could be used to reduce the uncertainty in location at earlier times.
 \end{itemize}
-
+Also, utilizing WiFi information in particles initialization accelerates the convergence speed.
+Experiments have been taken to show the effectiveness and efficiency of this zero-effort crowdsourcing process.
 
 \section{SLAM-based localization}
 
+The localization solutions in other fields can also be introduced here.
 \cite{Wang:2012:NNW:2307636.2307655} introduced \emph{UnLoc} framework.
-It simulates the SLAM (simultaneous localization and mapping) in robotics so that unsupervised localization could be reached.
+It simulates the SLAM (simultaneous localization and mapping) in robotics to implement an unsupervised localization.
 The devices starts to move from a known reference location, for example, an entrance of a building.
 By using dead-reckoning, the estimated location can be updated while moving.
 Landmarks are also used to correct location estimation.
@@ -244,6 +264,9 @@ There are two types of landmarks.
 \emph{UnLoc} uses \emph{seed landmarks} and \emph{organic landmarks} to reset dead reckoning error so that the motion of the user could be better tracked.
 Meanwhile, the landmark locations could also be refined using the dead reckoning paths. 
 This forms the \emph{simultaneous localization and mapping} process, in which the estimation error would converge with the observation number increases.
+Because the estimation refinement through active observation, war driving is no longer needed.
+However, the convergence rate still depends on the coverage of the device motion.
+
 
 \section{Summary}
 
@@ -256,11 +279,13 @@ However, yet in a lot of building, the GPS signal can be too weak to be extracte
 With the assistance from the readable status of the mobile device, the location estimation could be greatly enhanced.
 \emph{Guoguo} uses unnoticeable high frequency acoustical signal, which is also robust in a noisy environment.
 It might be hard to be applied to many situations, in which there exist plenty of obstacles that blocks the acoustic transmission.
-Both \emph{Zee} and \emph{UnLoc} adopt the idea of active learning, which autonomously generate training set from sensory information to location information.
-The dependence on a crowdsourcing process is released by unsupervised learning.
+Both \emph{Zee} and \emph{UnLoc} adopt the idea of active learning, which makes calibration-free possible for localization systems.
+They can autonomously generate training set from sensory information to location information.
+The dependence on a crowdsourcing process is released by the unsupervised learning.
 Particularly, online update of the forward motion estimation in \emph{UnLoc} supports localization even the signals are not good.
-\emph{Centaur} utilizes the sensory information fusion.
+Another great potential to be explored is that the sensory information fusion utilized in \emph{Centaur}.
 In this framework, more types of distance information could be introduced to enhance the location estimation.
+Particularly, it can also be merged into the active learning process in \emph{Zee} and the SLAM process in \emph{UnLoc}
 
  
 
