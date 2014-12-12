@@ -68,7 +68,7 @@ if __name__ == '__main__':
     #nx.draw_networkx_nodes(G, pos, node_color='r')
     #nx.draw_networkx_edges(G, pos, edge_color='b')
     
-    nx.write_graphml(G, 'net_load03.graphml')
+    #nx.write_graphml(G, 'citeseer_cites.graphml')
     
     out_data = {}
     out_data["NODES"] = G.nodes()

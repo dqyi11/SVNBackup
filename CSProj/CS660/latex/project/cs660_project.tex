@@ -291,7 +291,13 @@ White pixels can be seen after enlarged.
 
 \section{Analysis}
 
-\subsection{How the generative model fits the training data}
+After applying the Latent Dirichlet Allocation to the created network structure, two questions should be answered.
+\begin{itemize}
+\item How the generative model fits the network structure as the training data?
+\item What can the generative model tell?
+\end{itemize}
+
+\subsection{Verification}
 
 \emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset.
 It is defined as 
@@ -299,9 +305,10 @@ It is defined as
 Perplexity( E_{test} ) = \exp^{- \frac{ \sum_{e \in E_{test}} \log p(e) }{ | E_{test} | } }
 \end{equation}
 
-\subsection{What the generative model tells}
+\subsection{Application}
 
 \begin{itemize}
+\item \textbf{Community discovery} 
 \item \textbf{Importance of a member in a community} $ p ( \omega_{i}  \mid \iota_{j} ) $ 
 \item \textbf{Association within a community} $ p ( \iota_{j} \mid \omega_{i} ) $
 \item \textbf{Similarity of two community} $ Sim ( \iota_{i}, \iota_{j} ) $
