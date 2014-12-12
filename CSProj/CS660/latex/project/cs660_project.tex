@@ -192,8 +192,6 @@ The pseudo code is given as following.
 \end{algorithm}
 
 
-$ \theta_{m,k} $
-
 \section{Social Network Structure}
 
 This project required a set of data that had measurable relationships.
@@ -258,6 +256,8 @@ The node structure is as follows:
 \end{framed}
 
 Figure \ref{fig:gene_net_struct} illustrates the network structures of the generated document network and the generated author network.
+We use \emph{NetworkX} to create the network structure and dump int \emph{gml} format.
+The \emph{Gephi} is used to read the \emph{gml} file and visualize the network structure.
 And Figure \ref{fig:gene_ad_mat} visualizes the corresponding adjacency matrices.
 Both matrices are very sparse.
 White pixels can be seen after enlarged.
@@ -296,11 +296,60 @@ White pixels can be seen after enlarged.
 
 After applying the Latent Dirichlet Allocation to the created network structure, two questions should be answered.
 \begin{itemize}
+\item How can the generative model be used?
 \item How the generative model fits the network structure as the training data?
-\item What can the generative model tell?
+\end{itemize}
+These two will be answered in below two subsections.
+
+\subsection{Application}
+
+There are several applications that we can utilize the information in the generative model.
+\begin{itemize}
+\item \textbf{Community discovery} \\
+By looking at the probability distribution of that the actor associated with each community, an unsupervised clustering algorithm could be applied to detect potential communities among the actors. 
+\item \textbf{Importance of a member in a community} \\
+$ p ( \omega_{i}  \mid \iota_{j} ) $ tells the distribution of the actors given a community.
+The actor with a higher probability indirectly indicates its importance in this community.
+\item \textbf{Association within a community} $ p ( \iota_{j} \mid \omega_{i} ) $
+It tells the probability distribution that actor $ m $ belongs to cluster $ k $.
+There could be several ways to cluster the actors, e.g. using a SVM.
+Here the simplest method is taken, which the community with largest probability is chosen as the one that actor belongs to.
+\item \textbf{Similarity of two communities} \\
+The generative model can also tell the similarity of two communities.
+Because Kullback-Leibler divergence is used to measure the distance between two distributions.
+The similarity between two communities can be defined as 
+\begin{equation}
+Sim ( \iota_{i}, \iota_{j} ) = 10^{ - \xi \ast D_{KL} ( \iota_{i}, \iota_{j} ) },
+\end{equation}
+in which $ D_{KL} ( \iota_{i}, \iota_{j} ) $ is
+\begin{equation}
+D_{KL} ( \iota_{i}, \iota_{j} ) = \sum_{k} p( \omega_{k} \mid \iota_{i} ) \log \frac{ p( \omega_{k} \mid \iota_{i} ) }{ p( \omega_{k} \mid \iota_{j} ) }.
+\end{equation}
+\item \textbf{Identity recognition} \\
+Particularly, in the author network, the generative model can help to identify authors.
+Sometimes same author shows different names in string. 
+For example, some papers include the middle name, but some others does not.
+The similarity of the community distribution can help to assign the papers to correct author. 
+
+Meanwhile, different authors might have same name.
+The community distribution of the papers can help to sort out the papers into different authors in different fields.
 \end{itemize}
 
 \subsection{Verification}
+
+Before we could apply the information indicated by a generative model, we should guarantee that the generative model well approximate the training data distribution, which is the network structure in the social network analysis.
+A labeled dataset with three clusters is used to verify the community discovery capability of the Latent Dirichlet Allocation.
+The result is given in Figure \ref{fig:cluster3}.
+
+In order to verify how the Latent Dirichlet Allocation applies to the social network analysis.
+Two labeled dataset are also tested, which are \emph{CiteSeer} and \emph{Cora}
+\footnote{The datasets are obtained from http://linqs.cs.umd.edu/projects/projects/lbc/}.
+The test results are illustrated in Figure \ref{fig:doc_load01} and Figure \ref{fig:doc_load02}.
+In these datasets, each paper has a label showing which community it belongs to.
+After clustering the papers, we can see that the papers in the same cluster tends to share same original labels.
+Because Gibbs sampling is used to train the Bayesian network of the generative model.
+The convergence process could be slow.
+With a longer run time, the results could shows better consistency in each cluster.
 
 \begin{figure}
 \centering
@@ -387,33 +436,6 @@ It is defined as
 Perplexity( E_{test} ) = \exp^{- \frac{ \sum_{e \in E_{test}} \log p(e) }{ | E_{test} | } }
 \end{equation}
 
-\subsection{Application}
-
-\begin{itemize}
-\item \textbf{Community discovery} 
-\item \textbf{Importance of a member in a community} $ p ( \omega_{i}  \mid \iota_{j} ) $ 
-\item \textbf{Association within a community} $ p ( \iota_{j} \mid \omega_{i} ) $
-\item \textbf{Similarity of two community} $ Sim ( \iota_{i}, \iota_{j} ) $
-Because Kullback-Leibler divergence is used to measure the distance between two distributions.
-The similarity between two communities can be defined as 
-\begin{equation}
-Sim ( \iota_{i}, \iota_{j} ) = 10^{ - \xi \ast D_{KL} ( \iota_{i}, \iota_{j} ) },
-\end{equation}
-in which $ D_{KL} ( \iota_{i}, \iota_{j} ) $ is
-\begin{equation}
-D_{KL} ( \iota_{i}, \iota_{j} ) = \sum_{k} p( \omega_{k} \mid \iota_{i} ) \log \frac{ p( \omega_{k} \mid \iota_{i} ) }{ p( \omega_{k} \mid \iota_{j} ) }.
-\end{equation}
-\end{itemize}
-
-\begin{itemize}
-\item \textbf{Identity recognition}
-Same name appears in different and irrelevant community - different person
-
-Similar name appears in same community might be same person
-\end{itemize}
-
-
-How to measure the goodness of learned sampling
 
 \section{Summary}
 
