@@ -41,7 +41,7 @@ statetype q_sam(statetype x, obsvtype y){
 
 int main(){
     using namespace std::chrono;
-    pfilter <statetype,obsvtype> A(f,g,q,q_sam);
+    ParticleFilter <statetype,obsvtype> A(f,g,q,q_sam);
     std::ifstream in("data_y");     // data input
     std::ofstream on("data_xhat");  // data output
     in >> A;
