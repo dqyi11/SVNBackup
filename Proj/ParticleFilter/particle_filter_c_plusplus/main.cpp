@@ -44,13 +44,22 @@ int main(){
     ParticleFilter <statetype,obsvtype> A(f,g,q,q_sam);
     std::ifstream in("data_y");     // data input
     std::ofstream on("data_xhat");  // data output
-    in >> A;
+    on.precision(15);
+
     A.initialize(2000);  // initialize with
                         // the number of particles we want to use
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    A.iterate();    // run
+    obsvtype y;
+    statetype x;
+    int iter_num = 0;
+    while(in>>y)
+    {
+        x = A.update(y);
+        on<<iter_num<<"\t"<<x<<std::endl;
+        ++iter_num;
+    }
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
-    on << A;        // output data
+
     duration<double> time_span = duration_cast<duration<double>>(t2 - t1);
     std::cout << "It took " << time_span.count() << " seconds.";
     return 0;       //  we are done
