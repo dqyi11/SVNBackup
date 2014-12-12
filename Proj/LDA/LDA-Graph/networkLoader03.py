@@ -51,7 +51,8 @@ if __name__ == '__main__':
     for i in range(node_num):
         for aj in Adjacencies[i]:
             G.add_edge(IDs[i], aj)
-        
+            G.add_edge(aj, IDs[i])
+
     G_node_num = G.number_of_nodes()
     G_edge_num = G.number_of_edges()
     print "G Node num " + str(G_node_num)
@@ -62,11 +63,12 @@ if __name__ == '__main__':
         idx1 = get_node_idx(G, e[0])
         idx2 = get_node_idx(G, e[1])
         data_mat[idx1, idx2] += 1
+        data_mat[idx2, idx1] += 1
     
     #nx.draw_networkx_nodes(G, pos, node_color='r')
     #nx.draw_networkx_edges(G, pos, edge_color='b')
     
-    #nx.write_graphml(G, 'citeseer_cites.graphml')
+    nx.write_graphml(G, 'net_load03.graphml')
     
     out_data = {}
     out_data["NODES"] = G.nodes()

@@ -45,23 +45,30 @@ if __name__ == '__main__':
     for i in range(node_num):
         for aj in Adjacencies[i]:
             G.add_edge(Authors[i], aj)
+            G.add_edge(aj, Authors[i])
         
     G_node_num = G.number_of_nodes()
     G_edge_num = G.number_of_edges()
     print "G Node num " + str(G_node_num)
     print "G Edge num " + str(G_edge_num)
     
+    G2 = nx.Graph()
     data_mat = np.zeros((G_node_num, G_node_num))
     for e in G.edges():
         idx1 = get_node_idx(G, e[0])
         idx2 = get_node_idx(G, e[1])
         data_mat[idx1, idx2] += 1
+        data_mat[idx2, idx1] += 1
+        G2.add_edge(idx1, idx2)
+        G2.add_edge(idx2, idx1)
     
-    pos = nx.spring_layout(G)
-    nx.draw_networkx_nodes(G, pos, node_color='r')
-    nx.draw_networkx_edges(G, pos, edge_color='b')
+    #pos = nx.spring_layout(G)
+    #nx.draw_networkx_nodes(G, pos, node_color='r')
+    #nx.draw_networkx_edges(G, pos, edge_color='b')
     
-    nx.write_graphml(G, 'net_load04.graphml')
+    
+    
+    nx.write_graphml(G2, 'net_load04.graphml')
     
     out_data = {}
     out_data["NODES"] = G.nodes()
