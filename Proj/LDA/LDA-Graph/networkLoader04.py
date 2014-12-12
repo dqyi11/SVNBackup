@@ -68,10 +68,10 @@ if __name__ == '__main__':
     
     
     
-    nx.write_graphml(G2, 'net_load04.graphml')
+    #nx.write_graphml(G2, 'net_load04.graphml')
     
     out_data = {}
-    out_data["NODES"] = G.nodes()
+    #out_data["NODES"] = G.nodes()
     out_data["DATA_MATRIX"] = data_mat
     
     import scipy.io

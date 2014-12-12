@@ -27,6 +27,7 @@ if __name__ == '__main__':
 
     for cite in cora_cites:
         G.add_edge(cite[0], cite[1])
+        G.add_edge(cite[1], cite[0])
         G1.add_node(cite[0])
         G2.add_node(cite[1])
         
@@ -49,6 +50,7 @@ if __name__ == '__main__':
         idx1 = get_node_idx(G, e[0])
         idx2 = get_node_idx(G, e[1])
         data_mat[idx1, idx2] += 1
+        data_mat[idx2, idx1] += 1
     
     #nx.draw_networkx_nodes(G, pos, node_color='r')
     #nx.draw_networkx_edges(G, pos, edge_color='b')
