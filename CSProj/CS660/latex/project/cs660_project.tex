@@ -156,7 +156,7 @@ p( \iota_{i} = j \mid \vec{\iota}_{\neg i}, \vec{\omega}) \propto
 \frac{ n^{\omega_{i}}_{\neg i, j}+\beta }{ n^{\cdot}_{\neg i, j}+W\beta } \ast \frac{ n^{\mbox{sip}_{i}}_{\neg i}+\alpha }{ n^{\mbox{sip}_{i}}_{\neg i}+T\alpha }
 \end{equation}
 
-The update formula for $ $ and $ $ are
+The update formula for $ \phi_{k,\omega} $ and $ \theta_{m,k} $ are
 \begin{equation}
 \phi_{k,\omega} = \frac{n^{\omega}_{k}+\beta}{\sum_{v=1}^{V}n^{v}_{k}+W\beta}
 \end{equation}
@@ -190,6 +190,9 @@ The pseudo code is given as following.
 	\end{algorithmic}
 	\caption{Gibbs sampling process}
 \end{algorithm}
+
+
+$ \theta_{m,k} $
 
 \section{Social Network Structure}
 
@@ -300,6 +303,13 @@ After applying the Latent Dirichlet Allocation to the created network structure,
 \subsection{Verification}
 
 \begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{./fig/cluster3}
+\caption{Verify the clustering performance of Latent Dirichlet Allocation.}
+\label{fig:cluster3}
+\end{figure}
+
+\begin{figure}
 \subfigure[Cluster 1]{
 \centering
 \includegraphics[width=0.3\linewidth]{./fig/doc_load01-0}
@@ -331,8 +341,44 @@ After applying the Latent Dirichlet Allocation to the created network structure,
 \includegraphics[width=0.3\linewidth]{./fig/doc_load01-5}
 \label{fig:doc_load01:6}
 }
-\caption{The verification of the clusters generated from the trained generative model.}
+\caption{The verification of the clusters generated from the trained generative model \emph{cora}.}
 \label{fig:doc_load01}
+\end{figure}
+
+\begin{figure}
+\subfigure[Cluster 1]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-0}
+\label{fig:doc_load02:1}
+}
+\subfigure[Cluster 2]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-1}
+\label{fig:doc_load02:2}
+} 
+\subfigure[Cluster 3]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-2}
+\label{fig:doc_load02:3}
+}
+\\
+\subfigure[Cluster 4]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-3}
+\label{fig:doc_load02:4}
+}
+\subfigure[Cluster 5]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-4}
+\label{fig:doc_load02:5}
+} 
+\subfigure[Cluster 6]{
+\centering
+\includegraphics[width=0.3\linewidth]{./fig/doc_load02-5}
+\label{fig:doc_load02:6}
+}
+\caption{The verification of the clusters generated from the trained generative model.}
+\label{fig:doc_load02}
 \end{figure}
 
 \emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset.
