@@ -23,14 +23,14 @@
 \setlength{\pdfpagewidth}{8.5in}
 \setlength{\pdfpageheight}{11in}
 \pdfinfo{
-/Title (Community discovery in social networks using Latent Dirichlet Allocation)
+/Title (Community analysis on the social networks using Latent Dirichlet Allocation)
 /Author (Daqing Yi)}
 \setcounter{secnumdepth}{0}  
 \begin{document}
 % The file aaai.sty is the style file for AAAI Press 
 % proceedings, working notes, and technical reports.
 %
-\title{Community discovery in social networks using Latent Dirichlet Allocation}
+\title{Community analysis on the social networks using Latent Dirichlet Allocation}
 %\subtitle{CS 660 Computer Networks}
 
 \author{ 
@@ -62,29 +62,40 @@ Our project presents a measurement study and analysis of the structure of docume
 
 \section{Introduction}
 
-Among various types of information sharing systems provided in the Internet, online academic document database, such as Google Scholar and Microsoft Academic Search, have gained growing popularity.
-As of 2014, Google Scholar is reported to contain around 160 million documents with Microsoft Academic Search containing around 40 million documents. 
-
-Unlike Web, which is roughly organized round content, academic papers are organized around authors.
-Participating authors join the network, publish their brief profile.
-Once other authors cite the original authors’ paper, the authors are linked.
-The resulting document network provides a basis for maintaining author relationship for finding authors with similar interests.
-The document networks are proposed to analyze the latent relationship between papers~\cite{chang2009relational}.
-
-An understanding for the graph structure of online document networks is important to evaluate the current systems and to design future document networks. 
-For example, understanding the structure of the document networks may lead to algorithms that can detect influential authors.
-In this project paper, we present a measurement study and analysis of the structure of the document network formed by Google Scholar. 
-By
-
-Latent Dirichlet Allocation~\cite{Blei:2003:LDA:944919.944937} has been an important method in text mining.
-It uses a Bayesian network structure for a document generative model.
+Social networks, as an abstract of the relationship connections between a large scale of objects, exist in many groups of objects.
+These groups of objects can persons, identities, documents, pictures and many more.
+By figuring out the patterns and the features of a social network, people hope to explore the potential phenomenons in this society.
+However, the huge amount of data makes the pattern analysis on this network structure a hard problem.
+Recently, Latent Dirichlet Allocation~\cite{Blei:2003:LDA:944919.944937} , a popular technique applied in text mining, has been imported to the community analysis on the social networks.
+In the text mining, LDA uses a Bayesian network structure for a document generative model.
 The words in the documents are used as samples to training the Bayesian network.
 The trained Bayesian network is expected to approximate the latent text data distribution, which could be used for pattern analysis purpose.
 By modeling the social network distribution in a similar way, the Latent Dirichlet Allocation can be applied to analyze the social network structures
 ~\cite{4258697} \cite{Cha:2012:SAU:2348283.2348360} \cite{Henderson:2009:ALD:1529282.1529607}.
 
-\section{Graph generative model}
+In this project, we explore the social networks inside the academic scholar database.
+Among various types of information sharing systems provided in the Internet, online academic document database, such as Google Scholar and Microsoft Academic Search, have gained growing popularity.
+As of 2014, Google Scholar is reported to contain around 160 million documents with Microsoft Academic Search containing around 40 million documents. 
 
+The document networks are proposed to analyze the latent relationship between papers~\cite{chang2009relational}.
+It connects the papers as a social network, in which the connection can be defined by citation, author, keyword, category and etc.
+Also the academic scholar database also indicates a social network of the authors.
+The authors are connected as a network by the papers, which can be determined by coauthor relationship, citation, academic institutions, academic conferences and etc.
+Participating authors join the network, publish their brief profile.
+
+An understanding for these types of social networks can help to read the important states of the current society.
+For example, understanding the structure of the document networks may lead to algorithms that can detect influential authors.
+In this project paper, we collect the data from Google Scholar, with ``Phishing'' as a keyword, to construct two types of latent social networks.
+Latent Dirichlet Allocation has been applied to explore the potential features of these social networks.
+
+
+\section{Network generative model}
+
+The key of the Latent Dirichlet Allocation relies on the definition of a generative model.
+The generative model defines the form of distribution of the data.
+In the social networks, the distribution of the data is the distribution of the edges, the connection between the nodes.
+
+A social network consists of a group of actors, which contains a set of communities $ \iota( \iota_{1} , \iota_{2} , \cdots , \iota_{k} ) $.
 \emph{Social interaction profile} characterizes each actor.
 For actor $ v_{i} $, it is defined as a set of neighbor $ \omega_{i,j} $ and the corresponding weight $ \mbox{SIW}(v_{i}, \omega_{i,j}) $.
 Thus,
@@ -92,22 +103,9 @@ Thus,
 \mbox{SIP}(v_{i}) = \{ (\omega_{i,1}, \mbox{SIW}(v_{i}, \omega_{i,1})) , \cdots , (\omega_{i,m_{i}}, \mbox{SIW}(v_{i}, \omega_{i,m_{i}}) \},
 \end{equation}
 $ m_{i} $ is the size of $ v_{i} $'s social interaction profile and $ \mbox{SIW}() $ defines the strength of such interaction.
-A social network contains a set of communities $ \iota( \iota_{1} , \iota_{2} , \cdots , \iota_{k} ) $.
+More notations are given in Appendix.
 
-Here is a list of notations.
-\begin{itemize}
-	\item $ M $ : number of social actors (social interaction profiles) in the social network
-	\item $ K $ : number of communities (mixture components)
-	\item $ N_{i} $ : number of social interactions in a social interaction profile $ \mbox{sip}_{i} $
-	\item $ \vec{\alpha} $ : Dirichlet prior hyperparameter
-	\item $ \vec{\beta} $ : Dirichlet prior hyperparameter
-	\item $ \iota $ : hidden community variable, $ \iota_{i,j} $ means the community for the $ j $th social interaction in $ \mbox{sip}_{i} $
-	\item $ \vec{\theta} $ : $ p(\iota \mid \mbox{sip}_{j}) $ is the community mixture proportion for $ \mbox{sip}_{j} $ 
-	\item $ \vec{\Phi}_{k} $ : $ p(\omega \mid \iota_{k} ) $ is the mixture component of community $ k $
-	\item $ \omega $ : social interaction variable, $ $ means the $ j $th social interaction in $ \mbox{sip}_{i} $
-\end{itemize}
-
-The generative process for an agent $ \omega_{i} $'s social interaction profile $ \mbox{sip}_{i} $ in a social network.
+The generative process for an agent $ \omega_{i} $'s social interaction profile $ \mbox{sip}_{i} $ in a social network is defined as:
 \begin{itemize}
 	\item Sample mixture components $ \vec{\phi}_{k} \sim \mbox{Dirichlet}(\vec{\beta}) $ for $ k \in [1, K] $
 	\item Choose $ \vec{\theta}_{i} \sim \mbox{Dirichlet}(\vec{\alpha}) $ 
@@ -136,6 +134,8 @@ p( \vec{\theta}_{i} \mid \vec{\alpha} ) p( \underline{\mathbf{\Phi}} \mid \vec{\
 \end{equation}
 
 \section{Latent Dirichlet Allocation}
+
+With the generative model defined, we could apply the Latent Dirichlet Allocation.
 
 The desired distribution is the posterior given evidence
 \begin{equation}
@@ -262,7 +262,7 @@ And Figure \ref{fig:gene_ad_mat} visualizes the corresponding adjacency matrices
 Both matrices are very sparse.
 White pixels can be seen after enlarged.
 
-\begin{figure}
+\begin{figure}[ht]
 \subfigure[Document network]{
 \centering
 \includegraphics[width=0.47\linewidth]{./fig/doc_net_phishing.png}
@@ -277,7 +277,7 @@ White pixels can be seen after enlarged.
 \label{fig:gene_net_struct}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \subfigure[Document network]{
 \centering
 \includegraphics[width=0.47\linewidth]{./fig/doc_net_am}
@@ -351,14 +351,14 @@ Because Gibbs sampling is used to train the Bayesian network of the generative m
 The convergence process could be slow.
 With a longer run time, the results could shows better consistency in each cluster.
 
-\begin{figure}
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\linewidth]{./fig/cluster3}
 \caption{Verify the clustering performance of Latent Dirichlet Allocation.}
 \label{fig:cluster3}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \subfigure[Cluster 1]{
 \centering
 \includegraphics[width=0.3\linewidth]{./fig/doc_load01-0}
@@ -390,11 +390,11 @@ With a longer run time, the results could shows better consistency in each clust
 \includegraphics[width=0.3\linewidth]{./fig/doc_load01-5}
 \label{fig:doc_load01:6}
 }
-\caption{The verification of the clusters generated from the trained generative model \emph{cora}.}
+\caption{The verification of the clusters generated from the trained generative model - \emph{cora}.}
 \label{fig:doc_load01}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[ht]
 \subfigure[Cluster 1]{
 \centering
 \includegraphics[width=0.3\linewidth]{./fig/doc_load02-0}
@@ -426,20 +426,41 @@ With a longer run time, the results could shows better consistency in each clust
 \includegraphics[width=0.3\linewidth]{./fig/doc_load02-5}
 \label{fig:doc_load02:6}
 }
-\caption{The verification of the clusters generated from the trained generative model.}
+\caption{The verification of the clusters generated from the trained generative model - \emph{CiteSeer}.}
 \label{fig:doc_load02}
 \end{figure}
 
-\emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset.
+Because there is no label assigned to the data we collected from Google Scholar.
+It becomes hard to verify whether the clustering result is a good one.
+Usually we need to have both a training dataset and a testing dataset.
+After trained the generative model using the training dataset, the testing dataset will then be used to verify the approximative capability of the generative model.
+\emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset, which has been applied in \cite{Cha:2012:SAU:2348283.2348360} and \cite{4258697}.
 It is defined as 
 \begin{equation}
 Perplexity( E_{test} ) = \exp^{- \frac{ \sum_{e \in E_{test}} \log p(e) }{ | E_{test} | } }
 \end{equation}
-
+Due to the time limitation, it is not tested in this project.
 
 \section{Summary}
 
+
 \bibliographystyle{abbrv}
 \bibliography{reference}
+
+\section{Appendix}
+\label{sec:appendix}
+
+Here is a list of notations.
+\begin{itemize}
+	\item $ M $ : number of social actors (social interaction profiles) in the social network
+	\item $ K $ : number of communities (mixture components)
+	\item $ N_{i} $ : number of social interactions in a social interaction profile $ \mbox{sip}_{i} $
+	\item $ \vec{\alpha} $ : Dirichlet prior hyperparameter
+	\item $ \vec{\beta} $ : Dirichlet prior hyperparameter
+	\item $ \iota $ : hidden community variable, $ \iota_{i,j} $ means the community for the $ j $th social interaction in $ \mbox{sip}_{i} $
+	\item $ \vec{\theta} $ : $ p(\iota \mid \mbox{sip}_{j}) $ is the community mixture proportion for $ \mbox{sip}_{j} $ 
+	\item $ \vec{\Phi}_{k} $ : $ p(\omega \mid \iota_{k} ) $ is the mixture component of community $ k $
+	\item $ \omega $ : social interaction variable, $ $ means the $ j $th social interaction in $ \mbox{sip}_{i} $
+\end{itemize}
 
 \end{document}
