@@ -45,9 +45,9 @@
 
 \begin{abstract}
 Connecting the academic papers or the academic authors creates social network structures.
-By different ways of connecting nodes, the social network structure can represent different relationship in academic society.
-Using Latent Dirichlet Allocation to model the generative model of the network supports the analysis on the social network,
-particular the network at large scale.
+By different ways of connecting nodes, a social network structure can represent different relationship in an academic society.
+Using Latent Dirichlet Allocation to model the generative model of the network supports the analysis on the social networks,
+particular the networks at large scale.
 Our project collects academic documents from Google Scholar and creates corresponding social network structures.
 After the generative model has been learned from social network structure,
 many potential features could be extracted.
@@ -62,13 +62,13 @@ Our project presents a measurement study and analysis of the structure of docume
 
 \section{Introduction}
 
-Social networks, as an abstract of the relationship connections between a large scale of objects, exist in many groups of objects.
-These groups of objects can persons, identities, documents, pictures and many more.
-By figuring out the patterns and the features of a social network, people hope to explore the potential phenomenons in this society.
-However, the huge amount of data makes the pattern analysis on this network structure a hard problem.
+The social network, as an abstract of the relationship connections between a large scale of objects, exists in many groups of objects.
+These groups of objects can be persons, identities, documents, pictures and many more.
+By figuring out the patterns and the features of a social network, the researchers hope to explore the implicit phenomenons in this society.
+However, the huge amount of data makes the pattern analysis on this network structure a challenging problem.
 Recently, Latent Dirichlet Allocation~\cite{Blei:2003:LDA:944919.944937} , a popular technique applied in text mining, has been imported to the community analysis on the social networks.
 In the text mining, LDA uses a Bayesian network structure for a document generative model.
-The words in the documents are used as samples to training the Bayesian network.
+The words in the documents are used as samples to train the Bayesian network.
 The trained Bayesian network is expected to approximate the latent text data distribution, which could be used for pattern analysis purpose.
 By modeling the social network distribution in a similar way, the Latent Dirichlet Allocation can be applied to analyze the social network structures
 ~\cite{4258697} \cite{Cha:2012:SAU:2348283.2348360} \cite{Henderson:2009:ALD:1529282.1529607}.
@@ -91,7 +91,7 @@ Latent Dirichlet Allocation has been applied to explore the potential features o
 
 \section{Network generative model}
 
-The key of the Latent Dirichlet Allocation relies on the definition of a generative model.
+The core of the Latent Dirichlet Allocation is the definition of a generative model.
 The generative model defines the form of distribution of the data.
 In the social networks, the distribution of the data is the distribution of the edges, the connection between the nodes.
 
@@ -165,8 +165,9 @@ and
 \theta_{m,k} = \frac{n^{k}_{m}+\alpha}{\sum_{K}^{\iota=1}+T\alpha}.
 \end{equation}
 
-The pseudo code is given as following.
+The pseudo code is given in following Algorithm \ref{alg:gibss}.
 \begin{algorithm}
+\label{alg:gibss}
 	\begin{algorithmic}[1]
 		\For{\textbf{each} social interaction profile $ \mbox{sip}_{i} \in [1,M] $ }
 		\For{\textbf{each} social interaction $ \omega_{i,j} \in [1, N_{i}] $ }
@@ -200,8 +201,8 @@ Unfortunately, Google Scholar does not have an API so we had to come up with a w
 
 We first looked at any existing tools out there that could get the data we needed.
 Our search came up with some tools but none of them did exactly what we wanted.
-One of them, scholar.py, was able to get the first page of article results from Google Scholar, but we needed more results and also the papers that cited all of those results.
-This led us to building off of scholar.py but in the end creating our own Google Scholar scraping tool.
+One of them, \emph{scholar.py}, was able to get the first page of article results from Google Scholar, but we needed more results and also the papers that cited all of those results.
+This led us to building off of \emph{scholar.py} but in the end creating our own Google Scholar scraping tool.
 
 The specific data we needed from Google Scholar for each paper was the author, title, and also the author and title for any papers that cited the paper.
 In order to obtain this data our tool would first make a request for a given topic.
@@ -292,9 +293,10 @@ White pixels can be seen after enlarged.
 \label{fig:gene_ad_mat}
 \end{figure}
 
-\section{Analysis}
+\section{Community Analysis}
 
-After applying the Latent Dirichlet Allocation to the created network structure, two questions should be answered.
+By applying the Latent Dirichlet Allocation to the created network structure, a generative model of the network distribution is obtained.
+Two questions should be answered as well.
 \begin{itemize}
 \item How can the generative model be used?
 \item How the generative model fits the network structure as the training data?
@@ -310,8 +312,8 @@ By looking at the probability distribution of that the actor associated with eac
 \item \textbf{Importance of a member in a community} \\
 $ p ( \omega_{i}  \mid \iota_{j} ) $ tells the distribution of the actors given a community.
 The actor with a higher probability indirectly indicates its importance in this community.
-\item \textbf{Association within a community} $ p ( \iota_{j} \mid \omega_{i} ) $
-It tells the probability distribution that actor $ m $ belongs to cluster $ k $.
+\item \textbf{Association within a community} \\
+$ p ( \iota_{j} \mid \omega_{i} ) $ tells the probability distribution that actor $ m $ belongs to cluster $ k $.
 There could be several ways to cluster the actors, e.g. using a SVM.
 Here the simplest method is taken, which the community with largest probability is chosen as the one that actor belongs to.
 \item \textbf{Similarity of two communities} \\
@@ -329,22 +331,22 @@ D_{KL} ( \iota_{i}, \iota_{j} ) = \sum_{k} p( \omega_{k} \mid \iota_{i} ) \log \
 Particularly, in the author network, the generative model can help to identify authors.
 Sometimes same author shows different names in string. 
 For example, some papers include the middle name, but some others does not.
-The similarity of the community distribution can help to assign the papers to correct author. 
+The similarity of the community distribution can help to assign the papers to correct author identity. 
 
 Meanwhile, different authors might have same name.
-The community distribution of the papers can help to sort out the papers into different authors in different fields.
+The community distribution of the papers can help to sort out the papers into different author identities in different fields.
 \end{itemize}
 
 \subsection{Verification}
 
-Before we could apply the information indicated by a generative model, we should guarantee that the generative model well approximate the training data distribution, which is the network structure in the social network analysis.
+Before we could apply the information indicated by a generative model, we should guarantee that the generative model well approximates the training data distribution, which is the network structure in the social network analysis.
 A labeled dataset with three clusters is used to verify the community discovery capability of the Latent Dirichlet Allocation.
 The result is given in Figure \ref{fig:cluster3}.
 
 In order to verify how the Latent Dirichlet Allocation applies to the social network analysis.
 Two labeled dataset are also tested, which are \emph{CiteSeer} and \emph{Cora}
 \footnote{The datasets are obtained from http://linqs.cs.umd.edu/projects/projects/lbc/}.
-The test results are illustrated in Figure \ref{fig:doc_load01} and Figure \ref{fig:doc_load02}.
+The test results after running 600 iterations are illustrated in Figure \ref{fig:doc_load01} and Figure \ref{fig:doc_load02}.
 In these datasets, each paper has a label showing which community it belongs to.
 After clustering the papers, we can see that the papers in the same cluster tends to share same original labels.
 Because Gibbs sampling is used to train the Bayesian network of the generative model.
@@ -432,7 +434,7 @@ With a longer run time, the results could shows better consistency in each clust
 
 Because there is no label assigned to the data we collected from Google Scholar.
 It becomes hard to verify whether the clustering result is a good one.
-Usually we need to have both a training dataset and a testing dataset.
+In a common way, we should have both a training dataset and a testing dataset.
 After trained the generative model using the training dataset, the testing dataset will then be used to verify the approximative capability of the generative model.
 \emph{Perplexity} is a popular metric in measuring how well the trained model fits a test dataset, which has been applied in \cite{Cha:2012:SAU:2348283.2348360} and \cite{4258697}.
 It is defined as 
@@ -443,10 +445,16 @@ Due to the time limitation, it is not tested in this project.
 
 \section{Summary}
 
-
-\bibliographystyle{abbrv}
-\bibliography{reference}
-
+From the experiment, we can see that the Latent Dirichlet could learn the edge distribution of the social network.
+The clustering results show some evidences.
+The convergence using Gibbs sampling is slow.
+Using approximate variational inference might speed up the process.
+Due to the time limitation, many analysis tools proposed have not been implemented and verified.
+More interesting phenomenons in the  are yet to be explored.
+A hierarchical generative model can help explore more details in a community or support larger scale of social networks.
+Particularly, the current network uses only undirected edges.
+If we model the social network using directed edges, the influence flow in the network structure could provide a deeper understanding.
+But this is out of the scope that the Latent Dirichlet Allocation can do.
 \section{Appendix}
 \label{sec:appendix}
 
@@ -462,5 +470,10 @@ Here is a list of notations.
 	\item $ \vec{\Phi}_{k} $ : $ p(\omega \mid \iota_{k} ) $ is the mixture component of community $ k $
 	\item $ \omega $ : social interaction variable, $ $ means the $ j $th social interaction in $ \mbox{sip}_{i} $
 \end{itemize}
+
+\bibliographystyle{abbrv}
+\bibliography{reference}
+
+
 
 \end{document}
