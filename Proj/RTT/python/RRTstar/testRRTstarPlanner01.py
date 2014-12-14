@@ -31,11 +31,11 @@ if __name__ == '__main__':
     obs.size[2] = 8
     world.obstacles.append(obs)    
     
-    planner = RRTstarPlanner()
-    planner.world = World
+    planner = RRTstarPlanner(3)
+    planner.world = world
     
     root = planner.getRootVertex()
-    rootState = planner.getState()
+    rootState = root.state
     rootState[0] = 0.0
     rootState[1] = 0.0
     rootState[2] = 0.0

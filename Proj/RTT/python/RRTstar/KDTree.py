@@ -16,14 +16,14 @@ def KD_nearest_i(node, pos, rect):
     if dummy <= 0.0:
         nearer_subtree = node.left
         farther_subtree = node.right
-        nearer_hyperrect_coord = rect.max[dir]
-        farther_hyperrect_coord = rect.min[dir]
+        nearer_hyperrect_coord = rect.maxVal[dir]
+        farther_hyperrect_coord = rect.minVal[dir]
         #side = 0
     else:
         nearer_subtree = node.right
         farther_subtree = node.left
-        nearer_hyperrect_coord = rect.min[dir]
-        farther_hyperrect_coord = rect.max[dir]
+        nearer_hyperrect_coord = rect.minVal[dir]
+        farther_hyperrect_coord = rect.maxVal[dir]
         #side = 1  
         
     if nearer_subtree != None:
@@ -61,7 +61,7 @@ def KD_nearest_i(node, pos, rect):
     return result, result_dist_sq
     
 
-def KD_find_nearest(node, pos, range, list, ordered, dim):
+def KD_find_nearest(node, pos, pos_range, list, ordered, dim):
     if node==None:
         return 0
     
@@ -72,7 +72,7 @@ def KD_find_nearest(node, pos, range, list, ordered, dim):
         deltaVal = node.pos[i] - pos[i]
         dist_sq += deltaVal * deltaVal
         
-    if dist_sq <= range * range:
+    if dist_sq <= pos_range * pos_range:
         if ordered == False:
             val = -1.0
         else:
@@ -86,16 +86,16 @@ def KD_find_nearest(node, pos, range, list, ordered, dim):
         child_node = node.left
     else:
         child_node = node.right
-    ret = KD_find_nearest(child_node, pos, range, list, ordered, dim)
+    ret = KD_find_nearest(child_node, pos, pos_range, list, ordered, dim)
     
-    if ret >= 0 and np.abs(dx) < range:
+    if ret >= 0 and np.abs(dx) < pos_range:
         added_results += ret 
         child_node = node.left
         if dx <= 0.0:
             child_node = node.right
         else:
             child_node = node.left
-        ret = KD_find_nearest(child_node, pos, range, list, ordered, dim)
+        ret = KD_find_nearest(child_node, pos, pos_range, list, ordered, dim)
     
     added_results += ret 
     
@@ -119,7 +119,7 @@ class KDTree(object):
         self.rect = None
         
     def insert(self, pos, data):
-        self._insert_to_node(self.root, pos, data, 0)
+        self.root = self._insert_to_node(self.root, pos, data, 0)
         
         if self.rect == None:
             self.rect = KDHyperRect(self.dimension, pos, pos)
@@ -131,12 +131,15 @@ class KDTree(object):
             new_node = KDNode(pos)
             new_node.data = data
             new_node.dir = dir
-            return
+            return new_node
             
         new_dir = (node.dir + 1) % self.dimension
         if pos[node.dir] < node.pos[node.dir]:
-            return self.insert_to_node(node.left, pos, data, new_dir)
-        return self.insert_to_node(node.right, pos, data, new_dir)
+            node.left = self.insert_to_node(node.left, pos, data, new_dir)
+            #node = temp_node
+            return node
+        node.right =  self.insert_to_node(node.right, pos, data, new_dir)
+        return node
             
     def findNearest(self, pos):
         # Find one of the nearest nodes from the specified point.

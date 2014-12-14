@@ -4,7 +4,7 @@ Created on Dec 13, 2014
 @author: daqing_yi
 '''
 
-import sys.float_info
+import sys
 import numpy as np
 import copy
 from KDTree import *
@@ -47,6 +47,14 @@ class RRTstarPlanner(object):
         self.numVertices = 0
         self.listVertices = []
         
+        # Initialize the root vertex
+        self.root = Vertex()
+        self.root.state = np.zeros(self.dimension)
+        self.root.costFromParent = 0.0
+        self.root.costFromRoot = 0.0
+        self.root.trajFromParent = None
+
+        
     def insertIntoKDTree(self, vertexIn):
         stateKey = self.world.getStateKey(vertexIn.state)
         self.kdtree.insert(stateKey, vertexIn)
@@ -64,7 +72,7 @@ class RRTstarPlanner(object):
         return vertexPointerOut
         
         
-    def getNearVertices(self, stateIn, vectorNearVerticesOut):
+    def getNearVertices(self, stateIn):
         # Get the state key for the query state
         stateKey = self.world.getStateKey(stateIn)
         
@@ -164,11 +172,13 @@ class RRTstarPlanner(object):
         self.kdtree = KDTree(self.dimension)
         
         # Initialize the variables
-        self.root = Vertex()
-        self.root.state = copy.deepcopy(self.world.getRootState())
-        self.root.costFromParent = 0.0
-        self.root.costFromRoot = 0.0
-        self.root.trajFromParent = None
+        self.root = rootBackup
+        if self.root!= None:
+            self.listVertices.append(self.root)
+            self.insertIntoKDTree(self.root)
+            self.numVertices += 1
+        self.lowerBoundCost = sys.float_info.max
+        self.lowerBoundVertex = None
         
     def setGamma(self, gamma):
         self.gamma = gamma
@@ -249,7 +259,7 @@ class RRTstarPlanner(object):
         stateRandom = self.world.sampleState()
 
         # 2. Compute the set of all near vertices
-        vectorNearVertices = self.getNearestVertex(stateRandom)
+        vectorNearVertices = self.getNearVertices(stateRandom)
         
         # 3. Find the best parent and extend from that parent
         vertexParent = None
