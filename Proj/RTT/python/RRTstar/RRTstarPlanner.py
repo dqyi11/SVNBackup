@@ -4,15 +4,19 @@ Created on Dec 13, 2014
 @author: daqing_yi
 '''
 
+import sys.float_info
+
 class Vertex(object):
     
     def __init__(self):
         self.parent = None
         self.state = None
-        self.children = []
+        self.trajFromParent = None
+        
         self.costFromParent = 0.0
         self.costFromRoot = 0.0
-        self.trajFromParent = []
+        
+        self.children = []
         
     def getState(self):
         return self.state
@@ -28,7 +32,7 @@ class RRTstarPlanner(object):
 
     def __init__(self, dimensin, gamma):
         self.gamma = 1.0
-        self.lowerBoundCost = 
+        self.lowerBoundCost = sys.float_info.max
         self.lowerBoundVertex = None
         
         self.kdtree = None
@@ -36,8 +40,11 @@ class RRTstarPlanner(object):
         self.numVertices = 0
         self.world = None
         
+        self.numVertices = 0
+        self.listVertices = []
+        
     def insertIntoKDTree(self, vertexIn):
-        stateKey = self.world.getStateKey(vertexIn.state)self
+        stateKey = self.world.getStateKey(vertexIn.state)
         self.kdtree.insert(stateKey, vertexIn)
         
     def getNearestVertex(self, stateIn, vertexPointerOut):

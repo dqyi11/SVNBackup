@@ -31,10 +31,10 @@ class Trajectory(object):
         
 class World(object):
     
-    def __init__(self):
-        self.dimensionNum = 0
-        self.regionOperating = None
-        self.regionGoal = None
+    def __init__(self, dimensionNum):
+        self.dimensionNum = dimensionNum
+        self.regionOperating = Region(self.dimensionNum)
+        self.regionGoal = Region(self.dimensionNum)
         self.obstacles = []
         self.rootState = np.zeros(self.dimensionNum)
         
