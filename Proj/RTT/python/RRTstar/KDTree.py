@@ -61,9 +61,9 @@ def KD_nearest_i(node, pos, rect):
     return result, result_dist_sq
     
 
-def KD_find_nearest(node, pos, pos_range, list, ordered, dim):
+def KD_find_nearest(node, pos, pos_range, res_list, ordered, dim):
     if node==None:
-        return 0
+        return 0, res_list
     
     added_results = 0
     
@@ -77,7 +77,7 @@ def KD_find_nearest(node, pos, pos_range, list, ordered, dim):
             val = -1.0
         else:
             val = dist_sq
-        ResultListInsert(list, node, val)
+        res_list = ResultListInsert(res_list, node, val)
         added_results = 1
         
     dx = pos [node.dir] - node.pos[node.dir]
@@ -86,7 +86,7 @@ def KD_find_nearest(node, pos, pos_range, list, ordered, dim):
         child_node = node.left
     else:
         child_node = node.right
-    ret = KD_find_nearest(child_node, pos, pos_range, list, ordered, dim)
+    ret, res_list = KD_find_nearest(child_node, pos, pos_range, res_list, ordered, dim)
     
     if ret >= 0 and np.abs(dx) < pos_range:
         added_results += ret 
@@ -95,11 +95,11 @@ def KD_find_nearest(node, pos, pos_range, list, ordered, dim):
             child_node = node.right
         else:
             child_node = node.left
-        ret = KD_find_nearest(child_node, pos, pos_range, list, ordered, dim)
+        ret, res_list = KD_find_nearest(child_node, pos, pos_range, res_list, ordered, dim)
     
     added_results += ret 
     
-    return added_results
+    return added_results, res_list
         
 
 class KDNode(object):
@@ -143,8 +143,14 @@ class KDTree(object):
             
     def findNearest(self, pos):
         # Find one of the nearest nodes from the specified point.
+        
+        # Allocate result set
         rset = KDResult()
         rset.tree = self
+        rset.resList = ResultNode()
+        rset.resList.next = None
+        
+        # Duplicate the bounding hyperrectange, we will work on the copy 
         rect = copy.deepcopy(self.rect)
         
         # Our first guesstimate is the root node
@@ -159,18 +165,21 @@ class KDTree(object):
         
         # Store the result
         if result != None:
-            ResultListInsert(rset.resList, result, -1.0)
+            rset.resList = ResultListInsert(rset.resList, result, -1.0)
             rset.size = 1
             rset.rewind()
         
         return rset
         
         
-    def findNearestRange(self, pos, range):
+    def findNearestRange(self, pos, pos_range):
         # Find any nearest nodes from the specified point within a range.
         rset = KDResult()
+        rset.resList = ResultNode()
+        rset.resList.next = None
+        rset.tree = self
         
-        ret = KD_find_nearest(self.root, pos, range, rset.resList, False, self.dimension)
+        ret = KD_find_nearest(self.root, pos, pos_range, rset.resList, False, self.dimension)
         
         rset.size = ret
         rset.rewind()

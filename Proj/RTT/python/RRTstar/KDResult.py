@@ -6,17 +6,18 @@ Created on Dec 13, 2014
 import numpy as np
 from compiler.ast import Node
 
-def ResultListInsert(node, item, dist_sq):
+def ResultListInsert(rlist, item, dist_sq):
     rnode = ResultNode()
     rnode.item = item
     rnode.dist_sq = dist_sq
     
     if dist_sq >= 0.0:
-        while node.next!= None and node.next.dist_sq < dist_sq:
-            node = node.next
+        while rlist.next!= None and rlist.next.dist_sq < dist_sq:
+            rlist = rlist.next
             
-    rnode.next = node.next
-    node.next = rnode
+    rnode.next = rlist.next
+    rlist.next = rnode
+    return rlist
 
 class ResultNode(object):
     
@@ -40,13 +41,14 @@ class KDResult(object):
     def rewind(self):
         self.resIter = self.resList.next
         
+        
     def isEnd(self):
         if self.resIter==None:
             return True
         return False
     
     def next(self):
-        self.resIter = self.resList.next
+        self.resIter = self.resIter.next
         if self.resIter!= None:
             return True
         return False

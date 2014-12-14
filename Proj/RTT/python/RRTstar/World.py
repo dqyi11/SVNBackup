@@ -69,7 +69,9 @@ class World(object):
              - self.regionOperating.size[i]/2.0 + self.regionOperating.center[i]
         return randomStateOut
         
-    def extendTo(self, stateFromIn, stateTowardsIn, trajectoryOut, exactConnectionOut):
+    def extendTo(self, stateFromIn, stateTowardsIn):
+        
+        trajectoryOut = Trajectory()
         dists = np.zeros(self.dimensionNum)
         for i in range(self.dimensionNum):
             dists[i] = stateTowardsIn[i] - stateFromIn[i]
@@ -84,7 +86,7 @@ class World(object):
         for i in range(self.dimensionNum):
             dists[i] /= incrementTotal
             
-        numSegments = np.floor(incrementTotal)
+        numSegments = int(np.floor(incrementTotal))
         
         stateCurr = np.zeros(self.dimensionNum)
         for i in range(self.dimensionNum):
@@ -92,23 +94,20 @@ class World(object):
             
         for j in range(numSegments):
             if self.isInCollision(stateCurr):
-                return False, exactConnectionOut
+                return trajectoryOut, False
         
         trajectoryOut.endState = copy.deepcopy(stateTowardsIn)  
         trajectoryOut.totalVariation = distTotal
         
-        exactConnectionOut = True
-        
-        return True, exactConnectionOut
+        return trajectoryOut, True
         
         
     def evaluateExtensionCost(self, stateFromIn, stateTowardsIn):
-        
-        exactConnectionOut = True
+
         distTotal = 0.0
         for i in range(self.dimensionNum):
             distTotal += (stateTowardsIn[i] - stateFromIn[i])**2
-        return distTotal, exactConnectionOut
+        return distTotal
 
         
     def getTrajectory(self, stateFromIn, stateToIn, trajectoryOut):

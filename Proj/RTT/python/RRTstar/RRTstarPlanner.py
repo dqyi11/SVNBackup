@@ -89,12 +89,13 @@ class RRTstarPlanner(object):
             vectorNearVerticesOut = []
             return vectorNearVerticesOut
         
+        vectorNearVerticesOut = []
         # Place pointers to the near vertices into the vector
         idx = 0
         kdres.rewind()
         while kdres.isEnd()==False:
             vertexCurr = kdres.itemData()
-            vectorNearVerticesOut[idx] = vertexCurr
+            vectorNearVerticesOut.append(vertexCurr)
             kdres.next()
             idx += 1
             
@@ -186,13 +187,14 @@ class RRTstarPlanner(object):
     def compareVertexCostPairs(self, i, j):
         return i.second < j.second
         
-    def findBestParent(self, stateIn, vectorNearVerticesIn, exactConnection):
+    def findBestParent(self, stateIn, vectorNearVerticesIn):
         # Compute the cost of extension for each near vertex
         numNearVertices = len(vectorNearVerticesIn)
+        vertexBest = None
         
         vectorVertexCostPairs = []
         for i in range(numNearVertices):
-            trajCost = self.world.evaluateExtensionCost(vectorNearVerticesIn[i].state, stateIn, exactConnection)
+            trajCost = self.world.evaluateExtensionCost(vectorNearVerticesIn[i].state, stateIn)
             vectorVertexCostPairs.append((vectorNearVerticesIn[i], vectorNearVerticesIn[i].costFromRoot + trajCost))
             
         # Sort vertices according to cost
@@ -205,8 +207,7 @@ class RRTstarPlanner(object):
             # Extend the current vertex towards stateIn
             # (and this time check for collision with obstacles)
             
-            exactConnection = False
-            trajectoryOut, ret = self.world.extendTo(vertexCurr.state, stateIn, exactConnection)
+            trajectoryOut, ret = self.world.extendTo(vertexCurr.state, stateIn)
             if ret > 0:
                 vertexBest = vertexCurr
                 connectionEstablished = True
@@ -214,9 +215,9 @@ class RRTstarPlanner(object):
             
         # Return success if a connection was established
         if connectionEstablished:
-            return trajectoryOut, True
+            return vertexBest, trajectoryOut, True
         
-        return trajectoryOut, False
+        return vertexBest, trajectoryOut, False
             
         
     def updateBranchCost(self, vertexIn, depth):
@@ -234,16 +235,15 @@ class RRTstarPlanner(object):
         for vertexCurr in vectorNearVertices:
             
             # Check whether the extension results in an exact connection
-            exactConnection = False
-            costCurr = self.world.evaluateExtensionCost(vertexNew.state, vertexCurr.state, exactConnection )
-            if exactConnection==False or costCurr < 0:
+            costCurr = self.world.evaluateExtensionCost(vertexNew.state, vertexCurr.state )
+            if costCurr < 0:
                 continue
             
             # Check whether the cost of the extension is smaller than current cost
             totalCost = vertexNew.costFromRoot + costCurr
             if totalCost < vertexCurr.costFromRoot + costCurr:
                 # Compute the extension (checking for collision)
-                ret, trajectory = self.world.extendTo(vertexNew.state, vertexCurr.state, exactConnection)
+                ret, trajectory = self.world.extendTo(vertexNew.state, vertexCurr.state)
                 if ret == False:
                     continue
                 
@@ -263,7 +263,6 @@ class RRTstarPlanner(object):
         
         # 3. Find the best parent and extend from that parent
         vertexParent = None
-        exactConnection = False
         
         if len(vectorNearVertices) == 0:
             
@@ -271,12 +270,12 @@ class RRTstarPlanner(object):
             vertexParent = self.getNearestVertex(stateRandom)
             if vertexParent == None:
                 return False
-            ret, trajectory = self.world.extendTo(vertexParent.state, stateRandom, exactConnection)
+            ret, trajectory = self.world.extendTo(vertexParent.state, stateRandom)
             if ret == False:
                 return False
         else:
             # 3.b Extend the best parent within the near vertices
-            trajectory, ret = self.world.findBestParent(stateRandom, vectorNearVertices, vertexParent, exactConnection)
+            vertexParent, trajectory, ret = self.findBestParent(stateRandom, vectorNearVertices)
             if ret == False:
                 return False
         
@@ -326,21 +325,3 @@ class RRTstarPlanner(object):
             vertexCurr = vertexParent 
             
         return True
-                    
-                    
-            
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-        

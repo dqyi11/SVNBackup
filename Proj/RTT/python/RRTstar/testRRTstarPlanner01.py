@@ -49,6 +49,7 @@ if __name__ == '__main__':
     planner.setGamma (1.5);
     
     for i in range(ITERATION_NUM):
+        print "@Iter " + str(i)
         planner.iteration()
     
     
