@@ -6,13 +6,24 @@ Created on Dec 13, 2014
 import numpy as np
 from compiler.ast import Node
 
+def ResultListInsert(node, item, dist_sq):
+    rnode = ResultNode()
+    rnode.item = item
+    rnode.dist_sq = dist_sq
+    
+    if dist_sq >= 0.0:
+        while node.next!= None and node.next.dist_sq < dist_sq:
+            node = node.next
+            
+    rnode.next = node.next
+    node.next = rnode
+
 class ResultNode(object):
     
     def __init__(self):
         self.item = None
-        self.dist_square = 0.0
+        self.dist_sq = 0.0
         self.next = None
-        
     
         
 class KDResult(object):
