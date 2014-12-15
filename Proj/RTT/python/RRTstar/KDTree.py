@@ -135,10 +135,10 @@ class KDTree(object):
             
         new_dir = (node.dir + 1) % self.dimension
         if pos[node.dir] < node.pos[node.dir]:
-            node.left = self.insert_to_node(node.left, pos, data, new_dir)
+            node.left = self._insert_to_node(node.left, pos, data, new_dir)
             #node = temp_node
             return node
-        node.right =  self.insert_to_node(node.right, pos, data, new_dir)
+        node.right =  self._insert_to_node(node.right, pos, data, new_dir)
         return node
             
     def findNearest(self, pos):
