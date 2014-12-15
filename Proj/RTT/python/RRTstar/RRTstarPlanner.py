@@ -8,6 +8,7 @@ import sys
 import numpy as np
 import copy
 from KDTree import *
+from World import *
 
 class Vertex(object):
     
@@ -294,7 +295,7 @@ class RRTstarPlanner(object):
         
         trajectoryOut = []
         if self.lowerBoundVertex == None:
-            return trajectoryOut
+            return trajectoryOut, False
         
         vertexCurr = self.lowerBoundVertex
         
@@ -324,4 +325,4 @@ class RRTstarPlanner(object):
                     
             vertexCurr = vertexParent 
             
-        return True
+        return trajectoryOut, True

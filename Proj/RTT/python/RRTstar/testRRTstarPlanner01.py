@@ -51,6 +51,9 @@ if __name__ == '__main__':
     for i in range(ITERATION_NUM):
         print "@Iter " + str(i)
         planner.iteration()
+        
+    traj, ret = planner.getBestTrajectory()
+    print ret
     
     
     
