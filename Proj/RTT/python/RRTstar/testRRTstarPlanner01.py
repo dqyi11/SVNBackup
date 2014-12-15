@@ -5,40 +5,38 @@ Created on Dec 14, 2014
 '''
 from RRTstarPlanner import *
 from World import *
+from RRTstarVisualizer import *
 
 if __name__ == '__main__':
     
-    ITERATION_NUM = 2000
+    ITERATION_NUM = 10
     
-    world = World(3)
-    world.regionOperating.size[0] = 20.0
-    world.regionOperating.size[1] = 20.0
-    world.regionOperating.size[2] = 20.0
+    world = World(2)
+    world.regionOperating.center[0] = 0
+    world.regionOperating.center[1] = 0
+    world.regionOperating.size[0] = 600
+    world.regionOperating.size[1] = 400
     
-    world.regionGoal.center[0] = 2.0
-    world.regionGoal.center[1] = 2.0
-    world.regionGoal.center[2] = 2.0
-    world.regionGoal.size[0] = 2.0
-    world.regionGoal.size[0] = 2.0
-    world.regionGoal.size[0] = 2.0 
+    world.regionGoal.center[0] = 100
+    world.regionGoal.center[1] = 100
+    world.regionGoal.size[0] = 40
+    world.regionGoal.size[0] = 40
+
     
-    obs = Region(3)
+    obs = Region(2)
     obs.center[0] = 0
-    obs.center[1] = 0
-    obs.center[2] = 6
+    obs.center[1] = 200
     obs.size[0] = 10
     obs.size[1] = 10
-    obs.size[2] = 8
     world.obstacles.append(obs)    
     
-    planner = RRTstarPlanner(3)
+    planner = RRTstarPlanner(2)
     planner.world = world
     
     root = planner.getRootVertex()
     rootState = root.state
-    rootState[0] = 0.0
-    rootState[1] = 0.0
-    rootState[2] = 0.0
+    rootState[0] = 0
+    rootState[1] = 0
     
     planner.initialize()
     
@@ -46,11 +44,14 @@ if __name__ == '__main__':
     # optimality. Larger values will weigh on optimization 
     # rather than exploration in the RRT* algorithm. Lower 
     # values, such as 0.1, should recover the RRT.
-    planner.setGamma (1.5);
+    planner.setGamma (1.5)
+    
+    viz = RRTstarVisualizer(planner.kdtree, [[-300,300],[-200,200]])
     
     for i in range(ITERATION_NUM):
         print "@Iter " + str(i)
         planner.iteration()
+        viz.update()
         
     traj, ret = planner.getBestTrajectory()
     print ret
