@@ -18,6 +18,7 @@ bookmarksopenlevel=2]{hyperref}
 \usepackage{enumerate}
 \usepackage{multicol}
 \usepackage{tikz}
+\usepackage{comment}
 
 \usepackage{geometry}
 \geometry{total={210mm,297mm},
@@ -72,7 +73,7 @@ bindingoffset=0mm, top=20mm,bottom=20mm}
 
 \title{CS 660 Computer Networks - Fall 2014 \\ Final Exam Answer sheet}
 
-\author{Daqing Yi, Brigham Young University}
+\author{Daqing Yi}
 
 \date{}
 
@@ -85,30 +86,48 @@ Explain how each architecture works and discuss its benefits.
 Which one do you think has the best chance of replacing the current Internet?
 Justify your answer.
 \paragraph{Answer:}
-xx
+\begin{itemize}
+\item
+\textbf{NDN} stands for \emph{Named Data Networking}.
+
+\item
+\textbf{XIA} stands for \emph{eXpressive Internet Architecture}.
+\end{itemize}
 \item 
 We covered papers on domain names and domain parking. 
 Explain what these papers tell us about current domain usage. 
 What topics are still open for research with respect to Internet domains?
 \paragraph{Answer:}
-xx
+\begin{itemize}
+\item Parking service
+\item Illicit activities in online advertising
+\item Infiltration into malicious infrastructure
+\end{itemize}
+\begin{comment}
 \item 
 The paper on SSL, HTTPS, and trust models describes a number of flaws with our system for secure communication. 
 Choose three of these you feel are most important. 
 Describe the aw and explain why this is a critical area where improvement is needed.
 \paragraph{Answer:}
 xx
+\end{comment}
 \item
 The paper on reducing web latency describes three methods for improving TCP transfers. 
 Briefly explain how each of these works. 
 If you were to design a new version of TCP, and deployment was not an issue, which of these would you use and why?
 \paragraph{Answer:}
-xx
+\begin{itemize}
+\item \textbf{Proactive} \emph{Proactively recover from loses}
+\item \textbf{Reactive} \emph{Recover from them as quickly as possible}
+\item \textbf{Corrective} \emph{Reconstruct packets to mask loss}
+\end{itemize}
 \item
 Explain the issue of network neutrality to an audience of a fellow CS major who is unfamiliar with the issue.
 Conclude with your advice for how society should solve this problem, or provide justication why nothing should be done from a regulatory standpoint.
 \paragraph{Answer:}
-xx
+\emph{Network neutrality} focuses whether an ISP differentiates against specific end-hosts, protocols or application.
+People believe that the internet neutrality preserves the prosperity of the online innovation.
+Because this guarantees a hospitable environment to the new websites and internet business and a fair competition between any new service providers with the broadband providers.
 \item
 HLP was proposed as a replacement to BGP. 
 Explain the major ways that HLP tries to improve on BGP. 
@@ -116,7 +135,12 @@ To what extent can these problems can be solved by the simpler solution proposed
 right path"? 
 Which are left unsolved and may require deployment of a new protocol?
 \paragraph{Answer:}
-xx
+\begin{itemize}
+\item Scalability
+\item Isolation
+\item Convergence
+\end{itemize}
+
 \end{enumerate}
 
 
