@@ -90,7 +90,20 @@ Justify your answer.
 \item
 \textbf{NDN} stands for \emph{Named Data Networking}.
 \emph{NDN} is driven by the data consumers.
-Two types of packets, \emph{Interest} and \emph{Data}, are forwarded in the communications
+Two types of packets, \emph{Interest} and \emph{Data}, are forwarded in the communications.
+A consumer sends the \emph{interest} packet into the network.
+When an \emph{interes} arrives an NDN router, its CS (\emph{Content Store}) will firstly be checked.
+A node that has the requested data will return the \emph{data} packet.
+A NDN router uses a PIT (\emph{Pending Interest Table}) to store all forwarded but not satisfied \emph{Interests}.
+When a \emph{data} packet arrives an NDN router, it will firstly be removed from PIT and then added to CS.
+The benefits of \emph{NDN} architecture includes
+\begin{itemize}
+	\item  End-to-end principle
+	\item Routing and forwarding plane separation
+	\item Stateful forwarding
+	\item Built-in security
+	\item Endable user choice and competitin
+\end{itemize}
 \item
 \textbf{XIA} stands for \emph{eXpressive Internet Architecture}.
 It aims for providing native supports for different principals so that new functionalities can be incrementally deployed.
@@ -100,6 +113,12 @@ Three key ideas
 \item \emph{Flexible addressing} provides a gradual network support.
 Any new function can be deployed piecewise.
 \item \emph{Intrinsically secure identifiers} allows the accuracy and integrity in communication.
+\end{itemize}
+The benefits of \emph{XIA} architecture includes
+\begin{itemize}
+	\item content transfer and support for evolution
+	\item service migration
+	\item client mobility
 \end{itemize}
 \end{itemize}
 
@@ -138,7 +157,7 @@ If you were to design a new version of TCP, and deployment was not an issue, whi
 \end{itemize}
 \item
 Explain the issue of network neutrality to an audience of a fellow CS major who is unfamiliar with the issue.
-Conclude with your advice for how society should solve this problem, or provide justication why nothing should be done from a regulatory standpoint.
+Conclude with your advice for how society should solve this problem, or provide justification why nothing should be done from a regulatory standpoint.
 \paragraph{Answer:}
 \emph{Network neutrality} focuses whether an ISP differentiates against specific end-hosts, protocols or application.
 People believe that the internet neutrality preserves the prosperity of the online innovation.
