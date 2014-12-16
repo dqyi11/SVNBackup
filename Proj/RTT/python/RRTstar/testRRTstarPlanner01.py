@@ -9,7 +9,7 @@ from RRTstarVisualizer import *
 
 if __name__ == '__main__':
     
-    ITERATION_NUM = 10
+    ITERATION_NUM = 5
     
     world = World(2)
     world.regionOperating.center[0] = 0
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     # values, such as 0.1, should recover the RRT.
     planner.setGamma (1.5)
     
-    viz = RRTstarVisualizer(planner.kdtree, [[-300,300],[-200,200]])
+    viz = RRTstarVisualizer(planner, [[-300,300],[-200,200]])
     
     for i in range(ITERATION_NUM):
         print "@Iter " + str(i) + " NUM " + str(planner.numVertices)

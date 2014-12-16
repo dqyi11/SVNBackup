@@ -11,8 +11,8 @@ import numpy as np
 class RRTstarVisualizer(object):
 
 
-    def __init__(self, rrt, dim_range):
-        self.rrt = rrt 
+    def __init__(self, planner, dim_range):
+        self.planner = planner 
         self.dim_range = dim_range
         self.width = dim_range[0][1] - dim_range[0][0]
         self.height = dim_range[1][1] - dim_range[1][0]
@@ -27,8 +27,17 @@ class RRTstarVisualizer(object):
         
     
     def update(self):      
+        '''
         self.drawVertice(self.rrt.root)
         pygame.display.flip();
+        pygame.time.delay(100)
+        '''
+        for v in self.planner.listVertices:
+            for c in v.children:
+                from_pos = v.state - self.offset
+                to_pos = c.state - self.offset
+                pygame.draw.line(self.screen, (0,0,0), from_pos , to_pos)
+        pygame.display.flip()
         pygame.time.delay(100)
         
     def drawVertice(self, node):
