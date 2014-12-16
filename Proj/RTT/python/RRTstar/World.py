@@ -46,7 +46,7 @@ class World(object):
         
     def isReachingTarget(self, stateIn):
         for i in range(self.dimensionNum):
-            if np.abs(stateIn[i] - self.regionGoal.center[i]) > self.regionalGoal.size[i]/2 :
+            if np.abs(stateIn[i] - self.regionGoal.center[i]) > self.regionGoal.size[i]/2 :
                 return False
         return True
         

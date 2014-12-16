@@ -138,7 +138,7 @@ class RRTstarPlanner(object):
         
         # Update the costs
         vertexEndIn.costFromParent = trajectoryIn.evaluateCost()
-        vertexEndIn.costFromRoot = vertexStartIn.costFromRoot() + vertexEndIn.costFromParent()
+        vertexEndIn.costFromRoot = vertexStartIn.costFromRoot + vertexEndIn.costFromParent
         self.checkUpdateBestVertex(vertexEndIn)
         
         # Update the trajectory between the two vertices
@@ -244,7 +244,7 @@ class RRTstarPlanner(object):
             totalCost = vertexNew.costFromRoot + costCurr
             if totalCost < vertexCurr.costFromRoot + costCurr:
                 # Compute the extension (checking for collision)
-                ret, trajectory = self.world.extendTo(vertexNew.state, vertexCurr.state)
+                trajectory, ret = self.world.extendTo(vertexNew.state, vertexCurr.state)
                 if ret == False:
                     continue
                 

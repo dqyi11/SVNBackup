@@ -29,14 +29,21 @@ class RRTstarVisualizer(object):
     def update(self):      
         self.drawVertice(self.rrt.root)
         pygame.display.flip();
+        pygame.time.delay(100)
         
     def drawVertice(self, node):
         
         if node != None:
             if node.left!=None:
-                pygame.draw.line(self.screen, (0,0,0), node.pos+self.offset, node.left.pos+self.offset)
+                from_pos = node.pos-self.offset
+                to_pos = node.left.pos-self.offset
+                #print "PLOT " + str(from_pos[0]) +"," + str(from_pos[1]) + " - " + str(to_pos[0]) + "," + str(to_pos[1])
+                pygame.draw.line(self.screen, (0,0,0), from_pos , to_pos)
                 self.drawVertice(node.left)
             if node.right!=None:
-                pygame.draw.line(self.screen, (0,0,0), node.pos+self.offset, node.right.pos+self.offset)
+                from_pos = node.pos-self.offset
+                to_pos = node.right.pos-self.offset
+                #print "PLOT " + str(from_pos[0]) +"," + str(from_pos[1]) + " - " + str(to_pos[0]) + "," + str(to_pos[1])
+                pygame.draw.line(self.screen, (0,0,0), from_pos , to_pos)
                 self.drawVertice(node.right)
         

@@ -49,7 +49,7 @@ if __name__ == '__main__':
     viz = RRTstarVisualizer(planner.kdtree, [[-300,300],[-200,200]])
     
     for i in range(ITERATION_NUM):
-        print "@Iter " + str(i)
+        print "@Iter " + str(i) + " NUM " + str(planner.numVertices)
         planner.iteration()
         viz.update()
         
