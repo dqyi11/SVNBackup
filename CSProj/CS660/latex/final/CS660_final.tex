@@ -168,9 +168,11 @@ A probe segment is transmitted to trigger duplicate ACKs after a PTO(Probe timeo
 The recovery time is attempted to be shorter than an RTO.
 Only changes on sender's side are needed.
 \item \textbf{Proactive} \emph{Proactively recover from loses} \\
-
+Copies of each TCP segment is transmitted.
+If the receiver gets at least of one copy of the segment, it can discard redudant segments and proceed.
+It requires minimum changes on TCP implementation.
 \item \textbf{Corrective} \emph{Reconstruct packets to mask loss} \\
-If a packet is lost in transit, a corrective packet is transmitted
+The sender transmits extra FEC packets so that the receiver can repair a small number of loses.
 \end{itemize}
 \item
 Explain the issue of network neutrality to an audience of a fellow CS major who is unfamiliar with the issue.
