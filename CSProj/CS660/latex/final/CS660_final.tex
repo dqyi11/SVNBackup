@@ -92,32 +92,32 @@ Justify your answer.
 \emph{NDN} is driven by the data consumers.
 Two types of packets, \emph{Interest} and \emph{Data}, are forwarded in the communications.
 A consumer sends the \emph{interest} packet into the network.
-When an \emph{interes} arrives an NDN router, its CS (\emph{Content Store}) will firstly be checked.
+When an \emph{interest} arrives at an NDN router, its CS (\emph{Content Store}) will firstly be checked whether there is the interested content.
 A node that has the requested data will return the \emph{data} packet.
 A NDN router uses a PIT (\emph{Pending Interest Table}) to store all forwarded but not satisfied \emph{Interests}.
 When a \emph{data} packet arrives an NDN router, it will firstly be removed from PIT and then added to CS.
 The benefits of \emph{NDN} architecture includes
 \begin{itemize}
-	\item the named data routing is robust when there is node failure;
-	\item content cache might reduce congestion;
-	\item network traffic can be self-regulated;
-	\item better inherent security;
-	\item it supports user choice and competition as the network evolves.
+	\item The named data routing is robust when there is node failure;
+	\item Content cache might reduce congestion;
+	\item Network traffic can be self-regulated;
+	\item Inherent security is required;
+	\item It supports user choice and competition as the network evolves.
 \end{itemize}
 \item
 \textbf{XIA} stands for \emph{eXpressive Internet Architecture}.
 It aims for providing native supports for different principals so that new functionalities can be incrementally deployed.
-Three key ideas 
+Three key ideas form the process.
 \begin{itemize}
-\item \emph{Flexible principal types} \\
+\item \emph{Flexible principal types} is supported. 
 The format of the principal type can support any new type format.
 Any new type can be compatible before the network provides native supports to new functions.
-\item \emph{Flexible addressing} \\
-It provides a gradual network support.
+\item \emph{Flexible addressing} is also introduced.
+It provides a gradual network support which can evolve over time.
 Any new function can be deployed piecewise.
 Fallback also helps to specify backup option in case that the new type is not recognized.
-\item \emph{Intrinsically secure identifiers} \\
-Intrinsic security is required in both source and destination sides.  
+\item \emph{Intrinsically secure identifiers} is required. 
+Intrinsic security is required in both source and destination sides, which does not rely on external configuration. 
 \end{itemize}
 The benefits of \emph{XIA} architecture includes
 \begin{itemize}
@@ -128,7 +128,7 @@ The benefits of \emph{XIA} architecture includes
 \end{itemize}
 
 Because currently the Internet becomes already an international community.
-Any overwhelming reimplementation of the Internet becomes hard, because it needs profit consensus and cooperation.
+Any overwhelming reimplementation of the Internet becomes hard, because it needs profit consensus and cooperation of groups in different nations.
 It would be ideal that there is an standard like \emph{XIA} that supports the coexistence and competition for different architectures.
 This can provide the architectures, like \emph{NDN}, the opportunity to start from small-scale deployment but then become popular to win the game.
 
