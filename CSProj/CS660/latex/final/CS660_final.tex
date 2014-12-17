@@ -201,13 +201,16 @@ Conclude with your advice for how society should solve this problem, or provide 
 \paragraph{Answer:}
 \emph{Network neutrality} focuses whether an ISP differentiates against specific end-hosts, protocols or application.
 People believe that the internet neutrality preserves the prosperity of the online innovation.
+At the same time, the freedom and user experience of Internet browsing could be guaranteed. 
 Because this guarantees a hospitable environment to the new websites and internet business and a fair competition between any new service providers with the broadband providers.
 
 As I am from a internet highly-regulated country, I do not believe the government can always guarantee a neutral environment.
-However, because the government has more investigation tools. 
-They could bring more transparency to the public, so that they can know what is happening in the networks.
-At the same time, the government can bring more ISP options to the local residents.
-The people and the market can bring it to a balance.
+However, the government could be more active in supporting network neutrality.
+Because the government has more investigation tools, it is easier for the government bringing more transparency of what is happening in the networks to the public.
+The network can be censored by the public to some extent.
+At the same time, the government can help to bring more ISP options to the local residents.
+If the users can easily and freely choose a suitable ISP, which might be a balance between experience and cost.
+Though local non-neutrality might exist, the global neutrality could be reached.
 
 \item
 HLP was proposed as a replacement to BGP. 
@@ -221,10 +224,15 @@ Which are left unsolved and may require deployment of a new protocol?
 Because the routing state and rate of churn are linearly growing with the network size.
 \item When changes happen, BGP usually suffers from route instability, route oscilliation and thus long convergence time.
 \item BGP shows poor fault isolation property.
+Local failure could be propagated globally.
 \end{itemize}
+
+HLP uses link-state routing in the hierarchical trees of AS and path-vector routing between trees.
 By using cost-hiding, HLP could perform explicit information hiding of routing updates.
+A route update is propagated only when it is necessary.
 This makes HLP have better scalability and isolation.
 As well, the convergence of HLP has been proved with some assumptions satisfied.
+HLP does not use prefix-deaggregation to do traffic engineering.
 
 Some BGP policies are not supported by HLP.
 Due to path hiding, generic regular expression based policies are not well supported.
