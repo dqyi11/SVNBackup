@@ -98,34 +98,39 @@ A NDN router uses a PIT (\emph{Pending Interest Table}) to store all forwarded b
 When a \emph{data} packet arrives an NDN router, it will firstly be removed from PIT and then added to CS.
 The benefits of \emph{NDN} architecture includes
 \begin{itemize}
-	\item  End-to-end principle
-	\item Routing and forwarding plane separation
-	\item Stateful forwarding
-	\item Built-in security
-	\item Endable user choice and competitin
+	\item the named data routing is robust when there is node failure;
+	\item content cache might reduce congestion;
+	\item network traffic can be self-regulated;
+	\item better inherent security;
+	\item it supports user choice and competition as the network evolves.
 \end{itemize}
 \item
 \textbf{XIA} stands for \emph{eXpressive Internet Architecture}.
 It aims for providing native supports for different principals so that new functionalities can be incrementally deployed.
 Three key ideas 
 \begin{itemize}
-\item \emph{Flexible principal types} enables the compatibility of new types even before the network provides native support to new functions.
-\item \emph{Flexible addressing} provides a gradual network support.
+\item \emph{Flexible principal types} \\
+The format of the principal type can support any new type format.
+Any new type can be compatible before the network provides native supports to new functions.
+\item \emph{Flexible addressing} \\
+It provides a gradual network support.
 Any new function can be deployed piecewise.
-\item \emph{Intrinsically secure identifiers} allows the accuracy and integrity in communication.
+Fallback also helps to specify backup option in case that the new type is not recognized.
+\item \emph{Intrinsically secure identifiers} \\
+Intrinsic security is required in both source and destination sides.  
 \end{itemize}
 The benefits of \emph{XIA} architecture includes
 \begin{itemize}
-	\item content transfer and support for evolution
-	\item service migration
-	\item client mobility
+	\item The user can specifiy static content with the help of scoped intent;
+	\item seamless service migration can be supported by re-binding mechanism;
+	\item client mobility is accomplished by re-binding mechanism.
 \end{itemize}
 \end{itemize}
 
-Because currently the internet becomes already an international community.
-Any overwhelming reimplementation of the internet becomes hard, because it needs profit consensus and cooperation.
-It would be ideal to me that there is an standard like \emph{XIA} that supports the coexistence and competition for different architectures.
-This can provide the architectures, like \emph{NDN}, the opportunity to start from small deployment but then become popular to win the game.
+Because currently the Internet becomes already an international community.
+Any overwhelming reimplementation of the Internet becomes hard, because it needs profit consensus and cooperation.
+It would be ideal that there is an standard like \emph{XIA} that supports the coexistence and competition for different architectures.
+This can provide the architectures, like \emph{NDN}, the opportunity to start from small-scale deployment but then become popular to win the game.
 
 \item 
 We covered papers on domain names and domain parking. 
@@ -134,7 +139,7 @@ What topics are still open for research with respect to Internet domains?
 \paragraph{Answer:}
 Currently there are a large number of domain names that the owners do not have better uses of.
 A great share of them are used for domain parking services.
-However, some of them are involved in illicit activities, which includes click fraud, traffic spam, traffic stealing and etc.
+However, some of them are involved in illicit activities, which provide malicious contents.
 One of the paper investigates the existing ``dark side'' of domain parking.
 Most of them are registered by spammers and appear as typosquatting domain names, because they are more likely to be visited accidentally due to domain typos.
 Thus one paper proposes methods to detect typosquatting domain names to protect the users and the other introduces methods to detect spammer registration behaviors to reduce the agility for mounting attacks.
@@ -182,8 +187,8 @@ If I could design a new version of TC without worrying about deployment,
 \emph{Proactive} is too aggressive, too many redundant packets are transmitted.
 If every user adopts this way, it might raise congestion issue.
 The performance of the \emph{reactive} depends on a good RTO.
-If RTO is too short, it might cause redundant transmission.
-If RTO is too long, the advantage will not be significant.
+If PTO is too short, it might cause redundant transmission.
+If PTO is too long, the advantage will not be significant.
 
 \emph{Corrective} provides a good balance.
 If the assumption from measurement is correct, the recovery should be effective and save the transmission cost.
@@ -224,7 +229,7 @@ As well, the convergence of HLP has been proved with some assumptions satisfied.
 Some BGP policies are not supported by HLP.
 Due to path hiding, generic regular expression based policies are not well supported.
 Also negation-based expressions on the path vector is not supported. 
-Thus some other transit networks cannot be avoided.
+Thus some other transit networks cannot be avoided in the routing.
 
 \end{enumerate}
 
