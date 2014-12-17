@@ -173,7 +173,23 @@ If the receiver gets at least of one copy of the segment, it can discard redudan
 It requires minimum changes on TCP implementation.
 \item \textbf{Corrective} \emph{Reconstruct packets to mask loss} \\
 The sender transmits extra FEC packets so that the receiver can repair a small number of loses.
+Because the measurements indicate that usually only a single packet is lost.
+Thus the checksum process could recover many loses.
 \end{itemize}
+
+If I could design a new version of TC without worrying about deployment, 
+\emph{corrective} would be my preference.
+\emph{Proactive} is too aggressive, too many redundant packets are transmitted.
+If every user adopts this way, it might raise congestion issue.
+The performance of the \emph{reactive} depends on a good RTO.
+If RTO is too short, it might cause redundant transmission.
+If RTO is too long, the advantage will not be significant.
+
+\emph{Corrective} provides a good balance.
+If the assumption from measurement is correct, the recovery should be effective and save the transmission cost.
+In many cases, the cost of local processing is cheaper than the cost of transmission.
+
+
 \item
 Explain the issue of network neutrality to an audience of a fellow CS major who is unfamiliar with the issue.
 Conclude with your advice for how society should solve this problem, or provide justification why nothing should be done from a regulatory standpoint.
@@ -196,10 +212,19 @@ right path"?
 Which are left unsolved and may require deployment of a new protocol?
 \paragraph{Answer:}
 \begin{itemize}
-\item Scalability
-\item Isolation
-\item Convergence
+\item BGP fails in scalability test. 
+Because the routing state and rate of churn are linearly growing with the network size.
+\item When changes happen, BGP usually suffers from route instability, route oscilliation and thus long convergence time.
+\item BGP shows poor fault isolation property.
 \end{itemize}
+By using cost-hiding, HLP could perform explicit information hiding of routing updates.
+This makes HLP have better scalability and isolation.
+As well, the convergence of HLP has been proved with some assumptions satisfied.
+
+Some BGP policies are not supported by HLP.
+Due to path hiding, generic regular expression based policies are not well supported.
+Also negation-based expressions on the path vector is not supported. 
+Thus some other transit networks cannot be avoided.
 
 \end{enumerate}
 
