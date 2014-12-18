@@ -60,7 +60,7 @@ if __name__ == '__main__':
         for i in range(iterations):
             f1.write(str(x[i])+" "+str(y[i])+"\n")
         
-    with open('noised_position.txt', 'w') as f2:
+    with open('noised_position2.txt', 'w') as f2:
         for i in range(iterations):
             f2.write(str(nx[i])+" "+str(ny[i])+"\n")
             
