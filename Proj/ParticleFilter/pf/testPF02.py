@@ -12,12 +12,18 @@ if __name__ == '__main__':
     
     PARTICLE_NUM = 100
     
-    pf = ParticleFilter(PARTICLE_NUM, 2, 2, motionModel, sensorModel)
+    pf = ParticleFilter(PARTICLE_NUM, 2, 4, motionModel, sensorModel2)
     
     pos = np.loadtxt('pos.txt')
-    n_obs = np.loadtxt('n_obs1.txt')
+    n_obs1 = np.loadtxt('n_obs1.txt')
+    n_obs2 = np.loadtxt('n_obs2.txt')
     
-    DATA_LEN = n_obs.shape[0]
+    DATA_LEN = n_obs1.shape[0]
+    
+    fused_obs = np.hstack([n_obs1, n_obs2])
+    
+    print fused_obs.shape
+        
     
     d = np.random.normal(loc=5, scale=1, size=DATA_LEN)
     #theta = np.random.uniform(np.pi/5 - np.pi/36, np.pi/5 + np.pi/36, DATA_LEN)
@@ -34,13 +40,12 @@ if __name__ == '__main__':
     estX = []
     estY = []
     for i in range(DATA_LEN):
-        print "OBS " + str(n_obs[i, 0]) + " " + str(n_obs[i, 1]) 
-        pf.update(n_obs[i,:], INPUT[i,:])
+        print "OBS " + str(fused_obs[i, 0]) + " " + str(fused_obs[i, 1]) + " " + str(fused_obs[i, 2]) + " " + str(fused_obs[i, 3]) 
+        pf.update(fused_obs[i,:], INPUT[i,:])
         estPos, estVar = pf.estimate(pf.particles)
         estX.append(estPos[0])
         estY.append(estPos[1])
         print "EST " + str(estPos[0]) + " " + str(estPos[1])
-        
         
     errX = []
     errY = []

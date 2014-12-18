@@ -5,7 +5,7 @@ Created on Dec 18, 2014
 '''
 
 from motionModels import *
-from PathGenerator01 import *
+from PathGenerator04 import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         INPUT[i,1] = d[i]
     
     path_gnr = PathGenerator(motionModel, sensorModel, 4.0)
-    pos, n_obs = path_gnr.generate(PATH_LEN, INIT_POS, INPUT)
+    pos, n_obs1, n_obs2, n_obs3, n_obs4 = path_gnr.generate(PATH_LEN, INIT_POS, INPUT)
     
     
     fig1 = plt.figure()
@@ -34,9 +34,12 @@ if __name__ == '__main__':
     
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
-    ax2.plot(n_obs[:,0], n_obs[:,1], '-')
+    ax2.plot(n_obs1[:,0], n_obs1[:,1], '-', n_obs2[:,0], n_obs2[:,1], '--')
     ax2.set_title('observation')
     plt.show()
     
     np.savetxt('pos.txt', pos)
-    np.savetxt('n_obs.txt', n_obs)
+    np.savetxt('n_obs1.txt', n_obs1)
+    np.savetxt('n_obs2.txt', n_obs2)
+    np.savetxt('n_obs3.txt', n_obs3)
+    np.savetxt('n_obs4.txt', n_obs4)
