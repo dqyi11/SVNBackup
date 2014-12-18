@@ -22,16 +22,20 @@ if __name__ == '__main__':
     DATA_LEN = n_obs.shape[0]
     
     d = np.random.normal(loc=5, scale=1, size=DATA_LEN)
-    theta = np.random.uniform(np.pi/5 - np.pi/36, np.pi/5 + np.pi/36, DATA_LEN)
+    #theta = np.random.uniform(np.pi/5 - np.pi/36, np.pi/5 + np.pi/36, DATA_LEN)
+    theta = np.random.uniform(np.pi/5 - np.pi/10, np.pi/5 + np.pi/10, DATA_LEN)
 
-    INPUT = np.vstack([d, theta]).T
+    INPUT = np.zeros((DATA_LEN, 2), np.double)
+    for i in range(DATA_LEN):
+        INPUT[i,0] = theta[i]
+        INPUT[i,1] = d[i]
+        
     
     print DATA_LEN
     
     estX = []
     estY = []
     for i in range(DATA_LEN):
-        
         print "OBS " + str(obs[i, 0]) + " " + str(obs[i, 1]) 
         pf.update(obs[i,:], INPUT[i,:])
         estPos, estVar = pf.estimate(pf.particles)
