@@ -18,23 +18,20 @@ class RRTNode(object):
     def __eq__(self, other):
         if other == None:
             return False
-        for d in range(len(self.pos)):
-            if self.pos[d] != other.pos[d]:
-                return False
-        return True        
+        if self.pos[0] == other.pos[0] and self.pos[1] == other.pos[1]:
+            return True
+        return False        
 
 class RRT(object):
     
     def __init__(self, sampling_range, segmentLength):
-        self.sampling_range = sampling_range
-        self.dimension = len(self.sampling_range)
-        self.sampling_width = np.zeros(self.dimension)
-        for d in range(self.dimension):
-            self.sampling_width[d] = self.sampling_range[d][1]-self.sampling_range[d][0]
+        self.sampling_width = sampling_range[0]
+        self.sampling_height = sampling_range[1]
         self.segmentLength = segmentLength
+        self.dimension = 2
         self.nodes = []
         self.kdtree_root = None
-        
+        self.bitmap = np.zeros((self.sampling_width, self.sampling_height),np.int8)
     
     def init(self, start, goal):
         self.start = start
@@ -51,19 +48,18 @@ class RRT(object):
             
             # normalize along direction
             delta = np.zeros(self.dimension)
-            delta_len = 0.0
-            for d in range(self.dimension):
-                delta[d] = rndPos[d] - nearest_node.pos[d]
-                delta_len += delta[d]**2
-            delta_len = np.sqrt(delta_len)
+            delta[0] = rndPos[0] - nearest_node.pos[0]
+            delta[1] = rndPos[1] - nearest_node.pos[1]
+            delta_len = np.sqrt(delta[0]**2+delta[1]**2)
             scale = self.segmentLength/float(delta_len)
             delta = delta * scale
             
             new_pos = np.zeros(self.dimension)
-            for d in range(self.dimension):
-                new_pos[d] = nearest_node.pos[d] + int(delta[d])
+            new_pos[0] = nearest_node.pos[0] + int(delta[0])
+            new_pos[1] = nearest_node.pos[1] + int(delta[1])
             
             if False == self.isCrossingObstacle(new_pos, nearest_node.pos):
+                print new_pos
                 new_node = RRTNode(new_pos)
                 #new_node.cost = nearest_node.cost + self.segmentLength
                 self.kdtree_root.add(new_pos, new_node)
@@ -89,8 +85,39 @@ class RRT(object):
             return True
         return False
     
-    def isCrossingObstacle(self, pos_a, pos_b):
+    def isCrossingObstacle(self, pos_a, pos_b):  
         return False
+        step = np.zeros(self.dimension)
+        step[0] = (pos_a[0] - pos_b[0])/float(self.segmentLength)
+        step[1] = (pos_a[1] - pos_b[1])/float(self.segmentLength)
+        
+        #Set small steps to check for walls
+        
+        pointsNeeded = int(math.floor(np.max(np.abs(step))))
+        if math.fabs(step[0])>math.fabs(step[1]):
+            if step[0] >= 0: 
+                step = [1, step[1]/math.fabs(step[0])]
+            else: 
+                step = [-1, step[1]/math.fabs(step[0])]
+        else:
+            if step[1] >= 0: 
+                step = [step[0]/math.fabs(step[1]), 1]
+            else: 
+                step = [step[0]/math.fabs(step[1]), -1]
+  
+        blocked = False
+        for i in range(pointsNeeded+1): #Creates points between graph and solitary point
+            for j in range(int(self.segmentLength)):   #Check if there are walls between points
+                coordX = round(pos_a[0]+step[0]*j)
+                coordY = round(pos_b[1]+step[1]*j)
+                if coordX == pos_a[0] and coordY == pos_a[1]: break
+                if coordY >= self.bitmap.shape[0] or coordX >= self.bitmap.shape[1]: break
+                if self.bitmap[coordY,coordX] < 255: blocked = True
+                if blocked: break
+            if blocked: break
+    
+        return blocked
+
     
     def isInObstacle(self, pos):
         return False
@@ -98,8 +125,8 @@ class RRT(object):
     def generateRandomPos(self):
         while True:
             rndPos = np.random.random(self.dimension)
-            for d in range(self.dimension):
-                rndPos[d] = rndPos[d]*self.sampling_width[d] + self.sampling_range[d][0]
+            rndPos[0] = rndPos[0]*self.sampling_width
+            rndPos[1] = rndPos[1]*self.sampling_height
             
             if False == self.isInObstacle(rndPos):
                 return rndPos

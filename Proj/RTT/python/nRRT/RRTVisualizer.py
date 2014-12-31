@@ -13,8 +13,7 @@ class RRTVisualizer(object):
     def __init__(self, rrt):
         self.rrt = rrt
         pygame.init()
-        self.screen = pygame.display.set_mode((self.rrt.sampling_range[0][1]-self.rrt.sampling_range[0][0],self.rrt.sampling_range[1][1]-self.rrt.sampling_range[1][0]))
-        self.offset = np.array([self.rrt.sampling_range[0][0], self.rrt.sampling_range[1][0]])
+        self.screen = pygame.display.set_mode((self.rrt.sampling_width,self.rrt.sampling_height))
         pygame.display.set_caption('RRT')
         self.screen.fill((255,255,255))
         
@@ -22,9 +21,9 @@ class RRTVisualizer(object):
         for n in self.rrt.nodes:
             for c in n.children:
                 #print str(n.pos) + "-" + str(c.pos)
-                pygame.draw.line(self.screen, (0,0,0), n.pos+self.offset, c.pos+self.offset)
-        pygame.draw.circle(self.screen, (255,0,0), self.rrt.start+self.offset, 5)
-        pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal+self.offset, 5)
+                pygame.draw.line(self.screen, (0,0,0), n.pos, c.pos)
+        pygame.draw.circle(self.screen, (255,0,0), self.rrt.start, 5)
+        pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal, 5)
         
         #pygame.display.update()
         '''

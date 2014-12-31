@@ -9,7 +9,7 @@ from RRTVisualizer import *
 
 if __name__ == '__main__':
     
-    rrt = RRT([[0,400], [0,400]], 10)
+    rrt = RRT([400, 400], 10)
     rrt_viz = RRTVisualizer(rrt)
     
     rrt.init([40,40], [300, 300])
