@@ -8,7 +8,7 @@ from kdtree import *
 
 if __name__ == '__main__':
     
-    root = create([(2,3)], 2)
+    root = createKDTree([(2,3)], 2)
     
     root.add((5,4))
     root.add((9,6))

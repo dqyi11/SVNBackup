@@ -106,11 +106,11 @@ class Node(object):
         Returns an iterator for the non-empty children of the Node
         The children are returned as (Node, pos) tuples where pos is 0 for the
         left subnode and 1 for the right.
-        >>> len(list(create(dimensions=2).children))
+        >>> len(list(createKDTree(dimensions=2).children))
         0
-        >>> len(list(create([ (1, 2) ]).children))
+        >>> len(list(createKDTree([ (1, 2) ]).children))
         0
-        >>> len(list(create([ (2, 2), (2, 1), (2, 3) ]).children))
+        >>> len(list(createKDTree([ (2, 2), (2, 1), (2, 3) ]).children))
         2
         """
 
@@ -134,11 +134,11 @@ class Node(object):
         """
         Returns height of the (sub)tree, without considering
         empty leaf-nodes
-        >>> create(dimensions=2).height()
+        >>> createKDTree(dimensions=2).height()
         0
-        >>> create([ (1, 2) ]).height()
+        >>> createKDTree([ (1, 2) ]).height()
         1
-        >>> create([ (1, 2), (2, 3) ]).height()
+        >>> createKDTree([ (1, 2), (2, 3) ]).height()
         2
         """
 
@@ -197,7 +197,7 @@ class KDNode(Node):
 
 
     def __init__(self, data=None, left=None, right=None, axis=None,
-            sel_axis=None, dimensions=None):
+            sel_axis=None, dimensions=None, refNode=None):
         """ Creates a new node for a kd-tree
         If the node will be used within a tree, the axis and the sel_axis
         function should be supplied.
@@ -209,10 +209,11 @@ class KDNode(Node):
         self.axis = axis
         self.sel_axis = sel_axis
         self.dimensions = dimensions
+        self.ref = refNode
 
 
     @require_axis
-    def add(self, point):
+    def add(self, point, refNode=None):
         """
         Adds a point to the current node or iteratively
         descends to one of its children.
@@ -231,27 +232,28 @@ class KDNode(Node):
             # split on self.axis, recurse either left or right
             if point[current.axis] < current.data[current.axis]:
                 if current.left is None:
-                    current.left = current.create_subnode(point)
+                    current.left = current.create_subnode(point, refNode)
                     break
                 else:
                     current = current.left
                     #self.left.add(point)
             else:
                 if current.right is None:
-                    current.right = current.create_subnode(point)
+                    current.right = current.create_subnode(point, refNode)
                     break
                 else:
                     current = current.right
 
 
     @require_axis
-    def create_subnode(self, data):
+    def create_subnode(self, data, refNode=None):
         """ Creates a subnode for the current node """
 
         return self.__class__(data,
                 axis=self.sel_axis(self.axis),
                 sel_axis=self.sel_axis,
-                dimensions=self.dimensions)
+                dimensions=self.dimensions,
+                refNode=refNode)
 
 
     @require_axis
@@ -362,8 +364,10 @@ class KDNode(Node):
         """
         Returns the (possibly new) root of the rebalanced tree
         """
+        new_point_list = [x.data for x in self.inorder()]
+        new_ref_list = [x.ref for x in self.inorder()]
 
-        return create([x.data for x in self.inorder()])
+        return createKDTree(new_point_list, ref_list=new_ref_list)
 
 
     def axis_dist(self, point, axis):
@@ -578,7 +582,7 @@ class KDNode(Node):
 
 
 
-def create(point_list=None, dimensions=None, axis=0, sel_axis=None):
+def createKDTree(point_list=None, dimensions=None, axis=0, sel_axis=None, ref_list=None):
     """ Creates a kd-tree from a list of points
     All points in the list must be of the same dimensionality.
     If no point_list is given, an empty tree is created. The number of
@@ -600,13 +604,15 @@ def create(point_list=None, dimensions=None, axis=0, sel_axis=None):
     if not point_list:
         return KDNode(sel_axis=sel_axis, axis=axis, dimensions=dimensions)
 
+    if ref_list != None and len(ref_list) == len(point_list):
+        ref_list = [x for (y,x) in sorted(zip(point_list,ref_list), key=lambda point: point[axis])]
     # Sort point list and choose median as pivot element
     point_list.sort(key=lambda point: point[axis])
     median = len(point_list) // 2
 
     loc   = point_list[median]
-    left  = create(point_list[:median], dimensions, sel_axis(axis))
-    right = create(point_list[median + 1:], dimensions, sel_axis(axis))
+    left  = createKDTree(point_list[:median], dimensions, sel_axis(axis), ref_list=ref_list)
+    right = createKDTree(point_list[median + 1:], dimensions, sel_axis(axis), ref_list=ref_list)
     return KDNode(loc, left, right, axis=axis, sel_axis=sel_axis)
 
 

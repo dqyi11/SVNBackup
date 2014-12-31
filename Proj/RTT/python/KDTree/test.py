@@ -26,7 +26,7 @@ class RemoveTest(unittest.TestCase):
         """ creates a tree with only duplicate points, and removes them all """
 
         points = [(1,1)] * 100
-        tree = kdtree.create(points)
+        tree = kdtree.createKDTree(points)
         self.assertTrue(tree.is_valid())
 
         random.shuffle(points)
@@ -55,7 +55,7 @@ class RemoveTest(unittest.TestCase):
         """ Creates a random tree, removes all points in random order """
 
         points = list(set(islice(random_points(), 0, 20)))
-        tree =  kdtree.create(points)
+        tree =  kdtree.createKDTree(points)
         self.assertTrue(tree.is_valid())
 
         random.shuffle(points)
@@ -76,7 +76,7 @@ class RemoveTest(unittest.TestCase):
             self.assertEqual(nodes_in_tree, remaining_points)
 
     def test_remove_empty_tree(self):
-        tree = kdtree.create(dimensions=2)
+        tree = kdtree.createKDTree(dimensions=2)
         tree.remove( (1, 2) )
         self.assertFalse(bool(tree))
 
@@ -93,7 +93,7 @@ class AddTest(unittest.TestCase):
     def do_random_add(self, num_points=100):
 
         points = list(set(islice(random_points(), 0, num_points)))
-        tree = kdtree.create(dimensions=len(points[0]))
+        tree = kdtree.createKDTree(dimensions=len(points[0]))
         for n, point in enumerate(points, 1):
 
             tree.add(point)
@@ -113,19 +113,19 @@ class InvalidTreeTests(unittest.TestCase):
         """ Children on wrong subtree invalidate Tree """
         child = kdtree.KDNode( (3, 2) )
         child.axis = 2
-        tree = kdtree.create([(2, 3)])
+        tree = kdtree.createKDTree([(2, 3)])
         tree.left=child
         self.assertFalse(tree.is_valid())
 
-        tree = kdtree.create([(4, 1)])
+        tree = kdtree.createKDTree([(4, 1)])
         tree.right=child
         self.assertFalse(tree.is_valid())
 
 
     def test_different_dimensions(self):
-        """ Can't create Tree for Points of different dimensions """
+        """ Can't createKDTree Tree for Points of different dimensions """
         points = [ (1, 2), (2, 3, 4) ]
-        self.assertRaises(ValueError, kdtree.create, points)
+        self.assertRaises(ValueError, kdtree.createKDTree, points)
 
 
 class TreeTraversals(unittest.TestCase):
@@ -160,7 +160,7 @@ class NearestNeighbor(unittest.TestCase):
 
     def test_search_nn(self, nodes=100):
         points = list(islice(random_points(), 0, nodes))
-        tree = kdtree.create(points)
+        tree = kdtree.createKDTree(points)
         point = random_point()
 
         nn, dist = tree.search_nn(point)
@@ -171,7 +171,7 @@ class NearestNeighbor(unittest.TestCase):
     def test_search_nn2(self):
         points = [(1,2,3),(5,1,2),(9,3,4),(3,9,1),(4,8,3),(9,1,1),(5,0,0),
                   (1,1,1),(7,2,2),(5,9,1),(1,1,9),(9,8,7),(2,3,4),(4,5,4.01)]
-        tree = kdtree.create(points)
+        tree = kdtree.createKDTree(points)
         point = (2,5,6)
 
         nn, dist = tree.search_nn(point)
@@ -202,7 +202,7 @@ class NearestNeighbor(unittest.TestCase):
       (96, 15, 80), (96, 27, 39), (97, 87, 32), (97, 43, 7), (98, 78, 10),
       (99, 64, 55)]
 
-        tree = kdtree.create(points)
+        tree = kdtree.createKDTree(points)
         point = (66, 54, 29)
 
         nn, dist = tree.search_nn(point)
@@ -225,7 +225,7 @@ class NearestNeighbor(unittest.TestCase):
         """ tests search_nn_dist() according to bug #8 """
 
         points = [(x,y) for x in range(10) for y in range(10)]
-        tree = kdtree.create(points)
+        tree = kdtree.createKDTree(points)
         nn = tree.search_nn_dist((5,5), 2.5)
 
         self.assertEquals(len(nn), 4)
@@ -259,12 +259,12 @@ class PointTypeTests(unittest.TestCase):
     """ test using different types as points """
 
     def test_point_types(self):
-        emptyTree = kdtree.create(dimensions=3)
+        emptyTree = kdtree.createKDTree(dimensions=3)
         point1 = (2, 3, 4)
         point2 = [4, 5, 6]
         Point = collections.namedtuple('Point', 'x y z')
         point3 = Point(5, 3, 2)
-        tree = kdtree.create([point1, point2, point3])
+        tree = kdtree.createKDTree([point1, point2, point3])
         res, dist = tree.search_nn( (1, 2, 3) )
 
         self.assertEqual(res, kdtree.KDNode( (2, 3, 4) ))
@@ -272,7 +272,7 @@ class PointTypeTests(unittest.TestCase):
 
 def random_tree(nodes=20, dimensions=3, minval=0, maxval=100):
     points = list(islice(random_points(), 0, nodes))
-    tree = kdtree.create(points)
+    tree = kdtree.createKDTree(points)
     return tree
 
 def random_point(dimensions=3, minval=0, maxval=100):
