@@ -227,6 +227,7 @@ class KDNode(Node):
             # Adding has hit an empty leaf-node, add here
             if current.data is None:
                 current.data = point
+                current.ref = refNode
                 break
 
             # split on self.axis, recurse either left or right
@@ -611,9 +612,16 @@ def createKDTree(point_list=None, dimensions=None, axis=0, sel_axis=None, ref_li
     median = len(point_list) // 2
 
     loc   = point_list[median]
-    left  = createKDTree(point_list[:median], dimensions, sel_axis(axis), ref_list=ref_list)
-    right = createKDTree(point_list[median + 1:], dimensions, sel_axis(axis), ref_list=ref_list)
-    return KDNode(loc, left, right, axis=axis, sel_axis=sel_axis)
+    if ref_list != None:
+        left  = createKDTree(point_list[:median], dimensions, sel_axis(axis), ref_list=ref_list[:median])
+        right = createKDTree(point_list[median + 1:], dimensions, sel_axis(axis), ref_list=ref_list[median+1:])
+        new_node = KDNode(loc, left, right, axis=axis, sel_axis=sel_axis, refNode=ref_list[median])
+    else:
+        left  = createKDTree(point_list[:median], dimensions, sel_axis(axis))
+        right = createKDTree(point_list[median + 1:], dimensions, sel_axis(axis))
+        new_node = KDNode(loc, left, right, axis=axis, sel_axis=sel_axis)
+        
+    return new_node
 
 
 def check_dimensionality(point_list, dimensions=None):
