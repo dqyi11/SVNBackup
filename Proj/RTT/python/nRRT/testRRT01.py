@@ -17,8 +17,9 @@ if __name__ == '__main__':
     rrt_viz = RRTVisualizer(rrt)
     
     rrt.init([40,40], [320, 300])
+    #rrt.init([40,40], [200, 200])
     
-    for i in range(1000):
+    for i in range(500):
         print i
         rrt.expand()
         rrt_viz.update()

@@ -31,6 +31,8 @@ class RRTVisualizer(object):
                 pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
         pygame.draw.circle(self.screen, (255,0,0), self.rrt.start, 5)
         pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal, 5)
+        if self.rrt.new_node != None and self.rrt.connected_node != None:
+            pygame.draw.line(self.screen, (200,128,0), self.rrt.new_node, self.rrt.connected_node)
         
         #pygame.display.update()
         '''
@@ -39,5 +41,5 @@ class RRTVisualizer(object):
                 sys.exit("Leaving because you requested it.")
         '''
         pygame.display.flip();
-        #pygame.time.delay(100)
+        pygame.time.delay(200)
         

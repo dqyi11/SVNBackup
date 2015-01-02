@@ -6,6 +6,7 @@ Created on Dec 30, 2014
 
 from kdtree import *
 import numpy as np
+from scipy.misc import imread
 
 class RRTNode(object):
     
@@ -35,9 +36,11 @@ class RRT(object):
         self.obsCheckResolution = 2
         self.mapfile = None
         
+        self.new_node = None
+        self.connected_node = None
+        
     def loadMap(self, mapfile):
         self.mapfile = mapfile
-        from scipy.misc import imread
         self.bitmap = np.array(imread(self.mapfile, 'l')).T
         self.sampling_width = self.bitmap.shape[0]
         self.sampling_height = self.bitmap.shape[1]
@@ -73,7 +76,10 @@ class RRT(object):
                 #new_node.cost = nearest_node.cost + self.segmentLength
                 self.kdtree_root.add(new_pos, new_node)
                 self.nodes.append(new_node)
-                self.addEdge(nearest_node, new_node)  
+                self.addEdge(nearest_node, new_node) 
+                
+                self.new_node = [int(new_pos[0]), int(new_pos[1])]
+                self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
     def findClosetNode(self, pos):
         '''
@@ -97,8 +103,20 @@ class RRT(object):
     def isCrossingObstacle(self, pos_a, pos_b):  
         
         blocked = False
-        for coordX in range(int(pos_a[0]), int(pos_b[0]), int(self.obsCheckResolution)):
-            coordY = (pos_b[1] - pos_a[1])*(coordX-pos_a[0])/(pos_b[0]-pos_a[0]) + pos_a[1]
+        if pos_a[0] < pos_b[0]:
+            k = (pos_b[1] - pos_a[1])/(pos_b[0]-pos_a[0])
+            startX = int(pos_a[0])
+            endX = int(pos_b[0])
+            startY = pos_a[1]
+        else:
+            k = (pos_a[1] - pos_b[1])/(pos_a[0]-pos_b[0])
+            startX = int(pos_b[0])
+            endX = int(pos_a[0])
+            startY = pos_b[1]
+        stepLen = int(self.obsCheckResolution)
+        for coordX in range(startX, endX, stepLen):
+        #for coordX in range(int(pos_a[0]), int(pos_b[0]), int(self.obsCheckResolution)):
+            coordY = int(k*(coordX-startX) + startY)
             if coordY >= self.sampling_height or coordX >= self.sampling_width: break
             if self.bitmap[coordX,coordY] < 255: 
                 blocked = True
