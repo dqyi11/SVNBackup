@@ -16,12 +16,19 @@ class RRTVisualizer(object):
         self.screen = pygame.display.set_mode((self.rrt.sampling_width,self.rrt.sampling_height))
         pygame.display.set_caption('RRT')
         self.screen.fill((255,255,255))
+        if self.rrt.mapfile != None:
+            self.mapImg = pygame.image.load(self.rrt.mapfile)
+        else:
+            self.mapImg = None
+            
         
     def update(self):
+        if self.mapImg != None:
+            self.screen.blit(self.mapImg,(0,0))
         for n in self.rrt.nodes:
             for c in n.children:
                 #print str(n.pos) + "-" + str(c.pos)
-                pygame.draw.line(self.screen, (0,0,0), n.pos, c.pos)
+                pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
         pygame.draw.circle(self.screen, (255,0,0), self.rrt.start, 5)
         pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal, 5)
         

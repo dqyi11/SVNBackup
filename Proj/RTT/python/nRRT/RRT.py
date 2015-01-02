@@ -31,7 +31,16 @@ class RRT(object):
         self.dimension = 2
         self.nodes = []
         self.kdtree_root = None
-        self.bitmap = np.zeros((self.sampling_width, self.sampling_height),np.int8)
+        self.bitmap = 255 * np.ones((self.sampling_width, self.sampling_height),np.int8)
+        self.obsCheckResolution = 2
+        self.mapfile = None
+        
+    def loadMap(self, mapfile):
+        self.mapfile = mapfile
+        from scipy.misc import imread
+        self.bitmap = np.array(imread(self.mapfile, 'l')).T
+        self.sampling_width = self.bitmap.shape[0]
+        self.sampling_height = self.bitmap.shape[1]
     
     def init(self, start, goal):
         self.start = start
@@ -86,34 +95,13 @@ class RRT(object):
         return False
     
     def isCrossingObstacle(self, pos_a, pos_b):  
-        return False
-        step = np.zeros(self.dimension)
-        step[0] = (pos_a[0] - pos_b[0])/float(self.segmentLength)
-        step[1] = (pos_a[1] - pos_b[1])/float(self.segmentLength)
         
-        #Set small steps to check for walls
-        
-        pointsNeeded = int(math.floor(np.max(np.abs(step))))
-        if math.fabs(step[0])>math.fabs(step[1]):
-            if step[0] >= 0: 
-                step = [1, step[1]/math.fabs(step[0])]
-            else: 
-                step = [-1, step[1]/math.fabs(step[0])]
-        else:
-            if step[1] >= 0: 
-                step = [step[0]/math.fabs(step[1]), 1]
-            else: 
-                step = [step[0]/math.fabs(step[1]), -1]
-  
         blocked = False
-        for i in range(pointsNeeded+1): #Creates points between graph and solitary point
-            for j in range(int(self.segmentLength)):   #Check if there are walls between points
-                coordX = round(pos_a[0]+step[0]*j)
-                coordY = round(pos_b[1]+step[1]*j)
-                if coordX == pos_a[0] and coordY == pos_a[1]: break
-                if coordY >= self.bitmap.shape[0] or coordX >= self.bitmap.shape[1]: break
-                if self.bitmap[coordY,coordX] < 255: blocked = True
-                if blocked: break
+        for coordX in range(int(pos_a[0]), int(pos_b[0]), int(self.obsCheckResolution)):
+            coordY = (pos_b[1] - pos_a[1])*(coordX-pos_a[0])/(pos_b[0]-pos_a[0]) + pos_a[1]
+            if coordY >= self.sampling_height or coordX >= self.sampling_width: break
+            if self.bitmap[coordX,coordY] < 255: 
+                blocked = True
             if blocked: break
     
         return blocked
