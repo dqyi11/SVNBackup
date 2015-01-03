@@ -79,21 +79,23 @@
 
 \begin{itemize}
 \item \textbf{Sampling} \\
-$ \mbox{Sample(}) $ returns independent identically distributed samples from $ X_{free} $
+$ \mbox{Sample(}) $ returns independent identically distributed samples from $ X_{\mbox{free}} $.
 \item \textbf{Steering} \\
-$ \mbox{Steer}(x,y) = \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $
+Given two points $ x $ and $ y $, it returns a point $ z $ that its distance to $ x $ is less than $ \eta $ and minimizes the distance to $ y $. 
+$ \mbox{Steer}(x,y) = \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $.
 \item \textbf{Nearest neighbor} \\
-$ \mbox{Nearest}(G = (V,E), x) = \arg \min_{v \in V} \lVert x - v \rVert $ 
+It returns a vertex that is closest to point $ x $.
+$ \mbox{Nearest}(G = (V,E), x) = \arg \min_{v \in V} \lVert x - v \rVert $.
 \item \textbf{Near vertices} \\
 $ \mbox{Near}(G, x, \eta) $ returns a set of all vertices within the closed ball of radius $ r_{n} $ centered at $ x $, in which $ r_{n} = \min \{ ( \frac{\gamma}{\xi_{d}} \frac{\log n}{n} )^{1/d}  , \eta \} $.
 The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
 \item \textbf{Collision test} \\
-$ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{free} $, which means the line segment between $ x $ and $ x' $ lies in $ X _{free} $
+$ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{ \mbox{free} } $, which means the line segment between $ x $ and $ x' $ lies in $ X _{ \mbox{free} } $
 \item \textbf{Line} \\
-$ \mbox{Line}(x, x') : [0, s] \leftarrow X_{free} $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
+$ \mbox{Line}(x, x') : [0, s] \leftarrow X_{ \mbox{free} } $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
 \item \textbf{Cost} \\
-$ \mbox{Cost}( v ) $ is defined by the cost of the unique path from $ x_{init} $ to a vertex $ v \in V $.
-$ \mbox{Cost}( x_{init} ) = 0 $.
+$ \mbox{Cost}( v ) $ is defined by the cost of the unique path from $ x_{ \mbox{init} } $ to a vertex $ v \in V $.
+$ \mbox{Cost}( x_{ \mbox{init} } ) = 0 $.
 \end{itemize}
 
 \begin{algorithm}
