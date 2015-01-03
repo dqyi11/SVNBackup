@@ -90,7 +90,7 @@ $ \mbox{Nearest}(G = (V,E), x) = \arg \min_{v \in V} \lVert x - v \rVert $.
 $ \mbox{Near}(G, x, \eta) $ returns a set of all vertices within the closed ball of radius $ r_{n} $ centered at $ x $, in which $ r_{n} = \min \{ ( \frac{\gamma}{\xi_{d}} \frac{\log n}{n} )^{1/d}  , \eta \} $.
 The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
 \item \textbf{Collision test} \\
-$ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{ \mbox{free} } $, which means the line segment between $ x $ and $ x' $ lies in $ X _{ \mbox{free} } $
+$ \mbox{ObstacleFree}(x, x') $ returns True if $ [ x, x' ] \subset X_{ \mbox{free} } $, which means the line segment between $ x $ and $ x' $ lies in $ X _{ \mbox{free} } $.
 \item \textbf{Line} \\
 $ \mbox{Line}(x, x') : [0, s] \leftarrow X_{ \mbox{free} } $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
 \item \textbf{Cost} \\
