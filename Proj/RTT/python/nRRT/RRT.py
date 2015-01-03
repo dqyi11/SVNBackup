@@ -32,8 +32,8 @@ class RRT(object):
         self.dimension = 2
         self.nodes = []
         self.kdtree_root = None
-        self.bitmap = 255 * np.ones((self.sampling_width, self.sampling_height),np.int8)
-        self.obsCheckResolution = 2
+        self.bitmap = 255 * np.ones((self.sampling_height,self.sampling_width),np.int8)
+        self.obsCheckResolution = 1
         self.mapfile = None
         
         self.new_node = None
@@ -41,9 +41,9 @@ class RRT(object):
         
     def loadMap(self, mapfile):
         self.mapfile = mapfile
-        self.bitmap = np.array(imread(self.mapfile, 'l')).T
-        self.sampling_width = self.bitmap.shape[0]
-        self.sampling_height = self.bitmap.shape[1]
+        self.bitmap = np.array(imread(self.mapfile, 'l'))
+        self.sampling_width = self.bitmap.shape[1]
+        self.sampling_height = self.bitmap.shape[0]
     
     def init(self, start, goal):
         self.start = start
@@ -52,34 +52,37 @@ class RRT(object):
         self.nodes.append(self.root)
         self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         
-    def expand(self):
-        new_node = None
-        while new_node == None:
-            rndPos = self.generateRandomPos()
-            nearest_node = self.findClosetNode(rndPos)
+    def extend(self):
+        #new_node = None
+        #while new_node == None:
+        rndPos = self.generateRandomPos()
+        nearest_node = self.findClosetNode(rndPos)
+        
+
+        # normalize along direction
+        delta = np.zeros(self.dimension)
+        delta[0] = rndPos[0] - nearest_node.pos[0]
+        delta[1] = rndPos[1] - nearest_node.pos[1]
+        delta_len = np.sqrt(delta[0]**2+delta[1]**2)
+        scale = self.segmentLength/float(delta_len)
+        delta = delta * scale
+        
+        new_pos = np.zeros(self.dimension)
+        new_pos[0] = nearest_node.pos[0] + int(delta[0])
+        new_pos[1] = nearest_node.pos[1] + int(delta[1])
+
+        
+        crossingObs = self.isCrossingObstacle(new_pos, nearest_node.pos)
+        if False == crossingObs :
+            #print new_pos
+            new_node = RRTNode(new_pos)
+            #new_node.cost = nearest_node.cost + self.segmentLength
+            self.kdtree_root.add(new_pos, new_node)
+            self.nodes.append(new_node)
+            self.addEdge(nearest_node, new_node) 
             
-            # normalize along direction
-            delta = np.zeros(self.dimension)
-            delta[0] = rndPos[0] - nearest_node.pos[0]
-            delta[1] = rndPos[1] - nearest_node.pos[1]
-            delta_len = np.sqrt(delta[0]**2+delta[1]**2)
-            scale = self.segmentLength/float(delta_len)
-            delta = delta * scale
-            
-            new_pos = np.zeros(self.dimension)
-            new_pos[0] = nearest_node.pos[0] + int(delta[0])
-            new_pos[1] = nearest_node.pos[1] + int(delta[1])
-            
-            if False == self.isCrossingObstacle(new_pos, nearest_node.pos):
-                print new_pos
-                new_node = RRTNode(new_pos)
-                #new_node.cost = nearest_node.cost + self.segmentLength
-                self.kdtree_root.add(new_pos, new_node)
-                self.nodes.append(new_node)
-                self.addEdge(nearest_node, new_node) 
-                
-                self.new_node = [int(new_pos[0]), int(new_pos[1])]
-                self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
+            self.new_node = [int(new_pos[0]), int(new_pos[1])]
+            self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
     def findClosetNode(self, pos):
         '''
@@ -101,27 +104,47 @@ class RRT(object):
         return False
     
     def isCrossingObstacle(self, pos_a, pos_b):  
-        
         blocked = False
-        if pos_a[0] < pos_b[0]:
-            k = (pos_b[1] - pos_a[1])/(pos_b[0]-pos_a[0])
-            startX = int(pos_a[0])
-            endX = int(pos_b[0])
-            startY = pos_a[1]
-        else:
-            k = (pos_a[1] - pos_b[1])/(pos_a[0]-pos_b[0])
-            startX = int(pos_b[0])
-            endX = int(pos_a[0])
-            startY = pos_b[1]
+        
+        x_dist = np.abs(pos_a[0] - pos_b[0])
+        y_dist = np.abs(pos_a[1] - pos_b[1])
         stepLen = int(self.obsCheckResolution)
-        for coordX in range(startX, endX, stepLen):
-        #for coordX in range(int(pos_a[0]), int(pos_b[0]), int(self.obsCheckResolution)):
-            coordY = int(k*(coordX-startX) + startY)
-            if coordY >= self.sampling_height or coordX >= self.sampling_width: break
-            if self.bitmap[coordX,coordY] < 255: 
-                blocked = True
-            if blocked: break
-    
+        
+        if x_dist > y_dist:
+            k = y_dist/x_dist
+            if pos_a[0] < pos_b[0]:
+                startX = int(pos_a[0])
+                endX = int(pos_b[0])
+                startY = pos_a[1]
+            else:
+                startX = int(pos_b[0])
+                endX = int(pos_a[0])
+                startY = pos_b[1]
+            
+            for coordX in range(startX, endX, stepLen):
+                coordY = int(k*(coordX-startX) + startY)
+                if coordY >= self.sampling_height or coordX >= self.sampling_width: break
+                if self.bitmap[coordY,coordX] < 255: 
+                    blocked = True
+                if blocked: break
+        else:
+            k = x_dist/y_dist
+            if pos_a[1] < pos_b[1]:
+                startY = int(pos_a[1])
+                endY = int(pos_b[1])
+                startX = pos_a[0]
+            else:
+                startY = int(pos_b[0])
+                endY = int(pos_a[0])
+                startX = pos_b[1]
+                
+            for coordY in range(startY, endY, stepLen):
+                coordX = int(k*(coordY-startY) + startX)
+                if coordY >= self.sampling_height or coordX >= self.sampling_width: break
+                if self.bitmap[coordY,coordX] < 255: 
+                    blocked = True
+                if blocked: break
+
         return blocked
 
     

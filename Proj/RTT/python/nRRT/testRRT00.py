@@ -9,17 +9,14 @@ from RRTVisualizer import *
 
 if __name__ == '__main__':
     
-    MAP_FILE = './lab-map-inferior.png'
-    MAP_FILE = './lab-map-scaled.png'
-    rrt = RRT([444, 989], 10)
-    rrt.loadMap(MAP_FILE)
-    
+    rrt = RRT([600, 400], 10)
+
     rrt_viz = RRTVisualizer(rrt)
     
     rrt.init([40,40], [320, 300])
-    #rrt.init([40,40], [200, 200])
     
     for i in range(500):
+        #print i
         rrt.extend()
         rrt_viz.update()
     
