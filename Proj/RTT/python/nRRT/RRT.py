@@ -108,40 +108,39 @@ class RRT(object):
         
         x_dist = np.abs(pos_a[0] - pos_b[0])
         y_dist = np.abs(pos_a[1] - pos_b[1])
-        stepLen = int(self.obsCheckResolution)
         
         if x_dist > y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
-                startX = int(pos_a[0])
-                endX = int(pos_b[0])
+                startX = pos_a[0]
+                endX = pos_b[0]
                 startY = pos_a[1]
             else:
-                startX = int(pos_b[0])
-                endX = int(pos_a[0])
+                startX = pos_b[0]
+                endX = pos_a[0]
                 startY = pos_b[1]
             
-            for coordX in range(startX, endX, stepLen):
+            for coordX in np.arange(startX, endX+self.obsCheckResolution, self.obsCheckResolution):
                 coordY = int(k*(coordX-startX) + startY)
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
-                if self.bitmap[coordY,coordX] < 255: 
+                if self.bitmap[int(coordY),int(coordX)] < 255: 
                     blocked = True
                 if blocked: break
         else:
             k = x_dist/y_dist
             if pos_a[1] < pos_b[1]:
-                startY = int(pos_a[1])
-                endY = int(pos_b[1])
+                startY = pos_a[1]
+                endY = pos_b[1]
                 startX = pos_a[0]
             else:
-                startY = int(pos_b[1])
-                endY = int(pos_a[1])
+                startY = pos_b[1]
+                endY = pos_a[1]
                 startX = pos_b[0]
                 
-            for coordY in range(startY, endY, stepLen):
+            for coordY in np.arange(startY, endY+self.obsCheckResolution, self.obsCheckResolution):
                 coordX = int(k*(coordY-startY) + startX)
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
-                if self.bitmap[coordY,coordX] < 255: 
+                if self.bitmap[int(coordY),int(coordX)] < 255: 
                     blocked = True
                 if blocked: break
 
