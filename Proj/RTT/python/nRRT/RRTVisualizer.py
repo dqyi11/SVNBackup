@@ -41,5 +41,5 @@ class RRTVisualizer(object):
                 sys.exit("Leaving because you requested it.")
         '''
         pygame.display.flip();
-        pygame.time.delay(200)
+        #pygame.time.delay(200)
         

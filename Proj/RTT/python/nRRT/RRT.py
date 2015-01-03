@@ -53,36 +53,36 @@ class RRT(object):
         self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         
     def extend(self):
-        #new_node = None
-        #while new_node == None:
-        rndPos = self.generateRandomPos()
-        nearest_node = self.findClosetNode(rndPos)
-        
-
-        # normalize along direction
-        delta = np.zeros(self.dimension)
-        delta[0] = rndPos[0] - nearest_node.pos[0]
-        delta[1] = rndPos[1] - nearest_node.pos[1]
-        delta_len = np.sqrt(delta[0]**2+delta[1]**2)
-        scale = self.segmentLength/float(delta_len)
-        delta = delta * scale
-        
-        new_pos = np.zeros(self.dimension)
-        new_pos[0] = nearest_node.pos[0] + int(delta[0])
-        new_pos[1] = nearest_node.pos[1] + int(delta[1])
-
-        
-        crossingObs = self.isCrossingObstacle(new_pos, nearest_node.pos)
-        if False == crossingObs :
-            #print new_pos
-            new_node = RRTNode(new_pos)
-            #new_node.cost = nearest_node.cost + self.segmentLength
-            self.kdtree_root.add(new_pos, new_node)
-            self.nodes.append(new_node)
-            self.addEdge(nearest_node, new_node) 
+        new_node = None
+        while new_node == None:
+            rndPos = self.generateRandomPos()
+            nearest_node = self.findClosetNode(rndPos)
             
-            self.new_node = [int(new_pos[0]), int(new_pos[1])]
-            self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
+    
+            # normalize along direction
+            delta = np.zeros(self.dimension)
+            delta[0] = rndPos[0] - nearest_node.pos[0]
+            delta[1] = rndPos[1] - nearest_node.pos[1]
+            delta_len = np.sqrt(delta[0]**2+delta[1]**2)
+            scale = self.segmentLength/float(delta_len)
+            delta = delta * scale
+            
+            new_pos = np.zeros(self.dimension)
+            new_pos[0] = nearest_node.pos[0] + int(delta[0])
+            new_pos[1] = nearest_node.pos[1] + int(delta[1])
+    
+            
+            crossingObs = self.isCrossingObstacle(new_pos, nearest_node.pos)
+            if False == crossingObs :
+                #print new_pos
+                new_node = RRTNode(new_pos)
+                #new_node.cost = nearest_node.cost + self.segmentLength
+                self.kdtree_root.add(new_pos, new_node)
+                self.nodes.append(new_node)
+                self.addEdge(nearest_node, new_node) 
+                
+                self.new_node = [int(new_pos[0]), int(new_pos[1])]
+                self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
     def findClosetNode(self, pos):
         '''
@@ -134,9 +134,9 @@ class RRT(object):
                 endY = int(pos_b[1])
                 startX = pos_a[0]
             else:
-                startY = int(pos_b[0])
-                endY = int(pos_a[0])
-                startX = pos_b[1]
+                startY = int(pos_b[1])
+                endY = int(pos_a[1])
+                startX = pos_b[0]
                 
             for coordY in range(startY, endY, stepLen):
                 coordX = int(k*(coordY-startY) + startX)
