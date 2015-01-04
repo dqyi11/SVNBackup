@@ -75,7 +75,7 @@ class RRT(object):
             
             new_pos = self.steer(rndPos, nearest_node.pos)       
     
-            crossingObs = self.isObstacleFree(new_pos, nearest_node.pos)
+            crossingObs = self.isObstacleFree(nearest_node.pos, new_pos)
             if True == crossingObs :
                 #print new_pos
                 new_node = RRTNode(new_pos)
@@ -160,18 +160,23 @@ class RRT(object):
                 return rndPos
         return None
     
-    def removeEdge(self, node_a, node_b):
-        for c_a in node_a.children:
-            if c_a == node_b:
-                node_a.children.remove(c_a)
+    def removeEdge(self, node_p, node_c):
+        if node_p == None:
+            return False
+        
+        for c_a in node_p.children:
+            if c_a == node_c:
+                c_a.parent = None
+                node_p.children.remove(c_a)
                 return True
         return False
     
-    def addEdge(self, node_a, node_b):
-        for c_a in node_a.children:
-            if c_a == node_b:
+    def addEdge(self, node_p, node_c):
+        for c_a in node_p.children:
+            if c_a == node_c:
                 return False
-        node_a.children.append(node_b)
+        node_p.children.append(node_c)
+        node_c.parent = node_p
         return True
 
         

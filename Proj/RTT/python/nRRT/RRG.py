@@ -20,7 +20,7 @@ class RRG(RRT):
             
             new_pos = self.steer(rndPos, nearest_node.pos)
             
-            if True == self.isObstacleFree(new_pos, nearest_node.pos):
+            if True == self.isObstacleFree(nearest_node.pos, new_pos):
                 new_node = RRTNode(new_pos)
                 #new_node.cost = nearest_node.cost + self.segmentLength
                 
