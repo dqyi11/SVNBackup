@@ -15,7 +15,7 @@ if __name__ == '__main__':
     
     rrt.init([40,40], [320, 300])
     
-    for i in range(500):
+    for i in range(1000):
         #print i
         rrt.extend()
         rrt_viz.update()

@@ -52,26 +52,29 @@ class RRT(object):
         self.nodes.append(self.root)
         self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         
+    def steer(self, pos_a, pos_b):
+        
+        # normalize along direction
+        delta = np.zeros(self.dimension)
+        delta[0] = pos_a[0] - pos_b[0]
+        delta[1] = pos_a[1] - pos_b[1]
+        delta_len = np.sqrt(delta[0]**2+delta[1]**2)
+        scale = self.segmentLength/float(delta_len)
+        delta = delta * scale
+            
+        new_pos = np.zeros(self.dimension)
+        new_pos[0] = pos_b[0] + int(delta[0])
+        new_pos[1] = pos_b[1] + int(delta[1])
+        return new_pos
+        
     def extend(self):
         new_node = None
         while new_node == None:
-            rndPos = self.generateRandomPos()
-            nearest_node = self.findClosetNode(rndPos)
+            rndPos = self.sampling()
+            nearest_node = self.findNearestNeighbor(rndPos)
             
+            new_pos = self.steer(rndPos, nearest_node.pos)       
     
-            # normalize along direction
-            delta = np.zeros(self.dimension)
-            delta[0] = rndPos[0] - nearest_node.pos[0]
-            delta[1] = rndPos[1] - nearest_node.pos[1]
-            delta_len = np.sqrt(delta[0]**2+delta[1]**2)
-            scale = self.segmentLength/float(delta_len)
-            delta = delta * scale
-            
-            new_pos = np.zeros(self.dimension)
-            new_pos[0] = nearest_node.pos[0] + int(delta[0])
-            new_pos[1] = nearest_node.pos[1] + int(delta[1])
-    
-            
             crossingObs = self.isCrossingObstacle(new_pos, nearest_node.pos)
             if False == crossingObs :
                 #print new_pos
@@ -84,7 +87,7 @@ class RRT(object):
                 self.new_node = [int(new_pos[0]), int(new_pos[1])]
                 self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
-    def findClosetNode(self, pos):
+    def findNearestNeighbor(self, pos):
         '''
         node_num = len(self.nodes)
         dist = np.zeros(node_num, np.float)
@@ -150,7 +153,7 @@ class RRT(object):
     def isInObstacle(self, pos):
         return False
     
-    def generateRandomPos(self):
+    def sampling(self):
         while True:
             rndPos = np.random.random(self.dimension)
             rndPos[0] = rndPos[0]*self.sampling_width
