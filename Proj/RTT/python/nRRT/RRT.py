@@ -75,8 +75,8 @@ class RRT(object):
             
             new_pos = self.steer(rndPos, nearest_node.pos)       
     
-            crossingObs = self.isCrossingObstacle(new_pos, nearest_node.pos)
-            if False == crossingObs :
+            crossingObs = self.isObstacleFree(new_pos, nearest_node.pos)
+            if True == crossingObs :
                 #print new_pos
                 new_node = RRTNode(new_pos)
                 #new_node.cost = nearest_node.cost + self.segmentLength
@@ -106,8 +106,8 @@ class RRT(object):
             return True
         return False
     
-    def isCrossingObstacle(self, pos_a, pos_b):  
-        blocked = False
+    def isObstacleFree(self, pos_a, pos_b):  
+        obsFree = True
         
         x_dist = np.abs(pos_a[0] - pos_b[0])
         y_dist = np.abs(pos_a[1] - pos_b[1])
@@ -127,8 +127,9 @@ class RRT(object):
                 coordY = int(k*(coordX-startX) + startY)
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
                 if self.bitmap[int(coordY),int(coordX)] < 255: 
-                    blocked = True
-                if blocked: break
+                    obsFree = False
+                if obsFree == False:
+                    break
         else:
             k = x_dist/y_dist
             if pos_a[1] < pos_b[1]:
@@ -144,10 +145,11 @@ class RRT(object):
                 coordX = int(k*(coordY-startY) + startX)
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
                 if self.bitmap[int(coordY),int(coordX)] < 255: 
-                    blocked = True
-                if blocked: break
+                    obsFree = False
+                if obsFree == False:
+                    break
 
-        return blocked
+        return obsFree
 
     
     def isInObstacle(self, pos):
