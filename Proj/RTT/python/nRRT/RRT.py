@@ -88,14 +88,6 @@ class RRT(object):
                 self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
     def findNearestNeighbor(self, pos):
-        '''
-        node_num = len(self.nodes)
-        dist = np.zeros(node_num, np.float)
-        for i in range(node_num):
-            dist[i] = np.sqrt((pos[0]-self.nodes[i].pos[0])**2+(pos[1]-self.nodes[i].pos[1])**2)
-        min_dist_idx = dist.argmin()
-        return self.nodes[min_dist_idx]
-        '''
         results = self.kdtree_root.search_nn(pos)
         #print results[0], results[0].ref
         return results[0].ref
@@ -108,6 +100,9 @@ class RRT(object):
     
     def isObstacleFree(self, pos_a, pos_b):  
         obsFree = True
+        
+        if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
+            return obsFree
         
         x_dist = np.abs(pos_a[0] - pos_b[0])
         y_dist = np.abs(pos_a[1] - pos_b[1])
