@@ -41,7 +41,7 @@ class RRT(object):
         
     def loadMap(self, mapfile):
         self.mapfile = mapfile
-        self.bitmap = np.array(imread(self.mapfile, 'l'))
+        self.bitmap = np.array(imread(self.mapfile, True))
         self.sampling_width = self.bitmap.shape[1]
         self.sampling_height = self.bitmap.shape[0]
     
