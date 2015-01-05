@@ -11,6 +11,8 @@ class RRG(RRT):
     def __init__(self, sampling_range, segmentLength):
         super(RRG, self).__init__(sampling_range, segmentLength)
         self.nearNodeNum = 3
+        self.gamma = 1.0
+        self.radius = self.segmentLength
         
     def init(self, start, goal, costFunc):
         super(RRG, self).init(start, goal)
@@ -40,14 +42,27 @@ class RRG(RRT):
                         if True == self.isObstacleFree(near_node.pos, new_node.pos):
                             self.addEdge(near_node, new_node)
                             self.addEdge(near_node, new_node)
+                            
+    def calcRadius(self): 
+        vertexNum = len(self.nodes)
+        self.radius = np.power( ( self.gamma * np.log(float(vertexNum+1)) / (float(vertexNum+1)) ) ,  1.0/self.dimension) 
+        #self.radius = np.min([self.radius , self.segmentLength])
+        
+        return self.radius                
                 
     def findNearVertices(self, pos, num):
         node_list = []
         results = self.kdtree_root.search_knn(pos, num)
+        '''
+        self.calcRadius()
+        print self.radius
+        results = self.kdtree_root.search_nn_dist(pos, self.radius)
         for res in results:
-            if res[0].data[0]==pos[0] and res[0].data[1]==pos[1]:
+        '''
+        for res, dist in results:
+            if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
-            node_list.append(res[0].ref)
+            node_list.append(res.ref)
         return node_list
     
     def findPath(self):
