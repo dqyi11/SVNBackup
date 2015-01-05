@@ -72,7 +72,29 @@ class RRTstar(RRG):
             return False
         node_c.parent = node_p
         return True
-                            
+                          
+    def findPath(self):
+        path = []
+        
+        start_pos = np.zeros(2)
+        goal_pos = np.zeros(2)
+        start_pos[0], start_pos[1] = self.start[0], self.start[1]
+        goal_pos[0], goal_pos[1] = self.goal[0], self.goal[1]
+        
+        nearest_to_goal = self.findNearestNeighbor(goal_pos)
+        
+        node_list = []
+        curr_node = nearest_to_goal
+        node_list.append(curr_node)
+        while curr_node != self.root:
+            curr_node = curr_node.parent
+            node_list.append(curr_node)
+            
+        for n in reversed(node_list):
+            path.append([int(n.pos[0]), int(n.pos[1])])
+        path.append(goal_pos)
+        
+        return path  
 
                         
                 
