@@ -1,11 +1,11 @@
 '''
-Created on Jan 3, 2015
+Created on Jan 4, 2015
 
 @author: daqing_yi
 '''
 
-from RRG import *
-from RRTVisualizer import *
+from RRGPlanner import *
+import time
 
 if __name__ == '__main__':
     
@@ -14,19 +14,19 @@ if __name__ == '__main__':
         if referenceNode==None:
             return dist
         dist = np.sqrt((currentNode.pos[0]-referenceNode.pos[0])**2+(currentNode.pos[1]-referenceNode.pos[1])**2)
-        return dist    
+        return dist   
     
+        
     MAP_FILE = './lab-map-inferior.png'
     MAP_FILE = './lab-map-scaled.png'
-    rrg = RRG([444, 989], 10)
-    rrg.loadMap(MAP_FILE)
     
-    rrg_viz = RRTVisualizer(rrg)
+    planner = RRGPlanner([444, 989], 10, calcDist, MAP_FILE) 
+
+    path = planner.findPath([40,40], [320, 300], 1000)
+    print path
     
-    rrg.init([40,40], [320, 300], calcDist)
-    #rrt.init([40,40], [200, 200])
+    import pygame.image
+    pygame.image.save(planner.rrg_viz.screen, 'RRG01.png')
     
-    for i in range(2000):
-        rrg.extend()
-        rrg_viz.update()
-    
+    while True:
+        time.sleep(5)

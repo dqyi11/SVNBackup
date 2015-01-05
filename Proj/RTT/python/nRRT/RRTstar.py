@@ -12,11 +12,6 @@ class RRTstar(RRG):
         super(RRTstar, self).__init__(sampling_range, segmentLength)
         self.costFunc = None
         
-    def init(self, start, goal, costFunc):
-        super(RRTstar, self).init(start, goal)
-        self.costFunc = costFunc
-        self.root.cost = self.costFunc(self.root, None)
-        
     def extend(self):
         new_node = None
         while new_node == None:
@@ -33,17 +28,24 @@ class RRTstar(RRG):
                 self.nodes.append(new_node)
                 
                 min_node = nearest_node
-                self.addEdge(min_node, new_node)
                 
                 near_node_list = self.findNearVertices(new_node.pos, self.nearNodeNum)
+                
+                for near_node in near_node_list:
+                    if True == self.isObstacleFree(near_node.pos, new_node.pos):
+                        c = self.getCostToNode(near_node) + self.costFunc(near_node, new_node)
+                        if c < self.getCostToNode(new_node):
+                            min_node = near_node
+                            
+                self.addEdge(min_node, new_node)
+                
                 for near_node in near_node_list:
                     if near_node == min_node:
                         continue
                     
-                    if True == self.isObstacleFree(near_node.pos, new_node.pos):
+                    if True == self.isObstacleFree(new_node.pos, near_node.pos):
                         
-                        c = self.getCostToNode(near_node) + self.costFunc(near_node, new_node)
-                        if c < self.getCostToNode(new_node):
+                        if self.getCostToNode(near_node) > self.getCostToNode(new_node) + self.costFunc(new_node, near_node):
                             parent_node = self.getParent(near_node)
                             self.removeEdge(parent_node, near_node)
                             self.addEdge(new_node, near_node)

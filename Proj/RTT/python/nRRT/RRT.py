@@ -6,6 +6,7 @@ Created on Dec 30, 2014
 
 from kdtree import *
 import numpy as np
+#import copy
 from scipy.misc import imread
 
 class RRTNode(object):
@@ -146,10 +147,10 @@ class RRT(object):
 
         return obsFree
 
-    
     def isInObstacle(self, pos):
         return False
-    
+        
+        
     def sampling(self):
         while True:
             rndPos = np.random.random(self.dimension)
@@ -159,6 +160,29 @@ class RRT(object):
             if False == self.isInObstacle(rndPos):
                 return rndPos
         return None
+    
+    def findPath(self):
+        path = []
+        
+        start_pos = np.zeros(2)
+        goal_pos = np.zeros(2)
+        start_pos[0], start_pos[1] = self.start[0], self.start[1]
+        goal_pos[0], goal_pos[1] = self.goal[0], self.goal[1]
+        
+        nearest_to_goal = self.findNearestNeighbor(goal_pos)
+        
+        node_list = []
+        curr_node = nearest_to_goal
+        node_list.append(curr_node)
+        while curr_node != self.root:
+            curr_node = curr_node.parent
+            node_list.append(curr_node)
+            
+        for n in reversed(node_list):
+            path.append([int(n.pos[0]), int(n.pos[1])])
+        path.append(goal_pos)
+        
+        return path
     
     def removeEdge(self, node_p, node_c):
         if node_p == None:

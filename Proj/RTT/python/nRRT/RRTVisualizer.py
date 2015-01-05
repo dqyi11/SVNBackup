@@ -21,6 +21,8 @@ class RRTVisualizer(object):
         else:
             self.mapImg = None
             
+        self.activePath = None
+            
         
     def update(self):
         if self.mapImg != None:
@@ -33,6 +35,11 @@ class RRTVisualizer(object):
         pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal, 5)
         if self.rrt.new_node != None and self.rrt.connected_node != None:
             pygame.draw.line(self.screen, (200,128,0), self.rrt.new_node, self.rrt.connected_node)
+            
+        if self.activePath != None:
+            pathLen = len(self.activePath)
+            for i in range(0, pathLen-1, 1):
+                pygame.draw.line(self.screen, (255, 160, 0), self.activePath[i], self.activePath[i+1], 2)
         
         #pygame.display.update()
         '''
