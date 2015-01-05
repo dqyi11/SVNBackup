@@ -20,13 +20,32 @@ class RRTVisualizer(object):
             self.mapImg = pygame.image.load(self.rrt.mapfile)
         else:
             self.mapImg = None
+        
+        self.objImg = None
             
         self.activePath = None
+        self.dispMap = True
+        
+    def loadObj(self, objFile):    
+        self.objImg = pygame.image.load(objFile)
             
         
     def update(self):
-        if self.mapImg != None:
-            self.screen.blit(self.mapImg,(0,0))
+        
+        for e in pygame.event.get():
+            if e.type == KEYUP:
+                if self.dispMap==True:
+                    self.dispMap = False
+                else:
+                    self.dispMap = True
+            
+        if self.dispMap==True:
+            if self.mapImg != None:
+                self.screen.blit(self.mapImg,(0,0))
+        else:
+            if self.objImg != None:
+                self.screen.blit(self.objImg,(0,0))
+                
         for n in self.rrt.nodes:
             for c in n.children:
                 #print str(n.pos) + "-" + str(c.pos)
