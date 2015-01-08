@@ -66,7 +66,7 @@ if __name__ == '__main__':
     
     planner.rrts_viz.loadObj(FIT_FILE)
 
-    path = planner.findPath([40,40], [500, 40], 1000)
+    path = planner.findPath([40,40], [500, 40], 2000)
     print path
     
     import pygame.image

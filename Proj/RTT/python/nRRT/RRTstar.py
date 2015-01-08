@@ -24,7 +24,7 @@ class RRTstar(RRG):
                 new_node = RRTNode(new_pos)
                 self.kdtree_root.add(new_pos, new_node)
                 
-                new_node.cost = nearest_node.cost + self.costFunc(new_node, nearest_node)
+                min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node, new_node)
                 self.nodes.append(new_node)
                 
                 min_node = nearest_node
@@ -33,11 +33,13 @@ class RRTstar(RRG):
                 
                 for near_node in near_node_list:
                     if True == self.isObstacleFree(near_node.pos, new_node.pos):
-                        c = self.getCostToNode(near_node) + self.costFunc(near_node, new_node)
-                        if c < self.getCostToNode(new_node):
+                        c = near_node.cost + self.costFunc(near_node, new_node)
+                        if c < min_new_node_cost:
                             min_node = near_node
+                            min_new_node_cost = c
                             
                 self.addEdge(min_node, new_node)
+                new_node.cost = min_new_node_cost
                 
                 for near_node in near_node_list:
                     if near_node == min_node:
@@ -45,12 +47,17 @@ class RRTstar(RRG):
                     
                     if True == self.isObstacleFree(new_node.pos, near_node.pos):
                         
-                        if self.getCostToNode(near_node) > self.getCostToNode(new_node) + self.costFunc(new_node, near_node):
+                        delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node, near_node))
+                        if delta_cost > 0:
                             parent_node = self.getParent(near_node)
                             self.removeEdge(parent_node, near_node)
                             self.addEdge(new_node, near_node)
-                
+                            self.updateCostToChildren(near_node, delta_cost)
                             
+    def updateCostToChildren(self, node, delta_cost):
+        node.cost = node.cost - delta_cost
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost)  
                             
     def getCostToNode(self, node):
         return node.cost
