@@ -1,35 +1,22 @@
 '''
-Created on Dec 30, 2014
+Created on Jan 3, 2015
 
 @author: daqing_yi
 '''
 
 from kdtree import *
 import numpy as np
-#import copy
 from scipy.misc import imread
+from SubRRTstar import *
 
-class RRTNode(object):
-    
-    def __init__(self, pos):
-        self.pos = pos
-        self.parent = None
-        self.children = []
-        self.cost = 0.0
-        
-    def __eq__(self, other):
-        if other == None:
-            return False
-        if self.pos[0] == other.pos[0] and self.pos[1] == other.pos[1]:
-            return True
-        return False        
+class MORRTstar(object):
 
-class RRT(object):
-    
-    def __init__(self, sampling_range, segmentLength):
+    def __init__(self, sampling_range, segment_length, objective_num):
         self.sampling_width = sampling_range[0]
         self.sampling_height = sampling_range[1]
-        self.segmentLength = segmentLength
+        self.segmentLength = segment_length
+        self.objectiveNum = objective_num
+        
         self.dimension = 2
         self.nodes = []
         self.kdtree_root = None
@@ -40,19 +27,48 @@ class RRT(object):
         self.new_node = None
         self.connected_node = None
         
+        self.nearNodeNum = 6
+        self.gamma = 1.0
+        self.radius = self.segmentLength
+        
+        self.referenceTrees = []
+        self.subTrees = []
+        
+    def init(self, start, goal, costFuncs, weights, subproblem_num):
+        self.start = start
+        self.goal = goal
+        self.subproblemNum = subproblem_num
+        
+        self.costFuncs = costFuncs
+        self.weights = weights
+        
+        rnodes = []
+        for k in range(self.objectiveNum):
+            reftree = SubRRTstar([self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            reftree.root = RRTNode(start)
+            reftree.nodes.append(reftree.root)
+            reftree.root.cost = reftree.calcCost(reftree.root, None)
+            self.referenceTrees.append(reftree)
+            rnodes.append(reftree.root)
+            
+        for k in range(self.subproblemNum):
+            subtree = SubRRTstar([self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            subtree.root = RRTNode(start)
+            subtree.nodes.append(subtree.root)
+            subtree.root.cost = subtree.calcCost(subtree.root, None)
+            self.subTrees.append(subtree)
+            rnodes.append(subtree.root)
+        
+        self.kdtree_root = createKDTree([start], self.dimension, ref_list=[rnodes])
+
+        
     def loadMap(self, mapfile):
         self.mapfile = mapfile
         self.bitmap = np.array(imread(self.mapfile, True))
         self.sampling_width = self.bitmap.shape[1]
         self.sampling_height = self.bitmap.shape[0]
-    
-    def init(self, start, goal):
-        self.start = start
-        self.goal = goal
-        self.root = RRTNode(start)
-        self.nodes.append(self.root)
-        self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         
+    
     def steer(self, pos_a, pos_b):
         
         # normalize along direction
@@ -67,6 +83,16 @@ class RRT(object):
         new_pos[0] = pos_b[0] + int(delta[0])
         new_pos[1] = pos_b[1] + int(delta[1])
         return new_pos
+    
+    def sampling(self):
+        while True:
+            rndPos = np.random.random(self.dimension)
+            rndPos[0] = rndPos[0]*self.sampling_width
+            rndPos[1] = rndPos[1]*self.sampling_height
+            
+            if False == self.isInObstacle(rndPos):
+                return rndPos
+        return None
         
     def extend(self):
         new_node = None
@@ -74,20 +100,30 @@ class RRT(object):
             rndPos = self.sampling()
             nearest_node = self.findNearestNeighbor(rndPos)
             
-            new_pos = self.steer(rndPos, nearest_node.pos)       
-    
-            crossingObs = self.isObstacleFree(nearest_node.pos, new_pos)
-            if True == crossingObs :
-                #print new_pos
-                new_node = RRTNode(new_pos)
-                #new_node.cost = nearest_node.cost + self.segmentLength
-                self.kdtree_root.add(new_pos, new_node)
-                self.nodes.append(new_node)
-                self.addEdge(nearest_node, new_node) 
+            new_pos = self.steer(rndPos, nearest_node.pos)
+            
+            if True == self.isObstacleFree(nearest_node.pos, new_pos):
                 
-                self.new_node = [int(new_pos[0]), int(new_pos[1])]
-                self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
-        
+                # update reference trees (Reference trees are independent)
+                for k in range(self.objectiveNum):
+                    new_node = self.referenceTrees[k].addNewPos(new_pos)
+                
+                # add new pos to all the sub trees
+                for k in range(self.subproblemNum):
+                    new_node = self.subTrees[k].addNewPos(new_pos)
+                
+                # update rewired vertices of each sub trees
+                
+            
+    def findNearVertices(self, pos, num):
+        node_list = []
+        results = self.kdtree_root.search_knn(pos, num)
+        for res, dist in results:
+            if res.data[0]==pos[0] and res.data[1]==pos[1]:
+                continue
+            node_list.append(res.ref)
+        return node_list       
+    
     def findNearestNeighbor(self, pos):
         results = self.kdtree_root.search_nn(pos)
         #print results[0], results[0].ref
@@ -149,18 +185,31 @@ class RRT(object):
 
     def isInObstacle(self, pos):
         return False
-        
-        
-    def sampling(self):
-        while True:
-            rndPos = np.random.random(self.dimension)
-            rndPos[0] = rndPos[0]*self.sampling_width
-            rndPos[1] = rndPos[1]*self.sampling_height
-            
-            if False == self.isInObstacle(rndPos):
-                return rndPos
-        return None
+                            
+    def updateCostToChildren(self, node, delta_cost):
+        node.cost = node.cost - delta_cost
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost)  
+                                                   
+    def removeEdge(self, node_p, node_c):
+        if node_p == None:
+            return False
+        for c_a in node_p.children:
+            if c_a == node_c:
+                node_p.children.remove(c_a)
+                c_a.parent = None
+                return True
+        return False
+
     
+    def addEdge(self, node_p, node_c):
+        for c_a in node_p.children:
+            if c_a == node_c:
+                return False
+        node_p.children.append(node_c)
+        node_c.parent = node_p
+        return True
+                          
     def findPath(self):
         path = []
         
@@ -182,26 +231,11 @@ class RRT(object):
             path.append([int(n.pos[0]), int(n.pos[1])])
         path.append([goal_pos[0], goal_pos[1]])
         
-        return path
-    
-    def removeEdge(self, node_p, node_c):
-        if node_p == None:
-            return False
-        
-        for c_a in node_p.children:
-            if c_a == node_c:
-                c_a.parent = None
-                node_p.children.remove(c_a)
-                return True
-        return False
-    
-    def addEdge(self, node_p, node_c):
-        for c_a in node_p.children:
-            if c_a == node_c:
-                return False
-        node_p.children.append(node_c)
-        node_c.parent = node_p
-        return True
+        return path  
 
+
+                        
+                
         
         
+    
