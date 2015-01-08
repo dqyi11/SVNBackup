@@ -99,7 +99,7 @@ class RRTstar(RRG):
             
         for n in reversed(node_list):
             path.append([int(n.pos[0]), int(n.pos[1])])
-        path.append(goal_pos)
+        path.append([goal_pos[0], goal_pos[1]])
         
         return path  
 
