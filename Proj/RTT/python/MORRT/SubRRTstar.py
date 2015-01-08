@@ -25,7 +25,8 @@ class RRTNode(object):
 
 class SubRRTstar(object):
 
-    def __init__(self, sampling_range, segment_length, objective_num):
+    def __init__(self, parent, sampling_range, segment_length, objective_num):
+        self.parent = parent
         self.sampling_width = sampling_range[0]
         self.sampling_height = sampling_range[1]
         self.segmentLength = segment_length
@@ -55,11 +56,6 @@ class SubRRTstar(object):
         self.weights = weights
         self.root.cost = self.calcCost(self.root, None)
         
-    def loadMap(self, mapfile):
-        self.mapfile = mapfile
-        self.bitmap = np.array(imread(self.mapfile, True))
-        self.sampling_width = self.bitmap.shape[1]
-        self.sampling_height = self.bitmap.shape[0]
         
     def addMewPos(self, new_pos):
         

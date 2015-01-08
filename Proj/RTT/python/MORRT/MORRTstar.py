@@ -44,7 +44,7 @@ class MORRTstar(object):
         
         rnodes = []
         for k in range(self.objectiveNum):
-            reftree = SubRRTstar([self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
             reftree.root = RRTNode(start)
             reftree.nodes.append(reftree.root)
             reftree.root.cost = reftree.calcCost(reftree.root, None)
@@ -52,7 +52,7 @@ class MORRTstar(object):
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubRRTstar([self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
             subtree.root = RRTNode(start)
             subtree.nodes.append(subtree.root)
             subtree.root.cost = subtree.calcCost(subtree.root, None)
@@ -191,47 +191,20 @@ class MORRTstar(object):
         for cn in node.children:
             self.updateCostToChildren(cn, delta_cost)  
                                                    
-    def removeEdge(self, node_p, node_c):
-        if node_p == None:
-            return False
-        for c_a in node_p.children:
-            if c_a == node_c:
-                node_p.children.remove(c_a)
-                c_a.parent = None
-                return True
-        return False
-
-    
-    def addEdge(self, node_p, node_c):
-        for c_a in node_p.children:
-            if c_a == node_c:
-                return False
-        node_p.children.append(node_c)
-        node_c.parent = node_p
-        return True
+ 
                           
-    def findPath(self):
-        path = []
+    def findPaths(self):
+        paths = []
         
-        start_pos = np.zeros(2)
-        goal_pos = np.zeros(2)
-        start_pos[0], start_pos[1] = self.start[0], self.start[1]
-        goal_pos[0], goal_pos[1] = self.goal[0], self.goal[1]
-        
-        nearest_to_goal = self.findNearestNeighbor(goal_pos)
-        
-        node_list = []
-        curr_node = nearest_to_goal
-        node_list.append(curr_node)
-        while curr_node != self.root:
-            curr_node = curr_node.parent
-            node_list.append(curr_node)
+        for k in range(self.objectiveNum):
+            path = self.referenceTrees[k].findPath()
+            paths.append(path)      
             
-        for n in reversed(node_list):
-            path.append([int(n.pos[0]), int(n.pos[1])])
-        path.append([goal_pos[0], goal_pos[1]])
+        for k in range(self.subproblemNum):
+            path = self.subTrees[k].findPath()
+            paths.append(path)
         
-        return path  
+        return paths
 
 
                         
