@@ -6,12 +6,14 @@ Created on Nov 3, 2014
 
 import pygame, sys
 from pygame.locals import *
+import pygame.image
 import numpy as np
 
 class MORRTVisualizer(object):
 
-    def __init__(self, morrt):
+    def __init__(self, morrt, name=""):
         self.morrt = morrt
+        self.name = name
         pygame.init()
         self.screen = pygame.display.set_mode((self.morrt.sampling_width,self.morrt.sampling_height))
         pygame.display.set_caption('MORRT')
@@ -29,6 +31,7 @@ class MORRTVisualizer(object):
         self.currIdx = 0
         self.currImgs = 0
         self.pathIdx = 0
+    
         
     def loadObj(self, objFiles):    
         for obj in objFiles:
@@ -46,6 +49,8 @@ class MORRTVisualizer(object):
                     self.currImgs += 1
                 elif e.key == pygame.K_RIGHT:
                     self.pathIdx += 1
+                elif e.key == pygame.K_s:
+                    pygame.image.save(self.screen, self.name+"-"+str(self.pathIdx)+".png")
             
             if self.currIdx >= self.totalIdx:
                 self.currIdx = 0
@@ -86,6 +91,8 @@ class MORRTVisualizer(object):
             if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
                 sys.exit("Leaving because you requested it.")
         '''
+        self.screen.blit(self.font.render("PI:"+str(self.pathIdx), True, (255,0,0)), (self.morrt.sampling_width-40, 10))
+                
         pygame.display.flip();
         #pygame.time.delay(200)
         
