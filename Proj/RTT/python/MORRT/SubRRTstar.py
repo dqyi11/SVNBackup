@@ -69,8 +69,9 @@ class SubRRTstar(object):
         
         near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
         
-        for near_node in near_node_list[self.tree_idx]:
-            if True == self.isObstacleFree(near_node.pos, new_node.pos):
+        for near_nodes in near_node_list:
+            near_node = near_nodes[self.tree_idx]
+            if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
                 c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
                 if c < min_new_node_cost:
                     min_node = near_node
@@ -79,13 +80,14 @@ class SubRRTstar(object):
         self.addEdge(min_node, new_node)
         new_node.cost = min_new_node_cost
         
-        for near_node in near_node_list[self.tree_idx]:
+        for near_nodes in near_node_list:
+            near_node = near_nodes[self.tree_idx]
             if near_node == min_node:
                 continue
             
-            if True == self.isObstacleFree(new_node.pos, near_node.pos):
+            if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
                 
-                delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node.pos, near_node.pos))
+                delta_cost = near_node.cost - (new_node.cost + self.calcCost(new_node.pos, near_node.pos))
                 if delta_cost > 0:
                     parent_node = near_node.parent
                     self.removeEdge(parent_node, near_node)
@@ -102,7 +104,7 @@ class SubRRTstar(object):
             return cost
         
         for k in range(self.objectiveNum):
-            cost += self.costFuncs[k](node_a, node_b) * self.weight[k]
+            cost += self.costFuncs[k](node_a, node_b) * self.weights[k]
         return cost
                        
     def updateCostToChildren(self, node, delta_cost):

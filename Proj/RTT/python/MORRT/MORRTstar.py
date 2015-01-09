@@ -25,8 +25,8 @@ class MORRTstar(object):
         self.obsCheckResolution = 1
         self.mapfile = None
         
-        self.new_node = None
-        self.connected_node = None
+        self.new_pos = None
+        self.connected_pos = None
         
         self.nearNodeNum = 6
         self.gamma = 1.0
@@ -125,6 +125,9 @@ class MORRTstar(object):
                 
                 self.kdtree_root.add(new_pos, new_node_list)
                 
+                self.new_pos = new_pos
+                self.connected_pos = nearest_pos
+                
             
     def findNearVertices(self, pos, num):
         pos_list = []
@@ -207,15 +210,19 @@ class MORRTstar(object):
     def findPaths(self):
         paths = []
         
-        nearest_to_goal = self.kdtree_root.search_nn(self.goal)
+        goal_pos = np.zeros(2)
+        goal_pos[0], goal_pos[1] = self.goal[0], self.goal[1]
+        nearest_pos_to_goal, nearest_to_goal = self.findNearestNeighbor(goal_pos)
         
         for k in range(self.objectiveNum):
-            path = self.referenceTrees[k].findPath(nearest_to_goal)
+            ref_tree = self.referenceTrees[k]
+            path = ref_tree.findPath(nearest_to_goal[ref_tree.tree_idx])
             path.append([self.goal[0], self.goal[1]])
             paths.append(path)      
             
         for k in range(self.subproblemNum):
-            path = self.subTrees[k].findPath(nearest_to_goal)
+            sub_tree = self.subTrees[k]
+            path = sub_tree.findPath(nearest_to_goal[sub_tree.tree_idx])
             path.append([self.goal[0], self.goal[1]])
             paths.append(path)
         

@@ -23,11 +23,12 @@ class MORRTVisualizer(object):
         
         self.objImgs = []
             
-        self.activePaths = None
+        self.activePaths = []
         self.dispMap = True
         self.totalIdx = self.morrt.objectiveNum + self.morrt.subproblemNum
         self.currIdx = 0
         self.currImgs = 0
+        self.pathIdx = 0
         
     def loadObj(self, objFiles):    
         for obj in objFiles:
@@ -48,29 +49,33 @@ class MORRTVisualizer(object):
             
             if self.currIdx >= self.totalIdx:
                 self.currIdx = 0
-            if self.currImgs >= len(self.objImg):
+            if self.currImgs >= len(self.objImgs):
                 self.currImgs = 0
-            if self.pathIdx >= len(self.path):
+            if self.pathIdx >= len(self.activePaths):
                 self.pathIdx = 0
             
-        if self.objImg[self.currImgs] != None:
+        if self.objImgs[self.currImgs] != None:
             self.screen.blit(self.objImgs[self.currImgs],(0,0))
                 
         disp_idx = 0
         if self.currIdx >= self.morrt.objectiveNum:
             disp_idx = self.currIdx - self.morrt.objectiveNum
+            for n in self.morrt.subTrees[disp_idx].nodes:
+                for c in n.children:
+                    pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
         else:
             disp_idx = self.currIdx
-        for n in self.morrt.referenceTrees[disp_idx].nodes:
-            for c in n.children:
-                pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
+            for n in self.morrt.referenceTrees[disp_idx].nodes:
+                for c in n.children:
+                    pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
+
                     
         pygame.draw.circle(self.screen, (255,0,0), self.morrt.start, 5)
         pygame.draw.circle(self.screen, (0,0,255), self.morrt.goal, 5)
         if self.morrt.new_pos != None and self.morrt.connected_pos != None:
             pygame.draw.line(self.screen, (200,128,0), self.morrt.new_pos, self.morrt.connected_pos)
             
-        if self.activePaths != None:
+        if len(self.activePaths) > 0:
             ap = self.activePaths[self.pathIdx]
             pathLen = len(ap)
             for i in range(0, pathLen-1, 1):
