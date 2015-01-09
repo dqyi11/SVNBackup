@@ -98,11 +98,11 @@ class MORRTstar(object):
         new_node = None
         while new_node == None:
             rndPos = self.sampling()
-            nearest_node = self.findNearestNeighbor(rndPos)
+            nearest_pos, nearest_nodes = self.findNearestNeighbor(rndPos)
             
-            new_pos = self.steer(rndPos, nearest_node.pos)
+            new_pos = self.steer(rndPos, nearest_pos)
             
-            if True == self.isObstacleFree(nearest_node.pos, new_pos):
+            if True == self.isObstacleFree(nearest_pos, new_pos):
                 
                 # update reference trees (Reference trees are independent)
                 for k in range(self.objectiveNum):
@@ -116,18 +116,20 @@ class MORRTstar(object):
                 
             
     def findNearVertices(self, pos, num):
+        pos_list = []
         node_list = []
         results = self.kdtree_root.search_knn(pos, num)
         for res, dist in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
             node_list.append(res.ref)
-        return node_list       
+            pos_list.append(res.data)
+        return pos_list, node_list       
     
     def findNearestNeighbor(self, pos):
         results = self.kdtree_root.search_nn(pos)
         #print results[0], results[0].ref
-        return results[0].ref
+        return results[0].data, results[0].ref
     
     def isConnectableToGoal(self, pos):
         dist = np.sqrt((pos[0]-self.goal[0])**2+(pos[1]-self.goal[1])**2)

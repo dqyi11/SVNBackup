@@ -28,7 +28,6 @@ class RRTVisualizer(object):
         
     def loadObj(self, objFile):    
         self.objImg = pygame.image.load(objFile)
-            
         
     def update(self):
         
