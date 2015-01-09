@@ -189,19 +189,21 @@ class MORRTstar(object):
     def updateCostToChildren(self, node, delta_cost):
         node.cost = node.cost - delta_cost
         for cn in node.children:
-            self.updateCostToChildren(cn, delta_cost)  
-                                                   
- 
+            self.updateCostToChildren(cn, delta_cost)
                           
     def findPaths(self):
         paths = []
         
+        nearest_to_goal = self.kdtree_root.search_nn(self.goal)
+        
         for k in range(self.objectiveNum):
-            path = self.referenceTrees[k].findPath()
+            path = self.referenceTrees[k].findPath(nearest_to_goal)
+            path.append([self.goal[0], self.goal[1]])
             paths.append(path)      
             
         for k in range(self.subproblemNum):
-            path = self.subTrees[k].findPath()
+            path = self.subTrees[k].findPath(nearest_to_goal)
+            path.append([self.goal[0], self.goal[1]])
             paths.append(path)
         
         return paths
