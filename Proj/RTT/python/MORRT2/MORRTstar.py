@@ -44,20 +44,20 @@ class MORRTstar(object):
         
         rnodes = []
         for k in range(self.objectiveNum):
-            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
+            reftree = RefTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
             weight = np.zeros(self.objectiveNum)
             weight[k] = 1.0
             reftree.init(start, goal, self.costFuncs, weight)
-            reftree.root = RRTNode(start)
+            reftree.root = RRTNode(start, self.objectiveNum)
             reftree.nodes.append(reftree.root)
             reftree.root.cost = reftree.calcCost(reftree.root, None)
             self.referenceTrees.append(reftree)
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum + k)
+            subtree = SubTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum + k)
             subtree.init(start, goal, self.costFuncs, self.weights[k])
-            subtree.root = RRTNode(start)
+            subtree.root = RRTNode(start, self.objectiveNum)
             subtree.nodes.append(subtree.root)
             subtree.root.cost = subtree.calcCost(subtree.root, None)
             self.subTrees.append(subtree)
@@ -102,31 +102,54 @@ class MORRTstar(object):
         new_node = None
         while new_node == None:
             rndPos = self.sampling()
-            nearest_pos, nearest_nodes = self.findNearestNeighbor(rndPos)
+            nearest_pos, nearest_node_list = self.findNearestNeighbor(rndPos)
             
             new_pos = self.steer(rndPos, nearest_pos)
             
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 
+                near_poses_list, near_nodes_list = self.findNearVertices(new_pos, self.nearNodeNum)
+                
                 new_node_list = []
                 
-                # update reference trees (Reference trees are independent)
+                # create new nodes of reference trees 
                 for k in range(self.objectiveNum):
-                    new_node = self.referenceTrees[k].addNewPos(nearest_nodes[k], new_pos)
+                    new_node = self.referenceTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
                     
-                
-                # add new pos to all the sub trees
+                # create new nodes of sub trees 
                 for k in range(self.subproblemNum):
-                    new_node = self.subTrees[k].addNewPos(nearest_nodes[k+self.objectiveNum], new_pos)
+                    new_node = self.subTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
-                
-                # update rewired vertices of each sub trees
-                
+                    
                 self.kdtree_root.add(new_pos, new_node_list)
+                
+                # attach new node to reference trees
+                # rewire near nodes of reference trees
+                for k in range(self.objectiveNum):
+                    self.referenceTrees[k].attachNewNode(new_node_list[k], nearest_node_list, near_nodes_list)
+                    self.referenceTrees[k].rewireNearNodes(new_node_list[k], near_nodes_list)
+                
+                # attach new nodes to sub trees
+                # rewire near nodes of sub trees
+                for k in range(self.subproblemNum):
+                    self.subTrees[k].attachNewNode(new_node_list[k+self.objectiveNum], nearest_node_list, near_nodes_list)
+                    self.subTrees[k].rewireNearNodes(new_node_list[k+self.objectiveNum], near_nodes_list)
+
                 
                 self.new_pos = new_pos
                 self.connected_pos = nearest_pos
+                
+    def getReferenceCost(self, pos):
+        
+        refCost = np.zeros(self.objectiveNum)
+        result, dist = self.kdtree_root.search_nn(pos)
+        
+        if result.data[0] == pos[0] and result.data[1] == pos[1]:
+            for k in range(self.objectiveNum):
+                refCost[k] = result.ref[k].fitness
+                
+        return refCost
                 
             
     def findNearVertices(self, pos, num):
@@ -141,9 +164,9 @@ class MORRTstar(object):
         return pos_list, node_list       
     
     def findNearestNeighbor(self, pos):
-        results = self.kdtree_root.search_nn(pos)
+        results, dist = self.kdtree_root.search_nn(pos)
         #print results[0], results[0].ref
-        return results[0].data, results[0].ref
+        return results.data, results.ref
     
     def isConnectableToGoal(self, pos):
         dist = np.sqrt((pos[0]-self.goal[0])**2+(pos[1]-self.goal[1])**2)

@@ -16,6 +16,7 @@ class RRTNode(object):
         self.children = []
         self.objectiveNum = objective_num
         self.cost = np.zeros(self.objectiveNum)
+        self.fitness = 0.0
         
     def __eq__(self, other):
         if other == None:
@@ -24,7 +25,8 @@ class RRTNode(object):
             return True
         return False  
 
-class SubRRTstar(object):
+
+class ChildTree(object):
 
     def __init__(self, parent, sampling_range, segment_length, objective_num, tree_idx):
         self.parent = parent
@@ -60,45 +62,6 @@ class SubRRTstar(object):
         self.root.cost = self.calcCost(self.root.pos, None)
         
         
-    def addNewPos(self, nearest_node, new_pos):
-        new_node = RRTNode(new_pos)
-        
-        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
-        self.nodes.append(new_node)
-                
-        min_node = nearest_node
-        
-        near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
-        
-        for near_nodes in near_node_list:
-            near_node = near_nodes[self.tree_idx]
-            if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
-                c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
-                if c < min_new_node_cost:
-                    min_node = near_node
-                    min_new_node_cost = c
-                    
-        self.addEdge(min_node, new_node)
-        new_node.cost = min_new_node_cost
-        
-        for near_nodes in near_node_list:
-            near_node = near_nodes[self.tree_idx]
-            if near_node == min_node:
-                continue
-            
-            if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
-                
-                delta_cost = near_node.cost - (new_node.cost + self.calcCost(new_node.pos, near_node.pos))
-                if delta_cost > 0:
-                    parent_node = near_node.parent
-                    self.removeEdge(parent_node, near_node)
-                    self.addEdge(new_node, near_node)
-                    self.updateCostToChildren(near_node, delta_cost)
-        
-        
-        return new_node
-        
-        
     def calcCost(self, node_a, node_b):
         cost = np.zeros(self.objectiveNum)
         if node_a == None or node_b == None:
@@ -110,9 +73,19 @@ class SubRRTstar(object):
     
     def calcFitness(self, cost, refCost):
         fitnessVals = np.zeros(self.objectiveNum)
-        for k in range(self.objectiveNum):
-            fitnessVals[k] = self.weights[k] * np.abs(cost[k] - refCost[k])
-        return np.max(fitnessVals)      
+        if refCost == None:
+            for k in range(self.objectiveNum):
+                fitnessVals[k] = self.weights[k] * cost[k]
+        else:
+            for k in range(self.objectiveNum):
+                fitnessVals[k] = self.weights[k] * np.abs(cost[k] - refCost[k])
+        return np.max(fitnessVals)   
+    
+    def createNewNode(self, new_pos):
+        new_node = RRTNode(new_pos, self.objectiveNum)
+        self.nodes.append(new_node)
+        
+        return new_node   
                   
     def updateCostToChildren(self, node, delta_cost):
         node.cost = node.cost - delta_cost
@@ -153,8 +126,93 @@ class SubRRTstar(object):
         
         return path  
 
-
-                        
+class RefTree(ChildTree):
+        
+    def attachNewNode(self, new_node, nearest_node_list, near_nodes_list):
+        nearest_node = nearest_node_list[self.tree_idx]
+        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
+        min_new_node_fitness = self.calcFitness(min_new_node_cost, None)
+        min_node = nearest_node
+        
+        #near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
+        
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
+            if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
+                c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
+                f = self.calcFitness(c, None)
+                if f < min_new_node_fitness:
+                    min_node = near_node
+                    min_new_node_fitness = f
+                    min_new_node_cost = c
+                    
+        self.addEdge(min_node, new_node)
+        new_node.cost = min_new_node_cost
+        new_node.fitness = min_new_node_fitness
+        
+    def rewireNearNodes(self, new_node, near_nodes_list):
+        
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
+            if near_node == new_node:
+                continue
+            
+            if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
+                
+                temp_cost_from_new_node = new_node.cost + self.calcCost(new_node.pos, near_node.pos)
+                delta_cost = near_node.cost - temp_cost_from_new_node
+                delta_fitness = self.calcFitness(near_node.cost, None) - self.calcFitness(temp_cost_from_new_node, None)
+                
+                if delta_fitness > 0:
+                    parent_node = near_node.parent
+                    self.removeEdge(parent_node, near_node)
+                    self.addEdge(new_node, near_node)
+                    self.updateCostToChildren(near_node, delta_cost)
+    
+    
+class SubTree(ChildTree):
+    
+    def attachNewNode(self, new_node, nearest_node_list, near_nodes_list):
+        nearest_node = nearest_node_list[self.tree_idx]
+        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
+        min_new_node_fitness = self.calcFitness(min_new_node_cost, self.parent.getReferenceCost(new_node.pos))
+        min_node = nearest_node
+        
+        #near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
+        
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
+            if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
+                c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
+                f = self.calcFitness(c, self.parent.getReferenceCost(new_node.pos))
+                if f < min_new_node_fitness:
+                    min_node = near_node
+                    min_new_node_fitness = f
+                    min_new_node_cost = c
+                    
+        self.addEdge(min_node, new_node)
+        new_node.cost = min_new_node_cost
+        new_node.fitness = min_new_node_fitness
+        
+    def rewireNearNodes(self, new_node, near_nodes_list):
+        
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
+            if near_node == new_node:
+                continue
+            
+            if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
+                
+                temp_cost_from_new_node = new_node.cost + self.calcCost(new_node.pos, near_node.pos)
+                delta_cost = near_node.cost - temp_cost_from_new_node
+                delta_fitness = self.calcFitness(near_node.cost, self.parent.getReferenceCost(near_node.pos)) - self.calcFitness(temp_cost_from_new_node, self.parent.getReferenceCost(near_node.pos))
+                
+                if delta_fitness > 0:
+                    parent_node = near_node.parent
+                    self.removeEdge(parent_node, near_node)
+                    self.addEdge(new_node, near_node)
+                    self.updateCostToChildren(near_node, delta_cost)
+    
                 
         
         

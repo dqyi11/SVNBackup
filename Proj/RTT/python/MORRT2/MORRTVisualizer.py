@@ -97,6 +97,7 @@ class MORRTVisualizer(object):
                 sys.exit("Leaving because you requested it.")
         '''
         self.screen.blit(self.font.render("PI:"+str(self.pathIdx), True, (255,0,0)), (self.morrt.sampling_width-40, 10))
+        self.screen.blit(self.font.render("TI:"+str(self.currIdx), True, (0,255,0)), (self.morrt.sampling_width-40, 40))
                 
         pygame.display.flip();
         #pygame.time.delay(200)
