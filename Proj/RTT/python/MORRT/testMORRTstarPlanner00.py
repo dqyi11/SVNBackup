@@ -8,6 +8,7 @@ from MORRTstarPlanner import *
 from scipy.misc import imread
 import time
 import numpy as np
+from MOPathEvaluator import *
 
 if __name__ == '__main__':
     
@@ -73,11 +74,17 @@ if __name__ == '__main__':
     
     planner.morrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 1000)
+    paths = planner.findPaths([40,40], [500, 40], 500)
     print paths
     
     #import pygame.image
     #pygame.image.save(planner.morrts_viz.screen, 'MORRTstar00.png')
+    
+    evaluator = MOPathEvaluator([calcDist, calcCost])
+    evaluator.load(paths)
+    evaluator.visualize()
+    
+    print evaluator.scores
     
     while True:
         planner.morrts_viz.update()
