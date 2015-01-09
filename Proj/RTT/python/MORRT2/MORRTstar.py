@@ -136,7 +136,6 @@ class MORRTstar(object):
                     self.subTrees[k].attachNewNode(new_node_list[k+self.objectiveNum], nearest_node_list, near_nodes_list)
                     self.subTrees[k].rewireNearNodes(new_node_list[k+self.objectiveNum], near_nodes_list)
 
-                
                 self.new_pos = new_pos
                 self.connected_pos = nearest_pos
                 
