@@ -53,6 +53,9 @@ class RRTstar(RRG):
                             self.removeEdge(parent_node, near_node)
                             self.addEdge(new_node, near_node)
                             self.updateCostToChildren(near_node, delta_cost)
+                
+                self.new_pos = [int(new_pos[0]), int(new_pos[1])]
+                self.connected_pos = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
                             
     def updateCostToChildren(self, node, delta_cost):
         node.cost = node.cost - delta_cost

@@ -43,6 +43,9 @@ class RRG(RRT):
                             self.addEdge(near_node, new_node)
                             self.addEdge(near_node, new_node)
                             
+                self.new_pos = [int(new_pos[0]), int(new_pos[1])]
+                self.connected_pos = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
+                            
     def calcRadius(self): 
         vertexNum = len(self.nodes)
         self.radius = np.power( ( self.gamma * np.log(float(vertexNum+1)) / (float(vertexNum+1)) ) ,  1.0/self.dimension) 

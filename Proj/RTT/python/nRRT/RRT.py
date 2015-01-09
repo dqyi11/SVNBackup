@@ -37,8 +37,8 @@ class RRT(object):
         self.obsCheckResolution = 1
         self.mapfile = None
         
-        self.new_node = None
-        self.connected_node = None
+        self.new_pos = None
+        self.connected_pos = None
         
     def loadMap(self, mapfile):
         self.mapfile = mapfile
@@ -85,8 +85,8 @@ class RRT(object):
                 self.nodes.append(new_node)
                 self.addEdge(nearest_node, new_node) 
                 
-                self.new_node = [int(new_pos[0]), int(new_pos[1])]
-                self.connected_node = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
+                self.new_pos = [int(new_pos[0]), int(new_pos[1])]
+                self.connected_pos = [int(nearest_node.pos[0]), int(nearest_node.pos[1])] 
         
     def findNearestNeighbor(self, pos):
         results = self.kdtree_root.search_nn(pos)
