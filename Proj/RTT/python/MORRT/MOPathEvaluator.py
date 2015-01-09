@@ -26,7 +26,7 @@ class MOPathEvaluator(object):
                 pos_a = path[i]
                 pos_b = path[i+1]
                 for k in range(self.objectiveNum):
-                    self.scores[i,k] += self.costFuncs[k](pos_a, pos_b)
+                    self.scores[p,k] += self.costFuncs[k](pos_a, pos_b)
                     
     def visualize(self):
     

@@ -31,6 +31,8 @@ class MORRTVisualizer(object):
         self.currIdx = 0
         self.currImgs = 0
         self.pathIdx = 0
+        
+        self.font = pygame.font.SysFont(None, 24)
     
         
     def loadObj(self, objFiles):    
