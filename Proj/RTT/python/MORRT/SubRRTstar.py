@@ -44,7 +44,7 @@ class SubRRTstar(object):
         self.new_node = None
         self.connected_node = None
         
-        self.nearNodeNum = 6
+        #self.nearNodeNum = 6
         self.gamma = 1.0
         self.radius = self.segmentLength
         
@@ -59,18 +59,21 @@ class SubRRTstar(object):
         self.root.cost = self.calcCost(self.root.pos, None)
         
         
-    def addNewPos(self, nearest_node, new_pos):
+    def createNewNode(self, new_pos):
         new_node = RRTNode(new_pos)
-        
-        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
         self.nodes.append(new_node)
-                
+        
+        return new_node
+        
+    def attachNewNode(self, new_node, nearest_node_list, near_nodes_list):
+        nearest_node = nearest_node_list[self.tree_idx]
+        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
         min_node = nearest_node
         
-        near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
+        #near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
         
-        for near_nodes in near_node_list:
-            near_node = near_nodes[self.tree_idx]
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
             if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
                 c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
                 if c < min_new_node_cost:
@@ -80,9 +83,11 @@ class SubRRTstar(object):
         self.addEdge(min_node, new_node)
         new_node.cost = min_new_node_cost
         
-        for near_nodes in near_node_list:
-            near_node = near_nodes[self.tree_idx]
-            if near_node == min_node:
+    def rewireNearNodes(self, new_node, near_nodes_list):
+        
+        for near_node_list in near_nodes_list:
+            near_node = near_node_list[self.tree_idx]
+            if near_node == new_node:
                 continue
             
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
@@ -93,9 +98,6 @@ class SubRRTstar(object):
                     self.removeEdge(parent_node, near_node)
                     self.addEdge(new_node, near_node)
                     self.updateCostToChildren(near_node, delta_cost)
-        
-        
-        return new_node
         
         
     def calcCost(self, node_a, node_b):

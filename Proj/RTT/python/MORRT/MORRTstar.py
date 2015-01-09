@@ -102,28 +102,40 @@ class MORRTstar(object):
         new_node = None
         while new_node == None:
             rndPos = self.sampling()
-            nearest_pos, nearest_nodes = self.findNearestNeighbor(rndPos)
+            nearest_pos, nearest_node_list = self.findNearestNeighbor(rndPos)
             
             new_pos = self.steer(rndPos, nearest_pos)
             
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 
+                near_poses_list, near_nodes_list = self.findNearVertices(new_pos, self.nearNodeNum)
+                
                 new_node_list = []
                 
-                # update reference trees (Reference trees are independent)
+                # create new nodes of reference trees 
                 for k in range(self.objectiveNum):
-                    new_node = self.referenceTrees[k].addNewPos(nearest_nodes[k], new_pos)
+                    new_node = self.referenceTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
                     
-                
-                # add new pos to all the sub trees
+                # create new nodes of sub trees 
                 for k in range(self.subproblemNum):
-                    new_node = self.subTrees[k].addNewPos(nearest_nodes[k+self.objectiveNum], new_pos)
+                    new_node = self.subTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
-                
-                # update rewired vertices of each sub trees
-                
+                    
                 self.kdtree_root.add(new_pos, new_node_list)
+                
+                # attach new node to reference trees
+                # rewire near nodes of reference trees
+                for k in range(self.objectiveNum):
+                    self.referenceTrees[k].attachNewNode(new_node_list[k], nearest_node_list, near_nodes_list)
+                    self.referenceTrees[k].rewireNearNodes(new_node_list[k], near_nodes_list)
+                
+                # attach new nodes to sub trees
+                # rewire near nodes of sub trees
+                for k in range(self.subproblemNum):
+                    self.subTrees[k].attachNewNode(new_node_list[k+self.objectiveNum], nearest_node_list, near_nodes_list)
+                    self.subTrees[k].rewireNearNodes(new_node_list[k+self.objectiveNum], near_nodes_list)
+
                 
                 self.new_pos = new_pos
                 self.connected_pos = nearest_pos
