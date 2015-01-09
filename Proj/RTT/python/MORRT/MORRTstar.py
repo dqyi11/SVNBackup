@@ -11,11 +11,12 @@ from SubRRTstar import *
 
 class MORRTstar(object):
 
-    def __init__(self, sampling_range, segment_length, objective_num):
+    def __init__(self, sampling_range, segment_length, objective_num, subproblem_num):
         self.sampling_width = sampling_range[0]
         self.sampling_height = sampling_range[1]
         self.segmentLength = segment_length
         self.objectiveNum = objective_num
+        self.subproblemNum = subproblem_num
         
         self.dimension = 2
         self.nodes = []
@@ -34,10 +35,9 @@ class MORRTstar(object):
         self.referenceTrees = []
         self.subTrees = []
         
-    def init(self, start, goal, costFuncs, weights, subproblem_num):
+    def init(self, start, goal, costFuncs, weights):
         self.start = start
         self.goal = goal
-        self.subproblemNum = subproblem_num
         
         self.costFuncs = costFuncs
         self.weights = weights

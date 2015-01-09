@@ -10,7 +10,7 @@ from MORRTVisualizer import *
 
 class MORRTstarPlanner(object):
 
-    def __init__(self, planning_range, segment_length, objective_num, cost_funcs=None, subproblem_num, map_file=None):
+    def __init__(self, planning_range, segment_length, objective_num, cost_funcs, subproblem_num, map_file=None):
         self.planningRange = planning_range
         self.segmentLength = segment_length
         self.mapFile = map_file
@@ -18,21 +18,21 @@ class MORRTstarPlanner(object):
         self.costFuncs = cost_funcs
         self.subproblemNum = subproblem_num
         
-        self.morrts = MORRTstar(self.planningRange, self.segmentLength, self.objectiveNum)
+        self.morrts = MORRTstar(self.planningRange, self.segmentLength, self.objectiveNum, self.subproblemNum)
         self.morrts_viz = MORRTVisualizer(self.morrts)
         
         self.weights = []
-        for i in range(self.population_size):
-            weight = np.zeros(self.objective_num, np.float)
+        for i in range(self.subproblemNum):
+            weight = np.zeros(self.objectiveNum, np.float)
             if self.objectiveNum == 2:
                 weight[0] = float(i) / self.subproblemNum
-                weight[1] = float(self.population_size - i) / self.population_size
+                weight[1] = float(self.subproblemNum - i) / self.subproblemNum
             self.weights.append(weight)
 
             
-    def findPath(self, start, goal, iterationNum):
+    def findPaths(self, start, goal, iterationNum):
         
-        self.morrts.init(start, goal, self.costFuncs, self.weights, self.subproblemNum)
+        self.morrts.init(start, goal, self.costFuncs, self.weights)
 
         for it in range(iterationNum):
             self.morrts.extend()

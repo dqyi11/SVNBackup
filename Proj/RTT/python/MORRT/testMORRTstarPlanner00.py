@@ -73,8 +73,8 @@ if __name__ == '__main__':
     
     planner.morrts_viz.loadObj([FIT_FILE])
 
-    path = planner.findPath([40,40], [500, 40], 1000)
-    print path
+    paths = planner.findPaths([40,40], [500, 40], 1000)
+    print paths
     
     import pygame.image
     pygame.image.save(planner.rrts_viz.screen, 'MORRTstar00.png')

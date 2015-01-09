@@ -21,7 +21,7 @@ class MORRTVisualizer(object):
         else:
             self.mapImg = None
         
-        self.objImg = []
+        self.objImgs = []
             
         self.activePaths = None
         self.dispMap = True
@@ -54,7 +54,7 @@ class MORRTVisualizer(object):
                 self.pathIdx = 0
             
         if self.objImg[self.currImgs] != None:
-            self.screen.blit(self.objImg[self.currImgs],(0,0))
+            self.screen.blit(self.objImgs[self.currImgs],(0,0))
                 
         disp_idx = 0
         if self.currIdx >= self.morrt.objectiveNum:
