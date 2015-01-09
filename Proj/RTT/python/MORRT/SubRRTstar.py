@@ -25,12 +25,13 @@ class RRTNode(object):
 
 class SubRRTstar(object):
 
-    def __init__(self, parent, sampling_range, segment_length, objective_num, tree_idx):
+    def __init__(self, parent, sampling_range, segment_length, objective_num, cost_funcs, tree_idx):
         self.parent = parent
         self.sampling_width = sampling_range[0]
         self.sampling_height = sampling_range[1]
         self.segmentLength = segment_length
         self.objectiveNum = objective_num
+        self.costFuncs = cost_funcs
         
         self.tree_idx = tree_idx
         
@@ -47,7 +48,7 @@ class SubRRTstar(object):
         self.nearNodeNum = 6
         self.gamma = 1.0
         self.radius = self.segmentLength
-        self.costFuncs = None
+        
         
     def init(self, start, goal, costFuncs, weights):
         self.start = start
@@ -59,10 +60,10 @@ class SubRRTstar(object):
         self.root.cost = self.calcCost(self.root.pos, None)
         
         
-    def addMewPos(self, nearest_node, new_pos):
+    def addNewPos(self, nearest_node, new_pos):
         new_node = RRTNode(new_pos)
         
-        min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
+        min_new_node_cost = nearest_node.cost + self.calcCost(nearest_node.pos, new_node.pos)
         self.nodes.append(new_node)
                 
         min_node = nearest_node

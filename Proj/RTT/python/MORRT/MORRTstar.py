@@ -44,7 +44,7 @@ class MORRTstar(object):
         
         rnodes = []
         for k in range(self.objectiveNum):
-            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
+            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.costFuncs, self.objectiveNum, k)
             reftree.root = RRTNode(start)
             reftree.nodes.append(reftree.root)
             reftree.root.cost = reftree.calcCost(reftree.root, None)
@@ -52,7 +52,7 @@ class MORRTstar(object):
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum. self.objectiveNum+k)
+            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.costFuncs, self.objectiveNum + k)
             subtree.root = RRTNode(start)
             subtree.nodes.append(subtree.root)
             subtree.root.cost = subtree.calcCost(subtree.root, None)
