@@ -32,11 +32,12 @@ class RRTVisualizer(object):
     def update(self):
         
         for e in pygame.event.get():
-            if e.type == KEYUP:
-                if self.dispMap==True:
-                    self.dispMap = False
-                else:
-                    self.dispMap = True
+            if e.type == KEYDOWN:
+                if e.key == pygame.K_UP:
+                    if self.dispMap==True:
+                        self.dispMap = False
+                    else:
+                        self.dispMap = True
             
         if self.dispMap==True:
             if self.mapImg != None:

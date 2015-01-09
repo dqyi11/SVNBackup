@@ -25,12 +25,14 @@ class RRTNode(object):
 
 class SubRRTstar(object):
 
-    def __init__(self, parent, sampling_range, segment_length, objective_num):
+    def __init__(self, parent, sampling_range, segment_length, objective_num, tree_idx):
         self.parent = parent
         self.sampling_width = sampling_range[0]
         self.sampling_height = sampling_range[1]
         self.segmentLength = segment_length
         self.objectiveNum = objective_num
+        
+        self.tree_idx = tree_idx
         
         self.dimension = 2
         self.nodes = []
@@ -54,22 +56,22 @@ class SubRRTstar(object):
         #self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         self.costFuncs = costFuncs
         self.weights = weights
-        self.root.cost = self.calcCost(self.root, None)
+        self.root.cost = self.calcCost(self.root.pos, None)
         
         
     def addMewPos(self, nearest_node, new_pos):
         new_node = RRTNode(new_pos)
         
-        min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node, new_node)
+        min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
         self.nodes.append(new_node)
                 
         min_node = nearest_node
         
         near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
         
-        for near_node in near_node_list:
+        for near_node in near_node_list[self.tree_idx]:
             if True == self.isObstacleFree(near_node.pos, new_node.pos):
-                c = near_node.cost + self.calcCost(near_node, new_node)
+                c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
                 if c < min_new_node_cost:
                     min_node = near_node
                     min_new_node_cost = c
@@ -77,13 +79,13 @@ class SubRRTstar(object):
         self.addEdge(min_node, new_node)
         new_node.cost = min_new_node_cost
         
-        for near_node in near_node_list:
+        for near_node in near_node_list[self.tree_idx]:
             if near_node == min_node:
                 continue
             
             if True == self.isObstacleFree(new_node.pos, near_node.pos):
                 
-                delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node, near_node))
+                delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node.pos, near_node.pos))
                 if delta_cost > 0:
                     parent_node = near_node.parent
                     self.removeEdge(parent_node, near_node)

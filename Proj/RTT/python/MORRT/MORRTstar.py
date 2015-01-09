@@ -44,7 +44,7 @@ class MORRTstar(object):
         
         rnodes = []
         for k in range(self.objectiveNum):
-            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            reftree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
             reftree.root = RRTNode(start)
             reftree.nodes.append(reftree.root)
             reftree.root.cost = reftree.calcCost(reftree.root, None)
@@ -52,7 +52,7 @@ class MORRTstar(object):
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum)
+            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum. self.objectiveNum+k)
             subtree.root = RRTNode(start)
             subtree.nodes.append(subtree.root)
             subtree.root.cost = subtree.calcCost(subtree.root, None)
@@ -102,9 +102,9 @@ class MORRTstar(object):
             
             new_pos = self.steer(rndPos, nearest_pos)
             
-            new_node_list = []
-            
             if True == self.isObstacleFree(nearest_pos, new_pos):
+                
+                new_node_list = []
                 
                 # update reference trees (Reference trees are independent)
                 for k in range(self.objectiveNum):
@@ -118,6 +118,8 @@ class MORRTstar(object):
                     new_node_list.append(new_node)
                 
                 # update rewired vertices of each sub trees
+                
+                self.kdtree_root.add(new_pos, new_node_list)
                 
             
     def findNearVertices(self, pos, num):

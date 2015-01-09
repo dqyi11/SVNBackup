@@ -4,9 +4,10 @@ Created on Jan 4, 2015
 @author: daqing_yi
 '''
 
-from RRTstarPlanner import *
-import time
+from MORRTstarPlanner import *
 from scipy.misc import imread
+import time
+import numpy as np
 
 if __name__ == '__main__':
     
@@ -61,15 +62,22 @@ if __name__ == '__main__':
 
         return cost   
     
-    planner = RRTstarPlanner([600,400], 10, calcCost) 
+    def calcDist(currentPos, referencePos):
+        dist = 0.0
+        if referencePos==None:
+            return dist
+        dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
+        return dist   
     
-    planner.rrts_viz.loadObj(FIT_FILE)
+    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 100) 
+    
+    planner.morrts_viz.loadObj([FIT_FILE])
 
-    path = planner.findPath([40,40], [500, 40], 2000)
+    path = planner.findPath([40,40], [500, 40], 1000)
     print path
     
     import pygame.image
-    pygame.image.save(planner.rrts_viz.screen, 'RRTstar00-1.png')
+    pygame.image.save(planner.rrts_viz.screen, 'MORRTstar00.png')
     
     while True:
         time.sleep(5)
