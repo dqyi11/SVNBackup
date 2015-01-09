@@ -28,18 +28,27 @@ if __name__ == '__main__':
     root.add((8,1),'E')
     root.add((7,2),'F')
     
+    print 'Finding nearest to (9,6) '
+    results = root.search_nn((9,6))
+    print results[0].data, results[0].ref, results[1]
+    
+    print "---"
+    
+    print 'Finding 2 near to (9,2) '
     results =  root.search_knn((9,2), 2)
     for node, dist in results:
         print node.data, node.ref, dist
         
     print "---"
         
+    print "Finding distance < 8 to (9,2) "
     results = root.search_nn_dist((9,2), 8)
     for node in results:
         print node.data, node.ref
         
     print "---"
     
+    print "Finding nearest to (9,2) "
     results = root.search_nn((9,2))
     print results[0].data, results[0].ref, results[1]
     
