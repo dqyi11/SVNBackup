@@ -51,7 +51,7 @@ class RRTstar(object):
         self.nodes.append(self.root)
         self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         self.costFunc = costFunc
-        self.root.cost = self.costFunc(self.root, None)
+        self.root.cost = self.costFunc(self.root.pos, None)
         
     def loadMap(self, mapfile):
         self.mapfile = mapfile
@@ -102,7 +102,7 @@ class RRTstar(object):
                 new_node = RRTNode(new_pos)
                 self.kdtree_root.add(new_pos, new_node)
                 
-                min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node, new_node)
+                min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
                 self.nodes.append(new_node)
                 
                 min_node = nearest_node
@@ -111,7 +111,7 @@ class RRTstar(object):
                 
                 for near_node in near_node_list:
                     if True == self.isObstacleFree(near_node.pos, new_node.pos):
-                        c = near_node.cost + self.costFunc(near_node, new_node)
+                        c = near_node.cost + self.costFunc(near_node.pos, new_node.pos)
                         if c < min_new_node_cost:
                             min_node = near_node
                             min_new_node_cost = c
@@ -125,7 +125,7 @@ class RRTstar(object):
                     
                     if True == self.isObstacleFree(new_node.pos, near_node.pos):
                         
-                        delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node, near_node))
+                        delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node.pos, near_node.pos))
                         if delta_cost > 0:
                             parent_node = near_node.parent
                             self.removeEdge(parent_node, near_node)

@@ -102,15 +102,20 @@ class MORRTstar(object):
             
             new_pos = self.steer(rndPos, nearest_pos)
             
+            new_node_list = []
+            
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 
                 # update reference trees (Reference trees are independent)
                 for k in range(self.objectiveNum):
-                    new_node = self.referenceTrees[k].addNewPos(new_pos)
+                    new_node = self.referenceTrees[k].addNewPos(nearest_nodes[k], new_pos)
+                    new_node_list.append(new_node)
+                    
                 
                 # add new pos to all the sub trees
                 for k in range(self.subproblemNum):
-                    new_node = self.subTrees[k].addNewPos(new_pos)
+                    new_node = self.subTrees[k].addNewPos(nearest_nodes[k+self.objectiveNum], new_pos)
+                    new_node_list.append(new_node)
                 
                 # update rewired vertices of each sub trees
                 

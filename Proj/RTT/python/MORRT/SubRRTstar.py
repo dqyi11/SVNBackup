@@ -57,9 +57,39 @@ class SubRRTstar(object):
         self.root.cost = self.calcCost(self.root, None)
         
         
-    def addMewPos(self, new_pos):
-        
+    def addMewPos(self, nearest_node, new_pos):
         new_node = RRTNode(new_pos)
+        
+        min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node, new_node)
+        self.nodes.append(new_node)
+                
+        min_node = nearest_node
+        
+        near_pos_list, near_node_list = self.parent.findNearVertices(new_node.pos, self.nearNodeNum)
+        
+        for near_node in near_node_list:
+            if True == self.isObstacleFree(near_node.pos, new_node.pos):
+                c = near_node.cost + self.calcCost(near_node, new_node)
+                if c < min_new_node_cost:
+                    min_node = near_node
+                    min_new_node_cost = c
+                    
+        self.addEdge(min_node, new_node)
+        new_node.cost = min_new_node_cost
+        
+        for near_node in near_node_list:
+            if near_node == min_node:
+                continue
+            
+            if True == self.isObstacleFree(new_node.pos, near_node.pos):
+                
+                delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node, near_node))
+                if delta_cost > 0:
+                    parent_node = near_node.parent
+                    self.removeEdge(parent_node, near_node)
+                    self.addEdge(new_node, near_node)
+                    self.updateCostToChildren(near_node, delta_cost)
+        
         
         return new_node
         

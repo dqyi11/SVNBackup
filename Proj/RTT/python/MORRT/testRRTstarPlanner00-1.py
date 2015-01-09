@@ -15,13 +15,13 @@ if __name__ == '__main__':
     stepLen = 1
     
     
-    def calcCost(currentNode, referenceNode):
+    def calcCost(currentPos, referencePos):
         cost = 0.0
-        if referenceNode==None:
+        if referencePos==None:
             return cost
         
-        pos_a = currentNode.pos
-        pos_b = referenceNode.pos
+        pos_a = currentPos
+        pos_b = referencePos
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     
     planner.rrts_viz.loadObj(FIT_FILE)
 
-    path = planner.findPath([40,40], [500, 40], 500)
+    path = planner.findPath([40,40], [500, 40], 2000)
     print path
     
     import pygame.image
