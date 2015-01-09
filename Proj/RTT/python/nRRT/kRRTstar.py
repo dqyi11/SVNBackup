@@ -4,9 +4,9 @@ Created on Jan 3, 2015
 @author: daqing_yi
 '''
 
-from RRG import *
+from kRRG import *
 
-class kRRTstar(RRG):
+class kRRTstar(kRRG):
 
     def __init__(self, sampling_range, segmentLength):
         super(kRRTstar, self).__init__(sampling_range, segmentLength)

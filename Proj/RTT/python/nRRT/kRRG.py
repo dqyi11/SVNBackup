@@ -6,16 +6,16 @@ Created on Jan 3, 2015
 
 from RRT import *
 
-class RRG(RRT):
+class kRRG(RRT):
 
     def __init__(self, sampling_range, segmentLength):
-        super(RRG, self).__init__(sampling_range, segmentLength)
-
-        self.gamma = 8000* 2*(1+1/float(self.dimension))**(1/float(self.dimension)) * (self.sampling_width*self.sampling_height)**(1/float(self.dimension))
+        super(kRRG, self).__init__(sampling_range, segmentLength)
+        self.nearNodeNum = 3
+        self.gamma = 1.0
         self.radius = self.segmentLength
         
     def init(self, start, goal, costFunc):
-        super(RRG, self).init(start, goal)
+        super(kRRG, self).init(start, goal)
         self.costFunc = costFunc
         self.root.cost = self.costFunc(self.root, None)
         
@@ -36,7 +36,7 @@ class RRG(RRT):
                 self.addEdge(nearest_node, new_node)
                 self.addEdge(new_node, nearest_node)
                 
-                near_node_list = self.findNearVertices(new_node.pos)
+                near_node_list = self.findNearVertices(new_node.pos, self.nearNodeNum)
                 for near_node in near_node_list:
                     if near_node != new_node:
                         if True == self.isObstacleFree(near_node.pos, new_node.pos):
@@ -51,18 +51,18 @@ class RRG(RRT):
         self.radius = np.power( ( self.gamma * np.log(float(vertexNum+1)) / (float(vertexNum+1)) ) ,  1.0/self.dimension) 
         #self.radius = np.min([self.radius , self.segmentLength])
         
-        self.radius = 400
         return self.radius                
                 
-    def findNearVertices(self, pos):
+    def findNearVertices(self, pos, num):
         node_list = []
-        #results = self.kdtree_root.search_knn(pos, num)
-        
+        results = self.kdtree_root.search_knn(pos, num)
+        '''
         self.calcRadius()
-        #print self.radius
+        print self.radius
         results = self.kdtree_root.search_nn_dist(pos, self.radius)
         for res in results:
-        #for res, dist in results:
+        '''
+        for res, dist in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
             node_list.append(res.ref)

@@ -18,7 +18,7 @@ if __name__ == '__main__':
     
     planner = RRTstarPlanner([600,400], 10, calcDist) 
 
-    path = planner.findPath([40,40], [500, 40], 1000)
+    path = planner.findPath([40,40], [500, 40], 10000)
     print path
     
     import pygame.image

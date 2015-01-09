@@ -29,7 +29,7 @@ class RRTstar(RRG):
                 
                 min_node = nearest_node
                 
-                near_node_list = self.findNearVertices(new_node.pos, self.nearNodeNum)
+                near_node_list = self.findNearVertices(new_node.pos)
                 
                 for near_node in near_node_list:
                     if True == self.isObstacleFree(near_node.pos, new_node.pos):
