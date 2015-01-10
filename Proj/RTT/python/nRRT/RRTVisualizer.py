@@ -39,6 +39,7 @@ class RRTVisualizer(object):
                 else:
                     self.dispMap = True
             
+        self.screen.fill((255,255,255))    
         if self.dispMap==True:
             if self.mapImg != None:
                 self.screen.blit(self.mapImg,(0,0))

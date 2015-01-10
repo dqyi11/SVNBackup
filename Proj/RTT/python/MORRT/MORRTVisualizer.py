@@ -64,6 +64,7 @@ class MORRTVisualizer(object):
             if self.pathIdx >= len(self.activePaths):
                 self.pathIdx = 0
             
+        self.screen.fill((255,255,255))       
         if self.objImgs[self.currImgs] != None:
             self.screen.blit(self.objImgs[self.currImgs],(0,0))
                 
