@@ -30,7 +30,7 @@ class MORRTstar(object):
         
         self.nearNodeNum = 6
         self.gamma = 1.0
-        self.radius = self.segmentLength
+        self.radius = 400
         
         self.referenceTrees = []
         self.subTrees = []
@@ -108,7 +108,7 @@ class MORRTstar(object):
             
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 
-                near_poses_list, near_nodes_list = self.findNearVertices(new_pos, self.nearNodeNum)
+                near_poses_list, near_nodes_list = self.findNearVertices(new_pos)
                 
                 new_node_list = []
                 
@@ -141,11 +141,12 @@ class MORRTstar(object):
                 self.connected_pos = nearest_pos
                 
             
-    def findNearVertices(self, pos, num):
+    def findNearVertices(self, pos):
         pos_list = []
         node_list = []
-        results = self.kdtree_root.search_knn(pos, num)
-        for res, dist in results:
+        results = self.kdtree_root.search_nn_dist(pos, self.radius)
+
+        for res in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
             node_list.append(res.ref)
