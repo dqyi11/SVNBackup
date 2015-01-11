@@ -39,7 +39,7 @@ class MOkRRTstarPlanner(object):
             self.mokrrts.extend()
             self.mokrrts_viz.update()
                 
-        paths = self.morrts.findPaths()
+        paths = self.mokrrts.findPaths()
         
         self.mokrrts_viz.activePaths = paths
         
