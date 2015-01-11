@@ -33,11 +33,14 @@ class RRTVisualizer(object):
     def update(self):
         
         for e in pygame.event.get():
-            if e.type == KEYUP:
-                if self.dispMap==True:
-                    self.dispMap = False
-                else:
-                    self.dispMap = True
+            if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
+                sys.exit("Leaving because you requested it.")
+            elif e.type == KEYDOWN:
+                if e.key == pygame.K_UP:
+                    if self.dispMap==True:
+                        self.dispMap = False
+                    else:
+                        self.dispMap = True
             
         self.screen.fill((255,255,255))    
         if self.dispMap==True:

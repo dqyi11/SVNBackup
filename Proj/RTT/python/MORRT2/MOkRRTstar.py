@@ -7,9 +7,9 @@ Created on Jan 3, 2015
 from kdtree import *
 import numpy as np
 from scipy.misc import imread
-from SubRRTstar import *
+from SubkRRTstar import *
 
-class MORRTstar(object):
+class MOkRRTstar(object):
 
     def __init__(self, sampling_range, segment_length, objective_num, subproblem_num):
         self.sampling_width = sampling_range[0]
@@ -30,8 +30,7 @@ class MORRTstar(object):
         
         self.nearNodeNum = 6
         self.gamma = 1.0
-        #self.radius = self.segmentLength
-        self.radius = 400
+        self.radius = self.segmentLength
         
         self.referenceTrees = []
         self.subTrees = []
@@ -45,7 +44,7 @@ class MORRTstar(object):
         
         rnodes = []
         for k in range(self.objectiveNum):
-            reftree = RefTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
+            reftree = RefkTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, k)
             weight = np.zeros(self.objectiveNum)
             weight[k] = 1.0
             reftree.init(start, goal, self.costFuncs, weight)
@@ -56,7 +55,7 @@ class MORRTstar(object):
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum + k)
+            subtree = SubkTree(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum + k)
             subtree.init(start, goal, self.costFuncs, self.weights[k])
             subtree.root = RRTNode(start, self.objectiveNum)
             subtree.nodes.append(subtree.root)
@@ -109,7 +108,7 @@ class MORRTstar(object):
             
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 
-                near_poses_list, near_nodes_list = self.findNearVertices(new_pos)
+                near_poses_list, near_nodes_list = self.findNearVertices(new_pos, self.nearNodeNum)
                 
                 new_node_list = []
                 
@@ -152,11 +151,11 @@ class MORRTstar(object):
         return refCost
                 
             
-    def findNearVertices(self, pos):
+    def findNearVertices(self, pos, num):
         pos_list = []
         node_list = []
-        results = self.kdtree_root.search_nn_dist(pos, self.radius)
-        for res in results:
+        results = self.kdtree_root.search_knn(pos, num)
+        for res, dist in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
             node_list.append(res.ref)

@@ -47,7 +47,9 @@ class MORRTVisualizer(object):
         
     def update(self):
         for e in pygame.event.get():
-            if e.type == KEYDOWN:
+            if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
+                sys.exit("Leaving because you requested it.")
+            elif e.type == KEYDOWN:
                 if e.key == pygame.K_UP:
                     self.currIdx += 1
                 elif e.key == pygame.K_DOWN:
