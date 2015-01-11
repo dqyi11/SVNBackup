@@ -104,6 +104,8 @@ class ChildTree(object):
 
     
     def addEdge(self, node_p, node_c):
+        if node_p == node_c:
+            return False
         for c_a in node_p.children:
             if c_a == node_c:
                 return False

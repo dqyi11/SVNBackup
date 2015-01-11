@@ -48,23 +48,35 @@ class MORRTVisualizer(object):
     def update(self):
         for e in pygame.event.get():
             if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
-                sys.exit("Leaving because you requested it.")
+                sys.exit("Quit it.")
             elif e.type == KEYDOWN:
                 if e.key == pygame.K_UP:
                     self.currIdx += 1
                 elif e.key == pygame.K_DOWN:
-                    self.currImgs += 1
+                    self.currIdx -= 1
+                elif e.key == pygame.K_LEFT:
+                    self.pathIdx -= 1
                 elif e.key == pygame.K_RIGHT:
                     self.pathIdx += 1
+                elif e.key == pygame.K_p:
+                    self.currImgs += 1
+                elif e.key == pygame.K_o:
+                    self.currImgs -= 1
                 elif e.key == pygame.K_s:
                     pygame.image.save(self.screen, self.name+"-"+str(self.pathIdx)+".png")
-            
-            if self.currIdx >= self.totalIdx:
+        
+            if self.currIdx < 0:
+                self.currIdx = self.totalIdx-1
+            elif self.currIdx >= self.totalIdx:
                 self.currIdx = 0
-            if self.currImgs >= len(self.objImgs):
+            if self.currImgs < 0:
+                self.currImgs = len(self.objImgs)-1
+            elif self.currImgs >= len(self.objImgs):
                 self.currImgs = 0
-            if self.pathIdx >= len(self.activePaths):
-                self.pathIdx = 0
+            if self.pathIdx < 0:
+                self.pathIdx = len(self.activePaths)-1
+            elif self.pathIdx >= len(self.activePaths):
+                self.pathIdx = 0        
         
         self.screen.fill((255,255,255))       
         if self.objImgs[self.currImgs] != None:
