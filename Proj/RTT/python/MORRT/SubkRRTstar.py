@@ -124,8 +124,20 @@ class SubkRRTstar(object):
                 return True
         return False
 
+    def hasEdge(self, node_p, node_c):
+        if node_p == None or node_c == None:
+            return False
+        for c in node_p.children:
+            if c == node_c:
+                return True
+        return False
+
     
     def addEdge(self, node_p, node_c):
+        if node_p == node_c:
+            return False
+        if self.hasEdge(node_p, node_c):
+            return True
         for c_a in node_p.children:
             if c_a == node_c:
                 return False

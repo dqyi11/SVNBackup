@@ -75,7 +75,7 @@ if __name__ == '__main__':
     planner.morrts_viz.setName('MORRTstar00')
     planner.morrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 2000)
+    paths = planner.findPaths([40,40], [500, 40], 5000)
     print paths
     
     #import pygame.image

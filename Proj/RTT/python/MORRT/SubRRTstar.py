@@ -117,6 +117,7 @@ class SubRRTstar(object):
     def removeEdge(self, node_p, node_c):
         if node_p == None:
             return False
+
         for c_a in node_p.children:
             if c_a == node_c:
                 node_p.children.remove(c_a)
@@ -146,12 +147,15 @@ class SubRRTstar(object):
         return True
                           
     def findPath(self, nearest_to_goal):
+        print "Tree: " + str(self.tree_idx) + " " + str(nearest_to_goal.pos)
+         
         path = []
                
         node_list = []
         curr_node = nearest_to_goal
         node_list.append(curr_node)
         while curr_node != self.root:
+            print curr_node.parent.pos
             curr_node = curr_node.parent
             node_list.append(curr_node)
             
