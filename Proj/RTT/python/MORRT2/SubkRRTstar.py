@@ -89,6 +89,8 @@ class ChildkTree(object):
                   
     def updateCostToChildren(self, node, delta_cost):
         node.cost = node.cost - delta_cost
+        refCost = self.parent.getReferenceCost(node.pos)
+        node.fitness = self.calcFitness(node.cost, refCost)
         for cn in node.children:
             self.updateCostToChildren(cn, delta_cost)  
                                                    
