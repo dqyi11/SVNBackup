@@ -4,7 +4,7 @@ Created on Jan 4, 2015
 @author: daqing_yi
 '''
 
-from MORRTstarPlanner import *
+from MOkRRTstarPlanner import *
 from scipy.misc import imread
 import time
 import numpy as np
@@ -70,16 +70,13 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist   
     
-    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 30) 
+    planner = MOkRRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40) 
     
-    planner.morrts_viz.setName('MORRTstar00')
-    planner.morrts_viz.loadObj([FIT_FILE])
+    planner.mokrrts_viz.setName('MORRTstar00')
+    planner.mokrrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 100)
+    paths = planner.findPaths([40,40], [500, 40], 1000)
     print paths
-    
-    #import pygame.image
-    #pygame.image.save(planner.morrts_viz.screen, 'MORRTstar00.png')
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
     evaluator.load(paths)
@@ -88,4 +85,4 @@ if __name__ == '__main__':
     print evaluator.scores
     
     while True:
-        planner.morrts_viz.update()
+        planner.mokrrts_viz.update()

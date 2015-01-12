@@ -37,8 +37,8 @@ class MORRTstar(object):
         self.subTrees = []
         
     def init(self, start, goal, costFuncs, weights):
-        self.start = start
-        self.goal = goal
+        self.start = np.array(start)
+        self.goal = np.array(goal)
         
         self.costFuncs = costFuncs
         self.weights = weights
@@ -49,9 +49,6 @@ class MORRTstar(object):
             weight = np.zeros(self.objectiveNum)
             weight[k] = 1.0
             reftree.init(start, goal, self.costFuncs, weight)
-            reftree.root = RRTNode(start, self.objectiveNum)
-            reftree.nodes.append(reftree.root)
-            reftree.root.cost = reftree.calcCost(reftree.root, None)
             self.referenceTrees.append(reftree)
             rnodes.append(reftree.root)
             
@@ -85,8 +82,8 @@ class MORRTstar(object):
         delta = delta * scale
             
         new_pos = np.zeros(self.dimension)
-        new_pos[0] = pos_b[0] + int(delta[0])
-        new_pos[1] = pos_b[1] + int(delta[1])
+        new_pos[0] = pos_b[0] + delta[0]
+        new_pos[1] = pos_b[1] + delta[1]
         return new_pos
     
     def sampling(self):
@@ -122,7 +119,7 @@ class MORRTstar(object):
                 for k in range(self.subproblemNum):
                     new_node = self.subTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
-                    
+
                 self.kdtree_root.add(new_pos, new_node_list)
                 
                 # attach new node to reference trees

@@ -11,7 +11,9 @@ import numpy as np
 class RRTNode(object):
     
     def __init__(self, pos, objective_num):
-        self.pos = pos
+        self.pos = np.zeros(2)
+        self.pos[0] = pos[0]
+        self.pos[1] = pos[1]
         self.parent = None
         self.children = []
         self.objectiveNum = objective_num

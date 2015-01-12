@@ -32,18 +32,18 @@ class MOkRRTstarPlanner(object):
             
     def findPaths(self, start, goal, iterationNum):
         
-        self.morrts.init(start, goal, self.costFuncs, self.weights)
+        self.mokrrts.init(start, goal, self.costFuncs, self.weights)
 
         for it in range(iterationNum):
             print "Iter@" + str(it)
-            self.morrts.extend()
-            self.morrts_viz.update()
+            self.mokrrts.extend()
+            self.mokrrts_viz.update()
                 
         paths = self.morrts.findPaths()
         
-        self.morrts_viz.activePaths = paths
+        self.mokrrts_viz.activePaths = paths
         
-        self.morrts_viz.update()
+        self.mokrrts_viz.update()
         
         return paths
             
