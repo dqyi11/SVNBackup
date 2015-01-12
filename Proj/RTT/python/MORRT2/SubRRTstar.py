@@ -97,13 +97,16 @@ class ChildTree(object):
     def removeEdge(self, node_p, node_c):
         if node_p == None:
             return False
+        
+        node_c.parent = None
+        removed = False
         for c_a in node_p.children:
             if c_a == node_c:
                 node_p.children.remove(c_a)
                 c_a.parent = None
-                return True
-        return False
-
+                removed = True
+        return removed
+    
     def hasEdge(self, node_p, node_c):
         if node_p == None or node_c == None:
             return False
@@ -112,15 +115,13 @@ class ChildTree(object):
                 return True
         return False
 
-    
     def addEdge(self, node_p, node_c):
         if node_p == node_c:
             return False
         if self.hasEdge(node_p, node_c):
+            node_c.parent = node_p
             return True
-        for c_a in node_p.children:
-            if c_a == node_c:
-                return False
+
         node_p.children.append(node_c)
         node_c.parent = node_p
         return True
@@ -168,7 +169,7 @@ class RefTree(ChildTree):
         
         for near_node_list in near_nodes_list:
             near_node = near_node_list[self.tree_idx]
-            if near_node == new_node:
+            if near_node == new_node or near_node == self.root:
                 continue
             
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
@@ -212,7 +213,7 @@ class SubTree(ChildTree):
         
         for near_node_list in near_nodes_list:
             near_node = near_node_list[self.tree_idx]
-            if near_node == new_node:
+            if near_node == new_node or near_node == self.root:
                 continue
             
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
