@@ -36,8 +36,8 @@ class MORRTstar(object):
         self.subTrees = []
         
     def init(self, start, goal, costFuncs, weights):
-        self.start = start
-        self.goal = goal
+        self.start = np.array(start)
+        self.goal = np.array(goal)
         
         self.costFuncs = costFuncs
         self.weights = weights
@@ -48,18 +48,12 @@ class MORRTstar(object):
             weight = np.zeros(self.objectiveNum)
             weight[k] = 1.0
             reftree.init(start, goal, self.costFuncs, weight)
-            reftree.root = RRTNode(start)
-            reftree.nodes.append(reftree.root)
-            reftree.root.cost = reftree.calcCost(reftree.root, None)
             self.referenceTrees.append(reftree)
             rnodes.append(reftree.root)
             
         for k in range(self.subproblemNum):
-            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum + k)
+            subtree = SubRRTstar(self, [self.sampling_width, self.sampling_height], self.segmentLength, self.objectiveNum, self.objectiveNum+k)
             subtree.init(start, goal, self.costFuncs, self.weights[k])
-            subtree.root = RRTNode(start)
-            subtree.nodes.append(subtree.root)
-            subtree.root.cost = subtree.calcCost(subtree.root, None)
             self.subTrees.append(subtree)
             rnodes.append(subtree.root)
         
@@ -84,8 +78,8 @@ class MORRTstar(object):
         delta = delta * scale
             
         new_pos = np.zeros(self.dimension)
-        new_pos[0] = pos_b[0] + int(delta[0])
-        new_pos[1] = pos_b[1] + int(delta[1])
+        new_pos[0] = pos_b[0] + delta[0]
+        new_pos[1] = pos_b[1] + delta[1]
         return new_pos
     
     def sampling(self):
@@ -121,7 +115,7 @@ class MORRTstar(object):
                 for k in range(self.subproblemNum):
                     new_node = self.subTrees[k].createNewNode(new_pos)
                     new_node_list.append(new_node)
-                    
+
                 self.kdtree_root.add(new_pos, new_node_list)
                 
                 # attach new node to reference trees
@@ -136,7 +130,6 @@ class MORRTstar(object):
                     self.subTrees[k].attachNewNode(new_node_list[k+self.objectiveNum], nearest_node_list, near_nodes_list)
                     self.subTrees[k].rewireNearNodes(new_node_list[k+self.objectiveNum], near_nodes_list)
 
-                
                 self.new_pos = new_pos
                 self.connected_pos = nearest_pos
                 
@@ -154,9 +147,9 @@ class MORRTstar(object):
         return pos_list, node_list       
     
     def findNearestNeighbor(self, pos):
-        results = self.kdtree_root.search_nn(pos)
+        results, dist = self.kdtree_root.search_nn(pos)
         #print results[0], results[0].ref
-        return results[0].data, results[0].ref
+        return results.data, results.ref
     
     def isConnectableToGoal(self, pos):
         dist = np.sqrt((pos[0]-self.goal[0])**2+(pos[1]-self.goal[1])**2)

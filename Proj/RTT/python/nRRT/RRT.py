@@ -64,8 +64,8 @@ class RRT(object):
         delta = delta * scale
             
         new_pos = np.zeros(self.dimension)
-        new_pos[0] = pos_b[0] + int(delta[0])
-        new_pos[1] = pos_b[1] + int(delta[1])
+        new_pos[0] = pos_b[0] + delta[0]
+        new_pos[1] = pos_b[1] + delta[1]
         return new_pos
         
     def extend(self):

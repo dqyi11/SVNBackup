@@ -32,6 +32,8 @@ class RRTVisualizer(object):
     def update(self):
         
         for e in pygame.event.get():
+            if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
+                sys.exit("Quit it.")
             if e.type == KEYDOWN:
                 if e.key == pygame.K_UP:
                     if self.dispMap==True:
@@ -39,6 +41,7 @@ class RRTVisualizer(object):
                     else:
                         self.dispMap = True
             
+        self.screen.fill((255,255,255))
         if self.dispMap==True:
             if self.mapImg != None:
                 self.screen.blit(self.mapImg,(0,0))
@@ -49,11 +52,17 @@ class RRTVisualizer(object):
         for n in self.rrt.nodes:
             for c in n.children:
                 #print str(n.pos) + "-" + str(c.pos)
-                pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
-        pygame.draw.circle(self.screen, (255,0,0), self.rrt.start, 5)
-        pygame.draw.circle(self.screen, (0,0,255), self.rrt.goal, 5)
+                n_pos = (int(n.pos[0]), int(n.pos[1]))
+                c_pos = (int(c.pos[0]), int(c.pos[1]))
+                pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
+        start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
+        goal = (int(self.rrt.start[0]), int(self.rrt.goal[1]))
+        pygame.draw.circle(self.screen, (255,0,0), start, 5)
+        pygame.draw.circle(self.screen, (0,0,255), goal, 5)
         if self.rrt.new_node != None and self.rrt.connected_node != None:
-            pygame.draw.line(self.screen, (200,128,0), self.rrt.new_node, self.rrt.connected_node)
+            new_node = (int(self.rrt.new_node[0]), int(self.rrt.new_node[1]))
+            connected_node = (int(self.rrt.connected_node[0]), int(self.rrt.connected_node[1]))
+            pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
             
         if self.activePath != None:
             pathLen = len(self.activePath)

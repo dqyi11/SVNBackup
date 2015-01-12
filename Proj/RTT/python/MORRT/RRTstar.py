@@ -76,8 +76,8 @@ class RRTstar(object):
         delta = delta * scale
             
         new_pos = np.zeros(self.dimension)
-        new_pos[0] = pos_b[0] + int(delta[0])
-        new_pos[1] = pos_b[1] + int(delta[1])
+        new_pos[0] = pos_b[0] + delta[0]
+        new_pos[1] = pos_b[1] + delta[1]
         return new_pos
     
     def sampling(self):
@@ -107,7 +107,7 @@ class RRTstar(object):
                 
                 min_node = nearest_node
                 
-                near_node_list = self.findNearVertices(new_node.pos, self.nearNodeNum)
+                near_node_list = self.findNearVertices(new_node.pos)
                 
                 for near_node in near_node_list:
                     if True == self.isObstacleFree(near_node.pos, new_node.pos):
@@ -132,10 +132,11 @@ class RRTstar(object):
                             self.addEdge(new_node, near_node)
                             self.updateCostToChildren(near_node, delta_cost)
             
-    def findNearVertices(self, pos, num):
+    def findNearVertices(self, pos):
         node_list = []
-        results = self.kdtree_root.search_knn(pos, num)
-        for res, dist in results:
+        results = self.kdtree_root.search_nn_dist(pos, self.radius)
+
+        for res in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
                 continue
             node_list.append(res.ref)

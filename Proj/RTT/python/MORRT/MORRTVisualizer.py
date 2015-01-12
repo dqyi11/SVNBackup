@@ -64,7 +64,7 @@ class MORRTVisualizer(object):
                     self.currImgs -= 1
                 elif e.key == pygame.K_s:
                     pygame.image.save(self.screen, self.name+"-"+str(self.pathIdx)+".png")
-            
+        
             if self.currIdx < 0:
                 self.currIdx = self.totalIdx-1
             elif self.currIdx >= self.totalIdx:
@@ -76,8 +76,8 @@ class MORRTVisualizer(object):
             if self.pathIdx < 0:
                 self.pathIdx = len(self.activePaths)-1
             elif self.pathIdx >= len(self.activePaths):
-                self.pathIdx = 0
-            
+                self.pathIdx = 0        
+        
         self.screen.fill((255,255,255))       
         if self.objImgs[self.currImgs] != None:
             self.screen.blit(self.objImgs[self.currImgs],(0,0))
@@ -87,24 +87,33 @@ class MORRTVisualizer(object):
             disp_idx = self.currIdx - self.morrt.objectiveNum
             for n in self.morrt.subTrees[disp_idx].nodes:
                 for c in n.children:
-                    pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
+                    n_pos = (int(n.pos[0]), int(n.pos[1]))
+                    c_pos = (int(c.pos[0]), int(c.pos[1]))
+                    pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
         else:
             disp_idx = self.currIdx
             for n in self.morrt.referenceTrees[disp_idx].nodes:
                 for c in n.children:
-                    pygame.draw.line(self.screen, (128,200,0), n.pos, c.pos)
+                    n_pos = (int(n.pos[0]), int(n.pos[1]))
+                    c_pos = (int(c.pos[0]), int(c.pos[1]))
+                    pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
 
-                    
-        pygame.draw.circle(self.screen, (255,0,0), self.morrt.start, 5)
-        pygame.draw.circle(self.screen, (0,0,255), self.morrt.goal, 5)
+        start = (int(self.morrt.start[0]), int(self.morrt.start[1]))
+        goal = (int(self.morrt.goal[0]), int(self.morrt.goal[1]))
+        pygame.draw.circle(self.screen, (255,0,0), start, 5)
+        pygame.draw.circle(self.screen, (0,0,255), goal, 5)
         if self.morrt.new_pos != None and self.morrt.connected_pos != None:
-            pygame.draw.line(self.screen, (200,128,0), self.morrt.new_pos, self.morrt.connected_pos)
+            new_pos = (int(self.morrt.new_pos[0]), int(self.morrt.new_pos[1]))
+            connected_pos = (int(self.morrt.connected_pos[0]),int(self.morrt.connected_pos[1]))
+            pygame.draw.line(self.screen, (200,128,0), new_pos, connected_pos)
             
         if len(self.activePaths) > 0:
             ap = self.activePaths[self.pathIdx]
             pathLen = len(ap)
             for i in range(0, pathLen-1, 1):
-                pygame.draw.line(self.screen, (255, 160, 0), ap[i], ap[i+1], 2)
+                app = (int(ap[i][0]), int(ap[i][1]))
+                app_n = (int(ap[i+1][0]), int(ap[i+1][1]))
+                pygame.draw.line(self.screen, (255, 160, 0), app, app_n, 2)
         
         '''
         for e in pygame.event.get():
