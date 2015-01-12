@@ -220,7 +220,8 @@ class SubkTree(ChildkTree):
                 
                 temp_cost_from_new_node = new_node.cost + self.calcCost(new_node.pos, near_node.pos)
                 delta_cost = near_node.cost - temp_cost_from_new_node
-                delta_fitness = self.calcFitness(near_node.cost, self.parent.getReferenceCost(near_node.pos)) - self.calcFitness(temp_cost_from_new_node, self.parent.getReferenceCost(near_node.pos))
+                refCost = self.parent.getReferenceCost(near_node.pos)
+                delta_fitness = self.calcFitness(near_node.cost, refCost) - self.calcFitness(temp_cost_from_new_node, refCost)
                 
                 if delta_fitness > 0:
                     parent_node = near_node.parent

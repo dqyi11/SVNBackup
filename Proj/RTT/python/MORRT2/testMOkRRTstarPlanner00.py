@@ -72,10 +72,10 @@ if __name__ == '__main__':
     
     planner = MOkRRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40) 
     
-    planner.mokrrts_viz.setName('MORRTstar00')
+    planner.mokrrts_viz.setName('MOkRRTstar00')
     planner.mokrrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 1000)
+    paths = planner.findPaths([40,40], [500, 40], 4000)
     print paths
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
