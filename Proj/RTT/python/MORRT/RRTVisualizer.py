@@ -56,7 +56,7 @@ class RRTVisualizer(object):
                 c_pos = (int(c.pos[0]), int(c.pos[1]))
                 pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
         start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
-        goal = (int(self.rrt.start[0]), int(self.rrt.goal[1]))
+        goal = (int(self.rrt.goal[0]), int(self.rrt.goal[1]))
         pygame.draw.circle(self.screen, (255,0,0), start, 5)
         pygame.draw.circle(self.screen, (0,0,255), goal, 5)
         if self.rrt.new_node != None and self.rrt.connected_node != None:

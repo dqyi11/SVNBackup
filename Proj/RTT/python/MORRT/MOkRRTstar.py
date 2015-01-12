@@ -204,7 +204,7 @@ class MOkRRTstar(object):
                     break
 
         return obsFree
-
+    
     def isInObstacle(self, pos):
         return False
                             

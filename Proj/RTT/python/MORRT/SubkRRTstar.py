@@ -75,6 +75,7 @@ class SubkRRTstar(object):
         for near_node_list in near_nodes_list:
             near_node = near_node_list[self.tree_idx]
             if True == self.parent.isObstacleFree(near_node.pos, new_node.pos):
+                
                 c = near_node.cost + self.calcCost(near_node.pos, new_node.pos)
                 if c < min_new_node_cost:
                     min_node = near_node

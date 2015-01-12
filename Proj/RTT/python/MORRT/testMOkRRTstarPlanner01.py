@@ -68,12 +68,14 @@ if __name__ == '__main__':
         if referencePos==None:
             return dist
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
-        return dist   
+        return dist
     
-    planner = MOkRRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40) 
+    MAP_FILE = './map.png'
     
-    planner.mokrrts_viz.setName('MOkRRTstar00')
-    planner.mokrrts_viz.loadObj([FIT_FILE])
+    planner = MOkRRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40, MAP_FILE) 
+    
+    planner.mokrrts_viz.setName('MOkRRTstar01')
+    planner.mokrrts_viz.loadObj([MAP_FILE, FIT_FILE])
 
     paths = planner.findPaths([40,40], [500, 40], 1000)
     print paths

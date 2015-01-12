@@ -28,6 +28,9 @@ class MOkRRTstarPlanner(object):
                 weight[0] = float(i) / self.subproblemNum
                 weight[1] = float(self.subproblemNum - i) / self.subproblemNum
             self.weights.append(weight)
+        
+        if self.mapFile != None:
+            self.mokrrts.loadMap(self.mapFile)
 
             
     def findPaths(self, start, goal, iterationNum):
