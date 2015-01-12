@@ -37,7 +37,6 @@ class MORRTVisualizer(object):
     def setName(self, name):
         self.name = name
     
-        
     def loadObj(self, objFiles):    
         for obj in objFiles:
             self.objImgs.append(pygame.image.load(obj))

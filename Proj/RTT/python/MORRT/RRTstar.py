@@ -81,14 +81,12 @@ class RRTstar(object):
         return new_pos
     
     def sampling(self):
-        while True:
-            rndPos = np.random.random(self.dimension)
-            rndPos[0] = rndPos[0]*self.sampling_width
-            rndPos[1] = rndPos[1]*self.sampling_height
-            
-            if False == self.isInObstacle(rndPos):
-                return rndPos
-        return None
+        rndPos = np.random.random(self.dimension)
+        rndPos[0] = rndPos[0]*self.sampling_width
+        rndPos[1] = rndPos[1]*self.sampling_height
+        
+        return rndPos
+
         
     def extend(self):
         new_node = None
@@ -97,6 +95,8 @@ class RRTstar(object):
             nearest_node = self.findNearestNeighbor(rndPos)
             
             new_pos = self.steer(rndPos, nearest_node.pos)
+            if self.isInObstacle(new_pos):
+                continue
             
             if True == self.isObstacleFree(nearest_node.pos, new_pos):
                 new_node = RRTNode(new_pos)
@@ -178,7 +178,6 @@ class RRTstar(object):
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
                 if self.bitmap[int(coordY),int(coordX)] < 255: 
                     obsFree = False
-                if obsFree == False:
                     break
         else:
             k = x_dist/y_dist
@@ -196,7 +195,6 @@ class RRTstar(object):
                 if coordY >= self.sampling_height or coordX >= self.sampling_width: break
                 if self.bitmap[int(coordY),int(coordX)] < 255: 
                     obsFree = False
-                if obsFree == False:
                     break
 
         return obsFree
