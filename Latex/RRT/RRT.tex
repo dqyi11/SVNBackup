@@ -210,8 +210,8 @@ Especially, when the reference paths changed, how to update the Cost of each lin
 \EndIf
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+\For{ \textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
 \State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
 \State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
 \State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
@@ -225,6 +225,24 @@ Especially, when the reference paths changed, how to update the Cost of each lin
 \end{algorithm}
 
 \section{Theoretic analysis}
+
+\begin{itemize}
+	\item \emph{Reference tree}
+	\item \emph{Subproblem tree}
+\end{itemize}
+The \emph{reference trees} are mutually independent. 
+The \emph{subproblem trees} are mutually independent,  but depend on the \emph{reference trees}.
+
+When a new node is added to a reference tree, there exists no influence to the subproblem tree.
+When the 
+
+\begin{itemize}
+	\item \textbf{Lemma} The reference trees converge to the optimal
+	\item \textbf{Lemma} The subproblem trees convege to the optimal of the subproblem
+\end{itemize}
+
+
+
 
 \bibliography{reference}
 \bibliographystyle{plain}
