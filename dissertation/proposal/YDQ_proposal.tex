@@ -1,0 +1,172 @@
+\documentclass[phd]{byuprop}
+% Options for this class include the following (* indicates default):
+%
+%   10pt -- 10 point font size
+%   11pt -- 11 point font size
+%   12pt (*) -- 12 point font size
+%
+%   ms -- produce a thesis proposal (off)
+%   areaexam -- produce a research area overview (off)
+%   phd -- produce a dissertation proposal (off)
+%
+%   singlespacing -- single-spaced lines
+%   doublespacing -- double-spaced lines
+%
+%   layout -- show layout lines on the pages, helps with overfull boxes (off)
+%   grid -- show a half-inch grid on every page, helps with printing (off)
+
+
+% This command fixes my particular printer, which starts 0.03 inches too low,
+% shifting the whole page down by that amount.  This shifts the document
+% content up so that it comes out right when printed.
+%
+% Discovering this sort of behavior is best done by specifying the ``grid''
+% option in the class parameters above.  It prints a 1/2 inch grid on every
+% page.  You can then use a ruler to determine exactly what the printer is
+% doing.
+%
+% Uncomment to shift content up (accounting for printer problems)
+%\setlength{\voffset}{-.03in}
+
+% Here we set things up for invisible hyperlinks in the document.  This makes
+% the electronic version clickable without changing the way that the document
+% prints.  It's useful, but optional.  Note that if you use latex instead of
+% pdflatex, you should change "pdftex" to "ps2pdf".
+\usepackage[
+    pdftex,
+    bookmarks=true,
+    breaklinks=true,
+    raiselinks=true,
+    pdfborder={0 0 0},
+    colorlinks=false,
+    ]{hyperref}
+
+% Rewrite the itemize, description, and enumerate environments to have more
+% reasonable spacing:
+\newcommand{\ItemSep}{\itemsep 0pt}
+\let\oldenum=\enumerate
+\renewcommand{\enumerate}{\oldenum \ItemSep}
+\let\olditem=\itemize
+\renewcommand{\itemize}{\olditem \ItemSep}
+\let\olddesc=\description
+\renewcommand{\description}{\olddesc \ItemSep}
+
+% Get a little less fussy about word spacing on a line.  Sometimes produces
+% ugly results, so keep your eyes peeled.
+\sloppy
+
+% Important settings for the byuprop class. %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Because I use these things in more than one place, I created new commands for
+% them.  I did not use \providecommand because I absolutely want LaTeX to error
+% out if these already exist.
+\newcommand{\Title}{Sampling-based Multi-objective motion planning}
+\newcommand{\Author}{Daqing Yi}
+\newcommand{\SubmissionMonth}{April}
+\newcommand{\SubmissionYear}{2015}
+
+% Take these from the commands defined above
+\title{\Title}
+\author{\Author}
+\monthsubmitted{\SubmissionMonth}
+\yearsubmitted{\SubmissionYear}
+
+% Committee members
+\committeechair{Michael~A.~Goodrich}
+\committeemembera{Kevin~D.~Seppi}
+\committeememberb{Randy~W.~Beard}
+\committeememberc{Mark~J.~Clement}
+\committeememberd{Parris~K.~Egbert}
+
+% Department graduate coordinator
+\graduatecoordinator{Quinn~Snell}
+
+\documentabstract{%
+% The proposal abstract should be 1 to 2 paragraphs.
+This document is an example of how to use the byuprop {\LaTeX} class file.  The class creates Ph.D. and Master's documents equally well, producing all appropriate preamble content and adhering precisely to the minimum formatting requirements.
+
+Note that there is a blank line between paragraphs, here.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Set up the internal PDF information so that it becomes part of the document
+% metadata.  The pdfinfo command will display this. Be sure to set the document
+% type and add your own keywords.
+\hypersetup{%
+    pdftitle=\Title,%
+    pdfauthor=\Author,%
+    pdfsubject={Document Type, BYU CS Department: %
+                Submitted \SubmissionMonth~\SubmissionYear, Created \today},%
+    pdfkeywords={},%
+}
+
+% These packages allow the bibliography to be sorted alphabetically and allow references to more than one paper to be sorted and compressed (i.e. instead of [5,2,4,6] you get [2,4-6])
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+
+% Additional packages required for your specific thesis go here. I've left some I use as examples.
+\usepackage{graphicx}
+\usepackage{pdfsync}
+
+\begin{document}
+
+% Produce the preamble
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+% 1-2 pages
+% Answers:
+% 1) What problem do you want to solve?
+% 2) Who cares about this problem and why?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Research Area Overview}
+% Research Area Overview
+% Describes the broad research area (citing the 20 most important papers)
+% Should be about 3 pages and may be in the Introduction or Related Work
+% sections or may be an appendix.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Research-Related Work}
+% Related Work
+% 1-2 pages
+% Answers:
+% 3) What have others done to solve this problem and why is this inadequate?
+%    (only a small overlap with the area exam from the introduction)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thesis Statement}
+% 1 to 2 sentences
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Project Description}
+% about 6-8 pages
+% Answers:
+% 4) What is your proposed solution to this problem?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Validation}
+% 1-2 pages
+% Answers:
+% 5) How can you demonstrate that this is a good solution?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Thesis Schedule}
+% about 1/2 page
+% specifying dates for completion of major milestones, including potential
+% papers and their submission dates
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Change these to reflect the bibliography style and bibtex database file you want to use
+\bibliographystyle{}
+\bibliography{}
+
+\end{document}
