@@ -140,7 +140,6 @@ class MOkRRTstar(object):
                 self.connected_pos = nearest_pos
                 
     def getReferenceCost(self, pos):
-        
         refCost = np.zeros(self.objectiveNum)
         result, dist = self.kdtree_root.search_nn(pos)
         
@@ -149,7 +148,6 @@ class MOkRRTstar(object):
                 refCost[k] = result.ref[k].fitness
                 
         return refCost
-                
             
     def findNearVertices(self, pos, num):
         pos_list = []

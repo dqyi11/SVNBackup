@@ -109,7 +109,6 @@ class MORRTstar(object):
                 near_poses_list, near_nodes_list = self.findNearVertices(new_pos)
                 
                 new_node_list = []
-                
                 # create new nodes of reference trees 
                 for k in range(self.objectiveNum):
                     new_node = self.referenceTrees[k].createNewNode(new_pos)
