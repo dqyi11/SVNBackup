@@ -50,7 +50,7 @@
 		%\normalfont \normalsize \textsc{CS660 - Computer Networks} \\ [25pt]
 		\normalfont
 		\horrule{0.5pt} \\[0.4cm]
-		\huge MORRT$^{*}$ : Sampling-Based Multi-Objective Motion Planning \\
+		\huge MORRF$^{*}$ : Sampling-Based Multi-Objective Motion Planning \\
 		\horrule{2pt} \\[0.5cm]
 }
 \author{
@@ -68,10 +68,9 @@
 
 \section{Related works}
 
-\section{MORRT$^{*}$}
+\section{MORRF$^{*}$}
 
 \subsection{Decomposition based multi-objective optimization}
-
 
 
 \begin{thm}
@@ -98,6 +97,14 @@ Like all the sampling-based optimization, the random positions are uniformly sam
 It means that all the tree have equivalent vertices constructed from same positions set sequentially.
 But they are connected by different measurements of the costs, either a single objective or a cost from subproblem definition.
 The edges of the trees can be different.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/MORRTstar}
+\caption{Rapidly Exploring Process}
+\label{fig:MORRTstar}
+\end{figure}
+
 
 \begin{algorithm}
 \begin{algorithmic}[1]
