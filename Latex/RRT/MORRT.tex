@@ -185,7 +185,11 @@ The edges of the trees can be different.
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\If{ \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + $\vec{c}$( \Call{Line}{$ x_{new}, x_{near} $}) }
+		\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \vec{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
+		\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{G} $ }
+		\State $ \vec{c}_{near} = $ \Call{Cost}{$ x_{near} $} 
+		\State $ \eta_{near} = $ \Call{Fitness}{ $ \vec{c}_{near} , \vec{c}^{*} \mid \lambda_{G} $ }
+		\If{ $ \eta' < \eta_{near} $ }
 			\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
 			\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
 			\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
