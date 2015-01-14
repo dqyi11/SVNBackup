@@ -147,18 +147,21 @@ The edges of the trees can be different.
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
 \For{\textbf{each} $ x_{near} \in X_{near} $ }
 	\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ c' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-		\If{ $ c' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
+		\State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c_{k}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+		\If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
 		\State $ x_{min} \leftarrow x_{near} $
 		\EndIf
 	\EndIf
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost$_{k}$}{$ x_{near} $} > \Call{Cost$_{k}$}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
-		\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
-		\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
-		\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $}}
+	    \State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{new} $} $ + c_{k}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
+	    \If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{near} $} }
+			\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+			\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+			\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+		\EndIf
 	\EndIf
 \EndFor
 \Return $ G' = (V', E') $ 
