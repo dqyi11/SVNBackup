@@ -127,16 +127,16 @@ The edges of the trees can be different.
 	\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
 	\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
 		\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
-		\State $ (V_{r}, E_{r}) \leftarrow $ \Call{ Extend$_{Ref}$ }{$ G_{r}, x_{rand} $}
+		\State $ (V_{r}, E_{r}) \leftarrow $ \Call{ Extend$_{Ref}$ }{$ G_{r}, x_{new} $}
 		\EndFor
 		\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
-		\State $ (V_{s}, E_{s}) \leftarrow $ \Call{ Extend$_{Sub}$ }{$ G_{s}, x_{rand} $}
+		\State $ (V_{s}, E_{s}) \leftarrow $ \Call{ Extend$_{Sub}$ }{$ G_{s}, x_{new} $}
 		\EndFor
 	\EndIf
 \EndWhile
 \end{algorithmic}
 \label{alg:rapidly_exploring_process}
-\caption{Multi-objective rapidly exploring process}
+\caption{Multi-objective Rapidly Random exploring }
 \end{algorithm}
 
 \begin{algorithm}
@@ -146,15 +146,15 @@ The edges of the trees can be different.
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
 \For{\textbf{each} $ x_{near} \in X_{near} $ }
 	\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-		\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
+		\State $ c' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+		\If{ $ c' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
 		\State $ x_{min} \leftarrow x_{near} $
 		\EndIf
 	\EndIf
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost$_{k}$}{$ x_{near} $} > \Call{Cost$_{k}$}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
 		\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
 		\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
 		\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
@@ -172,20 +172,25 @@ The edges of the trees can be different.
 \State $ x_{min} \leftarrow x_{nearest} $
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
 \For{\textbf{each} $ x_{near} \in X_{near} $ }
-\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
-\State $ x_{min} \leftarrow x_{near} $
-\EndIf
-\EndIf
+	\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+		\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \vec{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+		\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{G} $ }
+		\State $ \vec{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
+		\State $ \eta_{new} = $ \Call{Fitness}{ $ \vec{c}_{new} , \vec{c}^{*} \mid \lambda_{G} $ }
+		\If{ $ \eta' < \eta_{new} $ }
+			\State $ x_{min} \leftarrow x_{near} $
+		\EndIf
+	\EndIf
 \EndFor
 \State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
-\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
-\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
-\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
-\EndIf
+	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+		\If{ \Call{Cost}{$ x_{near} $} > \Call{Cost}{$ x_{new} $} + $\vec{c}$( \Call{Line}{$ x_{new}, x_{near} $}) }
+			\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+			\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+			\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+		\EndIf
+	\EndIf
 \EndFor
 \Return $ G' = (V', E') $ 
 \end{algorithmic}
