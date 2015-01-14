@@ -22,11 +22,11 @@ if __name__ == '__main__':
     
     planner = RRGPlanner([444, 989], 10, calcDist, MAP_FILE) 
 
-    path = planner.findPath([40,40], [320, 300], 1000)
+    path = planner.findPath([40,40], [320, 300], 2000)
     print path
     
     import pygame.image
     pygame.image.save(planner.rrg_viz.screen, 'RRG01.png')
     
     while True:
-        time.sleep(5)
+        planner.rrg_viz.update()

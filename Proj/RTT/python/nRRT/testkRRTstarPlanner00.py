@@ -22,7 +22,7 @@ if __name__ == '__main__':
     print path
     
     import pygame.image
-    pygame.image.save(planner.krrts_viz.screen, 'RRTstar00.png')
+    pygame.image.save(planner.krrts_viz.screen, 'kRRTstar00.png')
     
     while True:
-        time.sleep(5)
+        planner.krrts_viz.update()

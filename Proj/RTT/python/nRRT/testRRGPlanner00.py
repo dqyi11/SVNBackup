@@ -25,4 +25,4 @@ if __name__ == '__main__':
     pygame.image.save(planner.rrg_viz.screen, 'RRG00.png')
     
     while True:
-        time.sleep(5)
+        planner.rrg_viz.update()
