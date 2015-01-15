@@ -21,11 +21,11 @@ if __name__ == '__main__':
     
     planner = RRTstarPlanner([600, 400], 10, calcDist, MAP_FILE) 
 
-    path = planner.findPath([40,40], [500, 300], 2000)
+    path = planner.findPath([40,40], [500, 40], 4000)
     print path
     
     import pygame.image
     pygame.image.save(planner.rrts_viz.screen, 'RRTstar02.png')
     
     while True:
-        time.sleep(5)
+        planner.rrts_viz.update()

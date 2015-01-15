@@ -89,3 +89,4 @@ if __name__ == '__main__':
     
     while True:
         planner.morrts_viz.update()
+        

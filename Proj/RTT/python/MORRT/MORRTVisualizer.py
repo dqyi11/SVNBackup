@@ -42,7 +42,46 @@ class MORRTVisualizer(object):
             self.objImgs.append(pygame.image.load(obj))
 
     def setLineColors(self, colors):
-        self.lineColors = colors            
+        self.lineColors = colors    
+        
+    def saveResult(self):
+        for idx in range(self.totalIdx):
+            self.screen.fill((255,255,255))
+            
+            disp_idx = 0
+            if idx >= self.morrt.objectiveNum:
+                disp_idx = idx - self.morrt.objectiveNum
+                for n in self.morrt.subTrees[disp_idx].nodes:
+                    for c in n.children:
+                        n_pos = (int(n.pos[0]), int(n.pos[1]))
+                        c_pos = (int(c.pos[0]), int(c.pos[1]))
+                        pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
+            else:
+                disp_idx = idx
+                if disp_idx > 0:
+                    self.screen.blit(self.objImgs[disp_idx-1],(0,0))
+                for n in self.morrt.referenceTrees[disp_idx].nodes:
+                    for c in n.children:
+                        n_pos = (int(n.pos[0]), int(n.pos[1]))
+                        c_pos = (int(c.pos[0]), int(c.pos[1]))
+                        pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
+                        
+            ap = self.activePaths[idx]
+            pathLen = len(ap)
+            for i in range(0, pathLen-1, 1):
+                app = (int(ap[i][0]), int(ap[i][1]))
+                app_n = (int(ap[i+1][0]), int(ap[i+1][1]))
+                pygame.draw.line(self.screen, (255, 160, 0), app, app_n, 2)
+                
+            start = (int(self.morrt.start[0]), int(self.morrt.start[1]))
+            goal = (int(self.morrt.goal[0]), int(self.morrt.goal[1]))
+            pygame.draw.circle(self.screen, (255,0,0), start, 5)
+            pygame.draw.circle(self.screen, (0,0,255), goal, 5)
+                
+            pygame.image.save(self.screen, './fig/'+self.name+"-"+str(idx)+".png")
+ 
+            
+            
         
     def update(self):
         for e in pygame.event.get():

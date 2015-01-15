@@ -6,11 +6,10 @@ Created on Jan 4, 2015
 
 from RRTstarPlanner import *
 import time
-from scipy.misc import imread
 
 if __name__ == '__main__':
     
-    FIT_FILE = 'fitness1.png'
+    FIT_FILE = 'fitness01.jpg'
     objVals = np.array(imread(FIT_FILE, True))
     stepLen = 1
     
@@ -61,15 +60,17 @@ if __name__ == '__main__':
 
         return cost   
     
-    planner = RRTstarPlanner([600,400], 10, calcCost) 
+        
+    MAP_FILE = './map.png'
     
+    planner = RRTstarPlanner([600, 400], 10, calcCost, MAP_FILE) 
     planner.rrts_viz.loadObj(FIT_FILE)
 
-    path = planner.findPath([40,40], [500, 40], 2000)
+    path = planner.findPath([40,40], [500, 40], 4000)
     print path
     
     import pygame.image
-    pygame.image.save(planner.rrts_viz.screen, 'RRTstar00-1.png')
+    pygame.image.save(planner.rrts_viz.screen, 'RRTstar02-1.png')
     
     while True:
         planner.rrts_viz.update()
