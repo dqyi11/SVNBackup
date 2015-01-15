@@ -152,7 +152,7 @@ class ChildTree(object):
             else:
                 current_level_nodes = current_level_children
                 level += 1
-            if level > 50:
+            if level > 100:
                 print "Probing level " + str(level)
         return child_list
 

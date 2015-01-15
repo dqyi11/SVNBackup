@@ -133,7 +133,27 @@ class ChildkTree(object):
         for n in reversed(node_list):
             path.append([int(n.pos[0]), int(n.pos[1])])
         
-        return path  
+        return path
+    
+    def findAllChildren(self, node):
+        level = 0
+        finished = False
+        child_list = []
+        current_level_nodes = []
+        current_level_nodes.append(node)
+        while finished == False:
+            current_level_children = []
+            for cln in current_level_nodes:
+                current_level_children = list( set(current_level_children) | set(cln.children) )
+            child_list = list( set(child_list) | set(current_level_children) )
+            if len(current_level_children) == 0:
+                finished = True
+            else:
+                current_level_nodes = current_level_children
+                level += 1
+            if level > 100:
+                print "Probing level " + str(level)
+        return child_list      
 
 class RefkTree(ChildkTree):
         
@@ -179,10 +199,16 @@ class RefkTree(ChildkTree):
                     self.updateCostToChildren(near_node, delta_cost)
 
     def updateCostToChildren(self, node, delta_cost):
+        '''
         node.cost = node.cost - delta_cost
-        node.fitness = self.calcFitness(node.cost, None)
         for cn in node.children:
-            self.updateCostToChildren(cn, delta_cost)      
+            self.updateCostToChildren(cn, delta_cost)
+        node.fitness = self.calcFitness(node.cost, None)
+        '''
+        child_list = self.findAllChildren(node)
+        for c in child_list:
+            c.cost = c.cost - delta_cost
+            c.fitness = self.calcFitness(c.cost, None)  
     
 class SubkTree(ChildkTree):
     
@@ -229,11 +255,18 @@ class SubkTree(ChildkTree):
                     self.updateCostToChildren(near_node, delta_cost)
    
     def updateCostToChildren(self, node, delta_cost):
+        '''
         node.cost = node.cost - delta_cost
-        refCost = self.parent.getReferenceCost(node.pos)
-        node.fitness = self.calcFitness(node.cost, refCost)
         for cn in node.children:
-            self.updateCostToChildren(cn, delta_cost)   
+            self.updateCostToChildren(cn, delta_cost) 
+        refCost = self.parent.getReferenceCost(node.pos)
+        node.fitness = self.calcFitness(node.cost, refCost) 
+        '''
+        child_list = self.findAllChildren(node)
+        for c in child_list:
+            c.cost = c.cost - delta_cost
+            refCost = self.parent.getReferenceCost(c.pos)
+            c.fitness = self.calcFitness(c.cost, refCost) 
                 
         
         
