@@ -152,6 +152,7 @@ class ChildTree(object):
             else:
                 current_level_nodes = current_level_children
                 level += 1
+            if level > 50:
                 print "Probing level " + str(level)
         return child_list
 
@@ -184,7 +185,7 @@ class RefTree(ChildTree):
         
         for near_node_list in near_nodes_list:
             near_node = near_node_list[self.tree_idx]
-            if near_node == new_node or near_node == self.root:
+            if near_node == new_node or near_node == self.root or near_node == new_node.parent:
                 continue
             
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
@@ -243,7 +244,7 @@ class SubTree(ChildTree):
         
         for near_node_list in near_nodes_list:
             near_node = near_node_list[self.tree_idx]
-            if near_node == new_node or near_node == self.root:
+            if near_node == new_node or near_node == self.root or near_node == new_node.parent:
                 continue
             
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
