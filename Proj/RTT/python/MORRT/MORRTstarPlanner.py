@@ -30,7 +30,7 @@ class MORRTstarPlanner(object):
             self.weights.append(weight)
             
         if self.mapFile != None:
-            self.mokrrts.loadMap(self.mapFile)
+            self.morrts.loadMap(self.mapFile)
 
             
     def findPaths(self, start, goal, iterationNum):

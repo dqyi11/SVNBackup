@@ -4,7 +4,7 @@ Created on Jan 4, 2015
 @author: daqing_yi
 '''
 
-from MOkRRTstarPlanner import *
+from MORRTstarPlanner import *
 from scipy.misc import imread
 import time
 import numpy as np
@@ -72,12 +72,12 @@ if __name__ == '__main__':
     
     MAP_FILE = './map.png'
     
-    planner = MOkRRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40, MAP_FILE) 
+    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40, MAP_FILE) 
     
-    planner.mokrrts_viz.setName('MOkRRTstar01')
-    planner.mokrrts_viz.loadObj([MAP_FILE, FIT_FILE])
+    planner.morrts_viz.setName('MORRTstar01')
+    planner.morrts_viz.loadObj([MAP_FILE, FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 5000)
+    paths = planner.findPaths([40,40], [500, 40], 4000)
     print paths
     
     #import pygame.image
@@ -90,4 +90,4 @@ if __name__ == '__main__':
     print evaluator.scores
     
     while True:
-        planner.mokrrts_viz.update()
+        planner.morrts_viz.update()
