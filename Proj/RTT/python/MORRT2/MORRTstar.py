@@ -87,14 +87,11 @@ class MORRTstar(object):
         return new_pos
     
     def sampling(self):
-        while True:
-            rndPos = np.random.random(self.dimension)
-            rndPos[0] = rndPos[0]*self.sampling_width
-            rndPos[1] = rndPos[1]*self.sampling_height
-            
-            if False == self.isInObstacle(rndPos):
-                return rndPos
-        return None
+        rndPos = np.random.random(self.dimension)
+        rndPos[0] = rndPos[0]*self.sampling_width
+        rndPos[1] = rndPos[1]*self.sampling_height
+        
+        return rndPos
         
     def extend(self):
         new_node = None
@@ -103,6 +100,8 @@ class MORRTstar(object):
             nearest_pos, nearest_node_list = self.findNearestNeighbor(rndPos)
             
             new_pos = self.steer(rndPos, nearest_pos)
+            if self.isInObstacle(new_pos):
+                continue
             
             if True == self.isObstacleFree(nearest_pos, new_pos):
                 

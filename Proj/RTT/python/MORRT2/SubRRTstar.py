@@ -88,13 +88,6 @@ class ChildTree(object):
         self.nodes.append(new_node)
         
         return new_node   
-                  
-    def updateCostToChildren(self, node, delta_cost):
-        node.cost = node.cost - delta_cost
-        refCost = self.parent.getReferenceCost(node.pos)
-        node.fitness = self.calcFitness(node.cost, refCost)
-        for cn in node.children:
-            self.updateCostToChildren(cn, delta_cost)  
                                                    
     def removeEdge(self, node_p, node_c):
         if node_p == None:
@@ -141,7 +134,27 @@ class ChildTree(object):
         for n in reversed(node_list):
             path.append([int(n.pos[0]), int(n.pos[1])])
         
-        return path  
+        return path
+    
+    def findAllChildren(self, node):
+        level = 0
+        finished = False
+        child_list = []
+        current_level_nodes = []
+        current_level_nodes.append(node)
+        while finished == False:
+            current_level_children = []
+            for cln in current_level_nodes:
+                current_level_children = list( set(current_level_children) | set(cln.children) )
+            child_list = list( set(child_list) | set(current_level_children) )
+            if len(current_level_children) == 0:
+                finished = True
+            else:
+                current_level_nodes = current_level_children
+                level += 1
+                print "Probing level " + str(level)
+        return child_list
+
 
 class RefTree(ChildTree):
         
@@ -177,14 +190,29 @@ class RefTree(ChildTree):
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
                 
                 temp_cost_from_new_node = new_node.cost + self.calcCost(new_node.pos, near_node.pos)
+                temp_fitness_from_new_node = self.calcFitness(temp_cost_from_new_node, None)
                 delta_cost = near_node.cost - temp_cost_from_new_node
-                delta_fitness = self.calcFitness(near_node.cost, None) - self.calcFitness(temp_cost_from_new_node, None)
+                delta_fitness = self.calcFitness(near_node.cost, None) - temp_fitness_from_new_node
                 
                 if delta_fitness > 0:
                     parent_node = near_node.parent
                     self.removeEdge(parent_node, near_node)
                     self.addEdge(new_node, near_node)
+                    near_node.cost = temp_cost_from_new_node
+                    near_node.fitness = temp_fitness_from_new_node
                     self.updateCostToChildren(near_node, delta_cost)
+                    
+    def updateCostToChildren(self, node, delta_cost):
+        '''
+        node.cost = node.cost - delta_cost
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost)
+        node.fitness = self.calcFitness(node.cost, None)
+        '''
+        child_list = self.findAllChildren(node)
+        for c in child_list:
+            c.cost = c.cost - delta_cost
+            c.fitness = self.calcFitness(c.cost, None)
     
     
 class SubTree(ChildTree):
@@ -221,14 +249,33 @@ class SubTree(ChildTree):
             if True == self.parent.isObstacleFree(new_node.pos, near_node.pos):
                 
                 temp_cost_from_new_node = new_node.cost + self.calcCost(new_node.pos, near_node.pos)
+                temp_fitness_from_new_node = self.calcFitness(temp_cost_from_new_node, self.parent.getReferenceCost(near_node.pos))
                 delta_cost = near_node.cost - temp_cost_from_new_node
-                delta_fitness = self.calcFitness(near_node.cost, self.parent.getReferenceCost(near_node.pos)) - self.calcFitness(temp_cost_from_new_node, self.parent.getReferenceCost(near_node.pos))
+                delta_fitness = self.calcFitness(near_node.cost, self.parent.getReferenceCost(near_node.pos)) - temp_fitness_from_new_node
                 
                 if delta_fitness > 0:
                     parent_node = near_node.parent
                     self.removeEdge(parent_node, near_node)
                     self.addEdge(new_node, near_node)
+                    near_node.cost = temp_cost_from_new_node
+                    near_node.fitness = temp_fitness_from_new_node
                     self.updateCostToChildren(near_node, delta_cost)
+                    
+    def updateCostToChildren(self, node, delta_cost):
+        '''
+        node.cost = node.cost - delta_cost
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost) 
+        refCost = self.parent.getReferenceCost(node.pos)
+        node.fitness = self.calcFitness(node.cost, refCost) 
+        '''
+        child_list = self.findAllChildren(node)
+        for c in child_list:
+            c.cost = c.cost - delta_cost
+            refCost = self.parent.getReferenceCost(c.pos)
+            c.fitness = self.calcFitness(c.cost, refCost)
+        
+        
     
                 
         

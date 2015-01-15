@@ -86,13 +86,7 @@ class ChildkTree(object):
         self.nodes.append(new_node)
         
         return new_node   
-                  
-    def updateCostToChildren(self, node, delta_cost):
-        node.cost = node.cost - delta_cost
-        refCost = self.parent.getReferenceCost(node.pos)
-        node.fitness = self.calcFitness(node.cost, refCost)
-        for cn in node.children:
-            self.updateCostToChildren(cn, delta_cost)  
+                
                                                    
     def removeEdge(self, node_p, node_c):
         if node_p == None:
@@ -183,7 +177,12 @@ class RefkTree(ChildkTree):
                     self.removeEdge(parent_node, near_node)
                     self.addEdge(new_node, near_node)
                     self.updateCostToChildren(near_node, delta_cost)
-    
+
+    def updateCostToChildren(self, node, delta_cost):
+        node.cost = node.cost - delta_cost
+        node.fitness = self.calcFitness(node.cost, None)
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost)      
     
 class SubkTree(ChildkTree):
     
@@ -228,7 +227,13 @@ class SubkTree(ChildkTree):
                     self.removeEdge(parent_node, near_node)
                     self.addEdge(new_node, near_node)
                     self.updateCostToChildren(near_node, delta_cost)
-    
+   
+    def updateCostToChildren(self, node, delta_cost):
+        node.cost = node.cost - delta_cost
+        refCost = self.parent.getReferenceCost(node.pos)
+        node.fitness = self.calcFitness(node.cost, refCost)
+        for cn in node.children:
+            self.updateCostToChildren(cn, delta_cost)   
                 
         
         

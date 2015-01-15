@@ -7,6 +7,7 @@ Created on Jan 5, 2015
 import numpy as np
 from MORRTstar import *
 from MORRTVisualizer import *
+from TreeAnalyzer import *
 
 class MORRTstarPlanner(object):
 
@@ -38,6 +39,11 @@ class MORRTstarPlanner(object):
             print "Iter@" + str(it)
             self.morrts.extend()
             self.morrts_viz.update()
+            '''
+            TA = TreeAnalyzer(self.morrts)
+            if TA.hasCircle() == True:
+                print "Circles detected"
+            '''
                 
         paths = self.morrts.findPaths()
         
