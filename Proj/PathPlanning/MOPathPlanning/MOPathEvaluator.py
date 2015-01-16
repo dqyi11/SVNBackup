@@ -29,6 +29,12 @@ class MOPathEvaluator(object):
                 for k in range(self.objectiveNum):
                     self.scores[p,k] += self.costFuncs[k](pos_a, pos_b)
                     
+    def savePaths(self, filename):
+        
+        with open(filename) as f1:
+            for p in self.paths:
+                f1.writeline(str(p))
+                    
     def visualize(self):
         
         if self.objectiveNum == 2:

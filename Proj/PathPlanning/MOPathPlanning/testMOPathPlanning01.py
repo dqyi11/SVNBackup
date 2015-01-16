@@ -92,8 +92,6 @@ if __name__ == '__main__':
     paths = planner.findSolutions(subproblem_num, iteration_num, pos_range)
     print paths
     
-    np.savetxt('MOPath01-path.txt', paths)
-    
     viz = MOPathVisualizer(world_size, start, goal, "MOPath01")
     viz.loadPaths(paths)
     viz.loadObj([FIT_FILE])
@@ -106,6 +104,8 @@ if __name__ == '__main__':
     
     print evaluator.scores
     
+        
+    evaluator.savePaths('MOPath01-path.txt')
     np.savetxt('MOPath01-score.txt', evaluator.scores)
     
     while True:
