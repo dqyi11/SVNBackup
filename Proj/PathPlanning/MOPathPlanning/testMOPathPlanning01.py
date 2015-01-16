@@ -75,7 +75,9 @@ if __name__ == '__main__':
     world_size = [600,400]
     start = [40, 40]
     goal = [500, 40]
-    sample_num = 10
+    sample_num = 20
+    subproblem_num = 100
+    iteration_num = 8000
     pos_range = []
     for i in range(sample_num):
         pos_range.append([0, world_size[0]-1])
@@ -84,11 +86,13 @@ if __name__ == '__main__':
     
     #fitMgr = FitnessManager()
     #fitMgr.addFitness(FIT_FILE)
-    planner = MOPathPlanner([calcDist, calcCost],start, goal, 20) 
+    planner = MOPathPlanner([calcDist, calcCost],start, goal, sample_num) 
     
 
-    paths = planner.findSolutions(100, 6000, pos_range)
+    paths = planner.findSolutions(subproblem_num, iteration_num, pos_range)
     print paths
+    
+    np.savetxt('MOPath01-path.txt', paths)
     
     viz = MOPathVisualizer(world_size, start, goal, "MOPath01")
     viz.loadPaths(paths)
@@ -101,6 +105,8 @@ if __name__ == '__main__':
     evaluator.visualize()
     
     print evaluator.scores
+    
+    np.savetxt('MOPath01-score.txt', evaluator.scores)
     
     while True:
         viz.update()
