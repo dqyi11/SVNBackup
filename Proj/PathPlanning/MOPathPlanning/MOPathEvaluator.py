@@ -31,7 +31,7 @@ class MOPathEvaluator(object):
                     
     def savePaths(self, filename):
         
-        with open(filename) as f1:
+        with open(filename, 'w') as f1:
             for p in self.paths:
                 f1.writeline(str(p))
                     
