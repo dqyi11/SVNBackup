@@ -35,7 +35,16 @@
 \maketitle
 
 \begin{abstract}
-The abstract goes here.
+The importance of multi-objective path planning emerges with the increase of the requirement complexity of the robot's tasks.
+The nature of the path planning problem makes that a few of the multi-objective optimization methods could not be directly imported to find the Pareto optimal solutions.
+Inspired by the RRT* and the decomposition-based multi-objective optimization, we proposed a MORRF*(Multi-objective Rapidly exploring Random Forest*) in this paper that could effectively and efficiently find the Pareto optimal set of solutions.
+The RRF consists of two types of tree structures, the reference tree and the subproblem tree.
+Each reference tree explores a single objective to support the estimation of an Utopia position in the fitness space.
+Each subproblem tree explores to find a solution to the assigned subproblem.
+The solutions from all the trees form a set of Pareto optimal solutions. 
+
+Theoretical analysis has been shown to support the feasibility of this algorithm and the asymptotic optimality. 
+Simulations have been take to show the effectiveness and the efficiency of the MORRF*.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -69,12 +78,32 @@ When those objectives could not be converted into single measurable objective, t
 In optimal design, a human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
 
 Finding Pareto optimal solutions in the multi-objective optimal path planning is much more difficult.
+The popular methods in multi-objective optimization cannot be directly applied to a path planning problem.
+One way is coding a path into a fixed-length solution by direction~\cite{Ahmed2013} or way points~\cite{5160222}.
+Evolutionary algorithms could then be imported to search the optimal solutions.
+In order to have a better approximation, the number of the segments consisted of a path cannot be too small.
+This will make the solutions in a rather high dimension solution space.
+However, representing the path trajectory by fixed number of segments might lead to problems in complex environment.
+With different shapes and sizes of obstacles, it is hard to estimate how many segments would be enough to represent all the possible paths.
+Allowing different segment numbers of the paths could help but the solution format won't fit the requirement of most of the evolutionary algorithms.
+Also, when modeling a path into a point in a solution space, the obstacles in the working space could make a few of infeasible regions, which influences the continuity and increases the hardness of the heuristic-based search~\cite{5160222}~\cite{4358754}.
 
+RRT(Rapidly exploring Random Tree) is a popular algorithm in finding feasible solutions from a start position to a goal position, which supports well in the environments with complex obstacles. 
+The tree structure also guarantees a great efficiency on path search.
+RRT* was recently introduced and has been proven to effectively finding an optimal path given enough sampling time~\cite{Karaman:2011:SAO:2000201.2000209}~\cite{Karaman.Frazzoli:RSS10}.
+Similar with that decomposing the multi-objective optimization problem into a few subproblems in \cite{4358754}, we propose the MORRF*(Multi-Objective Rapidly exploring Random Forest*) to find a set of Pareto optimal paths from the start position to the goal position.
 
-
+In this paper, we reviews a few existing multi-objective path planning algorithms and the works that inspires our algorithm in Section \ref{sec:related_works}.
+With the definition of the multi-objective path planning problem, MORRF* is introduced and explained in Section \ref{sec:morrt}.
+We provide theoretic analysis to support MORRF* in Section \ref{sec:theoretic_analysis}.
+Simulation results are given in Section \ref{sec:simulation} to illustrate the performance of the proposed algorithm.
 
 \section{Related works}
 \label{sec:related_works}
+
+Finding a set of Pareto optimal paths replies on exploring the non-dominance of the paths.
+The implicit comparative property prevents a few pruning techniques for efficiency and the algorithm complexity would be greatly extended.
+By , a multi-objective A* search could be applied to find the solution set in \cite{Mandow:2005:NAM:1642293.1642328}.
 
 \begin{comment}
 (1) multi-objective  
@@ -87,15 +116,6 @@ Finding Pareto optimal solutions in the multi-objective optimal path planning is
 \subsection{Decomposition based multi-objective optimization}
 
 
-\begin{thm}
-\label{thm:moo-d:rrt}
-The decomposition method is applicable to a RRT structure.
-\begin{proof}
-Let the path from start to goal with the most vertices be $ N $ segments.
-Any other paths can be represented into $ N $ segments (because they have less than $ N $ segment).
-By this way, all the paths could be mapped into a $ N $ dimensional space.
-\end{proof}
-\end{thm}
 
 Given a multi-objective optimization problem with $ K $ objectives,
 there are $ K $ objectives to be minimized. 
@@ -219,7 +239,19 @@ The edges of the trees can be different.
 \caption{ $ \mbox{Extend}_{Sub} (G, x) $}
 \end{algorithm} 
 
-\section{Asymptotically optimality}
+
+\section{Theoretic Analysis}
+\label{sec:theoretic_analysis}
+
+\begin{thm}
+	\label{thm:moo-d:rrt}
+	The decomposition method is applicable to a RRT structure.
+	\begin{proof}
+		Let the path from start to goal with the most vertices be $ N $ segments.
+		Any other paths can be represented into $ N $ segments (because they have less than $ N $ segment).
+		By this way, all the paths could be mapped into a $ N $ dimensional space.
+	\end{proof}
+\end{thm}
 
 \begin{lem}
 \label{lem:ref_tree:conv}
@@ -241,6 +273,8 @@ Baba
 \label{thm:morrt:asym_opt}
 \end{thm}
 
+\section{Simulation}
+\label{sec:simulation}
 
 
 \section{Conclusion} 
