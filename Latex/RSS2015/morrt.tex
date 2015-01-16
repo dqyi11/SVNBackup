@@ -61,6 +61,18 @@ The length requirement will be strictly enforced.
 (2) Why the multi-objective path planning is hard (compare with a common multi-objective optimization problem)
 \end{comment}
 
+In many real applications of the robots, the complexity of tasks inherently implies more than single objective to be reached.
+A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
+If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
+The multiple objectives in a planning optimization are usually incomparable and conflicted.
+When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a Pareto set of solutions.
+In optimal design, a human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
+
+Finding Pareto optimal solutions in the multi-objective optimal path planning is much more difficult.
+
+
+
+
 \section{Related works}
 \label{sec:related_works}
 
