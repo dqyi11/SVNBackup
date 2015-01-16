@@ -143,17 +143,20 @@ class ChildkTree(object):
         current_level_nodes.append(node)
         while finished == False:
             current_level_children = []
+            child_list_num = len(child_list)
             for cln in current_level_nodes:
                 current_level_children = list( set(current_level_children) | set(cln.children) )
             child_list = list( set(child_list) | set(current_level_children) )
             if len(current_level_children) == 0:
                 finished = True
+            elif len(child_list) == child_list_num:
+                finished = True
             else:
                 current_level_nodes = current_level_children
                 level += 1
             if level > 100:
-                print "Probing level " + str(level)
-        return child_list      
+                print "Probing level " + str(level) + " : " + str(child_list_num) + " --> " + str(len(child_list))
+        return child_list   
 
 class RefkTree(ChildkTree):
         

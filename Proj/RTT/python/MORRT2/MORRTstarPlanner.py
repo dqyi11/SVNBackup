@@ -28,7 +28,14 @@ class MORRTstarPlanner(object):
             if self.objectiveNum == 2:
                 weight[0] = float(i) / self.subproblemNum
                 weight[1] = float(self.subproblemNum - i) / self.subproblemNum
+            else:
+                randVals = np.random.random(self.objectiveNum)
+                for k in range(self.objectiveNum):
+                    weight[k] = randVals[k]
             self.weights.append(weight)
+            
+        if self.mapFile != None:
+            self.morrts.loadMap(self.mapFile)
 
             
     def findPaths(self, start, goal, iterationNum):
