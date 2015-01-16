@@ -29,6 +29,8 @@ class MOPathVisualizer(object):
         self.pathIdx = 0
         self.currImgs = 0
         
+        self.name = name
+        
         self.font = pygame.font.SysFont(None, 24)
         
     def setName(self, name):
@@ -45,7 +47,7 @@ class MOPathVisualizer(object):
         self.lineColors = colors    
         
     def saveResult(self):
-        for idx in range(self.totalIdx):
+        for idx in range(len(self.activePaths)):
             self.screen.fill((255,255,255))
                         
             ap = self.activePaths[idx]

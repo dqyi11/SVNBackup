@@ -93,6 +93,7 @@ if __name__ == '__main__':
     viz = MOPathVisualizer(world_size, start, goal, "MOPath01")
     viz.loadPaths(paths)
     viz.loadObj([FIT_FILE])
+    viz.saveResult()
     
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
