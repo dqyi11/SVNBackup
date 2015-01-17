@@ -103,7 +103,49 @@ Simulation results are given in Section \ref{sec:simulation} to illustrate the p
 
 Finding a set of Pareto optimal paths replies on exploring the non-dominance of the paths.
 The implicit comparative property prevents a few pruning techniques for efficiency and the algorithm complexity would be greatly extended.
-By , a multi-objective A* search could be applied to find the solution set in \cite{Mandow:2005:NAM:1642293.1642328}.
+By modeling the working space into the connectivity of a graph structure, a multi-objective A* search could be applied to find the solution set in \cite{Mandow:2005:NAM:1642293.1642328}.
+In a grid map, the paths could be coded into a sequence of directions from one cell to next cell.
+NSGA-II can then be used to find a set of Pareto optimal solutions in \cite{Ahmed2013}.
+The solutions would be obtained as sequences of way points.
+To better support the environment with obstacles, spline are introduced to interpolate a sequence of way points into a trajectory in \cite{6181426}.
+It reveals the drawbacks of this format of path trajectory. 
+This process might also deviate the path from the found optimal result.
+Increasing the path resolution, the number of the steps, should better deal with the obstacles in the working space and also follows better along the gradient of the fitness.
+But the dimension of the solution space would be increased.
+As a result, the search time could be significantly expanded.
+The exist of obstacles also make plenty of paths infeasible.
+This leads to the discontinuity of the solution space, which could impact the performance of many evolutionary algorithm on multi-objective optimization.
+
+The discretized map only approximates the environment, which might lose a lot of environmental information.
+Some of the obstacles' shapes could not be well considered in the planning process.
+
+If we model the problem in a continuous space, the solution space is greatly expanded. 
+It will take much longer time to converge to the Pareto front.
+RRT(Rapidly exploring random tree) has been a popular tool to path planning in a continuous space.
+It efficiently explores the space by randomly sampling and works well with any complex obstacles.
+The simplicity of the algorithm ensures the search time of a feasible solution can be very short.
+It is figured out that RRT fails to find an optimal solution in the optimal path planning in \cite{Karaman.Frazzoli:RSS10}.
+RRT* is introduced to facilitate the optimal search.
+A \emph{Rewire} process is imported to update the tree structure towards optimality.
+It has been proven that RRT* shows asymptotic optimality.
+It actually learns the optimal path from each vertex of the tree structure to the start position.
+Figure \ref{fig:RRTstar2} gives an example.
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{fig/RRTstar2}
+\caption{Tree structure after exploring fitness space.}
+\label{fig:RRTstar2}
+\end{figure}
+
+Besides dominance comparison, decomposition is another effective way to find Pareto optimality.
+MOEA-D is proposed in \cite{4358754} 
+
+
+
+
+
+
+
 
 \begin{comment}
 (1) multi-objective  
