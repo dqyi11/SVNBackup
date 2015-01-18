@@ -138,36 +138,37 @@ Figure \ref{fig:RRTstar2} gives an example.
 \end{figure}
 
 Besides dominance comparison, decomposition is another effective way to find Pareto optimality.
-MOEA-D is proposed in \cite{4358754} 
+MOEA-D is proposed in \cite{4358754}, which decomposes a multi-objective optimization problem into a class of subproblems.
+Three types of decomposition methods are introduced in \cite{4358754}.
+\begin{itemize}
+\item 
+\item 
+\item 
+\end{itemize}
+A few evolutionary algorithms based on the decomposition are proposed to solve the multi-objective optimization~\cite{6600851}, 
+especially in many-objective optimization problems.
+It is noticeable that the decomposition depends on finding the ``Utopia'' point as a reference to minimize different weighted distances.
+In the next section, we will propose an algorithm that explores the solution spaces parallel using an RRT* tree structure.
 
 
-
-
-
-
-
-
-\begin{comment}
-(1) multi-objective  
-(2)
-\end{comment}
 
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
 
-\subsection{Decomposition based multi-objective optimization}
-
-
-
+The multi-objective path planning problem is firstly defined.
 Given a multi-objective optimization problem with $ K $ objectives,
 there are $ K $ objectives to be minimized. 
-By Theorem \ref{thm:moo-d:rrt}, it can be decomposed into $ N $ subproblems.
+The solution set will be obtained by decomposing it into $ N $ subproblems.
 
-Two types of tree structure are used for the optimization process.
+There are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores for a single objective $ f_{k} (x), k \in K $. 
 \item Each \emph{subproblem tree} explores for a subproblem $ g_{n} ( x \mid \lambda_{n} , z^{*} ) , n \in N $.
 \end{itemize}
+The paths found from both the subproblem trees and the reference trees consist of the solution set.
+
+Because the convergence of the tree structure 
+
 
 Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
 It means that all the tree have equivalent vertices constructed from same positions set sequentially.
