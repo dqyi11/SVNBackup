@@ -311,14 +311,14 @@ The edges of the trees can be different.
 \label{sec:theoretic_analysis}
 
 \begin{thm}
-    \label{thm:morrt:conv}
-    The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
-    \begin{equation}
-    P( \lim_{ i \rightarrow \infty }  x^{\mbox{MORRF}^{*}}_{i} ) = 1.
-    \end{equation}
-    \begin{proof}
-    	content...
-    \end{proof}
+\label{thm:morrt:conv}
+The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
+\begin{equation}
+P( \lim_{ i \rightarrow \infty }  x^{\mbox{MORRF}^{*}}_{i} ) = 1.
+\end{equation}
+\begin{proof}
+content...
+\end{proof}
 \end{thm}
 
 \begin{lem}
@@ -329,8 +329,12 @@ In a sampling-based path planning problem, let $ N_{i} $ be the number of sampli
 In the cost minimization problem, assume there is no loop in a path, which means that a path will not visit a visited vertex.
 As a path $ \sigma $ is a sequence of vertices, the maximum size of a path is less than $ N_{i} $, i.e.
 $ | \sigma | \leq N_{i} $.
-		
-		
+Let $ \bar{i} $ be the stopping iteration number.
+The number of vertices in any path is less than $ N_{ \bar{i} } $, which can be represented as a path of length $ N_{ \bar{i} } $ by duplicating the vertices in a path.
+For example, duplicating $ x_{2} $ in $ (x_{1} , x_{2}, x_{3} ) $ makes an equivalent path of length $ 4 $ , $ (x_{1} , x_{2},  x_{2}, x_{3} ) $.
+The cost will not be changed, $ f( (x_{1} , x_{2}, x_{3}) ) = f( (x_{1} , x_{2},  x_{2}, x_{3} ) )$.
+Using a space of dimension $ N_{ \bar{i} } $, any path $ \sigma $ in a sampling-based path planning problem can be mapped into a point in the same space.
+The decomposition methods mentioned in \cite{4358754} can be imported in this case.		
 \end{proof}
 \end{lem}
 
@@ -350,9 +354,8 @@ The cost of the solution of $ i $-th reference tree converges to $ z^{*}_{i} $.
 
 \begin{lem}
 \label{lem:sub_tree:conv}
-The subproblem tree will converge.
+The cost of the solution of $ j $-th subproblem tree converges to $ j $-th subproblem.
 \begin{proof}
-Baba
 \end{proof}
 \end{lem}
 
@@ -363,7 +366,6 @@ Baba
 \section{Simulation}
 \label{sec:simulation}
 
-ha
 
 \section{Conclusion} 
 \label{sec:conclusion}
