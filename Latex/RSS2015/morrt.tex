@@ -146,11 +146,16 @@ Figure \ref{fig:RRTstar2} gives an example.
 
 Besides dominance comparison, decomposition is another effective way to find Pareto optimality.
 MOEA-D is proposed in \cite{4358754}, which decomposes a multi-objective optimization problem into a class of subproblems.
+
+Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weight vector and $ \sum_{k=1}^{K} \lambda_{k} = 1 $.
 Three types of decomposition methods are introduced in \cite{4358754}.
 \begin{itemize}
-\item 
-\item 
-\item 
+\item \emph{weighted sum approach} \\
+Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
+\item \emph{Tchebycheff approach} \\
+Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - z^{*}_{k}  | \} $;
+\item \emph{Boundary intersection approach} \\
+Minimize $ g^{bi} (x \mid \lambda , z^{*} ) = d $, subject to $ z^{*} - F(x) = d \lambda $.
 \end{itemize}
 A few evolutionary algorithms based on the decomposition are proposed to solve the multi-objective optimization~\cite{6600851}, 
 especially in many-objective optimization problems.
@@ -317,21 +322,30 @@ The edges of the trees can be different.
 \end{thm}
 
 \begin{lem}
-	\label{lem:moo-d:rrt}
-	The decomposition method is applicable to a RRT structure.
-	\begin{proof}
-		Let the path from start to goal with the most vertices be $ N $ segments.
-		Any other paths can be represented into $ N $ segments (because they have less than $ N $ segment).
-		By this way, all the paths could be mapped into a $ N $ dimensional space.
-	\end{proof}
+\label{lem:moo-d:rrt}
+The decomposition method is applicable to the sampling-based path planning.
+\begin{proof}
+In a sampling-based path planning problem, let $ N_{i} $ be the number of samplings at iteration $ i $.
+In the cost minimization problem, assume there is no loop in a path, which means that a path will not visit a visited vertex.
+As a path $ \sigma $ is a sequence of vertices, the maximum size of a path is less than $ N_{i} $, i.e.
+$ | \sigma | \leq N_{i} $.
+		
+		
+\end{proof}
 \end{lem}
 
 \begin{lem}
 \label{lem:ref_tree:conv}
-The reference tree will converge.
+The cost of the solution of $ i $-th reference tree converges to $ z^{*}_{i} $.
 \begin{proof}
-Haha
+
 \end{proof}
+\end{lem}
+
+\begin{lem}
+\label{lem:tree_vex:conv}
+
+	Give enough run time, the cost vertices converge to optimal
 \end{lem}
 
 \begin{lem}
