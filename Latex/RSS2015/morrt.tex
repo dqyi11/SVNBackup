@@ -12,6 +12,9 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 
+\usepackage{amsfonts}
+\usepackage{amsmath}
+
 \usepackage{amsthm}
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
@@ -160,11 +163,18 @@ In the next section, we will propose an algorithm that explores the solution spa
 \label{sec:morrt}
 
 The multi-objective path planning problem is usually defined as:
-\begin{defn}
-	\textbf{Multi-Objective Path Planning}
+\begin{defn}{ \textbf{Multi-Objective Path Planning} }
+	Given a bounded connect open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal region $ X_{goal} $.
+	Given $ K $ objectives that are determined by a vector function
+	$ \vec{F}(x) = [ f_{1} (x), \cdots , f_{K}(x) ]^{T} : \mathbb{R}^{d} \rightarrow \mathbb{R}^{K} $ and 
+	$ \vec{F}(\sigma) = \sum_{x \in \sigma} \vec{F}(x) $.
+	Find paths $ \sigma^{*} \in \Sigma^{*}  : [0, s] \rightarrow cl(  X \setminus X_{obs} ) $ such that
+	\begin{itemize}
+		\item $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = X_{goal}  $;
+		\item $ \not \exists \sigma , \forall k \in K, f_{k} (\sigma) > f_{k} (\sigma^{*}) $.
+	\end{itemize}
 \end{defn}
-Given a multi-objective optimization problem with $ K $ objectives,
-there are $ K $ objectives to be minimized. 
+
 The solution set will be obtained by decomposing it into $ N $ subproblems.
 
 There are two types of tree structures used for the optimization process.
@@ -296,14 +306,25 @@ The edges of the trees can be different.
 \label{sec:theoretic_analysis}
 
 \begin{thm}
-	\label{thm:moo-d:rrt}
+    \label{thm:morrt:conv}
+    The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
+    \begin{equation}
+    P( \lim_{ i \rightarrow \infty }  x^{\mbox{MORRF}^{*}}_{i} ) = 1.
+    \end{equation}
+    \begin{proof}
+    	content...
+    \end{proof}
+\end{thm}
+
+\begin{lem}
+	\label{lem:moo-d:rrt}
 	The decomposition method is applicable to a RRT structure.
 	\begin{proof}
 		Let the path from start to goal with the most vertices be $ N $ segments.
 		Any other paths can be represented into $ N $ segments (because they have less than $ N $ segment).
 		By this way, all the paths could be mapped into a $ N $ dimensional space.
 	\end{proof}
-\end{thm}
+\end{lem}
 
 \begin{lem}
 \label{lem:ref_tree:conv}
