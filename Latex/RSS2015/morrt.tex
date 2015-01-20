@@ -16,6 +16,9 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
 
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[section]
+
 \pdfinfo{
    /Author (Homer Simpson)
    /Title  (Robots: Our new overlords)
@@ -74,7 +77,8 @@ In many real applications of the robots, the complexity of tasks inherently impl
 A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
 If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
 The multiple objectives in a planning optimization are usually incomparable and conflicted.
-When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a Pareto set of solutions.
+When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a set of non-dominant solutions.
+A non-dominant solution means that there exists no other solution can surpass it in all the objectives.
 In optimal design, a human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
 
 Finding Pareto optimal solutions in the multi-objective optimal path planning is much more difficult.
@@ -155,7 +159,10 @@ In the next section, we will propose an algorithm that explores the solution spa
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
 
-The multi-objective path planning problem is firstly defined.
+The multi-objective path planning problem is usually defined as:
+\begin{defn}
+	\textbf{Multi-Objective Path Planning}
+\end{defn}
 Given a multi-objective optimization problem with $ K $ objectives,
 there are $ K $ objectives to be minimized. 
 The solution set will be obtained by decomposing it into $ N $ subproblems.
@@ -167,8 +174,10 @@ There are two types of tree structures used for the optimization process.
 \end{itemize}
 The paths found from both the subproblem trees and the reference trees consist of the solution set.
 
-Because the convergence of the tree structure 
 
+Because the convergence of the tree structure in RRT* means that the path from the root to any vertex is an optimal path of the defined cost.
+We use the same sampling position to extend all the trees in one iteration.
+Thus the vertices in the reference trees could be used as reference for estimating the cost in constructing the subproblem trees.
 
 Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
 It means that all the tree have equivalent vertices constructed from same positions set sequentially.
@@ -319,6 +328,7 @@ Baba
 \section{Simulation}
 \label{sec:simulation}
 
+ha
 
 \section{Conclusion} 
 \label{sec:conclusion}
