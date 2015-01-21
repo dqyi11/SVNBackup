@@ -30,7 +30,7 @@ class MORRTstar(object):
         
         self.nearNodeNum = 6
         self.gamma = 1.0
-        self.radius = 400
+        self.radius = 600
         
         self.referenceTrees = []
         self.subTrees = []
