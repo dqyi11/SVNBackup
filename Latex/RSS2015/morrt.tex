@@ -18,6 +18,7 @@
 \usepackage{amsthm}
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
+\newtheorem{asmp}{Assumption}
 
 \theoremstyle{definition}
 \newtheorem{defn}{Definition}[section]
@@ -79,6 +80,7 @@ The length requirement will be strictly enforced.
 In many real applications of the robots, the complexity of tasks inherently implies more than single objective to be reached.
 A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
 If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
+In robot arm manipulation planning, there usually exist several criteria to be considered as well~\cite{Pires2004}, for example, movement, joint velocities, joint accelerations and etc. 
 The multiple objectives in a planning optimization are usually incomparable and conflicted.
 When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a set of non-dominant solutions.
 A non-dominant solution means that there exists no other solution can surpass it in all the objectives.
@@ -310,6 +312,27 @@ The edges of the trees can be different.
 \section{Theoretic Analysis}
 \label{sec:theoretic_analysis}
 
+Several assumptions are needed, which are inherited from RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
+\begin{asmp}{(Additivity of the objective functions)}
+For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X \setminus X_{obs} $,
+$ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
+\end{asmp}
+
+\begin{asmp}{(Continuity of the objective functions)}
+For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
+$ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X \setminus X_{obs}, \sigma_{2} : [0, s_{2} ] \rightarrow X \setminus X_{obs} $,
+$ \exists k $ such that 
+$ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $
+\end{asmp}
+
+\begin{asmp}{(Obstacle spacing)}
+There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in X \setminus X_{obs} $ , $ \exists x' \in X \setminus X_{obs} $ such that
+\begin{itemize}
+\item the $ \delta $-ball centered at $ x' $ lies inside $ X \setminus X_{obs} $;
+\item $ x $ lies inside the $ \delta $-ball centered at $ x' $.
+\end{itemize}
+\end{asmp}
+
 \begin{lem}
 \label{lem:moo-d:rrt}
 The decomposition method is applicable to the sampling-based path planning.
@@ -392,6 +415,19 @@ $
 3D
 compare NSGA-II
 \end{comment}
+
+Simulations have been taken to verify the performance of MORRF$^{*}$.
+We 
+We also implemented NSGA-II for multi-objective path planning, which is introduced in \cite{Ahmed2013}.
+In order to be comparable, the path planning using NSGA-II is implemented in a continuous space.
+Each solution is represented as a sequence of way points.
+The cost is calculated like that in RRT*, whcih \textsc{Line}($ x_{1}, x_{2} $) is called to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.
+
+
+We tested firstly on path planning of two objectives.
+
+
+
 
 
 \section{Conclusion} 
