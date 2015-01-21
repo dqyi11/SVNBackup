@@ -76,8 +76,8 @@ if __name__ == '__main__':
     start = [40, 40]
     goal = [500, 40]
     sample_num = 20
-    subproblem_num = 100
-    iteration_num = 8000
+    subproblem_num = 30
+    iteration_num = 10000
     pos_range = []
     for i in range(sample_num):
         pos_range.append([0, world_size[0]-1])
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     viz.loadPaths(paths)
     viz.loadObj([FIT_FILE])
     viz.saveResult()
-    
+    viz.saveResultInOne()
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
     evaluator.load(paths)

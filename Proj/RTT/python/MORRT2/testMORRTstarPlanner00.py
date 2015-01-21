@@ -75,8 +75,11 @@ if __name__ == '__main__':
     planner.morrts_viz.setName('MORRTstar00')
     planner.morrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 5000)
+    paths = planner.findPaths([40,40], [500, 40], 10000)
     print paths
+    
+    planner.morrts_viz.saveResult()
+    planner.morrts_viz.saveResultInOne()
     
     #import pygame.image
     #pygame.image.save(planner.morrts_viz.screen, 'MORRTstar00.png')
@@ -84,6 +87,9 @@ if __name__ == '__main__':
     evaluator = MOPathEvaluator([calcDist, calcCost])
     evaluator.load(paths)
     evaluator.visualize()
+    
+    evaluator.savePaths('MORRTstar00-path.txt')
+    np.savetxt('MORRTstar00-score.txt', evaluator.scores)
     
     print evaluator.scores
     

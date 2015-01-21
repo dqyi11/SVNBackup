@@ -42,7 +42,24 @@ class MORRTVisualizer(object):
             self.objImgs.append(pygame.image.load(obj))
 
     def setLineColors(self, colors):
-        self.lineColors = colors    
+        self.lineColors = colors   
+        
+            
+    def saveResultInOne(self):
+        self.screen.fill((255,255,255))
+        for idx in range(self.totalIdx):
+            ap = self.activePaths[idx]
+            pathLen = len(ap)
+            for i in range(0, pathLen-1, 1):
+                app = (int(ap[i][0]), int(ap[i][1]))
+                app_n = (int(ap[i+1][0]), int(ap[i+1][1]))
+                pygame.draw.line(self.screen, (255, 160, 0), app, app_n, 2)
+        start = (int(self.morrt.start[0]), int(self.morrt.start[1]))
+        goal = (int(self.morrt.goal[0]), int(self.morrt.goal[1]))
+        pygame.draw.circle(self.screen, (255,0,0), start, 5)
+        pygame.draw.circle(self.screen, (0,0,255), goal, 5)
+                
+        pygame.image.save(self.screen, './fig/'+self.name+"-ALL.png") 
         
     def saveResult(self):
         for idx in range(self.totalIdx):
