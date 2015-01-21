@@ -327,12 +327,23 @@ The decomposition methods mentioned in \cite{4358754} can be imported in this ca
 \end{proof}
 \end{lem}
 
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{fig/dependency}
+\caption{The dependency of the trees in MORRF$^{*}$.}
+\label{fig:dependency}
+\end{figure}
+
+
 \begin{lem}
 \label{lem:ref_tree:conv}
 The cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
 $ P( \{ \lim_{ i \rightarrow \infty }  c_{k} ( i ) = z^{*}_{k}  \} ) = 1  $.
 \begin{proof}
-
+The construction of a reference tree does not depend on any other tree.
+The construction process is equivalent to the construction of a RRT*.
+The asymptotic optimality of RRT* is inherited here.
+Thus the cost of the solution converges to the optimal of one single objective.
 \end{proof}
 \end{lem}
 
@@ -342,6 +353,9 @@ The cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 $
 P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 \begin{proof}
+The construction of RRT* is not goal-oriented.
+The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
+Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
 \end{proof}
 \end{lem}
 
@@ -352,21 +366,32 @@ $
 P( \{ \lim_{ i \rightarrow \infty } c_{ \lambda_{m} }( i ) \} ) = z^{*}_{ \lambda_{m} }
 $
 \begin{proof}
+The construction of a subproblem tree depends on the convergence of all the reference trees.
+When all the reference trees have converged, the correct reference values $ c^{*} (x) $ of all the vertices could be obtained.
+The convergence process will be similar with that of a single RRT*.
+By Lemma \ref{lem:ref_tree:conv} and Lemma \ref{lem:sub_tree:conv}, we know that the utopia reference value $ c^{*} (x) $ could be correctly estimated after all the reference trees have reached optimality.
 \end{proof}
 \end{lem}
 
 \begin{thm}
-	\label{thm:morrt:conv}
-	The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
-	\begin{equation}
-	P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
-	\end{equation}
-	\begin{proof}
-	\end{proof}
+\label{thm:morrt:conv}
+The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
+$
+P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
+$
+\begin{proof}
+\end{proof}
 \end{thm}
 
 \section{Simulation}
 \label{sec:simulation}
+
+\begin{comment}
+2D (weighted sum + Tchebycheff method)
+2D (With obstacles)
+3D
+compare NSGA-II
+\end{comment}
 
 
 \section{Conclusion} 
