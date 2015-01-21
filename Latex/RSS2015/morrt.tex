@@ -82,13 +82,15 @@ A robot in a search task is usually expected to maximize the search coverage wit
 If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
 In robot arm manipulation planning, there usually exist several criteria to be considered as well~\cite{Pires2004}, for example, movement, joint velocities, joint accelerations and etc. 
 The multiple objectives in a planning optimization are usually incomparable and conflicted.
+The most commonly applied method is converting into a single objective by linearly weighted summation of multiple objectives.
+The performance of the planned paths relies strongly on how different objectives are weighted.
 When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a set of non-dominant solutions.
 A non-dominant solution means that there exists no other solution can surpass it in all the objectives.
 In optimal design, a human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
 
 Finding Pareto optimal solutions in the multi-objective optimal path planning is much more difficult.
 The popular methods in multi-objective optimization cannot be directly applied to a path planning problem.
-One way is coding a path into a fixed-length solution by direction~\cite{Ahmed2013} or way points~\cite{5160222}.
+One way is coding a path into a fixed-length solution by direction~\cite{Ahmed2013} or way points~\cite{5160222}~\cite{Pires2004}.
 Evolutionary algorithms could then be imported to search the optimal solutions.
 In order to have a better approximation, the number of the segments consisted of a path cannot be too small.
 This will make the solutions in a rather high dimension solution space.
