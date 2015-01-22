@@ -42,7 +42,7 @@
 \maketitle
 
 \begin{abstract}
-The importance of multi-objective path planning emerges with the increase of the requirement complexity of the robot's tasks.
+The importance of multi-objective path planning emerges with the increase of the requirement complexity of the tasks assigned to the robot.
 The nature of the path planning problem makes that a few of the multi-objective optimization methods could not be directly imported to find the Pareto optimal solutions.
 Inspired by the RRT* and the decomposition-based multi-objective optimization, we proposed a MORRF*(Multi-objective Rapidly exploring Random Forest*) in this paper that could effectively and efficiently find the Pareto optimal set of solutions.
 The RRF consists of two types of tree structures, the reference tree and the subproblem tree.
@@ -81,24 +81,31 @@ In many real applications of the robots, the complexity of tasks inherently impl
 A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
 If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
 In robot arm manipulation planning, there usually exist several criteria to be considered as well~\cite{Pires2004}, for example, movement, joint velocities, joint accelerations and etc. 
-The multiple objectives in a planning optimization are usually incomparable and conflicted.
 The most commonly applied method is converting into a single objective by linearly weighted summation of multiple objectives.
 The performance of the planned paths relies strongly on how different objectives are weighted.
-When those objectives could not be converted into single measurable objective, the multi-objective optimization will be needed to find a set of non-dominant solutions.
+The difficulty becomes how the task supervisor should assign the weights.
+Meanwhile, the multiple objectives in a planning optimization are sometimes incomparable or unrankable.
+It becomes impossible to assign weights or ranks.
+Finding a set of non-dominant solutions is introduced to answer the multi-objective optimization.
 A non-dominant solution means that there exists no other solution can surpass it in all the objectives.
-In optimal design, a human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
+A human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
+This has been applied well in optimal design and optimal decision already.
 
-Finding Pareto optimal solutions in the multi-objective optimal path planning is much more difficult.
-The popular methods in multi-objective optimization cannot be directly applied to a path planning problem.
-One way is coding a path into a fixed-length solution by direction~\cite{Ahmed2013} or way points~\cite{5160222}~\cite{Pires2004}.
+However, how to find Pareto optimal paths in the multi-objective path planning has not been well answered yet.
+The popular methods in multi-objective optimization are hard to be directly applied to path planning problems.
+One way is coding a path into a fixed-length set of segments, which can be represented by direction~\cite{Ahmed2013} or way points~\cite{5160222}~\cite{Pires2004}.
 Evolutionary algorithms could then be imported to search the optimal solutions.
 In order to have a better approximation, the number of the segments consisted of a path cannot be too small.
-This will make the solutions in a rather high dimension solution space.
-However, representing the path trajectory by fixed number of segments might lead to problems in complex environment.
-With different shapes and sizes of obstacles, it is hard to estimate how many segments would be enough to represent all the possible paths.
+This will make the solution search working in a rather high dimension solution space.
+Even some algorithms work efficiently in high dimension solution spaces, 
+forcing different path trajectories represented by fixed number of segments is hard. 
+Because naturally the total length and the details of curvatures can be versatile.
+Many constraints of the problems are then difficult to be modeled.
+It is hard to estimate how many segments would be enough to represent all the possible paths due to difference in shapes and the sizes of the obstacles.
 Allowing different segment numbers of the paths could help but the solution format won't fit the requirement of most of the evolutionary algorithms.
 Also, when modeling a path into a point in a solution space, the obstacles in the working space could make a few of infeasible regions, which influences the continuity and increases the hardness of the heuristic-based search~\cite{5160222}~\cite{4358754}.
 
+While the path planning on continuous space is of a over big search space, 
 RRT(Rapidly exploring Random Tree) is a popular algorithm in finding feasible solutions from a start position to a goal position, which supports well in the environments with complex obstacles. 
 The tree structure also guarantees a great efficiency on path search.
 RRT* was recently introduced and has been proven to effectively finding an optimal path given enough sampling time~\cite{Karaman:2011:SAO:2000201.2000209}~\cite{Karaman.Frazzoli:RSS10}.
@@ -113,33 +120,38 @@ Simulation results are given in Section \ref{sec:simulation} to illustrate the p
 \label{sec:related_works}
 
 Finding a set of Pareto optimal paths replies on exploring the non-dominance of the paths.
-The implicit comparative property prevents a few pruning techniques for efficiency and the algorithm complexity would be greatly extended.
+The implicit comparative property prevents a few pruning techniques for efficiency and the problem complexity would be greatly extended as a result.
+Discretizing the space is one way to reduce the problem complexity.
 By modeling the working space into the connectivity of a graph structure, a multi-objective A* search could be applied to find the solution set in \cite{Mandow:2005:NAM:1642293.1642328}.
-In a grid map, the paths could be coded into a sequence of directions from one cell to next cell.
+Another approach is coding the path into a sequence of directions from one cell to next cell after map discretization.
 NSGA-II can then be used to find a set of Pareto optimal solutions in \cite{Ahmed2013}.
-The solutions would be obtained as sequences of way points.
-To better support the environment with obstacles, spline are introduced to interpolate a sequence of way points into a trajectory in \cite{6181426}.
-It reveals the drawbacks of this format of path trajectory. 
-This process might also deviate the path from the found optimal result.
+The solutions would be translated into sequences of way points.
+Planning on a discretized map is never the best way of finding the optimal path.
+Either a coarse discretization loses the detail information, or a fine discretization brings too much redundancy and complexity.
+Especially when there exists obstacles in the working space, a sequence of way points might not be enough to represent a path.
+A direct line connecting two points might get into obstacles and is not feasible.  
+Therefore, spline are introduced to interpolate a sequence of way points into a trajectory in \cite{6181426}.
+How the interpolated shapes is actually not evaluated in the optimization process. 
+The solutions are not directly answer to the defined path planning problems.
 Increasing the path resolution, the number of the steps, should better deal with the obstacles in the working space and also follows better along the gradient of the fitness.
 But the dimension of the solution space would be increased.
-As a result, the search time could be significantly expanded.
-The exist of obstacles also make plenty of paths infeasible.
+It also reveals that approaching the problem in a continuous space would be better.
+
+The biggest challenge to multi-objective evolutionary algorithms on high dimension continuous space is efficiency.
+Within a small search step means that it will take much longer time to converge to the Pareto front.
+But within a big search step is likely to miss the optimal solutions.
+As a path is denoted by a point in a high dimension continuous space, the exist of obstacles that makes plenty of paths infeasible leads to plenty of undefined regions in the continuous space.
 This leads to the discontinuity of the solution space, which could impact the performance of many evolutionary algorithm on multi-objective optimization.
 
-The discretized map only approximates the environment, which might lose a lot of environmental information.
-Some of the obstacles' shapes could not be well considered in the planning process.
-
-If we model the problem in a continuous space, the solution space is greatly expanded. 
-It will take much longer time to converge to the Pareto front.
-RRT(Rapidly exploring random tree) has been a popular tool to path planning in a continuous space.
-It efficiently explores the space by randomly sampling and works well with any complex obstacles.
-The simplicity of the algorithm ensures the search time of a feasible solution can be very short.
-It is figured out that RRT fails to find an optimal solution in the optimal path planning in \cite{Karaman.Frazzoli:RSS10}.
-RRT* is introduced to facilitate the optimal search.
-A \emph{Rewire} process is imported to update the tree structure towards optimality.
-It has been proven that RRT* shows asymptotic optimality.
-It actually learns the optimal path from each vertex of the tree structure to the start position.
+Sampling-based path planning works effectively in continuous space.
+RRT(Rapidly exploring random tree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling and works well with any complex obstacles.
+The simplicity of the algorithm shortens the search time of a feasible solution.
+However, in finding an optimal solution, it is figured that RRT will fail in \cite{Karaman.Frazzoli:RSS10}.
+Thus RRT$^{*}$ is introduced to facilitate the optimal search.
+A \emph{Rewire} process is imported to update the tree structure gradually towards optimality which is triggered by new samplings.
+The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}.
+The structure is update with new samplings, and the connections are updated with the cost update.
+Gradually it learns the optimal path from each vertex of the tree structure to the start position.
 Figure \ref{fig:RRTstar2} gives an example.
 \begin{figure}
 \centering
@@ -148,9 +160,8 @@ Figure \ref{fig:RRTstar2} gives an example.
 \label{fig:RRTstar2}
 \end{figure}
 
-Besides dominance comparison, decomposition is another effective way to find Pareto optimality.
+In find Pareto optimality, decomposition method is another effective way besides dominance comparison.
 MOEA-D is proposed in \cite{4358754}, which decomposes a multi-objective optimization problem into a class of subproblems.
-
 Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weight vector and $ \sum_{k=1}^{K} \lambda_{k} = 1 $.
 Three types of decomposition methods are introduced in \cite{4358754}.
 \begin{itemize}
@@ -161,10 +172,13 @@ Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{i \leq k \leq K}  \{ \lambda_
 \item \emph{Boundary intersection approach} \\
 Minimize $ g^{bi} (x \mid \lambda , z^{*} ) = d $, subject to $ z^{*} - F(x) = d \lambda $.
 \end{itemize}
-A few evolutionary algorithms based on the decomposition are proposed to solve the multi-objective optimization~\cite{6600851}, 
+The solutions of all the subproblems are a subset of the Pareto optimal set.
+A few evolutionary algorithms based on the decomposition method are proposed to solve the multi-objective optimization~\cite{6600851}, 
 especially in many-objective optimization problems.
-It is noticeable that the decomposition depends on finding the ``Utopia'' point as a reference to minimize different weighted distances.
-In the next section, we will propose an algorithm that explores the solution spaces parallel using an RRT* tree structure.
+It is noticeable that the decomposition depends on finding the ``Utopia'' point $ [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ as a reference to minimize different weighted distances.
+In the next section, we will propose an algorithm that explores the solution spaces parallel using RRT* tree structure.
+Instead of a single tree structure, a set of trees are constructed in the exploration process.
+Thus it is named MORRF$^{*}$ (Multi-objective Rapidly exploring Randm Forest$^{*}$).
 
 
 
