@@ -45,17 +45,38 @@ class MOPathEvaluator(object):
                     ax.plot(self.scores[i,0], self.scores[i,1],'bs')
                 else:
                     ax.plot(self.scores[i,0], self.scores[i,1],'ro')
+                    
+            ax.set_xlabel("objective 1")
+            ax.set_ylabel("objective 2")
+            
             plt.show()
         elif self.objectiveNum == 3:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111, projection='3d')
+            
+            # interpolation spline with scipy 
+            from scipy import interpolate 
+            
+            tck0 = interpolate.bisplrep(self.scores[:,0], self.scores[:,1], self.scores[:,2]) 
+            xmin = np.min(self.scores[:,0])
+            xmax = np.max(self.scores[:,0])
+            ymin = np.min(self.scores[:,1])
+            ymax = np.max(self.scores[:,1])
+            xnew,ynew = np.mgrid[xmin:xmax:70j,ymin:ymax:70j] 
+            znew = interpolate.bisplev(xnew[:,0],ynew[0,:],tck0) 
+            ax1.plot_surface(xnew, ynew, znew, linewidth=0.0, color='y', alpha = 0.25)
+            
             ax1.scatter(self.scores[0,0], self.scores[1,1], self.scores[2,2], c='g', marker='p')
             for i in range(self.pathNum):
                 if i < self.objectiveNum:
                     ax1.scatter(self.scores[i,0], self.scores[i,1], self.scores[i,2], c ='b', marker='s')
                 else:
                     ax1.scatter(self.scores[i,0], self.scores[i,1], self.scores[i,2], c = 'r', marker='o')
-            
+                    
+            ax1.set_xlabel('Objective 1')
+            ax1.set_ylabel('Objective 2')
+            ax1.set_zlabel('Objective 3')
+            '''
             fig2 = plt.figure()     
             ax2 = fig2.add_subplot(111)
             for i in range(self.pathNum):
@@ -79,6 +100,7 @@ class MOPathEvaluator(object):
                     ax4.plot(self.scores[i,1], self.scores[i,2],'bs')
                 else:
                     ax4.plot(self.scores[i,1], self.scores[i,2],'ro')
+            '''
                     
             
             plt.show()
