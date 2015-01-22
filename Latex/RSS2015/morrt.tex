@@ -406,10 +406,29 @@ There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in 
 \end{itemize}
 \end{asmp}
 
+We firstly need to show that the tree structure in MORRF$ ^{*}$ has a finite maximum depth,
+so that we can guarantee that all the paths from the tree structure have finite length.
+We have Lemma \ref{lem:tree:finite_depth}.
+
 \begin{lem}
 \label{lem:tree:finite_depth}
 Either the reference tree or the subproblem tree has a finite maximum depth as $ i \rightarrow \infty $.
+\begin{proof}
+In a finite working space, the cost of a path will be infinite only when there is a loop in the path.
+The cost of the loop is added repeated in calculating the cost of the path.
+Assume that the maximum depth of the tree is infinite.
+It means that there exists a path that from a position to the start, the cost of which is infinite.
+It also equals to that there exist a loop in such a path.
+However, this contradicts the tree structure. 
+Because in a tree structure, there will not be a loop in any path from the root (the start) to any vertex.
+Thus, we can state that the reference tree or the subproblem tree constructed from a sampling process has a finite maximum depth.
+\end{proof}
 \end{lem}
+
+Because all the paths in MORRF$^{*}$ has a finite length.
+It means that all the solutions from MORRF$^{*}$ can be converted into a point in a finite high-dimension space.
+Therefore, we can import the Techbycheff method in solving such a multi-objective optimization problem~\cite{4358754}~\cite{miettinen1999nonlinear}.
+We have Lemma \ref{lem:moo-d:rrt}.
 
 \begin{lem}
 \label{lem:moo-d:rrt}
@@ -458,20 +477,13 @@ The decomposition methods mentioned in \cite{4358754} can be imported in this ca
 \label{fig:dependency}
 \end{figure}
 
+Lemma \ref{lem:moo-d:rrt} tells us that the multi-objective path planning could be decomposed into a set of subproblems.
+In MORRF$^{*}$, the responsibility of a subproblem tree is to find the optimal solution of its subproblem.
+The next question needs to be answered is that whether the subproblem tree could find the optimal solution of its subproblem.
 
-\begin{lem}
-\label{lem:ref_tree:conv}
-When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
-the cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
-$ P( \{ \lim_{ i \rightarrow \infty }  c_{k} ( i ) = z^{*}_{k}  \} ) = 1  $.
-\begin{proof}
-The construction of a reference tree does not depend on any other tree.
-The construction process is equivalent to the construction of a RRT*.
-The asymptotic optimality of RRT* is inherited here.
-Thus the cost of the solution converges to the optimal of one single objective.
-\end{proof}
-\end{lem}
-
+We notice that the \textsc{Extend} process in RRT$^{*}$ is not goal-oriented.
+Let $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
+We can generalize the conclusion of Theorem 22 in \cite{Karaman.Frazzoli:RSS10} to all the vertices in the RRT$^{*}$.
 \begin{lem}
 \label{lem:tree_vex:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
@@ -479,11 +491,23 @@ the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 $
 P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 \begin{proof}
-The construction of RRT* is not goal-oriented.
-The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
-Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
+	The construction of RRT* is not goal-oriented.
+	The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
+	Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
 \end{proof}
 \end{lem}
+
+Because the construction of a reference tree does not depend on any other tree.
+The construction process is equivalent to the construction of a RRT*.
+The asymptotic optimality of RRT* in Lemma \ref{lem:tree_vex:conv} is inherited here.
+Thus the cost of the solution converges to the optimal of one single objective.
+\begin{lem}
+\label{lem:ref_tree:conv}
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
+$ P( \{ \lim_{ i \rightarrow \infty }  c_{k} ( i ) = z^{*}_{k}  \} ) = 1  $.
+\end{lem}
+
 
 \begin{lem}
 \label{lem:sub_tree:conv}
@@ -508,9 +532,12 @@ $
 P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
 $
 \begin{proof}
-With the assumptions hold, we can have Lemma \ref{lem:ref_tree:conv}.
-It means that the reference trees will converge.
+As the solutions of MORRF$^{*}$ can be modeled in points in a high-dimension space by Lemma \ref{lem:moo-d:rrt}, the Tchebycheff method could be imported to decompose the multi-objective optimization problem into a set of subproblems.
+By the fitness definition of the subproblem trees, if the subproblem tree could find a solution that minimize the fitness, the solution is in the Pareto optimal set of the multi-objective optimization problem.
 
+By Lemma \ref{lem:sub_tree:conv}, we have that the solution cost of the $ m $-th subproblem tree converges to $ z^{*}_{ \lambda_{m} } $.
+It means that the solution converges to an optimal solution to $ m $-th subproblem as the iteration goes.
+Therefore, the set of the solutions from all the subproblem trees converge to a subset of the Pareto optimal set, as the iteration goes~\cite{4358754}~\cite{miettinen1999nonlinear}.
 \end{proof}
 \end{thm}
 
