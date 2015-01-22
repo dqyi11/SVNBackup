@@ -19,9 +19,7 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
 \newtheorem{asmp}{Assumption}
-
-\theoremstyle{definition}
-\newtheorem{defn}{Definition}[section]
+\newtheorem{defn}{Definition}
 
 \pdfinfo{
    /Author (Homer Simpson)
@@ -170,12 +168,12 @@ Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) 
 \item \emph{Tchebycheff approach} \\
 Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - z^{*}_{k}  | \} $;
 \item \emph{Boundary intersection approach} \\
-Minimize $ g^{bi} (x \mid \lambda , z^{*} ) = d $, subject to $ z^{*} - F(x) = d \lambda $.
+Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{*} ) = d $, subject to $ \vec{z}^{*} - F(x) = d \lambda $.
 \end{itemize}
 The solutions of all the subproblems are a subset of the Pareto optimal set.
 A few evolutionary algorithms based on the decomposition method are proposed to solve the multi-objective optimization~\cite{6600851}, 
 especially in many-objective optimization problems.
-It is noticeable that the decomposition depends on finding the ``Utopia'' point $ [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ as a reference to minimize different weighted distances.
+It is noticeable that the decomposition depends on finding the ``Utopia'' reference vector $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ as a reference to minimize different weighted distances.
 In the next section, we will propose an algorithm that explores the solution spaces parallel using RRT* tree structure.
 Instead of a single tree structure, a set of trees are constructed in the exploration process.
 Thus it is named MORRF$^{*}$ (Multi-objective Rapidly exploring Randm Forest$^{*}$).
@@ -205,26 +203,45 @@ Find $ M $ paths $ \sigma^{*} \in \Sigma^{*}  : [0, s] \rightarrow cl(  X \setmi
 
 Similar with MOEA-D~\cite{4358754}, the solution set of size $ M $ is obtained by decomposing the multi-objective problem into $ M $ subproblems.
 Each subproblem is assigned with a tree structure to explore the solution space.
-The solve of the subproblem relies on the knowledge of the reference position $ z^{*} $ in the fitness space if we follow the Tchebycheff approach or Boundary intersection approach.
+The solve of the subproblem relies on the knowledge of the reference vector $ \vec{z}^{*} $ in the fitness space if we follow the Tchebycheff approach or Boundary intersection approach.
+In this paper, for simplicity, we only look at the Tchebycheff approach.
+Boundary intersection approach could be easily implemented with slight modification.
 Thus $ K $ trees are introduced to explore the minimum of each objective.
 
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{fig/Tchebycheff}
+\caption{Tchebycheff method of finding Pareto front.}
+\label{fig:Tchebycheff}
+\end{figure}
 
 There are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores for a single objective $ f_{k} (x), k \in K $. 
+The fitness of each vertex is calculated from the $ k $-th objective.
 \item Each \emph{subproblem tree} explores for a subproblem $ g_{m} ( x \mid \lambda_{m} , z^{*} ) , m \in M $.
+The fitness of each vertex 
 \end{itemize}
-The paths found from both the subproblem trees and the reference trees consist of the solution set.
+In each iteration, a new position is generated from random sampling and the collision check.
+The new position is firstly added to all the reference trees to update the structure and refine the costs of neighboring vertices.
+Then the new position is added to all the subproblem trees to explore the subproblem in a similar way with RRT$^{*}$.
+Like the RRT and RRT$^{*}$, when the algorithm stops, each subproblem tree returns a path.
+The paths from all the subproblem trees forms the solution set.
+The exploration at each iteration is given in Algorithm \ref{alg:rapidly_exploring_process}.
 
+%Because the convergence of the tree structure in RRT* means that the path from the root to any vertex is an optimal path of the defined cost.
+%We use the same sampling position to extend all the trees in one iteration.
+%Thus the vertices in the reference trees could be used as reference for estimating the cost in constructing the subproblem trees.
+In each iteration, sample new position is used to extend both all the reference trees and all the subproblem trees.
+This enables us to estimate the fitness of each vertex in the subproblem tree by using the estimated reference vector of the vertex.
+The reference vector of the vertex is obtained by vectorizing the fitness of corresponding vertices (same position) in $ K $ reference trees.
+It means all the trees in MORRT$^{*}$ have same vertices but the edges are different.
+The edge are determined by the definition of the fitness in each tree.
 
-Because the convergence of the tree structure in RRT* means that the path from the root to any vertex is an optimal path of the defined cost.
-We use the same sampling position to extend all the trees in one iteration.
-Thus the vertices in the reference trees could be used as reference for estimating the cost in constructing the subproblem trees.
-
-Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
-It means that all the tree have equivalent vertices constructed from same positions set sequentially.
-But they are connected by different measurements of the costs, either a single objective or a cost from subproblem definition.
-The edges of the trees can be different.
+%Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
+%It means that all the tree have equivalent vertices constructed from same positions set sequentially.
+%But they are connected by different measurements of the costs, either a single objective or a cost from subproblem definition.
+%The edges of the trees can be different.
 
 \begin{figure}[H]
 \centering
@@ -233,39 +250,69 @@ The edges of the trees can be different.
 \label{fig:MORRTstar}
 \end{figure}
 
-
 \begin{algorithm}
-\begin{algorithmic}[1]
-\For{ \textbf{each} $ V_{r} \in \mathbf{V}_{r} $ } 
-	\State $ V_{r} \leftarrow \{ x_{init} \} $; $ E_{r} \leftarrow \emptyset $; $ i \leftarrow 0 $
-\EndFor
-\For{ \textbf{each} $ V_{s} \in \mathbf{V}_{s} $ } 
-	\State $ V_{s} \leftarrow \{ x_{init} \} $; $ E_{s} \leftarrow \emptyset $; $ i \leftarrow 0 $
-\EndFor
-\While{ $ i < N $ }
-	\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
+	\label{alg:rapidly_exploring_process}
+	\begin{algorithmic}[1]
+		\For{ \textbf{each} $ V_{r} \in \mathbf{V}_{r} $ } 
+		\State $ V_{r} \leftarrow \{ x_{init} \} $; $ E_{r} \leftarrow \emptyset $; $ i \leftarrow 0 $
+		\EndFor
+		\For{ \textbf{each} $ V_{s} \in \mathbf{V}_{s} $ } 
+		\State $ V_{s} \leftarrow \{ x_{init} \} $; $ E_{s} \leftarrow \emptyset $; $ i \leftarrow 0 $
+		\EndFor
+		\While{ $ i < N $ }
+		\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
 		\State $ G_{r} \leftarrow (V_{r}, E_{r}) $
-	\EndFor
-	\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
+		\EndFor
+		\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
 		\State $ G_{s} \leftarrow (V_{s}, E_{s}) $
-	\EndFor
-	\State $ x_{rand} \leftarrow $ \Call{ Sample }{$ i $} ; $ i \leftarrow i + 1 $
-	\State $ V' \leftarrow V $; $ E' \leftarrow E $
-	\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
-	\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
-	\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+		\EndFor
+		\State $ x_{rand} \leftarrow $ \Call{ Sample }{$ i $} ; $ i \leftarrow i + 1 $
+		\State $ V' \leftarrow V $; $ E' \leftarrow E $
+		\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x $}
+		\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x $}
+		\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
 		\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
 		\State $ (V_{r}, E_{r}) \leftarrow $ \Call{ Extend$_{Ref}$ }{$ G_{r}, x_{new} $}
 		\EndFor
 		\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
 		\State $ (V_{s}, E_{s}) \leftarrow $ \Call{ Extend$_{Sub}$ }{$ G_{s}, x_{new} $}
 		\EndFor
-	\EndIf
-\EndWhile
-\end{algorithmic}
-\label{alg:rapidly_exploring_process}
-\caption{Multi-objective Rapidly Random exploring }
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+	\caption{Multi-objective Rapidly Random exploring }
 \end{algorithm}
+
+We have the definitions of several functions similar with the definitions in ~\cite{Karaman.Frazzoli:RSS10}.
+\begin{itemize}
+	\item \textbf{Sampling} - \textsc{Sample}() \\
+	It returns independent identically distributed samples from $ X_{\mbox{free}} $.
+	\item \textbf{Steering} - \textsc{Steer}() \\
+	Given two points $ x $ and $ y $, it returns a point $ z $ that its distance to $ x $ is less than $ \eta $ and minimizes the distance to $ y $. 
+	\textsc{Steer}( $ x,y $ ) = $ \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $.
+	\item \textbf{Nearest neighbor} - \textsc{Nearest}() \\
+	It returns a vertex that is closest to point $ x $.
+	\textsc{Nearest}( $ G = (V,E), x $ ) = $ \arg \min_{v \in V} \lVert x - v \rVert $.
+	\item \textbf{Near vertices} - \textsc{Near}() \\
+	\textsc{Near}( $ G, x, \eta $ ) returns a set of all vertices within the closed ball of radius $ r_{n} $ centered at $ x $, in which $ r_{n} = \min \{ ( \frac{\gamma}{\xi_{d}} \frac{\log n}{n} )^{1/d}  , \eta \} $.
+	The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
+	\item \textbf{Collision test} - \textsc{ObstacleFree}() \\
+	\textsc{ObstacleFree}( $ x, x' $ ) returns True if $ [ x, x' ] \subset X \setminus X_{obs} $, which means the line segment between $ x $ and $ x' $ lies in $ X \setminus X_{obs} $.
+	\item \textbf{Line} - \textsc{Line}() \\
+	\textsc{Line}( $ x, x' $ ) $ : [0, s] \leftarrow X \setminus X_{obs} $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
+	\item \textbf{Cost} - \textsc{Cost}() \\
+	\textsc{Cost}( $ v  $ ) is defined by the cost of the unique path from $ x_{ \mbox{init} } $ to a vertex $ v \in V $.
+	\textsc{Cost}( $ x_{ \mbox{init} } $ ) = $ 0 $.
+\end{itemize}
+
+Figure \ref{fig:MORRTstar} shows the exploration process.
+When a new position is obtained (red dot in Figure \ref{fig:MORRTstar}), all the trees adds a new vertex with the same position.
+Firstly, each reference tree connects its new vertex and rewire a set of neighboring vertices in a radius (red dash circle in Figure \ref{fig:MORRTstar}).
+Then, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well.
+The extend processes of two types of trees are given in Algorithm \ref{alg:morrtstar:extend:ref} and Algorithm \ref{alg:morrtstar:extend:sub}.
+
+
+
 
 \begin{algorithm}
 \begin{algorithmic}[1]
@@ -334,7 +381,7 @@ The edges of the trees can be different.
 \end{algorithm} 
 
 
-\section{Theoretic Analysis}
+\section{Analysis}
 \label{sec:theoretic_analysis}
 
 Several assumptions are needed, which are inherited from RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
