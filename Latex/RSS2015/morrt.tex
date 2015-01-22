@@ -386,11 +386,13 @@ The extend processes of two types of trees are given in Algorithm \ref{alg:morrt
 
 Several assumptions are needed, which are inherited from RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
 \begin{asmp}{(Additivity of the objective functions)}
+\label{asmp:additivity}	
 For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X \setminus X_{obs} $,
 $ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
 \end{asmp}
 
 \begin{asmp}{(Continuity of the objective functions)}
+\label{asmp:continuity}
 For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
 $ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X \setminus X_{obs}, \sigma_{2} : [0, s_{2} ] \rightarrow X \setminus X_{obs} $,
 $ \exists k $ such that 
@@ -398,6 +400,7 @@ $ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \
 \end{asmp}
 
 \begin{asmp}{(Obstacle spacing)}
+\label{asmp:spacing}
 There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in X \setminus X_{obs} $ , $ \exists x' \in X \setminus X_{obs} $ such that
 \begin{itemize}
 \item the $ \delta $-ball centered at $ x' $ lies inside $ X \setminus X_{obs} $;
@@ -432,7 +435,8 @@ The decomposition methods mentioned in \cite{4358754} can be imported in this ca
 
 \begin{lem}
 \label{lem:ref_tree:conv}
-The cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
 $ P( \{ \lim_{ i \rightarrow \infty }  c_{k} ( i ) = z^{*}_{k}  \} ) = 1  $.
 \begin{proof}
 The construction of a reference tree does not depend on any other tree.
@@ -444,7 +448,8 @@ Thus the cost of the solution converges to the optimal of one single objective.
 
 \begin{lem}
 \label{lem:tree_vex:conv}
-The cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely, i.e.,
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely, i.e.,
 $
 P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 \begin{proof}
@@ -456,7 +461,8 @@ Similar with that of a goal vertex, the paths from the root to all other vertice
 
 \begin{lem}
 \label{lem:sub_tree:conv}
-The cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem, i.e.,
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem, i.e.,
 $
 P( \{ \lim_{ i \rightarrow \infty } c_{ \lambda_{m} }( i ) \} ) = z^{*}_{ \lambda_{m} }
 $
@@ -470,7 +476,8 @@ By Lemma \ref{lem:ref_tree:conv} and Lemma \ref{lem:sub_tree:conv}, we know that
 
 \begin{thm}
 \label{thm:morrt:conv}
-The solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
 $
 P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
 $
