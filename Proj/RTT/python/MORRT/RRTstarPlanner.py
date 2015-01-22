@@ -23,6 +23,7 @@ class RRTstarPlanner(object):
         
         self.rrts.init(start, goal, self.cost_func)
         for i in range(iterationNum):
+            print "Iter@" + str(i)
             self.rrts.extend()
             self.rrts_viz.update()
             

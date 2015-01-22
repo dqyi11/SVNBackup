@@ -70,14 +70,14 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist
     
-    MAP_FILE = './map.png'
+    MAP_FILE = './map2.png'
     
-    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 40, MAP_FILE) 
+    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 30, MAP_FILE) 
     
     planner.morrts_viz.setName('MORRTstar01')
     planner.morrts_viz.loadObj([MAP_FILE, FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 4000)
+    paths = planner.findPaths([40,40], [500, 40], 5000)
     print paths
     
     #import pygame.image

@@ -33,7 +33,7 @@ class MOPathEvaluator(object):
         
         with open(filename, 'w') as f1:
             for p in self.paths:
-                f1.writeline(str(p))
+                f1.write(str(p))
                     
     def visualize(self):
         
