@@ -41,7 +41,7 @@ class RRTstar(object):
         
         self.nearNodeNum = 6
         self.gamma = 1.0
-        self.radius = self.segmentLength
+        self.radius = 600  #self.segmentLength
         self.costFunc = None
         
     def init(self, start, goal, costFunc):
