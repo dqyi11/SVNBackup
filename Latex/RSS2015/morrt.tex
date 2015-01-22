@@ -5,6 +5,7 @@
 \usepackage[numbers]{natbib}
 \usepackage{multicol}
 \usepackage[bookmarks=true]{hyperref}
+%\usepackage{citesort}
 
 \usepackage[pdftex]{graphicx}
 \usepackage{comment}
@@ -40,16 +41,25 @@
 \maketitle
 
 \begin{abstract}
-The importance of multi-objective path planning emerges with the increase of the requirement complexity of the tasks assigned to the robot.
-The nature of the path planning problem makes that a few of the multi-objective optimization methods could not be directly imported to find the Pareto optimal solutions.
-Inspired by the RRT* and the decomposition-based multi-objective optimization, we proposed a MORRF*(Multi-objective Rapidly exploring Random Forest*) in this paper that could effectively and efficiently find the Pareto optimal set of solutions.
-The RRF consists of two types of tree structures, the reference tree and the subproblem tree.
-Each reference tree explores a single objective to support the estimation of an Utopia position in the fitness space.
-Each subproblem tree explores to find a solution to the assigned subproblem.
-The solutions from all the trees form a set of Pareto optimal solutions. 
+%The importance of multi-objective path planning emerges with the increase of the requirement complexity of the tasks assigned to the robot.
+%The nature of the path planning problem makes that a few of the multi-objective optimization methods could not be directly imported to find the Pareto optimal solutions.
+%Inspired by the RRT* and the decomposition-based multi-objective optimization, we proposed a MORRF*(Multi-objective Rapidly exploring Random Forest*) in this paper that could effectively and efficiently find the Pareto optimal set of solutions.
+%The RRF consists of two types of tree structures, the reference tree and the subproblem tree.
+%Each reference tree explores a single objective to support the estimation of an Utopia position in the fitness space.
+%Each subproblem tree explores to find a solution to the assigned subproblem.
+%The solutions from all the trees form a set of Pareto optimal solutions. 
+%
+%Theoretical analysis has been shown to support the feasibility of this algorithm and the asymptotic optimality. 
+%Simulations have been take to show the effectiveness and the efficiency of the MORRF*.%
 
-Theoretical analysis has been shown to support the feasibility of this algorithm and the asymptotic optimality. 
-Simulations have been take to show the effectiveness and the efficiency of the MORRF*.
+Many robotic tasks require a robot to satisfy multiple performance objectives.  
+For example, in path-planning, these objectives often include finding short paths that avoid risk and maximize the information obtained by the robot.  
+Although there exist many algorithms for performing multi-objective optimization, few of these algorithms apply directly to robotic path-planning and fewer still are capable of finding the set of Pareto optimal solutions.  
+We present the MORRF* (Multi-Objective Rapidly exploring Random Forest*) algorithm, which is blends concepts from two different types of algorithms from the literature: RRT* for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  E
+ach reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
+Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives.  
+We present a theoretical analysis that demonstrates that the algorithm asymptotically produces the set of Pareto optimal solutions, and use simulations to demonstrate the effectiveness and efficiency of MORFF* in approximating the Pareto set.
 \end{abstract}
 
 \IEEEpeerreviewmaketitle
@@ -75,33 +85,33 @@ The length requirement will be strictly enforced.
 (2) Why the multi-objective path planning is hard (compare with a common multi-objective optimization problem)
 \end{comment}
 
-In many real applications of the robots, the complexity of tasks inherently implies more than single objective to be reached.
-A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
-If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
-In robot arm manipulation planning, there usually exist several criteria to be considered as well~\cite{Pires2004}, for example, movement, joint velocities, joint accelerations and etc. 
-The most commonly applied method is converting into a single objective by linearly weighted summation of multiple objectives.
-The performance of the planned paths relies strongly on how different objectives are weighted.
-The difficulty becomes how the task supervisor should assign the weights.
-Meanwhile, the multiple objectives in a planning optimization are sometimes incomparable or unrankable.
-It becomes impossible to assign weights or ranks.
-Finding a set of non-dominant solutions is introduced to answer the multi-objective optimization.
-A non-dominant solution means that there exists no other solution can surpass it in all the objectives.
-A human interactive process can help the decision maker finding the most preferred solution, especially when the decision maker's preference is hard to precisely describe.
-This has been applied well in optimal design and optimal decision already.
+Many tasks assigned to robots are complex, can be performed in several different ways, and must satisfy several different performance objectives.  
+For example, a robot in a search task may be expected to maximize the area that covers while minimizing energy consumption and avoiding risk (see, for example~\cite{yi2014supporting,mei2005deployment}). 
+As another example, a robot manipulator may need to satisfy performance criteria  related to movement, joint velocities, joint accelerations, etc.~\cite{Pires2004}.
 
-However, how to find Pareto optimal paths in the multi-objective path planning has not been well answered yet.
-The popular methods in multi-objective optimization are hard to be directly applied to path planning problems.
-One way is coding a path into a fixed-length set of segments, which can be represented by direction~\cite{Ahmed2013} or way points~\cite{5160222}~\cite{Pires2004}.
-Evolutionary algorithms could then be imported to search the optimal solutions.
-In order to have a better approximation, the number of the segments consisted of a path cannot be too small.
-This will make the solution search working in a rather high dimension solution space.
-Even some algorithms work efficiently in high dimension solution spaces, 
-forcing different path trajectories represented by fixed number of segments is hard. 
-Because naturally the total length and the details of curvatures can be versatile.
-Many constraints of the problems are then difficult to be modeled.
-It is hard to estimate how many segments would be enough to represent all the possible paths due to difference in shapes and the sizes of the obstacles.
-Allowing different segment numbers of the paths could help but the solution format won't fit the requirement of most of the evolutionary algorithms.
-Also, when modeling a path into a point in a solution space, the obstacles in the working space could make a few of infeasible regions, which influences the continuity and increases the hardness of the heuristic-based search~\cite{5160222}~\cite{4358754}.
+%In many real applications of the robots, the complexity of tasks inherently implies more than single objective to be reached.
+%A robot in a search task is usually expected to maximize the search coverage with a consideration of the energy efficiency so that the execution time could also be expanded~\cite{yi2014supporting}. 
+%If there exists risk in the working environment, the robot should also try to avoid dangerous regions.
+%In robot arm manipulation planning, there usually exist several criteria to be considered as well~\cite{Pires2004}, for example, movement, joint velocities, joint accelerations and etc. 
+
+The most commonly applied method for finding a solution to a multi-objective optimization problem is to optimize a single objective created by a weighted summation of the multiple objectives.  
+Naturally, in path-planning the properties of the path produced by this optimization depends strongly on how different objectives are weighted, and this means that either the programmer, designer, or a human teammate must decide how to assign the weights so that the qualitative behavior matches what is intended.  
+In addition to the burden this places on the human operator, optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
+
+In response to these challenges, it is useful of find {\em the set of payoff dominant solutions} to the multi-objective path-planning problem, meaning the set of solutions for which there is no other solution that produces better payoffs for every objective.   
+This paper uses the economics term {\em Pareto optimal} to denote a payoff dominant solution.  Although not demonstrated in this paper, we propose that if an algorithm could produce the set of Pareto optimal solutions then a human could interactively explore this set to find one or more solutions that matches his or her expectations. 
+The objective of this paper is to create an algorithm that efficiently finds the Pareto set in a multi-objective path-planning problem.
+
+Most popular methods in multi-objective optimization don't naturally apply to path-planning problems~\cite{4358754, Ahmed2013}.
+%{\sc Give a reference to a good review or a reference to a handful of representative multi-objective methods}
+The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms doesn't scale well when there are an exponential number of solutions. 
+One approach to addressing this is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}.  
+This produces an encoding that can be ``fed into" an appropriate evolutionary algorithm to search for the Pareto set. 
+Unfortunately, these approaches don't scale well for large problems because the number of segments required to represent the paths grows too quickly, and estimating the required number of segments {\em a priori} is very challenging.  
+Another approach to solving the multi-objective path-planning problem is to represent the path as a point in a very high-dimensional vector space, each path corresponding to a different point in a potentially different dimensional space, and then use standard approaches to explore these spaces. 
+Indeed, we will use this as to guide our solution, but the algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{5160222,4358754}.
+
+{\sc This is where I got to. I'll keep working after colloquium.}
 
 While the path planning on continuous space is of a over big search space, 
 RRT(Rapidly exploring Random Tree) is a popular algorithm in finding feasible solutions from a start position to a goal position, which supports well in the environments with complex obstacles. 
