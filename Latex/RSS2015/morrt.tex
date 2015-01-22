@@ -491,43 +491,55 @@ the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 $
 P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 \begin{proof}
-	The construction of RRT* is not goal-oriented.
-	The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
-	Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
+	%The construction of RRT* is not goal-oriented.
+	%The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
+	%Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
+The asymptotic optimality of RRT$^{*}$ does not reply on how the sampling process is like (Theorem 22, \cite{Karaman.Frazzoli:RSS10}), though the convergence rate might be different.
+Simply changing the goal to the position of any vertex still hold the asymptotic optimality.
+Thus, we could generalize the asymptotic optimality from the goal to all the vertices.
 \end{proof}
 \end{lem}
 
-Because the construction of a reference tree does not depend on any other tree.
-The construction process is equivalent to the construction of a RRT*.
+The solve of a subproblem depends on a correct estimation of the reference vector $ \vec{z}^{*} $.
+Thus, we need to have the solutions of all the reference trees converging to the optimal firstly.
+The construction of a reference tree does not depend on any other tree.
+Thus, the construction process is equivalent to the construction of a RRT*.
 The asymptotic optimality of RRT* in Lemma \ref{lem:tree_vex:conv} is inherited here.
 Thus the cost of the solution converges to the optimal of one single objective.
 \begin{lem}
 \label{lem:ref_tree:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
-the cost of the solution of $ k $-th reference tree converges to $ z^{*}_{k} $, i.e., 
-$ P( \{ \lim_{ i \rightarrow \infty }  c_{k} ( i ) = z^{*}_{k}  \} ) = 1  $.
+the cost of the minimum cost path from the root to any vertex in $ k $-th reference tree converges to $ z^{*}_{k} $ almost surely, i.e., 
+$ P( \{ \lim_{ i \rightarrow \infty }  c_{k} (x, i ) = z^{*}_{k} (x) \} ) = 1  $.
 \end{lem}
 
-
+Then we need to show that after all the reference trees converge to the structure that provides optimal cost, 
+the subproblem tree can also converge to the structure that provides optimal fitness $ g^{*}_{m} ( x \mid \lambda_{m} , z^{*} ) $.
 \begin{lem}
 \label{lem:sub_tree:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+with $ \vec{z}^{*} (x) $ for any $ x $ given,
 the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem, i.e.,
 $
 P( \{ \lim_{ i \rightarrow \infty } c_{ \lambda_{m} }( i ) \} ) = z^{*}_{ \lambda_{m} }
 $
 \begin{proof}
-The construction of a subproblem tree depends on the convergence of all the reference trees.
-When all the reference trees have converged, the correct reference values $ c^{*} (x) $ of all the vertices could be obtained.
-The convergence process will be similar with that of a single RRT*.
-By Lemma \ref{lem:ref_tree:conv} and Lemma \ref{lem:sub_tree:conv}, we know that the utopia reference value $ c^{*} (x) $ could be correctly estimated after all the reference trees have reached optimality.
+When the reference vector $ \vec{z}^{*}(x) $ converges, the cost of the minimum cost path from the root to the vertex of position $ x $ in $ m $-th subproblem tree will gradually converge to the optimal by Lemma \ref{lem:tree_vex:conv}.
+It means that the minimum fitness path from the root to any vertex in a subproblem tree will converge to an optimal minimum fitness path, in which the vertices in goal region are included.
+It equals to that the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem.
+%The construction of a subproblem tree depends on the convergence of all the reference trees.
+%When all the reference trees have converged, the correct reference values $ c^{*} (x) $ of all the vertices could be obtained.
+%The convergence process will be similar with that of a single RRT*.
+%By Lemma \ref{lem:ref_tree:conv} and Lemma \ref{lem:sub_tree:conv}, we know that the utopia reference value $ c^{*} (x) $ could be correctly estimated after all the reference trees have reached optimality.
 \end{proof}
 \end{lem}
+
+Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to a subset of the Pareto optimal set.
 
 \begin{thm}
 \label{thm:morrt:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
-the solutions from MORRF$^{*} $ converges to the Pareto optimal set almost surely, i.e.
+the solutions from MORRF$^{*} $ converges to a subset of the Pareto optimal set almost surely, i.e.
 $
 P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
 $
@@ -535,7 +547,8 @@ $
 As the solutions of MORRF$^{*}$ can be modeled in points in a high-dimension space by Lemma \ref{lem:moo-d:rrt}, the Tchebycheff method could be imported to decompose the multi-objective optimization problem into a set of subproblems.
 By the fitness definition of the subproblem trees, if the subproblem tree could find a solution that minimize the fitness, the solution is in the Pareto optimal set of the multi-objective optimization problem.
 
-By Lemma \ref{lem:sub_tree:conv}, we have that the solution cost of the $ m $-th subproblem tree converges to $ z^{*}_{ \lambda_{m} } $.
+Lemma \ref{lem:ref_tree:conv} guarantees that the reference vector $ \vec{z}^{*}(x) $ at any location $ x $ converges to the correct estimation after running enough iteration.
+Thus, by Lemma \ref{lem:sub_tree:conv}, we have that the solution cost of the $ m $-th subproblem tree converges to $ z^{*}_{ \lambda_{m} } $.
 It means that the solution converges to an optimal solution to $ m $-th subproblem as the iteration goes.
 Therefore, the set of the solutions from all the subproblem trees converge to a subset of the Pareto optimal set, as the iteration goes~\cite{4358754}~\cite{miettinen1999nonlinear}.
 \end{proof}
