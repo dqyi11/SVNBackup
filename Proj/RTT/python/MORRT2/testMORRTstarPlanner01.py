@@ -90,10 +90,10 @@ if __name__ == '__main__':
     evaluator.load(paths)
     evaluator.visualize()
     
-    print evaluator.scores
-    
     evaluator.savePaths('MORRTstar01-path.txt')
     np.savetxt('MORRTstar01-score.txt', evaluator.scores)
+    
+    print evaluator.scores
     
     while True:
         planner.morrts_viz.update()
