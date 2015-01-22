@@ -124,31 +124,40 @@ The random forest uses two types of tree structures: a set of {\em reference tre
 Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia position} required by the adapted multi-objective optimization algorithm.  
 Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives. 
 
-The paper is structured as follows.  Section~\ref{sec:related_works} reviews relevant work in multi-objective optimization and RRT-like path-planning. Section~\ref{sec:morrt} presents the MORRF* algorithm,  Section~\ref{sec:theoretic_analysis} proves that the algorithm produces the Pareto frontier given enough sampling time, and Section~\ref{sec:simulation} uses simulations to to illustrate the algorithm's performance.
+The paper is structured as follows.  
+Section~\ref{sec:related_works} reviews relevant work in multi-objective optimization and RRT-like path-planning. 
+Section~\ref{sec:morrt} presents the MORRF$^{*}$ algorithm,  
+Section~\ref{sec:theoretic_analysis} proves that the algorithm produces the Pareto frontier given enough sampling time, 
+and Section~\ref{sec:simulation} uses simulations to illustrate the algorithm's performance.
 
 \section{Related Work}
 \label{sec:related_works}
 
 An algorithm that discovers the set of Pareto optimal solutions must discover those solutions for which no other solution is better with respect to every objective.  A naive algorithm would do this by comparing every solution to every other solution, which works fine for problems with a small, discrete set of solutions, but does not work for continuous spaces or problems with exponential numbers of potential solutions.  
-Consider Marler's and Arora's observation that ``no single approach is superior [for all problems].  Rather, the selection of a specific method depends on the type of information given in the problem"~\cite{marler2004survey}.  We note that (single objective) path-planning in a continuous state space is often efficiently performed using RRT* or other discretization-based approaches, and this suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
+Consider Marler's and Arora's observation that ``no single approach is superior [for all problems].  
+Rather, the selection of a specific method depends on the type of information given in the problem"~\cite{marler2004survey}.  
+We note that (single objective) path-planning in a continuous state space is often efficiently performed using RRT* or other discretization-based approaches, and this suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
 
 Given the restriction to approaches that use discretization-based approaches, prior work has modeled the space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
-{Walter, is the following sentence correct: The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT*; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.}  
+The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT*; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
 Obstacles can cause problems for determining which cells in the discretized space are connected to which others, not so much in 2-D for a single robot but more so for planning the trajectory for a robotic manipulator.
-Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using what the authors call the NSGA-II algorithm to to find a set of Pareto optimal solutions in \cite{Ahmed2013}.  
+Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using what the authors call the NSGA-II algorithm to find a set of Pareto optimal solutions in \cite{Ahmed2013}.  
 Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
 
 % Evolutionary algorithms can be used to fine the Pareto set, but these approaches tend to be inefficient when applied to spaces with high dimensions~\cite{marler2004survey}.  For such spaces, small deviations in possible solutions may need to be considered in order to find an optimal solution, but this means exploring many possible solutions for problems with non-linearities or multiple local maxima.   A path in a fixed-length search tree of depth $d$ can be considered as a point in $\Re^d$, so tree-based approaches followed by an evolutionary "fine-tuning" stage risk running into the problems just listed with evolutionary approaches. 
 
-In contrast to searching through and comparing solutions in order to find the Pareto optimal set, decomposition-based methods provide an attractive alternative.  Indeed, the approach in this paper uses a decomposition-based method.  
-MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
-Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$ denote the K-element set of objective functions, and let $x$ denote a potential solution.  Finally, let $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference, described in more detail in the next section. 
+In contrast to searching through and comparing solutions in order to find the Pareto optimal set, decomposition-based methods provide an attractive alternative.  
+Indeed, the approach in this paper uses a decomposition-based method.  
+MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  
+Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  
+Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
+Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$ denote the K-element set of objective functions, and let $x$ denote a potential solution.  Finally, let $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference vector, described in more detail in the next section. 
 Three types of decomposition methods are introduced in~\cite{4358754}.
 \begin{itemize}
 \item \emph{Weighted sum approach} \\
 Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
 \item \emph{Tchebycheff approach} \\
-Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - z^{*}_{k}  | \} $;
+Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - z^{*}_{k}  | \} $;
 \item \emph{Boundary intersection approach} \\
 Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{*} ) = d $, subject to $ \vec{z}^{*} - F(x) = d \lambda $.
 \end{itemize}
@@ -156,10 +165,10 @@ The solutions generated by each method are a subset of the Pareto optimal set.
 
 Before continuing, note that evolutionary algorithms based on the decomposition method have been proposed ~\cite{6600851}, but given the need to blend the decomposition methods with sampling-based path-planning, we do not explore these algorithms further in this paper.
 
-
-Sampling-based path planning works effectively in continuous space. The 
-RRT (Rapidly exploring RandomTtree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
-It has been shown that under certain conditions, RRT will fail to find an optimal solution~\cite{Karaman.Frazzoli:RSS10}. In response, the RRT$^{*}$ algorithm has been proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed.
+Sampling-based path planning works effectively in continuous space. 
+The RRT (Rapidly exploring RandomTtree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
+It has been shown that under certain conditions, RRT will fail to find an optimal solution~\cite{Karaman.Frazzoli:RSS10}. 
+In response, the RRT$^{*}$ algorithm has been proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed.
 The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
 %Figure \ref{fig:RRTstar2} illustrates a tree generated using the RRT* algorithm.
 %\begin{figure}
@@ -178,46 +187,55 @@ Because a set of trees are constructed in the exploration process, we call the a
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
 
-When the multi-objective path planning problem is defined on a continuous space $ X $, the Pareto optimal set is not enumerable.
-The target becomes finding a finite subset of the Pareto optimal set.
-The diversity of the solution is expected to be maximize so that the Pareto optimal set can be better approximated.
-In this paper, we only look at the minimization problem, which means all the objectives are expected to be minimize.
-Let the size of the finite subset be $ M $.
-We could have the multi-objective path planning problem defined.
+Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$. 
+Without loss of generality, we assume that each $f_j(\cdot)$ is a cost function so that our objective is to minimize these functions.  
+Since the Pareto optimal set is not enumerable, our {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
+By ``representative" we mean that we want a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.  
+
 \begin{defn}{ \textbf{Multi-Objective Path Planning} }
-Given a bounded connect open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal region $ X_{goal} $.
-The obstacle-free space is $ X_{free} = X \setminus X_{obs} $.
-Given $ K $ objectives that are determined by a vector function
-$ \vec{F}(x) = [ f_{1} (x), \cdots , f_{K}(x) ]^{T} : X \rightarrow \mathbb{R}^{K} $ and 
-$ \vec{F}(\sigma) = \sum_{x \in \sigma} \vec{F}(x) $.
-Find $ M $ paths $ \sigma^{*} \in \Sigma^{*}  : [0, s] \rightarrow cl(  X_{free} ) $ such that
+Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal region $ X_{goal} $. 
+Consider the set of $K$ objectives determined by a vector function $ \vec{F}(\cdot) = [ f_{1} (\cdot), \ldots , f_{K}(\cdot) ]^{T}$ defined by $\vec{F}: \mathbb X \rightarrow \mathbb{R}^{K} $. 
+Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{obs} $. Note that $\vec{F}$ is defined for all points in $X$ both those in free space and obstacle space.
+
+Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
+Define the cost of the path as the vector-valued function $ \vec{F}(\sigma) = \int_{\sigma} \vec{F}(x)ds $.  
+The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such that
 \begin{itemize}
+	\item $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
 	\item $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = X_{goal}  $;
 	\item $ \not \exists \sigma , \forall k \in K, f_{k} (\sigma) > f_{k} (\sigma^{*}) $.
 \end{itemize}
 \end{defn}
+\noindent Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
-Similar with MOEA-D~\cite{4358754}, the solution set of size $ M $ is obtained by decomposing the multi-objective problem into $ M $ subproblems.
-Each subproblem is assigned with a tree structure to explore the solution space.
-The solve of the subproblem relies on the knowledge of the reference vector $ \vec{z}^{*} $ in the fitness space if we follow the Tchebycheff approach or Boundary intersection approach.
-In this paper, for simplicity, we only look at the Tchebycheff approach.
-Boundary intersection approach could be easily implemented with slight modification.
-Thus $ K $ trees are introduced to explore the minimum of each objective.
-
+Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
+In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a ``Utopia" reference vector $ \vec{z}^{*} $ in the fitness space. 
+Before describing how we find $ \vec{z}^{*} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
 \begin{figure}
 \centering
 \includegraphics[width=0.9\linewidth]{fig/Tchebycheff}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
+Recall from the previous section that  $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find solutions $ x\in X $ that minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.  
+As illustrated in the Figure, the ``Utopia'' point is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\vec{z}^*$ is given by $\vec{z}^{*}_{k} = \arg \min_{x \in X} f_{k}(x)$.  
+It is called the ``Utopia'' point because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
 
-There are two types of tree structures used for the optimization process.
+%{\sc I don't understand the indexing on $g^{te}$, the difference between i and k on the right hand side of $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.}
+
+Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$ -based sampling of the search space.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' point in payoff space and another type of RRT* structure to find paths that minimize the Tchebycheff condition.  
+Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
-\item Each \emph{reference tree} explores for a single objective $ f_{k} (x), k \in K $. 
-The fitness of each vertex is calculated from the $ k $-th objective.
-\item Each \emph{subproblem tree} explores for a subproblem $ g_{m} ( x \mid \lambda_{m} , z^{*} ) , m \in M $.
-The fitness of each vertex 
+\item Each \emph{reference tree} explores using a single objective $ f_{k} (x), k \in K $. 
+The cost of each vertex is calculated using the $ k $-th objective function.
+\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , z^{*} ) , m \in M $.
+The cost of each vertex 
 \end{itemize}
+Thus $ K $ reference trees are introduced, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.
+
+{\sc This is where I have to stop for now.}
+
 In each iteration, a new position is generated from random sampling and the collision check.
 The new position is firstly added to all the reference trees to update the structure and refine the costs of neighboring vertices.
 Then the new position is added to all the subproblem trees to explore the subproblem in a similar way with RRT$^{*}$.
@@ -560,12 +578,12 @@ compare NSGA-II
 \end{comment}
 
 Simulations have been taken to verify the performance of MORRF$^{*}$.
-We 
-We also implemented NSGA-II for multi-objective path planning, which is introduced in \cite{Ahmed2013}.
-In order to be comparable, the path planning using NSGA-II is implemented in a continuous space.
-Each solution is represented as a sequence of way points.
-The cost is calculated like that in RRT*, whcih \textsc{Line}($ x_{1}, x_{2} $) is called to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.
-We have implemented two approaches of decomposition method, the weighted sum approach and the Tchebycheff approach.
+In order to compare the performance, we also implemented NSGA-II for multi-objective path planning, which is introduced in \cite{Ahmed2013}.
+To make it comparable, the path planning using NSGA-II works in a continuous space and the solution format has been modified to a sequence of waypoints.
+Thus the solution from the NSGA-II can have same format with those from MORRF$^{*}$.
+The cost calculation is identical with that in  MORRF$^{*}$, whcih \textsc{Line}($ x_{1}, x_{2} $) is called to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.
+
+We have implemented two types of  MORRF$^{*}$, using different decomposition approaches, the weighted sum approach and the Tchebycheff approach.
 The Tchebycheff approach depends on the knowledge of the reference vector, but the weighted sum approach does not.
 However, the weighted sum approach works well only when all the objectives are convex~\cite{4358754}.
 Also the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.
