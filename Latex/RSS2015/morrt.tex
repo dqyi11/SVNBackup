@@ -22,6 +22,9 @@
 \newtheorem{asmp}{Assumption}
 \newtheorem{defn}{Definition}
 
+\usepackage{caption}
+\usepackage{subcaption}
+
 \pdfinfo{
    /Author (Homer Simpson)
    /Title  (Robots: Our new overlords)
@@ -55,9 +58,9 @@
 Many robotic tasks require a robot to satisfy multiple performance objectives.  
 For example, in path-planning, these objectives often include finding short paths that avoid risk and maximize the information obtained by the robot.  
 Although there exist many algorithms for performing multi-objective optimization, few of these algorithms apply directly to robotic path-planning and fewer still are capable of finding the set of Pareto optimal solutions.  
-We present the MORRF* (Multi-Objective Rapidly exploring Random Forest*) algorithm, which is blends concepts from two different types of algorithms from the literature: RRT* for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
-The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  E
-ach reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
+We present the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$) algorithm, which is blends concepts from two different types of algorithms from the literature: RRT$^{*}$ for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
+Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
 Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives.  
 We present a theoretical analysis that demonstrates that the algorithm asymptotically produces the set of Pareto optimal solutions, and use simulations to demonstrate the effectiveness and efficiency of MORFF* in approximating the Pareto set.
 \end{abstract}
@@ -111,67 +114,36 @@ Unfortunately, these approaches don't scale well for large problems because the 
 Another approach to solving the multi-objective path-planning problem is to represent the path as a point in a very high-dimensional vector space, each path corresponding to a different point in a potentially different dimensional space, and then use standard approaches to explore these spaces. 
 Indeed, we will use this as to guide our solution, but the algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{5160222,4358754}.
 
-{\sc This is where I got to. I'll keep working after colloquium.}
+The RRT (Rapidly exploring Random Tree) algorithm is popular for finding feasible solutions from a start position to a goal position in continuous or very large search spaces; it also works well when environments have complex obstacles. 
+The reason that RRT is popular is that the tree structure tends to be find solutions very efficiently.
+The RRT$^{*}$ algorithm was a recently introduced modification to RRT that is guaranteed to find an optimal path given enough sampling time~\cite{Karaman:2011:SAO:2000201.2000209,Karaman.Frazzoli:RSS10}.
 
-While the path planning on continuous space is of a over big search space, 
-RRT(Rapidly exploring Random Tree) is a popular algorithm in finding feasible solutions from a start position to a goal position, which supports well in the environments with complex obstacles. 
-The tree structure also guarantees a great efficiency on path search.
-RRT* was recently introduced and has been proven to effectively finding an optimal path given enough sampling time~\cite{Karaman:2011:SAO:2000201.2000209}~\cite{Karaman.Frazzoli:RSS10}.
-Similar with that decomposing the multi-objective optimization problem into a few subproblems in \cite{4358754}, we propose the MORRF*(Multi-Objective Rapidly exploring Random Forest*) to find a set of Pareto optimal paths from the start position to the goal position.
+The remainder of the paper presents the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest*) algorithm, which we used to find a set of Pareto optimal paths from a start position to a goal position.  
+MORRF$^{*}$ blends concepts from RRT$^{*}$ a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
+Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia position} required by the adapted multi-objective optimization algorithm.  
+Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives. 
 
-In this paper, we reviews a few existing multi-objective path planning algorithms and the works that inspires our algorithm in Section \ref{sec:related_works}.
-With the definition of the multi-objective path planning problem, MORRF* is introduced and explained in Section \ref{sec:morrt}.
-We provide theoretic analysis to support MORRF* in Section \ref{sec:theoretic_analysis}.
-Simulation results are given in Section \ref{sec:simulation} to illustrate the performance of the proposed algorithm.
+The paper is structured as follows.  Section~\ref{sec:related_works} reviews relevant work in multi-objective optimization and RRT-like path-planning. Section~\ref{sec:morrt} presents the MORRF* algorithm,  Section~\ref{sec:theoretic_analysis} proves that the algorithm produces the Pareto frontier given enough sampling time, and Section~\ref{sec:simulation} uses simulations to to illustrate the algorithm's performance.
 
-\section{Related works}
+\section{Related Work}
 \label{sec:related_works}
 
-Finding a set of Pareto optimal paths replies on exploring the non-dominance of the paths.
-The implicit comparative property prevents a few pruning techniques for efficiency and the problem complexity would be greatly extended as a result.
-Discretizing the space is one way to reduce the problem complexity.
-By modeling the working space into the connectivity of a graph structure, a multi-objective A* search could be applied to find the solution set in \cite{Mandow:2005:NAM:1642293.1642328}.
-Another approach is coding the path into a sequence of directions from one cell to next cell after map discretization.
-NSGA-II can then be used to find a set of Pareto optimal solutions in \cite{Ahmed2013}.
-The solutions would be translated into sequences of way points.
-Planning on a discretized map is never the best way of finding the optimal path.
-Either a coarse discretization loses the detail information, or a fine discretization brings too much redundancy and complexity.
-Especially when there exists obstacles in the working space, a sequence of way points might not be enough to represent a path.
-A direct line connecting two points might get into obstacles and is not feasible.  
-Therefore, spline are introduced to interpolate a sequence of way points into a trajectory in \cite{6181426}.
-How the interpolated shapes is actually not evaluated in the optimization process. 
-The solutions are not directly answer to the defined path planning problems.
-Increasing the path resolution, the number of the steps, should better deal with the obstacles in the working space and also follows better along the gradient of the fitness.
-But the dimension of the solution space would be increased.
-It also reveals that approaching the problem in a continuous space would be better.
+An algorithm that discovers the set of Pareto optimal solutions must discover those solutions for which no other solution is better with respect to every objective.  A naive algorithm would do this by comparing every solution to every other solution, which works fine for problems with a small, discrete set of solutions, but does not work for continuous spaces or problems with exponential numbers of potential solutions.  
+Consider Marler's and Arora's observation that ``no single approach is superior [for all problems].  Rather, the selection of a specific method depends on the type of information given in the problem"~\cite{marler2004survey}.  We note that (single objective) path-planning in a continuous state space is often efficiently performed using RRT* or other discretization-based approaches, and this suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
 
-The biggest challenge to multi-objective evolutionary algorithms on high dimension continuous space is efficiency.
-Within a small search step means that it will take much longer time to converge to the Pareto front.
-But within a big search step is likely to miss the optimal solutions.
-As a path is denoted by a point in a high dimension continuous space, the exist of obstacles that makes plenty of paths infeasible leads to plenty of undefined regions in the continuous space.
-This leads to the discontinuity of the solution space, which could impact the performance of many evolutionary algorithm on multi-objective optimization.
+Given the restriction to approaches that use discretization-based approaches, prior work has modeled the space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
+{Walter, is the following sentence correct: The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT*; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.}  
+Obstacles can cause problems for determining which cells in the discretized space are connected to which others, not so much in 2-D for a single robot but more so for planning the trajectory for a robotic manipulator.
+Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using what the authors call the NSGA-II algorithm to to find a set of Pareto optimal solutions in \cite{Ahmed2013}.  
+Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
 
-Sampling-based path planning works effectively in continuous space.
-RRT(Rapidly exploring random tree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling and works well with any complex obstacles.
-The simplicity of the algorithm shortens the search time of a feasible solution.
-However, in finding an optimal solution, it is figured that RRT will fail in \cite{Karaman.Frazzoli:RSS10}.
-Thus RRT$^{*}$ is introduced to facilitate the optimal search.
-A \emph{Rewire} process is imported to update the tree structure gradually towards optimality which is triggered by new samplings.
-The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}.
-The structure is update with new samplings, and the connections are updated with the cost update.
-Gradually it learns the optimal path from each vertex of the tree structure to the start position.
-Figure \ref{fig:RRTstar2} gives an example.
-\begin{figure}
-\centering
-\includegraphics[width=0.9\linewidth]{fig/RRTstar2}
-\caption{Tree structure after exploring fitness space.}
-\label{fig:RRTstar2}
-\end{figure}
+% Evolutionary algorithms can be used to fine the Pareto set, but these approaches tend to be inefficient when applied to spaces with high dimensions~\cite{marler2004survey}.  For such spaces, small deviations in possible solutions may need to be considered in order to find an optimal solution, but this means exploring many possible solutions for problems with non-linearities or multiple local maxima.   A path in a fixed-length search tree of depth $d$ can be considered as a point in $\Re^d$, so tree-based approaches followed by an evolutionary "fine-tuning" stage risk running into the problems just listed with evolutionary approaches. 
 
-In find Pareto optimality, decomposition method is another effective way besides dominance comparison.
-MOEA-D is proposed in \cite{4358754}, which decomposes a multi-objective optimization problem into a class of subproblems.
-Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weight vector and $ \sum_{k=1}^{K} \lambda_{k} = 1 $.
-Three types of decomposition methods are introduced in \cite{4358754}.
+In contrast to searching through and comparing solutions in order to find the Pareto optimal set, decomposition-based methods provide an attractive alternative.  Indeed, the approach in this paper uses a decomposition-based method.  
+MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
+Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$ denote the K-element set of objective functions, and let $x$ denote a potential solution.  Finally, let $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference, described in more detail in the next section. 
+Three types of decomposition methods are introduced in~\cite{4358754}.
 \begin{itemize}
 \item \emph{Weighted sum approach} \\
 Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
@@ -180,13 +152,26 @@ Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{i \leq k \leq K}  \{ \lambda_
 \item \emph{Boundary intersection approach} \\
 Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{*} ) = d $, subject to $ \vec{z}^{*} - F(x) = d \lambda $.
 \end{itemize}
-The solutions of all the subproblems are a subset of the Pareto optimal set.
-A few evolutionary algorithms based on the decomposition method are proposed to solve the multi-objective optimization~\cite{6600851}, 
-especially in many-objective optimization problems.
-It is noticeable that the decomposition depends on finding the ``Utopia'' reference vector $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ as a reference to minimize different weighted distances.
-In the next section, we will propose an algorithm that explores the solution spaces parallel using RRT* tree structure.
-Instead of a single tree structure, a set of trees are constructed in the exploration process.
-Thus it is named MORRF$^{*}$ (Multi-objective Rapidly exploring Randm Forest$^{*}$).
+The solutions generated by each method are a subset of the Pareto optimal set.
+
+Before continuing, note that evolutionary algorithms based on the decomposition method have been proposed ~\cite{6600851}, but given the need to blend the decomposition methods with sampling-based path-planning, we do not explore these algorithms further in this paper.
+
+
+Sampling-based path planning works effectively in continuous space. The 
+RRT (Rapidly exploring RandomTtree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
+It has been shown that under certain conditions, RRT will fail to find an optimal solution~\cite{Karaman.Frazzoli:RSS10}. In response, the RRT$^{*}$ algorithm has been proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed.
+The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
+%Figure \ref{fig:RRTstar2} illustrates a tree generated using the RRT* algorithm.
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.9\linewidth]{fig/RRTstar2}
+%\caption{Tree structure after exploring fitness space.}
+%\label{fig:RRTstar2}
+%\end{figure}
+In the next section, we present an algorithm that explores the solution space using RRT*-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
+Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
+
+
 
 
 
@@ -203,7 +188,7 @@ We could have the multi-objective path planning problem defined.
 Given a bounded connect open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal region $ X_{goal} $.
 The obstacle-free space is $ X_{free} = X \setminus X_{obs} $.
 Given $ K $ objectives that are determined by a vector function
-$ \vec{F}(x) = [ f_{1} (x), \cdots , f_{K}(x) ]^{T} : \mathbb{R}^{d} \rightarrow \mathbb{R}^{K} $ and 
+$ \vec{F}(x) = [ f_{1} (x), \cdots , f_{K}(x) ]^{T} : X \rightarrow \mathbb{R}^{K} $ and 
 $ \vec{F}(\sigma) = \sum_{x \in \sigma} \vec{F}(x) $.
 Find $ M $ paths $ \sigma^{*} \in \Sigma^{*}  : [0, s] \rightarrow cl(  X_{free} ) $ such that
 \begin{itemize}
@@ -580,28 +565,225 @@ We also implemented NSGA-II for multi-objective path planning, which is introduc
 In order to be comparable, the path planning using NSGA-II is implemented in a continuous space.
 Each solution is represented as a sequence of way points.
 The cost is calculated like that in RRT*, whcih \textsc{Line}($ x_{1}, x_{2} $) is called to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.
-
+We have implemented two approaches of decomposition method, the weighted sum approach and the Tchebycheff approach.
+The Tchebycheff approach depends on the knowledge of the reference vector, but the weighted sum approach does not.
+However, the weighted sum approach works well only when all the objectives are convex~\cite{4358754}.
+Also the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.
 
 We tested firstly on path planning of two objectives.
+All the methods run $ 5000 $ iterations and generate $ 30 $ solutions.
 
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-0.png}
+		\caption{Minimize distance}
+		\label{fig:sim:norm:distance}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-1.png}
+		\caption{Minimize fitness 1}
+		\label{fig:sim:norm:fitness1}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim3-2obj/PF03-MOPATH.png}
+		\caption{Pareto front using NSGA-II}
+		\label{fig:sim:norm:pf:a}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim3-2obj/MOPath01-ALL.png}
+		\caption{Pareto optimal paths using NSGA-II}
+		\label{fig:sim:norm:sols:a}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim1-2obj/PF01-MORRT.png}
+		\caption{Pareto front using weighted sum approach}
+		\label{fig:sim:norm:pf:b}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim1-2obj/MORRTstar00-ALL.png}
+		\caption{Pareto optimal paths using weighted sum approach}
+		\label{fig:sim:norm:sols:b}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim2-2obj/PF02-MORRT2.png}
+		\caption{Pareto front using Tchebycheff approach}
+		\label{fig:sim:norm:pf:c}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-ALL.png}
+		\caption{Pareto optimal paths using Tchebycheff approach}
+		\label{fig:sim:norm:sols:c}
+	\end{subfigure}
+	\caption{Three simple graphs}
+	\label{fig:sim:norm}
+\end{figure}
 
 We also tested with how MORRTF$^{*}$ works with obstacles.
+The results are shown in Figure \ref{fig:sim:obs}.
 
- 
-More objectives are also tested here.
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-0.png}
+		\caption{Minimize distance}
+		\label{fig:sim:obs:distance}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1.png}
+		\caption{Minimize fitness 1}
+		\label{fig:sim:obs:fitness1}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/PF04-MORRT.png}
+		\caption{Pareto front using weighted sum approach}
+		\label{fig:sim:obs:pf:a}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-ALL.png}
+		\caption{Pareto optimal paths using weighted sum approach}
+		\label{fig:sim:obs:sols:a}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim5-obstacle/PF05-MORRT2.png}
+		\caption{Pareto front using Tchebycheff approach}
+		\label{fig:sim:obs:pf:b}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim5-obstacle/MORRTstar01-ALL.png}
+		\caption{Pareto optimal paths using Tchebycheff approach}
+		\label{fig:sim:obs:sols:b}
+	\end{subfigure}
+	\caption{Three simple graphs}
+	\label{fig:sim:obs}
+\end{figure}
+
+We also tested the case that the two objectives exist mutual contradiction.
+The results are illustrated in Figure \ref{fig:sim:nonconvex}.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-0.png}
+		\caption{Minimize fitness 1}
+		\label{fig:sim:nonconvex:fitness1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-1.png}
+		\caption{Minimize fitness 2}
+		\label{fig:sim:nonconvex:fitness2}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim8-nconvex/PF03-MORRT.png}
+		\caption{Pareto front using weighted sum approach}
+		\label{fig:sim:nonconvex:pf:a}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-ALL.png}
+		\caption{Pareto optimal paths using weighted sum approach}
+		\label{fig:sim:nonconvex:sols:a}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim9-nconvex/PF03-MORRT2.png}
+		\caption{Pareto front using Tchebycheff approach}
+		\label{fig:sim:nonconvex:pf:b}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim9-nconvex/MORRTstar03-ALL.png}
+		\caption{Pareto optimal paths using Tchebycheff approach}
+		\label{fig:sim:nonconvex:sols:b}
+	\end{subfigure}
+	\caption{Three simple graphs}
+	\label{fig:sim:nonconvex}
+\end{figure}
+
+In order to verify how the MORRF$^{*}$ performs with more objectives, we tested a case with three objectives.
+The results are given in Figure \ref{fig:sim:many}.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.31\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-0.png}
+		\caption{Minimize distance}
+		\label{fig:sim:many:distance}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.31\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-1.png}
+		\caption{Minimize fitness 1}
+		\label{fig:sim:many:fitness1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.31\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-2.png}
+		\caption{Minimize fitness 2}
+		\label{fig:sim:many:fitness2}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim6-3obj/PF06-MORRT.png}
+		\caption{Pareto front using weighted sum approach}
+		\label{fig:sim:many:pf:a}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-ALL.png}
+		\caption{Pareto optimal paths using weighted sum approach}
+		\label{fig:sim:many:sols:a}
+	\end{subfigure}  \\
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim7-3obj/PF07-MORRT2.png}
+		\caption{Pareto front using Tchebycheff approach}
+		\label{fig:sim:many:pf:b}
+	\end{subfigure} 
+	\begin{subfigure}[b]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/sim7-3obj/MORRTstar02-ALL.png}
+		\caption{Pareto optimal paths using Tchebycheff approach}
+		\label{fig:sim:many:sols:b}
+	\end{subfigure}
+	\caption{Three simple graphs}
+	\label{fig:sim:many}
+\end{figure}
 
 \section{Conclusion} 
 \label{sec:conclusion}
 
 This paper presented a MORRF$^{*}$ for the multi-objective path planning problems on continuous spaces.
-The multi-objective optimization problem is decomposed into a few subproblems.
-A forest of trees will explore the planning space to find the solution to corresponding subproblems.
-The set of solutions from all the subproblem trees is a subset 
+The multi-objective path planning problem is decomposed into a few subproblems.
+Each subproblem is assigned to a subproblem tree of a forest.
+The subproblem trees parallel explore the working space by same new sampling positions.
+Analyses have shown that the solutions of all the subproblem trees is a subset of the Pareto optimal solutions.
+Experiments have been taken to verify the effectiveness and evaluate the performance of the MORRF$^{*}$.
 
-Boundary intersection approach -> better diversity
+In the experiment, only weighted sum approach and the Tchebycheff approach have been tested. 
+It is obvious that the solutions from Tchebycheff approach shows better diversity than those from weighted sum approach.
+It is expected that the solutions from Boundary intersection approach would have even better diversity.
 
-We can see that...
-As a single query, the efficiency could be improved by sensing 
+We can see that the trees in MORRF$^{*}$ explores the entire working space in search of the Pareto optimal paths from the start to the goal region.
+As a single query, the efficiency could be improved by avoiding sensing 
 
 \section*{Acknowledgments}
 
