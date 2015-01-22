@@ -153,7 +153,7 @@ Gradually it learns the optimal path from each vertex of the tree structure to t
 Figure \ref{fig:RRTstar2} gives an example.
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{fig/RRTstar2}
+\includegraphics[width=0.9\linewidth]{fig/RRTstar2}
 \caption{Tree structure after exploring fitness space.}
 \label{fig:RRTstar2}
 \end{figure}
@@ -210,7 +210,7 @@ Thus $ K $ trees are introduced to explore the minimum of each objective.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{fig/Tchebycheff}
+\includegraphics[width=0.9\linewidth]{fig/Tchebycheff}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
@@ -482,6 +482,9 @@ $
 P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
 $
 \begin{proof}
+With the assumptions hold, we can have Lemma \ref{lem:ref_tree:conv}.
+It means that the reference trees will converge.
+
 \end{proof}
 \end{thm}
 
@@ -506,13 +509,23 @@ The cost is calculated like that in RRT*, whcih \textsc{Line}($ x_{1}, x_{2} $) 
 We tested firstly on path planning of two objectives.
 
 
+We also tested with how MORRTF$^{*}$ works with obstacles.
 
-
+ 
+More objectives are also tested here.
 
 \section{Conclusion} 
 \label{sec:conclusion}
 
-The conclusion goes here.
+This paper presented a MORRF$^{*}$ for the multi-objective path planning problems on continuous spaces.
+The multi-objective optimization problem is decomposed into a few subproblems.
+A forest of trees will explore the planning space to find the solution to corresponding subproblems.
+The set of solutions from all the subproblem trees is a subset 
+
+Boundary intersection approach -> better diversity
+
+We can see that...
+As a single query, the efficiency could be improved by sensing 
 
 \section*{Acknowledgments}
 
