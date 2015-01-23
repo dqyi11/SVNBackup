@@ -177,7 +177,7 @@ The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli
 %\caption{Tree structure after exploring fitness space.}
 %\label{fig:RRTstar2}
 %\end{figure}
-In the next section, we present an algorithm that explores the solution space using RRT*-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
+In the next section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
 
 
@@ -222,6 +222,7 @@ As illustrated in the Figure, the ``Utopia'' point is defined as that point in r
 It is called the ``Utopia'' point because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
 
 %{\sc I don't understand the indexing on $g^{te}$, the difference between i and k on the right hand side of $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.}
+%{\sc REPLY: There is some typo. I think now it is clear after corrected. Please see the current statement.}
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$ -based sampling of the search space.  
 We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' point in payoff space and another type of RRT* structure to find paths that minimize the Tchebycheff condition.  
@@ -330,15 +331,17 @@ The extend processes of two types of trees are given in Algorithm \ref{alg:morrt
 \State $ V' \leftarrow V' \cup \{ x_{new} \} $
 \State $ x_{min} \leftarrow x_{nearest} $
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-\For{\textbf{each} $ x_{near} \in X_{near} $ }
-	\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c_{k}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-		\If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
-		\State $ x_{min} \leftarrow x_{near} $
+\If{ $ x_{new} \neq x_{min} $ }
+	\For{\textbf{each} $ x_{near} \in X_{near} $ }
+		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+			\State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c_{k}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+			\If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
+			\State $ x_{min} \leftarrow x_{near} $
+			\EndIf
 		\EndIf
-	\EndIf
-\EndFor
-\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+	\EndFor
+	\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+\EndIf
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $}}
 	    \State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{new} $} $ + c_{k}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
@@ -360,18 +363,20 @@ The extend processes of two types of trees are given in Algorithm \ref{alg:morrt
 \State $ V' \leftarrow V' \cup \{ x_{new} \} $
 \State $ x_{min} \leftarrow x_{nearest} $
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-\For{\textbf{each} $ x_{near} \in X_{near} $ }
-	\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \vec{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-		\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{G} $ }
-		\State $ \vec{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
-		\State $ \eta_{new} = $ \Call{Fitness}{ $ \vec{c}_{new} , \vec{c}^{*} \mid \lambda_{G} $ }
-		\If{ $ \eta' < \eta_{new} $ }
-			\State $ x_{min} \leftarrow x_{near} $
+\If{ $ x_{new} \neq x_{min} $ }
+	\For{\textbf{each} $ x_{near} \in X_{near} $ }
+		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+			\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \vec{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+			\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{G} $ }
+			\State $ \vec{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
+			\State $ \eta_{new} = $ \Call{Fitness}{ $ \vec{c}_{new} , \vec{c}^{*} \mid \lambda_{G} $ }
+			\If{ $ \eta' < \eta_{new} $ }
+				\State $ x_{min} \leftarrow x_{near} $
+			\EndIf
 		\EndIf
-	\EndIf
-\EndFor
-\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+	\EndFor
+	\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+\EndIf
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
 		\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \vec{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
@@ -419,6 +424,15 @@ There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in 
 \end{itemize}
 \end{asmp}
 
+We also assume that two vertices in a tree won't be infinitely close.
+\begin{asmp}{(Finite accuracy)}
+\label{asmp:finite_accuracy}
+When $ \lVert x_{1} - x_{2} \rVert \leq \epsilon $, $ x_{1} = x_{2} $.
+\end{asmp}
+When the distance between the new position and any vertex in the tree is less than $ \epsilon $ (system accuracy), the new position will be considered as equivalent to the position of that vertex.
+In Algorithm \ref{alg:morrtstar:extend:ref} and Algorithm \ref{alg:morrtstar:extend:sub}, the new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
+It only triggers a ``rewire'' process on a set of near vertices.
+
 We firstly need to show that the tree structure in MORRF$ ^{*}$ has a finite maximum depth,
 so that we can guarantee that all the paths from the tree structure have finite length.
 We have Lemma \ref{lem:tree:finite_depth}.
@@ -427,7 +441,9 @@ We have Lemma \ref{lem:tree:finite_depth}.
 \label{lem:tree:finite_depth}
 Either the reference tree or the subproblem tree has a finite maximum depth as $ i \rightarrow \infty $.
 \begin{proof}
-In a finite working space, the cost of a path will be infinite only when there is a loop in the path.
+By Assumption \ref{asmp:finite_accuracy}, we know that the distance between two vertices cannot be infinitely small, which are always bigger than or equal to $ \epsilon $.
+By the Lipschitz continuity in Assumption \ref{asmp:continuity}, the cost between any two vertices won't be infinitely small as well.
+In this case, in a finite working space, the cost of a path will be infinite only when there is a loop in the path.
 The cost of the loop is added repeated in calculating the cost of the path.
 Assume that the maximum depth of the tree is infinite.
 It means that there exists a path that from a position to the start, the cost of which is infinite.
@@ -507,7 +523,7 @@ P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 	%The construction of RRT* is not goal-oriented.
 	%The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
 	%Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
-The asymptotic optimality of RRT$^{*}$ does not reply on how the sampling process is like (Theorem 22, \cite{Karaman.Frazzoli:RSS10}), though the convergence rate might be different.
+The asymptotic optimality of RRT$^{*}$ does not rely on how the sampling process is like (Theorem 22, \cite{Karaman.Frazzoli:RSS10}), though the convergence rate might be different.
 Simply changing the goal to the position of any vertex still hold the asymptotic optimality.
 Thus, we could generalize the asymptotic optimality from the goal to all the vertices.
 \end{proof}
@@ -641,7 +657,7 @@ All the methods run $ 5000 $ iterations and generate $ 30 $ solutions.
 		\caption{Pareto optimal paths using Tchebycheff approach}
 		\label{fig:sim:norm:sols:c}
 	\end{subfigure}
-	\caption{Three simple graphs}
+	\caption{Path planning with two objectives.}
 	\label{fig:sim:norm}
 \end{figure}
 
@@ -686,7 +702,7 @@ The results are shown in Figure \ref{fig:sim:obs}.
 		\caption{Pareto optimal paths using Tchebycheff approach}
 		\label{fig:sim:obs:sols:b}
 	\end{subfigure}
-	\caption{Three simple graphs}
+	\caption{Path planning with two objectives and the obstacles.}
 	\label{fig:sim:obs}
 \end{figure}
 
@@ -731,7 +747,7 @@ The results are illustrated in Figure \ref{fig:sim:nonconvex}.
 		\caption{Pareto optimal paths using Tchebycheff approach}
 		\label{fig:sim:nonconvex:sols:b}
 	\end{subfigure}
-	\caption{Three simple graphs}
+	\caption{Path planning with two conflict objectives.}
 	\label{fig:sim:nonconvex}
 \end{figure}
 
@@ -782,7 +798,7 @@ The results are given in Figure \ref{fig:sim:many}.
 		\caption{Pareto optimal paths using Tchebycheff approach}
 		\label{fig:sim:many:sols:b}
 	\end{subfigure}
-	\caption{Three simple graphs}
+	\caption{Path planning with three objectives.}
 	\label{fig:sim:many}
 \end{figure}
 
