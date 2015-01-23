@@ -157,7 +157,7 @@ Three types of decomposition methods are introduced in~\cite{4358754}.
 \item \emph{Weighted sum approach} \\
 Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
 \item \emph{Tchebycheff approach} \\
-Minimize $ g^{te} (x \mid \lambda , z^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - z^{*}_{k}  | \} $;
+Minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - z^{*}_{k}  | \} $;
 \item \emph{Boundary intersection approach} \\
 Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{*} ) = d $, subject to $ \vec{z}^{*} - F(x) = d \lambda $.
 \end{itemize}
@@ -179,9 +179,6 @@ The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli
 %\end{figure}
 In the next section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
-
-
-
 
 
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
@@ -520,9 +517,9 @@ the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 $
 P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
 \begin{proof}
-	%The construction of RRT* is not goal-oriented.
-	%The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
-	%Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
+%The construction of RRT* is not goal-oriented.
+%The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
+%Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
 The asymptotic optimality of RRT$^{*}$ does not rely on how the sampling process is like (Theorem 22, \cite{Karaman.Frazzoli:RSS10}), though the convergence rate might be different.
 Simply changing the goal to the position of any vertex still hold the asymptotic optimality.
 Thus, we could generalize the asymptotic optimality from the goal to all the vertices.
@@ -604,8 +601,12 @@ The Tchebycheff approach depends on the knowledge of the reference vector, but t
 However, the weighted sum approach works well only when all the objectives are convex~\cite{4358754}.
 Also the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.
 
-We tested firstly on path planning of two objectives.
 All the methods run $ 5000 $ iterations and generate $ 30 $ solutions.
+We tested firstly on path planning of two objectives.
+One objective is  Euclidean distance minimization, the other objective is a given fitness minimization, as shown in Figure \ref{fig:sim:norm:distance} and \ref{fig:sim:norm:fitness1}.
+The convergence of NSGA-II based path planning is very slow.
+In Figure \ref{fig:sim:norm:pf:a}, a Pareto-front like fitness distribution is formed but the distance to the reference vector is much further away.
+Weighted sum approach returns a set of solutions close to the Pareto optimal set in Figure \ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}, but the Tchebycheff approach shows better diversity in Figure \ref{fig:sim:norm:pf:c} and \ref{fig:sim:norm:sols:c}.
 
 \begin{figure}
 	\centering
@@ -661,20 +662,20 @@ All the methods run $ 5000 $ iterations and generate $ 30 $ solutions.
 	\label{fig:sim:norm}
 \end{figure}
 
-We also tested with how MORRTF$^{*}$ works with obstacles.
+We also imported obstacles to the environment to see how the performance of the MORRTF$^{*}$ becomes.
 The results are shown in Figure \ref{fig:sim:obs}.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-0.png}
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-0.png}
 		\caption{Minimize distance}
 		\label{fig:sim:obs:distance}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1.png}
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-1.png}
 		\caption{Minimize fitness 1}
 		\label{fig:sim:obs:fitness1}
 	\end{subfigure}  \\
@@ -686,7 +687,7 @@ The results are shown in Figure \ref{fig:sim:obs}.
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-ALL.png}
+		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-ALL.png}
 		\caption{Pareto optimal paths using weighted sum approach}
 		\label{fig:sim:obs:sols:a}
 	\end{subfigure}  \\
@@ -707,7 +708,9 @@ The results are shown in Figure \ref{fig:sim:obs}.
 \end{figure}
 
 We also tested the case that the two objectives exist mutual contradiction.
+The two fitness distributions are given in Figure \ref{fig:sim:nonconvex:fitness1} and \ref{fig:sim:nonconvex:fitness2}.
 The results are illustrated in Figure \ref{fig:sim:nonconvex}.
+It is obvious that the result of Tchebycheff approach shows better diversity than that of the weighted sum approach in Figure \ref{fig:sim:nonconvex}.
 
 \begin{figure}
 	\centering
@@ -752,7 +755,9 @@ The results are illustrated in Figure \ref{fig:sim:nonconvex}.
 \end{figure}
 
 In order to verify how the MORRF$^{*}$ performs with more objectives, we tested a case with three objectives.
+The Euclidean distance is the first objective, the other two objectives are shown in Figure \ref{fig:sim:many:fitness1} and \ref{fig:sim:many:fitness2}.
 The results are given in Figure \ref{fig:sim:many}.
+We can see that the Pareto front has formed towards the reference vector (Green point) in Figure \ref{fig:sim:many:pf:a} and \ref{fig:sim:many:pf:b}.
 
 \begin{figure}
 	\centering
@@ -816,8 +821,16 @@ In the experiment, only weighted sum approach and the Tchebycheff approach have 
 It is obvious that the solutions from Tchebycheff approach shows better diversity than those from weighted sum approach.
 It is expected that the solutions from Boundary intersection approach would have even better diversity.
 
-We can see that the trees in MORRF$^{*}$ explores the entire working space in search of the Pareto optimal paths from the start to the goal region.
-As a single query, the efficiency could be improved by avoiding sensing 
+There is also a lot of space to improve the efficiency of MORRT$^{*} $.
+Importing more prior should help to reduce some redundant samplings, which accelerates the convergence.
+Currently the sampling is still uniformly random.
+We can do the sampling based on the information collected from the environment, more efforts can then be put in the more interesting regions.
+
+If we take a goal position as the root to extend using MORRT$^{*}$,
+we should be able to find a similar set of Pareto optimal paths.
+In this case, if the movement deviates from the original paths, it is very efficient to get a new set of Pareto optimal paths from the new position to the goal position.
+Because the convergence of MORRT$^{*}$ means the optimal paths from all the vertices to the root.
+
 
 \section*{Acknowledgments}
 
