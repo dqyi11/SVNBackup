@@ -210,8 +210,8 @@ In this paper, we implement only the Tchebycheff approach, noting that the Bound
 Before describing how we find $ \vec{z}^{*} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
 \begin{figure}
 \centering
-\includegraphics[width=0.9\linewidth]{fig/Tchebycheff}
-\caption{Tchebycheff method of finding Pareto front~\cite{moo:lec2}.}
+\includegraphics[width=0.9\linewidth]{fig/Tchebycheff.pdf}
+\caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
 Recall from the previous section that  $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find solutions $ x\in X $ that minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.  
