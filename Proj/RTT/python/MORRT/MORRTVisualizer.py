@@ -34,12 +34,18 @@ class MORRTVisualizer(object):
         
         self.font = pygame.font.SysFont(None, 24)
         
+        self.useDistance = False
+        self.useObstacle = False
+        
     def setName(self, name):
         self.name = name
     
     def loadObj(self, objFiles):    
         for obj in objFiles:
             self.objImgs.append(pygame.image.load(obj))
+            
+    def loadObs(self, obsFile):
+        self.obsImg.append(pygame.image.load(obsFile))
 
     def setLineColors(self, colors):
         self.lineColors = colors   
@@ -75,8 +81,17 @@ class MORRTVisualizer(object):
                         pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
             else:
                 disp_idx = idx
+                if disp_idx == 0:
+                    if self.useDistance == True and self.useObstacle == True: 
+                        self.screen.blit(self.obsImg, (0,0))
+                    else:
+                        self.screen.blit(self.objImgs[disp_idx], (0,0))
+                    
                 if disp_idx > 0:
-                    self.screen.blit(self.objImgs[disp_idx-1],(0,0))
+                    if self.useDistance == True:
+                        self.screen.blit(self.objImgs[disp_idx-1],(0,0))
+                    else:
+                        self.screen.blit(self.objImgs[disp_idx], (0,0))
                 for n in self.morrt.referenceTrees[disp_idx].nodes:
                     for c in n.children:
                         n_pos = (int(n.pos[0]), int(n.pos[1]))
