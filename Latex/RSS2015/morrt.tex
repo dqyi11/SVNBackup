@@ -105,7 +105,7 @@ In response to these challenges, it is useful of find {\em the set of payoff dom
 This paper uses the economics term {\em Pareto optimal} to denote a payoff dominant solution.  Although not demonstrated in this paper, we propose that if an algorithm could produce the set of Pareto optimal solutions then a human could interactively explore this set to find one or more solutions that matches his or her expectations. 
 The objective of this paper is to create an algorithm that efficiently finds the Pareto set in a multi-objective path-planning problem.
 
-Most popular methods in multi-objective optimization don't naturally apply to path-planning problems~\cite{4358754, Ahmed2013}.
+Most popular methods in multi-objective optimization don't naturally apply to path-planning problems~\cite{4358754, 6600851}.
 %{\sc Give a reference to a good review or a reference to a handful of representative multi-objective methods}
 The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms doesn't scale well when there are an exponential number of solutions. 
 One approach to addressing this is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}.  
@@ -185,7 +185,7 @@ Because a set of trees are constructed in the exploration process, we call the a
 \label{sec:morrt}
 
 Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$. 
-Without loss of generality, we assume that each $f_j(\cdot)$ is a cost function so that our objective is to minimize these functions.  
+Without loss of generality, we assume that each $f_k(\cdot)$ is a cost function so that our objective is to minimize these functions.  
 Since the Pareto optimal set is not enumerable, our {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
 By ``representative" we mean that we want a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.  
 
@@ -211,24 +211,24 @@ Before describing how we find $ \vec{z}^{*} $ and how we combine the Tchebycheff
 \begin{figure}
 \centering
 \includegraphics[width=0.9\linewidth]{fig/Tchebycheff}
-\caption{Tchebycheff method of finding Pareto front.}
+\caption{Tchebycheff method of finding Pareto front~\cite{moo:lec2}.}
 \label{fig:Tchebycheff}
 \end{figure}
 Recall from the previous section that  $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find solutions $ x\in X $ that minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.  
-As illustrated in the Figure, the ``Utopia'' point is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\vec{z}^*$ is given by $\vec{z}^{*}_{k} = \arg \min_{x \in X} f_{k}(x)$.  
-It is called the ``Utopia'' point because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
+As illustrated in the Figure, the ``Utopia'' reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\vec{z}^*$ is given by $\vec{z}^{*}_{k} = \arg \min_{x \in X} f_{k}(x)$.  
+It is called the ``Utopia'' reference vector because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
 
 %{\sc I don't understand the indexing on $g^{te}$, the difference between i and k on the right hand side of $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.}
 %{\sc REPLY: There is some typo. I think now it is clear after corrected. Please see the current statement.}
 
-Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$ -based sampling of the search space.  
-We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' point in payoff space and another type of RRT* structure to find paths that minimize the Tchebycheff condition.  
+Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' point in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ f_{k} (x), k \in K $. 
 The cost of each vertex is calculated using the $ k $-th objective function.
-\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , z^{*} ) , m \in M $.
-The cost of each vertex 
+\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \vec{z}^{*} ) , m \in M $.
+The cost of each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
 Thus $ K $ reference trees are introduced, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.
 
@@ -309,9 +309,9 @@ We have the definitions of several functions similar with the definitions in ~\c
 	\textsc{Near}($ G, x, \eta $) returns a set of all vertices within the closed ball of radius $ r_{n} $ centered at $ x $, in which $ r_{n} = \min \{ ( \frac{\gamma}{\xi_{d}} \frac{\log n}{n} )^{1/d}  , \eta \} $.
 	The volume of the ball is $ \min \{ \gamma \frac{\log n}{n} , \xi_{d} \eta^{d} \} $.
 	\item \textbf{Collision test} - \textsc{ObstacleFree}() \\
-	\textsc{ObstacleFree}($ x, x' $) returns True if $ [ x, x' ] \subset X \setminus X_{obs} $, which means the line segment between $ x $ and $ x' $ lies in $ X \setminus X_{obs} $.
+	\textsc{ObstacleFree}($ x, x' $) returns True if $ [ x, x' ] \subset X_{\it free} $, which means the line segment between $ x $ and $ x' $ lies in $ X \setminus X_{obs} $.
 	\item \textbf{Line} - \textsc{Line}() \\
-	\textsc{Line}($ x, x' $) $ : [0, s] \leftarrow X \setminus X_{obs} $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
+	\textsc{Line}($ x, x' $) $ : [0, s] \leftarrow X_{\it free} $ denotes the path defined by $ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
 	\item \textbf{Cost} - \textsc{Cost}() \\
 	\textsc{Cost}($ v  $) is defined by the cost of the unique path from $ x_{ \mbox{init} } $ to a vertex $ v \in V $.
 	\textsc{Cost}($ x_{ \mbox{init} } $) = $ 0 $.
@@ -397,40 +397,42 @@ The extend processes of two types of trees are given in Algorithm \ref{alg:morrt
 \section{Analysis}
 \label{sec:theoretic_analysis}
 
-Several assumptions are needed, which are inherited from RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
+Before we start the analysis, several assumptions need to be inherited from  RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
 \begin{asmp}{(Additivity of the objective functions)}
 \label{asmp:additivity}	
-For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X_{free} $,
+For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X_{\it free} $,
 $ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
 \end{asmp}
 
 \begin{asmp}{(Continuity of the objective functions)}
 \label{asmp:continuity}
 For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
-$ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X_{free}, \sigma_{2} : [0, s_{2} ] \rightarrow X_{free} $,
+$ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X_{\it free}, \sigma_{2} : [0, s_{2} ] \rightarrow X_{\it free} $,
 $ \exists k $ such that 
 $ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $
 \end{asmp}
 
 \begin{asmp}{(Obstacle spacing)}
 \label{asmp:spacing}
-There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in X_{free} $ , $ \exists x' \in X_{free} $ such that
+There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in X_{\it free} $ , $ \exists x' \in X_{\it free} $ such that
 \begin{itemize}
-\item the $ \delta $-ball centered at $ x' $ lies inside $ X_{free} $;
+\item the $ \delta $-ball centered at $ x' $ lies inside $ X_{\it free} $;
 \item $ x $ lies inside the $ \delta $-ball centered at $ x' $.
 \end{itemize}
 \end{asmp}
 
 We also assume that two vertices in a tree won't be infinitely close.
+From the implementation perspective, it means that the processor has finite precision in calculation.
+We have Assumption \ref{asmp:finite_accuracy}.
 \begin{asmp}{(Finite accuracy)}
 \label{asmp:finite_accuracy}
 When $ \lVert x_{1} - x_{2} \rVert \leq \epsilon $, $ x_{1} = x_{2} $.
 \end{asmp}
 When the distance between the new position and any vertex in the tree is less than $ \epsilon $ (system accuracy), the new position will be considered as equivalent to the position of that vertex.
-In Algorithm \ref{alg:morrtstar:extend:ref} and Algorithm \ref{alg:morrtstar:extend:sub}, the new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
-It only triggers a ``rewire'' process on a set of near vertices.
+In Algorithm 2 and Algorithm 3, a new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
+It only triggers a ``rewire'' process for a set of near vertices.
 
-We firstly need to show that the tree structure in MORRF$ ^{*}$ has a finite maximum depth,
+We firstly need to show that the tree structure in MORRF$^{*}$ has a finite maximum depth,
 so that we can guarantee that all the paths from the tree structure have finite length.
 We have Lemma \ref{lem:tree:finite_depth}.
 
@@ -445,8 +447,8 @@ The cost of the loop is added repeated in calculating the cost of the path.
 Assume that the maximum depth of the tree is infinite.
 It means that there exists a path that from a position to the start, the cost of which is infinite.
 It also equals to that there exist a loop in such a path.
-However, this contradicts the tree structure. 
-Because in a tree structure, there will not be a loop in any path from the root (the start) to any vertex.
+However, this contradicts the property of the tree structure. 
+Because in a tree structure, there exists no loop in any path from the root (the start) to any vertex.
 Thus, we can state that the reference tree or the subproblem tree constructed from a sampling process has a finite maximum depth.
 \end{proof}
 \end{lem}
@@ -464,15 +466,15 @@ Let $ \mbox{maxDepth}(G_{ref}^{k}) $ be the maximum depth of $ k $-th reference 
 Let $ \mbox{maxDepth}(G_{sub}^{m}) $ be the maximum depth of $ m $-th subproblem tree.
 We have $ \mbox{maxDepth}(G_{ref}) = \max_{k = 1 , \cdots , K} ( \mbox{maxDepth}(G_{ref}^{k}) ) $ and $ \mbox{maxDepth}(G_{sub}) = \max_{m = 1 , \cdots , M} ( \mbox{maxDepth}(G_{sub}^{m}) ) $.
 Thus let 
- $ \bar{N}_{MD} =\ max \left(  \mbox{maxDepth}(G_{ref}), \mbox{maxDepth}(G_{sub}) \right) $.
+ $ \bar{N}_{MD} = \max \left(  \mbox{maxDepth}(G_{ref}), \mbox{maxDepth}(G_{sub}) \right) $.
 It means that the segment number of any path from MORRF$^{*}$ can be less than $ \bar{N}_{MD} $.
 
 Therefore, any path from MORRF$^{*}$ can be converted into an equivalent path of $ \bar{N}_{MD} $ segments by repeating some vertex before moving to the next one.
 For example, duplicating $ x_{2} $ in $ (x_{1} , x_{2}, x_{3} ) $ makes an equivalent path of length $ 4 $ , $ (x_{1} , x_{2},  x_{2}, x_{3} ) $.
 The cost will not be changed, $ f( (x_{1} , x_{2}, x_{3}) ) = f( (x_{1} , x_{2},  x_{2}, x_{3} ) )$.
 Using a space of dimension $ \bar{N}_{MD} $, any solution from MORFF$^{*}$ can be mapped into a point in the same space.
-Let the dimension of the working space be $ \mbox{dim} $.
-We can view that MORRF$^{*}$ searches the Pareto optimal set in a $ \bar{N}_{MD} * \mbox{dim} $ dimension space
+Let the dimension of the working space be $ N_{dim} $.
+We can consider that MORRF$^{*}$ searches the Pareto optimal set in a $ \bar{N}_{MD} * N_{dim} $ dimension space.
 \end{proof}
 \end{lem}
 
@@ -531,7 +533,7 @@ Thus, we need to have the solutions of all the reference trees converging to the
 The construction of a reference tree does not depend on any other tree.
 Thus, the construction process is equivalent to the construction of a RRT*.
 The asymptotic optimality of RRT* in Lemma \ref{lem:tree_vex:conv} is inherited here.
-Thus the cost of the solution converges to the optimal of one single objective.
+Thus the cost of the solution converges to the optimal of single objective.
 \begin{lem}
 \label{lem:ref_tree:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
@@ -699,7 +701,7 @@ The results are shown in Figure \ref{fig:sim:obs}.
 	\end{subfigure} 
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/sim5-obstacle/MORRTstar01-ALL.png}
+		\includegraphics[width=\textwidth]{fig/sim5-obstacle/MORRTstar01-1-ALL.png}
 		\caption{Pareto optimal paths using Tchebycheff approach}
 		\label{fig:sim:obs:sols:b}
 	\end{subfigure}
