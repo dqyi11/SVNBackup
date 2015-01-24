@@ -7,7 +7,7 @@ Created on Jan 23, 2015
 import cv2
 
 from ObstacleMgr import *
-import planar 
+import planar
 
 import pygame, sys
 from pygame.locals import *
@@ -45,10 +45,10 @@ class WorldMapMgr(object):
             for j in range(i, len(self.obstacles)):
                 bk1 = self.obstacles[i].bk
                 bk2 = self.obstacles[j].bk
-                '''
+                
                 pline = planar.Line(planar.Vec2(bk1[0], bk1[1]),planar.Vec2(bk2[0], bk2[1]))
                 self.obsBkPairLines.append(pline)
-                '''
+                
         
         # select central point c
         self.centralPoint = (int(self.width/2), int(self.height/2))
