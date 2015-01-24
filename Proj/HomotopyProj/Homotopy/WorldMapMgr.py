@@ -78,8 +78,9 @@ class WorldMapMgr(object):
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
                 pygame.draw.line(self.screen, (122,122,122), (xs[i], ys[i]), (xs[i+1], ys[i+1]), 2)
-            pygame.draw.circle(self.screen, (124,252,0), obs.bk, 4)    
+            pygame.draw.circle(self.screen, (124,252,0), obs.bk, 4)
             
+        pygame.draw.circle(self.screen, (255,0,0), self.centralPoint, 4)     
             
         while True:
             for event in pygame.event.get():
