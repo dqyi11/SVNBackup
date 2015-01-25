@@ -5,21 +5,34 @@ Created on Jan 23, 2015
 '''
 
 import numpy as np
-from shapely.geometry import Polygon, Point
+import shapely.geometry as shpgeo
 
 class ObstacleMgr(object):
 
 
-    def __init__(self, contour):
+    def __init__(self, contour, idx):
         self.contour = contour
+        self.idx = idx
         
         self.x_min = np.min(contour[:,0,0])
         self.x_max = np.max(contour[:,0,0])
         self.y_min = np.min(contour[:,0,1])
         self.y_max = np.max(contour[:,0,1])
-        self.polygon = Polygon([(self.contour[i,0,0], self.contour[i,0,1]) for i in range(self.contour.shape[0])])
+        vex_list = [(self.contour[i,0,0], self.contour[i,0,1]) for i in range(self.contour.shape[0])]
+        #print vex_list
+        self.polygon = shpgeo.Polygon(vex_list)
+        
+        self.alpha_ray = None
+        self.beta_ray = None
+        self.alpha_seg = None
+        self.beta_seg = None
 
-        print self.polygon
+        #print self.polygon
+        
+        self.alpha_self_intsecs = []
+        self.alpha_obs_intsecs = []
+        self.beta_self_intsecs = []
+        self.beta_obs_intsecs = []
         
     def samplePosition(self):
         
@@ -28,7 +41,7 @@ class ObstacleMgr(object):
             x_rnd = np.random.randint(self.x_min, self.x_max)
             y_rnd = np.random.randint(self.y_min, self.y_max)
             
-            if self.polygon.contains(Point(x_rnd, y_rnd)):
+            if self.polygon.contains(shpgeo.Point(x_rnd, y_rnd)):
                 rndPos = (x_rnd, y_rnd)
             
         return rndPos

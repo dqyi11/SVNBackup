@@ -13,5 +13,3 @@ if __name__ == '__main__':
     mapMgr.load(MAP_FILE)
     
     mapMgr.visualize()
-    
-    
