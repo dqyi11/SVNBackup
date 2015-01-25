@@ -34,6 +34,9 @@ class ObstacleMgr(object):
         self.beta_self_intsecs = []
         self.beta_obs_intsecs = []
         
+        self.alpha_obs_intsecs_info = []
+        self.beta_obs_intsecs_info = []
+        
     def samplePosition(self):
         
         rndPos = None
