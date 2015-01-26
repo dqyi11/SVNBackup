@@ -54,8 +54,12 @@ class RegionMgr(object):
                     pointString.append(ccl_info[0])
         else:
             for ccl_info in self.parent.center_corner_lines_info:
-                if ccl_info[1] > line1_info[1]-2*np.pi and ccl_info[1] < line2_info[1]:
+                if ccl_info[1] > line1_info[1]:
                     pointString.append(ccl_info[0])
+            for ccl_info in self.parent.center_corner_lines_info:
+                if ccl_info[1] >= 0 and ccl_info[1] < line2_info[1]:
+                    pointString.append(ccl_info[0])
+
         pointString.append(line2_info[0])
         
         return pointString
