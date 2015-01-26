@@ -5,7 +5,13 @@ Created on Jan 25, 2015
 '''
 
 import shapely.geometry as shpgeo
+import shapely.ops as shpops
 import numpy as np
+
+class SubRegion(object):
+    
+    def __init__(self, polygon):
+        self.polygon = polygon
 
 class RegionMgr(object):
 
@@ -42,6 +48,29 @@ class RegionMgr(object):
             
         pointString = self.getPointString(parent.centralPoint, self.line1_info, self.line2_info)
         self.polygon = shpgeo.Polygon(pointString)
+        
+        current_polygon = self.polygon
+        for obs in self.parent.obstacles:
+            if current_polygon.intersects(obs.polygon):
+                #print str(self.polygon) + " INTERSETS WITH " + str(obs.idx)
+                current_polygon = current_polygon.difference(obs.polygon)
+                print "Difference: " + current_polygon.type + " " + str(current_polygon)
+                
+        self.subregions = []
+        if current_polygon.type == "Polygon":
+            subregion = SubRegion(current_polygon)
+            self.subregions.append(subregion)           
+        elif current_polygon.type == "MultiPolygon":
+            for poly in current_polygon:
+                subregion = SubRegion(poly)
+                self.subregions.append(subregion)
+                
+        # init alpha and beta segments for subregion
+        print self.line1_other_intsecs_info
+        print self.line2_other_intsecs_info   
+                
+        
+        
         
     def getPointString(self, start, line1_info, line2_info):
         

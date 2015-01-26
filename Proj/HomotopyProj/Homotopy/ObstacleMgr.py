@@ -7,6 +7,14 @@ Created on Jan 23, 2015
 import numpy as np
 import shapely.geometry as shpgeo
 
+class LineSegmentMgr(object):
+    
+    def __init__(self, line_seg, type, parent):
+        self.parent = parent
+        self.type = type
+        self.line_seg = line_seg
+        self.sub_segs = []
+
 class ObstacleMgr(object):
 
 

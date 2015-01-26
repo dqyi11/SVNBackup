@@ -36,6 +36,7 @@ class WorldMapMgr(object):
         self.region_colors = []
         
         self.region_idx = 0
+        self.subregion_idx = 0
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -222,6 +223,20 @@ class WorldMapMgr(object):
         pygame.display.set_caption(self.mapfile)
         self.screen.fill((255,255,255))
         
+        if len(self.regions) > 0:
+            region = self.regions[self.region_idx]
+            region_color = self.region_colors[self.region_idx]
+            '''
+            xs, ys = region.polygon.exterior.coords.xy
+            for i in range(len(xs)-1):
+                pygame.draw.line(self.screen, region_color, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 6)
+            '''
+                
+            if len(region.subregions) > 0:
+                sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
+                for i in range(len(sub_xs)-1):
+                    pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 10)
+        
         for obs in self.obstacles:
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
@@ -240,13 +255,6 @@ class WorldMapMgr(object):
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             
-        if len(self.regions) > 0:
-            region = self.regions[self.region_idx]
-            region_color = self.region_colors[self.region_idx]
-            xs, ys = region.polygon.exterior.coords.xy
-            for i in range(len(xs)-1):
-                pygame.draw.line(self.screen, region_color, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 10)
-            
         pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)     
             
   
@@ -257,12 +265,25 @@ class WorldMapMgr(object):
             elif event.type == KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.region_idx += 1
+                    self.subregion_idx = 0
                 elif event.key == pygame.K_DOWN:
                     self.region_idx -= 1
+                    self.subregion_idx = 0
+                elif event.key == pygame.K_LEFT:
+                    self.subregion_idx -= 1
+                elif event.key == pygame.K_RIGHT:
+                    self.subregion_idx += 1
+                    
         if self.region_idx < 0:
             self.region_idx = len(self.regions)-1
         elif self.region_idx >= len(self.regions):
             self.region_idx = 0
+        
+        if self.subregion_idx < 0:
+            self.subregion_idx = len(self.regions[self.region_idx].subregions) - 1
+        elif self.subregion_idx >= len(self.regions[self.region_idx].subregions):
+            self.subregion_idx = 0
+            
         pygame.display.update()
             
             
