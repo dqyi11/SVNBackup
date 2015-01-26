@@ -19,8 +19,9 @@ class LineSegmentMgr(object):
         self.self_intsecs = self_intsecs
         self.other_intsecs = other_intsecs
         
-        print self.self_intsecs
-        print self.other_intsecs
+        print "LINE " + str(self.type) + " of OBS " + str(self.parent.idx)
+        print "ALPHA: " + str(self.self_intsecs)
+        print "BETA: " + str(self.other_intsecs)
         
 
 class ObstacleMgr(object):
@@ -30,6 +31,8 @@ class ObstacleMgr(object):
         self.contour = contour
         self.idx = idx
         
+        self.name = "OBS"+str(self.idx)
+        
         self.x_min = np.min(contour[:,0,0])
         self.x_max = np.max(contour[:,0,0])
         self.y_min = np.min(contour[:,0,1])
@@ -37,6 +40,8 @@ class ObstacleMgr(object):
         vex_list = [(self.contour[i,0,0], self.contour[i,0,1]) for i in range(self.contour.shape[0])]
         #print vex_list
         self.polygon = shpgeo.Polygon(vex_list)
+        
+        self.centroid = (int(self.polygon.centroid.x), int(self.polygon.centroid.y))
         
         self.alpha_ray = None
         self.beta_ray = None

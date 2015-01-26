@@ -21,6 +21,7 @@ class RegionMgr(object):
         self.ray1Info = ray1Info
         self.ray2Info = ray2Info
         self.parent = parent
+        self.name = "REG"+str(self.idx)
         
         self.ray1Obs = parent.obstacles[ray1Info[0]]
         self.ray2Obs = parent.obstacles[ray2Info[0]]
@@ -48,6 +49,8 @@ class RegionMgr(object):
             
         pointString = self.getPointString(parent.centralPoint, self.line1_info, self.line2_info)
         self.polygon = shpgeo.Polygon(pointString)
+        
+        self.centroid = (int(self.polygon.centroid.x), int(self.polygon.centroid.y))
         
         current_polygon = self.polygon
         for obs in self.parent.obstacles:

@@ -100,8 +100,8 @@ class WorldMapMgr(object):
             if ccl_info[1] < 0:
                 ccl_info[1] += 2*numpy.pi
         self.center_corner_lines_info.sort( key=lambda x: x[1], reverse=False )
-        print "CENTER CORNER LINES "
-        print self.center_corner_lines_info
+        #print "CENTER CORNER LINES "
+        #print self.center_corner_lines_info
         
         self.ray_info_list = []
         
@@ -209,7 +209,7 @@ class WorldMapMgr(object):
             self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))
         ray1_info = self.ray_info_list[len(self.ray_info_list)-1]
         ray2_info = self.ray_info_list[0]
-        region = RegionMgr(ray1_info, ray2_info, i, self)
+        region = RegionMgr(ray1_info, ray2_info, len(self.regions), self)
         self.regions.append(region)
         rndVal = numpy.random.randint(0, 256, 3)
         self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))    
@@ -226,6 +226,7 @@ class WorldMapMgr(object):
         pygame.init()
         self.screen = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption(self.mapfile)
+        self.font = pygame.font.SysFont(None, 15)
         self.screen.fill((255,255,255))
         
         if len(self.regions) > 0:
@@ -241,6 +242,7 @@ class WorldMapMgr(object):
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
                     pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 10)
+            self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), region.centroid)
         
         for obs in self.obstacles:
             xs, ys = obs.polygon.exterior.coords.xy
@@ -259,9 +261,11 @@ class WorldMapMgr(object):
             for bc in obs.beta_obs_intsecs:
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
+            self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
             
-        pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)     
             
+            
+        pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
   
         for event in pygame.event.get():                
             if event.type == QUIT:
