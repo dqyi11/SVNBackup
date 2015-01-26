@@ -8,7 +8,7 @@ from WorldMapMgr import *
 
 if __name__ == '__main__':
     
-    MAP_FILE = 'BYU_map.jpg'
+    MAP_FILE = 'map02.jpg'
     mapMgr = WorldMapMgr()
     mapMgr.load(MAP_FILE)
     

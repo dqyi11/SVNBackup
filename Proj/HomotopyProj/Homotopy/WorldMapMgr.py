@@ -155,24 +155,27 @@ class WorldMapMgr(object):
             for obs_ref in self.obstacles:
                 
                 # check alpha seg with obstacles
-                alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
-                #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
-                if alpha_intsecs.is_empty == False:
-                    for c in list(alpha_intsecs.coords):
-                        cpos = (int(c[0]), int(c[1]))
-                        cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
-                        obs.alpha_obs_intsecs.append(cpos)
-                        obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
+                if obs.alpha_seg.line_seg.intersects(obs_ref.polygon):
+                    alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
+                    #alpha_intsecs = obs_ref.polygon.intersection(obs.alpha_seg.line_seg)
+                    #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
+                    if alpha_intsecs.is_empty == False:
+                        for c in list(alpha_intsecs.coords):
+                            cpos = (int(c[0]), int(c[1]))
+                            cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                            obs.alpha_obs_intsecs.append(cpos)
+                            obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
                 
-                # check beta seg with obstacles
-                beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
-                #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
-                if beta_intsecs.is_empty == False:
-                    for c in list(beta_intsecs.coords):
-                        cpos = (int(c[0]), int(c[1]))
-                        cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
-                        obs.beta_obs_intsecs.append(cpos)
-                        obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
+                if obs.beta_seg.line_seg.intersects(obs_ref.polygon):
+                    # check beta seg with obstacles
+                    beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
+                    #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
+                    if beta_intsecs.is_empty == False:
+                        for c in list(beta_intsecs.coords):
+                            cpos = (int(c[0]), int(c[1]))
+                            cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                            obs.beta_obs_intsecs.append(cpos)
+                            obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
             
             obs.alpha_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
             obs.beta_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
@@ -240,8 +243,10 @@ class WorldMapMgr(object):
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
                     pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 6)
+                '''    
                 for n_info in region.subregions[self.subregion_idx].neighbor_info:
-                    pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)   
+                    pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)  
+                ''' 
                 
             self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.width-50, 15))
         
