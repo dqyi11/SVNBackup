@@ -14,6 +14,14 @@ class LineSegmentMgr(object):
         self.type = type
         self.line_seg = line_seg
         self.sub_segs = []
+        
+    def load(self, self_intsecs, other_intsecs):
+        self.self_intsecs = self_intsecs
+        self.other_intsecs = other_intsecs
+        
+        print self.self_intsecs
+        print self.other_intsecs
+        
 
 class ObstacleMgr(object):
 

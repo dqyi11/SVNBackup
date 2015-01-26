@@ -118,9 +118,11 @@ class WorldMapMgr(object):
             obs.alpha_seg = None
             obs.beta_seg = None
             if a_pt != None:
-                obs.alpha_seg = shpgeo.LineString([obs.bk, (int(a_pt.x), int(a_pt.y))])
+                alpha_seg = shpgeo.LineString([obs.bk, (int(a_pt.x), int(a_pt.y))])
+                obs.alpha_seg = LineSegmentMgr(alpha_seg, 'A', obs)
             if b_pt != None:
-                obs.beta_seg = shpgeo.LineString([obs.bk, (int(b_pt.x), int(b_pt.y))])
+                beta_seg = shpgeo.LineString([obs.bk, (int(b_pt.x), int(b_pt.y))])
+                obs.beta_seg = LineSegmentMgr(beta_seg, 'B', obs)
                 
             alpha_ray_rad = numpy.arctan(float(obs.alpha_ray.slope))
             if obs.alpha_ray.p1.x > obs.alpha_ray.p2.x:
@@ -149,7 +151,7 @@ class WorldMapMgr(object):
                 
         for obs in self.obstacles:
             
-            alpha_self_intsecs = obs.alpha_seg.intersection(obs.polygon)
+            alpha_self_intsecs = obs.alpha_seg.line_seg.intersection(obs.polygon)
             #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(obs.idx) + " = " + str(alpha_self_intsecs)
             if alpha_self_intsecs.is_empty == False:
                 for c in list(alpha_self_intsecs.coords):
@@ -157,7 +159,7 @@ class WorldMapMgr(object):
                     obs.alpha_self_intsecs.append(cpos)   
                     obs.alpha_self_intsecs_info.append((obs.idx, 'A', cpos))
             
-            beta_self_intsecs = obs.beta_seg.intersection(obs.polygon)
+            beta_self_intsecs = obs.beta_seg.line_seg.intersection(obs.polygon)
             #print "BETA: " + str(obs.beta_seg) + " + " + str(obs.idx) + " = " + str(beta_self_intsecs)
             if beta_self_intsecs.is_empty == False:
                 for c in list(beta_self_intsecs.coords):
@@ -168,7 +170,7 @@ class WorldMapMgr(object):
             for other_obs in self.obstacles:
                 if obs != other_obs:
                     # check alpha seg with obstacles
-                    alpha_intsecs = obs.alpha_seg.intersection(other_obs.polygon)
+                    alpha_intsecs = obs.alpha_seg.line_seg.intersection(other_obs.polygon)
                     #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
                     if alpha_intsecs.is_empty == False:
                         for c in list(alpha_intsecs.coords):
@@ -177,7 +179,7 @@ class WorldMapMgr(object):
                             obs.alpha_obs_intsecs_info.append((other_obs.idx, 'A', cpos))              
                     
                     # check beta seg with obstacles
-                    beta_intsecs = obs.beta_seg.intersection(other_obs.polygon)
+                    beta_intsecs = obs.beta_seg.line_seg.intersection(other_obs.polygon)
                     #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
                     if beta_intsecs.is_empty == False:
                         for c in list(beta_intsecs.coords):
@@ -189,6 +191,9 @@ class WorldMapMgr(object):
             #print str(obs.beta_obs_intsecs)
             #print obs.alpha_obs_intsecs_info
             #print obs.beta_obs_intsecs_info
+            obs.alpha_seg.load(obs.alpha_self_intsecs_info, obs.alpha_obs_intsecs_info)
+            obs.beta_seg.load(obs.beta_self_intsecs_info, obs.beta_obs_intsecs_info)
+            
             
     def process(self):
         
@@ -242,9 +247,9 @@ class WorldMapMgr(object):
             for i in range(len(xs)-1):
                 pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 2)
             if obs.alpha_seg != None:
-                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.coords[0], obs.alpha_seg.coords[1], 2)
+                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
             if obs.beta_seg != None:
-                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.coords[0], obs.beta_seg.coords[1], 2)
+                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
             for ac in obs.alpha_self_intsecs:
                 pygame.draw.circle(self.screen, ALPHA_SELF_COLOR, ac, 3)
             for bc in obs.beta_self_intsecs:
