@@ -241,7 +241,7 @@ class WorldMapMgr(object):
             if len(region.subregions) > 0:
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
-                    pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 10)
+                    pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 6)
             self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.width-50, 15))
         
         for obs in self.obstacles:
