@@ -25,6 +25,7 @@ BETA_SELF_COLOR = (153,255,204)
 BETA_OTHER_COLOR = (76,153,0)
 CENTER_POINT_COLOR = (255,0,0)
 OBS_BK_COLOR = (124,252,0)
+SUBSEGMENT_COLOR = (255,255,0,100)
 
 
 
@@ -35,8 +36,7 @@ class WorldMapMgr(object):
         self.regions = []
         self.region_colors = []
         
-        self.region_idx = 0
-        self.subregion_idx = 0
+        self.subsegments = []
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -178,6 +178,12 @@ class WorldMapMgr(object):
             obs.alpha_seg.load(obs.alpha_obs_intsecs_info)
             obs.beta_seg.load(obs.beta_obs_intsecs_info)
             
+        for obs in self.obstacles:
+            for linSeg in obs.alpha_seg.sub_segs:
+                self.subsegments.append(linSeg)
+            for linSeg in obs.beta_seg.sub_segs:
+                self.subsegments.append(linSeg)
+            
             
     def process(self):
         
@@ -206,11 +212,18 @@ class WorldMapMgr(object):
                 return True
         return False    
         
-    def visualize(self):
+    def initVisualize(self):
         pygame.init()
         self.screen = pygame.display.set_mode((self.width,self.height))
         pygame.display.set_caption(self.mapfile)
         self.font = pygame.font.SysFont(None, 15)
+        
+        self.region_idx = 0
+        self.subregion_idx = 0
+        self.subsegment_idx = 0
+        
+    def updateVisualize(self):
+        
         self.screen.fill((255,255,255))
         
         if len(self.regions) > 0:
@@ -232,10 +245,10 @@ class WorldMapMgr(object):
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
                 pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 2)
-            if obs.alpha_seg != None:
-                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
-            if obs.beta_seg != None:
-                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
+
+            pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
+            pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
+            
             for ac in obs.alpha_self_intsecs:
                 pygame.draw.circle(self.screen, ALPHA_SELF_COLOR, ac, 3)
             for bc in obs.beta_self_intsecs:
@@ -246,6 +259,12 @@ class WorldMapMgr(object):
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
+            
+        if len(self.subsegments) > 0:
+            subsegment = self.subsegments[self.subsegment_idx]
+            pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], 10)
+            self.screen.blit(self.font.render(subsegment.name, True, (0,0,0)), (15,15))
+            
             
             
         pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
@@ -265,6 +284,8 @@ class WorldMapMgr(object):
                     self.subregion_idx -= 1
                 elif event.key == pygame.K_RIGHT:
                     self.subregion_idx += 1
+                elif event.key == pygame.K_SPACE:
+                    self.subsegment_idx += 1
                     
         if self.region_idx < 0:
             self.region_idx = len(self.regions)-1
@@ -275,6 +296,9 @@ class WorldMapMgr(object):
             self.subregion_idx = len(self.regions[self.region_idx].subregions) - 1
         elif self.subregion_idx >= len(self.regions[self.region_idx].subregions):
             self.subregion_idx = 0
+            
+        if self.subsegment_idx >= len(self.subsegments):
+            self.subsegment_idx = 0
             
         pygame.display.update()
             

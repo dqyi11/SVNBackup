@@ -29,19 +29,19 @@ class RegionMgr(object):
         if self.ray1Info[1] == "A":
             self.line1 = self.ray1Obs.alpha_seg
             self.line1_info = self.ray1Obs.alpha_seg_info
-            self.line1_other_intsecs_info = self.ray1Obs.alpha_obs_intsecs_info
+            #self.line1_obs_intsecs_info = self.ray1Obs.alpha_obs_intsecs_info
         else:
             self.line1 = self.ray1Obs.beta_seg
             self.line1_info = self.ray1Obs.beta_seg_info
-            self.line1_other_intsecs_info = self.ray1Obs.beta_obs_intsecs_info
+            #self.line1_obs_intsecs_info = self.ray1Obs.beta_obs_intsecs_info
         if ray2Info[1] == "A":
             self.line2 = self.ray2Obs.alpha_seg
             self.line2_info = self.ray2Obs.alpha_seg_info
-            self.line2_other_intsecs_info = self.ray2Obs.alpha_obs_intsecs_info
+            #self.line2_obs_intsecs_info = self.ray2Obs.alpha_obs_intsecs_info
         else:
             self.line2 = self.ray2Obs.beta_seg
             self.line2_info = self.ray2Obs.beta_seg_info
-            self.line2_other_intsecs_info = self.ray2Obs.beta_obs_intsecs
+            #self.line2_obs_intsecs_info = self.ray2Obs.beta_obs_intsecs
             
         pointString = self.getPointString(parent.centralPoint, self.line1_info, self.line2_info)
         self.polygon = shpgeo.Polygon(pointString)
@@ -65,8 +65,8 @@ class RegionMgr(object):
                 self.subregions.append(subregion)
                 
         # init alpha and beta segments for subregion
-        print self.line1_other_intsecs_info
-        print self.line2_other_intsecs_info   
+        #print self.line1_obs_intsecs_info
+        #print self.line2_obs_intsecs_info   
                 
         
         

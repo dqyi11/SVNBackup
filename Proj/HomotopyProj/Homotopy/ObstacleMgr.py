@@ -24,6 +24,9 @@ class LineSegmentMgr(object):
         self.line_seg = line_seg
         self.sub_segs = []
         self.mid_points = []
+
+        self.from_pos = line_seg.coords[0]
+        self.end_pos = line_seg.coords[1]
         
     def load(self, obs_intsecs):
         self.obs_intsecs = obs_intsecs
@@ -36,7 +39,7 @@ class LineSegmentMgr(object):
             for i in range(2, len(self.obs_intsecs), 2):
                 pos1 = self.obs_intsecs[i][2]
                 pos2 = self.obs_intsecs[i+1][2]
-                mid_point = ( int( (pos2[0]-pos1[0])/2 ), int( (pos2[1]-pos1[1])/2 ) )
+                mid_point = ( int( (pos2[0]+pos1[0])/2 ), int( (pos2[1]+pos1[1])/2 ) )
                 self.mid_points.append(mid_point)
                 
         if len(self.mid_points) == 0:
@@ -44,7 +47,7 @@ class LineSegmentMgr(object):
             lineSubSeg = LineSubSegment(subseg, 0, self)
             self.sub_segs.append(lineSubSeg)
         else:
-            subseg = shpgeo.LineString([self.parent.bk, self.mid_points[0]])
+            subseg = shpgeo.LineString([self.from_pos, self.mid_points[0]])
             lineSubSeg = LineSubSegment(subseg, 0, self)
             self.sub_segs.append(lineSubSeg)
             
@@ -53,7 +56,7 @@ class LineSegmentMgr(object):
                 lineSubSeg = LineSubSegment(subseg, len(self.mid_points), self)
                 self.sub_segs.append(lineSubSeg)
             
-            subseg = shpgeo.LineString([self.parent.bk, self.mid_points[len(self.mid_points)-1]])
+            subseg = shpgeo.LineString([self.mid_points[len(self.mid_points)-1], self.end_pos])
             lineSubSeg = LineSubSegment(subseg, len(self.mid_points), self)
             self.sub_segs.append(lineSubSeg)
             
