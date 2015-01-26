@@ -212,7 +212,7 @@ class WorldMapMgr(object):
         region = RegionMgr(ray1_info, ray2_info, len(self.regions), self)
         self.regions.append(region)
         rndVal = numpy.random.randint(0, 256, 3)
-        self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))    
+        self.region_colors.append((rndVal[0], rndVal[1], rndVal[2], 100))    
         
     def isInObsBkLinePair(self, pos):
         
@@ -242,7 +242,7 @@ class WorldMapMgr(object):
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
                     pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 10)
-            self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), region.centroid)
+            self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.width-50, 15))
         
         for obs in self.obstacles:
             xs, ys = obs.polygon.exterior.coords.xy
@@ -262,7 +262,6 @@ class WorldMapMgr(object):
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
-            
             
             
         pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
