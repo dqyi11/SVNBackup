@@ -151,48 +151,32 @@ class WorldMapMgr(object):
                 
         for obs in self.obstacles:
             
-            alpha_self_intsecs = obs.alpha_seg.line_seg.intersection(obs.polygon)
-            #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(obs.idx) + " = " + str(alpha_self_intsecs)
-            if alpha_self_intsecs.is_empty == False:
-                for c in list(alpha_self_intsecs.coords):
-                    cpos = (int(c[0]), int(c[1]))
-                    obs.alpha_self_intsecs.append(cpos)   
-                    obs.alpha_self_intsecs_info.append((obs.idx, 'A', cpos))
+            for obs_ref in self.obstacles:
+                
+                # check alpha seg with obstacles
+                alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
+                #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
+                if alpha_intsecs.is_empty == False:
+                    for c in list(alpha_intsecs.coords):
+                        cpos = (int(c[0]), int(c[1]))
+                        cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                        obs.alpha_obs_intsecs.append(cpos)
+                        obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
+                
+                # check beta seg with obstacles
+                beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
+                #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
+                if beta_intsecs.is_empty == False:
+                    for c in list(beta_intsecs.coords):
+                        cpos = (int(c[0]), int(c[1]))
+                        cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                        obs.beta_obs_intsecs.append(cpos)
+                        obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
             
-            beta_self_intsecs = obs.beta_seg.line_seg.intersection(obs.polygon)
-            #print "BETA: " + str(obs.beta_seg) + " + " + str(obs.idx) + " = " + str(beta_self_intsecs)
-            if beta_self_intsecs.is_empty == False:
-                for c in list(beta_self_intsecs.coords):
-                    cpos = (int(c[0]), int(c[1]))
-                    obs.beta_self_intsecs.append(cpos)   
-                    obs.beta_self_intsecs_info.append((obs.idx, 'B', cpos))
-                    
-            for other_obs in self.obstacles:
-                if obs != other_obs:
-                    # check alpha seg with obstacles
-                    alpha_intsecs = obs.alpha_seg.line_seg.intersection(other_obs.polygon)
-                    #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
-                    if alpha_intsecs.is_empty == False:
-                        for c in list(alpha_intsecs.coords):
-                            cpos = (int(c[0]), int(c[1]))
-                            obs.alpha_obs_intsecs.append(cpos)
-                            obs.alpha_obs_intsecs_info.append((other_obs.idx, 'A', cpos))              
-                    
-                    # check beta seg with obstacles
-                    beta_intsecs = obs.beta_seg.line_seg.intersection(other_obs.polygon)
-                    #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
-                    if beta_intsecs.is_empty == False:
-                        for c in list(beta_intsecs.coords):
-                            cpos = (int(c[0]), int(c[1]))
-                            obs.beta_obs_intsecs.append(cpos)
-                            obs.beta_obs_intsecs_info.append((other_obs.idx, 'B', cpos))  
-                            
-            #print str(obs.alpha_obs_intsecs)
-            #print str(obs.beta_obs_intsecs)
-            #print obs.alpha_obs_intsecs_info
-            #print obs.beta_obs_intsecs_info
-            obs.alpha_seg.load(obs.alpha_self_intsecs_info, obs.alpha_obs_intsecs_info)
-            obs.beta_seg.load(obs.beta_self_intsecs_info, obs.beta_obs_intsecs_info)
+            obs.alpha_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
+            obs.beta_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
+            obs.alpha_seg.load(obs.alpha_obs_intsecs_info)
+            obs.beta_seg.load(obs.beta_obs_intsecs_info)
             
             
     def process(self):

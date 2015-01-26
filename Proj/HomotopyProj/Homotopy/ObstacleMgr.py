@@ -7,6 +7,15 @@ Created on Jan 23, 2015
 import numpy as np
 import shapely.geometry as shpgeo
 
+class LineSubSegment(object):
+    
+    def __init__(self, line_seg, idx, parent):
+        self.line_seg = line_seg
+        self.idx = idx
+        self.parent = parent
+        
+        self.name = self.parent.type + str(self.parent.parent.idx) + "-" + str(self.idx)
+
 class LineSegmentMgr(object):
     
     def __init__(self, line_seg, type, parent):
@@ -14,15 +23,43 @@ class LineSegmentMgr(object):
         self.type = type
         self.line_seg = line_seg
         self.sub_segs = []
+        self.mid_points = []
         
-    def load(self, self_intsecs, other_intsecs):
-        self.self_intsecs = self_intsecs
-        self.other_intsecs = other_intsecs
+    def load(self, obs_intsecs):
+        self.obs_intsecs = obs_intsecs
         
-        print "LINE " + str(self.type) + " of OBS " + str(self.parent.idx)
-        print "ALPHA: " + str(self.self_intsecs)
-        print "BETA: " + str(self.other_intsecs)
+        #print "LINE " + str(self.type) + " of OBS " + str(self.parent.idx)
+        #print "INTERSECTS : " + str(self.obs_intsecs)
+
+        # first two intersection is with self 
+        if len(self.obs_intsecs) > 2:
+            for i in range(2, len(self.obs_intsecs), 2):
+                pos1 = self.obs_intsecs[i][2]
+                pos2 = self.obs_intsecs[i+1][2]
+                mid_point = ( int( (pos2[0]-pos1[0])/2 ), int( (pos2[1]-pos1[1])/2 ) )
+                self.mid_points.append(mid_point)
+                
+        if len(self.mid_points) == 0:
+            subseg = shpgeo.LineString(self.line_seg)
+            lineSubSeg = LineSubSegment(subseg, 0, self)
+            self.sub_segs.append(lineSubSeg)
+        else:
+            subseg = shpgeo.LineString([self.parent.bk, self.mid_points[0]])
+            lineSubSeg = LineSubSegment(subseg, 0, self)
+            self.sub_segs.append(lineSubSeg)
+            
+            for i in range(1, len(self.mid_points), 1):
+                subseg = shpgeo.LineString([self.parent.bk, self.mid_points[len(self.mid_points)-1]])
+                lineSubSeg = LineSubSegment(subseg, len(self.mid_points), self)
+                self.sub_segs.append(lineSubSeg)
+            
+            subseg = shpgeo.LineString([self.parent.bk, self.mid_points[len(self.mid_points)-1]])
+            lineSubSeg = LineSubSegment(subseg, len(self.mid_points), self)
+            self.sub_segs.append(lineSubSeg)
+            
+        print "OBS " + str(self.parent.idx) + " " + str(self.type) + " " + str(self.sub_segs)
         
+                
 
 class ObstacleMgr(object):
 
