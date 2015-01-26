@@ -12,4 +12,5 @@ if __name__ == '__main__':
     mapMgr = WorldMapMgr()
     mapMgr.load(MAP_FILE)
     
-    mapMgr.visualize()
+    while True:
+        mapMgr.visualize()

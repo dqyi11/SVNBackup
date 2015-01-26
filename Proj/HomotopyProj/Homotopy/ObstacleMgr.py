@@ -34,6 +34,8 @@ class ObstacleMgr(object):
         self.beta_self_intsecs = []
         self.beta_obs_intsecs = []
         
+        self.alpha_self_intsecs_info = []
+        self.beta_self_intsecs_info = []
         self.alpha_obs_intsecs_info = []
         self.beta_obs_intsecs_info = []
         

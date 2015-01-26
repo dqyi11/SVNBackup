@@ -32,6 +32,10 @@ class WorldMapMgr(object):
 
     def __init__(self):
         self.obstacles = []
+        self.regions = []
+        self.region_colors = []
+        
+        self.region_idx = 0
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -48,6 +52,7 @@ class WorldMapMgr(object):
             self.obstacles.append(obs)
             
         self.init()
+        self.process()
         
     def init(self):
         # select random point for each obstacle
@@ -80,9 +85,22 @@ class WorldMapMgr(object):
         self.x_high = symgeo.Line(symgeo.Point(0,self.height-1), symgeo.Point(self.width-1, self.height-1))
         self.y_high = symgeo.Line(symgeo.Point(self.width-1, 0), symgeo.Point(self.width-1, self.height-1))
         self.boundary_lines.append(self.x_axis)
-        self.boundary_lines.append(self.y_axis)
-        self.boundary_lines.append(self.x_high)
         self.boundary_lines.append(self.y_high)
+        self.boundary_lines.append(self.x_high)
+        self.boundary_lines.append(self.y_axis)
+        
+        # init lines from center point to four corners
+        self.center_corner_lines_info = []
+        self.center_corner_lines_info.append( [ (0,0), numpy.arctan2(float(-self.centralPoint[1]), float(-self.centralPoint[0])) ] )
+        self.center_corner_lines_info.append( [ (0,self.height), numpy.arctan2(float(self.height-self.centralPoint[1]), float(-self.centralPoint[0])) ] )
+        self.center_corner_lines_info.append( [ (self.width,self.height), numpy.arctan2(float(self.height-self.centralPoint[1]), float(self.width-self.centralPoint[0])) ] )
+        self.center_corner_lines_info.append( [ (self.width,0), numpy.arctan2(float(-self.centralPoint[1]), float(self.width-self.centralPoint[0])) ] )
+        for ccl_info in self.center_corner_lines_info:
+            if ccl_info[1] < 0:
+                ccl_info[1] += 2*numpy.pi
+        self.center_corner_lines_info.sort( key=lambda x: x[1], reverse=False )
+        print "CENTER CORNER LINES "
+        print self.center_corner_lines_info
         
         self.ray_info_list = []
         
@@ -120,6 +138,10 @@ class WorldMapMgr(object):
             #print "BETA RAY SLOPE " + str(beta_ray_info)
             self.ray_info_list.append(alpha_ray_info)
             self.ray_info_list.append(beta_ray_info)
+              
+            obs.alpha_seg_info = ( (int(a_pt.x), int(a_pt.y)), alpha_ray_rad )
+            obs.beta_seg_info = ( (int(b_pt.x), int(b_pt.y)), beta_ray_rad )  
+              
                 
         self.ray_info_list.sort(key=lambda x: x[2], reverse=False)
         #print self.ray_info_list
@@ -130,13 +152,17 @@ class WorldMapMgr(object):
             #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(obs.idx) + " = " + str(alpha_self_intsecs)
             if alpha_self_intsecs.is_empty == False:
                 for c in list(alpha_self_intsecs.coords):
-                    obs.alpha_self_intsecs.append((int(c[0]), int(c[1])))   
+                    cpos = (int(c[0]), int(c[1]))
+                    obs.alpha_self_intsecs.append(cpos)   
+                    obs.alpha_self_intsecs_info.append((obs.idx, 'A', cpos))
             
             beta_self_intsecs = obs.beta_seg.intersection(obs.polygon)
             #print "BETA: " + str(obs.beta_seg) + " + " + str(obs.idx) + " = " + str(beta_self_intsecs)
             if beta_self_intsecs.is_empty == False:
                 for c in list(beta_self_intsecs.coords):
-                    obs.beta_self_intsecs.append((int(c[0]), int(c[1])))   
+                    cpos = (int(c[0]), int(c[1]))
+                    obs.beta_self_intsecs.append(cpos)   
+                    obs.beta_self_intsecs_info.append((obs.idx, 'B', cpos))
                     
             for other_obs in self.obstacles:
                 if obs != other_obs:
@@ -166,13 +192,21 @@ class WorldMapMgr(object):
     def process(self):
         
         # split the region
+        self.regions = []
+        self.region_colors = []
         for i in range(len(self.ray_info_list)-1):
             ray1_info = self.ray_info_list[i]
             ray2_info = self.ray_info_list[i+1]
             region = RegionMgr(ray1_info, ray2_info, i, self)
             self.regions.append(region)
-         
-            
+            rndVal = numpy.random.randint(0, 256, 3)
+            self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))
+        ray1_info = self.ray_info_list[len(self.ray_info_list)-1]
+        ray2_info = self.ray_info_list[0]
+        region = RegionMgr(ray1_info, ray2_info, i, self)
+        self.regions.append(region)
+        rndVal = numpy.random.randint(0, 256, 3)
+        self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))    
         
     def isInObsBkLinePair(self, pos):
         
@@ -206,14 +240,30 @@ class WorldMapMgr(object):
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             
+        if len(self.regions) > 0:
+            region = self.regions[self.region_idx]
+            region_color = self.region_colors[self.region_idx]
+            xs, ys = region.polygon.exterior.coords.xy
+            for i in range(len(xs)-1):
+                pygame.draw.line(self.screen, region_color, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 10)
+            
         pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)     
             
-        while True:
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-            pygame.display.update()
+  
+        for event in pygame.event.get():                
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.region_idx += 1
+                elif event.key == pygame.K_DOWN:
+                    self.region_idx -= 1
+        if self.region_idx < 0:
+            self.region_idx = len(self.regions)-1
+        elif self.region_idx >= len(self.regions):
+            self.region_idx = 0
+        pygame.display.update()
             
             
     def findIntersectionWithBoundary(self, a_ray):
