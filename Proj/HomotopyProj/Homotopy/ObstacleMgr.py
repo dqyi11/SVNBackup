@@ -81,6 +81,8 @@ class ObstacleMgr(object):
         #print vex_list
         self.polygon = shpgeo.Polygon(vex_list)
         
+        self.bk = None
+        
         self.centroid = (int(self.polygon.centroid.x), int(self.polygon.centroid.y))
         
         self.alpha_ray = None

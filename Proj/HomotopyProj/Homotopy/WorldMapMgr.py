@@ -38,6 +38,8 @@ class WorldMapMgr(object):
         self.region_colors = []
         
         self.subsegments = []
+        
+        self.centralPoint = None
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -54,7 +56,7 @@ class WorldMapMgr(object):
             self.obstacles.append(obs)
             
         self.init()
-        self.process()
+        #self.process()
         
     def init(self):
         # select random point for each obstacle
@@ -103,6 +105,7 @@ class WorldMapMgr(object):
         self.center_corner_lines_info.sort( key=lambda x: x[1], reverse=False )
         #print "CENTER CORNER LINES "
         #print self.center_corner_lines_info
+        return
         
         self.ray_info_list = []
         
@@ -254,9 +257,10 @@ class WorldMapMgr(object):
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
                 pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 2)
-
-            pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
-            pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
+            if obs.alpha_seg != None:
+                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
+            if obs.beta_seg != None:
+                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
             
             for ac in obs.alpha_self_intsecs:
                 pygame.draw.circle(self.screen, ALPHA_SELF_COLOR, ac, 3)
@@ -266,7 +270,8 @@ class WorldMapMgr(object):
                 pygame.draw.circle(self.screen, ALPHA_OTHER_COLOR, ac, 3)
             for bc in obs.beta_obs_intsecs:
                 pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
-            pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
+            if obs.bk != None:
+                pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
             
         if len(self.subsegments) > 0 and self.subsegment_idx >= 0:
@@ -274,8 +279,9 @@ class WorldMapMgr(object):
             pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], 10)
             self.screen.blit(self.font.render(subsegment.name, True, (0,0,0)), (15,15))
             
-            
-        pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
+        
+        if self.centralPoint != None:
+            pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
   
         for event in pygame.event.get():                
             if event.type == QUIT:
@@ -300,13 +306,14 @@ class WorldMapMgr(object):
         elif self.region_idx >= len(self.regions):
             self.region_idx = 0
         
-        if self.subregion_idx < 0:
-            self.subregion_idx = len(self.regions[self.region_idx].subregions) - 1
-        elif self.subregion_idx >= len(self.regions[self.region_idx].subregions):
-            self.subregion_idx = 0
-            
-        if self.subsegment_idx >= len(self.subsegments):
-            self.subsegment_idx = -1
+        if len(self.regions) > 0:
+            if self.subregion_idx < 0:
+                self.subregion_idx = len(self.regions[self.region_idx].subregions) - 1
+            elif self.subregion_idx >= len(self.regions[self.region_idx].subregions):
+                self.subregion_idx = 0
+                
+            if self.subsegment_idx >= len(self.subsegments):
+                self.subsegment_idx = -1
             
         pygame.display.update()
             
