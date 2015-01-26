@@ -26,6 +26,7 @@ BETA_OTHER_COLOR = (76,153,0)
 CENTER_POINT_COLOR = (255,0,0)
 OBS_BK_COLOR = (124,252,0)
 SUBSEGMENT_COLOR = (255,255,0,100)
+SUBREGION_BORDER_COLOR = (255,0,0,100)
 
 
 
@@ -220,7 +221,7 @@ class WorldMapMgr(object):
         
         self.region_idx = 0
         self.subregion_idx = 0
-        self.subsegment_idx = 0
+        self.subsegment_idx = -1
         
     def updateVisualize(self):
         
@@ -239,6 +240,9 @@ class WorldMapMgr(object):
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
                     pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 6)
+                for n_info in region.subregions[self.subregion_idx].neighbor_info:
+                    pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)   
+                
             self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.width-50, 15))
         
         for obs in self.obstacles:
@@ -260,11 +264,10 @@ class WorldMapMgr(object):
             pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
             
-        if len(self.subsegments) > 0:
+        if len(self.subsegments) > 0 and self.subsegment_idx >= 0:
             subsegment = self.subsegments[self.subsegment_idx]
             pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], 10)
             self.screen.blit(self.font.render(subsegment.name, True, (0,0,0)), (15,15))
-            
             
             
         pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
@@ -298,7 +301,7 @@ class WorldMapMgr(object):
             self.subregion_idx = 0
             
         if self.subsegment_idx >= len(self.subsegments):
-            self.subsegment_idx = 0
+            self.subsegment_idx = -1
             
         pygame.display.update()
             

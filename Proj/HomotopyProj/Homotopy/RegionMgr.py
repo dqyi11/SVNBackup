@@ -12,6 +12,7 @@ class SubRegion(object):
     
     def __init__(self, polygon):
         self.polygon = polygon
+        self.neighbor_info = []
 
 class RegionMgr(object):
 
@@ -65,8 +66,20 @@ class RegionMgr(object):
                 self.subregions.append(subregion)
                 
         # init alpha and beta segments for subregion
+        
         #print self.line1_obs_intsecs_info
         #print self.line2_obs_intsecs_info   
+        print "CHECK NEIGHBOR OF REGION " + str(self.name)
+        for subregion in self.subregions:
+            for subseg in self.line1.sub_segs:
+                if subregion.polygon.intersects(subseg.line_seg):
+                    print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
+                    subregion.neighbor_info.append((self.line1, subseg))
+        
+            for subseg in self.line2.sub_segs:
+                if subregion.polygon.intersects(subseg.line_seg):
+                    print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
+                    subregion.neighbor_info.append((self.line2, subseg))
                 
         
         
