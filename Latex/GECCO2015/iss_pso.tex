@@ -94,19 +94,19 @@ This version of PSO includes a ring topology, and a constricted position update 
 The constricted position update rule is
 
 \begin{subequations}
-	\label{eq:pso_alg}
-	\begin{equation}
-	\label{eq:up_vel}
-	\begin{aligned}
-	v_{ij}(k+1) & = \chi [ v_{ij}(k) 
-	+ \phi^{P} u^{P}_{ij}(k) (x^{P}_{ij}(k) - x_{ij}(k))
-	\\ & + \phi^{G} u^{G}_{ij}(k) ( x^{G}_{ij}(k) - x_{ij}(k)) ],
-	\end{aligned}
-	\end{equation}
-	\begin{equation}
-	\label{eq:up_pos}
-	x_{ij}(k+1) = x_{ij}(k) + v_{ij}(k+1).
-	\end{equation}
+\label{eq:pso_alg}
+\begin{equation}
+\label{eq:up_vel}
+\begin{aligned}
+v_{ij}(k+1) & = \chi [ v_{ij}(k) 
++ \phi^{P} u^{P}_{ij}(k) (x^{P}_{ij}(k) - x_{ij}(k))
+\\ & + \phi^{G} u^{G}_{ij}(k) ( x^{G}_{ij}(k) - x_{ij}(k)) ],
+\end{aligned}
+\end{equation}
+\begin{equation}
+\label{eq:up_pos}
+x_{ij}(k+1) = x_{ij}(k) + v_{ij}(k+1).
+\end{equation}
 \end{subequations}
 $ x_{ij}(k) $ represents the position of particle $ i $ in dimension $ j $ at time $ k $.
 $ v_{ij}(k) $ similarly represents the velocity of particle $ i $ in dimension $ j $ also at time $ k $.
@@ -159,7 +159,7 @@ These two components are the
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.5\textwidth]{sys_flow.pdf}
+	\includegraphics[width=0.5\textwidth]{particle_sys_flow.pdf}
 	\caption{System structure of PSO}
 	\label{fig:sys_flow}
 \end{figure}
