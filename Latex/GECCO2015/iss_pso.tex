@@ -210,8 +210,8 @@ $ B(k) = \begin{bmatrix}
 
 The system state is $ X(k) = [ v(k), x(k) - x^{*} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} $
 \footnote{$ x^{*} $ means an equilibrium point to the system.
-	In PSO, it can be a local optimum, a global optimum, or an estimated optimum.
-	We use it as a reference point to check the bounds.}
+In PSO, it can be a local optimum, a global optimum, or an estimated optimum.
+We use it as a reference point to check the bounds.}
 .
 The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \rightarrow x^{*} $.
 
@@ -241,18 +241,18 @@ We first introduce several types of functions \cite{Jiang2001857}.
 \end{itemize}
 
 \begin{mydef}[Input-to-state stable]\cite{Jiang2001857}
-	\label{def:iss}
-	For a discrete-time system
-	\begin{equation}
-	\label{eq:dis_nonlinear}
-	x(k+1) = f( x(k) , u(k) ),
-	\end{equation}
-	with $ f(0,0) = 0 $
-	\footnote{This means that $ x = 0 $ is an equilibrium of the 0-input system.}, the system is \emph{(globally) input-to-state stable} if there exist a $ KL $-function $ \beta  $ and a $ K $-function $ \gamma $ such that, for each input $ u \in l^{m}_{\infty} $ and each $ \xi \in \mathbb{R}^{n} $, it holds that $  \forall k \in \mathbb{Z}^{+} $,
-	\begin{equation}
-	\label{eq:def_iss}
-	| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma (|| u ||).
-	\end{equation}
+\label{def:iss}
+For a discrete-time system
+\begin{equation}
+\label{eq:dis_nonlinear}
+x(k+1) = f( x(k) , u(k) ),
+\end{equation}
+with $ f(0,0) = 0 $
+\footnote{This means that $ x = 0 $ is an equilibrium of the 0-input system.}, the system is \emph{(globally) input-to-state stable} if there exist a $ KL $-function $ \beta  $ and a $ K $-function $ \gamma $ such that, for each input $ u \in l^{m}_{\infty} $ and each $ \xi \in \mathbb{R}^{n} $, it holds that $  \forall k \in \mathbb{Z}^{+} $,
+\begin{equation}
+\label{eq:def_iss}
+| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma (|| u ||).
+\end{equation}
 \end{mydef}
 
 The $ \beta () $ term in equation \eqref{eq:def_iss} defines an initial bound with a decaying property.
@@ -266,80 +266,12 @@ We will use the ISS-Lyapunov-function approach in the proof given later in this 
 Using the definition of the PSO position update as given in equation \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be ISS as defined in definition \ref{def:iss}.
 
 \begin{mythm}
-	\label{thm:iss}
-	The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, when $ | \lambda_{\max} ( A(k) ) | < 1 $.
-	%The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, if there exists a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q' $ that has $ A(k)^{T} P A(k) - P = - Q(k) \leq - Q' $.
-	\begin{proof}
-		
-		Let $ P $ be an identity matrix.
-		As $ | \lambda_{\max} ( A(k) ) | < 1 $, we have
-		$ \lVert A^{T}(k) P A(k) \rVert \leq \lVert P \rVert \lVert A(k) \rVert^{2} \leq \lVert P \rVert | \lambda_{\max} ( A(k) ) |^{2} < \lVert P \rVert $.
-		Because $ P $ is an identity matrix it is positive definite, and thus $ A^{T}(k) P A(k) $ is positive definite or positive semi-definite by definition.
-		So by positive definite ordering we have $ A^{T}(k) P A(k) < P $.
-		
-		Let $ -Q(k) = A^{T}(k) P A(k) - P $. Since $ A^{T}(k) P A(k) < P $ then $ - Q(k) < 0 $ furthermore $ \exists Q' \forall k, Q(k) > Q' > 0 $. 
-		
-		By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, then the system is ISS.
-		
-		Define a Lyapunov function
-		\begin{equation}
-		\label{eq:lyapunov_v}
-		V( X(k) ) = X^{T} (k) P X(k).
-		\end{equation}
-		We can have
-		$
-		\lambda_{min}(P) | X(k) |^{2} \leq V( X(k) )\leq \lambda_{max}(P) | X(k) |^{2}
-		$ and $ \lambda_{min}(P) = \lambda_{max}(P) $.
-		
-		Let $ \alpha_{1} ( \xi )= \lambda_{min} \xi^{2} $
-		and 
-		$ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
-		we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
-		
-		By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
-		\begin{equation}
-		\label{eq:lyapunov_delta2}
-		\begin{aligned}
-		& V( X(k+1) ) - V( X(k) ) \\
-		= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
-		& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-		\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
-		& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-		\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert | U(k) | | X(k) | \\
-		& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
-		\end{aligned}
-		\end{equation}
-		
-		By completing the square, we have
-		\begin{equation}
-		\label{eq:lyapunov_delta4}
-		\begin{aligned}
-		& V( X(k+1) ) - V( X(k) ) \\
-		\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} }  + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
-		\end{aligned}
-		\end{equation}
-		
-		Because $ u^{P}(k) \in [0, 1] $, there exist an $ A' $ and $ B' $ such that $ \lVert A(k) \rVert \leq \lVert A' \rVert $ and $ \lVert B(k) \rVert \leq \lVert B' \rVert $.
-		We have $ \lVert A^{T}(k) P B(k) \rVert \leq \lVert A' \rVert \lVert P \rVert \lVert B' \rVert $ and $ \lVert B^{T}(k) P B(k) \rVert \leq \lVert P \rVert \lVert B' \rVert^{2} $.
-		
-		Since the identity matrix $ P $ has $ || P || = 1 $:
-		\begin{equation}
-		\label{eq:lyapunov_delta5}
-		\begin{aligned}
-		& V( X(k+1) ) - V( X(k) ) \\
-		\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] | U(k) |^{2}.
-		\end{aligned}
-		\end{equation}
-		
-		Let
-		$ \alpha_{3} ( \xi )= \frac{1}{2} \lambda_{min}(Q') \xi^{2} $,
-		and
-		$ \sigma ( \xi ) = [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } +  \lVert B' \rVert^{2} ] \xi^{2} $.
-		Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
-		so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
-		Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
-		
-	\end{proof}
+\label{thm:iss}
+The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, when $ | \lambda_{\max} ( A(k) ) | < 1 $.
+%The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, if there exists a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q' $ that has $ A(k)^{T} P A(k) - P = - Q(k) \leq - Q' $.
+\begin{proof}
+The proof is given in Appendix \ref{sec:thm:iss:proof}.
+\end{proof}
 \end{mythm}
 
 Note that in using equation \eqref{eq:pso_up_linalg_simp},
@@ -383,39 +315,18 @@ Figure \ref{fig:boundary} gives an example on how a particle's boundary is deter
 \end{figure}
 
 \begin{mycoro}
-	\label{coro:param_unit_disc}
-	Write $ A(k) = 
-	\begin{bmatrix}
-	\chi & - \chi \phi \\
-	\chi & 1 - \chi \phi
-	\end{bmatrix}
-	$, in which
-	$ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
-	When $ \phi \in (0 , \frac{2(1+\chi)}{\chi} ) $, the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
-	\begin{proof}
-		Let $ a = (1 + \chi) - \chi \phi $. 
-		The eigenvalues of $ A(k) $ are
-		$ \lambda = \frac{ a \pm \sqrt{ a^{2} - 4 \chi } }{2} $.
-		
-		\begin{enumerate}
-			\item If $ a^{2} \geq 4 \chi $, we have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
-			
-			If $ a \geq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ 0 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 1 $.
-			It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
-			
-			If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ -1 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 0 $.
-			It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
-			
-			\item If $ a^{2} \geq 4 \chi $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
-			
-			$ | \lambda_{\max} | < 1 $ derives $ \frac{ a^{2} }{4} + \frac{ a^{2} - 4\chi }{4} < 1 $.
-			It means that $ - 2 \sqrt{ 2(1+\chi) } < a < 2 \sqrt{ 2(1+\chi) } $.
-			Because $ \sqrt{ 2(1+\chi) } > 2 \sqrt{ \chi } $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
-		\end{enumerate}
-		Combining these two cases, we have  $ - (1 + \chi) < a < 1 + \chi $.
-		It equals to $ \phi \in (0 , \frac{2(1+\chi)}{\chi} ) $.
-		
-	\end{proof}
+\label{coro:param_unit_disc}
+Write $ A(k) = 
+\begin{bmatrix}
+\chi & - \chi \phi \\
+\chi & 1 - \chi \phi
+\end{bmatrix}
+$, in which
+$ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
+When $ \phi \in (0 , \frac{2(1+\chi)}{\chi} ) $, the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
+\begin{proof}
+The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof}.
+\end{proof}
 \end{mycoro}
 
 Figure \ref{fig:paramSpace} shows the parameter space.
@@ -564,8 +475,110 @@ In cases that use the same position update component but different input update 
 whether the input update component generates converging or bounded personal best and global best.
 For variants that use a different position update component, the ISS properties would need to be verified.
 
+\section*{Appendix}
+\label{sec:appendix}
 
+\subsection{Proof of Theorem \ref{thm:iss}}
+\label{sec:thm:iss:proof}
+		
+\begin{proof}
+Let $ P $ be an identity matrix.
+As $ | \lambda_{\max} ( A(k) ) | < 1 $, we have
+$ \lVert A^{T}(k) P A(k) \rVert \leq \lVert P \rVert \lVert A(k) \rVert^{2} \leq \lVert P \rVert | \lambda_{\max} ( A(k) ) |^{2} < \lVert P \rVert $.
+Because $ P $ is an identity matrix it is positive definite, and thus $ A^{T}(k) P A(k) $ is positive definite or positive semi-definite by definition.
+So by positive definite ordering we have $ A^{T}(k) P A(k) < P $.
+		
+Let $ -Q(k) = A^{T}(k) P A(k) - P $. Since $ A^{T}(k) P A(k) < P $ then $ - Q(k) < 0 $ furthermore $ \exists Q' \forall k, Q(k) > Q' > 0 $. 
+		
+By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, then the system is ISS.
+		
+Define a Lyapunov function
+\begin{equation}
+\label{eq:lyapunov_v}
+V( X(k) ) = X^{T} (k) P X(k).
+\end{equation}
+We can have
+$
+\lambda_{min}(P) | X(k) |^{2} \leq V( X(k) )\leq \lambda_{max}(P) | X(k) |^{2}
+$ and $ \lambda_{min}(P) = \lambda_{max}(P) $.
+		
+Let $ \alpha_{1} ( \xi )= \lambda_{min} \xi^{2} $
+and 
+$ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
+we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
+		
+By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
+\begin{equation}
+\label{eq:lyapunov_delta2}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+	= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+	\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+	\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert  U(k) | | X(k) | \\
+	& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+\end{aligned}
+\end{equation}
+		
+By completing the square, we have
+\begin{equation}
+\label{eq:lyapunov_delta4}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} }  + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
+\end{aligned}
+\end{equation}
+		
+Because $ u^{P}(k) \in [0, 1] $, there exist an $ A' $ and $ B' $ such that $ \lVert A(k) \rVert \leq \lVert A' \rVert $ and $ \lVert B(k) \rVert \leq \lVert B' \rVert $.
+We have $ \lVert A^{T}(k) P B(k) \rVert \leq \lVert A' \rVert \lVert P \rVert \lVert B' \rVert $ and $ \lVert B^{T}(k) P B(k) \rVert \leq \lVert P \rVert \lVert B' \rVert^{2} $.
+		
+Since the identity matrix $ P $ has $ || P || = 1 $:
+\begin{equation}
+\label{eq:lyapunov_delta5}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} ] | U(k) |^{2}.
+\end{aligned}
+\end{equation}
+		
+Let
+$ \alpha_{3} ( \xi )= \frac{1}{2} \lambda_{min}(Q') \xi^{2} $,
+and
+$ \sigma ( \xi ) = [ \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } +  \lVert B' \rVert^{2} ] \xi^{2} $.
+Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
+so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
+Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
+\end{proof}
 
+\subsection{Proof of Corollary \ref{coro:param_unit_disc}}
+\label{sec:coro:param_unit_disc:proof}
+
+\begin{proof}
+Let $ a = (1 + \chi) - \chi \phi $. 
+The eigenvalues of $ A(k) $ are
+$ \lambda = \frac{ a \pm \sqrt{ a^{2} - 4 \chi } }{2} $.
+		
+\begin{enumerate}
+\item If $ a^{2} \geq 4 \chi $, we have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
+			
+If $ a \geq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ 0 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 1 $.
+It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
+			
+If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ -1 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 0 $.
+It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
+			
+\item If $ a^{2} \geq 4 \chi $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+			
+$ | \lambda_{\max} | < 1 $ derives $ \frac{ a^{2} }{4} + \frac{ a^{2} - 4\chi }{4} < 1 $.
+It means that $ - 2 \sqrt{ 2(1+\chi) } < a < 2 \sqrt{ 2(1+\chi) } $.
+Because $ \sqrt{ 2(1+\chi) } > 2 \sqrt{ \chi } $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+\end{enumerate}
+Combining these two cases, we have  $ - (1 + \chi) < a < 1 + \chi $.
+It equals to $ \phi \in (0 , \frac{2(1+\chi)}{\chi} ) $.
+		
+\end{proof}		
+		
 \bibliographystyle{abbrv}
 \bibliography{reference}
 
