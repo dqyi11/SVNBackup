@@ -163,24 +163,42 @@ class WorldMapMgr(object):
                     alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
                     #alpha_intsecs = obs_ref.polygon.intersection(obs.alpha_seg.line_seg)
                     print "ALPHA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(alpha_intsecs)
-                    if alpha_intsecs.is_empty == False:
-                        for c in list(alpha_intsecs.coords):
-                            cpos = (c[0], c[1])
-                            cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
-                            obs.alpha_obs_intsecs.append(cpos)
-                            obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
+                    if alpha_intsecs.type == "LineString":
+                        if alpha_intsecs.is_empty == False:
+                            for c in list(alpha_intsecs.coords):
+                                cpos = (c[0], c[1])
+                                cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                                obs.alpha_obs_intsecs.append(cpos)
+                                obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))
+                    elif alpha_intsecs.type == "MultiLineString":
+                        for int_line in alpha_intsecs:
+                            if int_line.is_empty == False:
+                                for c in list(int_line.coords):
+                                    cpos = (c[0], c[1])
+                                    cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                                    obs.alpha_obs_intsecs.append(cpos)
+                                    obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))            
                 
                 isIntersect = obs.beta_seg.line_seg.intersects(obs_ref.polygon)
                 if isIntersect == True:
                     # check beta seg with obstacles
                     beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
                     print "BETA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(beta_intsecs)
-                    if beta_intsecs.is_empty == False:
-                        for c in list(beta_intsecs.coords):
-                            cpos = (c[0], c[1])
-                            cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
-                            obs.beta_obs_intsecs.append(cpos)
-                            obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
+                    if beta_intsecs.type == "LineString":
+                        if beta_intsecs.is_empty == False:
+                            for c in list(beta_intsecs.coords):
+                                cpos = (c[0], c[1])
+                                cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                                obs.beta_obs_intsecs.append(cpos)
+                                obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
+                    elif beta_intsecs.type == "MultiLineString":
+                        for int_line in beta_intsecs:
+                            if int_line.is_empty == False:
+                                for c in list(int_line.coords):
+                                    cpos = (c[0], c[1])
+                                    cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
+                                    obs.beta_obs_intsecs.append(cpos)
+                                    obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
             
             obs.alpha_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
             obs.beta_obs_intsecs_info.sort(key=lambda x: x[3], reverse=False)
