@@ -1,5 +1,7 @@
 \documentclass{sig-alternate}
 
+\usepackage{comment}
+
 \newtheorem{mydef}{Definition}
 \newtheorem{mylem}{Lemma}
 \newtheorem{mythm}{Theorem}
@@ -59,6 +61,31 @@ exploits and explores the fitness landscape as a function of the personal best a
 \end{abstract}
 
 \keywords{Particle Swarm Optimization, Input-to-state stability}
+
+\begin{comment}
+\emph{Input-to-state stable analysis} = 
+Modeling by decomposition + Input-to-state stability
+\begin{itemize}
+\item Why input-to-state stable analysis is needed
+    \begin{itemize}
+    \item A better way of modeling PSO
+    \item A better understand of the PSO dynamics
+    \item Exploration + Exploitation (ISS)
+    \item Match with the previous results
+    \end{itemize}
+\item When input-to-state stability is satisfied (Parameter selection)
+    \begin{itemize}
+    \item Input-to-state stability proof
+    \item Moment analysis
+    \end{itemize}
+\item What happens when the position update of the particles are ISS
+    \begin{itemize}
+    \item Stagnation
+    \item Beyond stagnation
+    \end{itemize}
+\end{itemize}
+
+\end{comment}
 
 \section{Introduction}
 \label{sec:intro}
