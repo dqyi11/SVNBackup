@@ -13,5 +13,12 @@ if __name__ == '__main__':
     mapMgr.load(MAP_FILE)
     
     mapMgr.initVisualize()
+    mapMgr.init()
+    mapMgr.updateVisualize()
+    mapMgr.initSegments()
+    mapMgr.updateVisualize()
+    mapMgr.process()
+    
+    
     while True:
         mapMgr.updateVisualize()

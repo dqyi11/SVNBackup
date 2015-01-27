@@ -55,8 +55,7 @@ class WorldMapMgr(object):
             obs = ObstacleMgr(cont, len(self.obstacles))
             self.obstacles.append(obs)
             
-        self.init()
-        #self.process()
+        
         
     def init(self):
         # select random point for each obstacle
@@ -151,16 +150,19 @@ class WorldMapMgr(object):
                 
         self.ray_info_list.sort(key=lambda x: x[2], reverse=False)
         #print self.ray_info_list
-                
+    
+    def initSegments(self):    
+    
         for obs in self.obstacles:
             
             for obs_ref in self.obstacles:
                 
                 # check alpha seg with obstacles
-                if obs.alpha_seg.line_seg.intersects(obs_ref.polygon):
+                isIntersect = obs.alpha_seg.line_seg.intersects(obs_ref.polygon)
+                if isIntersect == True:
                     alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
                     #alpha_intsecs = obs_ref.polygon.intersection(obs.alpha_seg.line_seg)
-                    #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
+                    print "ALPHA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(alpha_intsecs)
                     if alpha_intsecs.is_empty == False:
                         for c in list(alpha_intsecs.coords):
                             cpos = (c[0], c[1])
@@ -168,10 +170,11 @@ class WorldMapMgr(object):
                             obs.alpha_obs_intsecs.append(cpos)
                             obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
                 
-                if obs.beta_seg.line_seg.intersects(obs_ref.polygon):
+                isIntersect = obs.beta_seg.line_seg.intersects(obs_ref.polygon)
+                if isIntersect == True:
                     # check beta seg with obstacles
                     beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
-                    #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
+                    print "BETA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(beta_intsecs)
                     if beta_intsecs.is_empty == False:
                         for c in list(beta_intsecs.coords):
                             cpos = (c[0], c[1])
