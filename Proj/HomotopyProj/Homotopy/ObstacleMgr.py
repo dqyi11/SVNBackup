@@ -81,6 +81,19 @@ class ObstacleMgr(object):
         #print vex_list
         self.polygon = shpgeo.Polygon(vex_list)
         
+        if self.polygon.is_valid == False:
+            print "fixing polygon of OBS " + str(self.idx)
+            fixed_polygon = self.polygon.buffer(0)
+            print "After fixing: " + str(fixed_polygon.is_valid)
+            if fixed_polygon.type == "MultiPolygon":
+                polygon_list = []
+                for poly in fixed_polygon:
+                    polygon_list.append((poly, poly.area))
+                polygon_list.sort(key=lambda x: x[1], reverse=True)
+                self.polygon = polygon_list[0][0]
+            elif fixed_polygon.type == "Polygon":
+                self.polygon = fixed_polygon
+        
         self.bk = None
         
         self.centroid = (self.polygon.centroid.x, self.polygon.centroid.y)

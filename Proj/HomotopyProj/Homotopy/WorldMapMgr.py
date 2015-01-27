@@ -251,7 +251,7 @@ class WorldMapMgr(object):
                 '''    
                 for n_info in region.subregions[self.subregion_idx].neighbor_info:
                     pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)  
-                ''' 
+                '''
                 
             self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.width-50, 15))
         
