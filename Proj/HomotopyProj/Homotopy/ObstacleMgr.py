@@ -39,7 +39,7 @@ class LineSegmentMgr(object):
             for i in range(2, len(self.obs_intsecs), 2):
                 pos1 = self.obs_intsecs[i][2]
                 pos2 = self.obs_intsecs[i+1][2]
-                mid_point = ( int( (pos2[0]+pos1[0])/2 ), int( (pos2[1]+pos1[1])/2 ) )
+                mid_point = ( (pos2[0]+pos1[0])/2 , (pos2[1]+pos1[1])/2 )
                 self.mid_points.append(mid_point)
                 
         if len(self.mid_points) == 0:
@@ -83,7 +83,7 @@ class ObstacleMgr(object):
         
         self.bk = None
         
-        self.centroid = (int(self.polygon.centroid.x), int(self.polygon.centroid.y))
+        self.centroid = (self.polygon.centroid.x, self.polygon.centroid.y)
         
         self.alpha_ray = None
         self.beta_ray = None

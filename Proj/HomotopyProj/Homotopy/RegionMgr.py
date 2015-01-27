@@ -47,7 +47,7 @@ class RegionMgr(object):
         pointString = self.getPointString(parent.centralPoint, self.line1_info, self.line2_info)
         self.polygon = shpgeo.Polygon(pointString)
         
-        self.centroid = (int(self.polygon.centroid.x), int(self.polygon.centroid.y))
+        self.centroid = (self.polygon.centroid.x, self.polygon.centroid.y)
         
         current_polygon = self.polygon
         for obs in self.parent.obstacles:

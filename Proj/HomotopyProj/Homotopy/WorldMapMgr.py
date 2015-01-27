@@ -73,14 +73,14 @@ class WorldMapMgr(object):
                 
         
         # select central point c
-        self.centralPoint = (int(self.width/2), int(self.height/2))
+        self.centralPoint = (self.width/2, self.height/2)
         foundCP = False
         while foundCP == False:
             if self.isInObsBkLinePair(self.centralPoint)==False:
                 foundCP = True
             else:
-                self.centralPoint[0] = np.random.randint(0, self.width)
-                self.centralPoint[1] = np.random.randint(0, self.height)
+                self.centralPoint[0] = np.random.random()*self.width
+                self.centralPoint[1] = np.random.random()*self.height
                 
         # init four boundary line
         self.boundary_lines = []
@@ -105,7 +105,6 @@ class WorldMapMgr(object):
         self.center_corner_lines_info.sort( key=lambda x: x[1], reverse=False )
         #print "CENTER CORNER LINES "
         #print self.center_corner_lines_info
-        return
         
         self.ray_info_list = []
         
@@ -122,10 +121,10 @@ class WorldMapMgr(object):
             obs.alpha_seg = None
             obs.beta_seg = None
             if a_pt != None:
-                alpha_seg = shpgeo.LineString([obs.bk, (int(a_pt.x), int(a_pt.y))])
+                alpha_seg = shpgeo.LineString([obs.bk, (a_pt.x, a_pt.y)])
                 obs.alpha_seg = LineSegmentMgr(alpha_seg, 'A', obs)
             if b_pt != None:
-                beta_seg = shpgeo.LineString([obs.bk, (int(b_pt.x), int(b_pt.y))])
+                beta_seg = shpgeo.LineString([obs.bk, (b_pt.x, b_pt.y)])
                 obs.beta_seg = LineSegmentMgr(beta_seg, 'B', obs)
                 
             alpha_ray_rad = numpy.arctan(float(obs.alpha_ray.slope))
@@ -146,8 +145,8 @@ class WorldMapMgr(object):
             self.ray_info_list.append(alpha_ray_info)
             self.ray_info_list.append(beta_ray_info)
               
-            obs.alpha_seg_info = ( (int(a_pt.x), int(a_pt.y)), alpha_ray_rad )
-            obs.beta_seg_info = ( (int(b_pt.x), int(b_pt.y)), beta_ray_rad )  
+            obs.alpha_seg_info = ( (a_pt.x, a_pt.y), alpha_ray_rad )
+            obs.beta_seg_info = ( (b_pt.x, b_pt.y), beta_ray_rad )  
               
                 
         self.ray_info_list.sort(key=lambda x: x[2], reverse=False)
@@ -164,7 +163,7 @@ class WorldMapMgr(object):
                     #print "ALPHA: " + str(obs.alpha_seg) + " + " + str(other_obs.idx) + " = " + str(alpha_intsecs)
                     if alpha_intsecs.is_empty == False:
                         for c in list(alpha_intsecs.coords):
-                            cpos = (int(c[0]), int(c[1]))
+                            cpos = (c[0], c[1])
                             cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
                             obs.alpha_obs_intsecs.append(cpos)
                             obs.alpha_obs_intsecs_info.append((obs_ref.idx, 'A', cpos, cdist))              
@@ -175,7 +174,7 @@ class WorldMapMgr(object):
                     #print "BETA: " + str(obs.beta_seg) + " + " + str(other_obs.idx) + " = " + str(beta_intsecs)
                     if beta_intsecs.is_empty == False:
                         for c in list(beta_intsecs.coords):
-                            cpos = (int(c[0]), int(c[1]))
+                            cpos = (c[0], c[1])
                             cdist = numpy.sqrt((obs.bk[0]-cpos[0])**2+(obs.bk[1]-cpos[1])**2)
                             obs.beta_obs_intsecs.append(cpos)
                             obs.beta_obs_intsecs_info.append((obs_ref.idx, 'B', cpos, cdist))
@@ -267,9 +266,9 @@ class WorldMapMgr(object):
             for bc in obs.beta_self_intsecs:
                 pygame.draw.circle(self.screen, BETA_SELF_COLOR, bc, 3)
             for ac in obs.alpha_obs_intsecs:
-                pygame.draw.circle(self.screen, ALPHA_OTHER_COLOR, ac, 3)
+                pygame.draw.circle(self.screen, ALPHA_OTHER_COLOR, (int(ac[0]),int(ac[1])), 3)
             for bc in obs.beta_obs_intsecs:
-                pygame.draw.circle(self.screen, BETA_OTHER_COLOR, bc, 3)
+                pygame.draw.circle(self.screen, BETA_OTHER_COLOR, (int(bc[0]),int(bc[1])), 3)
             if obs.bk != None:
                 pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
