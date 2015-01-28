@@ -180,10 +180,8 @@ The input-to-state stability analysis consists of two parts:
 \item how to decompose a system into components;
 \item the input-to-state stability of each component.
 \end{itemize}
-In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
-We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
-We also derive the bounds implied by the ISS property.
-We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
+
+
 
 \subsection{Feedback Cascade Model}
 
@@ -284,6 +282,11 @@ However, if the personal best and global best converge to an estimated optimal p
 
 \section{When the Input-to-state stability of PSO is satisfied (Parameter Selection)}
 \label{sec:iss}
+
+In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
+We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
+We also derive the bounds implied by the ISS property.
+We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
 
 In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 
