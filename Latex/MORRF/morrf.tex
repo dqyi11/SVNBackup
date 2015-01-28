@@ -121,7 +121,7 @@ The RRT$^{*}$ algorithm was a recently introduced modification to RRT that is gu
 The remainder of the paper presents the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest*) algorithm, which we used to find a set of Pareto optimal paths from a start position to a goal position.  
 MORRF$^{*}$ blends concepts from RRT$^{*}$ a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
 The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
-Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia position} required by the adapted multi-objective optimization algorithm.  
+Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
 Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives. 
 
 The paper is structured as follows.  
@@ -222,7 +222,7 @@ It is called the ``Utopia'' reference vector because it represents the very best
 %{\sc REPLY: There is some typo. I think now it is clear after corrected. Please see the current statement.}
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
-We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' point in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ f_{k} (x), k \in K $. 
@@ -325,8 +325,8 @@ Returns a the position of the vertex whose position is closest to point $ x $.
 
 Given the general algorithm, we can now discuss how edges are added to the reference and subproblem trees.  
 As illustrated in Figure~\ref{fig:MORRTstar}, second layer, edges to the reference trees are added before the edges to the subproblem trees.  
-This allows us to use compute the Utopia point using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
-The Utopia point is then used to determine which edges should be added for each subproblem. Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
+This allows us to use compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
+The Utopia reference vector is then used to determine which edges should be added for each subproblem. Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
 
 %Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
 %It means that all the tree have equivalent vertices constructed from same positions set sequentially.
@@ -346,7 +346,7 @@ Otherwise, the new vertex is added to the graph and all vertices in the graph wi
 The radius is determined by the current number of vertices in the graph. 
 The radius and volume are precisely defined in the {\sc Near} method, given below. 
 {\sc Walter, Give some intuition about why this equation is used, and give a reference if needed.  I think it is an estimate of the expected density of the nodes in the graph, given as a spatial distribution in $d$-dimensions.}  
-{\sc This is the essence of RRT*. }
+{\sc Answer: This is the essence of RRT*. It guarantees the convergence of the cost.}
 
 
 Because of the way that $x_{new}$ is defined, we are guaranteed that $|X_{near}| \geq 1$, that is, there is at least one vertex ``near'' the new position.
@@ -368,7 +368,7 @@ If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{ne
 \State $ V' \leftarrow V \cup \{ x_{new} \} $
 \State $ x_{min} \leftarrow x_{nearest} $
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-\If{ $ x_{new} \neq x_{min} $ }
+%\If{ $ x_{new} \neq x_{min} $ }
 	\For{\textbf{each} $ x_{near} \in X_{near} $ }
 		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
 			\State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c_{k}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
@@ -378,7 +378,7 @@ If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{ne
 		\EndIf
 	\EndFor
 	\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-\EndIf
+%\EndIf
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $}}
 	    \State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{new} $} $ + c_{k}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
@@ -413,9 +413,9 @@ Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how th
 The Utopia reference vector, $\vec{c}^*$ is defined as the $k$-dimensional vector constructed from each reference tree.  
 The minimum cost path from the starting vertex over all the leaf node is  computed for each reference tree.  
 The Utopia reference vector is the vector of these costs. 
-Using the Utopia point, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well. 
+Using the Utopia reference vector, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well. 
 Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
-This is performed using the {\sc Factor} method.
+This is performed using the {\sc Fitness} method.
 
 \begin{algorithm}[hbtp]
 \begin{algorithmic}[1]
@@ -425,7 +425,7 @@ This is performed using the {\sc Factor} method.
 \State $ V' \leftarrow V' \cup \{ x_{new} \} $
 \State $ x_{min} \leftarrow x_{nearest} $
 \State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-\If{ $ x_{new} \neq x_{min} $ }
+%\If{ $ x_{new} \neq x_{min} $ }
 	\For{\textbf{each} $ x_{near} \in X_{near} $ }
 		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
 			\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \vec{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
@@ -438,7 +438,7 @@ This is performed using the {\sc Factor} method.
 		\EndIf
 	\EndFor
 	\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-\EndIf
+%\EndIf
 \For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
 	\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
 		\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \vec{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
