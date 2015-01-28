@@ -196,28 +196,6 @@ These two components are the
 The properties of this system can be analyzed using the input-to-state stability of the position update component and the input update component. 
 Given an input-to-state stable position update component, we will see that the convergence of $ x_{i}(k) $ depends on bounds on $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
 
-%PSO is designed to strike an effective balance between \emph{exploring} and \emph{exploiting} a fitness landscape.
-%A bound on a particle's state is an indicator of the nature of that balance.
-%When this bound is large the particle is exploring.
-%However, as a particle finishes exploring and reach stagnation, a particle's position should converge.
-%
-%Input-to-state stability implies that the state of the system is bounded in a range determined by the bounds on the input.
-%Before stagnation, when the personal best and global best values have not converged, we can expect only looser bounds on the particle state.
-%These looser bounds reflect both what is know about the input and the what is know about the update process itself.
-%
-%
-%We call the bounds on the global best and personal best the ``exploit radius'' and the bounds on the particle's position a ``explore radius''.
-%The ratio of the explore radius to the exploit radius is determined by the parameters of the position update component.
-%However, if the personal best and global best converge to an estimated optimal position, the exploit radius falls to zero and the explore radius declines to a bound.
-%
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.4\textwidth]{./explore_and_exploit}
-%\caption{Exploration and exploitation.}
-%\label{fig:explore_and_exploit}
-%\end{figure}
-
-
 \subsection{Input-to-state stability}
 
 In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
@@ -257,6 +235,7 @@ This means that the influence $ \beta () $ term gradually decreases to zero and 
 
 \subsection{The need of input-to-state stability in PSO}
 
+\begin{comment}
 \begin{itemize}
 \item Understanding the input-to-state stability of a component in a system helps understanding the dynamics of a system. (convergence and boundary)
 
@@ -265,6 +244,28 @@ The parallel connection of input-to-state stable components reserves the input-t
 
 \item The exploitation and the exploration inherent depend on the input-to-state stability.
 \end{itemize}
+\end{comment}
+
+PSO is designed to strike an effective balance between \emph{exploring} and \emph{exploiting} a fitness landscape.
+A bound on a particle's state is an indicator of the nature of that balance.
+When this bound is large the particle is exploring.
+However, as a particle finishes exploring and reach stagnation, a particle's position should converge.
+
+Input-to-state stability implies that the state of the system is bounded in a range determined by the bounds on the input.
+Before stagnation, when the personal best and global best values have not converged, we can expect only looser bounds on the particle state.
+These looser bounds reflect both what is know about the input and the what is know about the update process itself.
+
+
+We call the bounds on the global best and personal best the ``exploit radius'' and the bounds on the particle's position a ``explore radius''.
+The ratio of the explore radius to the exploit radius is determined by the parameters of the position update component.
+However, if the personal best and global best converge to an estimated optimal position, the exploit radius falls to zero and the explore radius declines to a bound.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{./explore_and_exploit}
+\caption{Exploration and exploitation.}
+\label{fig:explore_and_exploit}
+\end{figure}
 
 
 \section{When the Input-to-state stability of PSO is satisfied (Parameter Selection)}
@@ -345,7 +346,7 @@ Figure \ref{fig:boundary} gives an example on how a particle's boundary is deter
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.6\linewidth]{./boundary}
+	\includegraphics[width=0.8\linewidth]{./boundary}
 	\caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation \ref{eq:state_bound:conv}.
 		The ratio of wo radii indicates $ \gamma $.}
 	\label{fig:boundary}
