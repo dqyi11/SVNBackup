@@ -225,7 +225,7 @@ with $ f(0,0) = 0 $
 \footnote{This means that $ x = 0 $ is an equilibrium of the 0-input system.}, the system is \emph{(globally) input-to-state stable} if there exist a $ KL $-function $ \beta  $ and a $ K $-function $ \gamma $ such that, for each input $ u \in l^{m}_{\infty} $ and each $ \xi \in \mathbb{R}^{n} $, it holds that $  \forall k \in \mathbb{Z}^{+} $,
 \begin{equation}
 \label{eq:def_iss}
-| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma (|| u ||).
+| x(k, \xi, u) | \leq \beta (| \xi |, k) + \gamma (\lVert u \rVert).
 \end{equation}
 \end{mydef}
 
@@ -246,6 +246,14 @@ The parallel connection of input-to-state stable components reserves the input-t
 \end{itemize}
 \end{comment}
 
+Understanding the input-to-state stability of components in a system helps understanding the dynamics of a system.
+By decomposing the PSO into several components, we could evaluate the input-to-state stability of each component separately. 
+Because the parallel connection of input-to-state stable components reserves the input-to-state stable property.
+As in Figure \ref{fig:sys_flow}, if each component of single dimension is input-to-state stable,  the position update component which combines all the dimension is still input-to-state stable.
+This simplifies the analysis of the system by looking at only single dimension.
+The serial connection and the feedback connection also lead to some interesting property from input-to-state stability, which will be discussed in Section \ref{sec:sys_dynamics}.
+
+The input-to-state stability analysis also provides the tool to know the convergence and the boundary of the PSO.
 PSO is designed to strike an effective balance between \emph{exploring} and \emph{exploiting} a fitness landscape.
 A bound on a particle's state is an indicator of the nature of that balance.
 When this bound is large the particle is exploring.
@@ -424,6 +432,7 @@ The convergence criteria have been given in \cite{Jiang20078}.
 The input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:final} shows how the $ E(x(k)) $ will deviate from the $ \hat{x} $ when we know how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from the $ \hat{x} $.
 
 \begin{mythm}
+\label{thm:iss:mean}
 	The system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, if $ | \lambda_{\max} ( A_{m} ) | < 1 $.
 	\begin{proof}
 		The proof process is similar with Theorem \ref{thm:iss}, but we can get a constant symmetric positive definite $ Q_{m} $ from $ A_{m}^{T} P A_{m} - P = - Q_{m} $.
@@ -454,7 +463,6 @@ In a similar way, we can apply the input-to-state stability analysis to the vari
 
 %\section{The Stability after including Input Update Component}
 %\label{sec:opt_strgy}
-\subsection{Stagnation}
 
 In this section, we add the input update component that was first shown in Figure \ref{fig:sys_flow} and then analyze the convergence of particle position.
 
@@ -467,15 +475,18 @@ In this section, we add the input update component that was first shown in Figur
 %\end{equation}
 %in which $ X^{G}(k) $ is a set that contains the $ x^{G} (k) $ of all the particles.
 
-Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input update component. We can say:
+Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input update component. 
+We can say:
 \begin{enumerate}
-	\item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
-	\item If the personal best and global best vary within a bound, the particle will converge within a bound;
-	\item If the personal best and global best become constant, the particle will converge to a point.
+\item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
+\item If the personal best and global best vary within a bound, the particle will converge within a bound;
+\item If the personal best and global best become constant, the particle will converge within a bound.
 \end{enumerate}
 
 Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
 In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
+
+\subsection{Stagnation}
 
 As the stagnation is defined that there is no new improvement found, we have that $ x^{P}(k) $ and $ x^{G}(k) $ are constant, which are $ x^{P} $ and $ x^{G} $ respectively.
 If we assume that $ u^{P}(k) $ and $ u^{G}(k) $ are equivalent and constant, it is stated that
@@ -484,6 +495,9 @@ If we assume that $ u^{P}(k) $ and $ u^{G}(k) $ are equivalent and constant, it 
 \hat{x} = \frac{\phi^{P} x^{P} + \phi^{G} x^{G} }{ \phi^{P} + \phi^{G} } 
 \end{equation}
 is an equilibrium point for stagnation as noted in previous work \cite{985692}.
+
+By Theorem \ref{thm:iss:mean}, we can have that the mean of the position will converge.
+Similarly, if we enforece the convergence of higher moments as in \cite{Jiang20078, Poli:2007:EAS:1276958.1276977}.
 
 By letting $ x^{*} = \hat{x} $ be the reference point, and
 by Corollary \ref{coro:state_bound}, we can go beyond prior work and can identify a bound on PSO behavior at stagnation:
@@ -503,7 +517,7 @@ $ \exists T , x(T) = x^{G} $,
 which means $ x(k) \rightarrow x^{G} $.
 Thus we have shown the convergence of PSO in stagnation without the simplifying assumptions required by the work described in Section \ref{sec:relwork}.
 
-\subsection{Non-stagnation}
+\subsection{Beyond stagnation}
 
 
 
