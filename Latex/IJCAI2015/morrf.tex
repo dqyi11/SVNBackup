@@ -1,0 +1,31 @@
+\documentclass{article}
+
+\usepackage{ijcai15}
+
+\usepackage{times}
+
+\title{ MORRF$^{*}$ : Sampling-Based Multi-Objective Motion Planning }
+
+\author{Author Names Omitted for Anonymous Review. Paper-ID [add your ID here]}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Many robotic tasks require a robot to satisfy multiple performance objectives.  
+For example, in path-planning, these objectives often include finding short paths that avoid risk and maximize the information obtained by the robot.  
+Although there exist many algorithms for performing multi-objective optimization, few of these algorithms apply directly to robotic path-planning and fewer still are capable of finding the set of Pareto optimal solutions.  
+We present the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$) algorithm, which is blends concepts from two different types of algorithms from the literature: RRT$^{*}$ for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
+Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
+Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives.  
+We present a theoretical analysis that demonstrates that the algorithm asymptotically produces the set of Pareto optimal solutions, and use simulations to demonstrate the effectiveness and efficiency of MORFF* in approximating the Pareto set.
+\end{abstract}
+
+\section*{Acknowledgments}
+
+\bibliographystyle{named}
+\bibliography{reference}
+
+\end{document}
