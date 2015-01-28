@@ -47,7 +47,10 @@ class WorldMapMgr(object):
         self.height = self.mapImgData.shape[0]
         self.width = self.mapImgData.shape[1]
         self.mapImgGrayData = cv2.cvtColor(self.mapImgData, cv2.COLOR_BGR2GRAY)
-
+        
+        self.sampleWidthScale = self.width/5
+        self.sampleHeightScale = self.height/5
+        
         ret, thresh = cv2.threshold(255-self.mapImgGrayData, 127, 255, 0)
         contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         
@@ -75,11 +78,13 @@ class WorldMapMgr(object):
         self.centralPoint = (self.width/2, self.height/2)
         foundCP = False
         while foundCP == False:
-            if self.isInObsBkLinePair(self.centralPoint)==False:
+            if (self.isInObstacle(self.centralPoint) == False) and (self.isInObsBkLinePair(self.centralPoint)==False):
                 foundCP = True
             else:
-                self.centralPoint[0] = np.random.random()*self.width
-                self.centralPoint[1] = np.random.random()*self.height
+                cpX = np.random.normal()*(self.sampleWidthScale) + self.width/2
+                cpY = np.random.random()*(self.sampleHeightScale) + self.height/2
+                self.centralPoint = (int(cpX), int(cpY))
+                print "Resampling " + str(self.centralPoint)
                 
         # init four boundary line
         self.boundary_lines = []
@@ -237,7 +242,14 @@ class WorldMapMgr(object):
         for bkline in self.obsBkPairLines:
             if bkline.contains(pPos):
                 return True
-        return False    
+        return False 
+    
+    def isInObstacle(self, pos):   
+        cPoint = shpgeo.Point(pos[0], pos[1])
+        for obs in self.obstacles:
+            if obs.polygon.contains(cPoint):
+                return True
+        return False
         
     def initVisualize(self):
         pygame.init()
