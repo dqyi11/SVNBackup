@@ -51,13 +51,11 @@ Michael A. Goodrich \\
 
 \begin{abstract}
 This paper examines the dynamics of particle swarm optimization (PSO) by modeling PSO as a cascade system and then applying input-to-state stability analysis.
-Using a cascade system model we can
-include the effects of the global-best and personal-best values more directly in the model of the dynamics.
+Using a feedback cascade system model we can include the effects of the global-best and personal-best values more directly in the model of the dynamics.
 Thus in contrast to previous study of PSO dynamics, the input-to-state stability property used here allows for the analysis of PSO both before and at stagnation.
 In addition, the use of input-to-state stability allows this analysis to preserve random terms which were heretofore simplified to constants.
 This analysis is important because it can inform the setting of PSO parameters and better characterize the nature of PSO as a dynamic system.
-This work also illuminates the way in which the personal best and the global best updates influence the bound on particle's position and hence, how the algorithm
-exploits and explores the fitness landscape as a function of the personal best and global best.
+This work also illuminates the way in which the personal best and the global best updates influence the bound on particle's position and hence, how the algorithm exploits and explores the fitness landscape as a function of the personal best and global best.
 \end{abstract}
 
 \keywords{Particle Swarm Optimization, Input-to-state stability}
@@ -98,7 +96,7 @@ At that point the algorithm can be mimicked by simply sampling from the appropri
 In this paper we extend the limited work that has been done to understand
 the behavior \emph{before} stagnation, that is, when the unique mechanisms of PSO are directing the behavior of the algorithm.
 
-By using a \emph{cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the affect of the personal and global best.
+By using a \emph{feedback cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the affect of the personal and global best.
 This paper does so in contrast to prior work which focuses on the position update.
 This model also allows us to make fewer assumptions in mapping from PSO to a dynamical system model.
 Using the cascade model we are able to derive the conditions under which the process is input-to-state stable (ISS)\cite{Jiang2001857}, produce bounds on particle motion, as well as prove bounds on the mean of particle motion.
@@ -106,11 +104,12 @@ The ISS conditions and the bounds can inform parameter adjustments and other pro
 This is espeically valuable in the context of the design of future PSO variants. 
 
 The body of this paper is organized as described here.
-In section \ref{sec:sys_model}, we model the PSO dynamics as a cascade system.
-Section \ref{sec:iss} reviews the definition of input-to-state stability (ISS) and shows that for particular parameter values, PSO is ISS. Using the ISS property we then give the bound on particle motion.
-In section \ref{sec:sys_dynamics}, we examine the convergence of the algorithm.
-In section \ref{sec:sto_anly}, we introduce the ISS property in a stochastic analysis of mean
-particle behavior.
+In section \ref{sec:sys_model}, we model the PSO dynamics as a feedback cascade system, which enables the input-to-state stability analysis.
+The definition of input-to-state stability (ISS) and how it applies to the PSO is also given.
+Section \ref{sec:iss} shows that for particular parameter values, the position update component of a particle is ISS. 
+Using the ISS property we then give the bound on particle motion.
+We also introduce how the ISS property applies to the moment analysis of the particle behavior.
+In section \ref{sec:sys_dynamics}, we look at how the ISS helps analyzes the dynamics of the particle.
 
 \section{Related Work}
 \label{sec:relwork}
@@ -176,6 +175,16 @@ has also been analyzed
 \section{Input-to-state stable analysis of the standard PSO}
 \label{sec:sys_model}
 
+The input-to-state stability analysis consists of two parts:
+\begin{itemize}
+\item how to decompose a system into components;
+\item the input-to-state stability of each component.
+\end{itemize}
+In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
+We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
+We also derive the bounds implied by the ISS property.
+We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
+
 \subsection{Feedback Cascade Model}
 
 In the purpose of input-to-state stability analysis, we model the system structure of a particle in PSO.
@@ -198,10 +207,7 @@ Given an input-to-state stable position update component, we will see that the c
 
 \subsection{Input-to-state stability}
 
-In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
-We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
-We also derive the bounds implied by the ISS property.
-We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
+
 
 We first introduce several types of functions \cite{Jiang2001857}.
 \begin{itemize}
