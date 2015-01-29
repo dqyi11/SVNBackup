@@ -559,7 +559,7 @@ If we have  $ f(x^{G} > f(x^{P}) $, in the assumption of the continuity in the f
 The $ x^{P} $ will start to change.
 \item When both the $ x^{G} $ and $ x^{P} $ are not constant, this usually means that both the particle and the swarm it belongs to keep on finding better positions.
 In this case, the input-to-state stability of the input update component is harder to guarantee.
-However, if the change of $ x^{G}(k) $ and $  x^{P}(k) $ is bounded, 
+However, if the change of $ x^{G}(k) $ and $ x^{P}(k) $ is bounded, 
 \end{itemize}
 
 Generally, in the PSO, the dynamics of a particle switches in between those cases before reaching the stagnation.
@@ -568,16 +568,20 @@ Understanding the dynamics of the particles before stagnation supports the explo
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this paper, we have decomposed the PSO algorithm into a cascade model, which consists of input update and position update components.
+In this paper, we have decomposed the particle in the PSO algorithm into a feedback cascade model, which consists of input update and position update components.
 We introduce the input-to-state stability analysis to the position update component.
 For an input-to-state stable position update component, if the input to this component is bounded, the state is bounded; also if the input to the component converges, the state converges.
-The convergence of the PSO is determined by the output of the input update component, which are the personal best and global best.
+The convergence of the particle in PSO is determined by the output of the input update component, which are the personal best and global best.
 If they are in stagnation, the particle converges.
 
 The analysis of a cascade structure used here can be applied to a wide range of the PSO variants.
 In cases that use the same position update component but different input update components, the convergence and the boundary of the particles are determined by
 whether the input update component generates converging or bounded personal best and global best.
 For variants that use a different position update component, the ISS properties would need to be verified.
+
+The ISS property of the input update component depends on the fitness distribution.
+We provide several scenarios for the dynamics of the particle.
+We show that the optimal search process is switching among those scenarios and how the input-to-state stability analysis should be applied into different scenarios.
 
 \section*{Appendix}
 \label{sec:appendix}
