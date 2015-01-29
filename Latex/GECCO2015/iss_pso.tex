@@ -631,12 +631,40 @@ By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) 
 \label{eq:lyapunov_delta2}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-	= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
-	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-	\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
-	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
-	\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert  U(k) | | X(k) | \\
-	& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+%	= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+%	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+%	\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+%	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+%	\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert  U(k) | | X(k) | \\
+%	& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+= & [ X^{T}(k)  A^{T}(k) + U^{T}(k) B^{T}(k) ] P [ A(k) X(k) + B(k) U(k) ] \\ & - X^{T}(k) P X(k) \\
+= & X^{T}(k)  A^{T}(k) P A(k) X(k) +  X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P A(k) X(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\ & - X^{T}(k) P X(k) \\
+\end{aligned}
+\end{equation}
+As $ P $ is identity matrix, it is symmetric, thus
+\begin{equation}
+[ X^{T}(k)  A^{T}(k) P B(k) U(k) ]^{T} =  U^{T}(k) B^{T}(k) P A(k) X(k).
+\end{equation}
+$ V( X(k+1) ) , V( X(k) ) \in \mathbb{R} $, 
+we have $ X^{T}(k)  A^{T}(k) P B(k) U(k) $ and $  U^{T}(k) B^{T}(k) P A(k) X(k) $ are both real value (like $ 1 \times 1 $ matrix).
+Thus, 
+\begin{equation}
+ X^{T}(k)  A^{T}(k) P B(k) U(k) =   U^{T}(k) B^{T}(k) P A(k) X(k) .
+\end{equation}
+We then have
+\begin{equation}
+\label{eq:lyapunov_delta3}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + U^{T}(k) B^{T}(k) P B(k) U(k)  \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+\leq & - X^{T}(k) Q' X(k)  + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+\leq & - \lambda_{min}(Q') | X(k) |^{2}  + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+& + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) | \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+& - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) |  \\
 \end{aligned}
 \end{equation}
 		
