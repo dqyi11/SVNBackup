@@ -110,6 +110,7 @@ Section \ref{sec:iss} shows that for particular parameter values, the position u
 Using the ISS property we then give the bound on particle motion.
 We also introduce how the ISS property applies to the moment analysis of the particle behavior.
 In section \ref{sec:sys_dynamics}, we look at how the ISS helps analyzes the dynamics of the particle.
+With the ISS property of the input update component, we could analyze the dynamics of the particle before and at stagnation.
 
 \section{Related Work}
 \label{sec:relwork}
@@ -283,6 +284,7 @@ In this section, we briefly review the definition of input-to-state stability (I
 We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
 We also derive the bounds implied by the ISS property.
 We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
+WE also introduce ISS into moment analysis.
 
 In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 
@@ -312,6 +314,7 @@ We use it as a reference point to check the bounds.}
 The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \rightarrow x^{*} $.
 
 \subsection{Conditions for input-to-state stability for position update in PSO}
+\label{sec:iss_proof}
 
 Using the definition of the PSO position update as given in equation \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be ISS as defined in definition \ref{def:iss}.
 
@@ -392,7 +395,7 @@ The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:is
 \end{figure}
 
 \subsection{Moment Analysis}
-\label{sec:sto_anly}
+\label{sec:moment_analysis}
 
 Using the same perspective of the feedback cascade system, the input-to-stable stability analysis can also be applied to moment analysis.
 Like the others \cite{Jiang20078,Poli:2008:DSS:1384929.1384944}, we derive the models on the statistical features on the particle's position.
@@ -409,13 +412,13 @@ If we consider $ \hat{x} $ as a swarm average estimation on the optimum, we are 
 E( x(k+1) ) - \hat{x} \\
 E( x(k) ) - \hat{x}
 \end{bmatrix}
-= 
+& = 
 A_{m}
 \begin{bmatrix}
 E( x(k) ) - \hat{x} \\
 E( x(k-1) ) - \hat{x}
 \end{bmatrix}
-+
+\\ & +
 B_{m}
 \begin{bmatrix}
 E( x^{P}(k) ) - \hat{x}\\
@@ -449,6 +452,7 @@ The input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:fi
 
 Similar to Corollary \ref{coro:state_bound}, we can use the $ Q_{m} $ to determine the state bound.
 \begin{mycoro}
+\label{coro:bound:mean}
 If the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, we have a bound 
 \begin{equation}
 \exists T, \forall k > T, 
@@ -486,6 +490,8 @@ We can say:
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
 \item If the personal best and global best become constant, the particle will converge within a bound.
 \end{enumerate}
+By Theorem \ref{thm:iss:mean} and \ref{coro:bound:mean}, we can arrive similar results on the mean.
+As well, this boundary analysis could be applied to higher moments.
 
 Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $, if the position update component is input-to-state stable.
 In particular, the boundary of the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
