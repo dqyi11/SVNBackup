@@ -5,6 +5,7 @@ Created on Jan 23, 2015
 '''
 
 from WorldMapMgr import *
+from WorldMapVisualizer import * 
 
 if __name__ == '__main__':
     
@@ -12,13 +13,15 @@ if __name__ == '__main__':
     mapMgr = WorldMapMgr()
     mapMgr.load(MAP_FILE)
     
-    mapMgr.initVisualize()
+    mapMgrViz = WorldMapVisualizer(mapMgr)
+    
+    mapMgrViz.initVisualize()
     mapMgr.init()
-    mapMgr.updateVisualize()
+    mapMgrViz.updateVisualize()
     mapMgr.initSegments()
-    mapMgr.updateVisualize()
+    mapMgrViz.updateVisualize()
     mapMgr.process()
     
     
     while True:
-        mapMgr.updateVisualize()
+        mapMgrViz.updateVisualize()
