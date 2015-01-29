@@ -28,6 +28,11 @@ OBS_BK_COLOR = (124,252,0)
 SUBSEGMENT_COLOR = (255,255,0,100)
 SUBREGION_BORDER_COLOR = (255,0,0,100)
 
+SEGMENT_LINE_WIDTH = 1
+OBSTACLE_LINE_WIDTH = 2
+KEYPOINT_SIZE = 2
+BORDER_LINE_WIDTH = 10
+REGION_LINE_WIDTH = 6
 
 
 class WorldMapMgr(object):
@@ -277,7 +282,7 @@ class WorldMapMgr(object):
             if len(region.subregions) > 0:
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
-                    pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), 6)
+                    pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), REGION_LINE_WIDTH)
                 '''    
                 for n_info in region.subregions[self.subregion_idx].neighbor_info:
                     pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)  
@@ -288,32 +293,32 @@ class WorldMapMgr(object):
         for obs in self.obstacles:
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
-                pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), 2)
+                pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), OBSTACLE_LINE_WIDTH)
             if obs.alpha_seg != None:
-                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], 2)
+                pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], SEGMENT_LINE_WIDTH)
             if obs.beta_seg != None:
-                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], 2)
+                pygame.draw.line(self.screen, BETA_COLOR, obs.beta_seg.line_seg.coords[0], obs.beta_seg.line_seg.coords[1], SEGMENT_LINE_WIDTH)
             
             for ac in obs.alpha_self_intsecs:
-                pygame.draw.circle(self.screen, ALPHA_SELF_COLOR, ac, 3)
+                pygame.draw.circle(self.screen, ALPHA_SELF_COLOR, ac, KEYPOINT_SIZE)
             for bc in obs.beta_self_intsecs:
-                pygame.draw.circle(self.screen, BETA_SELF_COLOR, bc, 3)
+                pygame.draw.circle(self.screen, BETA_SELF_COLOR, bc, KEYPOINT_SIZE)
             for ac in obs.alpha_obs_intsecs:
-                pygame.draw.circle(self.screen, ALPHA_OTHER_COLOR, (int(ac[0]),int(ac[1])), 3)
+                pygame.draw.circle(self.screen, ALPHA_OTHER_COLOR, (int(ac[0]),int(ac[1])), KEYPOINT_SIZE)
             for bc in obs.beta_obs_intsecs:
-                pygame.draw.circle(self.screen, BETA_OTHER_COLOR, (int(bc[0]),int(bc[1])), 3)
+                pygame.draw.circle(self.screen, BETA_OTHER_COLOR, (int(bc[0]),int(bc[1])), KEYPOINT_SIZE)
             if obs.bk != None:
-                pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, 3)
+                pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, KEYPOINT_SIZE)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
             
         if len(self.subsegments) > 0 and self.subsegment_idx >= 0:
             subsegment = self.subsegments[self.subsegment_idx]
-            pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], 10)
+            pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], BORDER_LINE_WIDTH)
             self.screen.blit(self.font.render(subsegment.name, True, (0,0,0)), (15,15))
             
         
         if self.centralPoint != None:
-            pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, 3)
+            pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.centralPoint, KEYPOINT_SIZE)
   
         for event in pygame.event.get():                
             if event.type == QUIT:
