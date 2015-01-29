@@ -180,13 +180,13 @@ The input-to-state stability analysis consists of two parts:
 \item how to decompose a system into components;
 \item the input-to-state stability of each component.
 \end{itemize}
-
-
+In this section, we model the particle into a feedback cascade model.
+Then we review the definition of the input-to-state stability (ISS).
+We also explain how the ISS can be applied into understanding the PSO.
 
 \subsection{Feedback Cascade Model}
 
 In the purpose of input-to-state stability analysis, we model the system structure of a particle in PSO.
-
 %This enables analysis of PSO with stochastic factors preserved and without the stagnation assumption.
 As shown in Figure \ref{fig:sys_flow}, this system is comprised of cascaded component and feedback of the historical state.
 These two components are the 
@@ -205,9 +205,7 @@ Given an input-to-state stable position update component, we will see that the c
 
 \subsection{Input-to-state stability}
 
-
-
-We first introduce several types of functions \cite{Jiang2001857}.
+Before reviewing the definition of input-to-state stability, we first introduce several types of functions \cite{Jiang2001857}.
 \begin{itemize}
 	\item $ K $-function $ \mathbb{K} $ : a function $ \alpha  : [ 0, a ) \rightarrow [ 0, \infty ) $ is continuous, strictly increasing and $ \alpha (0) = 0 $; it is a $ K_{\infty} $-function, if $ \alpha (s) \rightarrow \infty $ as $ s \rightarrow \infty $;
 	\item $ KL $-function $ \mathbb{KL} $ : a function $ \beta : [ 0, a ) \times [ 0 , \infty ) \rightarrow [ 0, \infty ) $ satisfies:
@@ -267,7 +265,6 @@ Input-to-state stability implies that the state of the system is bounded in a ra
 Before stagnation, when the personal best and global best values have not converged, we can expect only looser bounds on the particle state.
 These looser bounds reflect both what is know about the input and the what is know about the update process itself.
 
-
 We call the bounds on the global best and personal best the ``exploit radius'' and the bounds on the particle's position a ``explore radius''.
 The ratio of the explore radius to the exploit radius is determined by the parameters of the position update component.
 However, if the personal best and global best converge to an estimated optimal position, the exploit radius falls to zero and the explore radius declines to a bound.
@@ -278,7 +275,6 @@ However, if the personal best and global best converge to an estimated optimal p
 \caption{Exploration and exploitation.}
 \label{fig:explore_and_exploit}
 \end{figure}
-
 
 \section{When the Input-to-state stability of PSO is satisfied (Parameter Selection)}
 \label{sec:iss}
@@ -390,7 +386,7 @@ The x-axis is $ \phi = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
 The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:iss} and the yellow boundary is obtained from Corollary \ref{coro:param_unit_disc}.
 \begin{figure}
 \centering
-\includegraphics[width=0.5\linewidth]{./param2}
+\includegraphics[width=0.7\linewidth]{./param2}
 \caption{Parameter space}
 \label{fig:paramSpace}
 \end{figure}
@@ -398,12 +394,10 @@ The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:is
 \subsection{Moment Analysis}
 \label{sec:sto_anly}
 
-Using a cascade system perspective, the input-to-stable stability analysis can also be applied to moment analysis.
+Using the same perspective of the feedback cascade system, the input-to-stable stability analysis can also be applied to moment analysis.
 Like the others \cite{Jiang20078,Poli:2008:DSS:1384929.1384944}, we derive the models on the statistical features on the particle's position.
 The criteria for the convergence on the statistic values on the particle's position are given in \cite{Jiang20078} and \cite{Poli:2008:DSS:1384929.1384944}, when a particle is in stagnation.
 The input-to-state stable analysis can provide the boundaries before reaching stagnation.
-
-%\subsection{Mean convergence analysis}
 
 We adopt the approach of Jiang, Luo \& Yang to construct a model for the mean.
 It is given that $ E( x(k) ) $ converges to $ \hat{x} = \frac{\phi^{P} x^{P} + \phi^{G} x^{G} }{ \phi^{P} + \phi^{G} } $ in stagnation \cite{Jiang20078}.
@@ -591,14 +585,17 @@ For variants that use a different position update component, the ISS properties 
 \subsection{ISS-Lyapunov function}
 \label{sec:iss_lyapunov:func}
 
-\begin{itemize}
-\item ISS-Lyapunov function $ V : \mathbb{R}^{n} \rightarrow \mathbb{R}_{\geq 0} $ satisfies:
+By using the $ K $-function and $ KL $-function in Section \ref{sec:sys_model}, 
+The definition of the ISS-Lyapunov function 
+%\begin{itemize}
+%\item 
+ISS-Lyapunov function $ V : \mathbb{R}^{n} \rightarrow \mathbb{R}_{\geq 0} $ satisfies:
 \begin{enumerate}
 \item $ \exists \alpha_{1}, \alpha_{2} \in \mathbb{K} $ such that 
 $ \forall \xi \in \mathbb{R}^{n}, \alpha_{1} ( | \xi | ) \leq V( \xi ) \leq \alpha_{2}  ( | \xi | ) $.
 \item $ \exists \alpha_{3} \in \mathbb{K}_{\infty} , \sigma \in \mathbb{K} $ such that $ \forall \xi \in \mathbb{R}^{n}, \forall \mu \in \mathbb{R}^{m}, V( f( \xi, \mu ) ) - V( \xi ) \leq - \alpha_{3} ( | \xi | ) + \sigma ( | \mu | ) $. 
 \end{enumerate}
-\end{itemize}
+%\end{itemize}
 
 \subsection{Proof of Theorem \ref{thm:iss}}
 \label{sec:thm:iss:proof}
@@ -648,7 +645,8 @@ By completing the square, we have
 \label{eq:lyapunov_delta4}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left[ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} }  + \lVert B^{T}(k) P B(k) \rVert \right] | U(k) |^{2}. 
+	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + [ \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } \\
+	& + \lVert B^{T}(k) P B(k) \rVert ] | U(k) |^{2}. 
 \end{aligned}
 \end{equation}
 		
