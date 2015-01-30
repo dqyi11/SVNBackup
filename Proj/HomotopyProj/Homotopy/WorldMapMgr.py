@@ -214,15 +214,21 @@ class WorldMapMgr(object):
             ray1_info = self.ray_info_list[i]
             ray2_info = self.ray_info_list[i+1]
             region = RegionMgr(ray1_info, ray2_info, i, self)
+            region.ref_rad = (ray1_info[2] + ray2_info[2])/2
             self.regions.append(region)
             #rndVal = numpy.random.randint(0, 256, 3)
             #self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))
         ray1_info = self.ray_info_list[len(self.ray_info_list)-1]
         ray2_info = self.ray_info_list[0]
         region = RegionMgr(ray1_info, ray2_info, len(self.regions), self)
+        region.ref_rad = (ray1_info[2] + ray2_info[2] + 2*np.pi)/2
         self.regions.append(region)
         #rndVal = numpy.random.randint(0, 256, 3)
         #self.region_colors.append((rndVal[0], rndVal[1], rndVal[2], 100))    
+        
+        print "REGION RAD"
+        for r in self.regions:
+            print r.ref_rad
         
     def isInObsBkLinePair(self, pos):
         
