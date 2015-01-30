@@ -14,8 +14,6 @@ import shapely.geometry as shpgeo
 import numpy 
 
 
-
-
 class WorldMapMgr(object):
 
     def __init__(self):
@@ -72,7 +70,7 @@ class WorldMapMgr(object):
                 cpX = np.random.normal()*(self.sampleWidthScale) + self.width/2
                 cpY = np.random.random()*(self.sampleHeightScale) + self.height/2
                 self.centralPoint = (int(cpX), int(cpY))
-                print "Resampling " + str(self.centralPoint)
+                #print "Resampling " + str(self.centralPoint)
                 
         # init four boundary line
         self.boundary_lines = []
@@ -155,7 +153,8 @@ class WorldMapMgr(object):
                 if isIntersect == True:
                     alpha_intsecs = obs.alpha_seg.line_seg.intersection(obs_ref.polygon)
                     #alpha_intsecs = obs_ref.polygon.intersection(obs.alpha_seg.line_seg)
-                    print "ALPHA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(alpha_intsecs)
+                    
+                    #print "ALPHA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(alpha_intsecs)
                     if alpha_intsecs.type == "LineString":
                         if alpha_intsecs.is_empty == False:
                             for c in list(alpha_intsecs.coords):
@@ -176,7 +175,8 @@ class WorldMapMgr(object):
                 if isIntersect == True:
                     # check beta seg with obstacles
                     beta_intsecs = obs.beta_seg.line_seg.intersection(obs_ref.polygon)
-                    print "BETA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(beta_intsecs)
+                    
+                    #print "BETA: " + str(obs.idx) + " + " + str(obs_ref.idx) #+ " = " + str(beta_intsecs)
                     if beta_intsecs.type == "LineString":
                         if beta_intsecs.is_empty == False:
                             for c in list(beta_intsecs.coords):
@@ -261,16 +261,19 @@ class WorldMapMgr(object):
                 test_points.append(linseg.midpoint)
                 test_points.append((linseg.midpoint[0]+delta_x, linseg.midpoint[1]+delta_y))
                 test_points.append((linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y))
-                print linseg
-                print regionA
-                print regionB
+                #print linseg
+                #print regionA
+                #print regionB
                 sgA =  self.isPointsInRegion(regionA.subregions, test_points)
+                print linseg
                 if sgA != None:
                     linseg.regionAInfo = sgA
+                    print "      " + str(sgA)
                     
                 sgB = self.isPointsInRegion(regionB.subregions, test_points) 
                 if sgB != None:
                     linseg.regionBInfo = sgB
+                    print "      " + str(sgB)
     
     def isPointsInRegion(self, subregions, points):
         for p in points:

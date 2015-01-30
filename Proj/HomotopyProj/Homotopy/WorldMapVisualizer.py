@@ -107,6 +107,12 @@ class WorldMapVisualizer(object):
             subsegment = self.world_map.subsegments[self.subsegment_idx]
             pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], BORDER_LINE_WIDTH)
             self.screen.blit(self.font.render(subsegment.name, True, (0,0,0)), (15,15))
+            if subsegment.regionAInfo != None:
+                ss_reg_info = subsegment.regionAInfo
+                self.displayPolygon(ss_reg_info.polygon, self.region_colors[ss_reg_info.parent.idx], REGION_LINE_WIDTH)
+            if subsegment.regionBInfo != None:
+                ss_reg_info = subsegment.regionBInfo
+                self.displayPolygon(ss_reg_info.polygon, self.region_colors[ss_reg_info.parent.idx], REGION_LINE_WIDTH)
             
         
         if self.world_map.centralPoint != None:

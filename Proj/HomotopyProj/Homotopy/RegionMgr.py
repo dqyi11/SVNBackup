@@ -10,9 +10,10 @@ import numpy as np
 
 class SubRegion(object):
     
-    def __init__(self, polygon):
+    def __init__(self, polygon, parent):
         self.polygon = polygon
         self.neighbor_info = []
+        self.parent = parent
 
 class RegionMgr(object):
 
@@ -54,35 +55,33 @@ class RegionMgr(object):
             if current_polygon.intersects(obs.polygon):
                 #print str(self.polygon) + " INTERSETS WITH " + str(obs.idx)
                 current_polygon = current_polygon.difference(obs.polygon)
-                print "Difference: " + current_polygon.type + " " + str(current_polygon)
+                #print "Difference: " + current_polygon.type + " " + str(current_polygon)
                 
         self.subregions = []
         if current_polygon.type == "Polygon":
-            subregion = SubRegion(current_polygon)
+            subregion = SubRegion(current_polygon, self)
             self.subregions.append(subregion)           
         elif current_polygon.type == "MultiPolygon":
             for poly in current_polygon:
-                subregion = SubRegion(poly)
+                subregion = SubRegion(poly, self)
                 self.subregions.append(subregion)
                 
         # init alpha and beta segments for subregion
         
         #print self.line1_obs_intsecs_info
         #print self.line2_obs_intsecs_info   
-        print "CHECK NEIGHBOR OF REGION " + str(self.name)
+        #print "CHECK NEIGHBOR OF REGION " + str(self.name)
         for subregion in self.subregions:
             for subseg in self.line1.sub_segs:
                 if subregion.polygon.intersects(subseg.line_seg):
-                    print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
+                    #print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
                     subregion.neighbor_info.append((self.line1, subseg))
         
             for subseg in self.line2.sub_segs:
                 if subregion.polygon.intersects(subseg.line_seg):
-                    print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
+                    #print "INTERSECTS " + str(subregion) + " AND " + str(subseg) 
                     subregion.neighbor_info.append((self.line2, subseg))
-                
-        
-        
+            
         
     def getPointString(self, start, line1_info, line2_info):
         

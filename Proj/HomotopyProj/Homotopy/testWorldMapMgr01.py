@@ -22,6 +22,5 @@ if __name__ == '__main__':
     mapMgrViz.updateVisualize()
     mapMgr.process()
     
-    
     while True:
         mapMgrViz.updateVisualize()

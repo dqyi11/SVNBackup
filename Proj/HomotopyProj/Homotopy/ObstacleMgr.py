@@ -64,7 +64,7 @@ class LineSegmentMgr(object):
             lineSubSeg = LineSubSegment(subseg, len(self.mid_points), self)
             self.sub_segs.append(lineSubSeg)
             
-        print "OBS " + str(self.parent.idx) + " " + str(self.type) + " " + str(self.sub_segs)
+        #print "OBS " + str(self.parent.idx) + " " + str(self.type) + " " + str(self.sub_segs)
         
                 
 
@@ -86,9 +86,9 @@ class ObstacleMgr(object):
         self.polygon = shpgeo.Polygon(vex_list)
         
         if self.polygon.is_valid == False:
-            print "fixing polygon of OBS " + str(self.idx)
+            #print "fixing polygon of OBS " + str(self.idx)
             fixed_polygon = self.polygon.buffer(0)
-            print "After fixing: " + str(fixed_polygon.is_valid)
+            #print "After fixing: " + str(fixed_polygon.is_valid)
             if fixed_polygon.type == "MultiPolygon":
                 polygon_list = []
                 for poly in fixed_polygon:
