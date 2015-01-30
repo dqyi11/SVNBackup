@@ -46,6 +46,11 @@ class WorldMapVisualizer(object):
         for i in range(self.world_map.regionNum):
             rndVal = numpy.random.randint(0, 256, 3)
             self.region_colors.append((rndVal[0], rndVal[1], rndVal[2]))
+            
+    def displayPolygon(self, polygon, polygon_color, line_width):
+        xs, ys = polygon.exterior.coords.xy
+        for i in range(len(xs)-1):
+            pygame.draw.line(self.screen, polygon_color, (xs[i], ys[i]), (xs[i+1], ys[i+1]), line_width)
         
     def updateVisualize(self):
         
@@ -61,9 +66,12 @@ class WorldMapVisualizer(object):
             '''
                 
             if len(region.subregions) > 0:
+                '''
                 sub_xs, sub_ys = region.subregions[self.subregion_idx].polygon.exterior.coords.xy
                 for i in range(len(sub_xs)-1):
                     pygame.draw.line(self.screen, region_color, (sub_xs[i], sub_ys[i]), (sub_xs[i+1], sub_ys[i+1]), REGION_LINE_WIDTH)
+                '''
+                self.displayPolygon(region.subregions[self.subregion_idx].polygon, region_color, REGION_LINE_WIDTH)
                 '''    
                 for n_info in region.subregions[self.subregion_idx].neighbor_info:
                     pygame.draw.line(self.screen, SUBREGION_BORDER_COLOR, n_info[1].line_seg.coords[0], n_info[1].line_seg.coords[1], 10)  
@@ -72,9 +80,12 @@ class WorldMapVisualizer(object):
             self.screen.blit(self.font.render(region.name+"-"+str(self.subregion_idx), True, region_color), (self.world_map.width-50, 15))
         
         for obs in self.world_map.obstacles:
+            self.displayPolygon(obs.polygon, OBSTACLE_COLOR, OBSTACLE_LINE_WIDTH)
+            '''                   
             xs, ys = obs.polygon.exterior.coords.xy
             for i in range(len(xs)-1):
                 pygame.draw.line(self.screen, OBSTACLE_COLOR, (xs[i], ys[i]), (xs[i+1], ys[i+1]), OBSTACLE_LINE_WIDTH)
+            '''
             if obs.alpha_seg != None:
                 pygame.draw.line(self.screen, ALPHA_COLOR, obs.alpha_seg.line_seg.coords[0], obs.alpha_seg.line_seg.coords[1], SEGMENT_LINE_WIDTH)
             if obs.beta_seg != None:

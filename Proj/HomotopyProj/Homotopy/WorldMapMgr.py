@@ -226,9 +226,61 @@ class WorldMapMgr(object):
         #rndVal = numpy.random.randint(0, 256, 3)
         #self.region_colors.append((rndVal[0], rndVal[1], rndVal[2], 100))    
         
+        '''
         print "REGION RAD"
         for r in self.regions:
             print r.ref_rad
+        '''
+        
+        for i in range(len(self.ray_info_list)):
+            # pick two neighbors here
+            ray_info = self.ray_info_list[i]
+            ray_rad = ray_info[2]
+            delta_x = 0.5
+            delta_y = np.tan(ray_rad+np.pi/2)*0.5
+            obs = self.obstacles[ray_info[0]]
+            if ray_info[1] == 'A':
+                seg = obs.alpha_seg
+            else:
+                seg = obs.beta_seg
+                
+            if i==0:
+                regionA = self.regions[len(self.ray_info_list)-1]
+            else:
+                regionA = self.regions[i-1]
+                
+            if i==len(self.ray_info_list)-1:
+                regionB = self.regions[0]
+            else:
+                regionB = self.regions[i]
+            
+                
+            for linseg in seg.sub_segs:
+                # check each sub seg of a seg line
+                test_points = []
+                test_points.append(linseg.midpoint)
+                test_points.append((linseg.midpoint[0]+delta_x, linseg.midpoint[1]+delta_y))
+                test_points.append((linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y))
+                print linseg
+                print regionA
+                print regionB
+                sgA =  self.isPointsInRegion(regionA.subregions, test_points)
+                if sgA != None:
+                    linseg.regionAInfo = sgA
+                    
+                sgB = self.isPointsInRegion(regionB.subregions, test_points) 
+                if sgB != None:
+                    linseg.regionBInfo = sgB
+    
+    def isPointsInRegion(self, subregions, points):
+        for p in points:
+            pnt = shpgeo.Point(p)
+            for sg in subregions:
+                if sg.polygon.contains(pnt):
+                    return sg
+        return None
+                
+                
         
     def isInObsBkLinePair(self, pos):
         

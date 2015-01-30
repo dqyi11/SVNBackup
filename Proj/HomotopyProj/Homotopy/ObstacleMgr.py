@@ -15,6 +15,10 @@ class LineSubSegment(object):
         self.parent = parent
         
         self.name = self.parent.type + str(self.parent.parent.idx) + "-" + str(self.idx)
+        self.midpoint = ( (line_seg.coords[1][0]+line_seg.coords[0][0])/2, (line_seg.coords[1][1]+line_seg.coords[0][1])/2 )
+        
+        self.regionAInfo = None
+        self.regionBInfo = None
 
 class LineSegmentMgr(object):
     
