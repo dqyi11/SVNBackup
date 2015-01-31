@@ -8,6 +8,7 @@ import cv2
 
 from ObstacleMgr import *
 from RegionMgr import *
+from TopologicalGraph import *
 import sympy.geometry as symgeo
 import sympy.core as symcore
 import shapely.geometry as shpgeo
@@ -273,6 +274,19 @@ class WorldMapMgr(object):
                     print "      " + sgB.getName()
                 else:
                     print "   " + regionB.name
+                    
+    def getTopologicalGraph(self):
+        
+        g = TopologicalGraph()
+        for reg in self.regions:
+            for sr in reg.subregions:
+                g.addNode(sr.getName())
+        for seg in self.subsegments:
+            nodeA = g.findNode(seg.regionAInfo.getName())
+            nodeB = g.findNode(seg.regionBInfo.getName())
+            g.addEdge(nodeA, nodeB, seg.name)
+            
+        return g
                     
     def findNeighborRegion(self, rad):
         regionA = None

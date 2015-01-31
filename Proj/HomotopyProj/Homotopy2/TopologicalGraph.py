@@ -42,7 +42,7 @@ class TopologicalGraph(object):
         
     def visualize(self, filename):
         
-        g = Graph(format='png')
+        g = Graph(format='png', engine='neato')
         for n in self.nodes:
             g.node(n.name)
         

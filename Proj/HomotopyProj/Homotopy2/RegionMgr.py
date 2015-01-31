@@ -76,7 +76,7 @@ class RegionMgr(object):
                 
         self.subregions.sort(key=lambda x: x.distToCentral, reverse=False)
         for i in range(len(self.subregions)):
-            self.subregions[i].idx = idx
+            self.subregions[i].idx = i
             
                 
         # init alpha and beta segments for subregion

@@ -22,5 +22,8 @@ if __name__ == '__main__':
     mapMgrViz.updateVisualize()
     mapMgr.process()
     
+    tg = mapMgr.getTopologicalGraph()
+    tg.visualize(MAP_FILE)
+    
     while True:
         mapMgrViz.updateVisualize()
