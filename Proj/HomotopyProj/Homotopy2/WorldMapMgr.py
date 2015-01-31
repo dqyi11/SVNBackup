@@ -204,6 +204,8 @@ class WorldMapMgr(object):
                 self.subsegments.append(linSeg)
             for linSeg in obs.beta_seg.sub_segs:
                 self.subsegments.append(linSeg)
+                
+        self.subsegments.sort(key=lambda x: x.rad, reverse=False)
             
             
     def process(self):
@@ -237,22 +239,9 @@ class WorldMapMgr(object):
             obs = self.obstacles[ray_info[0]]
             if ray_info[1] == 'A':
                 seg = obs.alpha_seg
-                seg_rad = obs.alpha_seg_info[1]
             else:
                 seg = obs.beta_seg
-                seg_rad = obs.beta_seg_info[1]
-                
-            '''
-            if i==0:
-                regionA = self.regions[len(self.ray_info_list)-1]
-            else:
-                regionA = self.regions[i-1]
-                
-            if i==len(self.ray_info_list)-1:
-                regionB = self.regions[0]
-            else:
-                regionB = self.regions[i]
-            '''
+
             
             for linseg in seg.sub_segs:
                 # check each sub seg of a seg line
@@ -304,7 +293,7 @@ class WorldMapMgr(object):
         
                     
     def calcCheckDelta(self, ray_rad):
-        rad_len = 4
+        rad_len = 2
         delta_x = rad_len * np.cos(ray_rad+np.pi/2)
         delta_y = rad_len * np.sin(ray_rad+np.pi/2)
         
@@ -325,8 +314,6 @@ class WorldMapMgr(object):
                     return sg
         return None
                 
-                
-        
     def isInObsBkLinePair(self, pos):
         
         pPos = symgeo.Point(pos[0], pos[1])
