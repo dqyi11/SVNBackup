@@ -23,6 +23,10 @@ class LineSubSegment(object):
         
         self.checkPosA = None
         self.checkPosB = None
+    
+        
+        self.checkRegionA = None
+        self.checkRegionB = None
         
         self.isConnectedToCentralPoint = False
 

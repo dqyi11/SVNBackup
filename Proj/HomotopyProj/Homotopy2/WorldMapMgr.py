@@ -97,7 +97,6 @@ class WorldMapMgr(object):
         #print self.center_corner_lines_info
         
         self.ray_info_list = []
-        
         # init alpah and beta segments
         for obs in self.obstacles:
             obs.alpha_ray = symgeo.Ray(symgeo.Point(obs.bk[0], obs.bk[1]), symgeo.Point(self.centralPoint[0],self.centralPoint[1]))
@@ -226,25 +225,11 @@ class WorldMapMgr(object):
         #rndVal = numpy.random.randint(0, 256, 3)
         #self.region_colors.append((rndVal[0], rndVal[1], rndVal[2], 100))    
         
-        '''
-        print "REGION RAD"
-        for r in self.regions:
-            print r.ref_rad
-        '''
-        
         for i in range(len(self.ray_info_list)):
             # pick two neighbors here
             ray_info = self.ray_info_list[i]
             ray_rad = ray_info[2]
-            '''
-            k = np.tan(ray_rad+np.pi/2)
-            if np.abs(k) > 1.0:
-                delta_x = 1.5
-                delta_y = k*delta_x
-            else:
-                delta_y = 1.5
-                delta_x = delta_y/k
-            '''
+
             delta_x, delta_y = self.calcCheckDelta(ray_rad)
             obs = self.obstacles[ray_info[0]]
             if ray_info[1] == 'A':
@@ -268,14 +253,11 @@ class WorldMapMgr(object):
             print "SEG RAD " + str(seg_rad) + " REG A " + str(regionA.ref_rad) + " REG B " + str(regionB.ref_rad)
             for linseg in seg.sub_segs:
                 # check each sub seg of a seg line
-                '''
-                test_points = []
-                test_points.append(linseg.midpoint)
-                test_points.append((linseg.midpoint[0]+delta_x, linseg.midpoint[1]+delta_y))
-                test_points.append((linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y))
-                '''
                 linseg.checkPosA = (linseg.midpoint[0]+delta_x, linseg.midpoint[1]+delta_y)
                 linseg.checkPosB = (linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y)
+                
+                linseg.checkRegionA = regionA
+                linseg.checkRegionB = regionB
                 #print linseg
                 #print regionA
                 #print regionB
@@ -301,16 +283,7 @@ class WorldMapMgr(object):
                     print "   " + str(regionB)
                     
     def calcCheckDelta(self, ray_rad):
-        '''
-        delta_x = 1.5
-        delta_y = 1.5
-        k = np.tan(ray_rad + np.pi/2)
-        if np.abs(k) > 1.0:
-            delta_y = k * delta_x
-        else:
-            delta_x = delta_y / k
-        '''
-        rad_len = 4
+        rad_len = 2
         delta_x = rad_len * np.cos(ray_rad+np.pi/2)
         delta_y = rad_len * np.sin(ray_rad+np.pi/2)
         

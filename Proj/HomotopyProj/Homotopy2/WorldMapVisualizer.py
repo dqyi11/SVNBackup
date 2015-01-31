@@ -106,12 +106,18 @@ class WorldMapVisualizer(object):
             
         if len(self.world_map.subsegments) > 0 and self.subsegment_idx >= 0:
             subsegment = self.world_map.subsegments[self.subsegment_idx]
+            '''
             if subsegment.regionAInfo != None:
                 ss_reg_info = subsegment.regionAInfo
                 self.displayPolygon(ss_reg_info.polygon, self.region_colors[ss_reg_info.parent.idx], REGION_LINE_WIDTH)
             if subsegment.regionBInfo != None:
                 ss_reg_info = subsegment.regionBInfo
                 self.displayPolygon(ss_reg_info.polygon, self.region_colors[ss_reg_info.parent.idx], REGION_LINE_WIDTH)
+            '''
+            if subsegment.checkRegionA != None:
+                self.displayPolygon(subsegment.checkRegionA.polygon, self.region_colors[subsegment.checkRegionA.idx], REGION_LINE_WIDTH)
+            if subsegment.checkRegionB != None:
+                self.displayPolygon(subsegment.checkRegionB.polygon, self.region_colors[subsegment.checkRegionB.idx], REGION_LINE_WIDTH)
             
             #pygame.draw.line(self.screen, SUBSEGMENT_COLOR, subsegment.line_seg.coords[0], subsegment.line_seg.coords[1], BORDER_LINE_WIDTH)
             #pygame.draw.line(self.screen, SUBSEGMENT_OPEN_COLOR, subsegment.open_seg[0], subsegment.open_seg[1], BORDER_LINE_WIDTH)
