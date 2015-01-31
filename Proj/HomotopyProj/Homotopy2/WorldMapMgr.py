@@ -254,25 +254,25 @@ class WorldMapMgr(object):
                 linseg.checkRegionA = regionA
                 linseg.checkRegionB = regionB
                 
-                print linseg
+                print linseg.name
                 #print test_points
                 iline = shpgeo.LineString([linseg.checkPosA, linseg.checkPosB])
                 sgA = self.isLineIntersectedWithRegion(regionA.subregions, iline)
                 #sgA =  self.isPointsInRegion(regionA.subregions, test_points)
                 if sgA != None:
                     linseg.regionAInfo = sgA
-                    print "      " + str(sgA)
+                    print "      " + sgA.getName()
                 else:
-                    print "   " + str(regionA)
+                    print "   " + regionA.name
                 
                 iline = shpgeo.LineString([linseg.checkPosA, linseg.checkPosB])
                 sgB = self.isLineIntersectedWithRegion(regionB.subregions, iline)    
                 #sgB = self.isPointsInRegion(regionB.subregions, test_points) 
                 if sgB != None:
                     linseg.regionBInfo = sgB
-                    print "      " + str(sgB)
+                    print "      " + sgB.getName()
                 else:
-                    print "   " + str(regionB)
+                    print "   " + regionB.name
                     
     def findNeighborRegion(self, rad):
         regionA = None

@@ -14,6 +14,14 @@ class SubRegion(object):
         self.polygon = polygon
         self.neighbor_info = []
         self.parent = parent
+        
+        self.center = (polygon.centroid.x, polygon.centroid.y)
+        
+        self.distToCentral = np.sqrt((self.center[0]-self.parent.parent.centralPoint[0])**2+(self.center[1]-self.parent.parent.centralPoint[1])**2)
+        self.idx = None
+        
+    def getName(self):
+        return "R"+str(self.parent.idx)+"-"+str(self.idx)
 
 class RegionMgr(object):
 
@@ -23,7 +31,7 @@ class RegionMgr(object):
         self.ray1Info = ray1Info
         self.ray2Info = ray2Info
         self.parent = parent
-        self.name = "REG"+str(self.idx)
+        self.name = "R"+str(self.idx)
         
         self.ray1Obs = parent.obstacles[ray1Info[0]]
         self.ray2Obs = parent.obstacles[ray2Info[0]]
@@ -65,6 +73,11 @@ class RegionMgr(object):
             for poly in current_polygon:
                 subregion = SubRegion(poly, self)
                 self.subregions.append(subregion)
+                
+        self.subregions.sort(key=lambda x: x.distToCentral, reverse=False)
+        for i in range(len(self.subregions)):
+            self.subregions[i].idx = idx
+            
                 
         # init alpha and beta segments for subregion
         
