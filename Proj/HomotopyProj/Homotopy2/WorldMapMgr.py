@@ -106,15 +106,6 @@ class WorldMapMgr(object):
             #print str(obs.alpha_ray) + " --> " + str(a_pt)
             b_pt = self.findIntersectionWithBoundary(obs.beta_ray)
             #print str(obs.beta_ray) + " --> " + str(b_pt)
-            
-            obs.alpha_seg = None
-            obs.beta_seg = None
-            if a_pt != None:
-                alpha_seg = shpgeo.LineString([obs.bk, (a_pt.x, a_pt.y)])
-                obs.alpha_seg = LineSegmentMgr(alpha_seg, 'A', obs)
-            if b_pt != None:
-                beta_seg = shpgeo.LineString([obs.bk, (b_pt.x, b_pt.y)])
-                obs.beta_seg = LineSegmentMgr(beta_seg, 'B', obs)
                 
             alpha_ray_rad = numpy.arctan(float(obs.alpha_ray.slope))
             if obs.alpha_ray.p1.x > obs.alpha_ray.p2.x:
@@ -129,6 +120,17 @@ class WorldMapMgr(object):
             if beta_ray_rad < 0:
                 beta_ray_rad += 2*numpy.pi                
             beta_ray_info = (obs.idx, 'B', beta_ray_rad)
+            
+                        
+            obs.alpha_seg = None
+            obs.beta_seg = None
+            if a_pt != None:
+                alpha_seg = shpgeo.LineString([obs.bk, (a_pt.x, a_pt.y)])
+                obs.alpha_seg = LineSegmentMgr(alpha_seg, 'A', alpha_ray_rad, obs)
+            if b_pt != None:
+                beta_seg = shpgeo.LineString([obs.bk, (b_pt.x, b_pt.y)])
+                obs.beta_seg = LineSegmentMgr(beta_seg, 'B', beta_ray_rad, obs)
+            
             #print "ALPHA RAY SLOPE " + str(alpha_ray_info)
             #print "BETA RAY SLOPE " + str(beta_ray_info)
             self.ray_info_list.append(alpha_ray_info)
@@ -231,6 +233,7 @@ class WorldMapMgr(object):
             ray_rad = ray_info[2]
 
             delta_x, delta_y = self.calcCheckDelta(ray_rad)
+         
             obs = self.obstacles[ray_info[0]]
             if ray_info[1] == 'A':
                 seg = obs.alpha_seg
@@ -239,6 +242,7 @@ class WorldMapMgr(object):
                 seg = obs.beta_seg
                 seg_rad = obs.beta_seg_info[1]
                 
+            '''
             if i==0:
                 regionA = self.regions[len(self.ray_info_list)-1]
             else:
@@ -248,19 +252,18 @@ class WorldMapMgr(object):
                 regionB = self.regions[0]
             else:
                 regionB = self.regions[i]
+            '''
             
-            
-            print "SEG RAD " + str(seg_rad) + " REG A " + str(regionA.ref_rad) + " REG B " + str(regionB.ref_rad)
             for linseg in seg.sub_segs:
                 # check each sub seg of a seg line
                 linseg.checkPosA = (linseg.midpoint[0]+delta_x, linseg.midpoint[1]+delta_y)
                 linseg.checkPosB = (linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y)
                 
+                regionA, regionB = self.findNeighborRegion(linseg.rad)
+                print "SEG RAD " + str(linseg.rad) + " REG A " + str(regionA.ref_rad) + " REG B " + str(regionB.ref_rad)
+                
                 linseg.checkRegionA = regionA
                 linseg.checkRegionB = regionB
-                #print linseg
-                #print regionA
-                #print regionB
                 
                 print linseg
                 #print test_points
@@ -282,15 +285,32 @@ class WorldMapMgr(object):
                 else:
                     print "   " + str(regionB)
                     
+    def findNeighborRegion(self, rad):
+        regionA = None
+        regionB = None
+        if self.regions[len(self.regions)-1].ref_rad - 2*np.pi <= rad  and rad < self.regions[0].ref_rad:
+            regionA = self.regions[len(self.regions)-1]
+            regionB = self.regions[0]
+        elif self.regions[len(self.regions)-1] <= rad and rad < self.regions[0].ref_rad + 2*np.pi:
+            regionA = self.regions[len(self.regions)-1]
+            regionB = self.regions[0]
+        else:
+            for i in range(len(self.regions)-1):
+                if self.regions[i].ref_rad <= rad and rad < self.regions[i+1].ref_rad:
+                    regionA = self.regions[i]
+                    regionB = self.regions[i+1]
+            
+        return regionA, regionB
+        
+                    
     def calcCheckDelta(self, ray_rad):
-        rad_len = 2
+        rad_len = 4
         delta_x = rad_len * np.cos(ray_rad+np.pi/2)
         delta_y = rad_len * np.sin(ray_rad+np.pi/2)
         
         return delta_x, delta_y
     
     def isLineIntersectedWithRegion(self, subregions, iline):
-        
         for sg in subregions:
             if sg.polygon.intersects(iline):
                 return sg

@@ -9,10 +9,11 @@ import shapely.geometry as shpgeo
 
 class LineSubSegment(object):
     
-    def __init__(self, line_seg, open_seg, idx, parent):
+    def __init__(self, line_seg, open_seg, idx, rad, parent):
         self.line_seg = line_seg
         self.open_seg = open_seg
         self.idx = idx
+        self.rad = rad
         self.parent = parent
         
         self.name = self.parent.type + str(self.parent.parent.idx) + "-" + str(self.idx)
@@ -23,7 +24,6 @@ class LineSubSegment(object):
         
         self.checkPosA = None
         self.checkPosB = None
-    
         
         self.checkRegionA = None
         self.checkRegionB = None
@@ -32,10 +32,11 @@ class LineSubSegment(object):
 
 class LineSegmentMgr(object):
     
-    def __init__(self, line_seg, type, parent):
+    def __init__(self, line_seg, type, rad, parent):
         self.parent = parent
         self.type = type
         self.line_seg = line_seg
+        self.rad = rad
         self.sub_segs = []
         self.mid_points = []
         
@@ -51,44 +52,58 @@ class LineSegmentMgr(object):
             cpdist = np.sqrt((self.parent.bk[0]-self.parent.parent.centralPoint[0])**2+(self.parent.bk[1]-self.parent.parent.centralPoint[1])**2)
             
             idx = 0
+            passCentralPoint = False
             for i in range(1, len(self.obs_intsecs)-1, 2):
                 sec1 = self.obs_intsecs[i]
                 sec2 = self.obs_intsecs[i+1]
+                if passCentralPoint == False:
+                    trad = self.rad + np.pi
+                    if trad > 2*np.pi:
+                        trad = trad - 2*np.pi
+                else:
+                    trad = self.rad
                 if sec1[3] <= cpdist and sec2[3] >= cpdist:
                     open_seg = (sec1[2], self.parent.parent.centralPoint)
                     subseg = shpgeo.LineString([self.obs_intsecs[i-1][2], self.parent.parent.centralPoint])
-                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
                     self.sub_segs.append(lineSubSeg)
                     idx += 1
                     
+                    passCentralPoint = True
+                    trad = self.rad
+                    
                     open_seg = (self.parent.parent.centralPoint, sec2[2])
                     subseg = shpgeo.LineString([self.parent.parent.centralPoint, sec2[2]])
-                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
                     self.sub_segs.append(lineSubSeg)
                     idx += 1 
                 else:
                     open_seg = (sec1[2], sec2[2])
                     subseg = shpgeo.LineString([self.obs_intsecs[i-1][2], sec2[2]])
-                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                    lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
                     self.sub_segs.append(lineSubSeg)
                     idx += 1
             
             if self.obs_intsecs[len(self.obs_intsecs)-1][3] > cpdist:        
                 open_seg = (self.obs_intsecs[len(self.obs_intsecs)-1][2], self.end_pos)
                 subseg = shpgeo.LineString([self.obs_intsecs[len(self.obs_intsecs)-2][2], self.end_pos])
-                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self.rad, self)
                 self.sub_segs.append(lineSubSeg)
                 idx += 1
             else:
+                trad = self.rad + np.pi
+                if trad > 2*np.pi:
+                    trad = trad - 2*np.pi
+                    
                 open_seg = (self.obs_intsecs[len(self.obs_intsecs)-1][2], self.parent.parent.centralPoint)
                 subseg = shpgeo.LineString([self.obs_intsecs[len(self.obs_intsecs)-2][2], self.parent.parent.centralPoint])
-                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
                 self.sub_segs.append(lineSubSeg)
                 idx += 1
                 
                 open_seg = (self.parent.parent.centralPoint, self.end_pos)
                 subseg = shpgeo.LineString([self.parent.parent.centralPoint, self.end_pos])
-                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self.rad, self)
                 self.sub_segs.append(lineSubSeg)
                 idx += 1 
             
@@ -101,13 +116,13 @@ class LineSegmentMgr(object):
 
                 open_seg = (sec1[2], sec2[2])
                 subseg = shpgeo.LineString([self.obs_intsecs[i-1][2], sec2[2]])
-                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+                lineSubSeg = LineSubSegment(subseg, open_seg, idx, self.rad, self)
                 self.sub_segs.append(lineSubSeg)
                 idx += 1
                 
             open_seg = (self.obs_intsecs[len(self.obs_intsecs)-1][2], self.end_pos)
             subseg = shpgeo.LineString([self.obs_intsecs[len(self.obs_intsecs)-2][2], self.end_pos])
-            lineSubSeg = LineSubSegment(subseg, open_seg, idx, self)
+            lineSubSeg = LineSubSegment(subseg, open_seg, idx, self.rad, self)
             self.sub_segs.append(lineSubSeg)
             idx += 1
         
