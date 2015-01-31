@@ -16,11 +16,6 @@ if __name__ == '__main__':
     mapMgrViz = WorldMapVisualizer(mapMgr)
     
     mapMgrViz.initVisualize()
-    mapMgr.init()
-    mapMgrViz.updateVisualize()
-    mapMgr.initSegments()
-    mapMgrViz.updateVisualize()
-    mapMgr.process()
     
     tg = mapMgr.getTopologicalGraph()
     tg.visualize(MAP_FILE)
