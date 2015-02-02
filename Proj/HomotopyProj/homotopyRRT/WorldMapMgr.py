@@ -347,6 +347,20 @@ class WorldMapMgr(object):
                 return True
         return False
         
+    def isCrossingObstalce(self, start, end):
+        segLine = shpgeo.LineString([start, end])
+        for obs in self.obstacles:
+            if segLine.intersects(obs.polygon):
+            #if obs.polygon.intersects(segLine):
+                return True
+        return False
+    
+    def getSubsegment(self, pos):
+        posPoint = shpgeo.Point(pos[0], pos[1])
+        for subseg in self.subsegments:
+            if subseg.line_seg.contains(posPoint):
+                return sugseg
+        return None
  
     def findIntersectionWithBoundary(self, a_ray):
         for bl in self.boundary_lines:
