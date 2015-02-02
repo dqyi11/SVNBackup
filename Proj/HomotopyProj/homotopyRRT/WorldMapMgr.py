@@ -355,11 +355,11 @@ class WorldMapMgr(object):
                 return True
         return False
     
-    def getSubsegment(self, pos):
-        posPoint = shpgeo.Point(pos[0], pos[1])
+    def getCrossingSubsegment(self, pos_s, pos_e):
+        linS = shpgeo.LineString([pos_s, pos_e])
         for subseg in self.subsegments:
-            if subseg.line_seg.contains(posPoint):
-                return sugseg
+            if subseg.line_seg.intersects(linS):
+                return subseg
         return None
  
     def findIntersectionWithBoundary(self, a_ray):
