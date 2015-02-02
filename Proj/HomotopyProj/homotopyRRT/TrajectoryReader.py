@@ -10,8 +10,16 @@ class TrajectoryReader(object):
 
     def __init__(self, world_map):
         self.world_map = world_map
-                    
-                
+        self.centerGroup = []    
+        
+        self.initEquSubsegs()
+    
+    def initEquSubsegs(self):
+        
+        for s in self.world_map.subsegments:
+            if s.isConnectedToCentralPoint == True:
+                self.centerGroup.append((s.name, s))
+            
         
     def readPath(self, posList):
         if len(posList)==0:
@@ -52,6 +60,48 @@ class TrajectoryReader(object):
             subsegs_strs.append(s.name)
             
         return (start_str, end_str, subsegs_strs)
+    
+    def isInCenterGroup(self, name):
+        for gn in self.centerGroup:
+            if gn[0] == name:
+                return True
+        return False
+    
+    def compareStr(self, nameA, nameB):
+        if nameA == nameB:
+            return True
+        if self.isInCenterGroup(nameA)==True and self.isInCenterGroup(nameB)==True:
+            return True
+        return False
+        
+    
+    def shortenString(self, strPath):
+        
+        newStrPath = []
+        newStrPath.append(strPath[0])
+        
+        for i in range(1, len(strPath)):
+            if self.compareStr(newStrPath[len(newStrPath)-1], strPath[i])==False:
+                newStrPath.append(strPath[i])
+                
+        return newStrPath
+                
+    
+    def compareStringPath(self, strPath, refStrPath):
+        
+        s_strPath = self.shortenString(strPath)
+        s_refStrPath = self.shortenString(refStrPath)
+        
+        if len(s_strPath) > len(s_refStrPath):
+            return False
+        
+        for i in range(len(s_strPath)):
+            if self.compareStr(s_strPath[i], s_refStrPath[i]) == False:
+                return False           
+        return True
+            
+            
+            
                                 
                                 
                     

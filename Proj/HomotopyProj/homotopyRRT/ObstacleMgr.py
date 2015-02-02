@@ -66,6 +66,7 @@ class LineSegmentMgr(object):
                     open_seg = (sec1[2], self.parent.parent.centralPoint)
                     subseg = shpgeo.LineString([self.obs_intsecs[i-1][2], self.parent.parent.centralPoint])
                     lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
+                    lineSubSeg.isConnectedToCentralPoint = True
                     self.sub_segs.append(lineSubSeg)
                     idx += 1
                     
@@ -75,6 +76,7 @@ class LineSegmentMgr(object):
                     open_seg = (self.parent.parent.centralPoint, sec2[2])
                     subseg = shpgeo.LineString([self.parent.parent.centralPoint, sec2[2]])
                     lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
+                    lineSubSeg.isConnectedToCentralPoint = True
                     self.sub_segs.append(lineSubSeg)
                     idx += 1 
                 else:
@@ -98,12 +100,14 @@ class LineSegmentMgr(object):
                 open_seg = (self.obs_intsecs[len(self.obs_intsecs)-1][2], self.parent.parent.centralPoint)
                 subseg = shpgeo.LineString([self.obs_intsecs[len(self.obs_intsecs)-2][2], self.parent.parent.centralPoint])
                 lineSubSeg = LineSubSegment(subseg, open_seg, idx, trad, self)
+                lineSubSeg.isConnectedToCentralPoint = True
                 self.sub_segs.append(lineSubSeg)
                 idx += 1
                 
                 open_seg = (self.parent.parent.centralPoint, self.end_pos)
                 subseg = shpgeo.LineString([self.parent.parent.centralPoint, self.end_pos])
                 lineSubSeg = LineSubSegment(subseg, open_seg, idx, self.rad, self)
+                lineSubSeg.isConnectedToCentralPoint = True
                 self.sub_segs.append(lineSubSeg)
                 idx += 1 
             

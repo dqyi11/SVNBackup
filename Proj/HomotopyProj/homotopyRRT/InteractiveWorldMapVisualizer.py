@@ -68,7 +68,7 @@ class InteractiveWorldMapVisualizer(object):
             elif event.type == pygame.MOUSEMOTION:
                 if self.tracking == True:
                     self.trackingPosList.append((event.pos[0], event.pos[1]))
-                    print "mouse at (%d, %d)" % event.pos
+                    #print "mouse at (%d, %d)" % event.pos
         
         self.screen.fill((255,255,255))
         
@@ -98,6 +98,10 @@ class InteractiveWorldMapVisualizer(object):
         for i in range(len(self.convertedTrackingPosList)-1):
             pygame.draw.line(self.screen, CONVERTED_HUMAN_PATH_COLOR, self.convertedTrackingPosList[i], self.convertedTrackingPosList[i+1], HUMAN_PATH_WIDTH)
             
+        trackingPosListLen = len(self.trackingPosList) 
+        if trackingPosListLen > 0:
+            pygame.draw.circle(self.screen, (76,0,153), self.trackingPosList[0], 5)
+            pygame.draw.rect(self.screen, (204,153,255), (self.trackingPosList[trackingPosListLen-1][0], self.trackingPosList[trackingPosListLen-1][1], 10, 10))
         
         if self.world_map.centralPoint != None:
             pygame.draw.circle(self.screen, CENTER_POINT_COLOR, self.world_map.centralPoint, KEYPOINT_SIZE)
