@@ -26,6 +26,8 @@ class RRTVisualizer(object):
         self.activePath = None
         self.dispMap = True
         
+        self.refLines = []
+        
     def loadObj(self, objFile):    
         self.objImg = pygame.image.load(objFile)
         
@@ -48,6 +50,9 @@ class RRTVisualizer(object):
         else:
             if self.objImg != None:
                 self.screen.blit(self.objImg,(0,0))
+                
+        for refLine in self.refLines:
+            pygame.draw.line(self.screen, (50,50,50), refLine[0], refLine[1])
                 
         for n in self.rrt.nodes:
             for c in n.children:

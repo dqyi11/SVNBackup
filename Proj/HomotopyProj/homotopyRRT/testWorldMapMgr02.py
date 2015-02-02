@@ -41,10 +41,13 @@ if __name__ == '__main__':
         return dist   
 
 
-    refStrPath = mapMgrViz.reader.readPath(mapMgrViz.convertedTrackingPosList)
+    refStrPath, dumbList = mapMgrViz.reader.readPath(mapMgrViz.convertedTrackingPosList)
     homoMgr = HomotopyMgr(mapMgrViz.world_map, mapMgrViz.reader)
     homoMgr.init(refStrPath)
     planner = RRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
+    
+    for subseg in mapMgr.subsegments:
+        planner.rrts_viz.refLines.append([subseg.line_seg.coords[0], subseg.line_seg.coords[1]])
 
     path = planner.findPath(start_pos, end_pos, 6000,homoMgr)
     print path

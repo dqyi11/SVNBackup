@@ -45,6 +45,11 @@ class WorldMapMgr(object):
             
         self.regionNum = len(self.obstacles)*2
         
+        self.xmin = -1
+        self.xmax = self.width+1
+        self.ymin = -1
+        self.ymax = self.height+1
+        
         self.init()
         self.initSegments()
         self.process()
@@ -79,10 +84,10 @@ class WorldMapMgr(object):
                 
         # init four boundary line
         self.boundary_lines = []
-        self.x_axis = symgeo.Line(symgeo.Point(0,0), symgeo.Point(self.width-1,0))
-        self.y_axis = symgeo.Line(symgeo.Point(0,0), symgeo.Point(0, self.height-1))
-        self.x_high = symgeo.Line(symgeo.Point(0,self.height-1), symgeo.Point(self.width-1, self.height-1))
-        self.y_high = symgeo.Line(symgeo.Point(self.width-1, 0), symgeo.Point(self.width-1, self.height-1))
+        self.x_axis = symgeo.Line(symgeo.Point(self.xmin, self.ymin), symgeo.Point(self.xmax, self.ymin))
+        self.y_axis = symgeo.Line(symgeo.Point(self.xmin, self.ymin), symgeo.Point(self.xmin, self.ymax))
+        self.x_high = symgeo.Line(symgeo.Point(self.xmin, self.ymax), symgeo.Point(self.xmax, self.ymax))
+        self.y_high = symgeo.Line(symgeo.Point(self.xmax, self.ymin), symgeo.Point(self.xmax, self.ymax))
         self.boundary_lines.append(self.x_axis)
         self.boundary_lines.append(self.y_high)
         self.boundary_lines.append(self.x_high)
@@ -368,7 +373,7 @@ class WorldMapMgr(object):
             #print str(a_ray) + " + " + str(bl) + " = " + str(intsecs)
             if len(intsecs) > 0:
                 intsec = intsecs[0]
-                if intsec.x >=0 and intsec.x <self.width and intsec.y >=0 and intsec.y <self.height:
+                if intsec.x >= self.xmin and intsec.x <= self.xmax and intsec.y >= self.ymin and intsec.y <=self.ymax:
                     return intsec
         return None
 

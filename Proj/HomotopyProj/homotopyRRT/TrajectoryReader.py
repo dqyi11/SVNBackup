@@ -94,7 +94,12 @@ class TrajectoryReader(object):
         s_strPath = self.shortenString(strPath)
         s_refStrPath = self.shortenString(refStrPath)
         
-        if len(s_strPath) > len(s_refStrPath):
+        s_strPath_len = len(s_strPath)
+        s_refStrPath_len = len(s_refStrPath)
+        if s_strPath_len==0 or s_refStrPath_len == 0:
+            return True
+        
+        if s_strPath_len > s_refStrPath_len:
             return False
         
         for i in range(len(s_strPath)):
