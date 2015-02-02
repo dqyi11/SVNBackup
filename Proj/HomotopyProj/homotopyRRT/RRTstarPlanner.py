@@ -19,9 +19,9 @@ class RRTstarPlanner(object):
         self.rrts_viz = RRTVisualizer(self.rrts)
         self.cost_func = cost_func
         
-    def findPath(self, start, goal, iterationNum):
+    def findPath(self, start, goal, iterationNum, homotopyMgr):
         
-        self.rrts.init(start, goal, self.cost_func)
+        self.rrts.init(start, goal, self.cost_func, homotopyMgr)
         for i in range(iterationNum):
             print "Iter@" + str(i)
             self.rrts.extend()

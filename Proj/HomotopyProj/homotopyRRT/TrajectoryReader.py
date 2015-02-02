@@ -78,6 +78,8 @@ class TrajectoryReader(object):
     def shortenString(self, strPath):
         
         newStrPath = []
+        if len(strPath)==0:
+            return newStrPath
         newStrPath.append(strPath[0])
         
         for i in range(1, len(strPath)):

@@ -7,6 +7,7 @@ Created on Jan 3, 2015
 from kdtree import *
 import numpy as np
 from scipy.misc import imread
+from HomotopyMgr import *
 
 class RRTNode(object):
     
@@ -15,6 +16,8 @@ class RRTNode(object):
         self.parent = None
         self.children = []
         self.cost = 0.0
+        
+        self.homoPath = []
         
     def __eq__(self, other):
         if other == None:
@@ -44,7 +47,7 @@ class RRTstar(object):
         self.radius = 600  #self.segmentLength
         self.costFunc = None
         
-    def init(self, start, goal, costFunc):
+    def init(self, start, goal, costFunc, homotopyMgr):
         self.start = start
         self.goal = goal
         self.root = RRTNode(start)
@@ -52,6 +55,7 @@ class RRTstar(object):
         self.kdtree_root = createKDTree([start], self.dimension, ref_list=[self.root])
         self.costFunc = costFunc
         self.root.cost = self.costFunc(self.root.pos, None)
+        self.homotopyMgr = homotopyMgr
         
     def loadMap(self, mapfile):
         self.mapfile = mapfile
@@ -99,38 +103,48 @@ class RRTstar(object):
                 continue
             
             if True == self.isObstacleFree(nearest_node.pos, new_pos):
-                new_node = RRTNode(new_pos)
-                self.kdtree_root.add(new_pos, new_node)
-                
-                min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
-                self.nodes.append(new_node)
-                
-                min_node = nearest_node
-                
-                near_node_list = self.findNearVertices(new_node.pos)
-                
-                for near_node in near_node_list:
-                    if True == self.isObstacleFree(near_node.pos, new_node.pos):
-                        c = near_node.cost + self.costFunc(near_node.pos, new_node.pos)
-                        if c < min_new_node_cost:
-                            min_node = near_node
-                            min_new_node_cost = c
-                            
-                self.addEdge(min_node, new_node)
-                new_node.cost = min_new_node_cost
-                
-                for near_node in near_node_list:
-                    if near_node == min_node:
-                        continue
+                homoRet, new_homo_path = self.isHomotopyFree(nearest_node, new_pos)
+                if homoRet == True:
+                    new_node = RRTNode(new_pos)
+                    self.kdtree_root.add(new_pos, new_node)
                     
-                    if True == self.isObstacleFree(new_node.pos, near_node.pos):
+                    min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
+                    self.nodes.append(new_node)
+                    
+                    min_node = nearest_node
+                    min_homo_path = new_homo_path
+                    
+                    near_node_list = self.findNearVertices(new_node.pos)
+                    
+                    for near_node in near_node_list:
+                        if True == self.isObstacleFree(near_node.pos, new_node.pos):
+                            homoRet, new_homo_path = self.isHomotopyFree(near_node, new_pos)
+                            if homoRet == True:
+                                c = near_node.cost + self.costFunc(near_node.pos, new_node.pos)
+                                if c < min_new_node_cost:
+                                    min_node = near_node
+                                    min_new_node_cost = c
+                                    min_homo_path = new_homo_path
+                                
+                    self.addEdge(min_node, new_node)
+                    new_node.cost = min_new_node_cost
+                    new_node.homoPath = min_homo_path
+                    
+                    for near_node in near_node_list:
+                        if near_node == min_node:
+                            continue
                         
-                        delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node.pos, near_node.pos))
-                        if delta_cost > 0:
-                            parent_node = near_node.parent
-                            self.removeEdge(parent_node, near_node)
-                            self.addEdge(new_node, near_node)
-                            self.updateCostToChildren(near_node, delta_cost)
+                        if True == self.isObstacleFree(new_node.pos, near_node.pos):                 
+                            homoRet, new_homo_path = self.isHomotopyFree(new_node, near_node.pos)
+                            if homoRet == True:
+                                delta_cost = near_node.cost - (new_node.cost + self.costFunc(new_node.pos, near_node.pos))
+                                if delta_cost > 0:
+                                    parent_node = near_node.parent
+                                    self.removeEdge(parent_node, near_node)
+                                    self.addEdge(new_node, near_node)
+                                    self.updateCostToChildren(near_node, delta_cost)
+                                    near_node.homoPath = new_homo_path
+                                    
             
     def findNearVertices(self, pos):
         node_list = []
@@ -152,6 +166,12 @@ class RRTstar(object):
         if dist <= self.segmentLength:
             return True
         return False
+    
+    def isHomotopyFree(self, node, new_pos):
+        
+        newPath = self.homotopyMgr.extendPath(node.homoPath, node.pos, new_pos)
+        ret =  self.homotopyMgr.inSameHomotopy(newPath)
+        return ret, newPath
     
     def isObstacleFree(self, pos_a, pos_b):  
         obsFree = True
