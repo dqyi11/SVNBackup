@@ -36,6 +36,7 @@ class InteractiveWorldMapVisualizer(object):
         self.reader = TrajectoryReader(self.world_map)
         self.trackingPosList = []
         self.convertedTrackingPosList = []
+        self.refString = []
         
     def initVisualize(self):
         pygame.init()
@@ -58,7 +59,7 @@ class InteractiveWorldMapVisualizer(object):
                 if event.key == pygame.K_x:
                     #self.convertedTrackingPosList = self.convertingPosList(self.trackingPosList)
                     self.convertedTrackingPosList, self.referenceInfo = self.reader.readPath(self.trackingPosList)
-                    print self.reader.getString(self.referenceInfo)
+                    self.refString = self.reader.getString(self.referenceInfo)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.trackingPosList = []
                 self.convertedTrackingPosList = []

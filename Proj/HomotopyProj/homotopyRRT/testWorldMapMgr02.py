@@ -40,16 +40,14 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist   
 
-
-    refStrPath, dumbList = mapMgrViz.reader.readPath(mapMgrViz.convertedTrackingPosList)
     homoMgr = HomotopyMgr(mapMgrViz.world_map, mapMgrViz.reader)
-    homoMgr.init(refStrPath)
+    homoMgr.init(mapMgrViz.refString)
     planner = RRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
     
     for subseg in mapMgr.subsegments:
         planner.rrts_viz.refLines.append([subseg.line_seg.coords[0], subseg.line_seg.coords[1]])
 
-    path = planner.findPath(start_pos, end_pos, 6000,homoMgr)
+    path = planner.findPath(start_pos, end_pos, 1000,homoMgr)
     print path
     
     import pygame.image
