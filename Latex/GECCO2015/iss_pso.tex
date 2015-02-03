@@ -50,7 +50,7 @@ Michael A. Goodrich \\
 \maketitle
 
 \begin{abstract}
-This paper examines the dynamics of particle swarm optimization (PSO) by modeling PSO as a cascade system and then applying input-to-state stability analysis.
+This paper examines the dynamics of particle swarm optimization (PSO) by modeling PSO as a feedback cascade system and then applying input-to-state stability analysis.
 Using a feedback cascade system model we can include the effects of the global-best and personal-best values more directly in the model of the dynamics.
 Thus in contrast to previous study of PSO dynamics, the input-to-state stability property used here allows for the analysis of PSO both before and at stagnation.
 In addition, the use of input-to-state stability allows this analysis to preserve random terms which were heretofore simplified to constants.
@@ -105,7 +105,7 @@ This is espeically valuable in the context of the design of future PSO variants.
 
 The body of this paper is organized as described here.
 In section \ref{sec:sys_model}, we model the PSO dynamics as a feedback cascade system, which enables the input-to-state stability analysis.
-The definition of input-to-state stability (ISS) and how it applies to the PSO is also given.
+The definition of input-to-state stability (ISS) and how it means to the PSO is also given.
 Section \ref{sec:iss} shows that for particular parameter values, the position update component of a particle is ISS. 
 Using the ISS property we then give the bound on particle motion.
 We also introduce how the ISS property applies to the moment analysis of the particle behavior.
@@ -117,7 +117,7 @@ With the ISS property of the input update component, we could analyze the dynami
 
 Although the input-to-state stable analysis given in this paper can be applied to many versions of PSO,
 for this work we use the formulas from Kennedy's most recent definition of PSO\cite{4223164}.
-This version of PSO includes a ring topology, and a constricted position update rule. 
+This version of PSO includes a star topology, and a constricted position update rule. 
 The constricted position update rule is
 
 \begin{subequations}
@@ -154,7 +154,7 @@ Based on such a convergence analysis, parameters can be set for best effect \cit
 The second approach for handling the stochastic factors is based on the stochastic analysis.
 By taking the mean of the stochastic variables, the stochastic terms can be converted into
 constant terms.
-A convergence analysis of the mean and variance of a particle at stagnation can also be obtained using the characteristic equation in a discrete-time model 
+A convergence analysis of the mean and variance of a particle at stagnation can also be obtained by using the characteristic equation in a discrete-time model 
 \cite{Jiang20078}.
 In a similar way, 
 other moments can be computed
@@ -179,20 +179,21 @@ has also been analyzed
 The input-to-state stability analysis consists of two parts:
 \begin{itemize}
 \item how to decompose a system into components;
-\item the input-to-state stability of each component.
+\item and the input-to-state stability of each component.
 \end{itemize}
 In this section, we model the particle into a feedback cascade model.
 Then we review the definition of the input-to-state stability (ISS).
-We also explain how the ISS can be applied into understanding the PSO.
+We also explain why the ISS should be applied into understanding the PSO.
 
 \subsection{Feedback Cascade Model}
+\label{sec:feedback_cascade_model}
 
 In the purpose of input-to-state stability analysis, we model the system structure of a particle in PSO.
 %This enables analysis of PSO with stochastic factors preserved and without the stagnation assumption.
 As shown in Figure \ref{fig:sys_flow}, this system is comprised of cascaded component and feedback of the historical state.
 These two components are the 
 \emph{input update component} for the global best ($ x^{G}_{i}(k) $) and the personal best ($ x^{P}_{i}(k) $), and the 
-\emph{position update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $ and the swarm topology.
+\emph{position update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $.
 
 \begin{figure}
 	\centering
@@ -201,10 +202,11 @@ These two components are the
 	\label{fig:sys_flow}
 \end{figure}
 
-The properties of this system can be analyzed using the input-to-state stability of the position update component and the input update component. 
+The properties of this system can be analyzed by using the input-to-state stability of the position update component and the input update component. 
 Given an input-to-state stable position update component, we will see that the convergence of $ x_{i}(k) $ depends on bounds on $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
 
 \subsection{Input-to-state stability}
+\label{sec:def_iss}
 
 Before reviewing the definition of input-to-state stability, we first introduce several types of functions \cite{Jiang2001857}.
 \begin{itemize}
@@ -216,6 +218,8 @@ Before reviewing the definition of input-to-state stability, we first introduce 
 	\end{enumerate}
 	%\item Positive-definite function: a function $ \gamma (s) > 0, \forall s > 0 $ and $ \gamma (0) = 0 $.
 \end{itemize}
+
+We then have the definition of input-to-state stability in Definition \ref{def:iss}.
 
 \begin{mydef}[Input-to-state stable]\cite{Jiang2001857}
 \label{def:iss}
@@ -237,23 +241,18 @@ The $ \gamma () $ term in equation \eqref{eq:def_iss} defines a bound determined
 This means that the influence $ \beta () $ term gradually decreases to zero and the position is bounded by a range determined by the bound on the input.
 
 \subsection{The need of input-to-state stability in PSO}
-
-\begin{comment}
-\begin{itemize}
-\item Understanding the input-to-state stability of a component in a system helps understanding the dynamics of a system. (convergence and boundary)
-
-It enables the analysis in one dimension.
-The parallel connection of input-to-state stable components reserves the input-to-state stable property.
-
-\item The exploitation and the exploration inherent depend on the input-to-state stability.
-\end{itemize}
-\end{comment}
+\label{sec:connect_iss_to_pso}
 
 Understanding the input-to-state stability of components in a system helps understanding the dynamics of a system.
 By decomposing the PSO into several components, we could evaluate the input-to-state stability of each component separately. 
 Because the parallel connection of input-to-state stable components reserves the input-to-state stable property.
 As in Figure \ref{fig:sys_flow}, if each component of single dimension is input-to-state stable,  the position update component which combines all the dimension is still input-to-state stable.
-This simplifies the analysis of the system by looking at only single dimension.
+We have property \ref{prop:iss:parallel}.
+\begin{myprop}
+\label{prop:iss:parallel}
+The position update component is input-to-state stable if the update in each dimension is input-to-state stable.
+\end{myprop}
+This simplifies the analysis of the system by looking at only single dimension separately.
 The serial connection and the feedback connection also lead to some interesting property from input-to-state stability, which will be discussed in Section \ref{sec:sys_dynamics}.
 
 The input-to-state stability analysis also provides the tool to know the convergence and the boundary of the PSO.
@@ -272,7 +271,7 @@ However, if the personal best and global best converge to an estimated optimal p
 
 \begin{figure}
 \centering
-\includegraphics[width=0.6\linewidth]{./explore_and_exploit}
+\includegraphics[width=0.6\linewidth]{./explore_and_exploit.pdf}
 \caption{Exploration and exploitation.}
 \label{fig:explore_and_exploit}
 \end{figure}
@@ -284,7 +283,7 @@ In this section, we briefly review the definition of input-to-state stability (I
 We then show that PSO satisfies this definition when the parameters of PSO are set in the requisite range. 
 We also derive the bounds implied by the ISS property.
 We use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
-WE also introduce ISS into moment analysis.
+We also introduce ISS into moment analysis.
 
 In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 
@@ -389,7 +388,7 @@ The x-axis is $ \phi = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
 The stable region in red is obtained from eigenvalue test on Theorem \ref{thm:iss} and the yellow boundary is obtained from Corollary \ref{coro:param_unit_disc}.
 \begin{figure}
 \centering
-\includegraphics[width=0.7\linewidth]{./param2}
+\includegraphics[width=0.7\linewidth]{./param2.png}
 \caption{Parameter space}
 \label{fig:paramSpace}
 \end{figure}
@@ -450,6 +449,25 @@ The input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:fi
 %When $ | \lambda_{\max} ( A_{m} ) | < 1 $, the system %\eqref{eq:pso1_alg_mean_linalg:final} is %input-to-state stable.
 %\end{mycoro}
 
+Similarly, we can have Corollary \ref{coro:param_unit_disc:mean} for parameter selection on mean convergence.
+It is noticeable that when the condition in Corollary \ref{coro:param_unit_disc} is satisified, the condition in Corollary \ref{coro:param_unit_disc:mean} is also guaranteed.
+It means that when the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, the mean dynamics \eqref{eq:pso1_alg_mean_linalg:final} is also input-to-state stable.
+
+\begin{mycoro}
+\label{coro:param_unit_disc:mean}
+Write $ A_{m} = \begin{bmatrix}
+1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & -\chi \\
+1 & 0
+\end{bmatrix} 
+$, in which
+$ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
+When $ \phi \in (0 , \frac{4(1+\chi)}{\chi} ) $, the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable.
+\begin{proof}
+The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof:mean}.
+\end{proof}
+\end{mycoro}
+
+
 Similar to Corollary \ref{coro:state_bound}, we can use the $ Q_{m} $ to determine the state bound.
 \begin{mycoro}
 \label{coro:bound:mean}
@@ -489,6 +507,7 @@ We can say:
 \item If the input update component generates converging personal best and global best, the bound of the particle position will converge;
 \item If the personal best and global best vary within a bound, the particle will converge within a bound;
 \item If the personal best and global best become constant, the particle will converge within a bound.
+\item If the personal best and global best are constant and the same, the particle will converge toward the global best.
 \end{enumerate}
 By Theorem \ref{thm:iss:mean} and \ref{coro:bound:mean}, we can arrive similar results on the mean.
 As well, this boundary analysis could be applied to higher moments.
@@ -544,26 +563,30 @@ x_{i}^{G}(k) = \arg \max_{ x \in \{ x_{i}(k), x_{i}^{G}(k-1) \} } f(x).
 \end{equation}
 As in Figure \ref{fig:sys_flow}, there exists a feedback cascade system structure for a particle.
 Assume that there is another model for swarm information sharing, which implements the $ x^{G}(k) $ update.
-Then to the particle, the $ x^{G}(k) $ can be viewed as an input that is independent with the current system state.
+Then to the particle, the $ x^{G}(k) $ can be viewed as an input that is independent with the current particle state.
 The feedback loop uses the current state to update the $ x^{P}(k) $.
-As in Equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input update component depends on $ f(x) $, which indicates the input-to-state stability relies on the shape of the distribution.
+As in Equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input update component depends on $ f(x) $, which indicates the input-to-state stability relies on the shape of the fitness distribution.
 Assume that we have the position update component input-to-state stable, there are three cases in analyzing the dynamics of a particle.
 \begin{itemize}
-\item When only the $ x^{G} (k) $ is constant, this happens usually when a good global best is found.
+\item \emph{When only the $ x^{G} (k) $ is constant} \\
+This happens usually when a good global best is found.
 The input can be modeled as the constant factor of the system. 
 The system dynamics is determined by the feedback state.
 In this process, $ f(x^{P}) < f(x^{G}) $, otherwise, $ x^{G} $ will be updated.
 In this case, the two components form a feedback loop structure.
 The Small gain theorem~\cite{Jiang2001857} can be used.
 If the multiplication of the gain factors of two components is less than $ 1 $, the system will still converge.
-\item When only the $ x^{P} (k) $ is constant, this usually means that this particle is ``stucking'' in exploring a local region but some other particles are continuously finding new better position. 
-It means that the feedback of the system does not really work, which can be ignored in modeling.
+\item \emph{When only the $ x^{P} (k) $ is constant} \\
+This usually means that this particle is ``stucking'' in exploring a local region but some other particles are continuously finding new better position. 
+In this case, the feedback of the system does not influence the input update component and thus the position update component as well.
+Thus it can be ignored to simplify the modeling.
 As a result, the system falls into a pure cascade system.
 If the input update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable.
 It indicates that the particle will be converging to the $ x^{G} (k) $.
 If we have  $ f(x^{G} > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there must be some region that $ f(x) > f(x^{P}) $.
 The $ x^{P} $ will start to change.
-\item When both the $ x^{G} $ and $ x^{P} $ are not constant, this usually means that both the particle and the swarm it belongs to keep on finding better positions.
+\item \emph{When both the $ x^{G} $ and $ x^{P} $ are not constant} \\
+This usually means that both the particle and the swarm it belongs to keep on finding better positions.
 In this case, the input-to-state stability of the input update component is harder to guarantee.
 However, if the change of $ x^{G}(k) $ and $ x^{P}(k) $ is bounded, 
 \end{itemize}
@@ -723,9 +746,10 @@ Using Lemma 3.5 in \cite{Jiang2001857}, the position update component of PSO (eq
 Let $ a = (1 + \chi) - \chi \phi $. 
 The eigenvalues of $ A(k) $ are
 $ \lambda = \frac{ a \pm \sqrt{ a^{2} - 4 \chi } }{2} $.
-		
+There can be two cases.		
 \begin{enumerate}
-\item If $ a^{2} \geq 4 \chi $, we have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
+\item If $ a^{2} \geq 4 \chi $, the eigenvalues are complex number.
+We have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
 			
 If $ a \geq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ 0 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 1 $.
 It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
@@ -733,7 +757,8 @@ It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
 If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives $ -1 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 0 $.
 It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
 			
-\item If $ a^{2} \geq 4 \chi $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+\item If $ a^{2} < 4 \chi $, the eigenvalues are real number.
+We have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
 			
 $ | \lambda_{\max} | < 1 $ derives $ \frac{ a^{2} }{4} + \frac{ a^{2} - 4\chi }{4} < 1 $.
 It means that $ - 2 \sqrt{ 2(1+\chi) } < a < 2 \sqrt{ 2(1+\chi) } $.
@@ -743,8 +768,23 @@ Combining these two cases, we have  $ - (1 + \chi) < a < 1 + \chi $.
 It equals to $ \phi \in (0 , \frac{2(1+\chi)}{\chi} ) $.
 		
 \end{proof}		
+
+\subsection{Proof of Corollary \ref{coro:param_unit_disc:mean}}
+\label{sec:coro:param_unit_disc:proof:mean}
+
+\begin{proof}
+The proof is similar with that in Subsection \ref{sec:coro:param_unit_disc:proof}.
+Here $ a = (1 + \chi) - \frac{ \phi }{2} \chi $.
+Similarly, we can have two cases and derive
+$ - (1 + \chi) < a < 1 + \chi $.
+It equals to $ \phi \in (0 , \frac{4(1+\chi)}{\chi} ) $.
+\end{proof}
 		
 \bibliographystyle{abbrv}
 \bibliography{reference}
 
 \end{document}
+
+
+
+	
