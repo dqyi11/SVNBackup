@@ -66,7 +66,11 @@ class TopologicalGraph(object):
         nx.draw_networkx_edges(self.G, pos=graph_pos, width=3, edge_color='orange')
         nx.draw_networkx_labels(self.G, pos=graph_pos)
         plt.show()
-             
+        
+        
+        
+        
+        
         
 
         
