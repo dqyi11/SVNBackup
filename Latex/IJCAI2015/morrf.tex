@@ -77,7 +77,7 @@ In response to these challenges, it is useful of find {\em the set of payoff dom
 This paper uses the economics term {\em Pareto optimal} to denote a payoff dominant solution.  Although not demonstrated in this paper, we propose that if an algorithm could produce the set of Pareto optimal solutions then a human could interactively explore this set to find one or more solutions that matches his or her expectations. 
 The objective of this paper is to create an algorithm that efficiently finds the Pareto set in a multi-objective path-planning problem.
 
-Most popular methods in multi-objective optimization don't naturally apply to path-planning problems~\cite{4358754, 6600851}.
+Most popular methods in multi-objective optimization don't naturally apply to path-planning problems~\cite{4358754,6600851}.
 %{\sc Give a reference to a good review or a reference to a handful of representative multi-objective methods}
 The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms doesn't scale well when there are an exponential number of solutions. 
 One approach to addressing this is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}.  
@@ -869,7 +869,7 @@ As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia referenc
 This paper presented the MORRF$^{*}$ algorithm for the multi-objective path-planning problems on continuous spaces.
 The algorithm blends principles from the RRT* algorithm with principles from multi-objective optimization to produce an algorithm that provides a reasonable approximation of the Pareto set, outperforms a common multi-objective optimization problem on a path-planning problem, and has guaranteed best-case performance.
 
-Future work should extend the algorithm to include not only the weighted sum and Tchebycheff approach but also the the boundary intersection approach, which results from~\ref{} suggest should have even better diversity.
+Future work should extend the algorithm to include not only the weighted sum and Tchebycheff approach but also the the boundary intersection approach, which results from~\cite{4358754} suggest should have even better diversity.
 MORRF* could also be made more efficient by, for example, using prior information to improve the set of sample points.
 For example, when an objective includes minimizing Euclidean distance in the presence of obstacles, visibility graph techniques could be used to produce a prior set of sample points guaranteed to include the shortest path.
 Additionally, if there is structure in the cost functions, which may be common in path-planning problems, then the sampling of new points could be based on information collected from the environment, allowing more search effort to be put in the more interesting regions.
