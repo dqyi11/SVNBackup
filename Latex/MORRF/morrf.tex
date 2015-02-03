@@ -673,23 +673,24 @@ Therefore, the set of the solutions from all the subproblem trees converge to a 
 compare NSGA-II
 \end{comment}
 
-Simulations have been taken to verify the performance of MORRF$^{*}$.
-In order to compare the performance, we also implemented NSGA-II for multi-objective path planning, which is introduced in \cite{Ahmed2013}.
-To make it comparable, the path planning using NSGA-II works in a continuous space and the solution format has been modified to a sequence of waypoints.
-Thus the solution from the NSGA-II can have same format with those from MORRF$^{*}$.
-The cost calculation is identical with that in  MORRF$^{*}$, whcih \textsc{Line}($ x_{1}, x_{2} $) is called to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.
+We now present a series of simulation studies that provide evidence that MORFF* produces a representative set of samples from the Pareto set.
+Results from MORFF* are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORFF* that uses a weighted sum rather than the Tchebycheff approach.
+NSGA-II was selected because evidence suggests that it provides more uniform samples from the Pareto set than other approaches~\cite{deb2002fast}.  
+We modified the NSGA-II algorithm for this problem to use paths as inputs, represented by a series of waypoints connected by line segments;he cost calculation is identical with that in  MORRF$^{*}$, calling \textsc{Line}($ x_{1}, x_{2} $) to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.  
+The weighted sum approach was chosen because evidence suggests that it works well only when all the objectives are convex~\cite{4358754} whereas the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.  
+The weighted sum approach uses the same sampling method for weights as that used to generate the $\lambda_i$ in MORFF*.
+Each method was run for $ 5000 $ iterations and restricted to $ 30 $ solutions.  
 
-We have implemented two types of  MORRF$^{*}$, using different decomposition approaches, the weighted sum approach and the Tchebycheff approach.
-The Tchebycheff approach depends on the knowledge of the reference vector, but the weighted sum approach does not.
-However, the weighted sum approach works well only when all the objectives are convex~\cite{4358754}.
-Also the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.
+The first simulation study compares there three algorithms in an obstacle-free world with two objectives: 
+minimize Euclidean distance, see Figure~\ref{fig:sim:norm:distance}, and minimize a cost function, see Figure~\ref{fig:sim:norm:fitness1}, which has dark colors as low costs and light colors as high costs.  
 
-All the methods run $ 5000 $ iterations and generate $ 30 $ solutions.
-We tested firstly on path planning of two objectives.
-One objective is  Euclidean distance minimization, the other objective is a given fitness minimization, as shown in Figure \ref{fig:sim:norm:distance} and \ref{fig:sim:norm:fitness1}.
-The convergence of NSGA-II based path planning is very slow.
-In Figure \ref{fig:sim:norm:pf:a}, a Pareto-front like fitness distribution is formed but the distance to the reference vector is much further away.
-Weighted sum approach returns a set of solutions close to the Pareto optimal set in Figure \ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}, but the Tchebycheff approach shows better diversity in Figure \ref{fig:sim:norm:pf:c} and \ref{fig:sim:norm:sols:c}.
+
+The first thing to note is that the convergence of NSGA-II-based path-planning is very slow.
+This is indicated in Figures~\ref{fig:sim:norm:pf:a}-\ref{fig:sim:norm:sols:a}, which show the approximation to the Pareto set and corresponding paths, respectively, after $5000$ iterations; observe how the quality of the paths and sampling of the Pareto set is uneven and unsatisfactory.
+By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF* using weighted sum.
+Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF* using weighted sum, and compare this to the slightly more uniform clustering of MORFF* using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
+
+{\sc Need figures c, e, and g to have bigger axis labels.  Actually, all the Pareto front axes need to have bigger labels.}
 
 \begin{figure}
 	\centering
@@ -702,51 +703,53 @@ Weighted sum approach returns a set of solutions close to the Pareto optimal set
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-1.png}
-		\caption{Minimize fitness 1}
+		\caption{Minimize cost 1}
 		\label{fig:sim:norm:fitness1}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim3-2obj/PF03-MOPATH.png}
-		\caption{Pareto front using NSGA-II}
+		\caption{Pareto set: NSGA-II}
 		\label{fig:sim:norm:pf:a}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim3-2obj/MOPath01-ALL.png}
-		\caption{Pareto optimal paths using NSGA-II}
+		\caption{Pareto paths: NSGA-II}
 		\label{fig:sim:norm:sols:a}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim1-2obj/PF01-MORRT.png}
-		\caption{Pareto front using weighted sum approach}
+		\caption{Pareto set: weighted sum}
 		\label{fig:sim:norm:pf:b}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim1-2obj/MORRTstar00-ALL.png}
-		\caption{Pareto optimal paths using weighted sum approach}
+		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:norm:sols:b}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/PF02-MORRT2.png}
-		\caption{Pareto front using Tchebycheff approach}
+		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:norm:pf:c}
 	\end{subfigure} 
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-ALL.png}
-		\caption{Pareto optimal paths using Tchebycheff approach}
+		\caption{Pareto paths: Tchebycheff}
 		\label{fig:sim:norm:sols:c}
 	\end{subfigure}
 	\caption{Path planning with two objectives.}
 	\label{fig:sim:norm}
 \end{figure}
 
-We also imported obstacles to the environment to see how the performance of the MORRTF$^{*}$ becomes.
+Recall that the weighted sum approach is designed to work well for convex sets and the Tchebycheff approach is designed to give more uniform sampling for non-convex sets. 
+We therefore compared results for the two approaches for an environment with obstacles, omitting results for NSGA-II because convergence is so slow.  
 The results are shown in Figure \ref{fig:sim:obs}.
+As before, observe that the Tchebycheff approach yields a more uniform sampling, albeit one that appears to be somewhat noisy approximation to the Pareto set.
 
 \begin{figure}
 	\centering
@@ -759,131 +762,129 @@ The results are shown in Figure \ref{fig:sim:obs}.
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-1.png}
-		\caption{Minimize fitness 1}
+		\caption{Minimize cost 1}
 		\label{fig:sim:obs:fitness1}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/PF04-MORRT.png}
-		\caption{Pareto front using weighted sum approach}
+		\caption{Paretoset: weighted sum}
 		\label{fig:sim:obs:pf:a}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-ALL.png}
-		\caption{Pareto optimal paths using weighted sum approach}
+		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:obs:sols:a}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim5-obstacle/PF05-MORRT2.png}
-		\caption{Pareto front using Tchebycheff approach}
+		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:obs:pf:b}
 	\end{subfigure} 
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim5-obstacle/MORRTstar01-1-ALL.png}
-		\caption{Pareto optimal paths using Tchebycheff approach}
+		\caption{Pareto paths: Tchebycheff}
 		\label{fig:sim:obs:sols:b}
 	\end{subfigure}
-	\caption{Path planning with two objectives and the obstacles.}
+	\caption{Path planning with two objectives and an obstacle.}
 	\label{fig:sim:obs}
 \end{figure}
 
-We also tested the case that the two objectives exist mutual contradiction.
-The two fitness distributions are given in Figure \ref{fig:sim:nonconvex:fitness1} and \ref{fig:sim:nonconvex:fitness2}.
-The results are illustrated in Figure \ref{fig:sim:nonconvex}.
-It is obvious that the result of Tchebycheff approach shows better diversity than that of the weighted sum approach in Figure \ref{fig:sim:nonconvex}.
+We then tested the MORFF* algorithms on a two-objective problem  in which there exists a conflict in the costs; 
+see Figures~\ref{fig:sim:nonconvex:fitness1}-\ref{fig:sim:nonconvex:fitness2}. 
+The results illustrated in Figure~\ref{fig:sim:nonconvex} illustrate that, once again, the Tchebycheff approach shows better diversity but is somewhat more noisy than the weighted sum approach in Figure \ref{fig:sim:nonconvex}.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-0.png}
-		\caption{Minimize fitness 1}
+		\caption{Minimize cost 1}
 		\label{fig:sim:nonconvex:fitness1}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-1.png}
-		\caption{Minimize fitness 2}
+		\caption{Minimize cost 2}
 		\label{fig:sim:nonconvex:fitness2}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim8-nconvex/PF03-MORRT.png}
-		\caption{Pareto front using weighted sum approach}
+		\caption{Pareto set: weighted sum}
 		\label{fig:sim:nonconvex:pf:a}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim8-nconvex/MORRTstar03-ALL.png}
-		\caption{Pareto optimal paths using weighted sum approach}
+		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:nonconvex:sols:a}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim9-nconvex/PF03-MORRT2.png}
-		\caption{Pareto front using Tchebycheff approach}
+		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:nonconvex:pf:b}
 	\end{subfigure} 
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim9-nconvex/MORRTstar03-ALL.png}
-		\caption{Pareto optimal paths using Tchebycheff approach}
+		\caption{Pareto paths: Tchebycheff}
 		\label{fig:sim:nonconvex:sols:b}
 	\end{subfigure}
-	\caption{Path planning with two conflict objectives.}
+	\caption{Path planning with two conflicting objectives.}
 	\label{fig:sim:nonconvex}
 \end{figure}
 
-In order to verify how the MORRF$^{*}$ performs with more objectives, we tested a case with three objectives.
-The Euclidean distance is the first objective, the other two objectives are shown in Figure \ref{fig:sim:many:fitness1} and \ref{fig:sim:many:fitness2}.
-The results are given in Figure \ref{fig:sim:many}.
-We can see that the Pareto front has formed towards the reference vector (Green point) in Figure \ref{fig:sim:many:pf:a} and \ref{fig:sim:many:pf:b}.
+Finally, we evaluated how MORRF$^{*}$ performs three objectives: 
+Euclidean distance and the two other objectives are shown in Figures~\ref{fig:sim:many:distance}-\ref{fig:sim:many:fitness2}.
+As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia reference vector (Green point) to better approximate the Pareto set than the weighted sum approach, albeit in a somewhat noisy way.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.31\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-0.png}
-		\caption{Minimize distance}
+		\caption{Distance}
 		\label{fig:sim:many:distance}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.31\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-1.png}
-		\caption{Minimize fitness 1}
+		\caption{Cost 1}
 		\label{fig:sim:many:fitness1}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.31\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-2.png}
-		\caption{Minimize fitness 2}
+		\caption{Cost 2}
 		\label{fig:sim:many:fitness2}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/PF06-MORRT.png}
-		\caption{Pareto front using weighted sum approach}
+		\caption{Pareto set: weighted sum}
 		\label{fig:sim:many:pf:a}
 	\end{subfigure}
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-ALL.png}
-		\caption{Pareto optimal paths using weighted sum approach}
+		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:many:sols:a}
 	\end{subfigure}  \\
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim7-3obj/PF07-MORRT2.png}
-		\caption{Pareto front using Tchebycheff approach}
+		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:many:pf:b}
 	\end{subfigure} 
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim7-3obj/MORRTstar02-ALL.png}
-		\caption{Pareto optimal paths using Tchebycheff approach}
+		\caption{Pareto paths: Tchebycheff}
 		\label{fig:sim:many:sols:b}
 	\end{subfigure}
 	\caption{Path planning with three objectives.}
@@ -893,29 +894,21 @@ We can see that the Pareto front has formed towards the reference vector (Green 
 \section{Conclusion} 
 \label{sec:conclusion}
 
-This paper presented a MORRF$^{*}$ for the multi-objective path planning problems on continuous spaces.
-The multi-objective path planning problem is decomposed into a few subproblems.
-Each subproblem is assigned to a subproblem tree of a forest.
-The subproblem trees parallel explore the working space by same new sampling positions.
-Analyses have shown that the solutions of all the subproblem trees is a subset of the Pareto optimal solutions.
-Experiments have been taken to verify the effectiveness and evaluate the performance of the MORRF$^{*}$.
+This paper presented the MORRF$^{*}$ algorithm for the multi-objective path-planning problems on continuous spaces.
+The algorithm blends principles from the RRT* algorithm with principles from multi-objective optimization to produce an algorithm that provides a reasonable approximation of the Pareto set, outperforms a common multi-objective optimization problem on a path-planning problem, and has guaranteed best-case performance.
 
-In the experiment, only weighted sum approach and the Tchebycheff approach have been tested. 
-It is obvious that the solutions from Tchebycheff approach shows better diversity than those from weighted sum approach.
-It is expected that the solutions from Boundary intersection approach would have even better diversity.
+Future work should extend the algorithm to include not only the weighted sum and Tchebycheff approach but also the the boundary intersection approach, which results from~\ref{} suggest should have even better diversity.
+MORRF* could also be made more efficient by, for example, using prior information to improve the set of sample points.
+For example, when an objective includes minimizing Euclidean distance in the presence of obstacles, visibility graph techniques could be used to produce a prior set of sample points guaranteed to include the shortest path.
+Additionally, if there is structure in the cost functions, which may be common in path-planning problems, then the sampling of new points could be based on information collected from the environment, allowing more search effort to be put in the more interesting regions.
 
-There is also a lot of space to improve the efficiency of MORRT$^{*} $.
-Importing more prior should help to reduce some redundant samplings, which accelerates the convergence.
-Currently the sampling is still uniformly random.
-We can do the sampling based on the information collected from the environment, more efforts can then be put in the more interesting regions.
-
-If we take a goal position as the root to extend using MORRT$^{*}$,
-we should be able to find a similar set of Pareto optimal paths.
-In this case, if the movement deviates from the original paths, it is very efficient to get a new set of Pareto optimal paths from the new position to the goal position.
-Because the convergence of MORRT$^{*}$ means the optimal paths from all the vertices to the root.
-
+Another area of future work is to combine MORRF* with Bellman's principle of optimality.
+This could be done by setting a goal position as the root node in the algorithm and then generating a set of Pareto optimal paths.
+The algorithm should then converge to the set of Pareto optimal from any vertex in the tree to the goal.
+Additionally, if movement deviates from the original path, it should be very efficient to generate a new set of Pareto optimal paths from the new position to the goal position.
 
 \section*{Acknowledgments}
+Omitted for anonymous review.
 
 %% Use plainnat to work nicely with natbib. 
 
