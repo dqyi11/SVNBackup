@@ -25,7 +25,7 @@
 
 \title{ MORRF$^{*}$ : Sampling-Based Multi-Objective Motion Planning }
 
-\author{Author Names Omitted for Anonymous Review. Paper-ID [160]}
+\author{Author Names Omitted for Anonymous Review.}
 
 \begin{document}
 
@@ -39,7 +39,7 @@ We present the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}
 The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
 Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
 Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives.  
-We present a theoretical analysis that demonstrates that the algorithm asymptotically produces the set of Pareto optimal solutions, and use simulations to demonstrate the effectiveness and efficiency of MORFF* in approximating the Pareto set.
+We present a theoretical analysis that demonstrates that the algorithm asymptotically produces the set of Pareto optimal solutions, and use simulations to demonstrate the effectiveness and efficiency of MORFF$^{*}$ in approximating the Pareto set.
 \end{abstract}
 
 \begin{comment}
@@ -54,11 +54,6 @@ Note that the references page should only include references.
 
 \section{Introduction}
 \label{sec:intro}
-
-\begin{comment}
-(1) Why the multi-objective path planning is needed 
-(2) Why the multi-objective path planning is hard (compare with a common multi-objective optimization problem)
-\end{comment}
 
 Many tasks assigned to robots are complex, can be performed in several different ways, and must satisfy several different performance objectives.  
 For example, a robot in a search task may be expected to maximize the area that covers while minimizing energy consumption and avoiding risk (see, for example~\cite{yi2014supporting,mei2005deployment}). 
@@ -111,7 +106,7 @@ Rather, the selection of a specific method depends on the type of information gi
 We note that (single objective) path-planning in a continuous state space is often efficiently performed using RRT* or other discretization-based approaches, and this suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
 
 Given the restriction to approaches that use discretization-based approaches, prior work has modeled the space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
-The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT*; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
+The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT$^{*}$; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
 Obstacles can cause problems for determining which cells in the discretized space are connected to which others, not so much in 2-D for a single robot but more so for planning the trajectory for a robotic manipulator.
 Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using what the authors call the NSGA-II algorithm to find a set of Pareto optimal solutions in \cite{Ahmed2013}.  
 Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
@@ -123,32 +118,34 @@ Indeed, the approach in this paper uses a decomposition-based method.
 MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  
 Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  
 Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
-Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{f_1(\cdot), f_2(\cdot), ... f_{K}(\cdot)\}$ denote the K-element set of objective functions, and let $x$ denote a potential solution.  Finally, let $ \vec{z}^{*} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference vector, described in more detail in the next section. 
+Let $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{f_1(\cdot), f_2(\cdot), \ldots f_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [f_1(x), f_2(x), \ldots, f_K(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \vec{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference vector, described in more detail in the next section. 
 Three types of decomposition methods are introduced in~\cite{4358754}.
-\begin{itemize}
-\item \emph{Weighted sum approach} \\
-Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
-\item \emph{Tchebycheff approach} \\
-Minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - z^{*}_{k}  | \} $;
-\item \emph{Boundary intersection approach} \\
-Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{*} ) = d $, subject to $ \vec{z}^{*} - F(x) = d \lambda $.
-\end{itemize}
+\begin{eqnarray}
+ \arg\max_x \sum_{k=1}^{K} \lambda_{k} f_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
+ \arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} \mid f_{k}(x) - \vec{z}^{\rm utop}_{k}  | \} & {\rm Tchebycheff} \label{eq:Tchebycheff}\\
+ \arg\min_x \{ d \mid \vec{z}^{\rm utop} - F(x) = d \vec{\lambda} \} & {\rm boundary \ intersection} \label{eq:boundary}
+\end{eqnarray}
+%\begin{itemize}
+%\item \emph{Weighted sum}:
+%Maximize $ g^{ws} (x \mid \vec{\lambda}) = \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
+%$\arg\max_x \sum_{k=1}^{K} \lambda_{k} f_{k} (x) $;
+%\item \emph{Tchebycheff}:
+%Minimize $ g^{te} (x \mid \lambda , \vec{z}^{\rm utop}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - z^{*}_{k}  | \} $;
+%$\arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{\rm utop}_{k}  | \} $;
+%\item \emph{Boundary intersection}:
+%Minimize $ g^{bi} (x \mid \lambda , \vec{z}^{\rm utop} ) = d $, subject to $ \vec{z}^{\rm utop} - F(x) = d \lambda $.
+%$\arg\min\{d \mid \vec{z}^{\rm utop} - F(x) = d \lambda $\}.
+%\end{itemize}
 The solutions generated by each method are a subset of the Pareto optimal set.
 
 Before continuing, note that evolutionary algorithms based on the decomposition method have been proposed ~\cite{6600851}, but given the need to blend the decomposition methods with sampling-based path-planning, we do not explore these algorithms further in this paper.
 
 Sampling-based path planning works effectively in continuous space. 
-The RRT (Rapidly exploring RandomTtree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
+The RRT (Rapidly exploring Random Tree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
 It has been shown that under certain conditions, RRT will fail to find an optimal solution~\cite{Karaman.Frazzoli:RSS10}. 
 In response, the RRT$^{*}$ algorithm has been proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed.
 The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
-%Figure \ref{fig:RRTstar2} illustrates a tree generated using the RRT* algorithm.
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.9\linewidth]{fig/RRTstar2}
-%\caption{Tree structure after exploring fitness space.}
-%\label{fig:RRTstar2}
-%\end{figure}
+
 In the next section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
 
@@ -178,20 +175,17 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 \noindent Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
 Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a ``Utopia" reference vector $ \vec{z}^{*} $ in the fitness space. 
-Before describing how we find $ \vec{z}^{*} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
+In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a ``Utopia" reference vector $ \vec{z}^{\rm utop} $ in the fitness space. 
+Before describing how we find $ \vec{z}^{\rm utop} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
 \begin{figure}
 \centering
-\includegraphics[width=0.9\linewidth]{fig/Tchebycheff.pdf}
+\includegraphics[width=0.6\linewidth]{fig/Tchebycheff2.png}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
-Recall from the previous section that  $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find solutions $ x\in X $ that minimize $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.  
-As illustrated in the Figure, the ``Utopia'' reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\vec{z}^*$ is given by $\vec{z}^{*}_{k} = \arg \min_{x \in X} f_{k}(x)$.  
+Recall from the previous section that  $ \vec{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | f_{k}(x) - \vec{z}^{\rm utop}_{k}  | \} $.  
+As illustrated in the Figure, the ``Utopia'' reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\vec{z}^*$ is given by $\vec{z}^{\rm utop}_{k} = \arg \min_{x \in X} f_{k}(x)$.  
 It is called the ``Utopia'' reference vector because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
-
-%{\sc I don't understand the indexing on $g^{te}$, the difference between i and k on the right hand side of $ g^{te} (x \mid \lambda , \vec{z}^{*}) = \max_{i \leq k \leq K}  \{ \lambda_{i} | f_{k}(x) - \vec{z}^{*}_{k}  | \} $.}
-%{\sc REPLY: There is some typo. I think now it is clear after corrected. Please see the current statement.}
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
 We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
@@ -199,13 +193,13 @@ Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ f_{k} (x), k \in K $. 
 The cost of each vertex is calculated using the $ k $-th objective function.
-\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \vec{z}^{*} ) , m \in M $.
+\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \vec{z}^{\rm utop} ) , m \in M $.
 The cost of each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
 Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
 
-We are now in a position to describe the main flow of the MORRF* algorithm; see Algorithm~\ref{alg:rapidly_exploring_process}.  
+We are now in a position to describe the main flow of the MORRF$^{*}$ algorithm; see Algorithm~\ref{alg:rapidly_exploring_process}.  
 The first four steps initialize two trees, the reference tree with vertices and edges denoted by $V_r$ and $E_r$, respectively, and the subproblem tree with vertices and edges denoted by $V_s$ and $E_s$, respectively.  
 Each reference and subproblem tree are a collection of edges and vertices, $G_r=(V_r,E_r)$ and $G_s=(V_s,E_s)$, respectively, and the collection of reference trees and subproblem trees are denoted by ${\mathbf G}_r = \{G_r: r\in \{1, \ldots, K\}\}$ and ${\mathbf G}_s = \{G_s: s \in \{q, \ldots, M\}$.  
 
@@ -234,9 +228,9 @@ Given the location of a new vertex for each tree, edges are added, potentially d
 We require that each new vertex be connected to some existing vertex, so a feasibility check is added using the {\sc ObstacleFree} method.
 This method checks whether the line segment connecting $x_{new}$ and $x_{nearest}$ enters obstacle space.
 If it does, no new vertices and no new edges are added, and another iteration of the algorithm begins. 
-This check guarantees that when the algorithms are called that determine which edge to add to the reference tree or subproblem tree, there is always at least one possible edge that can be added; this is consistent with the RRT* algorithm.
+This check guarantees that when the algorithms are called that determine which edge to add to the reference tree or subproblem tree, there is always at least one possible edge that can be added; this is consistent with the RRT$^{*}$ algorithm.
 
-The exploration at each iteration is given in Algorithm \ref{alg:rapidly_exploring_process}.  Like RRT*, when the algorithm stops, each reference tree and subproblem tree returns a path, and the set of all these paths forms the solution set.
+The exploration at each iteration is given in Algorithm \ref{alg:rapidly_exploring_process}.  Like RRT$^{*}$, when the algorithm stops, each reference tree and subproblem tree returns a path, and the set of all these paths forms the solution set.
 
 \begin{algorithm}
 	\begin{algorithmic}[1]
@@ -276,8 +270,6 @@ We now define several functions, using appropriately modified definitions from~\
 \begin{itemize}
 \item \textsc{Sample}():
 Returns independent uniformly distributed samples from $ X_{\mbox{free}} $. 
-%{\sc *** According to what distribution? ***}
-%{\sc ANSWER: I changed to ``uniformly'', hope this answer the question.}
 
 \item \textsc{Nearest}():
 Returns a the position of the vertex whose position is closest to point $ x $.
@@ -316,9 +308,7 @@ If so, no edges are added to the graph; this prevents self-loops, and is necessa
 
 Otherwise, the new vertex is added to the graph and all vertices in the graph within a particular radius are identified.  
 The radius is determined by the current number of vertices in the graph. 
-The radius and volume are precisely defined in the {\sc Near} method, given below. 
-{\sc Walter, Give some intuition about why this equation is used, and give a reference if needed.  I think it is an estimate of the expected density of the nodes in the graph, given as a spatial distribution in $d$-dimensions.}  
-{\sc Answer: This is the essence of RRT*. It guarantees the convergence of the cost.}
+The radius and volume are precisely defined in the {\sc Near} method, given below. The equation in this method is a standard equation from the RRT$^{*}$ algorithm.  It is based on the expected density of the vertices in the graph, given as a spatial distribution in $d$-dimensions, and is an important element in the convergence guarantees of RRT$^{*}$.
 
 
 Because of the way that $x_{new}$ is defined, we are guaranteed that $|X_{near}| \geq 1$, that is, there is at least one vertex ``near'' the new position.
@@ -374,12 +364,12 @@ The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:
 
 	\item \textsc{Line}($ x, x' $) $ : [0, s] \leftarrow X_{\it free} $ denotes the path defined by line segment from $x$ to $x'$.
 	%$ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
-	{\sc Walter, I tried to simplify this equation and description.  Let me know if you buy it.  If not, the original description is commented in the .tex.}
+	%{\sc Walter, I tried to simplify this equation and description.  Let me know if you buy it.  If not, the original description is commented in the .tex.}
 	
 	\item \textsc{Cost}($ v  $) is defined by the cost of the unique path (because $G$ is a tree) from $ x_{ \mbox{init} } $ to a vertex $ v \in V $. \textsc{Cost}($ x_{ \mbox{init} } $) = $ 0 $.
 \end{itemize}
 
-{\sc I've refactored Algorithm~3 to match Algorithm~2. The first thing to do will be to remind people of how we compute the Utopia point in payoff space.  Then we need to describe how the weight vector $lambda_G$ is obtained.}
+%{\sc I've refactored Algorithm~3 to match Algorithm~2. The first thing to do will be to remind people of how we compute the Utopia point in payoff space.  Then we need to describe how the weight vector $lambda_G$ is obtained.}
 
 Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how the subproblem trees ``rewire'' to connect to the new vertex.  
 The Utopia reference vector, $\vec{c}^*$ is defined as the $k$-dimensional vector constructed from each reference tree.  
@@ -430,22 +420,22 @@ This is performed using the {\sc Fitness} method.
 \label{alg:morrtstar:extend:sub}
 \end{algorithm} 
 
-{\sc Walter, Please give the equation for the Fitness method.  Also, please describe how the different $\lambda_m$ are obtained.  I assume that the $\lambda_m$ are selected so that you uniformly sample the range of possible weightings.}
-{\sc \underline  
-(1) The $ \lambda_{m} $ can either be evenly sampled 
-or uniformly randomly sampled from the normalized $ K $ space.
-In 2-objective problem, I just directly evenly collect values .
-In 3-objective problem, I do uniformly randomly sampling.
-This is the same with how $ \lambda_{m} $ is obtained in MOEA-D.
-(2) The fitness is calculated by one of the three methods in section "Related work".
-For example, if I use Tchebycheff approach,
-I will firstly calculate $ | f_k(x) - z^{*}_{k} | $ for each objective, multiple it with $ k $th value of the vector $ \lambda_m $.
-The maximum of the $ K $ values will be the fitness.
-This converts the cost vector ($ K $-dimension) into a single dimension fitness.
-Thus, I use FITNESS to differentiate with COST.
-}
+The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:boundary}).  Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{f_k():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
+%{\sc Walter, Please give the equation for the Fitness method.  Also, please describe how the different $\lambda_m$ are obtained.  I assume that the $\lambda_m$ are selected so that you uniformly sample the range of possible weightings.}
+%{\sc \underline  
+%(1) The $ \lambda_{m} $ can either be evenly sampled 
+%or uniformly randomly sampled from the normalized $ K $ space.
+%In 2-objective problem, I just directly evenly collect values .
+%In 3-objective problem, I do uniformly randomly sampling.
+%This is the same with how $ \lambda_{m} $ is obtained in MOEA-D.
+%(2) The fitness is calculated by one of the three methods in section "Related work".
+%For example, if I use Tchebycheff approach,
+%I will firstly calculate $ | f_k(x) - z^{*}_{k} | $ for each objective, multiple it with $ k $th value of the vector $ \lambda_m $.
+%The maximum of the $ K $ values will be the fitness.
+%This converts the cost vector ($ K $-dimension) into a single dimension fitness.
+%Thus, I use FITNESS to differentiate with COST.
+%}%
 
-{\sc This is where I quit for the day.}
 
 \section{Analysis}
 \label{sec:theoretic_analysis}
@@ -457,6 +447,10 @@ For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X_{\it free} $,
 $ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
 \end{asmp}
 
+{\sc Walter, a conditional cost function $ c_{k} ( \sigma_{1}  \mid \sigma_{2} )$ isn't defined in this paper.  What does it mean?  also, replace $c_k$ with the notation we've been using, $f_k$.  Do you mean that if you construct a discontinuous path made up of $\sigma_1$ and $\sigma_2$, the cost for that path $f_k(\sigma_1,\sigma_2)$ is the sum of the costs of the two paths?  If so, assumption 1 becomes:}
+
+\noindent{\bf Assumption 1.} For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $f_k(\sigma_1\circ\sigma_2) = f_k(\sigma_1) + f_k(\sigma_2)$.
+
 \begin{asmp}{(Continuity of the objective functions)}
 \label{asmp:continuity}
 For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
@@ -464,6 +458,15 @@ $ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X_{\it free}, \sigma_{2} : [0, s
 $ \exists k $ such that 
 $ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $
 \end{asmp}
+
+{\sc The $s$, $s_1$, and $s_2$ don't seem to mean anything.  Are you trying to impose an ordering such that $s_1<s_2$ means the path parameterized by $s_1$ is shorter than the path parameterized by $s_2$?  If not, then we can use a standardized parameterization $[0,1]$, which is often done when talking about paths in vector calculus.  There appears to be some meaning in $s_1$ and $s_2$ because the assumption uses a shrinking parameter $\tau$.}
+
+{\sc Do the cost functions, which are defined over piecewise linear paths delineated by waypoints, satisfy this condition?  Also, why does the cost function index, $k$, multiply the supremum?  That doesn't make any sense.  I think you mean that there is a constant, call it $\kappa\in \Re^+\cup{0}$, which depends on which cost function you are using, such that the $\kappa(k)$ is the constant.  This means that the difference between the costs of any two paths, measured using $c_k$, can be bounded by the maximum Euclidean distance all equivalent points (the scaling function $\tau$) on each of the paths.}
+
+{\sc If my assumptions are correct, then assumption 2 becomes:} 
+
+\noindent{\bf Assumption 2}. For all $k\in K$, the cost function $f_k$ is Lipshitz continuous, that is, for all paths $\sigma_1:[0,1]\rightarrow X_{\it free}$ and $\sigma_2:[0,1]\rightarrow X_{\it free}$, there exists a (cost function dependent) constant $\kappa(k)\in \mathbb{R}_{+}\cup \{0 \}$ such that $ | f_{k} ( \sigma_{1} ) - f_{k} ( \sigma_{2} ) | \leq \kappa(k) \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau) - \sigma_{2} (\tau) \rVert $.
+
 
 \begin{asmp}{(Obstacle spacing)}
 \label{asmp:spacing}
@@ -474,16 +477,18 @@ There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in 
 \end{itemize}
 \end{asmp}
 
-We also assume that two vertices in a tree won't be infinitely close.
-From the implementation perspective, it means that the processor has finite precision in calculation.
-We have Assumption \ref{asmp:finite_accuracy}.
+We also assume that two vertices in a tree won't be infinitesimally closer than the finite precision allowed by the computer:
 \begin{asmp}{(Finite accuracy)}
 \label{asmp:finite_accuracy}
-When $ \lVert x_{1} - x_{2} \rVert \leq \epsilon $, $ x_{1} = x_{2} $.
+When $ \lVert x_{1} - x_{2} \rVert \leq \epsilon $, $ x_{1} = x_{2} $ where $\epsilon$ is the precision limitation of the computer.
 \end{asmp}
 When the distance between the new position and any vertex in the tree is less than $ \epsilon $ (system accuracy), the new position will be considered as equivalent to the position of that vertex.
 In Algorithm 2 and Algorithm 3, a new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
-It only triggers a ``rewire'' process for a set of near vertices.
+%It only triggers a ``rewire'' process for a set of near vertices.
+
+{\sc Walter, is this lemma saying (a) that as the number of iterations goes to infinity, you run out of space to add new vertices to the tree since there is finite precision in what can be represented and (b) this means that in the absence of loops (which we can prove by induction won't exist) there are no infinite depth paths?  If this is correct, then I'll rework the proof.}
+
+{\sc Quitting here now, but check out my question just before Lemma 3.}
 
 We firstly need to show that the tree structure in MORRF$^{*}$ has a finite maximum depth,
 so that we can guarantee that all the paths from the tree structure have finite length.
@@ -562,6 +567,9 @@ Lemma \ref{lem:moo-d:rrt} tells us that the multi-objective path planning could 
 In MORRF$^{*}$, the responsibility of a subproblem tree is to find the optimal solution of its subproblem.
 The next question needs to be answered is that whether the subproblem tree could find the optimal solution of its subproblem.
 
+
+{\sc Walter, there is a contradiction in the finite precision assumptions and the claim of almost sure convergence.  In fact, since the set of possible paths is finite and each path is finite, and since there are an uncountable number of possible paths, you can probably prove that your algorithm fails to converge to the optimal path almost surely.  I think, however, that you can prove something very useful, namely that the difference between the cost of the optimal path and the path returned by the algorithm is bounded by $\epsilon \bar{N}_{MD}$.  The same kind of error bounds apply to Lemma 4 and 5.}
+
 We notice that the \textsc{Extend} process in RRT$^{*}$ is not goal-oriented.
 Let $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
 We can generalize the conclusion of Theorem 22 in \cite{Karaman.Frazzoli:RSS10} to all the vertices in the RRT$^{*}$.
@@ -581,11 +589,11 @@ Thus, we could generalize the asymptotic optimality from the goal to all the ver
 \end{proof}
 \end{lem}
 
-The solve of a subproblem depends on a correct estimation of the reference vector $ \vec{z}^{*} $.
+The solve of a subproblem depends on a correct estimation of the reference vector $ \vec{z}^{\rm utop} $.
 Thus, we need to have the solutions of all the reference trees converging to the optimal firstly.
 The construction of a reference tree does not depend on any other tree.
-Thus, the construction process is equivalent to the construction of a RRT*.
-The asymptotic optimality of RRT* in Lemma \ref{lem:tree_vex:conv} is inherited here.
+Thus, the construction process is equivalent to the construction of a RRT$^{*}$.
+The asymptotic optimality of RRT$^{*}$ in Lemma \ref{lem:tree_vex:conv} is inherited here.
 Thus the cost of the solution converges to the optimal of single objective.
 \begin{lem}
 \label{lem:ref_tree:conv}
@@ -595,17 +603,17 @@ $ P( \{ \lim_{ i \rightarrow \infty }  c_{k} (x, i ) = z^{*}_{k} (x) \} ) = 1  $
 \end{lem}
 
 Then we need to show that after all the reference trees converge to the structure that provides optimal cost, 
-the subproblem tree can also converge to the structure that provides optimal fitness $ g^{*}_{m} ( x \mid \lambda_{m} , z^{*} ) $.
+the subproblem tree can also converge to the structure that provides optimal fitness $ g^{*}_{m} ( x \mid \lambda_{m} , \vec{z}^{\rm utop} ) $.
 \begin{lem}
 \label{lem:sub_tree:conv}
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
-with $ \vec{z}^{*} (x) $ for any $ x $ given,
+with $ \vec{z}^{\rm utop} (x) $ for any $ x $ given,
 the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem, i.e.,
 $
 P( \{ \lim_{ i \rightarrow \infty } c_{ \lambda_{m} }( i ) \} ) = z^{*}_{ \lambda_{m} }
 $
 \begin{proof}
-When the reference vector $ \vec{z}^{*}(x) $ converges, the cost of the minimum cost path from the root to the vertex of position $ x $ in $ m $-th subproblem tree will gradually converge to the optimal by Lemma \ref{lem:tree_vex:conv}.
+When the reference vector $ \vec{z}^{\rm utop}(x) $ converges, the cost of the minimum cost path from the root to the vertex of position $ x $ in $ m $-th subproblem tree will gradually converge to the optimal by Lemma \ref{lem:tree_vex:conv}.
 It means that the minimum fitness path from the root to any vertex in a subproblem tree will converge to an optimal minimum fitness path, in which the vertices in goal region are included.
 It equals to that the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem.
 %The construction of a subproblem tree depends on the convergence of all the reference trees.
@@ -628,7 +636,7 @@ $
 As the solutions of MORRF$^{*}$ can be modeled in points in a high-dimension space by Lemma \ref{lem:moo-d:rrt}, the Tchebycheff method could be imported to decompose the multi-objective optimization problem into a set of subproblems.
 By the fitness definition of the subproblem trees, if the subproblem tree could find a solution that minimize the fitness, the solution is in the Pareto optimal set of the multi-objective optimization problem.
 
-Lemma \ref{lem:ref_tree:conv} guarantees that the reference vector $ \vec{z}^{*}(x) $ at any location $ x $ converges to the correct estimation after running enough iteration.
+Lemma \ref{lem:ref_tree:conv} guarantees that the reference vector $ \vec{z}^{\rm utop}(x) $ at any location $ x $ converges to the correct estimation after running enough iteration.
 Thus, by Lemma \ref{lem:sub_tree:conv}, we have that the solution cost of the $ m $-th subproblem tree converges to $ z^{*}_{ \lambda_{m} } $.
 It means that the solution converges to an optimal solution to $ m $-th subproblem as the iteration goes.
 Therefore, the set of the solutions from all the subproblem trees converge to a subset of the Pareto optimal set, as the iteration goes~\cite{4358754}~\cite{miettinen1999nonlinear}.
@@ -645,12 +653,12 @@ Therefore, the set of the solutions from all the subproblem trees converge to a 
 compare NSGA-II
 \end{comment}
 
-We now present a series of simulation studies that provide evidence that MORFF* produces a representative set of samples from the Pareto set.
-Results from MORFF* are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORFF* that uses a weighted sum rather than the Tchebycheff approach.
+We now present a series of simulation studies that provide evidence that MORFF$^{*}$ produces a representative set of samples from the Pareto set.
+Results from MORFF$^{*}$ are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORFF$^{*}$ that uses a weighted sum rather than the Tchebycheff approach.
 NSGA-II was selected because evidence suggests that it provides more uniform samples from the Pareto set than other approaches~\cite{deb2002fast}.  
 We modified the NSGA-II algorithm for this problem to use paths as inputs, represented by a series of waypoints connected by line segments;he cost calculation is identical with that in  MORRF$^{*}$, calling \textsc{Line}($ x_{1}, x_{2} $) to calculate the cost between two way points $ x_{1} $ and $ x_{2} $.  
 The weighted sum approach was chosen because evidence suggests that it works well only when all the objectives are convex~\cite{4358754} whereas the Tchebycheff approach should bring better diversity in the solutions~\cite{4358754}.  
-The weighted sum approach uses the same sampling method for weights as that used to generate the $\lambda_i$ in MORFF*.
+The weighted sum approach uses the same sampling method for weights as that used to generate the $\lambda_i$ in MORFF$^{*}$.
 Each method was run for $ 5000 $ iterations and restricted to $ 30 $ solutions.  
 
 The first simulation study compares there three algorithms in an obstacle-free world with two objectives: 
@@ -659,12 +667,10 @@ minimize Euclidean distance, see Figure~\ref{fig:sim:norm:distance}, and minimiz
 
 The first thing to note is that the convergence of NSGA-II-based path-planning is very slow.
 This is indicated in Figures~\ref{fig:sim:norm:pf:a}-\ref{fig:sim:norm:sols:a}, which show the approximation to the Pareto set and corresponding paths, respectively, after $5000$ iterations; observe how the quality of the paths and sampling of the Pareto set is uneven and unsatisfactory.
-By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF* using weighted sum.
-Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF* using weighted sum, and compare this to the slightly more uniform clustering of MORFF* using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
+By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF$^{*}$ using weighted sum.
+Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF$^{*}$ using weighted sum, and compare this to the slightly more uniform clustering of MORFF$^{*}$ using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
 
-%{\sc Need figures c, e, and g to have bigger axis labels.  Actually, all the Pareto front axes need to have bigger labels.}
-
-\begin{figure}[tb]
+\begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
@@ -723,7 +729,7 @@ We therefore compared results for the two approaches for an environment with obs
 The results are shown in Figure \ref{fig:sim:obs}.
 As before, observe that the Tchebycheff approach yields a more uniform sampling, albeit one that appears to be somewhat noisy approximation to the Pareto set.
 
-\begin{figure}[tb]
+\begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
@@ -765,11 +771,11 @@ As before, observe that the Tchebycheff approach yields a more uniform sampling,
 	\label{fig:sim:obs}
 \end{figure}
 
-We then tested the MORFF* algorithms on a two-objective problem  in which there exists a conflict in the costs; 
+We then tested the MORFF$^{*}$ algorithms on a two-objective problem  in which there exists a conflict in the costs; 
 see Figures~\ref{fig:sim:nonconvex:fitness1}-\ref{fig:sim:nonconvex:fitness2}. 
 The results illustrated in Figure~\ref{fig:sim:nonconvex} illustrate that, once again, the Tchebycheff approach shows better diversity but is somewhat more noisy than the weighted sum approach in Figure \ref{fig:sim:nonconvex}.
 
-\begin{figure}[tb]
+\begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
@@ -815,7 +821,7 @@ Finally, we evaluated how MORRF$^{*}$ performs three objectives:
 Euclidean distance and the two other objectives are shown in Figures~\ref{fig:sim:many:distance}-\ref{fig:sim:many:fitness2}.
 As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia reference vector (Green point) to better approximate the Pareto set than the weighted sum approach, albeit in a somewhat noisy way.
 
-\begin{figure}[tb]
+\begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.31\linewidth}
 		\centering
@@ -867,14 +873,14 @@ As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia referenc
 \label{sec:conclusion}
 
 This paper presented the MORRF$^{*}$ algorithm for the multi-objective path-planning problems on continuous spaces.
-The algorithm blends principles from the RRT* algorithm with principles from multi-objective optimization to produce an algorithm that provides a reasonable approximation of the Pareto set, outperforms a common multi-objective optimization problem on a path-planning problem, and has guaranteed best-case performance.
+The algorithm blends principles from the RRT$^{*}$ algorithm with principles from multi-objective optimization to produce an algorithm that provides a reasonable approximation of the Pareto set, outperforms a common multi-objective optimization problem on a path-planning problem, and has guaranteed best-case performance.
 
 Future work should extend the algorithm to include not only the weighted sum and Tchebycheff approach but also the the boundary intersection approach, which results from~\cite{4358754} suggest should have even better diversity.
-MORRF* could also be made more efficient by, for example, using prior information to improve the set of sample points.
+MORRF$^{*}$ could also be made more efficient by, for example, using prior information to improve the set of sample points.
 For example, when an objective includes minimizing Euclidean distance in the presence of obstacles, visibility graph techniques could be used to produce a prior set of sample points guaranteed to include the shortest path.
 Additionally, if there is structure in the cost functions, which may be common in path-planning problems, then the sampling of new points could be based on information collected from the environment, allowing more search effort to be put in the more interesting regions.
 
-Another area of future work is to combine MORRF* with Bellman's principle of optimality.
+Another area of future work is to combine MORRF$^{*}$ with Bellman's principle of optimality.
 This could be done by setting a goal position as the root node in the algorithm and then generating a set of Pareto optimal paths.
 The algorithm should then converge to the set of Pareto optimal from any vertex in the tree to the goal.
 Additionally, if movement deviates from the original path, it should be very efficient to generate a new set of Pareto optimal paths from the new position to the goal position.
