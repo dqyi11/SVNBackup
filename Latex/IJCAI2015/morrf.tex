@@ -512,30 +512,37 @@ The {\sc Fitness} method computes costs using one of the cost functions in Equat
 Before we start the analysis, several assumptions need to be inherited from  RRT$^{*}$~\cite{Karaman.Frazzoli:RSS10}.
 \begin{asmp}{(Additivity of the objective functions)}
 \label{asmp:additivity}	
-For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X_{\it free} $,
-$ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
+%For all $ k \in K $, $ \sigma_{1} , \sigma_{2} \in X_{\it free} $,
+%$ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
+For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $f_k(\sigma_1\circ\sigma_2) = f_k(\sigma_1) + f_k(\sigma_2)$.
 \end{asmp}
 
-{\sc Walter, a conditional cost function $ c_{k} ( \sigma_{1}  \mid \sigma_{2} )$ isn't defined in this paper.  What does it mean?  also, replace $c_k$ with the notation we've been using, $f_k$.  Do you mean that if you construct a discontinuous path made up of $\sigma_1$ and $\sigma_2$, the cost for that path $f_k(\sigma_1,\sigma_2)$ is the sum of the costs of the two paths?  If so, assumption 1 becomes:}
+%{\sc Walter, a conditional cost function $ c_{k} ( \sigma_{1}  \mid \sigma_{2} )$ isn't defined in this paper.  What does it mean?  also, replace $c_k$ with the notation we've been using, $f_k$.  Do you mean that if you construct a discontinuous path made up of $\sigma_1$ and $\sigma_2$, the cost for that path $f_k(\sigma_1,\sigma_2)$ is the sum of the costs of the two paths?  If so, assumption 1 becomes:}
 
-\noindent{\bf Assumption 1.} For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $f_k(\sigma_1\circ\sigma_2) = f_k(\sigma_1) + f_k(\sigma_2)$.
+%\noindent{\bf Assumption 1.} For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $f_k(\sigma_1\circ\sigma_2) = f_k(\sigma_1) + f_k(\sigma_2)$.
+
+{\sc ANSWER: I borrow this assumption directly from the origin paper. I think that one is exactly as what you rewrote.}
 
 \begin{asmp}{(Continuity of the objective functions)}
 \label{asmp:continuity}
-For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
-$ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X_{\it free}, \sigma_{2} : [0, s_{2} ] \rightarrow X_{\it free} $,
-$ \exists k $ such that 
-$ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $
+%For all $ k \in K $, the cost function $ c_{k} $ is Lipschitz continuous,
+%$ \forall \sigma_{1} : [ 0, s_{1} ] \rightarrow X_{\it free}, \sigma_{2} : [0, s_{2} ] \rightarrow X_{\it free} $,
+%$ \exists k $ such that 
+%$ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq k \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $
+For all $k\in K$, the cost function $f_k$ is Lipshitz continuous, that is, for all paths $\sigma_1 : [0, s_{1}] \rightarrow X_{\it free}$ and $ \sigma_2 : [0, s_{2}] \rightarrow X_{\it free}$, there exists a (cost function dependent) constant $\kappa(k)\in \mathbb{R}_{+}\cup \{0 \}$ such that $ | f_{k} ( \sigma_{1} ) - f_{k} ( \sigma_{2} ) | \leq \kappa(k) \sup_{\tau \in [0, 1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $.
 \end{asmp}
 
 {\sc The $s$, $s_1$, and $s_2$ don't seem to mean anything.  Are you trying to impose an ordering such that $s_1<s_2$ means the path parameterized by $s_1$ is shorter than the path parameterized by $s_2$?  If not, then we can use a standardized parameterization $[0,1]$, which is often done when talking about paths in vector calculus.  There appears to be some meaning in $s_1$ and $s_2$ because the assumption uses a shrinking parameter $\tau$.}
 
-{\sc Do the cost functions, which are defined over piecewise linear paths delineated by waypoints, satisfy this condition?  Also, why does the cost function index, $k$, multiply the supremum?  That doesn't make any sense.  I think you mean that there is a constant, call it $\kappa\in \Re^+\cup{0}$, which depends on which cost function you are using, such that the $\kappa(k)$ is the constant.  This means that the difference between the costs of any two paths, measured using $c_k$, can be bounded by the maximum Euclidean distance all equivalent points (the scaling function $\tau$) on each of the paths.}
+%{\sc Do the cost functions, which are defined over piecewise linear paths delineated by waypoints, satisfy this condition?  Also, why does the cost function index, $k$, multiply the supremum?  That doesn't make any sense.  I think you mean that there is a constant, call it $\kappa\in \Re^+\cup{0}$, which depends on which cost function you are using, such that the $\kappa(k)$ is the constant.  This means that the difference between the costs of any two paths, measured using $c_k$, can be bounded by the maximum Euclidean distance all equivalent points (the scaling function $\tau$) on each of the paths.}
 
-{\sc If my assumptions are correct, then assumption 2 becomes:} 
+%{\sc If my assumptions are correct, then assumption 2 becomes:} 
 
-\noindent{\bf Assumption 2}. For all $k\in K$, the cost function $f_k$ is Lipshitz continuous, that is, for all paths $\sigma_1:[0,1]\rightarrow X_{\it free}$ and $\sigma_2:[0,1]\rightarrow X_{\it free}$, there exists a (cost function dependent) constant $\kappa(k)\in \mathbb{R}_{+}\cup \{0 \}$ such that $ | f_{k} ( \sigma_{1} ) - f_{k} ( \sigma_{2} ) | \leq \kappa(k) \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau) - \sigma_{2} (\tau) \rVert $.
+%\noindent{\bf Assumption 2}. For all $k\in K$, the cost function $f_k$ is Lipshitz continuous, that is, for all paths $\sigma_1:[0,1]\rightarrow X_{\it free}$ and $\sigma_2:[0,1]\rightarrow X_{\it free}$, there exists a (cost function dependent) constant $\kappa(k)\in \mathbb{R}_{+}\cup \{0 \}$ such that $ | f_{k} ( \sigma_{1} ) - f_{k} ( \sigma_{2} ) | \leq \kappa(k) \sup_{\tau \in [0,1]} \lVert \sigma_{1} (\tau) - \sigma_{2} (\tau) \rVert $.
 
+{\sc ANSWER: This assumption is also directly borrowed from origin paper. It is for Lipschitz continuity of the cost function.
+I was wrong in mixing $ k $ of different meaning. I think $s_1$ and $s_2$ means that they could be different lengths. For example, $ \sigma_{1} $ could be a sub path of $ \sigma_{2} $. 
+I currently changed to using $s_1$ and $s_2$. Do you agree?}
 
 \begin{asmp}{(Obstacle spacing)}
 \label{asmp:spacing}
@@ -555,7 +562,18 @@ When the distance between the new position and any vertex in the tree is less th
 In Algorithm 2 and Algorithm 3, a new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
 %It only triggers a ``rewire'' process for a set of near vertices.
 
-{\sc Walter, is this lemma saying (a) that as the number of iterations goes to infinity, you run out of space to add new vertices to the tree since there is finite precision in what can be represented and (b) this means that in the absence of loops (which we can prove by induction won't exist) there are no infinite depth paths?  If this is correct, then I'll rework the proof.}
+{\sc Walter, is this lemma saying 
+(a) that as the number of iterations goes to infinity, you run out of space to add new vertices to the tree since there is finite precision in what can be represented and 
+(b) this means that in the absence of loops (which we can prove by induction won't exist) there are no infinite depth paths?  If this is correct, then I'll rework the proof.}
+
+{\sc ANSWER:
+I think it can be a little different.
+I assume that the algorithm guarantees that the will be no loop.
+However, as $ i $ goes to infinity, there might be an infinite chain of vertices if we continuously add new vertex to same branch of a tree.
+
+I am trying to prove that because we are checking the minimum cost while adding new vertex.
+Only the breadth of the tree might go infinity but not the depth.
+}
 
 {\sc Quitting here now, but check out my question just before Lemma 3.}
 
@@ -638,6 +656,11 @@ The next question needs to be answered is that whether the subproblem tree could
 
 
 {\sc Walter, there is a contradiction in the finite precision assumptions and the claim of almost sure convergence.  In fact, since the set of possible paths is finite and each path is finite, and since there are an uncountable number of possible paths, you can probably prove that your algorithm fails to converge to the optimal path almost surely.  I think, however, that you can prove something very useful, namely that the difference between the cost of the optimal path and the path returned by the algorithm is bounded by $\epsilon \bar{N}_{MD}$.  The same kind of error bounds apply to Lemma 4 and 5.}
+
+{\sc Yes, you figured out the problem. A finite precision contradicts with the almost sure convergence. 
+I imported the finite precision to assist the finite depth proof. 
+I need to figure another way to prove it.
+}
 
 We notice that the \textsc{Extend} process in RRT$^{*}$ is not goal-oriented.
 Let $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
