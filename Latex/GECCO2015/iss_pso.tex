@@ -247,7 +247,7 @@ This means that the influence $ \beta () $ term gradually decreases to zero and 
 
 Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. We will take this approach with PSO. 
 Parallel combinations of input-to-state stable components yields a combined structure that is also input-to-state stable property~\cite{khalil1996nonlinear}.
-In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
+In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing a single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
 Thus we have property \ref{prop:iss:parallel}.
 \begin{myprop}
 \label{prop:iss:parallel}
@@ -619,7 +619,7 @@ Thus the global best is being updated.
 In this case, the feedback of the system does not impact the input-update component and thus nor does it impact the position-update component.
 In this case the system model can be simplified by ignoring the feedback.
 As a result, the system falls into only a serial cascade system because there is no feedback for this particle.
-If the input-update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable (it can be shown that a serial cascade of iss components is also ISS~\cite{khalil1996nonlinear}).
+If the input-update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable (it can be shown that a serial cascade of ISS components is also ISS~\cite{khalil1996nonlinear}).
 Since this serial cascade system is ISS, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converging toward the $ x^{G} (k) $.
 If we have  $ f(x^{G} > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there exits some region that $ f(x) > f(x^{P}) $.
 The $ x^{P} $ will start to change.
@@ -794,7 +794,7 @@ and
 \end{equation} 
 Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
 so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
-Using Jiang's Lemma 3.5 in \cite{Jiang2001857}, the position-update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
+Using Jiang's Lemma 3.5\cite{Jiang2001857}, the position-update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
 \end{proof}
 
 \subsection{Proof of Corollary \ref{coro:param_unit_disc}}
