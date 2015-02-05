@@ -109,7 +109,7 @@ In section \ref{sec:sys_model}, we model the PSO dynamics as a feedback cascade 
 The definition of input-to-state stability (ISS) and its meaning in the context of PSO are also given.
 Section \ref{sec:iss} shows that for particular parameter values, the position-update component of a particle is ISS. 
 Using the ISS property we then give the bound on particle motion.
-We also use the ISS property in the context of the analysis of the moments of particle motion.
+We also use the ISS property in the context of the analysis of the moments (the mean and higher moments) of particle motion.
 In section \ref{sec:sys_dynamics}, we use the ISS property to help analyze the dynamics of the particle.
 Using the ISS property of the input-update component, we can analyze the dynamics of the particle before and at stagnation.
 
@@ -218,7 +218,7 @@ Before reviewing the definition of input-to-state stability, we first introduce 
 		\item $ \forall s \geq 0 $, $ \beta (s, \cdot) $ is decreasing and $ \beta(s,t) \rightarrow 0 $ as $ t \rightarrow \infty $.
 	\end{enumerate}
 	%\item Positive-definite function: a function $ \gamma (s) > 0, \forall s > 0 $ and $ \gamma (0) = 0 $.
-\end{itemize}ete
+\end{itemize}
 
 These functions are used to define input-to-state stability in Definition \ref{def:iss}.
 
@@ -245,7 +245,7 @@ This means that the influence $ \beta () $ term gradually decreases to zero and 
 \subsection{Importance of input-to-state stability}
 \label{sec:connect_iss_to_pso}
 
-Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. We will take this apporach with PSO. 
+Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. We will take this approach with PSO. 
 Parallel combinations of input-to-state stable components yields a combined structure that is also input-to-state stable property~\cite{khalil1996nonlinear}.
 In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
 Thus we have property \ref{prop:iss:parallel}.
