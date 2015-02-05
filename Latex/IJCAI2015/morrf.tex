@@ -322,6 +322,7 @@ This only occurs if there are more than two vertices in the neighborhood of $x_{
 The lines step through every vertex $x_{near}$ in the neighborhood (other than the minimum cost vertex -- see line~11) and compares (a)~the cost of the current path through the tree to $x_{near}$ to (b)~the cost of the same path to the parent $x_{parent}$ of $x_{near}$ plus the cost from $x_{parent}$ to the new node $x_{new}$. 
 If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{near}$, the tree is rewired so that the parent forgets $x_{near}$ and connects instead to $x_{new}$ -- see lines~16-17.
 
+%\begin{comment}
 \begin{algorithm}[hbtp]
 \begin{algorithmic}[1]
 \If{ $ x_{new} = x_{nearest} $} 
@@ -356,6 +357,7 @@ If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{ne
 \caption{ \textsc{Extend}$_{\it Ref} $ ($ G, x_{\it new}, x_{\it nearest},k$) }
 \label{alg:morrtstar:extend:ref}
 \end{algorithm} 
+%\end{comment}
 
 The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:extend:ref} are given below.
 \begin{itemize}
@@ -379,6 +381,72 @@ Using the Utopia reference vector, each subproblem tree connects its new vertex 
 Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
 This is performed using the {\sc Fitness} method.
 
+\begin{comment}
+\begin{algorithm}[hbtp]
+	\begin{algorithmic}[1]
+		\If{ $ x_{new} = x_{nearest} $} 
+		\Return $G=(V,E)$ 
+		\EndIf
+		\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+		\State $ x_{min} \leftarrow x_{nearest} $
+		\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+		%\If{ $ x_{new} \neq x_{min} $ }
+		\If{ $ G.{\it type } = {\sc REF} $ } 
+			\State $ k = i $
+		\ElsIf{ $ G.{\it type } = {\sc SUB} $ }
+			\State $ m = i $
+		\EndIf
+		\For{\textbf{each} $ x_{near} \in X_{near} $ }
+			\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+				\If{ $ G.{\it type } = {\sc REF} $ }
+				    \State $ k = i $
+					\State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{near} $} $ + c_{k}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+					\If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{new} $} }
+						\State $ x_{min} \leftarrow x_{near} $
+					\EndIf				
+				\ElsIf{ $ G.{\it type } = {\sc SUB} $ }
+					\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \vec{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+					\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{m} $ }
+					\State $ \vec{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
+					\State $ \eta_{new} = $ \Call{Fitness}{ $ \vec{c}_{new} , \vec{c}^{*} \mid \lambda_{m} $ }
+					\If{ $ \eta' < \eta_{new} $ }
+						\State $ x_{min} \leftarrow x_{near} $
+					\EndIf
+				\EndIf
+			\EndIf
+		\EndFor
+		\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+		%\EndIf
+		\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+		\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+			\If{ $ G.{\it type } = {\sc REF} $ }
+			    \State $ c_{k}' \leftarrow $ \Call{Cost$_{k}$}{$ x_{new} $} $ + c_{k}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
+			    \If{ $ c_{k}' < $ \Call{Cost$_{k}$}{$ x_{near} $} }
+				    \State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+				    \State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+				    \State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+			    \EndIf
+			\ElsIf{ $ G.{\it type } = {\sc SUB} $ }
+				\State $ \vec{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \vec{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
+				\State $ \eta' =  $ \Call{Fitness}{ $ \vec{c}' , \vec{c}^{*} \mid \lambda_{m} $ }
+				\State $ \vec{c}_{near} = $ \Call{Cost}{$ x_{near} $} 
+				\State $ \eta_{near} = $ \Call{Fitness}{ $ \vec{c}_{near} , \vec{c}^{*} \mid \lambda_{m} $ }
+				\If{ $ \eta' < \eta_{near} $ }
+					\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+					\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+					\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+				\EndIf
+			\EndIf
+		\EndIf
+		\EndFor
+		\Return $ G' = (V', E') $ 
+	\end{algorithmic}
+	\caption{ \textsc{Extend} ($ G, x_{\it new}, x_{\it nearest}, i $) }
+	\label{alg:morrtstar:extend}
+\end{algorithm} 
+\end{comment}
+
+%\begin{comment}
 \begin{algorithm}[hbtp]
 \begin{algorithmic}[1]
 \If{ $ x_{new} = x_{nearest} $} 
@@ -419,6 +487,7 @@ This is performed using the {\sc Fitness} method.
 \caption{ \textsc{Extend}$_{\it Sub} $ ($ G, x_{\it new}, x_{\it nearest},m$) }
 \label{alg:morrtstar:extend:sub}
 \end{algorithm} 
+%\end{comment}
 
 The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:boundary}).  Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{f_k():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
 %{\sc Walter, Please give the equation for the Fitness method.  Also, please describe how the different $\lambda_m$ are obtained.  I assume that the $\lambda_m$ are selected so that you uniformly sample the range of possible weightings.}
