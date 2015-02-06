@@ -29,7 +29,7 @@ class BiRRTVisualizer(object):
         self.refLines = []
         
         self.states = ("START", "GOAL", "BOTH")
-        self.currentState = 0
+        self.currentState = 2
         
     def loadObj(self, objFile):    
         self.objImg = pygame.image.load(objFile)
@@ -78,7 +78,7 @@ class BiRRTVisualizer(object):
                     #print str(n.pos) + "-" + str(c.pos)
                     n_pos = (int(n.pos[0]), int(n.pos[1]))
                     c_pos = (int(c.pos[0]), int(c.pos[1]))
-                    pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
+                    pygame.draw.line(self.screen, (200,128,0), n_pos, c_pos)
 
             if self.rrt.gt_new_node != None and self.rrt.gt_connected_node != None:
                 new_node = (int(self.rrt.gt_new_node[0]), int(self.rrt.gt_new_node[1]))

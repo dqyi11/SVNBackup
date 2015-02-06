@@ -24,12 +24,14 @@ class BiRRTstarPlanner(object):
         self.rrts.init(start, goal, self.cost_func, homotopyMgr)
         for i in range(iterationNum):
             print "Iter@" + str(i)
-            self.rrts.extend()
+            self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
+            self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
             self.rrts_viz.update()
             
-        path = self.rrts.findPath()
+        #path = self.rrts.findPath()
+        path = None
         
-        self.rrts_viz.activePath = path
+        #self.rrts_viz.activePath = path
         
         self.rrts_viz.update()
         

@@ -60,7 +60,7 @@ class BiRRTstar(object):
         
         self.gt_root = RRTNode(goal)
         self.gt_nodes.append(self.gt_root)
-        self.gt_kdtree_root = createKDTree([start], self.dimension, ref_list=[self.st_root])
+        self.gt_kdtree_root = createKDTree([start], self.dimension, ref_list=[self.gt_root])
         
         self.costFunc = costFunc
         self.st_root.cost = self.costFunc(self.st_root.pos, None)
@@ -102,11 +102,11 @@ class BiRRTstar(object):
         return rndPos
 
         
-    def extend(self):
+    def extend(self, kdtree_root, nodes):
         new_node = None
         while new_node == None:
             rndPos = self.sampling()
-            nearest_node = self.findNearestNeighbor(self.st_kdtree_root, rndPos)
+            nearest_node = self.findNearestNeighbor(kdtree_root, rndPos)
             
             new_pos = self.steer(rndPos, nearest_node.pos)
             if self.isInObstacle(new_pos):
@@ -116,15 +116,15 @@ class BiRRTstar(object):
                 homoRet, new_homo_path = self.isHomotopyFree(nearest_node, new_pos)
                 #if homoRet == True:
                 new_node = RRTNode(new_pos)
-                self.st_kdtree_root.add(new_pos, new_node)
+                kdtree_root.add(new_pos, new_node)
                 
                 min_new_node_cost = nearest_node.cost + self.costFunc(nearest_node.pos, new_node.pos)
-                self.st_nodes.append(new_node)
+                nodes.append(new_node)
                 
                 min_node = nearest_node
                 min_homo_path = new_homo_path
                 
-                near_node_list = self.findNearVertices(self.st_kdtree_root, new_node.pos)
+                near_node_list = self.findNearVertices(kdtree_root, new_node.pos)
                 
                 for near_node in near_node_list:
                     if True == self.isObstacleFree(near_node.pos, new_node.pos):
