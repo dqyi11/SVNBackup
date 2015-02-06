@@ -17,6 +17,7 @@ class RRTNode(object):
         self.children = []
         self.cost = 0.0
         
+        self.strBit = None
         self.homoPath = []
         
     def __eq__(self, other):
@@ -115,7 +116,7 @@ class BiRRTstar(object):
                 continue
             
             if True == self.isObstacleFree(nearest_node.pos, new_pos):
-                homoRet, new_homo_path = self.isHomotopyFree(nearest_node, new_pos)
+                homoRet, new_homo_path, new_bit = self.isHomotopyFree(nearest_node, new_pos)
                 #if homoRet == True:
                 intcross = self.homotopyMgr.isCrossingDividingRefs(nearest_node.pos, new_pos)
                 if intcross==False:
@@ -127,12 +128,13 @@ class BiRRTstar(object):
                 
                     min_node = nearest_node
                     min_homo_path = new_homo_path
+                    min_bit = new_bit
                 
                     near_node_list = self.findNearVertices(kdtree_root, new_node.pos)
                 
                     for near_node in near_node_list:
                         if True == self.isObstacleFree(near_node.pos, new_node.pos):
-                            homoRet, new_homo_path = self.isHomotopyFree(near_node, new_pos)
+                            homoRet, new_homo_path, new_bit = self.isHomotopyFree(near_node, new_pos)
                             #if homoRet == True:
                             intcross = self.homotopyMgr.isCrossingDividingRefs(near_node.pos, new_pos)
                             if intcross == False:
@@ -141,17 +143,19 @@ class BiRRTstar(object):
                                     min_node = near_node
                                     min_new_node_cost = c
                                     min_homo_path = new_homo_path
+                                    min_bit = new_bit
                             
                     self.addEdge(min_node, new_node)
                     new_node.cost = min_new_node_cost
                     new_node.homoPath = min_homo_path
+                    new_node.strBit = min_bit
                     
                     for near_node in near_node_list:
                         if near_node == min_node:
                             continue
                         
                         if True == self.isObstacleFree(new_node.pos, near_node.pos):                 
-                            homoRet, new_homo_path = self.isHomotopyFree(new_node, near_node.pos)
+                            homoRet, new_homo_path, new_bit = self.isHomotopyFree(new_node, near_node.pos)
                             #if homoRet == True:
                             intcross = self.homotopyMgr.isCrossingDividingRefs(new_node.pos, near_node.pos)
                             if intcross == False:
@@ -162,11 +166,15 @@ class BiRRTstar(object):
                                     self.addEdge(new_node, near_node)
                                     self.updateCostToChildren(near_node, delta_cost)
                                     near_node.homoPath = new_homo_path
+                                    near_node.strBit = new_bit
                                     
             
     def findNearVertices(self, kdtree_root, pos):
+        return self.findNearVerticesByRadius(kdtree_root, pos, self.radius)   
+    
+    def findNearVerticesByRadius(self, kdtree_root, pos, radius):
         node_list = []
-        results = kdtree_root.search_nn_dist(pos, self.radius)
+        results = kdtree_root.search_nn_dist(pos, radius)
 
         for res in results:
             if res.data[0]==pos[0] and res.data[1]==pos[1]:
@@ -187,9 +195,11 @@ class BiRRTstar(object):
     
     def isHomotopyFree(self, node, new_pos):
         
-        newPath = self.homotopyMgr.extendPath(node.homoPath, node.pos, new_pos)
+        newPath, newBit = self.homotopyMgr.extendPath(node.homoPath, node.pos, new_pos)
         ret =  self.homotopyMgr.inSameHomotopy(newPath)
-        return ret, newPath
+        return ret, newPath, newBit
+    
+    
     
     def isObstacleFree(self, pos_a, pos_b):  
         obsFree = True
@@ -263,29 +273,69 @@ class BiRRTstar(object):
         node_p.children.append(node_c)
         node_c.parent = node_p
         return True
-                          
-    def findPath(self):
-        path = []
-        
-        start_pos = np.zeros(2)
-        goal_pos = np.zeros(2)
-        start_pos[0], start_pos[1] = self.start[0], self.start[1]
-        goal_pos[0], goal_pos[1] = self.goal[0], self.goal[1]
-        
-        nearest_to_goal = self.findNearestNeighbor(self.st_kdtree_root, goal_pos)
+    
+    def getSubpath(self, node, root):
+        subpath = []
         
         node_list = []
-        curr_node = nearest_to_goal
+        curr_node = node
         node_list.append(curr_node)
-        while curr_node != self.st_root:
+        while curr_node != root:
             curr_node = curr_node.parent
             node_list.append(curr_node)
             
         for n in reversed(node_list):
-            path.append([int(n.pos[0]), int(n.pos[1])])
-        path.append([goal_pos[0], goal_pos[1]])
+            subpath.append([int(n.pos[0]), int(n.pos[1])])
         
-        return path  
+        return subpath
+    
+    def concatenatePaths(self, path1, path2):
+        path = []
+        stringInfo = []
+        
+        if len(path1) > 0:
+            for idx1 in range(len(path1)-1):
+                path.append([path1[idx1][0], path2[idx1+1][0]])
+                if path1[idx1][1] != None:
+                    stringInfo.append(path1[idx1][1]) 
+            stringInfo.append(path1[len(path1)-1])          
+            
+        
+        if len(path2) > 0:
+            strBit = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1][0], path2[0][0])
+            path.append([path1[len(path1)-1][0], path2[0][0]])
+            stringInfo.append(strBit)
+            
+            for idx2 in range(len(path2)-1):
+                path.append([path2[idx2][0], path2[idx2+1][0]])
+                if path2[idx2][1] != None:
+                    stringInfo.append(path2[idx2][1]) 
+            stringInfo.append(path2[len(path2)-1])
+        
+        return (path, stringInfo)
+                          
+    def findPaths(self):
+        
+        matchRadius = 15
+        node_pairs = []
+        paths = []
+        # Find matching vertices from two trees
+        for st_node in self.st_nodes:
+            nearestNode = self.findNearestNeighbor(self.gt_kdtree_root, st_node.pos)
+            dist = np.sqrt((nearestNode.pos[1]-st_node.pos[1])**2+(nearestNode.pos[0]-st_node.pos[0])**2)
+            if dist < matchRadius:
+                node_pairs.append((st_node, nearestNode))
+        
+        # create paths from subpaths
+        for nodePair in node_pairs:
+            
+            subpathFromStart = self.getSubpath(nodePair[0], self.st_root)
+            subpathFromGoal = self.getSubpath(nodePair[1], self.gt_root)
+            
+            path = self.concatenatePaths(subpathFromStart, subpathFromGoal)
+            paths.append(path)
+        
+        return paths 
 
 
                         

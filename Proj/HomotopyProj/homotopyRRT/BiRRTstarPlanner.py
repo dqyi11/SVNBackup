@@ -19,7 +19,7 @@ class BiRRTstarPlanner(object):
         self.rrts_viz = BiRRTVisualizer(self.rrts)
         self.cost_func = cost_func
         
-    def findPath(self, start, goal, iterationNum, homotopyMgr):
+    def findPaths(self, start, goal, iterationNum, homotopyMgr):
         
         self.rrts.init(start, goal, self.cost_func, homotopyMgr)
         dividingRefs = homotopyMgr.getDividingRefs(start, goal)
@@ -32,11 +32,10 @@ class BiRRTstarPlanner(object):
             self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
             self.rrts_viz.update()
             
-        #path = self.rrts.findPath()
-        path = None
+        paths = self.rrts.findPaths()
         
         #self.rrts_viz.activePath = path
         
-        self.rrts_viz.update()
+        #self.rrts_viz.update()
         
-        return path
+        return paths
