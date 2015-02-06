@@ -557,6 +557,7 @@ There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in 
 \end{itemize}
 \end{asmp}
 
+\begin{comment}
 We also assume that two vertices in a tree won't be infinitesimally closer than the finite precision allowed by the computer:
 \begin{asmp}{(Finite accuracy)}
 \label{asmp:finite_accuracy}
@@ -565,6 +566,7 @@ When $ \lVert x_{1} - x_{2} \rVert \leq \epsilon $, $ x_{1} = x_{2} $ where $\ep
 When the distance between the new position and any vertex in the tree is less than $ \epsilon $ (system accuracy), the new position will be considered as equivalent to the position of that vertex.
 In Algorithm 2 and Algorithm 3, a new position won't be added to a tree if its distance to some vertex in the tree is less than $ \epsilon $.
 %It only triggers a ``rewire'' process for a set of near vertices.
+\end{comment}
 
 {\sc Walter, is this lemma saying 
 (a) that as the number of iterations goes to infinity, you run out of space to add new vertices to the tree since there is finite precision in what can be represented and 
@@ -686,28 +688,25 @@ g^{te} ( \sigma )
 \geq & g^{te} ( \sigma^{*} ).
 \end{aligned}
 \end{equation}
+It means,
+\begin{equation}
+\forall \sigma, g^{te} ( \sigma ) \geq g^{te} ( \sigma^{*} ).
+\end{equation}
 Thus, $  \sigma^{*} $ is a solution to Equation \eqref{eq:Tchebycheff} with weights defined as Equation \eqref{eq:weights:assign}.
 \end{proof}
 \end{lem}
 
+By Lemma \ref{lem:sol_pareto_opt} and Lemma \ref{lem:exist_weight}, we can have Theorem \ref{thm:moo-d:rrt}.
 
-
-Because all the paths in MORRF$^{*}$ has a finite length.
-It means that all the solutions from MORRF$^{*}$ can be converted into a point in a finite high-dimension space.
-Therefore, we can import the Techbycheff method in solving such a multi-objective optimization problem~\cite{4358754}~\cite{miettinen1999nonlinear}.
-We have Lemma \ref{lem:moo-d:rrt}.
-
-\begin{lem}
-\label{lem:moo-d:rrt}
+\begin{thm}
+\label{thm:moo-d:rrt}
 The set of Pareto optimal paths $ \{ \sigma^{*} \} $ are the solutions to Equation \eqref{eq:Tchebycheff}.
 \begin{proof}
 By Lemma \ref{lem:sol_pareto_opt}, we know that each solution to Equation \eqref{eq:Tchebycheff} is a solution in Pareto optimal set.
 By Lemma \ref{lem:exist_weight}, we know that each solution in Pareto optimal set, there exits a weight that makes the solution an answer to Equation \eqref{eq:Tchebycheff}.
 Thus, we know that the Pareto optimal set $ \{ \sigma^{*} \} $ is the range of the function value defined by Equation \eqref{eq:Tchebycheff}.
 \end{proof}
-\end{lem}
-
-
+\end{thm}
 
 \begin{figure}
 \centering
@@ -716,7 +715,8 @@ Thus, we know that the Pareto optimal set $ \{ \sigma^{*} \} $ is the range of t
 \label{fig:dependency}
 \end{figure}
 
-Lemma \ref{lem:moo-d:rrt} tells us that the multi-objective path planning could be decomposed into a set of subproblems.
+By Theorem \ref{thm:moo-d:rrt}, we can import the Techbycheff method in solving such a multi-objective optimization problem~\cite{4358754}~\cite{miettinen1999nonlinear}.
+Therefore, the multi-objective path planning could be decomposed into a set of subproblems.
 In MORRF$^{*}$, the responsibility of a subproblem tree is to find the optimal solution of its subproblem.
 The next question needs to be answered is that whether the subproblem tree could find the optimal solution of its subproblem.
 
