@@ -583,7 +583,7 @@ Only the breadth of the tree might go infinity but not the depth.
 
 \begin{lem}
 \label{lem:sol_pareto_opt}
-The solution of Equation \eqref{eq:Tchebycheff} is Pareto optimal.
+Any solution of Equation \eqref{eq:Tchebycheff} is Pareto optimal.
 \begin{proof}
 Let $ \sigma^{*} $ be a solution,
 thus 
@@ -650,47 +650,47 @@ We can have
 \end{equation}
 for any given $ \sigma $.
 
-For $ \sigma^{*} $, we have $ g^{te} ( \sigma^{*} ) = \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} $.Z
+For $ \sigma^{*} $, we have 
+\begin{equation}
+ g^{te} ( \sigma^{*} ) = \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1}.
+\end{equation}
 
-
-
-Let another solution of Equation \eqref{eq:Tchebycheff} be $ \sigma^{o} $, which satisfies that
+Given any solution $ \sigma $, we have
 \begin{equation}
 \label{eq:exist_weight:leq}
-\max_{k \in K} \lambda_{k} | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} | \leq \max_{k \in K} \lambda_{k} | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} |.
-\end{equation}
-By applying Equation \eqref{eq:weights:assign} to Equation \eqref{eq:exist_weight:leq}, we have
-\begin{equation}
 \begin{aligned}
-& \max_{k \in K} \frac{ | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
-\leq & \max_{k \in K} \frac{ | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} | }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\ 
-= & \max_{k \in K} \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
-= & \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1}.
+ g^{te} ( \sigma ) = &
+\max_{k \in K} \lambda_{k} | f_{k}( \sigma ) - z^{\rm utop}_{k} | \\
+= & \max_{k \in K} \frac{ | f_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+= & \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - z^{\rm utop}_{k}  }{ f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+= & \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+& \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  +  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+= & \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+& \max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right|
 \end{aligned}
 \end{equation}
+
+Because $ \sigma^{*} $ is Pareto optimal,
+\begin{equation}
+\exists k' \in K, f_{k'} ( \sigma ) > f_{k'} ( \sigma^{*} ),
+\end{equation}
+we have 
+\begin{equation}
+\max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \geq 1.
+\end{equation}
+Thus,
+\begin{equation}
+\begin{aligned}
+g^{te} ( \sigma ) 
+\geq &  \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+\geq & g^{te} ( \sigma^{*} ).
+\end{aligned}
+\end{equation}
+Thus, $  \sigma^{*} $ is a solution to Equation \eqref{eq:Tchebycheff} with weights defined as Equation \eqref{eq:weights:assign}.
 \end{proof}
 \end{lem}
 
-We firstly need to show that the tree structure in MORRF$^{*}$ has a finite maximum depth,
-so that we can guarantee that all the paths from the tree structure have finite length.
-We have Lemma \ref{lem:tree:finite_depth}.
 
-\begin{lem}
-\label{lem:tree:finite_depth}
-Either the reference tree or the subproblem tree has a finite maximum depth as $ i \rightarrow \infty $.
-\begin{proof}
-By Assumption \ref{asmp:finite_accuracy}, we know that the distance between two vertices cannot be infinitely small, which are always bigger than or equal to $ \epsilon $.
-By the Lipschitz continuity in Assumption \ref{asmp:continuity}, the cost between any two vertices won't be infinitely small as well.
-In this case, in a finite working space, the cost of a path will be infinite only when there is a loop in the path.
-The cost of the loop is added repeated in calculating the cost of the path.
-Assume that the maximum depth of the tree is infinite.
-It means that there exists a path that from a position to the start, the cost of which is infinite.
-It also equals to that there exist a loop in such a path.
-However, this contradicts the property of the tree structure. 
-Because in a tree structure, there exists no loop in any path from the root (the start) to any vertex.
-Thus, we can state that the reference tree or the subproblem tree constructed from a sampling process has a finite maximum depth.
-\end{proof}
-\end{lem}
 
 Because all the paths in MORRF$^{*}$ has a finite length.
 It means that all the solutions from MORRF$^{*}$ can be converted into a point in a finite high-dimension space.
@@ -699,43 +699,15 @@ We have Lemma \ref{lem:moo-d:rrt}.
 
 \begin{lem}
 \label{lem:moo-d:rrt}
-The solutions of MORRF$^{*}$ can be mapped into points in a finite high-dimension space.
+The set of Pareto optimal paths $ \{ \sigma^{*} \} $ are the solutions to Equation \eqref{eq:Tchebycheff}.
 \begin{proof}
-Let $ \mbox{maxDepth}(G_{ref}^{k}) $ be the maximum depth of $ k $-th reference tree.
-Let $ \mbox{maxDepth}(G_{sub}^{m}) $ be the maximum depth of $ m $-th subproblem tree.
-We have $ \mbox{maxDepth}(G_{ref}) = \max_{k = 1 , \cdots , K} ( \mbox{maxDepth}(G_{ref}^{k}) ) $ and $ \mbox{maxDepth}(G_{sub}) = \max_{m = 1 , \cdots , M} ( \mbox{maxDepth}(G_{sub}^{m}) ) $.
-Thus let 
- $ \bar{N}_{MD} = \max \left(  \mbox{maxDepth}(G_{ref}), \mbox{maxDepth}(G_{sub}) \right) $.
-It means that the segment number of any path from MORRF$^{*}$ can be less than $ \bar{N}_{MD} $.
-
-Therefore, any path from MORRF$^{*}$ can be converted into an equivalent path of $ \bar{N}_{MD} $ segments by repeating some vertex before moving to the next one.
-For example, duplicating $ x_{2} $ in $ (x_{1} , x_{2}, x_{3} ) $ makes an equivalent path of length $ 4 $ , $ (x_{1} , x_{2},  x_{2}, x_{3} ) $.
-The cost will not be changed, $ f( (x_{1} , x_{2}, x_{3}) ) = f( (x_{1} , x_{2},  x_{2}, x_{3} ) )$.
-Using a space of dimension $ \bar{N}_{MD} $, any solution from MORFF$^{*}$ can be mapped into a point in the same space.
-Let the dimension of the working space be $ N_{dim} $.
-We can consider that MORRF$^{*}$ searches the Pareto optimal set in a $ \bar{N}_{MD} * N_{dim} $ dimension space.
+By Lemma \ref{lem:sol_pareto_opt}, we know that each solution to Equation \eqref{eq:Tchebycheff} is a solution in Pareto optimal set.
+By Lemma \ref{lem:exist_weight}, we know that each solution in Pareto optimal set, there exits a weight that makes the solution an answer to Equation \eqref{eq:Tchebycheff}.
+Thus, we know that the Pareto optimal set $ \{ \sigma^{*} \} $ is the range of the function value defined by Equation \eqref{eq:Tchebycheff}.
 \end{proof}
 \end{lem}
 
-\begin{comment}
-\begin{lem}
-\label{lem:moo-d:rrt}
-MORRF$^{*}$ can be modeled as a 
-The decomposition method is applicable to the sampling-based path planning.
-\begin{proof}
-In a sampling-based path planning problem, let $ N_{i} $ be the number of samplings at iteration $ i $.
-In the cost minimization problem, assume there is no loop in a path, which means that a path will not visit a visited vertex.
-As a path $ \sigma $ is a sequence of vertices, the maximum size of a path is less than $ N_{i} $, i.e.
-$ | \sigma | \leq N_{i} $.
-Let $ \bar{i} $ be the stopping iteration number.
-The number of vertices in any path is less than $ N_{ \bar{i} } $, which can be represented as a path of length $ N_{ \bar{i} } $ by duplicating the vertices in a path.
-For example, duplicating $ x_{2} $ in $ (x_{1} , x_{2}, x_{3} ) $ makes an equivalent path of length $ 4 $ , $ (x_{1} , x_{2},  x_{2}, x_{3} ) $.
-The cost will not be changed, $ f( (x_{1} , x_{2}, x_{3}) ) = f( (x_{1} , x_{2},  x_{2}, x_{3} ) )$.
-Using a space of dimension $ N_{ \bar{i} } $, any path $ \sigma $ in a sampling-based path planning problem can be mapped into a point in the same space.
-The decomposition methods mentioned in \cite{4358754} can be imported in this case.		
-\end{proof}
-\end{lem}
-\end{comment}
+
 
 \begin{figure}
 \centering
