@@ -169,7 +169,11 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 \begin{itemize}
 	\item $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
 	\item $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = X_{goal}  $;
-	\item $ \not \exists \sigma , \forall k \in K, f_{k} (\sigma) > f_{k} (\sigma^{*}) $.
+	\item There does not exist $ \sigma $ that,
+	\begin{itemize}
+		\item $ \forall k \in K, f_{k} (\sigma) \leq f_{k} (\sigma^{*}) $;
+		\item $ \exists k' \in K, f_{k'} (\sigma) < f_{k'} (\sigma^{*}) $.
+	\end{itemize}
 \end{itemize}
 \end{defn}
 \noindent Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
@@ -576,6 +580,96 @@ Only the breadth of the tree might go infinity but not the depth.
 }
 
 {\sc Quitting here now, but check out my question just before Lemma 3.}
+
+\begin{lem}
+\label{lem:sol_pareto_opt}
+The solution of Equation \eqref{eq:Tchebycheff} is Pareto optimal.
+\begin{proof}
+Let $ \sigma^{*} $ be a solution,
+thus 
+\begin{equation}
+\label{eq:tchebycheff:argmin}
+\sigma^{*} = \arg \min_{ \sigma } \max_{ k \in K }  \lambda_{k} | f_{k}( \sigma ) - z^{\rm utop}_{k} | .
+\end{equation}
+Assume $ \sigma^{*} $ is not Pareto optimal.
+Then there exist $ \sigma^{o} $ that dominates $ \sigma^{*} $, which means
+\begin{eqnarray}
+\nonumber
+\forall k \in K , & f_{k}( \sigma^{o} ) \leq f_{k}( \sigma^{*} ); \\
+\nonumber
+\exists k' \in K , & f_{k'}( \sigma^{o} ) < f_{k'}( \sigma^{*} ).
+\end{eqnarray}
+As how the ``Utopia'' reference vector is defined,  $ \forall k \in K $, $ z^{\rm utop}_{k} \leq  f_{k}( \sigma )  $.
+Therefore, we have
+\begin{eqnarray}
+\nonumber
+\forall k \in K , & z^{\rm utop}_{k} \leq f_{k}( \sigma^{o} ) \leq f_{k}( \sigma^{*} ) ; \\
+\nonumber
+\exists k' \in K , & z^{\rm utop}_{k} \leq f_{k'}( \sigma^{o} ) < f_{k'}( \sigma^{*} ).
+\end{eqnarray}
+It equals to
+\begin{eqnarray}
+\nonumber
+\forall k \in K , & f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} \geq f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} \geq 0 ; \\
+\nonumber
+\exists k' \in K , &  f_{k'}( \sigma^{*} ) - z^{\rm utop}_{k} > f_{k'}( \sigma^{o} ) - z^{\rm utop}_{k} \geq 0 .
+\end{eqnarray}
+We can then have
+\begin{eqnarray}
+\nonumber
+\forall k \in K , & \lambda_{k} | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} | \geq \lambda_{k}  | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} | ; \\
+\nonumber
+\exists k' \in K , & \lambda_{k'}  | f_{k'}( \sigma^{*} ) - z^{\rm utop}_{k} | > \lambda_{k'}  | f_{k'}( \sigma^{o} ) - z^{\rm utop}_{k} | .
+\end{eqnarray}
+It means that 
+\begin{equation}
+\nonumber
+\max_{ k \in K }  \lambda_{k} | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} | > \max_{ k \in K } \lambda_{k}  | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} |,
+\end{equation}
+which contradicts with Equation \eqref{eq:tchebycheff:argmin}.
+\end{proof}
+\end{lem}
+
+\begin{lem}
+\label{lem:exist_weight}
+Let $ \sigma^{*} $ be Pareto optimal.
+There exists a weighting vector $ \vec{\lambda} $ that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ such that $ \sigma^{*} $ is a solution of Equation \eqref{eq:Tchebycheff}.
+\begin{proof}
+We can choose  $ \vec{\lambda} $ as 
+\begin{equation}
+\label{eq:weights:assign}
+\forall k \in K,
+\lambda_{k} = \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} .
+\end{equation}
+We can have 
+\begin{equation}
+\begin{aligned}
+ g^{te} ( \sigma ) & =  \max_{k \in K} \lambda_{k} | f_{k}( \sigma ) - z^{\rm utop}_{k} | \\
+&  =  \max_{k \in K} \frac{ | f_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1}
+\end{aligned}
+\end{equation}
+for any given $ \sigma $.
+
+For $ \sigma^{*} $, we have $ g^{te} ( \sigma^{*} ) = \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} $.Z
+
+
+
+Let another solution of Equation \eqref{eq:Tchebycheff} be $ \sigma^{o} $, which satisfies that
+\begin{equation}
+\label{eq:exist_weight:leq}
+\max_{k \in K} \lambda_{k} | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} | \leq \max_{k \in K} \lambda_{k} | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} |.
+\end{equation}
+By applying Equation \eqref{eq:weights:assign} to Equation \eqref{eq:exist_weight:leq}, we have
+\begin{equation}
+\begin{aligned}
+& \max_{k \in K} \frac{ | f_{k}( \sigma^{o} ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+\leq & \max_{k \in K} \frac{ | f_{k}( \sigma^{*} ) - z^{\rm utop}_{k} | }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\ 
+= & \max_{k \in K} \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1} \\
+= & \left( \sum_{k=1}^{K} \frac{1}{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1}.
+\end{aligned}
+\end{equation}
+\end{proof}
+\end{lem}
 
 We firstly need to show that the tree structure in MORRF$^{*}$ has a finite maximum depth,
 so that we can guarantee that all the paths from the tree structure have finite length.
