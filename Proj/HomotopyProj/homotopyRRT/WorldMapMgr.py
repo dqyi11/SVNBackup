@@ -23,6 +23,7 @@ class WorldMapMgr(object):
         self.region_colors = []
         
         self.subsegments = []
+        self.rad_list = []
         
         self.centralPoint = None
     
@@ -131,6 +132,8 @@ class WorldMapMgr(object):
                 beta_ray_rad += 2*numpy.pi                
             beta_ray_info = (obs.idx, 'B', beta_ray_rad)
             
+            self.rad_list.append(alpha_ray_rad)
+            self.rad_list.append(beta_ray_rad)
                         
             obs.alpha_seg = None
             obs.beta_seg = None
@@ -152,6 +155,8 @@ class WorldMapMgr(object):
                 
         self.ray_info_list.sort(key=lambda x: x[2], reverse=False)
         #print self.ray_info_list
+        
+        self.rad_list.sort(reverse=False)
     
     def initSegments(self):    
     
@@ -259,30 +264,30 @@ class WorldMapMgr(object):
                 linseg.checkPosB = (linseg.midpoint[0]-delta_x, linseg.midpoint[1]-delta_y)
                 
                 regionA, regionB = self.findNeighborRegion(linseg.rad)
-                print "SEG RAD " + str(linseg.rad) + " REG A " + str(regionA.ref_rad) + " REG B " + str(regionB.ref_rad)
+                #print "SEG RAD " + str(linseg.rad) + " REG A " + str(regionA.ref_rad) + " REG B " + str(regionB.ref_rad)
                 
                 linseg.checkRegionA = regionA
                 linseg.checkRegionB = regionB
                 
-                print linseg.name
+                #print linseg.name
                 #print test_points
                 iline = shpgeo.LineString([linseg.checkPosA, linseg.checkPosB])
                 sgA = self.isLineIntersectedWithRegion(regionA.subregions, iline)
                 #sgA =  self.isPointsInRegion(regionA.subregions, test_points)
                 if sgA != None:
                     linseg.regionAInfo = sgA
-                    print "      " + sgA.getName()
-                else:
-                    print "   " + regionA.name
+                    #print "      " + sgA.getName()
+                #else:
+                    #print "   " + regionA.name
                 
                 iline = shpgeo.LineString([linseg.checkPosA, linseg.checkPosB])
                 sgB = self.isLineIntersectedWithRegion(regionB.subregions, iline)    
                 #sgB = self.isPointsInRegion(regionB.subregions, test_points) 
                 if sgB != None:
                     linseg.regionBInfo = sgB
-                    print "      " + sgB.getName()
-                else:
-                    print "   " + regionB.name
+                    #print "      " + sgB.getName()
+                #else:
+                    #print "   " + regionB.name
                     
     def getTopologicalGraph(self):
         
@@ -363,6 +368,13 @@ class WorldMapMgr(object):
     def getCrossingSubsegment(self, pos_s, pos_e):
         linS = shpgeo.LineString([pos_s, pos_e])
         for subseg in self.subsegments:
+            if subseg.line_seg.intersects(linS):
+                return subseg
+        return None
+    
+    def getCrossingSubsegList(self, pos_s, pos_e, subsegList):
+        linS = shpgeo.LineString([pos_s, pos_e])
+        for subseg in subsegList:
             if subseg.line_seg.intersects(linS):
                 return subseg
         return None

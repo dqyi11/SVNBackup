@@ -22,6 +22,10 @@ class BiRRTstarPlanner(object):
     def findPath(self, start, goal, iterationNum, homotopyMgr):
         
         self.rrts.init(start, goal, self.cost_func, homotopyMgr)
+        dividingRefs = homotopyMgr.getDividingRefs(start, goal)
+        for dr in dividingRefs:
+            self.rrts.dividingRefs.append([dr.open_seg[0], dr.open_seg[1]])
+        
         for i in range(iterationNum):
             print "Iter@" + str(i)
             self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
