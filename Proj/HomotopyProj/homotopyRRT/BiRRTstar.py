@@ -299,9 +299,10 @@ class BiRRTstar(object):
             
         
         if len(path2) > 0:
-            strBit = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1].pos, path2[0].pos)
             path.append([ (path1[len(path1)-1].pos[0],path1[len(path1)-1].pos[1]), (path2[0].pos[0], path2[0].pos[1]) ])
-            stringInfo.append(strBit)
+            crossInt = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1].pos, path2[0].pos)
+            if crossInt != None:
+                stringInfo.append(crossInt.name)
             
             for idx2 in range(len(path2)-1, 0, -1):
                 path.append([ (path2[idx2].pos[0],path2[idx2].pos[1]), (path2[idx2-1].pos[0],path2[idx2-1].pos[1]) ])
@@ -318,6 +319,7 @@ class BiRRTstar(object):
         matchRadius = 15
         node_pairs = []
         paths = []
+        stringInfos = []
         # Find matching vertices from two trees
         for st_node in self.st_nodes:
             nearestNode = self.findNearestNeighbor(self.gt_kdtree_root, st_node.pos)
@@ -331,10 +333,11 @@ class BiRRTstar(object):
             subpathFromStart = self.getSubNodeList(nodePair[0], self.st_root)
             subpathFromGoal = self.getSubNodeList(nodePair[1], self.gt_root)
             
-            path = self.concatenatePaths(subpathFromStart, subpathFromGoal)
+            path, stringInfo = self.concatenatePaths(subpathFromStart, subpathFromGoal)
             paths.append(path)
+            stringInfos.append(stringInfo)
         
-        return paths 
+        return paths, stringInfos
 
 
                         
