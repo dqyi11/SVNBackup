@@ -73,7 +73,7 @@ class HomotopyMgr(object):
         print "GET DIVIDING REFS "
         print ref_rad
         
-        precisionDelta = 0.15
+        precisionDelta = 0.07
         self.dividingRefs = []
         for subseg in self.world_map.subsegments:
             if (subseg.rad>=ref_rad-precisionDelta and subseg.rad<ref_rad+precisionDelta) \
