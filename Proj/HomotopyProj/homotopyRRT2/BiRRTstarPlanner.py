@@ -32,7 +32,7 @@ class BiRRTstarPlanner(object):
             self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
             self.rrts_viz.update()
             
-        paths, infos = self.rrts.findPaths()
+        paths, infos, costs = self.rrts.findPaths()
         
         self.rrts_viz.activePaths = paths
         

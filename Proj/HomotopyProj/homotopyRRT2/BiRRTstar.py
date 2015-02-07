@@ -319,6 +319,7 @@ class BiRRTstar(object):
         node_pairs = []
         paths = []
         stringInfos = []
+        costs = []
         # Find matching vertices from two trees
         for st_node in self.st_nodes:
             nearestNode = self.findNearestNeighbor(self.gt_kdtree_root, st_node.pos)
@@ -329,14 +330,18 @@ class BiRRTstar(object):
         # create paths from subpaths
         for nodePair in node_pairs:
             
+            cost = 0.9
             subpathFromStart = self.getSubNodeList(nodePair[0], self.st_root)
             subpathFromGoal = self.getSubNodeList(nodePair[1], self.gt_root)
-            
+            cost += nodePair[0].cost
+            cost += nodePair[1].cost
+            cost += self.calcCost(nodePair[0].pos, nodePair[1].pos)
             path, stringInfo = self.concatenatePaths(subpathFromStart, subpathFromGoal)
             paths.append(path)
             stringInfos.append(stringInfo)
+            costs.append(cost)
         
-        return paths, stringInfos
+        return paths, stringInfos, costs
 
 
                         
