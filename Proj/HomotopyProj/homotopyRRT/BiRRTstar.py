@@ -300,13 +300,13 @@ class BiRRTstar(object):
             if crossInt != None:
                 stringInfo.append(crossInt.name)
             
-            for idx2 in range(len(path2)-1, -1, -1):
-                path.append([ (path2[idx2].pos[0],path2[idx2].pos[1]), (path2[idx2-1].pos[0],path2[idx2-1].pos[1]) ])
+            for idx2 in range(len(path2)-1, 0, -1):
+                path.append( (path2[idx2].pos[0],path2[idx2].pos[1]) )
                 if path2[idx2-1].strBit != None:
                     stringInfo.append(path2[idx2-1].strBit) 
-                    
-            if path2[0].strBit != None:
-                stringInfo.append(path2[0].strBit)
+            path.append( (path2[idx2].pos[0],path2[idx2].pos[1]) )        
+            #if path2[0].strBit != None:
+            #    stringInfo.append(path2[0].strBit)
         
         return path, stringInfo
                           
