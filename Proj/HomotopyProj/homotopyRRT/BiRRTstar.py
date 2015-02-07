@@ -295,7 +295,7 @@ class BiRRTstar(object):
         
         if len(path1) > 0:
             for idx1 in range(len(path1)-1):
-                path.append([path1[idx1][0], path2[idx1+1][0]])
+                path.append([path1[idx1][0], path1[idx1+1][0]])
                 if path1[idx1][1] != None:
                     stringInfo.append(path1[idx1][1]) 
             stringInfo.append(path1[len(path1)-1])          
