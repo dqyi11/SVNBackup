@@ -290,21 +290,21 @@ class BiRRTstar(object):
         stringInfo = []
         
         if len(path1) > 0:
-            for idx1 in range(len(path1)):
+            for idx1 in range(len(path1)-1, -1, -1):
                 path.append( (path1[idx1].pos[0],path1[idx1].pos[1]) )
                 if path1[idx1].strBit != None:
                     stringInfo.append(path1[idx1].strBit)         
         
         if len(path2) > 0:
-            crossInt = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1].pos, path2[0].pos)
+            crossInt = self.homotopyMgr.world_map.getCrossingSubsegment(path1[0].pos, path2[0].pos)
             if crossInt != None:
                 stringInfo.append(crossInt.name)
             
-            for idx2 in range(len(path2)-1, 0, -1):
+            for idx2 in range(len(path2)):
                 path.append( (path2[idx2].pos[0],path2[idx2].pos[1]) )
                 if path2[idx2-1].strBit != None:
                     stringInfo.append(path2[idx2-1].strBit) 
-            path.append( (path2[idx2].pos[0],path2[idx2].pos[1]) )        
+ 
             #if path2[0].strBit != None:
             #    stringInfo.append(path2[0].strBit)
         

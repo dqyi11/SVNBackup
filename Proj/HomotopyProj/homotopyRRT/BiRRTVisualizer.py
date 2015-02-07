@@ -31,6 +31,8 @@ class BiRRTVisualizer(object):
         self.states = ("START", "GOAL", "BOTH")
         self.currentState = 2
         
+        self.font = pygame.font.SysFont(None, 24)
+        
         self.pathIdx = 0
         
     def loadObj(self, objFile):    
@@ -102,12 +104,16 @@ class BiRRTVisualizer(object):
             for i in range(0, pathLen-1, 1):
                 pos1 = (int(activePath[i][0]), int(activePath[i][1]))
                 pos2 = (int(activePath[i+1][0]), int(activePath[i+1][1]))
-                pygame.draw.line(self.screen, (255, 160, 0), pos1, pos2, 2)    
+                pygame.draw.line(self.screen, (0, 102, 204), pos1, pos2, 2)    
+                
+            self.screen.blit(self.font.render("PI:"+str(self.pathIdx), True, (255,0,0)), (self.rrt.sampling_width-40, 10))
                 
         start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
         goal = (int(self.rrt.goal[0]), int(self.rrt.goal[1]))
         pygame.draw.circle(self.screen, (255,0,0), start, 5)
         pygame.draw.circle(self.screen, (0,0,255), goal, 5)        
+        
+        
                 
         pygame.display.flip();
 
