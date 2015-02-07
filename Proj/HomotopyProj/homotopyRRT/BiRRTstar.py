@@ -291,7 +291,7 @@ class BiRRTstar(object):
         
         if len(path1) > 0:
             for idx1 in range(len(path1)-1):
-                path.append([path1[idx1].pos, path1[idx1+1].pos])
+                path.append([ (path1[idx1].pos[0],path1[idx1].pos[1]), (path1[idx1+1].pos[0],path1[idx1+1].pos[1]) ])
                 if path1[idx1].strBit != None:
                     stringInfo.append(path1[idx1].strBit) 
             if path1[len(path1)-1].strBit != None:
@@ -300,11 +300,11 @@ class BiRRTstar(object):
         
         if len(path2) > 0:
             strBit = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1].pos, path2[0].pos)
-            path.append([path1[len(path1)-1].pos, path2[0].pos])
+            path.append([ (path1[len(path1)-1].pos[0],path1[len(path1)-1].pos[1]), (path2[0].pos[0], path2[0].pos[1]) ])
             stringInfo.append(strBit)
             
             for idx2 in range(len(path2)-1, 0, -1):
-                path.append([path2[idx2].pos, path2[idx2-1].pos])
+                path.append([ (path2[idx2].pos[0],path2[idx2].pos[1]), (path2[idx2-1].pos[0],path2[idx2-1].pos[1]) ])
                 if path2[idx2-1].strBit != None:
                     stringInfo.append(path2[idx2-1].strBit) 
                     
