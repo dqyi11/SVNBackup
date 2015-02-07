@@ -100,7 +100,9 @@ class BiRRTVisualizer(object):
             activePath = self.activePaths[self.pathIdx]
             pathLen = len(activePath)
             for i in range(0, pathLen-1, 1):
-                pygame.draw.line(self.screen, (255, 160, 0), activePath[i], activePath[i+1], 2)    
+                pos1 = (int(activePath[i][0]), int(activePath[i][1]))
+                pos2 = (int(activePath[i+1][0]), int(activePath[i+1][1]))
+                pygame.draw.line(self.screen, (255, 160, 0), pos1, pos2, 2)    
                 
         start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
         goal = (int(self.rrt.goal[0]), int(self.rrt.goal[1]))
