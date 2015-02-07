@@ -306,11 +306,11 @@ class BiRRTstar(object):
             path.append([path1[len(path1)-1][0], path2[0][0]])
             stringInfo.append(strBit)
             
-            for idx2 in range(len(path2)-1):
-                path.append([path2[idx2][0], path2[idx2+1][0]])
-                if path2[idx2][1] != None:
-                    stringInfo.append(path2[idx2][1]) 
-            stringInfo.append(path2[len(path2)-1])
+            for idx2 in range(len(path2)-1, 0, -1):
+                path.append([path2[idx2][0], path2[idx2-1][0]])
+                if path2[idx2-1][1] != None:
+                    stringInfo.append(path2[idx2-1][1]) 
+            stringInfo.append(path2[0][1])
         
         return (path, stringInfo)
                           
