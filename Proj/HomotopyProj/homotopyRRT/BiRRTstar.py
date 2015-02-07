@@ -274,8 +274,7 @@ class BiRRTstar(object):
         node_c.parent = node_p
         return True
     
-    def getSubpath(self, node, root):
-        subpath = []
+    def getSubNodeList(self, node, root):
         
         node_list = []
         curr_node = node
@@ -284,10 +283,7 @@ class BiRRTstar(object):
             curr_node = curr_node.parent
             node_list.append(curr_node)
             
-        for n in reversed(node_list):
-            subpath.append([int(n.pos[0]), int(n.pos[1])])
-        
-        return subpath
+        return node_list
     
     def concatenatePaths(self, path1, path2):
         path = []
@@ -295,22 +291,25 @@ class BiRRTstar(object):
         
         if len(path1) > 0:
             for idx1 in range(len(path1)-1):
-                path.append([path1[idx1][0], path1[idx1+1][0]])
-                if path1[idx1][1] != None:
-                    stringInfo.append(path1[idx1][1]) 
-            stringInfo.append(path1[len(path1)-1])          
+                path.append([path1[idx1].pos, path1[idx1+1].pos])
+                if path1[idx1].strBit != None:
+                    stringInfo.append(path1[idx1].strBit) 
+            if path1[len(path1)-1].strBit != None:
+                stringInfo.append(path1[len(path1)-1].strBit)          
             
         
         if len(path2) > 0:
-            strBit = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1][0], path2[0][0])
-            path.append([path1[len(path1)-1][0], path2[0][0]])
+            strBit = self.homotopyMgr.world_map.getCrossingSubsegment(path1[len(path1)-1].pos, path2[0].pos)
+            path.append([path1[len(path1)-1].pos, path2[0].pos])
             stringInfo.append(strBit)
             
             for idx2 in range(len(path2)-1, 0, -1):
-                path.append([path2[idx2][0], path2[idx2-1][0]])
-                if path2[idx2-1][1] != None:
-                    stringInfo.append(path2[idx2-1][1]) 
-            stringInfo.append(path2[0][1])
+                path.append([path2[idx2].pos, path2[idx2-1].pos])
+                if path2[idx2-1].strBit != None:
+                    stringInfo.append(path2[idx2-1].strBit) 
+                    
+            if path2[0].strBit != None:
+                stringInfo.append(path2[0].strBit)
         
         return (path, stringInfo)
                           
@@ -329,8 +328,8 @@ class BiRRTstar(object):
         # create paths from subpaths
         for nodePair in node_pairs:
             
-            subpathFromStart = self.getSubpath(nodePair[0], self.st_root)
-            subpathFromGoal = self.getSubpath(nodePair[1], self.gt_root)
+            subpathFromStart = self.getSubNodeList(nodePair[0], self.st_root)
+            subpathFromGoal = self.getSubNodeList(nodePair[1], self.gt_root)
             
             path = self.concatenatePaths(subpathFromStart, subpathFromGoal)
             paths.append(path)

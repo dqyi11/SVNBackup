@@ -34,7 +34,7 @@ class BiRRTstarPlanner(object):
             
         paths = self.rrts.findPaths()
         
-        #self.rrts_viz.activePath = path
+        self.rrts_viz.activePaths = paths
         
         #self.rrts_viz.update()
         
