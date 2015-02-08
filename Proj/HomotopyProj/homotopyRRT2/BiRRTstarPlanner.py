@@ -6,6 +6,7 @@ Created on Jan 4, 2015
 
 from BiRRTstar import *
 from BiRRTVisualizer import *
+from PathManager import *
 
 class BiRRTstarPlanner(object):
     
@@ -18,6 +19,8 @@ class BiRRTstarPlanner(object):
             self.rrts.loadMap(self.mapFile)
         self.rrts_viz = BiRRTVisualizer(self.rrts)
         self.cost_func = cost_func
+        
+        self.pathMgr = PathManager()
         
     def findPaths(self, start, goal, iterationNum, homotopyMgr):
         
@@ -33,6 +36,9 @@ class BiRRTstarPlanner(object):
             self.rrts_viz.update()
             
         paths, infos, costs = self.rrts.findPaths()
+        
+        for i in range(len(paths)):
+            self.pathMgr.addPath(Path(paths[i], costs[i], infos[i]))
         
         self.rrts_viz.activePaths = paths
         
