@@ -17,10 +17,12 @@ class BiRRTstarPlanner(object):
         self.rrts = BiRRTstar(self.planningRange, self.segmentLength)
         if self.mapFile!= None:
             self.rrts.loadMap(self.mapFile)
-        self.rrts_viz = BiRRTVisualizer(self.rrts)
+            
+        self.pathMgr = PathManager(cost_func)
+        self.rrts_viz = BiRRTVisualizer(self.rrts, self.pathMgr)
         self.cost_func = cost_func
         
-        self.pathMgr = PathManager(cost_func)
+        
         
     def findPaths(self, start, goal, iterationNum, homotopyMgr):
         

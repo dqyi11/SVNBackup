@@ -10,7 +10,7 @@ import numpy as np
 
 class BiRRTVisualizer(object):
 
-    def __init__(self, rrt):
+    def __init__(self, rrt, pathMgr):
         self.rrt = rrt
         pygame.init()
         self.screen = pygame.display.set_mode((self.rrt.sampling_width,self.rrt.sampling_height))
@@ -26,6 +26,7 @@ class BiRRTVisualizer(object):
         self.activePaths = []
         self.dispMap = True
         
+        self.pathMgr = pathMgr
         self.refLines = []
         
         self.states = ("START", "GOAL", "BOTH")
@@ -34,6 +35,7 @@ class BiRRTVisualizer(object):
         self.font = pygame.font.SysFont(None, 24)
         
         self.pathIdx = 0
+        self.classIdx = 0
         
     def loadObj(self, objFile):    
         self.objImg = pygame.image.load(objFile)
@@ -53,9 +55,14 @@ class BiRRTVisualizer(object):
                     self.pathIdx -= 1
                 elif e.key == pygame.K_RIGHT:
                     self.pathIdx += 1
+                elif e.key == pygame.K_s:
+                    self.classIdx += 1
+                    self.pathIdx = 0
                     
         if self.pathIdx >= len(self.activePaths):
             self.pathIdx = 0
+        if self.classIdx >= len(self.pathMgr.classes.keys()):
+            self.classIdx = 0
             
         self.screen.fill((255,255,255))
         if self.dispMap==True:
@@ -100,13 +107,17 @@ class BiRRTVisualizer(object):
                 connected_node = (int(self.rrt.gt_connected_node[0]), int(self.rrt.gt_connected_node[1]))
                 pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
                 
-        if len(self.activePaths) > 0:
-            activePath = self.activePaths[self.pathIdx]
-            pathLen = len(activePath)
-            for i in range(0, pathLen-1, 1):
-                pos1 = (int(activePath[i][0]), int(activePath[i][1]))
-                pos2 = (int(activePath[i+1][0]), int(activePath[i+1][1]))
-                pygame.draw.line(self.screen, (0, 102, 204), pos1, pos2, 2)    
+                
+                
+        if len(self.pathMgr.classes.keys()) > 0:
+            cls = self.pathMgr.classes.keys()[self.classIdx]
+            if len(self.pathMgr.classes[cls]) > 0:
+                activePath = self.pathMgr.classes[cls][self.pathIdx]
+                pathLen = len(activePath)
+                for i in range(0, pathLen-1, 1):
+                    pos1 = (int(activePath[i][0]), int(activePath[i][1]))
+                    pos2 = (int(activePath[i+1][0]), int(activePath[i+1][1]))
+                    pygame.draw.line(self.screen, (0, 102, 204), pos1, pos2, 2)    
                 
             self.screen.blit(self.font.render("PI:"+str(self.pathIdx), True, (255,0,0)), (self.rrt.sampling_width-80, 10))
                 

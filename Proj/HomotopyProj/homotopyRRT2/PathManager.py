@@ -47,6 +47,9 @@ class PathManager(object):
             else:
                 cls.append(path)
                 
+        for i in range(len(self.classes.keys())):
+            self.classes[self.classes.keys()[i]].sort( key=lambda x: x.cost, reverse=False )
+                
         print "Total Num " + str(len(self.paths))
         for cstr in self.classes.keys():
             print str(len(self.classes[cstr])) + " : " + str(cstr) 
@@ -66,7 +69,7 @@ class PathManager(object):
         with open(filename, 'w') as f1:
             f1.write( "Total Num " + str(len(self.paths)) + "\n")
             for cstr in self.classes.keys():
-                f1.write( str(len(self.classes[cstr])) + " : " + str(cstr) + "|n" )
+                f1.write( str(len(self.classes[cstr])) + " : " + str(cstr) + "\n" )
             
             for p in self.paths:
                 f1.write(str(p.points))
