@@ -68,8 +68,10 @@ class BiRRTVisualizer(object):
         for refLine in self.refLines:
             pygame.draw.line(self.screen, (50,50,50), refLine[0], refLine[1])
          
+        '''
         for dr in self.rrt.dividingRefs:
             pygame.draw.line(self.screen, (255,204,153), dr[0], dr[1], 10)
+        '''
          
         if self.currentState==0 or self.currentState==2:       
             for n in self.rrt.st_nodes:

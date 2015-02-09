@@ -17,7 +17,7 @@ class Path(object):
 class PathManager(object):
 
     def __init__(self, cost_func):
-        self.objectiveNum = len(cost_func)
+
         self.costFunc = cost_func
         self.paths = []
         
@@ -39,6 +39,9 @@ class PathManager(object):
         with open(filename, 'w') as f1:
             for p in self.paths:
                 f1.write(str(p.points))
+                f1.write(str(p.stringBits))
+                f1.write(str(p.cost))
+                f1.write("\n")
                     
     def visualize(self):
         

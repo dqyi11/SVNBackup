@@ -20,7 +20,7 @@ class BiRRTstarPlanner(object):
         self.rrts_viz = BiRRTVisualizer(self.rrts)
         self.cost_func = cost_func
         
-        self.pathMgr = PathManager()
+        self.pathMgr = PathManager(cost_func)
         
     def findPaths(self, start, goal, iterationNum, homotopyMgr):
         

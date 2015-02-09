@@ -77,9 +77,7 @@ class BiRRTstar(object):
         self.sampling_height = self.bitmap.shape[0]
         
     def calcCost(self, node_a, node_b):
-        cost = 0.0
-        for k in range(self.objectiveNum):
-            cost += self.costFunc[k](node_a, node_b) * self.weight[k]
+        cost = self.costFunc(node_a, node_b)
         return cost
     
     def steer(self, pos_a, pos_b):
