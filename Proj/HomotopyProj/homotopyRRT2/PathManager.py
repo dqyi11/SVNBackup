@@ -21,9 +21,36 @@ class PathManager(object):
         self.costFunc = cost_func
         self.paths = []
         
+        self.classes = {}
+        
     def addPath(self, path):
         self.paths.append(path)
         self.pathNum = len(self.paths)
+        
+    def getClass(self, strBit):
+        for cstr in self.classes.keys():
+            same = True
+            if len(cstr)==len(strBit):
+                for i in range(len(cstr)):
+                    if cstr[i]!=strBit[i]:
+                        same = False
+            if same==True:
+                return self.classes[cstr]
+        return None
+     
+    def classify(self):
+        for path in self.paths:
+            cls = self.getClass(str(path.stringBits))
+            if cls==None:
+                self.classes[str(path.stringBits)] = []
+                self.classes[str(path.stringBits)].append(path)
+            else:
+                cls.append(path)
+                
+        print "Total Num " + str(len(self.paths))
+        for cstr in self.classes.keys():
+            print str(len(self.classes[cstr])) + " : " + str(cstr) 
+        
         
         
     def calcCost(self, path): 
@@ -37,6 +64,10 @@ class PathManager(object):
                     
     def savePaths(self, filename):
         with open(filename, 'w') as f1:
+            f1.write( "Total Num " + str(len(self.paths)) + "\n")
+            for cstr in self.classes.keys():
+                f1.write( str(len(self.classes[cstr])) + " : " + str(cstr) + "|n" )
+            
             for p in self.paths:
                 f1.write(str(p.points))
                 f1.write(str(p.stringBits))

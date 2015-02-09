@@ -49,6 +49,7 @@ if __name__ == '__main__':
 
     paths = planner.findPaths(start_pos, end_pos, 3000, homoMgr)
     
+    planner.pathMgr.classify()    
     planner.pathMgr.savePaths('RRstar02-path.txt')
     
     import pygame.image
