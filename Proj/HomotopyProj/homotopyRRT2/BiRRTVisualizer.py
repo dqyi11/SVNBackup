@@ -119,7 +119,7 @@ class BiRRTVisualizer(object):
                     pos2 = (int(activePath[i+1][0]), int(activePath[i+1][1]))
                     pygame.draw.line(self.screen, (0, 102, 204), pos1, pos2, 2)    
                 
-            self.screen.blit(self.font.render(cls, True, (0,0,255)), (10,10))    
+            self.screen.blit(self.font.render(str(self.classIdx)+ " "+ cls, True, (0,0,255)), (10,10))    
             self.screen.blit(self.font.render("PI:"+str(self.pathIdx), True, (255,0,0)), (self.rrt.sampling_width-80, 10))
                 
         start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
