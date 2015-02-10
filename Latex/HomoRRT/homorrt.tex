@@ -5,17 +5,15 @@
 
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
-
 \title{\LARGE \bf
-Homotopy RRT
+Homotopy-based RRT$^{*}$
 }
 
 \author{
-Daqing Yi
-\thanks{Daqing Yi is with Department of Computer Science, Brigham Young University, Provo, UT, 84604, USA.
-{\tt\small daqing.yi@byu.edu} }
+Daqing Yi, Michael A. Goodrich and Kevin D. Seppi
+\thanks{Daqing Yi, Michael A. Goodrich and Kevin D. Seppi are with Department of Computer Science, Brigham Young University, Provo, UT, 84604, USA.
+{\tt\small daqing.yi@byu.edu, mike@cs.byu.edu, kseppi@cs.byu.edu} }
 }
-
 
 \begin{document}
 
@@ -27,7 +25,7 @@ Daqing Yi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-
+The homotopy 
 
 
 \end{abstract}
@@ -38,15 +36,63 @@ Daqing Yi
 \label{sec:intro}
 
 The most popular focus on the robotic path planning is optimality.
-Given a measurable metric, the planned path would be a optimized solution to the given objective.
-This has been widely applied to model the intent of the task supervisor.
-For example, if the task is reaching a target in shortest time, the cost is defined as Euclidean distance and the planned path should be the shortest.
-However, there also exist plenty of intents that are hard to be measured by any metric, which are usually relevant with the topology.
-For example, though the execution time is expected to be minimized, it would be better if the robot could pass some specific location.
-It indicates that sometimes the ``shape'' of the paths could be an important factor to consider in planning, especially in environments with complex obstacles.
+In planning the robot's motion in a task, the intent of the task supervisor is usually modeled into single objective~\cite{6974170} or multiple objective optimization~\cite{yi2014supporting}.
+The generated path is a solution that optimizes the given objectives, for example, minimizing the Euclidean distance.
+There exist plenty of other human intents that are hard to be modeled using measurable metrics.
+A class of them can be relevant with the ``shape'' of the planned path, especially in environments with complex obstacles.
+For example, the human supervisor would like the robot reaching a target in the shortest time while passing through some locations.
+The most common solution is defining via points as a constraint for the path planning problem.
+However, sometimes this intent is only a preference instead of a hard constraint.
+
+\emph{Homotopy} is imported to model the inherent topological similarity of the paths.
+Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez201544}.
+This leads to a \emph{homotopy class}, in which any two paths are homotopic.
+The homotopy of the paths can help to model the human intent, which can be applied to several scenarios.
+\begin{itemize}
+\item Human initialized homotopic constraint \\
+If the task supervisor has a strong opinion on the topology of the path, the supervisor can define the homotopic constraint by either initializing a reference path or defining via-regions.
+The problem becomes finding an optimal path of a given homotopy class~\cite{Hershberger199463}.
+\item Optimality of different homotopy classes \\
+If the task supervisor has a weak opinion on the topology of the path, the planning algorithm can provide the best solution of each homotopy class to the supervisor.
+The supervisor can then select one that satisfy his/her intent.
+\end{itemize}
 
 
 
+\section{Related work}
+\label{sec:related_work}
+
+\subsection{Homotopy-based Path Planning}
+
+\cite{Hershberger199463}
+
+\cite{AAAI101920}
+
+\subsection{Homotopy RRT / PRM}
+
+\cite{1041613}
+
+\cite{Hernandez201544}
+
+\subsection{Bidirectional RRT}
+
+\cite{1041613}
+
+\cite{Jordan.Perez.ea:CSAIL13}
+
+\cite{starek2014bidirectional}
+
+\section{Algorithm}
+\label{sec:algorithm}
+
+\section{Application}
+\label{sec:application}
+
+\section{Analysis}
+\label{sec:analysis}
+
+\section{Conclusion}
+\label{sec:conclusion}
 
 \bibliographystyle{IEEEtran}
 \bibliography{reference}
