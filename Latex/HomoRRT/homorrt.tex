@@ -5,13 +5,15 @@
 
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
+
 \title{\LARGE \bf
 Homotopy RRT
 }
 
-
 \author{
 Daqing Yi
+\thanks{Daqing Yi is with Department of Computer Science, Brigham Young University, Provo, UT, 84604, USA.
+{\tt\small daqing.yi@byu.edu} }
 }
 
 
@@ -33,6 +35,18 @@ Daqing Yi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{INTRODUCTION}
+\label{sec:intro}
+
+The most popular focus on the robotic path planning is optimality.
+Given a measurable metric, the planned path would be a optimized solution to the given objective.
+This has been widely applied to model the intent of the task supervisor.
+For example, if the task is reaching a target in shortest time, the cost is defined as Euclidean distance and the planned path should be the shortest.
+However, there also exist plenty of intents that are hard to be measured by any metric, which are usually relevant with the topology.
+For example, though the execution time is expected to be minimized, it would be better if the robot could pass some specific location.
+It indicates that sometimes the ``shape'' of the paths could be an important factor to consider in planning, especially in environments with complex obstacles.
+
+
+
 
 \bibliographystyle{IEEEtran}
 \bibliography{reference}
