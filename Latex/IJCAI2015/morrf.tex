@@ -637,6 +637,82 @@ $z_k^{\rm utop} = \inf_{\sigma\in X_{\rm free}} c_{k}(\sigma) - \delta$ for $\de
 If $ \sigma^{*} $ is Pareto optimal then there exists a weighting vector $ \bm{\lambda} $, where $ \forall k \ \lambda_k\geq 0$ and $\sum_{k=1}^{K} \lambda_{k} = 1 $, such that $ \sigma^{*} $ is a solution of Eq.~\eqref{eq:Tchebycheff}.
 \begin{proof}
 This is a proof by construction.  
+When $ \sigma^{*} $ is Pareto optimal, there exits two cases, which are $ \exists k ,  c_{k}( \sigma ) = z^{\rm utop}_{k} $ and $ \forall k,  c_{k}( \sigma^{*} ) < z^{\rm utop}_{k} $.
+
+\begin{itemize}
+\item $ \exists k ,  c_{k}( \sigma ) = z^{\rm utop}_{k} $ \\
+Define $ P(\sigma^*)=\{ j \ \mid  c_{j}(\sigma^*)=z_j^{\rm utop}\} $ and let $ \overline{P}=\{1,\ldots,K\} \setminus P $.
+Let the cardinality of $ P(\sigma^*) $ be $ len(P(\sigma^*)) $.
+Define the weight vector $ \bm{\lambda} $ as 
+\begin{itemize}
+	\item $ \forall k \in P(\sigma^*), \lambda_{k} = 1 / len(P(\sigma^*)) $;
+	\item $ \forall k \in \overline{P}(\sigma^*), \lambda_{k} = 0 $.
+\end{itemize}
+We can have $ \sigma^{*} $ is a solution to Eq.~\eqref{eq:Tchebycheff}.
+
+\item $ \forall k,  c_{k}( \sigma^{*} ) > z^{\rm utop}_{k} $
+We can define the weights as
+\begin{equation}
+\label{eq:weights:assign}
+\forall k \in K, \lambda_{k} = \frac{ \ell_{k} }{ \sum_{j=1}^K \ell_{j} }.
+\end{equation}
+in which $ \ell_{k} =\frac{1}{| c_{k}(\sigma^*)-z^{\rm utop}_{k} |} $.
+\end{itemize}
+
+The Tchebycheff cost for $ \sigma^{*} $ becomes
+\begin{equation}
+\begin{aligned}
+	g^{te} ( \sigma^{*} ) =& \max_{k \in K} \lambda_{k} | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
+	=& \max_{k\in K} \frac{\ell_k}{\sum_{j=1}^{K} \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
+	=& \max_{k\in \overline{P}} \frac{\ell_k}{\sum_{j=1}^K \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |\\
+	=& \max_{k\in \overline{P}}  \frac{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |}{ | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |} \frac{1}{\sum_{j=1}^K \ell_j} \\
+	=& \frac{1}{\sum_{j=1}^K \ell_j} \\
+\end{aligned}
+\end{equation}
+
+Given any solution $ \sigma $, we have
+\begin{equation}
+\label{eq:exist_weight:leq}
+\begin{aligned}
+ g^{te} ( \sigma ) = &
+ \max_{k \in K} \lambda_{k} | f_{k}( \sigma ) - z^{\rm utop}_{k} | \\
+ =& \max_{k\in K} \frac{ \ell_{k} }{ \sum_{j=1}^K \ell_{j} } | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
+ = & \max_{k \in K} \frac{ | f_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - z^{\rm utop}_{k}  }{ f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  +  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right|
+\end{aligned}
+\end{equation}
+
+Because $ \sigma^{*} $ is Pareto optimal,
+\begin{equation}
+\exists k' \in K, f_{k'} ( \sigma ) > f_{k'} ( \sigma^{*} ),
+\end{equation}
+As $ \forall k,  c_{k}( \sigma^{*} ) > z^{\rm utop}_{k} $,
+we have 
+\begin{equation}
+\exists k' \in K, \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} }  > 0.
+\end{equation}
+It indicates that
+\begin{equation}
+\max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| > 1.
+\end{equation}
+Thus,
+\begin{equation}
+\begin{aligned}
+g^{te} ( \sigma ) 
+> &  \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} = g^{te} ( \sigma^{*} ).
+\end{aligned}
+\end{equation}
+It means,
+\begin{equation}
+\forall \sigma, g^{te} ( \sigma ) > g^{te} ( \sigma^{*} ).
+\end{equation}
+Thus, $  \sigma^{*} $ is a solution to Eq. \eqref{eq:Tchebycheff} with weights defined as Eq.\eqref{eq:weights:assign}.
+
+In both two cases, Lemma \ref{lem:exist_weight} is true.
+
+\begin{comment}
 Define $P(\sigma^*)=\{ j \ |\  c_{j}(\sigma^*)=z_j^{\rm utop}\}$ and let $\overline{P}=\{1,\ldots,K\} \setminus P$.   
 $\forall k\in P$ define  $\ell_k=1$, and $\forall k \in \overline{P}$ define $\ell_k=\frac{1}{|c_{k}(\sigma^*)-z^{\rm utop}_k|}$.   
 Normalize the weights, yielding
@@ -735,6 +811,8 @@ $%\begin{equation}
 $%\end{equation}
 so every Pareto optimal solution $\sigma^*$ can be obtained using the Tchebycheff method.
 %Thus, $  \sigma^{*} $ is a solution to Equation \eqref{eq:Tchebycheff} with weights defined as Equation \eqref{eq:weights:assign}.
+\end{comment}
+
 \end{proof}
 \end{lem}
 
@@ -828,6 +906,7 @@ Let's state this as a claim and move to the simulation studies.}
 {\sc Answer: I think this only influences the convergence speed.
 The convergence of RRT* is guaranteed by the ``REWIRE'' process.
 Because of the ``REWIRE'' process, the subproblem trees can converge after the reference trees converged.
+This is like the input-to-state stability of two cascaded input-to-state stable components.
 }
 
 We are close to being able to state that the MORFF* algorithm converges to points in the Pareto set when using the Tchebycheff method.  
