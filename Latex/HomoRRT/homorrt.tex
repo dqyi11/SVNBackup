@@ -52,7 +52,7 @@ The homotopy of the paths can help to model the human intent, which can be appli
 \item Human initialized homotopic constraint \\
 If the task supervisor has a strong opinion on the topology of the path, the supervisor can define the homotopic constraint by either initializing a reference path or defining via-regions.
 The problem becomes finding an optimal path of a given homotopy class~\cite{Hershberger199463}.
-The homotopical constraint reduce the exploring space, which brings the efficiency enhancement.
+The homotopic constraint reduce the exploring space, which brings the efficiency enhancement.
 \item Optimality of different homotopy classes \\
 If the task supervisor has a weak opinion on the topology of the path, the planning algorithm can provide the best solution of each homotopy class to the supervisor.
 The supervisor can then select one that satisfy his/her intent.
@@ -65,8 +65,11 @@ The supervisor can then select one that satisfy his/her intent.
 
 \subsection{Homotopy-based Path Planning}
 
+Homotopy-based path planning depends on the determination of the homotopy equivalence of two paths, which is usually computationally expensive.
+
+
 By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
-Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopical equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
+Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
 The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
 
 \subsection{Homotopy RRT / PRM}
@@ -81,6 +84,10 @@ Bidirectional RRT has been introduced to accelerate the exploration process whil
 
 \section{Algorithm}
 \label{sec:algorithm}
+
+\subsection{Homotopy-base space decomposition}
+
+\subsection{Bidirection RRT$^{*}$}
 
 \section{Application}
 \label{sec:application}
