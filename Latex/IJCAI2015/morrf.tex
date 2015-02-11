@@ -664,8 +664,7 @@ The Tchebycheff cost for $ \sigma^{*} $ becomes
 \begin{aligned}
 	g^{te} ( \sigma^{*} ) =& \max_{k \in K} \lambda_{k} | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
 	=& \max_{k\in K} \frac{\ell_k}{\sum_{j=1}^{K} \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
-	=& \max_{k\in \overline{P}} \frac{\ell_k}{\sum_{j=1}^K \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |\\
-	=& \max_{k\in \overline{P}}  \frac{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |}{ | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |} \frac{1}{\sum_{j=1}^K \ell_j} \\
+	=& \max_{k \in K}  \frac{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |}{ | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |} \frac{1}{\sum_{j=1}^K \ell_j} \\
 	=& \frac{1}{\sum_{j=1}^K \ell_j} \\
 \end{aligned}
 \end{equation}
@@ -675,27 +674,29 @@ Given any solution $ \sigma $, we have
 \label{eq:exist_weight:leq}
 \begin{aligned}
  g^{te} ( \sigma ) = &
- \max_{k \in K} \lambda_{k} | f_{k}( \sigma ) - z^{\rm utop}_{k} | \\
+ \max_{k \in K} \lambda_{k} | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
  =& \max_{k\in K} \frac{ \ell_{k} }{ \sum_{j=1}^K \ell_{j} } | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
- = & \max_{k \in K} \frac{ | f_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \\
- = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - z^{\rm utop}_{k}  }{ f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
- = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  +  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
- = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right|
+ = & \max_{k \in K} \frac{ | c_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ c_{k}( \sigma ) - z^{\rm utop}_{k}  }{ c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  +  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+ = & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right|
 \end{aligned}
 \end{equation}
 
 Because $ \sigma^{*} $ is Pareto optimal,
 \begin{equation}
-\exists k' \in K, f_{k'} ( \sigma ) > f_{k'} ( \sigma^{*} ),
+\label{eq:exist_geq}
+\exists k' \in K, c_{k'} ( \sigma ) >  c_{k'} ( \sigma^{*} ).
 \end{equation}
 As $ \forall k,  c_{k}( \sigma^{*} ) > z^{\rm utop}_{k} $,
-we have 
+we have $ \forall k,  c_{k}( \sigma^{*} ) - z^{\rm utop}_{k} > 0 $.
+Therefore,
 \begin{equation}
-\exists k' \in K, \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} }  > 0.
+\exists k' \in K, \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} }  > 0.
 \end{equation}
 It indicates that
 \begin{equation}
-\max_{k \in K} \left| 1 + \frac{ f_{k}( \sigma ) - f_{k} ( \sigma^{*} )  }{  f_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| > 1.
+\max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| > 1.
 \end{equation}
 Thus,
 \begin{equation}
