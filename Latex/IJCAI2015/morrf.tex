@@ -868,7 +868,19 @@ If $  F^{\rm SUB}_{m} $ of the $ m $-th subproblem tree is input-to-state stable
 \label{lem:sub_tree:iss}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing}, $ \bm{c}^{\rm SUB}_{m} ( x ;i ) = F^{\rm SUB}_{m} ( x; i, \hat{\bm{z}}^{\rm utop} (x;i) ) $ is ISS.
 \begin{proof}
-
+Let $ \xi (i) = \max_{k \in K} \lambda_{m , k} | c^{\rm SUB}_{m, k} (x; i) - c_{m, k}^{*} (x) \geq 0 | $.
+Define $ V(i) = \xi (i) $.
+Because $ \forall k, \hat{\bm{z}}^{\rm utop}_{k} (x) $ is monotonic decreasing.
+There exists $ \tau $ such that $ \forall k \in K , c_{m, k}^{*}(x) \geq \hat{\bm{z}}^{\rm utop}_{k} (x) $.
+Let $ \tau $ as the initial.
+\begin{equation}
+\begin{aligned}
+& V(i+1) - V(i) \\
+= & -V(i) + \xi (i+1) \\
+\leq& - V(i) + \max_{k \in K} \lambda_{m , k} | c^{\rm SUB}_{m, k} (x; i) - \bm{z}^{\rm utop}_{k} (x) | \\
+= & - V(i) + \max_{k \in K} \lambda_{m , k} | \hat{\bm{z}}^{\rm utop}_{k} (x)  - \bm{z}^{\rm utop}_{k} (x) + c^{\rm SUB}_{m, k} (x; i) - \hat{\bm{z}}^{\rm utop}_{k} (x) | .
+\end{aligned}
+\end{equation}
 \end{proof}
 \end{lem}
 
