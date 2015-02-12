@@ -843,7 +843,7 @@ The next question that needs to be answered is whether the subproblem tree can f
 
 
 We notice that the \textsc{Extend} process in RRT$^{*}$ is not goal-oriented.
-Let $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
+Let $ c(x, i) $ be the minimum cost from the root to the position of vertex $ x $ at iteration $ i$  and $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
 We can generalize the conclusion of Theorem 22 in \cite{Karaman.Frazzoli:RSS10} to all the vertices in the RRT$^{*}$.
 \begin{lem}
 \label{lem:tree_vex:conv}
@@ -860,36 +860,40 @@ Simply changing the goal to the position of any vertex still hold the asymptotic
 Thus, we could generalize the asymptotic optimality from the goal to all the vertices.
 \end{proof}
 \end{lem}
-{\sc Walter, it looks like we have replaced $f$ with $c$, introduced an iteration index $i$, and switched from path $\sigma$ to denote our solutions to $x$. 
- Please fix this with a consistent notation and then I'll work on the proof.}
+%{\sc Walter, it looks like we have replaced $f$ with $c$, introduced an iteration index $i$, and switched from path $\sigma$ to denote our solutions to $x$. 
+% Please fix this with a consistent notation and then I'll work on the proof.}
 
-{\sc ANSWER: here $  c(x, i) $ indicates the cost of vertex $ x $ at iteration $  i $, which is stored at each vertex.
-It is the cost of the path from the root to vertex $ x $.
-}
+%{\sc ANSWER: here $  c(x, i) $ indicates the cost of vertex $ x $ at iteration $  i $, which is stored at each vertex.
+%It is the cost of the path from the root to vertex $ x $.
+%}
 
 The solution to a subproblem requires a correct estimation of the reference vector $ \bm{z}^{\rm utop} $. 
 To guarantee a correct estimation of this reference vector, we need to prove that the solutions of all the reference trees converge to the optimal.
 Since the construction of a reference tree does not depend on any other tree, the construction process is equivalent to the construction of an RRT$^{*}$.
 The asymptotic optimality of RRT$^{*}$ in Lemma \ref{lem:tree_vex:conv} therefore applies to the reference tree, so the the cost of the solution converges to the optimal cost with respect to a single objective.
+
+Define $ c^{\rm REF}_{k} ( x ,i ) = F^{\rm REF}_{k} ( x, i  ) $ as the minimum cost from the root to the vertex $ x $ at iteration $ i $ by the $ k $-th reference tree.
 \begin{lem}
 \label{lem:ref_tree:conv}
 Given Assumptions \ref{asmp:additivity}-\ref{asmp:spacing},
-the cost of the minimum cost path from the root to any vertex in $ k $-th reference tree converges to $ z^{*}_{k} $ almost surely.%, i.e., 
-%$ P( \{ \lim_{ i \rightarrow \infty }  c_{k} (x, i ) = z^{*}_{k} (x) \} ) = 1  $.
+the cost of the minimum cost path from the root to any vertex in $ k $-th reference tree converges to $ z^{*}_{k} $ almost surely, i.e., 
+$ P( \{ \lim_{ i \rightarrow \infty }  c^{\rm REF}_{k} (x, i) = z^{*}_{k} (x) \} ) = 1  $.
 \end{lem}
 
 By similar reasoning, given convergence to the Utopia reference vector, we can guarantee that each subproblem tree converges to a point in the Pareto set.
 %Then we need to show that after all the reference trees converge to the structure that provides optimal cost, 
 %the subproblem tree can also converge to the structure that provides optimal fitness $ g^{*}_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) $.
+Define $ \bm{c}^{\rm SUB}_{m} ( x ,i ) = F^{\rm SUB}_{\lambda_{m}} ( x, i, \hat{\bm{z}}^{\rm utop} (x) ) $ as the Pareto-optimal cost vector from the root to the vertex $ x $ given $  \hat{\bm{z}}^{\rm utop} $ as reference vector at iteration $ i $ by the $ m $-th subproblem tree.
 \begin{lem}
 \label{lem:sub_tree:conv}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing} and given the correct value of the Utopia reference vector,
 %with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
-the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem almost surely.%, i.e.,
-%$
-%P( \{ \lim_{ i \rightarrow \infty } c_{ \lambda_{m} }( i ) \} ) = z^{*}_{ \lambda_{m} }
-%$
-%\begin{proof}
+the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem almost surely, i.e.,
+\begin{equation}
+\label{eq:sub_tree:conv}
+P( \{ \lim_{ i \rightarrow \infty } \bm{c}^{\rm SUB}_{m} ( x ,i ) =  \bm{c}_{m}^{*} (x) \} ) = 1 .
+\end{equation}
+\begin{proof}
 %When the reference vector $ \bm{z}^{\rm utop}(x) $ converges, the cost of the minimum cost path from the root to the vertex of position $ x $ in $ m $-th subproblem tree will gradually converge to the optimal by Lemma \ref{lem:tree_vex:conv}.
 %It means that the minimum fitness path from the root to any vertex in a subproblem tree will converge to an optimal minimum fitness path, in which the vertices in goal region are included.
 %It equals to that the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem.
@@ -897,37 +901,64 @@ the cost of the solution of $ m $-th subproblem tree converges to the optimal co
 %When all the reference trees have converged, the correct reference values $ c^{*} (x) $ of all the vertices could be obtained.
 %The convergence process will be similar with that of a single RRT*.
 %By Lemma \ref{lem:ref_tree:conv} and Lemma \ref{lem:sub_tree:conv}, we know that the utopia reference value $ c^{*} (x) $ could be correctly estimated after all the reference trees have reached optimality.
-%\end{proof}
+
+Consider $ F^{\rm SUB}_{\lambda_{m}} ( x, i, \hat{\bm{z}}^{\rm utop} (x) ) $ as a system.
+\begin{itemize}
+\item If $ \hat{\bm{z}}^{\rm utop}  (x) = \bm{z}^{\rm utop}  (x) $, $ \bm{c}^{\rm SUB}_{m} ( x ,i ) \rightarrow \bm{c}_{m}^{*} (x) $ as $ i \rightarrow \infty $ by lemma \ref{lem:tree_vex:conv}.
+Thus, as $ i \rightarrow \infty $, $ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \rightarrow 0 $.
+Write it using a $ KL $-function $ \beta $, we have
+$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \beta( \lVert \bm{c}^{\rm SUB}_{m} ( x , 0 ) - \bm{c}_{m}^{*} (x) \rVert , i )  $.
+\item If $ \bm{c}^{\rm SUB}_{m} ( x , 0 ) = \bm{c}_{m}^{*} (x) $, it means the subproblem tree initially has a solution $ \bm{c}_{m}^{*} (x) $ to the subproblem.
+However, because $  \hat{\bm{z}}^{\rm utop}  (x) \neq \bm{z}^{\rm utop}  (x)  $, the newer best solution will deviate from this initial solution, but still bounded and the boundary is determined by how  $ \hat{\bm{z}}^{\rm utop}  (x) $ deviates from $  \bm{z}^{\rm utop}  (x)  $.
+Write it using a $ K $-function $ \gamma $, we have
+$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \gamma ( \sup_{ 0 \leq \tau \leq t}  \lVert \hat{\bm{z}}^{\rm utop}  (x) - \bm{z}^{\rm utop}  (x) \rVert ) $.
+\end{itemize}
+By combining two cases, we have the output state satisfying 
+\begin{equation}
+\begin{aligned}
+\lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \beta( \lVert \bm{c}^{\rm SUB}_{m} ( x , 0 ) - \bm{c}_{m}^{*} (x) \rVert , i ) 
+\\ + \gamma ( \sup_{ 0 \leq \tau \leq t}  \lVert \hat{\bm{z}}^{\rm utop}  (x) - \bm{z}^{\rm utop}  (x) \rVert ).
+\end{aligned}
+\end{equation}
+
+Thus, the system is input-to-state stable~\cite{khalil1996nonlinear}.
+If $ \hat{\bm{z}}^{\rm utop}  (x) \rightarrow \bm{z}^{\rm utop} (x) $,
+$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \rightarrow 0 $.
+By Lemma \ref{lem:ref_tree:conv}, we have
+$ P( \{ \lim_{ i \rightarrow \infty }  \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert = 0 \} ) = 1 $, 
+which equals to Eq. \eqref{eq:sub_tree:conv}.
+\end{proof}
 \end{lem}
 
-{\sc Walter, the problem now is that you must have the reference trees converge first and then the subproblem trees, but all the trees in the forest are constructed simultaneously.  
-That means that we can't guarantee convergence of the entire algorithm without more work than is done in the proof below.  
-Let's state this as a claim and move to the simulation studies.}
 
-{\sc Answer: I think this only influences the convergence speed.
-The convergence of RRT* is guaranteed by the ``REWIRE'' process.
-Because of the ``REWIRE'' process, the subproblem trees can converge after the reference trees converged.
-This is like the input-to-state stability of two cascaded input-to-state stable components.
-}
+%{\sc Walter, the problem now is that you must have the reference trees converge first and then the subproblem trees, but all the trees in the forest are constructed simultaneously.  
+%That means that we can't guarantee convergence of the entire algorithm without more work than is done in the proof below.  
+%Let's state this as a claim and move to the simulation studies.}
 
-We are close to being able to state that the MORFF* algorithm converges to points in the Pareto set when using the Tchebycheff method.  
-Unfortunately, the requirement that the reference trees converge before the subproblem trees can converge causes technical problems in the proof of such a condition.  
-Thus, we state the following claim without proof, and provide evidence for this claim in the next section.
+%{\sc Answer: I think this only influences the convergence speed.
+%The convergence of RRT* is guaranteed by the ``REWIRE'' process.
+%Because of the ``REWIRE'' process, the subproblem trees can converge after the reference trees converged.
+%This is like the input-to-state stability of two cascaded input-to-state stable components.
+%}
 
-\begin{clm}
-\label{clm:morrt:conv}	
-Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing}, the solutions from MORRF$^{*} $ converge to a subset of the Pareto optimal set almost surely.
-\end{clm}
+%We are close to being able to state that the MORFF* algorithm converges to points in the Pareto set when using the Tchebycheff method.  
+%Unfortunately, the requirement that the reference trees converge before the subproblem trees can converge causes technical problems in the proof of such a condition.  
+%Thus, we state the following claim without proof, and provide evidence for this claim in the next section.
 
-%Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to a subset of the Pareto optimal set.
-%
-%\begin{thm}
-%\label{thm:morrt:conv}
-%When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
-%the solutions from MORRF$^{*} $ converges to a subset of the Pareto optimal set almost surely, i.e.
-%$
-%P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
-%$
+%\begin{clm}
+%\label{clm:morrt:conv}	
+%Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing}, the solutions from MORRF$^{*} $ converge to a subset of the Pareto optimal set almost surely.
+%\end{clm}
+
+Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to a subset of the Pareto optimal set.
+
+\begin{thm}
+\label{thm:morrt:conv}
+When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
+the solutions from MORRF$^{*} $ converges to a subset of the Pareto optimal set almost surely, i.e.
+$
+P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
+$
 %\begin{proof}
 %As the solutions of MORRF$^{*}$ can be modeled in points in a high-dimension space by Lemma \ref{lem:moo-d:rrt}, the %Tchebycheff method could be imported to decompose the multi-objective optimization problem into a set of subproblems.
 %By the fitness definition of the subproblem trees, if the subproblem tree could find a solution that minimize the fitness, the %solution is in the Pareto optimal set of the multi-objective optimization problem.
@@ -937,7 +968,7 @@ Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing}, the solutions from M
 %It means that the solution converges to an optimal solution to $ m $-th subproblem as the iteration goes.
 %Therefore, the set of the solutions from all the subproblem trees converge to a subset of the Pareto optimal set, as the %iteration goes~\cite{4358754}~\cite{miettinen1999nonlinear}.
 %\end{proof}
-%\end{thm}
+\end{thm}
 
 \section{Simulation}
 \label{sec:simulation}
