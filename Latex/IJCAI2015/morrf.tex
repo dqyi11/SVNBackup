@@ -185,7 +185,7 @@ In this paper, we implement only the Tchebycheff approach, noting that the Bound
 Before describing how we find $ \bm{z}^{\rm utop} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
 \begin{figure}
 \centering
-\includegraphics[width=0.6\linewidth]{fig/Tchebycheff2.png}
+\includegraphics[width=0.4\linewidth]{fig/Tchebycheff2.png}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
@@ -225,7 +225,7 @@ This process of finding $x_{new}$ is represented in the top layer of Figure~\ref
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{./fig/MORRTstar}
+\includegraphics[width=0.7\linewidth]{./fig/MORRTstar}
 \caption{Rapidly exploring process}
 \label{fig:MORRTstar}
 \end{figure}
@@ -496,20 +496,6 @@ This is performed using the {\sc Fitness} method.
 %\end{comment}
 
 The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:Tchebycheff}).  Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{c_{k}():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
-%{\sc Walter, Please give the equation for the Fitness method.  Also, please describe how the different $\lambda_m$ are obtained.  I assume that the $\lambda_m$ are selected so that you uniformly sample the range of possible weightings.}
-%{\sc \underline  
-%(1) The $ \lambda_{m} $ can either be evenly sampled 
-%or uniformly randomly sampled from the normalized $ K $ space.
-%In 2-objective problem, I just directly evenly collect values .
-%In 3-objective problem, I do uniformly randomly sampling.
-%This is the same with how $ \lambda_{m} $ is obtained in MOEA-D.
-%(2) The fitness is calculated by one of the three methods in section "Related work".
-%For example, if I use Tchebycheff approach,
-%I will firstly calculate $ | c_{k}(x) - z^{*}_{k} | $ for each objective, multiple it with $ k $th value of the vector $ \lambda_m $.
-%The maximum of the $ K $ values will be the fitness.
-%This converts the cost vector ($ K $-dimension) into a single dimension fitness.
-%Thus, I use FITNESS to differentiate with COST.
-%}%
 
 
 \section{Analysis} 
@@ -522,12 +508,6 @@ Before we start the analysis, note the following restrictions on the cost functi
 %$ c_{k} ( \sigma_{1}  \mid \sigma_{2} ) = c_{k} ( \sigma_{1} ) + c_{k} ( \sigma_{2} ) $.
 For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $c_{k}(\sigma_1\circ\sigma_2) = c_{k}(\sigma_1) + c_{k}(\sigma_2)$.
 \end{asmp}
-
-%{\sc Walter, a conditional cost function $ c_{k} ( \sigma_{1}  \mid \sigma_{2} )$ isn't defined in this paper.  What does it mean?  also, replace $c_k$ with the notation we've been using, $c_{k}$.  Do you mean that if you construct a discontinuous path made up of $\sigma_1$ and $\sigma_2$, the cost for that path $c_k(\sigma_1,\sigma_2)$ is the sum of the costs of the two paths?  If so, assumption 1 becomes:}
-
-%\noindent{\bf Assumption 1.} For a path constructed by composing two other paths (to create a discontinuous path), $\forall k\in K, \sigma_1,\sigma_2\in X_{\rm free}$, $c_k(\sigma_1\circ\sigma_2) = c_k(\sigma_1) + c_k(\sigma_2)$.
-
-%{\sc ANSWER: I borrow this assumption directly from the origin paper. I think that one is exactly as what you rewrote.}
 
 \begin{asmp}{(Continuity of the objective functions)}
 \label{asmp:continuity}
@@ -618,8 +598,6 @@ Define the weight vector $ \bm{\lambda} $ as
 %\end{itemize}
 For these weights, Eq.~\eqref{eq:Tchebycheff} returns a set of solution paths, all of which have the same cost for the $k$-cost functions when $k\in P$ but different possible costs for $k\in\overline{P}$.  $\sigma^*$ is trivially in this set of solution paths.
 
-%{\sc Walter, this proof doesn't work because weightings for the first case don't generate a unique solution.  For a four-objective problem, consider consider the cost functions for two paths: $\sigma_a$ and $\sigma_b$.  Suppose the cost functions for these two paths are $c_1(\sigma_a) = \lambda_1 = c_2(\sigma_b)$, ${\rm for}\ j\in{1,2,3}c_j(\sigma_a) = 5$ and $c_j(\sigma_b)=4$.  Both $\sigma_a$ and $\sigma_b$ have the same Tchebycheff cost, $g^{te}(\sigma_a)=g^{te}(\sigma_b)$.  That is why I didn't set the weights for $k\in\overline{P}$ to zero.} 
-
 \textit{\textbf{Case (b)}}: $\forall k,  c_{k}( \sigma^{*} ) > z^{\rm utop}_{k}$\\
 For all $k$, define the weights as
 %\begin{equation}
@@ -646,9 +624,9 @@ Given any other path $ \sigma $, we can represent the Tchebycheff cost as follow
  g^{te} ( \sigma )%& = &
  %\max_{k \in K} \lambda_{k} | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
  &=& \max_{k\in K} \frac{ \ell_{k} }{ \sum_{j=1}^K \ell_{j} } | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
- &= & \frac{1}{\sum_{j=1}^K \ell_j}\max_{k \in K} \frac{ | c_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \\%\left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \\
+% &= & \frac{1}{\sum_{j=1}^K \ell_j}\max_{k \in K} \frac{ | c_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \\%\left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \\
  %&= & \left( \sum_{j=1}^K \ell_{j}  \right)^{-1} \max_{k \in K} \left| \frac{ c_{k}( \sigma ) - z^{\rm utop}_{k}  }{ c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
- &= & \frac{1}{\sum_{j=1}^K \ell_j}\max_{k \in K} \left| \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  +  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
+% &= & \frac{1}{\sum_{j=1}^K \ell_j}\max_{k \in K} \left| \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  +  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \\
  &= & \frac{1}{\sum_{j=1}^K \ell_j} \max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right|
 %\end{aligned}
 %\end{equation}
@@ -682,107 +660,6 @@ g^{te} ( \sigma ) >  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} ).
 %\end{equation}
 Thus, $  \sigma^{*} $ is a solution to Eq. \eqref{eq:Tchebycheff}.
 
-\begin{comment}
-Define $P(\sigma^*)=\{ j \ |\  c_{j}(\sigma^*)=z_j^{\rm utop}\}$ and let $\overline{P}=\{1,\ldots,K\} \setminus P$.   
-$\forall k\in P$ define  $\ell_k=1$, and $\forall k \in \overline{P}$ define $\ell_k=\frac{1}{|c_{k}(\sigma^*)-z^{\rm utop}_k|}$.   
-Normalize the weights, yielding
-\begin{equation}
-\label{eq:weights:assign}
-\forall k \in K, \lambda_k = \frac{\ell_k}{\sum_{j=1}^K \ell_j}.
-%\lambda_{k} = \frac{1}{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{j=1}^{K} \frac{1}{ | c_{j} ( \sigma^{*} ) - z^{\rm utop}_{j} | }  \right)^{-1} .
-\end{equation}
-If $P(\sigma^*) = \{1,2,\ldots, K\}$, then there is only one element in the Pareto set and the result is trivial.  
-
-Otherwise, define the Tchebycheff cost for an arbitrary path $\sigma$ as
-\begin{equation}
-%\begin{aligned}
- g^{te} ( \sigma )  =  \max_{k \in K} \lambda_{k} | c_{k}( \sigma ) - z^{\rm utop}_{k} |. %\\
-%&  =  \max_{k \in K} \frac{ | c_{k}( \sigma ) - z^{\rm utop}_{k} |  }{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | } \left( \sum_{k=1}^{K} \frac{1}{ | c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} | }  \right)^{-1}
-%\end{aligned}
-\end{equation}
-%for any given $ \sigma $.
-%
-%
-The Tchebycheff cost for $ \sigma^{*} $ becomes
-\begin{eqnarray*}
- g^{te} ( \sigma^{*} ) &=& \max_{k \in K} \lambda_{k} | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
-   &=& \max_{k\in K} \frac{\ell_k}{\sum_{j=1}^{K} \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} | \\
-   &=& \max_{k\in \overline{P}} \frac{\ell_k}{\sum_{j=1}^K \ell_j}  | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |\\
-   &=& \max_{k\in \overline{P}}  \frac{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |}{ | c_{k}( \sigma^* ) - z^{\rm utop}_{k} |} \frac{1}{\sum_{j=1}^K \ell_j} \\
-   &=& \frac{1}{\sum_{j=1}^K \ell_j} \\
-%   &=& \\
- %  &=& \left( \sum_{j\not\in P} \frac{1}{ | c_{j} ( \sigma^{*} ) - z^{\rm utop}_{j} | }  \right)^{-1}\\
-\end{eqnarray*}
-
-Given any solution $ \sigma $, we have
-\begin{equation}
-\label{eq:exist_weight:leq}
-\begin{aligned}
- g^{te} ( \sigma ) = &
-\max_{k \in K} \lambda_{k} | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
-=& \max_{k\in K} \frac{\ell_k}{\sum_{j=1}^K \ell_j} | c_{k}( \sigma ) - z^{\rm utop}_{k} | \\
-=&  \frac{1}{\sum_{j=1}^K \ell_j} \max_{k\in K} \ell_k | c_{k}( \sigma ) - z^{\rm utop}_{k} |\\
-=& \frac{1}{\sum_{j=1}^K \ell_j} \max_{k\in K} \Big\{ \{ \ell_k | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ \big{|} k\in\overline{P}\}\Big.  \\
-& \Big.\bigcup \{ \ell_k | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ \big{|} k\in P\}\Big\}\\
-%=&  \frac{1}{\sum_{j=1}^K \ell_j} \max_{k\not\in P} \ell_k | c_{k}( \sigma ) - z^{\rm utop}_{k} |\\
-=& \frac{1}{\sum_{j=1}^K \ell_j} \max_{k\in K} \Bigg\{ \Big\{ \frac{| c_{k}( \sigma ) - z^{\rm utop}_{k}| }{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |}\ \big{|} k\in\overline{ P}\Big\} \Bigg. \\
-& \Bigg.\bigcup \{ \varepsilon | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ \big{|} k\in P\}\Bigg\}\\
-%=&  \frac{1}{\sum_{j=1}^K \ell_j}  \max_{k\in K} \Big\{\{\frac{| c_{k}( \sigma ) - z^{\rm utop}_{k}| }{| c_{k}( \sigma^* ) - z^{\rm utop}_{k} |\ | k\in P\}}\\
-%& \bigcup \Big\{ \varepsilon | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ | k\in P\Big\}\Big\}\\
-= & \frac{1}{\sum_{j=1}^K \ell_j} \max_{k \in K}\Bigg\{\\
-& \Big\{ \Big| \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  +  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k}  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \Big|  \ \big{|} k\in\overline{ P}\Big\}\Bigg.\\
-& \Bigg.\bigcup \{ \varepsilon | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ \big{|} k\in P\}\Bigg\}\\
-= & \frac{1}{\sum_{j=1}^K \ell_j} \max_{k \in K} \Bigg\{\Big\{\Big| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \Big| \ | k\in\overline{ P}\Big\}\Bigg.\\
-& \Bigg.\bigcup \{ \varepsilon | c_{k}( \sigma ) - z^{\rm utop}_{k} |\ | k\in P\}\Bigg\}\\
-=&  \frac{1}{\sum_{j=1}^K \ell_j}  \max\Bigg\{\max_{k\in \overline{P}}\Big\{\Big| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \Big| \Big\} \Bigg.\\
-& \Bigg.\max_{k\in P} \Big\{ \varepsilon | c_{k}( \sigma ) - z^{\rm utop}_{k} |\Big\}\Bigg\}.
-\end{aligned}
-\end{equation}
-
-%{\sc Walter, we don't really need the condition that the lambda weights sum to one.  
-%The math gets cleaner if we don't use that constraint.  Let's drop it.}
-
-%{\sc Answer: I think it is still necessary to keep the normalized weight.
-%It guarantees the uniqueness.
-%For example, [0.5, 0.5] has same effect with [1.0, 1.0].
-%If all the weights are normalized, there won't be duplicates. }
-
-Because $ \sigma^{*} $ is Pareto optimal,
-%\begin{equation}
-$\exists k' \in K, c_{k'} ( \sigma ) > c_{k'} ( \sigma^{*} ).
-$
-%\end{equation}
-If $k'\in \overline{P}$, then 
-\begin{equation}
-\max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \geq 1
-\end{equation}
-and Eq.~\ref{eq:exist_weight:leq} becomes 
-\begin{equation}
-\begin{aligned}
-g^{te} ( \sigma ) 
-\geq &  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} ).
-\end{aligned}
-\end{equation}
-%
-%{\sc What if $k'\in P$?}  
-%
-When $k'\in P$, things get a little more tricky.  
-Observe that since  $c_{k'} ( \sigma ) > c_{k'} ( \sigma^{*})$, by the definition of Pareto optimal, and since $c_{k'}(\sigma^*)\geq z_k^{\rm utop}$, by the assumption about the ``Utopia'' vector then $c_k'(\sigma) > z_k^{\rm utop}$.  
-Thus, if we set \[\epsilon = \frac{1}{\inf_{\sigma\in X_{\rm free}} \min_{k} c_{k}(\sigma) - z_{k}^{\rm utop}}\] we could guarantee the same bound on the Tchebycheff cost.  
-Unfortunately, the sequence of infimum and minimum operators can return a zero, so $\varepsilon$ can be undefined.  
-Although there is likely an elegant solution to this, we do not know what this is so we employ a simple trick, namely to redefine our Utopia vector to avoid the divide-by-zero problem.  
-Thus, instead of having $z_k^{\rm utop} = \inf_{\sigma\in X_{\rm free}} c_{k}(\sigma)$, we instead set $z_k^{\rm utop} = \inf_{\sigma\in X_{\rm free}} c_{k}(\sigma) - \delta$.  
-This guarantees that the maximum of the two maxima in Eq.~\ref{eq:exist_weight:leq} exceeds one, which in turn guarantees that $g^{te} ( \sigma ) 
-\geq   \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} )$.
-
-Thus, for any other path $\sigma$, we can define a weight vector consisting of $\lambda_k$ that guarantees that
-$%\begin{equation}
-\forall \sigma, g^{te} ( \sigma ) \geq g^{te} ( \sigma^{*} ),
-$%\end{equation}
-so every Pareto optimal solution $\sigma^*$ can be obtained using the Tchebycheff method.
-%Thus, $  \sigma^{*} $ is a solution to Equation \eqref{eq:Tchebycheff} with weights defined as Equation \eqref{eq:weights:assign}.
-\end{comment}
-
 \end{proof}
 \end{lem}
 
@@ -809,8 +686,6 @@ Theorem~\ref{thm:moo-d:rrt} implies that we can use the Tchebycheff method to fi
 In terms of the MORRF$^{*}$ algorithm, we can sample the Pareto set by selecting weights, forming a subproblem that can be solved using RRT*. 
 The next question that needs to be answered is whether the subproblem tree can find the optimal solution of its assigned subproblem.
 
-
-%We notice that the \textsc{Extend} process in RRT$^{*}$ is not goal-oriented.
 The way that the RRT* algorithm works is that it incrementally constructs a tree from a root position.  New nodes are constructed by randomly sampling points that are near to other locations in the tree, and then wiring the new node and rewiring nearby nodes in the tree so that the path from root to the position of the new node is minimal.  The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman.Frazzoli:RSS10}.
 \begin{lem}
 \label{lem:tree_vex:conv}
@@ -818,7 +693,8 @@ Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing},
 the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely.
 \end{lem}
   
-\begin{comment}Let $c(x; i) $ be the minimum cost from the root to the position of vertex $ x $ at iteration $ i$  and $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
+\begin{comment}
+Let $c(x; i) $ be the minimum cost from the root to the position of vertex $ x $ at iteration $ i$  and $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
 We can generalize the conclusion of Theorem 22 in \cite{Karaman.Frazzoli:RSS10} to all the vertices in the RRT$^{*}$.
 \begin{lem}
 %\label{lem:tree_vex:conv}
@@ -836,12 +712,7 @@ Thus, we could generalize the asymptotic optimality from the goal to all the ver
 \end{proof}
 \end{lem}
 \end{comment}
-%{\sc Walter, it looks like we have replaced $f$ with $c$, introduced an iteration index $i$, and switched from path $\sigma$ to denote our solutions to $x$. 
-% Please fix this with a consistent notation and then I'll work on the proof.}
 
-%{\sc ANSWER: here $  c(x, i) $ indicates the cost of vertex $ x $ at iteration $  i $, which is stored at each vertex.
-%It is the cost of the path from the root to vertex $ x $.
-%}
 Lemma~\ref{lem:tree_vex:conv} and Theorem~\ref{thm:moo-d:rrt} imply that each reference tree converges to the optimal path from the root to any node in the tree, including a node arbitrarily close to the goal node.  This means that the costs returned by those trees for the path from start to goal for cost function $c_k$ converges to the $k^{\rm th}$ element of the Utopia reference vector $ \bm{z}^{\rm utop} $.  We state this as a lemma.
 \begin{lem}
 \label{lem:ref_tree:conv}
@@ -857,70 +728,34 @@ We now address this problem.
 
 Let $  \hat{\bm{z}}^{\rm utop}(x;i) $ denote the approximate Utopia reference vector for position $x$ on iteration $i$, obtained by looking the cost from the root to position $x$ from the $k$-reference trees.
 Recall that the $m^{\rm th}$ subtree attempts to generate a solution to Eq.~\eqref{eq:Tchebycheff} for a given weight vector ${\mathbf \lambda}^m$.
-Let $ \bm{c}^{\rm SUB}_{m} ( x ;i ) = F^{\rm SUB}_{m} ( x; i, \hat{\bm{z}}^{\rm utop} (x;i) ) $ denote the as the cost vector from the root to the vertex $ x $ in $ m $-th subproblem tree given the reference vector $  \hat{\bm{z}}^{\rm utop} $.
-Consider $ F^{\rm SUB}_{\lambda_{m}} ( x, i, \hat{\bm{z}}^{\rm utop} (x) ) $ as a system in Figure \ref{fig:dependency}.
-A subproblem tree obtains $ \hat{\bm{z}}^{\rm utop} (x) $ from the reference trees and generate the corresponding $ \bm{c}^{\rm SUB}_{m} ( x ;i ) $ at iteration $ i $ for either adding new vertex or rewiring an existing vertex.
+Let
+\begin{equation}
+ \bm{c}^{\rm SUB}_{m} ( \bm{z} ) = 
+\bm{c}( \bm{z} ) = \arg \min_{x} \max_{ k \in K } \lambda_{m, k} | x_{k} - \bm{z}_{k} | 
+\end{equation} denote the as the cost vector in $ m $-th subproblem tree given the reference vector $ \bm{z} $.
+$ \hat{ \bm{c} }^{\rm SUB}_{m} ( i, \bm{z} ) $ as its estimation at iteration $ i $.
+A subproblem tree obtains $ \hat{\bm{z}}^{\rm utop} (v) $ for vertex $ v $ from the reference trees and generate the corresponding $ \bm{c}^{\rm SUB}_{m} ( v ; i, \hat{\bm{z}}^{\rm utop} (v) ) $ at iteration $ i $ for either adding new vertex or rewiring an existing vertex.
 This forms a cascade structure from the reference trees to the subproblem tree. 
 By Lemma \ref{lem:ref_tree:conv}, we have the convergence of the reference trees.
-If $  F^{\rm SUB}_{m} $ of the $ m $-th subproblem tree is input-to-state stable(ISS), we can have the convergence of $ \bm{c}^{\rm SUB}_{m} ( x ;i ) $~\cite{khalil1996nonlinear}.
-
-\begin{lem}
-\label{lem:sub_tree:iss}
-Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing}, $ \bm{c}^{\rm SUB}_{m} ( x ;i ) = F^{\rm SUB}_{m} ( x; i, \hat{\bm{z}}^{\rm utop} (x;i) ) $ is ISS.
-\begin{proof}
-Let $ \xi (i) = \max_{k \in K} \lambda_{m , k} | c^{\rm SUB}_{m, k} (x; i) - c_{m, k}^{*} (x) \geq 0 | $.
-Define $ V(i) = \xi (i) $.
-Because $ \forall k, \hat{\bm{z}}^{\rm utop}_{k} (x) $ is monotonic decreasing.
-There exists $ \tau $ such that $ \forall k \in K , c_{m, k}^{*}(x) \geq \hat{\bm{z}}^{\rm utop}_{k} (x) $.
-Let $ \tau $ as the initial.
-\begin{equation}
-\begin{aligned}
-& V(i+1) - V(i) \\
-= & -V(i) + \xi (i+1) \\
-\leq& - V(i) + \max_{k \in K} \lambda_{m , k} | c^{\rm SUB}_{m, k} (x; i) - \bm{z}^{\rm utop}_{k} (x) | \\
-= & - V(i) + \max_{k \in K} \lambda_{m , k} | \hat{\bm{z}}^{\rm utop}_{k} (x)  - \bm{z}^{\rm utop}_{k} (x) + c^{\rm SUB}_{m, k} (x; i) - \hat{\bm{z}}^{\rm utop}_{k} (x) | .
-\end{aligned}
-\end{equation}
-\end{proof}
-\end{lem}
 
 
 \begin{lem}
 \label{lem:sub_tree:conv}
+Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing} and given the estimated Utopia reference vector $ \hat{\bm{z}} $,
+%with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
+the cost of the solution of $ m $-th subproblem tree converges to the corresponding cost of the $ m $-th subproblem $ \bm{c}_{m}^{*} ( x \mid \hat{\bm{z}} ) $ almost surely.
+\end{lem}
+
+
+\begin{lem}
+\label{lem:morrf:conv}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing} and given the correct value of the Utopia reference vector,
 %with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
 the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem almost surely, i.e.,
 \begin{equation}
 \label{eq:sub_tree:conv}
-P( \{ \lim_{ i \rightarrow \infty } \bm{c}^{\rm SUB}_{m} ( x ,i ) =  \bm{c}_{m}^{*} (x) \} ) = 1 .
+P( \{ \lim_{ \substack{ i \to \infty \\ j \to \infty } } \bm{c}^{\rm SUB}_{m} (i , \hat{\bm{z}} (j) ) =  \bm{c}_{m}^{*}  \} ) = 1 .
 \end{equation}
-\begin{proof}
-
-\begin{itemize}
-\item If $ \hat{\bm{z}}^{\rm utop}  (x) = \bm{z}^{\rm utop}  (x) $, $ \bm{c}^{\rm SUB}_{m} ( x ,i ) \rightarrow \bm{c}_{m}^{*} (x) $ as $ i \rightarrow \infty $ by lemma \ref{lem:tree_vex:conv}.
-Thus, as $ i \rightarrow \infty $, $ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \rightarrow 0 $.
-Write it using a $ KL $-function $ \beta $, we have
-$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \beta( \lVert \bm{c}^{\rm SUB}_{m} ( x , 0 ) - \bm{c}_{m}^{*} (x) \rVert , i )  $.
-\item If $ \bm{c}^{\rm SUB}_{m} ( x , 0 ) = \bm{c}_{m}^{*} (x) $, it means the subproblem tree initially has a solution $ \bm{c}_{m}^{*} (x) $ to the subproblem.
-However, because $  \hat{\bm{z}}^{\rm utop}  (x) \neq \bm{z}^{\rm utop}  (x)  $, the newer best solution will deviate from this initial solution, but still bounded and the boundary is determined by how  $ \hat{\bm{z}}^{\rm utop}  (x) $ deviates from $  \bm{z}^{\rm utop}  (x)  $.
-Write it using a $ K $-function $ \gamma $, we have
-$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \gamma ( \sup_{ 0 \leq \tau \leq t}  \lVert \hat{\bm{z}}^{\rm utop}  (x) - \bm{z}^{\rm utop}  (x) \rVert ) $.
-\end{itemize}
-By combining two cases, we have the output state satisfying 
-\begin{equation}
-\begin{aligned}
-\lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \leq \beta( \lVert \bm{c}^{\rm SUB}_{m} ( x , 0 ) - \bm{c}_{m}^{*} (x) \rVert , i ) 
-\\ + \gamma ( \sup_{ 0 \leq \tau \leq t}  \lVert \hat{\bm{z}}^{\rm utop}  (x) - \bm{z}^{\rm utop}  (x) \rVert ).
-\end{aligned}
-\end{equation}
-
-Thus, the system is input-to-state stable~\cite{khalil1996nonlinear}.
-If $ \hat{\bm{z}}^{\rm utop}  (x) \rightarrow \bm{z}^{\rm utop} (x) $,
-$ \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert \rightarrow 0 $.
-By Lemma \ref{lem:ref_tree:conv}, we have
-$ P( \{ \lim_{ i \rightarrow \infty }  \lVert \bm{c}^{\rm SUB}_{m} ( x ,i ) - \bm{c}_{m}^{*} (x) \rVert = 0 \} ) = 1 $, 
-which equals to Eq. \eqref{eq:sub_tree:conv}.
-\end{proof}
 \end{lem}
 
 Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to a subset of the Pareto optimal set.
@@ -930,7 +765,7 @@ Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to
 When Assumption \ref{asmp:additivity}, \ref{asmp:continuity} and \ref{asmp:spacing} hold,
 the solutions from MORRF$^{*} $ converges to a subset of the Pareto optimal set almost surely, i.e.
 $
-P( \lim_{ i \rightarrow \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
+P( \lim_{ i \to \infty }  \Sigma^{\mbox{MORRF}^{*}}_{i}  \subset \Sigma^{*} ) = 1.
 $
 %\begin{proof}
 %As the solutions of MORRF$^{*}$ can be modeled in points in a high-dimension space by Lemma \ref{lem:moo-d:rrt}, the %Tchebycheff method could be imported to decompose the multi-objective optimization problem into a set of subproblems.
@@ -970,7 +805,7 @@ This is indicated in Figures~\ref{fig:sim:norm:pf:a}-\ref{fig:sim:norm:sols:a}, 
 By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF$^{*}$ using weighted sum.
 Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF$^{*}$ using weighted sum, and compare this to the slightly more uniform clustering of MORFF$^{*}$ using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
 
-\begin{figure}
+\begin{figure}[htpb]
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
@@ -1029,7 +864,7 @@ We therefore compared results for the two approaches for an environment with obs
 The results are shown in Figure \ref{fig:sim:obs}.
 As before, observe that the Tchebycheff approach yields a more uniform sampling, albeit one that appears to be somewhat noisy approximation to the Pareto set.
 
-\begin{figure}
+\begin{figure}[htpb]
 	\centering
 	\begin{subfigure}[b]{0.45\linewidth}
 		\centering
@@ -1071,6 +906,7 @@ As before, observe that the Tchebycheff approach yields a more uniform sampling,
 	\label{fig:sim:obs}
 \end{figure}
 
+\begin{comment}
 We then tested the MORFF$^{*}$ algorithms on a two-objective problem  in which there exists a conflict in the costs; 
 see Figures~\ref{fig:sim:nonconvex:fitness1}-\ref{fig:sim:nonconvex:fitness2}. 
 The results illustrated in Figure~\ref{fig:sim:nonconvex} illustrate that, once again, the Tchebycheff approach shows better diversity but is somewhat more noisy than the weighted sum approach in Figure \ref{fig:sim:nonconvex}.
@@ -1116,12 +952,13 @@ The results illustrated in Figure~\ref{fig:sim:nonconvex} illustrate that, once 
 	\caption{Path planning with two conflicting objectives.}
 	\label{fig:sim:nonconvex}
 \end{figure}
+\end{comment}
 
 Finally, we evaluated how MORRF$^{*}$ performs three objectives: 
 Euclidean distance and the two other objectives are shown in Figures~\ref{fig:sim:many:distance}-\ref{fig:sim:many:fitness2}.
 As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia reference vector (Green point) to better approximate the Pareto set than the weighted sum approach, albeit in a somewhat noisy way.
 
-\begin{figure}
+\begin{figure}[htpb]
 	\centering
 	\begin{subfigure}[b]{0.31\linewidth}
 		\centering
@@ -1190,5 +1027,38 @@ Omitted for anonymous review.
 
 \bibliographystyle{named}
 \bibliography{reference}
+
+\section{Appendix}
+
+\subsection{Proof of Lemma \ref{lem:sub_tree:conv}}
+
+\begin{proof}
+
+By Lemma \ref{lem:ref_tree:conv}, we have 
+\begin{equation}
+\lim_{j \to \infty} \lVert \bm{z}^{*} - \hat{\bm{z}} (j) \rVert = 0.
+\end{equation}
+By Lemma \ref{lem:sub_tree:conv}, we have
+\begin{equation}
+\lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) = \bm{c}( \hat{\bm{z}}(j) ).
+\end{equation}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{fig/conv}
+\caption{The convergence process of .}
+\label{fig:conv}
+\end{figure}
+We have $ \bm{c}( \bm{z} ) $ 
+is Lipschitz continuous.
+\begin{equation}
+\begin{aligned}
+& \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \\
+= & \lVert \lim_{i \to \infty} \bm{c}( \bm{z}^{*} ) - \lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \\
+= & \lVert \bm{c}( \bm{z}^{*} ) - \bm{c}( \hat{\bm{z}}(j) ) \rVert \leq K \lVert \bm{z}^{*} - \hat{\bm{z}}(j) \rVert
+\end{aligned}
+\end{equation}
+As $ j \to \infty $, we have $ \hat{\bm{z}}(j) \to \bm{z}^{*} $, thus $ \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \to 0 $.
+\end{proof}
 
 \end{document}
