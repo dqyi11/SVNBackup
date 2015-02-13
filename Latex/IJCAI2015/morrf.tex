@@ -121,7 +121,7 @@ Indeed, the approach in this paper uses a decomposition-based method.
 MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  
 Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  
 Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
-Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference vector, described in more detail in the next section. 
+Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector, described in more detail in the next section. 
 Three types of decomposition methods are introduced in~\cite{4358754}; we will use the following two methods in this paper, leaving the boundary intersection method to future work.
 \begin{eqnarray}
  \arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
@@ -182,7 +182,7 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 \noindent Without loss of generality, we could set $s=1$ for all paths, but we retain the $s$-parameter because it is a convenient way of signalling that two paths may be different lengths.  Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
 Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a ``Utopia" reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
+In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
 Before describing how we find $ \bm{z}^{\rm utop} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
 \begin{figure}
 \centering
@@ -191,15 +191,15 @@ Before describing how we find $ \bm{z}^{\rm utop} $ and how we combine the Tcheb
 \label{fig:Tchebycheff}
 \end{figure}
 Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
-As illustrated in the Figure, the ``Utopia'' reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
-It is called the ``Utopia'' reference vector because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
+As illustrated in the Figure, the Utopia reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
+It is called the Utopia reference vector because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
-We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ c_{k} (x), k \in K $. 
-The cost of each vertex is calculated using the $ k $-th objective function.
+The cost of each vertex is calculated using the $ k^{\rm th} $ objective function.
 \item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) , m \in M $.
 The cost of each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
@@ -690,10 +690,13 @@ A path is Pareto optimal if and only if it is a solution to Eq.~\eqref{eq:Tcheby
 
 
 Theorem~\ref{thm:moo-d:rrt} implies that we can use the Tchebycheff method to find the Pareto set for the multi-objective path-planning problems.  
-In terms of the MORRF$^{*}$ algorithm, we can sample the Pareto set by selecting weights, forming a subproblem that can be solved using RRT*. 
+In terms of the MORRF$^{*}$ algorithm, we can sample the Pareto set by selecting weights, forming a subproblem that can be solved using RRT$^{*}$. 
 The next question that needs to be answered is whether the subproblem tree can find the optimal solution of its assigned subproblem.
 
-The way that the RRT* algorithm works is that it incrementally constructs a tree from a root position.  New nodes are constructed by randomly sampling points that are near to other locations in the tree, and then wiring the new node and rewiring nearby nodes in the tree so that the path from root to the position of the new node is minimal.  The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman.Frazzoli:RSS10}.
+The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from a root position.  
+New nodes are constructed by randomly sampling points that are near to other locations in the tree, and then wiring the new node and rewiring nearby nodes in the tree so that the path from root to the position of the new node is minimal.  
+The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
+We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman.Frazzoli:RSS10}.
 \begin{lem}
 \label{lem:tree_vex:conv}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing},
@@ -720,11 +723,13 @@ Thus, we could generalize the asymptotic optimality from the goal to all the ver
 \end{lem}
 \end{comment}
 
-Lemma~\ref{lem:tree_vex:conv} and Theorem~\ref{thm:moo-d:rrt} imply that each reference tree converges to the optimal path from the root to any node in the tree, including a node arbitrarily close to the goal node.  This means that the costs returned by those trees for the path from start to goal for cost function $c_k$ converges to the $k^{\rm th}$ element of the Utopia reference vector $ \bm{z}^{\rm utop} $.  We state this as a lemma.
+Lemma~\ref{lem:tree_vex:conv} and Theorem~\ref{thm:moo-d:rrt} imply that each reference tree converges to the optimal path from the root to any node in the tree, including a node arbitrarily close to the goal node.  
+This means that the costs returned by those trees for the path from start to goal for cost function $c_k$ converges to the $k^{\rm th}$ element of the Utopia reference vector $ \bm{z}^{\rm utop} $.  
+We state this as a lemma.
 \begin{lem}
 \label{lem:ref_tree:conv}
 Given Assumptions \ref{asmp:additivity}-\ref{asmp:spacing},
-the cost of the minimum cost path from the root to any vertex in $ k $-th reference tree converges to $ z^{*}_{k} $ almost surely%, i.e., 
+the cost of the minimum cost path from the root to any vertex in $ k^{\rm th} $ reference tree converges to $ z^{*}_{k} $ almost surely. %, i.e., 
 %$ P( \{ \lim_{ i \rightarrow \infty }  c^{\rm REF}_{k} (x, i) = z^{*}_{k} (x) \} ) = 1  $.
 \end{lem}
 
@@ -733,14 +738,14 @@ The proof of this claim is that we need to know $\bm{z}^{\rm utop} $ to compute 
 If we knew that the reference trees had already converged to $\bm{z}^{\rm utop} $, then we could simply instantiate Lemma~\ref{lem:tree_vex:conv}, but the problem is that reference trees are converging at the same time that the subproblem trees are converging.
 We now address this problem.  
 
-Let $  \hat{\bm{z}}^{\rm utop}(x;i) $ denote the approximate Utopia reference vector for position $x$ on iteration $i$, obtained by looking the cost from the root to position $x$ from the $k$-reference trees.
+Let $ \hat{\bm{z}}^{\rm utop}(v;i) $ denote the approximate Utopia reference vector for position $v$ on iteration $i$, obtained by looking the cost from the root to position $x$ from the $k$-reference trees.
 Recall that the $m^{\rm th}$ subtree attempts to generate a solution to Eq.~\eqref{eq:Tchebycheff} for a given weight vector ${\mathbf \lambda}^m$.
 Let
 \begin{equation}
 \label{eq:c_def}
  \bm{c}^{\rm SUB}_{m} ( \bm{z} ) 
  = \arg \min_{x} \max_{ k \in K } \lambda_{m, k} | x_{k} - \bm{z}_{k} | 
-\end{equation} denote the as the cost vector in $ m $-th subproblem tree given the reference vector $ \bm{z} $.
+\end{equation} denote the as the cost vector in $ m^{\rm th} $ subproblem tree given the reference vector $ \bm{z} $.
 $ \hat{ \bm{c} }^{\rm SUB}_{m} ( i, \bm{z} ) $ as its estimation at iteration $ i $.
 A subproblem tree obtains $ \hat{\bm{z}}^{\rm utop} (v) $ for vertex $ v $ from the reference trees and generate the corresponding $ \bm{c}^{\rm SUB}_{m} ( v ; i, \hat{\bm{z}}^{\rm utop} (v) ) $ at iteration $ i $ for either adding new vertex or rewiring an existing vertex.
 This forms a cascade structure from the reference trees to the subproblem tree. 
@@ -748,27 +753,29 @@ By Lemma \ref{lem:ref_tree:conv}, we have the convergence of the reference trees
 
 \begin{asmp}{(Lipschitz continuity)}
 \label{asmp:lipschitz}
-$ \bm{c}^{\rm SUB}_{m} ( \bm{z} )  $ in Eq. \eqref{eq:c_def} is Lipschitz continuity.
+$ \bm{c}^{\rm SUB}_{m} ( \bm{z} )  $ in Eq. \eqref{eq:c_def} is Lipschitz continuity, i.e.
+$ \lVert \bm{c}^{\rm SUB}_{m} ( \bm{z}_{a} ) - \bm{c}^{\rm SUB}_{m} ( \bm{z}_{b} ) \rVert \leq K \lVert \bm{z}_{a} - \bm{z}_{b} \rVert $.
 \end{asmp}
 
 \begin{lem}
 \label{lem:sub_tree:conv}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:lipschitz} and given the estimated Utopia reference vector $ \hat{\bm{z}} $,
 %with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
-the cost of the solution of $ m $-th subproblem tree converges to the corresponding cost of the $ m $-th subproblem $ \bm{c}_{m}^{*} ( x \mid \hat{\bm{z}} ) $ almost surely.
+the cost of the solution of $ m^{\rm th} $ subproblem tree converges to the corresponding cost of the $ m^{\rm th} $ subproblem $ \bm{c}_{m}^{*} ( \hat{\bm{z}} ) $ almost surely.
 \end{lem}
 
-
+\begin{comment}
 \begin{lem}
 \label{lem:morrf:conv}
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:lipschitz} and given the correct value of the Utopia reference vector,
 %with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
-the cost of the solution of $ m $-th subproblem tree converges to the optimal cost of the $ m $-th subproblem almost surely, i.e.,
+the cost of the solution of $ m^{\rm th} $ subproblem tree converges to the optimal cost of the $ m^{\rm th} $ subproblem almost surely, i.e.,
 \begin{equation}
 \label{eq:sub_tree:conv}
 P( \{ \lim_{ \substack{ i \to \infty \\ j \to \infty } } \bm{c}^{\rm SUB}_{m} (i , \hat{\bm{z}} (j) ) =  \bm{c}_{m}^{*}  \} ) = 1 .
 \end{equation}
 \end{lem}
+\end{comment}
 
 Now, we can prove that the solutions from MORRF$^{*}$ almost surely converges to a subset of the Pareto optimal set.
 
@@ -1074,5 +1081,6 @@ is Lipschitz continuous.
 \end{equation}
 As $ j \to \infty $, we have $ \hat{\bm{z}}(j) \to \bm{z}^{*} $, thus $ \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \to 0 $.
 \end{proof}
+
 
 \end{document}
