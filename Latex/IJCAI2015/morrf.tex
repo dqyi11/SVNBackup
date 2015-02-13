@@ -119,7 +119,8 @@ We note that (single objective) path-planning in a continuous state space is oft
 
 Prior work has modeled the search space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
 The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT$^{*}$; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
-Obstacles can make it more difficult to determining which cells in the discretized space are connected to which others, especially when searching a space of more than 2 dimensions such as in planning the trajectory for a robotic manipulator.
+Obstacles can make it more difficult to determining which cells in the discretized space are connected to which others
+. %, especially when searching a space of more than 2 dimensions such as in planning the trajectory for a robotic manipulator.
 Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using the NSGA-II algorithm to find a set of Pareto optimal solutions \cite{Ahmed2013}.  
 Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
 In addition to the genetic approach used in NSGA-II, evolutionary algorithms based on the decomposition method have also been proposed ~\cite{6600851}.
@@ -132,9 +133,10 @@ In contrast to searching through and comparing solutions in order to find the Pa
 In this paper we uses a decomposition-based method similar to MOE-D~\cite{4358754}.  
 MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a set of subproblems.  
 Each subproblem uses a weighed combination of the objectives to find specific points in the Pareto set or to guide the search for such points.  
-Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
+%Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
 Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  
-Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector, described in more detail in the next section. 
+Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the $K$-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  
+Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector. %, described in more detail in the next section. 
 Three types of decomposition methods have been used in prior work~\cite{4358754}; however we will use only the two methods described below, leaving the third (the boundary intersection method) to future work.
 \begin{eqnarray}
  \arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
@@ -181,6 +183,10 @@ Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{obs} $. Note t
 Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
 Define the cost of the path as the vector-valued function $ \bm{F}(\sigma) = \int_{\sigma} \bm{F}(x)ds $.  
 The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such that
+\textit{ (a) }, $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
+\textit{ (b) }, $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = X_{goal}  $;
+\textit{ (c) }, There does not exist $ \sigma $ that $ \forall k \in K, c_{k} (\sigma) \leq c_{k} (\sigma^{*}) $ and $ \exists k' \in K, c_{k'} (\sigma) < c_{k'} (\sigma^{*}) $.
+\begin{comment}
 \begin{itemize}
 	\item $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
 	\item $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = X_{goal}  $;
@@ -190,11 +196,15 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 		\item $ \exists k' \in K, c_{k'} (\sigma) < c_{k'} (\sigma^{*}) $.
 	\end{itemize}
 \end{itemize}
+\end{comment}
 \end{defn}
-\noindent Without loss of generality, we could set $s=1$ for all paths, but we retain the $s$-parameter because it is a convenient way of signalling that two paths may be different lengths.  Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
+%\noindent Without loss of generality, we could set $s=1$ for all paths, but we retain the $s$-parameter because it is a convenient way of signaling that two paths may be different lengths.  
+%Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
 Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we use the Tchebycheff approach from MOE-D. The MOE-D Boundary Intersection Approach could be used with only slight modifications. The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
+In this paper, we use the Tchebycheff approach from MOE-D. 
+%The MOE-D Boundary Intersection Approach could be used with only slight modifications. 
+The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
 Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 \begin{figure}
 \centering
@@ -202,11 +212,11 @@ Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a 
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
-Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
-As illustrated in the Figure, the Utopia reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
+%Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
+As illustrated in the Figure, the Utopia reference vector is defined as that point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
 %It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
 
-Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
+%Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
 We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition, as described below.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
@@ -218,36 +228,38 @@ The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by
 Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\linewidth]{./fig/MORRTstar}
+	\caption{Rapidly exploring process}
+	\label{fig:MORRTstar}
+\end{figure}
+
 We are now in a position to describe the main flow of the MORRF$^{*}$ algorithm; see Algorithm~\ref{alg:rapidly_exploring_process}.  
-The first four steps initialize two trees, the reference tree with vertices and edges denoted by $V_r$ and $E_r$, respectively, and the subproblem tree with vertices and edges denoted by $V_s$ and $E_s$, respectively.  
+%The first four steps initialize two trees, the reference tree with vertices and edges denoted by $V_r$ and $E_r$, respectively, and the subproblem tree with vertices and edges denoted by $V_s$ and $E_s$, respectively.  
 Each reference and subproblem tree are a collection of edges and vertices, $G_r=(V_r,E_r)$ and $G_s=(V_s,E_s)$, respectively, and the collection of reference trees and subproblem trees are denoted by ${\mathbf G}_r = \{G_r: r\in \{1, \ldots, K\}\}$ and ${\mathbf G}_s = \{G_s: s \in \{q, \ldots, M\}$.  
 
-Because this is a path-planning problem, each vertex in each tree corresponds to a physical location in configuration space.  
-In the examples used later, the configuration space is a plane, so the distances will all be computed using Euclidean distance. 
+%Because this is a path-planning problem, each vertex in each tree corresponds to a physical location in configuration space.  
+%In the examples used later, the configuration space is a plane, so the distances will all be computed using Euclidean distance. 
 Note that each each tree, reference and subproblem, uses the same set of vertices, meaning they all share the same points in configuration space.  
 The differences between the trees is the edge set; each reference tree and each subproblem tree has a different way of connecting the vertices.
 
-In each iteration, $i\in\{1, \ldots, N\}$ where $N$ is the maximum number of iterations allowed by the algorithm, a new position, $x_{rand}$ is generated by randomly sampling from the configuration space.  
+In each iteration, 
+%$i\in\{1, \ldots, N\}$ where $N$ is the maximum number of iterations allowed by the algorithm, a new position, 
+$x_{rand}$ is generated by randomly sampling from the configuration space.  
 The set of vertices is then searched to find that vertex whose position in the plane is nearest the random point; since all trees share the same set of vertices, any tree $G\in{\mathbf G}_r \cup {\mathbf G}_s$ may be used to find the nearest point.  
 The location of this vertex is labeled $x_{nearest}$.  
-It is possible that the distance between the newly sampled position and the vertex nearest to this position is very large.  
-A tolerance parameter, $\eta$, is used to guarantee that the distance between the vertices in the tree and the new position is within some exploration tolerance; this is accomplished in the {\sc Steer} method.  
-If the distance between $x_{rand}$ and $x_{nearest}$ is less than the tolerance $\eta$, then $x_{new}=x_{nearest}$.  
-Otherwise, a line segment between $x_{rand}$ and $x_{nearest}$ is constructed and the point on this line segment that is distance $\eta$ from $x_{nearest}$ becomes the new point $x_{new}$. 
-This process of finding $x_{new}$ is represented in the top layer of Figure~\ref{fig:MORRTstar}, with the dashed circle around the new point indicating $\eta$.
+%It is possible that the distance between the newly sampled position and the vertex nearest to this position is very large.  
+%A tolerance parameter, $\eta$, is used to guarantee that the distance between the vertices in the tree and the new position is within some exploration tolerance; this is accomplished in the {\sc Steer} method.  
+%If the distance between $x_{rand}$ and $x_{nearest}$ is less than the tolerance $\eta$, then $x_{new}=x_{nearest}$.  
+%Otherwise, a line segment between $x_{rand}$ and $x_{nearest}$ is constructed and the point on this line segment that is distance $\eta$ from $x_{nearest}$ becomes the new point $x_{new}$. 
+This process of finding $x_{new}$ is represented in the top layer of %Figure~\ref{fig:MORRTstar}, with the dashed circle around the new point indicating $\eta$.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.6\linewidth]{./fig/MORRTstar}
-\caption{Rapidly exploring process}
-\label{fig:MORRTstar}
-\end{figure}
-
-Given the location of a new vertex for each tree, edges are added, potentially different edges for each reference and each subproblem tree.
-We require that each new vertex be connected to some existing vertex, so a feasibility check is added using the {\sc ObstacleFree} method.
-This method checks whether the line segment connecting $x_{new}$ and $x_{nearest}$ enters obstacle space.
-If it does, no new vertices and no new edges are added, and another iteration of the algorithm begins. 
-This check guarantees that when the algorithms are called that determine which edge to add to the reference tree or subproblem tree, there is always at least one possible edge that can be added; this is consistent with the RRT$^{*}$ algorithm.
+%Given the location of a new vertex for each tree, edges are added, potentially different edges for each reference and each subproblem tree.
+%We require that each new vertex be connected to some existing vertex, so a feasibility check is added using the {\sc ObstacleFree} method.
+%This method checks whether the line segment connecting $x_{new}$ and $x_{nearest}$ enters obstacle space.
+%If it does, no new vertices and no new edges are added, and another iteration of the algorithm begins. 
+%This check guarantees that when the algorithms are called that determine which edge to add to the reference tree or subproblem tree, there is always at least one possible edge that can be added; this is consistent with the RRT$^{*}$ algorithm.
 
 The exploration at each iteration is given in Algorithm \ref{alg:rapidly_exploring_process}.  Like RRT$^{*}$, when the algorithm stops, each reference tree and subproblem tree returns a path, and the set of all these paths forms the solution set.
 
@@ -311,7 +323,8 @@ Returns a the position of the vertex whose position is closest to point $ x $.
 We can now discuss how edges are added to the reference and subproblem trees.  
 As illustrated in Figure~\ref{fig:MORRTstar}, second layer, edges to the reference trees are added before the edges to the subproblem trees.  
 This allows us to compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
-The Utopia reference vector is then used to determine which edges should be added for each subproblem. Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
+The Utopia reference vector is then used to determine which edges should be added for each subproblem. 
+Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
 
 %Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
 %It means that all the tree have equivalent vertices constructed from same positions set sequentially.
@@ -321,20 +334,21 @@ The Utopia reference vector is then used to determine which edges should be adde
 Consider the second layer in Figure \ref{fig:MORRTstar}, which shows the exploration process for the reference trees.
 When a new position is obtained (red dot in Figure \ref{fig:MORRTstar}), all reference trees add a vertex that corresponds to this new location.  
 Each reference tree then connects this new vertex to existing nodes by ``rewiring" a set of neighboring vertices within a specified radius (red dash circle in Figure \ref{fig:MORRTstar}).  
-The process of rewiring consists of adding edges between existing vertices and the new vertex.  This is done using the {\sc Extend} method, given in Algorithm~\ref{alg:morrtstar:extend:ref}.
+The process of rewiring consists of adding edges between existing vertices and the new vertex.  
+This is done using the {\sc Extend} method, given in Algorithm~\ref{alg:morrtstar:extend:ref}.
 
-The idea of the algorithm is to add the new vertex, $x_{\it new}$ to the graph and then look for existing vertices in the graph that are close to the new vertex. 
-Line~1 checks to see if the randomly generated position is precisely on top of the position of a vertex already in the graph.  
-If so, no edges are added to the graph; this prevents self-loops, and is necessary because of finite precision numerical representations.  
+%The idea of the algorithm is to add the new vertex, $x_{\it new}$ to the graph and then look for existing vertices in the graph that are close to the new vertex. 
+%Line~1 checks to see if the randomly generated position is precisely on top of the position of a vertex already in the graph.  
+%If so, no edges are added to the graph; this prevents self-loops, and is necessary because of finite precision numerical representations.  
 
-Otherwise, the new vertex is added to the graph and all vertices in the graph within a particular radius are identified.  
-The radius is determined by the current number of vertices in the graph. 
-The radius and volume are precisely defined in the {\sc Near} method, given below. The equation in this method is a standard equation from the RRT$^{*}$ algorithm.  It is based on the expected density of the vertices in the graph, given as a spatial distribution in $d$-dimensions, and is an important element in the convergence guarantees of RRT$^{*}$.
+%Otherwise, the new vertex is added to the graph and all vertices in the graph within a particular radius are identified.  
+%The radius is determined by the current number of vertices in the graph. 
+%The radius and volume are precisely defined in the {\sc Near} method, given below. The equation in this method is a standard equation from the RRT$^{*}$ algorithm.  It is based on the expected density of the vertices in the graph, given as a spatial distribution in $d$-dimensions, and is an important element in the convergence guarantees of RRT$^{*}$.
 
-Because of the way that $x_{new}$ is defined, we are guaranteed that $|X_{near}| \geq 1$, that is, there is at least one vertex ``near'' the new position.
+%Because of the way that $x_{new}$ is defined, we are guaranteed that $|X_{near}| \geq 1$, that is, there is at least one vertex ``near'' the new position.
 
 Lines~5-10 then find the vertex, $x_{min}$ that produces the minimum obstacle-free cost adds the edge between $x_{min}$ and $x_{new}$ to the graph.  
-Because of the check in in Algorithm~\ref{alg:rapidly_exploring_process}, there is always at least one such edge.  
+%Because of the check in in Algorithm~\ref{alg:rapidly_exploring_process}, there is always at least one such edge.  
 Observe that this cost is computed using the $k^{\rm th}$ cost function, which is, after all, the role of the reference tree.
 
 Lines~11-17 ``rewire'' the graph.  
@@ -343,7 +357,7 @@ The lines step through every vertex $x_{near}$ in the neighborhood (other than t
 If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{near}$, the tree is rewired so that the parent forgets $x_{near}$ and connects instead to $x_{new}$ -- see lines~16-17.
 
 %\begin{comment}
-\begin{algorithm}[hbtp]
+\begin{algorithm}[h!]
 \begin{algorithmic}[1]
 \If{ $ x_{new} = x_{nearest} $} 
 	\Return $G=(V,E)$ 
@@ -387,8 +401,6 @@ The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:
 	%$ \forall \tau \in [0, s], \sigma( \tau ) = \tau x + (s - \tau) x', s = \lVert x' -x \rVert $.
 	\item \textsc{Cost}($ v  $) is defined by the cost of the unique path (because $G$ is a tree) from $ x_{ \mbox{init} } $ to a vertex $ v \in V $. \textsc{Cost}($ x_{ \mbox{init} } $) = $ 0 $.
 \end{itemize}
-
-
 
 Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how the subproblem trees ``rewire'' to connect to the new vertex.  
 The Utopia reference vector, $ \hat{\bm{z}}_{k}^{\rm utop} $ is defined as the $k$-dimensional vector constructed from each reference tree.  
@@ -440,7 +452,10 @@ This is performed using the {\sc Fitness} method.
 \end{algorithm} 
 %\end{comment}
 
-The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:Tchebycheff}).  Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{c_{k}():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
+The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:Tchebycheff}).  
+Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{c_{k}():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. 
+The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  
+%In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
 
 \section{Analysis} 
 \label{sec:theoretic_analysis}
@@ -468,7 +483,6 @@ For all $k\in K$, the cost function $c_{k}$ is Lipshitz continuous, that is, for
 constant $\kappa(k)\in \mathbb{R}_{+}\cup \{0 \}$ such that $ | c_{k} ( \sigma_{1} ) - c_{k} ( \sigma_{2} ) | \leq \kappa(k) \sup_{\tau \in [0, 1]} \lVert \sigma_{1} (\tau s_{1}) - \sigma_{2} (\tau s_{2}) \rVert $.
 \end{asmp}
 
-
 \begin{asmp}{(Obstacle spacing)}
 \label{asmp:spacing}
 There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in X_{\it free} $ , $ \exists x' \in X_{\it free} $ such that
@@ -477,7 +491,6 @@ There exists a constant $ \delta \in \mathbb{R}_{+} $ such that $ \forall x \in 
 \item $ x $ lies inside the $ \delta $-ball centered at $ x' $.
 \end{itemize}
 \end{asmp}
-
 
 \begin{lem}
 \label{lem:sol_pareto_opt}
@@ -635,13 +648,12 @@ A path is Pareto optimal if and only if it is a solution to Eq.~\eqref{eq:Tcheby
 %\end{proof}
 \end{thm}
 
-
 Theorem~\ref{thm:moo-d:rrt} implies that we can use the Tchebycheff method to find the Pareto set for the multi-objective path-planning problems.  
-In terms of the MORRF$^{*}$ algorithm, we can sample the Pareto set by selecting weights, forming a subproblem that can be solved using RRT$^{*}$. 
+%In terms of the MORRF$^{*}$ algorithm, we can sample the Pareto set by selecting weights, forming a subproblem that can be solved using RRT$^{*}$. 
 The next question that needs to be answered is whether the subproblem tree can find the optimal solution of its assigned subproblem.
 
 The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from a root position.  
-New nodes are constructed by randomly sampling points that are near to other locations in the tree, and then wiring the new node and rewiring nearby nodes in the tree so that the path from root to the position of the new node is minimal.  
+%New nodes are constructed by randomly sampling points that are near to other locations in the tree, and then wiring the new node and rewiring nearby nodes in the tree so that the path from root to the position of the new node is minimal.  
 The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
 We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman.Frazzoli:RSS10}.
 \begin{lem}
