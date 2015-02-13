@@ -743,15 +743,6 @@ The weighted sum approach was chosen because evidence suggests that it works wel
 The weighted sum approach uses the same sampling method for weights as that used to generate the $\lambda_i$ in MORFF$^{*}$.
 Each method was run for $ 5000 $ iterations and restricted to $ 30 $ solutions.  
 
-The first simulation study compares there three algorithms in an obstacle-free world with two objectives: 
-minimize Euclidean distance, see Figure~\ref{fig:sim:norm:distance}, and minimize a cost function, see Figure~\ref{fig:sim:norm:fitness1}, which has dark colors as low costs and light colors as high costs.  
-
-
-The first thing to note is that the convergence of NSGA-II-based path-planning is very slow.
-This is indicated in Figures~\ref{fig:sim:norm:pf:a}-\ref{fig:sim:norm:sols:a}, which show the approximation to the Pareto set and corresponding paths, respectively, after $5000$ iterations; observe how the quality of the paths and sampling of the Pareto set is uneven and unsatisfactory.
-By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF$^{*}$ using weighted sum.
-Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF$^{*}$ using weighted sum, and compare this to the slightly more uniform clustering of MORFF$^{*}$ using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
-
 \begin{figure}[h!]
 	\centering
 	\begin{subfigure}[t]{0.3\linewidth}
@@ -806,7 +797,15 @@ Finally, note the somewhat uneven clustering of solutions on Pareto front for MO
 	\label{fig:sim:norm}
 \end{figure}
 
-Recall that the weighted sum approach is designed to work well for convex sets and the Tchebycheff approach is designed to give more uniform sampling for non-convex sets~\cite{4358754}. 
+The first simulation study compares there three algorithms in an obstacle-free world with two objectives: 
+minimize Euclidean distance, see Figure~\ref{fig:sim:norm:distance}, and minimize a cost function, see Figure~\ref{fig:sim:norm:fitness1}. % which has dark colors as low costs and light colors as high costs.  
+
+The first thing to note is that the convergence of NSGA-II-based path-planning is very slow.
+This is indicated in Figures~\ref{fig:sim:norm:pf:a}-\ref{fig:sim:norm:sols:a}, which show the approximation to the Pareto set and corresponding paths, respectively, after $5000$ iterations; observe how the quality of the paths and sampling of the Pareto set is uneven and unsatisfactory.
+By contrast, the weighted sum approach returns a set of high-quality solutions close to the Pareto optimal set, see Figures~\ref{fig:sim:norm:pf:b} and \ref{fig:sim:norm:sols:b}; %especially note the difference in x-axis values (corresponding to the costs of the paths) between the solutions from NSGA-II and the MORFF$^{*}$ using weighted sum.
+Finally, note the somewhat uneven clustering of solutions on Pareto front for MORFF$^{*}$ using weighted sum, and compare this to the slightly more uniform clustering of MORFF$^{*}$ using the Tchebycheff approach in Figures~\ref{fig:sim:norm:pf:c}-\ref{fig:sim:norm:sols:c}.
+
+%Recall that the weighted sum approach is designed to work well for convex sets and the Tchebycheff approach is designed to give more uniform sampling for non-convex sets~\cite{4358754}. 
 We therefore compared results for the two approaches for an environment with obstacles, omitting results for NSGA-II because convergence is so slow.  
 The results are shown in Figure \ref{fig:sim:obs}.
 As before, observe that the Tchebycheff approach yields a more uniform sampling, albeit one that appears to be somewhat noisy approximation to the Pareto set.
