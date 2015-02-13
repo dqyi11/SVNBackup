@@ -31,25 +31,9 @@
 \setlength{\textfloatsep}{10pt plus 1.0pt minus 2.0pt}
 \setlength{\floatsep}{10pt plus 1.0pt minus 2.0pt}
 \setlength{\intextsep}{10pt plus 1.0pt minus 2.0pt}
-\setlength{\belowcaptionskip}{-10pt}
+\setlength{\belowcaptionskip}{-2pt}
 \setlength\abovedisplayskip{2.0pt}
 \setlength\belowdisplayskip{2.0pt}
-
-% Reduce space between section titles
-% Arguments are space before, vertical space, and space after
-%\titlespacing{\part}{0pt}{*0}{2ex}
-%\titlespacing{\section}{0pt}{2pt}{1ex}
-%\titlespacing{\subsection}{0pt}{2pt}{1ex}
-%\titlespacing{\subsubsection}{0pt}{*0}{1ex}
-
-% suck up extra white space
-%\setlength{\parskip}{0pt}
-%\setlength{\parsep}{0pt}
-%\setlength{\headsep}{0pt}
-%\setlength{\topskip}{0pt}
-%\setlength{\topmargin}{0pt}
-%\setlength{\topsep}{0pt}
-%\setlength{\partopsep}{0pt}
 
 
 \usepackage{enumitem}
@@ -95,7 +79,8 @@ A common method for finding a solution to a multi-objective optimization problem
 %In path-planning the properties of the path produced by this method depends strongly on how each objective is weighted. 
 This means that either the programmer, designer , or a human teammate 
 must decide how to assign the weights so that the qualitative behavior matches what is intended.  
-In addition to the burden this places on the human operator, optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
+%In addition to the burden this places on the human operator, optimizing
+Optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
 
 In response to these challenges, it is useful of find {\em the set of
 %  payoff dominant solutions
@@ -108,11 +93,17 @@ The objective of this paper is to create an algorithm that efficiently finds the
 
 Most popular methods in multi-objective optimization do not naturally apply to path-planning problems~\cite{4358754,6600851}.
 %The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms do not scale well when there are an exponential number of solutions. 
-One approach to addressing this issue is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}
+One approach to addressing this issue is to change the representation for a path by
+%, for example, 
+coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}
 so that an evolutionary algorithm can be applied.  
 %This produces an encoding that can be ``fed into" an appropriate evolutionary algorithm to search for the Pareto set. 
-Unfortunately, these approaches do not scale well for large problems because the number of segments required to represent the paths grows too quickly, and estimating the required number of segments {\em a priori} is very challenging.  
-Another approach to solving the multi-objective path-planning problem is to represent the path as a point in a very high-dimensional vector space. 
+Unfortunately, these approaches do not scale well for large problems
+ %because the number of segments required to represent the paths grows too quickly
+ , and estimating the required number of segments {\em a priori} is very challenging.  
+Another approach 
+%to solving the multi-objective path-planning problem 
+is to represent the path as a point in a very high-dimensional vector space. 
 In this approach a path is represented as a point in a $ n * d $ dimensional space formed by $ n $ $ d $-dimensional way-points.
 %If the number of way-points can be held constant, we can use standard approaches to explore the space. 
 However the search can be more difficult if we allow the number of way-points, and therefor the dimensionality of the optimization problem, to vary.
@@ -198,7 +189,9 @@ In this section, we present an algorithm that explores the solution space using 
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
 
 Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
-Without loss of generality, assume that each $c_{k}(\cdot)$ is a cost function such that the objective is to minimize these functions.  
+Without loss of generality, assume that
+ % each $c_{k}(\cdot)$ is a cost function such that 
+ the objective is to minimize these functions.  
 Since the Pareto optimal set is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
 %By ``representative" we mean a diverse set of solutions that span the Pareto set rather than
 %, for example, 
@@ -234,15 +227,15 @@ Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in 
 In this paper, we use the Tchebycheff approach from MOE-D. 
 %The MOE-D Boundary Intersection Approach could be used with only slight modifications. 
 The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
-Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
+%Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 \begin{figure}
 \centering
-\includegraphics[width=0.4\linewidth]{fig/Tchebycheff2.png}
+\includegraphics[width=0.35\linewidth]{fig/Tchebycheff2.png}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
 %Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
-As illustrated in the Figure, the Utopia reference vector is defined as that point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
+As illustrated in Figure~\ref{fig:Tchebycheff}, the Utopia reference vector is defined as that point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
 %It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
 
 %Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
@@ -254,7 +247,7 @@ The cost of each vertex is calculated using the $ k^{\rm th} $ objective functio
 \item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) , m \in M $.
 The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
-Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
+%Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
 
 \begin{figure}[H]
@@ -264,7 +257,8 @@ The $K$ reference trees and $M$ subproblem trees constitute the exploration fore
 	\label{fig:MORRTstar}
 \end{figure}
 
-We are now in a position to describe the main flow of the MORRF$^{*}$ algorithm; see Algorithm~\ref{alg:rapidly_exploring_process}.  
+%We are now in a position to describe the main flow of the MORRF$^{*}$ algorithm; see Algorithm~\ref{alg:rapidly_exploring_process}.  
+The main flow of the MORRF$^{*}$ algorithm is given in Algorithm~\ref{alg:rapidly_exploring_process}.
 %The first four steps initialize two trees, the reference tree with vertices and edges denoted by $V_r$ and $E_r$, respectively, and the subproblem tree with vertices and edges denoted by $V_s$ and $E_s$, respectively.  
 Each reference and subproblem tree are a collection of edges and vertices, $G_r=(V_r,E_r)$ and $G_s=(V_s,E_s)$, respectively, and the collection of reference trees and subproblem trees are denoted by ${\mathbf G}_r = \{G_r: r\in \{1, \ldots, K\}\}$ and ${\mathbf G}_s = \{G_s: s \in \{q, \ldots, M\}$.  
 
@@ -352,7 +346,7 @@ We can now discuss how edges are added to the reference and subproblem trees.
 As illustrated in Figure~\ref{fig:MORRTstar}, second layer, edges to the reference trees are added before the edges to the subproblem trees.  
 This allows us to compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
 The Utopia reference vector is then used to determine which edges should be added for each subproblem. 
-Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
+%Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
 
 %Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
 %It means that all the tree have equivalent vertices constructed from same positions set sequentially.
@@ -375,15 +369,15 @@ This is done using the {\sc Extend} method, given in Algorithm~\ref{alg:morrtsta
 
 %Because of the way that $x_{new}$ is defined, we are guaranteed that $|X_{near}| \geq 1$, that is, there is at least one vertex ``near'' the new position.
 
-Lines~5-10 then find the vertex, $x_{min}$ that produces the minimum obstacle-free cost adds the edge between $x_{min}$ and $x_{new}$ to the graph.  
+%Lines~5-10 then find the vertex, $x_{min}$ that produces the minimum obstacle-free cost adds the edge between $x_{min}$ and $x_{new}$ to the graph.  
 %Because of the check in in Algorithm~\ref{alg:rapidly_exploring_process}, there is always at least one such edge.  
 %Observe that this
-This cost is computed using the $k^{\rm th}$ cost function, which is, after all, the role of the reference tree.
+%This cost is computed using the $k^{\rm th}$ cost function, which is, after all, the role of the reference tree.
 
-Lines~11-17 ``rewire'' the graph.  
-This only occurs if there are more than two vertices in the neighborhood of $x_{new}$.  
-The lines step through every vertex $x_{near}$ in the neighborhood (other than the minimum cost vertex -- see line~11) and compares (a)~the cost of the current path through the tree to $x_{near}$ to (b)~the cost of the same path to the parent $x_{parent}$ of $x_{near}$ plus the cost from $x_{parent}$ to the new node $x_{new}$. 
-If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{near}$, the tree is rewired so that the parent forgets $x_{near}$ and connects instead to $x_{new}$ -- see lines~16-17.
+%Lines~11-17 ``rewire'' the graph.  
+%This only occurs if there are more than two vertices in the neighborhood of $x_{new}$.  
+%The lines step through every vertex $x_{near}$ in the neighborhood (other than the minimum cost vertex -- see line~11) and compares (a)~the cost of the current path through the tree to $x_{near}$ to (b)~the cost of the same path to the parent $x_{parent}$ of $x_{near}$ plus the cost from $x_{parent}$ to the new node $x_{new}$. 
+%If the cost of the path to $x_{new}$ is less than the cost of the path to $x_{near}$, the tree is rewired so that the parent forgets $x_{near}$ and connects instead to $x_{new}$ -- see lines~16-17.
 
 %\begin{comment}
 \begin{algorithm}[h!]
@@ -434,7 +428,7 @@ The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:
 Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how the subproblem trees ``rewire'' to connect to the new vertex.  
 The Utopia reference vector, $ \hat{\bm{z}}_{k}^{\rm utop} $ is defined as the $k$-dimensional vector constructed from each reference tree.  
 The minimum cost path from the starting vertex over all the leaf node is computed for each reference tree.  
-The Utopia reference vector is the vector of these costs. 
+%The Utopia reference vector is the vector of these costs. 
 Using the Utopia reference vector, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well. 
 Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
 This is performed using the {\sc Fitness} method.
@@ -988,9 +982,8 @@ The results illustrated in Figure~\ref{fig:sim:nonconvex} illustrate that, once 
 
 Finally, we evaluated how MORRF$^{*}$ performs three objectives: 
 Euclidean distance and the two other objectives are shown in Figures~\ref{fig:sim:many:distance}-\ref{fig:sim:many:fitness2}.
-As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia reference vector (Green point) to better approximate the Pareto set than the weighted sum approach, albeit in a somewhat noisy way.
-
-
+As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia reference vector (Green point) to better approximate the Pareto set than the weighted sum approach.
+%, albeit in a somewhat noisy way.
 
 \section{Conclusion} 
 \label{sec:conclusion}
@@ -1000,7 +993,7 @@ The algorithm blends principles from the RRT$^{*}$ algorithm with principles fro
 
 Future work should extend the algorithm to include not only the weighted sum and Tchebycheff approach but also the the boundary intersection approach, which results from~\cite{4358754} suggest mightshould have even better diversity.
 MORRF$^{*}$ could also be made more efficient by, for example, using prior information to improve the set of sample points.
-For example, when an objective includes minimizing Euclidean distance in the presence of obstacles, visibility graph techniques could be used to produce a prior set of sample points guaranteed to include the shortest path.
+%For example, when an objective includes minimizing Euclidean distance in the presence of obstacles, visibility graph techniques could be used to produce a prior set of sample points guaranteed to include the shortest path.
 % not bad but we need to shorten:
 %Additionally, if there is structure in the cost functions, which may be common in path-planning problems, then the sampling of new points could be based on information collected from the environment, allowing more search effort to be put in the more interesting regions.
 
@@ -1055,7 +1048,7 @@ The algorithm should then converge to the set of Pareto optimal from any vertex 
 	$.
 	%\end{equation}
 	As $ j \to \infty $, we have $ \hat{\bm{z}}(j) \to \bm{z}^{*} $, thus $ \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \to 0 $.
-	This implies that
+	This implies 
 	%\begin{equation}
 	$
 	P( \{ \lim_{ \substack{ i \to \infty \\ j \to \infty } } \bm{c}^{\rm SUB}_{m} (i , \hat{\bm{z}} (j) ) =  \bm{c}_{m}^{*}  \} ) = 1 $.
