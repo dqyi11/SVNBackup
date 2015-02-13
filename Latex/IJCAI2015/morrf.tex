@@ -151,10 +151,13 @@ optimal~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}.
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
 
+In this section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
+Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
+
 Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
-Without loss of generality, we assume that each $c_{k}(\cdot)$ is a cost function so that our objective is to minimize these functions.  
-Since the Pareto optimal set is not enumerable, our {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
-By ``representative" we mean that we want a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.  
+Without loss of generality, assume that each $c_{k}(\cdot)$ is a cost function such that the objective is to minimize these functions.  
+Since the Pareto optimal set is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
+By ``representative" we mean a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.  
 
 \begin{defn}{ \textbf{Multi-Objective Path Planning} }
 Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal region $ X_{goal} $. 
@@ -177,8 +180,8 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 \noindent Without loss of generality, we could set $s=1$ for all paths, but we retain the $s$-parameter because it is a convenient way of signalling that two paths may be different lengths.  Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
 Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we implement only the Tchebycheff approach, noting that the Boundary Intersection Approach can be used with only slight modifications to our algorithm. The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
-Before describing how we find $ \bm{z}^{\rm utop} $ and how we combine the Tchebycheff approach with RRT$^{*}$, it is useful to illustrate how the reference vector is used to help find the Pareto set; Figure~\ref{fig:Tchebycheff} illustrates the process for two objectives.  
+In this paper, we use the Tchebycheff approach from MOE-D. The MOE-D Boundary Intersection Approach could be used with only slight modifications. The Tchebycheff approach requires us to define a ``Utopia" reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
+Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 \begin{figure}
 \centering
 \includegraphics[width=0.4\linewidth]{fig/Tchebycheff2.png}
@@ -186,17 +189,17 @@ Before describing how we find $ \bm{z}^{\rm utop} $ and how we combine the Tcheb
 \label{fig:Tchebycheff}
 \end{figure}
 Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
-As illustrated in the Figure, the Utopia reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
-It is called the Utopia reference vector because it represents the very best that could conceivably be achieved for an ideal point in the solution space.
+As illustrated in the Figure, the ``Utopia'' reference vector is defined as that point in reward space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
+%It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
-We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the ``Utopia'' reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition, as described below.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ c_{k} (x), k \in K $. 
-The cost of each vertex is calculated using the $ k^{\rm th} $ objective function.
+The cost of each vertex is calculated using the $ k $-th objective function.
 \item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) , m \in M $.
-The cost of each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
+The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
 Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
@@ -206,7 +209,7 @@ The first four steps initialize two trees, the reference tree with vertices and 
 Each reference and subproblem tree are a collection of edges and vertices, $G_r=(V_r,E_r)$ and $G_s=(V_s,E_s)$, respectively, and the collection of reference trees and subproblem trees are denoted by ${\mathbf G}_r = \{G_r: r\in \{1, \ldots, K\}\}$ and ${\mathbf G}_s = \{G_s: s \in \{q, \ldots, M\}$.  
 
 Because this is a path-planning problem, each vertex in each tree corresponds to a physical location in configuration space.  
-For the examples used later in this chapter, configuration space is a plane so the distances will all be computed using Euclidean distance. 
+In the examples used later, the configuration space is a plane, so the distances will all be computed using Euclidean distance. 
 Note that each each tree, reference and subproblem, uses the same set of vertices, meaning they all share the same points in configuration space.  
 The differences between the trees is the edge set; each reference tree and each subproblem tree has a different way of connecting the vertices.
 
@@ -291,9 +294,9 @@ Returns a the position of the vertex whose position is closest to point $ x $.
 %We use the same sampling position to extend all the trees in one iteration.
 %Thus the vertices in the reference trees could be used as reference for estimating the cost in constructing the subproblem trees.
 
-Given the general algorithm, we can now discuss how edges are added to the reference and subproblem trees.  
+We can now discuss how edges are added to the reference and subproblem trees.  
 As illustrated in Figure~\ref{fig:MORRTstar}, second layer, edges to the reference trees are added before the edges to the subproblem trees.  
-This allows us to use compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
+This allows us to compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
 The Utopia reference vector is then used to determine which edges should be added for each subproblem. Stated another way, the edges added to each tree are determined by the definition of the fitness (cost function) for each tree.
 
 %Like all the sampling-based optimization, the random positions are uniformly sampled from the workspace.
@@ -379,7 +382,7 @@ The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:
 
 Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how the subproblem trees ``rewire'' to connect to the new vertex.  
 The Utopia reference vector, $ \hat{\bm{z}}_{k}^{\rm utop} $ is defined as the $k$-dimensional vector constructed from each reference tree.  
-The minimum cost path from the starting vertex over all the leaf node is  computed for each reference tree.  
+The minimum cost path from the starting vertex over all the leaf node is computed for each reference tree.  
 The Utopia reference vector is the vector of these costs. 
 Using the Utopia reference vector, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well. 
 Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
@@ -494,7 +497,6 @@ This is performed using the {\sc Fitness} method.
 %\end{comment}
 
 The {\sc Fitness} method computes costs using one of the cost functions in Equations~(\ref{eq:weighted})-(\ref{eq:Tchebycheff}).  Different values of $\lambda_m$ are obtained using the pattern in the MOEA-D algorithm: (a)~pre-deterimining the range of the $K$-cost functions, $\{c_{k}():1\ldots K\}$ and (b)~sampling from the $K$-dimensional hypercube defined by these ranges. The $M$ samples from this hypercube can be obtained by either creating a uniform (hyper)-grid or by doing uniform sampling across the space.  In the simulations below, the two-objective problems use a uniform grid and the three-objective problem uses uniform random sampling. 
-
 
 \section{Analysis} 
 \label{sec:theoretic_analysis}
