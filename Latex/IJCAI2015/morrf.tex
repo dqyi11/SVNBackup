@@ -106,23 +106,24 @@ and Section~\ref{sec:simulation} uses simulations to illustrate the algorithm's 
 An algorithm that discovers the set of Pareto optimal solutions must discover those solutions for which no other solution is better with respect to every objective.  A naive algorithm would do this by comparing every solution to every other solution, which works for problems with a small, discrete set of solutions, but does not work for continuous spaces or problems with exponential numbers of potential solutions.  
 Marler and Arora observed that ``no single approach is superior [for all problems].  
 Rather, the selection of a specific method depends on the type of information given in the problem"~\cite{marler2004survey}.  
-We note that (single objective) path-planning in a continuous state space is often efficient using RRT* or other discretization-based approaches. This suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.
+We note that (single objective) path-planning in a continuous state space is often efficient using RRT* or other discretization-based approaches. This suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
 
-Given the restriction to approaches that use discretization-based approaches, prior work has modeled the space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
+Prior work has modeled the search space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
 The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT$^{*}$; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
-Obstacles can cause problems for determining which cells in the discretized space are connected to which others, not so much in 2-D for a single robot but more so for planning the trajectory for a robotic manipulator.
-Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using what the authors call the NSGA-II algorithm to find a set of Pareto optimal solutions in \cite{Ahmed2013}.  
+Obstacles can make it more difficult to determining which cells in the discretized space are connected to which others, especially when searching a space of more than 2 dimensions such as in planning the trajectory for a robotic manipulator.
+Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using the NSGA-II algorithm to find a set of Pareto optimal solutions \cite{Ahmed2013}.  
 Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
+In addition to the genetic approach used in NSGA-II, evolutionary algorithms based on the decomposition method have also been proposed ~\cite{6600851}.
 
 % Evolutionary algorithms can be used to fine the Pareto set, but these approaches tend to be inefficient when applied to spaces with high dimensions~\cite{marler2004survey}.  For such spaces, small deviations in possible solutions may need to be considered in order to find an optimal solution, but this means exploring many possible solutions for problems with non-linearities or multiple local maxima.   A path in a fixed-length search tree of depth $d$ can be considered as a point in $\Re^d$, so tree-based approaches followed by an evolutionary "fine-tuning" stage risk running into the problems just listed with evolutionary approaches. 
 
 In contrast to searching through and comparing solutions in order to find the Pareto optimal set, decomposition-based methods provide an attractive alternative.  
-Indeed, the approach in this paper uses a decomposition-based method.  
-MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a class of subproblems~\cite{4358754}.  
-Each subproblem uses a weighed blend of the various objectives to find specific points in the Pareto set or to guide the search for such points.  
-Because we  will use this subproblem idea in our algorithm, it is useful to introduce some important notation.
-Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector, described in more detail in the next section. 
-Three types of decomposition methods are introduced in~\cite{4358754}; we will use the following two methods in this paper, leaving the boundary intersection method to future work.
+In this paper we uses a decomposition-based method similar to MOE-D~\cite{4358754}.  
+MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a set of subproblems.  
+Each subproblem uses a weighed combination of the objectives to find specific points in the Pareto set or to guide the search for such points.  
+Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
+Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the K-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called ``Utopia" reference vector, described in more detail in the next section. 
+Three types of decomposition methods have been used in prior work~\cite{4358754}; however we will use only the two methods described below, leaving the third (the boundary intersection method) to future work.
 \begin{eqnarray}
  \arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
  \arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} & {\rm Tchebycheff} \label{eq:Tchebycheff}%\\
@@ -141,17 +142,11 @@ Three types of decomposition methods are introduced in~\cite{4358754}; we will u
 %\end{itemize}
 The solutions generated by each method are a subset of the Pareto optimal set.
 
-Before continuing, note that evolutionary algorithms based on the decomposition method have been proposed ~\cite{6600851}, but given the need to blend the decomposition methods with sampling-based path-planning, we do not explore these algorithms further in this paper.
-
 Sampling-based path planning works effectively in continuous space. 
 The RRT (Rapidly exploring Random Tree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
-It has been shown that under certain conditions, RRT will fail to find an optimal solution~\cite{Karaman.Frazzoli:RSS10}. 
-In response, the RRT$^{*}$ algorithm has been proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed.
-The asymptotic optimality of RRT$^{*}$ has been proven in~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
-
-In the next section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
-Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
-
+Unfortunately, RRT has been shown to fail in certian conditions~\cite{Karaman.Frazzoli:RSS10}. 
+In response, the RRT$^{*}$ algorithm was proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed. Thus RRT$^{*}$ is asymptotically
+optimal~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
 
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
@@ -548,14 +543,17 @@ By definition,
 \sigma^{*} = \arg \min_{ \sigma } \max_{ k \in K }  \lambda_{k} | c_{k}( \sigma ) - z^{\rm utop}_{k} | .
 \end{equation}
 Assume that the path $ \sigma^{*} $ is not Pareto optimal.
-Then there exists another path $ \sigma^{o} $ that dominates $ \sigma^{*} $, meaning
-\begin{eqnarray}
-\nonumber
-\forall k \in K , & c_{k}( \sigma^{o} ) \leq c_{k}( \sigma^{*} ); \\
-\nonumber
-\exists k' \in K , & c_{k'}( \sigma^{o} ) < c_{k'}( \sigma^{*} ).
-\end{eqnarray}
-Because the Utopia reference vector satisfies,  $ \forall k \in K $, $ z^{\rm utop}_{k} \leq  c_{k}( \sigma ) $, it follows that
+Then there exist another path $ \sigma^{o} $ that dominates $ \sigma^{*} $
+%, meaning
+%\begin{eqnarray}
+%\nonumber
+%\forall k \in K , & c_{k}( \sigma^{o} ) \leq c_{k}( \sigma^{*} ); \\
+%\nonumber
+%\exists k' \in K , & c_{k'}( \sigma^{o} ) < c_{k'}( \sigma^{*} ).
+%\end{eqnarray}
+%Because the Utopia reference vector satisfies, 
+and the Utopia reference vector that satisfies
+$ \forall k \in K $, $ z^{\rm utop}_{k} \leq  c_{k}( \sigma ) $, it follows that
 \begin{eqnarray}
 \nonumber
 \forall k \in K , & z^{\rm utop}_{k} \leq c_{k}( \sigma^{o} ) \leq c_{k}( \sigma^{*} ) ; \\
@@ -662,11 +660,12 @@ $
 \max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| > 1.
 $ %\end{equation}
 Therefore,
-\begin{equation}
+%\begin{equation}
 %\begin{aligned}
-g^{te} ( \sigma ) >  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} ).
+$
+g^{te} ( \sigma ) >  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} )$.
 %\end{aligned}
-\end{equation}
+%\end{equation}
 %It means,
 %\begin{equation}
 %\forall \sigma, g^{te} ( \sigma ) > g^{te} ( \sigma^{*} ).
