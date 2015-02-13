@@ -78,23 +78,26 @@ If an algorithm could produce the set of Pareto optimal solutions then a human c
 The objective of this paper is to create an algorithm that efficiently finds the Pareto set in a multi-objective path-planning problem.
 
 Most popular methods in multi-objective optimization do not naturally apply to path-planning problems~\cite{4358754,6600851}.
-The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms do not scale well when there are an exponential number of solutions. 
-One approach to addressing this issue is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}.  
-This produces an encoding that can be ``fed into" an appropriate evolutionary algorithm to search for the Pareto set. 
+%The main reason for this is that path-planning often represents the problem to be solved as a semi-structured tree with an exponential number of possible trajectories through the tree, and the number of evaluations of the objective function required by existing algorithms do not scale well when there are an exponential number of solutions. 
+One approach to addressing this issue is to change the representation for a path by, for example, coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,howlett2006learning} or waypoints~\cite{5160222,Pires2004}
+so that an evolutionary algorithm can be applied.  
+%This produces an encoding that can be ``fed into" an appropriate evolutionary algorithm to search for the Pareto set. 
 Unfortunately, these approaches do not scale well for large problems because the number of segments required to represent the paths grows too quickly, and estimating the required number of segments {\em a priori} is very challenging.  
-Another approach to solving the multi-objective path-planning problem is to represent the path as a point in a very high-dimensional vector space. In this approach a path is represented as a point in a $ n * d $ dimensional space formed by $ n $ $ d $-dimensional way-points.
-If the number of way-points can be held constant, we can use standard approaches to explore the space. However the search can be more difficult if we allow the number of way-points, and therefor the dimensionality of the optimization problem, to vary.
+Another approach to solving the multi-objective path-planning problem is to represent the path as a point in a very high-dimensional vector space. 
+In this approach a path is represented as a point in a $ n * d $ dimensional space formed by $ n $ $ d $-dimensional way-points.
+%If the number of way-points can be held constant, we can use standard approaches to explore the space. 
+However the search can be more difficult if we allow the number of way-points, and therefor the dimensionality of the optimization problem, to vary.
 Indeed, we will use this as to guide our solution, but the algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{5160222,4358754}.
 
 The RRT (Rapidly exploring Random Tree) algorithm is popular for finding feasible solutions from a start position to a goal position in continuous or very large search spaces; it also works well when environments have complex obstacles. 
 The reason that RRT is popular is that the tree structure tends to be find solutions very efficiently.
 The RRT$^{*}$ algorithm was a recently introduced modification to RRT that is guaranteed to find an optimal path given enough sampling time~\cite{Karaman:2011:SAO:2000201.2000209,Karaman.Frazzoli:RSS10}.
 
-The remainder of the paper presents the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest*) algorithm, which we used to find a set of Pareto optimal paths from a start position to a goal position.  
-MORRF$^{*}$ blends concepts from RRT$^{*}$ a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
-The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
-Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
-Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives. 
+%The remainder of the paper presents the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest*) algorithm, which we used to find a set of Pareto optimal paths from a start position to a goal position.  
+%MORRF$^{*}$ blends concepts from RRT$^{*}$ a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+%The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
+%Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector} required by the adapted multi-objective optimization algorithm.  
+%Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives. 
 
 The paper is structured as follows.  
 Section~\ref{sec:related_works} reviews relevant work in multi-objective optimization and RRT-like path-planning. 
@@ -105,12 +108,14 @@ and Section~\ref{sec:simulation} uses simulations to illustrate the algorithm's 
 \section{Related Work}
 \label{sec:related_works}
 
+\begin{comment}
 An algorithm that discovers the set of Pareto optimal solutions must discover those solutions for which no other solution is better with respect to every objective.  
 A naive algorithm would do this by comparing every solution to every other solution, which works for problems with a small, discrete set of solutions, but does not work for continuous spaces or problems with exponential numbers of potential solutions.  
 Marler and Arora observed that ``no single approach is superior [for all problems].  
 Rather, the selection of a specific method depends on the type of information given in the problem"~\cite{marler2004survey}.  
 We note that (single objective) path-planning in a continuous state space is often efficient using RRT* or other sampling-based approaches. 
 %This suggests that we use a discretization-based approach, ruling out, for example, variational approaches to solving the problem.    
+\end{comment}
 
 Prior work has modeled the search space as a graph and applied a multi-objective A* search to find the solution~\cite{Mandow:2005:NAM:1642293.1642328}. 
 The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT$^{*}$; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
@@ -233,7 +238,7 @@ This process of finding $x_{new}$ is represented in the top layer of Figure~\ref
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\linewidth]{./fig/MORRTstar}
+\includegraphics[width=0.6\linewidth]{./fig/MORRTstar}
 \caption{Rapidly exploring process}
 \label{fig:MORRTstar}
 \end{figure}
@@ -451,7 +456,7 @@ For a path constructed by composing two other paths (to create a discontinuous p
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\linewidth]{fig/cascade}
+\includegraphics[width=0.45\linewidth]{fig/cascade}
 \caption{The dependency of the trees in MORRF$^{*}$.}
 \label{fig:dependency}
 \end{figure}
@@ -749,49 +754,49 @@ Finally, note the somewhat uneven clustering of solutions on Pareto front for MO
 
 \begin{figure}[h!]
 	\centering
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[t]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-0.png}
-		\caption{Minimize distance}
+		\caption{Min distance}
 		\label{fig:sim:norm:distance}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[t]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-1.png}
-		\caption{Minimize cost 1}
+		\caption{Min cost 1}
 		\label{fig:sim:norm:fitness1}
 	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.31\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim3-2obj/PF03-MOPATH.pdf}
 		\caption{Pareto set: NSGA-II}
 		\label{fig:sim:norm:pf:a}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.31\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim1-2obj/PF01-MORRT.pdf}
 		\caption{Pareto set: weighted sum}
 		\label{fig:sim:norm:pf:b}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.31\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/PF02-MORRT2.pdf}
 		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:norm:pf:c}
 	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.31\linewidth}
+	\begin{subfigure}[b]{0.29\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim3-2obj/MOPath01-ALL.png}
 		\caption{Pareto paths: NSGA-II}
 		\label{fig:sim:norm:sols:a}
 	\end{subfigure} 
-	\begin{subfigure}[b]{0.31\linewidth}
+	\begin{subfigure}[b]{0.29\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim1-2obj/MORRTstar00-ALL.png}
 		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:norm:sols:b}
 	\end{subfigure} 
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.29\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-ALL.png}
 		\caption{Pareto paths: Tchebycheff}
@@ -808,19 +813,19 @@ As before, observe that the Tchebycheff approach yields a more uniform sampling,
 
 \begin{figure}[h!]
 	\centering
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-0.png}
-		\caption{Minimize distance}
+		\caption{Min distance}
 		\label{fig:sim:obs:distance}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/MORRTstar01-1-1.png}
-		\caption{Minimize cost 1}
+		\caption{Min cost 1}
 		\label{fig:sim:obs:fitness1}
 	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim4-obstacle/PF04-MORRT.pdf}
 		\caption{Paretoset: weighted sum}
@@ -832,7 +837,7 @@ As before, observe that the Tchebycheff approach yields a more uniform sampling,
 	%	\caption{Pareto paths: weighted sum}
 	%	\label{fig:sim:obs:sols:a}
 	%\end{subfigure}  \\
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim5-obstacle/PF05-MORRT2.pdf}
 		\caption{Pareto set: Tchebycheff}
@@ -920,30 +925,30 @@ As shown in Figure \ref{fig:sim:many}, the Pareto front uses the Utopia referenc
 		\caption{Cost 2}
 		\label{fig:sim:many:fitness2}
 	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.35\linewidth}
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim6-3obj/PF06-MORRT.pdf}
 		\caption{Pareto set: weighted sum}
 		\label{fig:sim:many:pf:a}
 	\end{subfigure}
-	\begin{subfigure}[b]{0.35\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-ALL.png}
-		\caption{Pareto paths: weighted sum}
-		\label{fig:sim:many:sols:a}
-	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.35\linewidth}
+	%\begin{subfigure}[b]{0.3\linewidth}
+	%	\centering
+	%	\includegraphics[width=\textwidth]{fig/sim6-3obj/MORRTstar02-ALL.png}
+	%	\caption{Pareto paths: weighted sum}
+	%	\label{fig:sim:many:sols:a}
+	%\end{subfigure}  \\
+	\begin{subfigure}[b]{0.3\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim7-3obj/PF07-MORRT2.pdf}
 		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:many:pf:b}
 	\end{subfigure} 
-	\begin{subfigure}[b]{0.35\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/sim7-3obj/MORRTstar02-ALL.png}
-		\caption{Pareto paths: Tchebycheff}
-		\label{fig:sim:many:sols:b}
-	\end{subfigure}
+	%\begin{subfigure}[b]{0.3\linewidth}
+	%	\centering
+	%	\includegraphics[width=\textwidth]{fig/sim7-3obj/MORRTstar02-ALL.png}
+	%	\caption{Pareto paths: Tchebycheff}
+	%	\label{fig:sim:many:sols:b}
+	%\end{subfigure}
 	\caption{Path planning with three objectives.}
 	\label{fig:sim:many}
 \end{figure}
