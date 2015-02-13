@@ -26,6 +26,9 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,leftmargin=*}
+
 \title{ MORRF$^*$: Sampling-Based Multi-Objective Motion Planning }
 
 \author{Author Names Omitted for Anonymous Review.}
@@ -312,7 +315,7 @@ Returns a the position of the vertex whose position is closest to point $ x $.
 
 \textsc{Steer}( $ x,y,\eta $ ) = $ \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $.
 
-\item \textsc{ObstacleFree}(x,x): Returns True if $ [ x, x' ] \subset X_{\it free} $, which means the line segment between $ x $ and $ x' $ lies in $ X_{\it free} $.
+\item \textsc{ObstacleFree}(x,x): Returns True if $ [ x, x' ] \subset X_{\it free} $, which the line segment between $ x $ and $ x' $ lies in $ X_{\it free} $.
 
 \end{itemize}
 
@@ -785,19 +788,19 @@ Each method was run for $ 5000 $ iterations and restricted to $ 30 $ solutions.
 		\caption{Pareto set: Tchebycheff}
 		\label{fig:sim:norm:pf:c}
 	\end{subfigure}  \\
-	\begin{subfigure}[b]{0.29\linewidth}
+	\begin{subfigure}[b]{0.25\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim3-2obj/MOPath01-ALL.png}
 		\caption{Pareto paths: NSGA-II}
 		\label{fig:sim:norm:sols:a}
 	\end{subfigure} 
-	\begin{subfigure}[b]{0.29\linewidth}
+	\begin{subfigure}[b]{0.25\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim1-2obj/MORRTstar00-ALL.png}
 		\caption{Pareto paths: weighted sum}
 		\label{fig:sim:norm:sols:b}
 	\end{subfigure} 
-	\begin{subfigure}[b]{0.29\linewidth}
+	\begin{subfigure}[b]{0.25\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/sim2-2obj/MORRTstar00-ALL.png}
 		\caption{Pareto paths: Tchebycheff}
@@ -982,55 +985,57 @@ The algorithm should then converge to the set of Pareto optimal from any vertex 
 %\section*{Acknowledgments}
 %Omitted for anonymous review.
 
-\bibliographystyle{named}
-\bibliography{reference}
+\appendix
 
-\appendix{Proof of Lemma \ref{lem:sub_tree:conv}}
+\section{Proof of Lemma \ref{lem:sub_tree:conv}}
 
 \begin{proof}
-
-\begin{comment}
-\begin{figure}
-\centering
-\includegraphics[width=0.4\linewidth]{fig/conv}
-\caption{The convergence process of .}
-\label{fig:conv}
-\end{figure}
-\end{comment}
-
-By Lemma \ref{lem:ref_tree:conv}, we have 
-%\begin{equation}
-$ \lim_{j \to \infty} \lVert \bm{z}^{*} - \hat{\bm{z}} (j) \rVert = 0 $.
-%\end{equation}
-By Lemma \ref{lem:tree_vex:conv}, we have
-%\begin{equation}
-$ \lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) = \bm{c}( \hat{\bm{z}}(j) ) $.
-%\end{equation}
-Thus,
-%\begin{equation}
-%\nonumber
-%\begin{aligned}
-$ 
-\lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert 
-= \lVert \lim_{i \to \infty} \bm{c}( \bm{z}^{*} ) - \lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert 
- =  \lVert \bm{c}( \bm{z}^{*} ) - \bm{c}( \hat{\bm{z}}(j) ) \rVert 
- $.
-%\end{aligned}
-%\end{equation}
-
-Since $ \bm{c}( \bm{z} ) $ and $ \hat{\bm{c}}( i, \bm{z} ) $
-are Lipschitz continuous;
-%\begin{equation}
-$
-\lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \leq K \lVert \bm{z}^{*} - \hat{\bm{z}}(j) \rVert
-$.
-%\end{equation}
-As $ j \to \infty $, we have $ \hat{\bm{z}}(j) \to \bm{z}^{*} $, thus $ \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \to 0 $.
-This implies that
-%\begin{equation}
-$
-P( \{ \lim_{ \substack{ i \to \infty \\ j \to \infty } } \bm{c}^{\rm SUB}_{m} (i , \hat{\bm{z}} (j) ) =  \bm{c}_{m}^{*}  \} ) = 1 $.
-%\end{equation}
+	
+	\begin{comment}
+	\begin{figure}
+	\centering
+	\includegraphics[width=0.4\linewidth]{fig/conv}
+	\caption{The convergence process of .}
+	\label{fig:conv}
+	\end{figure}
+	\end{comment}
+	
+	By Lemma \ref{lem:ref_tree:conv}, we have 
+	%\begin{equation}
+	$ \lim_{j \to \infty} \lVert \bm{z}^{*} - \hat{\bm{z}} (j) \rVert = 0 $.
+	%\end{equation}
+	By Lemma \ref{lem:tree_vex:conv}, we have
+	%\begin{equation}
+	$ \lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) = \bm{c}( \hat{\bm{z}}(j) ) $.
+	%\end{equation}
+	Thus,
+	%\begin{equation}
+	%\nonumber
+	%\begin{aligned}
+	$ 
+	\lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert 
+	= \lVert \lim_{i \to \infty} \bm{c}( \bm{z}^{*} ) - \lim_{i \to \infty} \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert 
+	=  \lVert \bm{c}( \bm{z}^{*} ) - \bm{c}( \hat{\bm{z}}(j) ) \rVert 
+	$.
+	%\end{aligned}
+	%\end{equation}
+	
+	Since $ \bm{c}( \bm{z} ) $ and $ \hat{\bm{c}}( i, \bm{z} ) $
+	are Lipschitz continuous;
+	%\begin{equation}
+	$
+	\lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \leq K \lVert \bm{z}^{*} - \hat{\bm{z}}(j) \rVert
+	$.
+	%\end{equation}
+	As $ j \to \infty $, we have $ \hat{\bm{z}}(j) \to \bm{z}^{*} $, thus $ \lim_{i \to \infty} \lVert \bm{c}( \bm{z}^{*} ) -  \hat{\bm{c}}( i, \hat{\bm{z}}(j) ) \rVert \to 0 $.
+	This implies that
+	%\begin{equation}
+	$
+	P( \{ \lim_{ \substack{ i \to \infty \\ j \to \infty } } \bm{c}^{\rm SUB}_{m} (i , \hat{\bm{z}} (j) ) =  \bm{c}_{m}^{*}  \} ) = 1 $.
+	%\end{equation}
 \end{proof}
+
+\bibliographystyle{named}
+\bibliography{reference}
 
 \end{document}
