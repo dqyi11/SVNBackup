@@ -51,7 +51,7 @@
 Many robotic tasks require solutions that maximize multiple performance objectives.  
 For example, in path-planning, these objectives often include finding short paths that avoid risk and maximize the information obtained by the robot.  
 Although there exist many algorithms for multi-objective optimization, few of these algorithms apply directly to robotic path-planning and fewer still are capable of finding the set of Pareto optimal solutions.  
-We present the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$) algorithm, which blends concepts from two different types of algorithms from the literature: Rapidly exploring random tree (RRT$^{*}$) for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
+We present the MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$) algorithm, which blends concepts from two different types of algorithms from the literature: Optimal rapidly exploring random tree (RRT$^{*}$) for efficient path finding~\cite{Karaman.Frazzoli:RSS10} and a decomposition-based approach to multi-objective optimization~\cite{4358754}.  
 The random forest uses two types of tree structures: a set of {\em reference trees} and a set of {\em subproblem trees}.  
 %Each reference tree explores a single objective, and the estimates from the set of reference trees are used to estimate what is called the {\em Utopia reference vector}. This vector is required by the multi-objective optimization part of the algorithm.  
 %Each subproblem tree explores the space, seeking to find an optimal solution to the subproblem created by blending different objectives.  
@@ -141,9 +141,9 @@ Prior work has modeled the search space as a graph and applied a multi-objective
 The limitation of this approach is that it requires an {\em a priori} discretization rather than a discretization that is guided by the objectives as is done in RRT$^{*}$; a coarse discretization throws away potentially valuable information and a fine discretization increases complexity and adds redundancy in the resulting graph structures.
 Obstacles can make it more difficult to determining which cells in the discretized space are connected to which others
 . %, especially when searching a space of more than 2 dimensions such as in planning the trajectory for a robotic manipulator.
-Another approach that users an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using the NSGA-II algorithm to find a set of Pareto optimal solutions \cite{Ahmed2013}.  
+Another approach that uses an {\em a priori} discretization (and suffers from these limitations) is to encode a path as a sequence of directions from one cell to next cell and then using the NSGA-II algorithm to find a set of Pareto optimal solutions \cite{Ahmed2013}.  
 Constrained splines have been introduced to interpolate a sequence of way points into a trajectory that avoids obstacles~\cite{6181426}, but the effect of the interpolation on the quality of the solution has not been evaluated.
-In addition to the genetic approach used in NSGA-II, evolutionary algorithms based on the decomposition method have also been proposed ~\cite{6600851}.
+In addition to the sorting approach used in NSGA-II, evolutionary algorithms based on the decomposition method have also been proposed ~\cite{6600851}.
 
 % Evolutionary algorithms can be used to fine the Pareto set, but these approaches tend to be inefficient when applied to spaces with high dimensions~\cite{marler2004survey}. 
 %For such spaces, small deviations in possible solutions may need to be considered in order to find an optimal solution, but this means exploring many possible solutions for problems with non-linearities or multiple local maxima. 
@@ -155,7 +155,7 @@ MOEA-D is an algorithm that decomposes a multi-objective optimization problem in
 Each subproblem uses a weighed combination of the objectives to find specific points in the Pareto set or to guide the search for such points.  
 %Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
 Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  
-Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the $K$-element set of objective functions, let $F(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  
+Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the $K$-element set of objective functions, let $\bm{c}(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  
 Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector. %, described in more detail in the next section. 
 Three types of decomposition methods have been used in prior work~\cite{4358754}; however we will use only the two methods described below, leaving the third (the boundary intersection method) to future work.
 \begin{eqnarray}
@@ -178,9 +178,9 @@ The solutions generated by each method are a subset of the Pareto optimal set.
 
 Sampling-based path planning works effectively in continuous space. 
 The RRT (Rapidly exploring Random Tree) has been one of the most popular tools, which  efficiently explores the space by randomly sampling the search space; this algorithm tends to work well in the presence of complex obstacles.
-Unfortunately, RRT has been shown to fail in certian conditions~\cite{Karaman.Frazzoli:RSS10}. 
-In response, the RRT$^{*}$ algorithm was proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed. Thus RRT$^{*}$ is asymptotically
-optimal~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
+Unfortunately, RRT has been shown to fail in optimality guarantee~\cite{Karaman.Frazzoli:RSS10}. 
+In response, the RRT$^{*}$ algorithm was proposed, which uses a \emph{Rewire} process to gradually update the tree structure when new samples of the space indicate that this is needed. 
+Thus RRT$^{*}$ is asymptotically optimal~\cite{Karaman.Frazzoli:RSS10}~\cite{Karaman:2011:SAO:2000201.2000209}. 
 
 \section{Multi-Objective Rapidly exploring Random Forest$^{*}$}
 \label{sec:morrt}
@@ -224,8 +224,8 @@ The goal is to find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ such
 %Note that this last condition enforces a very strict form of payoff dominance; extensions to the algorithm can be made for weaker forms of payoff dominance.
 
 Adopting the idea from the MOEA-D algorithm~\cite{4358754}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we use the Tchebycheff approach from MOE-D. 
-%The MOE-D Boundary Intersection Approach could be used with only slight modifications. 
+In this paper, we use the Tchebycheff approach from MOEA-D. 
+%The MOEA-D Boundary Intersection Approach could be used with only slight modifications. 
 The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
 %Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 \begin{figure}
@@ -239,7 +239,7 @@ As illustrated in Figure~\ref{fig:Tchebycheff}, the Utopia reference vector is d
 %It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
 
 %Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
-We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition, as described below.  
+We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition. %, as described below.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 \item Each \emph{reference tree} explores using a single objective $ c_{k} (x), k \in K $. 
@@ -250,7 +250,7 @@ The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by
 %Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
 
-\begin{figure}[H]
+\begin{figure}
 	\centering
 	\includegraphics[width=0.6\linewidth]{./fig/MORRTstar}
 	\caption{Rapidly exploring process}
@@ -276,7 +276,7 @@ The location of this vertex is labeled $x_{nearest}$.
 %A tolerance parameter, $\eta$, is used to guarantee that the distance between the vertices in the tree and the new position is within some exploration tolerance; this is accomplished in the {\sc Steer} method.  
 %If the distance between $x_{rand}$ and $x_{nearest}$ is less than the tolerance $\eta$, then $x_{new}=x_{nearest}$.  
 %Otherwise, a line segment between $x_{rand}$ and $x_{nearest}$ is constructed and the point on this line segment that is distance $\eta$ from $x_{nearest}$ becomes the new point $x_{new}$. 
-This process of finding $x_{new}$ is represented in the top layer of %Figure~\ref{fig:MORRTstar}, with the dashed circle around the new point indicating $\eta$.
+This process of finding $x_{new}$ is represented in the top layer of Figure~\ref{fig:MORRTstar}. %, with the dashed circle around the new point indicating $\eta$.
 
 %Given the location of a new vertex for each tree, edges are added, potentially different edges for each reference and each subproblem tree.
 %We require that each new vertex be connected to some existing vertex, so a feasibility check is added using the {\sc ObstacleFree} method.
@@ -331,10 +331,10 @@ Returns independent uniformly distributed samples from $ X_{\mbox{free}} $.
 Returns a the position of the vertex whose position is closest to point $ x $.
 \textsc{Nearest}($ G = (V,E), x $) = $ \arg \min_{v \in V} \lVert x - v \rVert $.
 	
-\item \textsc{Steer}(): Given two points $ x $ and $ y $, returns a point $ z $ on the line segment from $x$ to $y$ that that is no greater than $eta$ from $y$. 
+\item \textsc{Steer}(): Given two points $ x $ and $ y $, returns a point $ z $ on the line segment from $x$ to $y$ that that is no greater than $\eta$ from $y$. 
 \textsc{Steer}( $ x,y,\eta $ ) = $ \arg \min_{ z \in \mathbb{R}^{d}, \lVert z -x \rVert \leq \eta } \lVert z - y \rVert $.
 
-\item \textsc{ObstacleFree}(x,x): Returns True if $ [ x, x' ] \subset X_{\it free} $, which the line segment between $ x $ and $ x' $ lies in $ X_{\it free} $.
+\item \textsc{ObstacleFree}(x,x): Returns True if $ [ x, x' ] \subset X_{\it free} $, which is the line segment between $ x $ and $ x' $ lies in $ X_{\it free} $.
 
 \end{itemize}
 
@@ -342,7 +342,7 @@ Returns a the position of the vertex whose position is closest to point $ x $.
 %We use the same sampling position to extend all the trees in one iteration.
 %Thus the vertices in the reference trees could be used as reference for estimating the cost in constructing the subproblem trees.
 
-We can now discuss how edges are added to the reference and subproblem trees.  
+%We can now discuss how edges are added to the reference and subproblem trees.  
 As illustrated in Figure~\ref{fig:MORRTstar}, second layer, edges to the reference trees are added before the edges to the subproblem trees.  
 This allows us to compute the Utopia reference vector using the path costs for each reference tree, each reference tree returning a path that approximates the minimum cost for a specific objective.  
 The Utopia reference vector is then used to determine which edges should be added for each subproblem. 
@@ -427,10 +427,10 @@ The precise definitions of the methods used in the Algorithm~\ref{alg:morrtstar:
 
 Consider the third layer in Figure~\ref{fig:MORRTstar}, which illustrates how the subproblem trees ``rewire'' to connect to the new vertex.  
 The Utopia reference vector, $ \hat{\bm{z}}_{k}^{\rm utop} $ is defined as the $k$-dimensional vector constructed from each reference tree.  
-The minimum cost path from the starting vertex over all the leaf node is computed for each reference tree.  
+The minimum cost of each path from the starting vertex over any other vertex is computed for each reference tree.  
 %The Utopia reference vector is the vector of these costs. 
 Using the Utopia reference vector, each subproblem tree connects its new vertex and rewire a set of neighboring vertices in a radius as well. 
-Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
+Algorithm \ref{alg:morrtstar:extend:sub} precisely follows Algorithm~\ref{alg:morrtstar:extend:ref} except that instead of computing the cost using one of the objectives, the cost is computed using the Tchebycheff method; each of the $m^{\rm th}$ subproblem trees corresponds to a different weighting vector~$\lambda_m$.  
 This is performed using the {\sc Fitness} method.
 
 
@@ -689,26 +689,6 @@ We restate this as a lemma, and note that the corresponds exactly to that given 
 Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing},
 the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely.
 \end{lem}
-  
-\begin{comment}
-Let $c(x; i) $ be the minimum cost from the root to the position of vertex $ x $ at iteration $ i$  and $ z^{*}(x) $ be the minimum cost from the start to the position of vertex $ x $.
-We can generalize Karaman and Frazzoli'sthe conclusion of Theorem 22 in 22~\cite{Karaman.Frazzoli:RSS10} to all the vertices in the RRT$^{*}$.
-\begin{lem}
-%\label{lem:tree_vex:conv}
-Given Assumptions~\ref{asmp:additivity}-\ref{asmp:spacing},
-the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely, i.e.,
-$
-P( \{ \lim_{ i \rightarrow \infty } c(x, i)  = z^{*}(x) \} ) = 1, x \in V $.
-\begin{proof}
-%The construction of RRT* is not goal-oriented.
-%The ``rewire'' process potentially will update all the vertices and converge the value to the optimal one.
-%Similar with that of a goal vertex, the paths from the root to all other vertices will converge to corresponding optimal ones as well.
-The asymptotic optimality of RRT$^{*}$ does not rely on how the nature of the sampling process is like (Theorem 22, \cite{Karaman.Frazzoli:RSS10}), though the convergence rate might be different.
-Simply changing the goal to the position of any vertex still hold the asymptotic optimality.
-Thus, we could generalize the asymptotic optimality from the goal to all the vertices.
-\end{proof}
-\end{lem}
-\end{comment}
 
 Lemma~\ref{lem:tree_vex:conv} and Theorem~\ref{thm:moo-d:rrt} imply that each reference tree converges to the optimal path from the root to any node in the tree, including a node arbitrarily close to the goal node.  
 This means that the costs returned by those trees for the path from the start to the goal for the cost function $c_k$ converges to the $k^{\rm th}$ element of the Utopia reference vector $ \bm{z}^{\rm utop} $.  
@@ -739,6 +719,7 @@ A subproblem tree obtains $ \hat{\bm{z}}^{\rm utop} (v) $ for vertex $ v $ in th
 This forms a cascade structure from the reference trees to the subproblem tree. 
 By Lemma \ref{lem:ref_tree:conv}, we have the convergence of the reference trees.
 
+We introduce Assumption \ref{asmp:lipschitz} to get Lemma \ref{lem:sub_tree:conv}.
 \begin{asmp}{(Lipschitz continuity)}
 \label{asmp:lipschitz}
 $ \bm{c}^{\rm SUB}_{m} ( \bm{z} )  $ in Eq. \eqref{eq:c_def} and its estimation $ \hat{ \bm{c} }^{\rm SUB}_{m} ( i, \bm{z} ) $ are Lipschitz continuity, i.e.
@@ -747,9 +728,11 @@ $ \lVert \bm{c}^{\rm SUB}_{m} ( \bm{z}_{a} ) - \bm{c}^{\rm SUB}_{m} ( \bm{z}_{b}
 
 \begin{lem}
 \label{lem:sub_tree:conv}
-Given Assumptions~\ref{asmp:additivity}-\ref{asmp:lipschitz} and given the estimated Utopia reference vector $ \hat{\bm{z}} $,
+Given Assumptions~\ref{asmp:additivity}-\ref{asmp:lipschitz} 
+%and given the estimated Utopia reference vector $ \hat{\bm{z}} $
+,
 %with $ \bm{z}^{\rm utop} (x) $ for any $ x $ given,
-the cost of the solution of $ m^{\rm th} $ subproblem tree converges to the corresponding cost of the $ m^{\rm th} $ subproblem $ \bm{c}_{m}^{*} ( \hat{\bm{z}} ) $ almost surely.
+the cost of the solution of $ m^{\rm th} $ subproblem tree converges to the corresponding cost of the $ m^{\rm th} $ subproblem $ \bm{c}_{m}^{*}  $ almost surely.
 \end{lem}
 The proof for Lemma \ref{lem:sub_tree:conv} is given in the appendix.
 
