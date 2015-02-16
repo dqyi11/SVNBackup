@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="626.40112"
-   height="515.12695"
+   width="620.76398"
+   height="491.36371"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.1 "
-   sodipodi:docname="New document 1">
+   sodipodi:docname="pareto_optimal.svg">
   <defs
      id="defs4">
     <marker
@@ -68,11 +68,11 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.35"
-     inkscape:cx="373.94974"
-     inkscape:cy="252.62695"
+     inkscape:cx="368.31261"
+     inkscape:cy="228.86371"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="true"
+     showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -98,7 +98,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -106,7 +106,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(444.66403,-269.86218)">
+     transform="translate(439.0269,-269.86218)">
     <path
        style="fill:#b7cbb7;fill-opacity:1;stroke:none"
        d="m -320,372.36218 c 33.405,202.78548 194.61039,277.77056 425.71429,282.85714 l -1.42857,-281.42857 z"
@@ -172,16 +172,16 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-650.22333"
-       y="-403.4675"
+       x="-619.98395"
+       y="-405.1134"
        id="text4664"
        sodipodi:linespacing="125%"
        transform="matrix(-0.00532399,-0.99998583,0.99998583,-0.00532399,0,0)"><tspan
          sodipodi:role="line"
          id="tspan4666"
-         x="-650.22333"
-         y="-403.4675"
-         style="font-size:60px">Objective 1</tspan></text>
+         x="-619.98395"
+         y="-405.1134"
+         style="font-size:50px">Objective 1</tspan></text>
     <flowRoot
        xml:space="preserve"
        id="flowRoot4668"
@@ -192,7 +192,7 @@
            height="240"
            x="-740"
            y="332.36218" /></flowRegion><flowPara
-         id="flowPara4674"></flowPara></flowRoot>    <flowRoot
+         id="flowPara4674" /></flowRoot>    <flowRoot
        xml:space="preserve"
        id="flowRoot4676"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"><flowRegion
@@ -202,17 +202,17 @@
            height="320"
            x="-671.42859"
            y="252.36218" /></flowRegion><flowPara
-         id="flowPara4682"></flowPara></flowRoot>    <text
+         id="flowPara4682" /></flowRoot>    <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-280"
-       y="772.36218"
+       x="-218.94975"
+       y="750.70343"
        id="text4696"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4698"
-         x="-280"
-         y="772.36218"
-         style="font-size:60px">Objective 2</tspan></text>
+         x="-218.94975"
+         y="750.70343"
+         style="font-size:50px">Objective 2</tspan></text>
   </g>
 </svg>
