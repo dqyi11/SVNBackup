@@ -1,11 +1,17 @@
 \section{Introduction}
 
 \begin{frame}{Path planning}{Introduction}
+\begin{itemize}
+\item
+\item 
+\end{itemize}
 \end{frame}
 
 \begin{frame}{The need of multi-objective}{Introduction}
 \begin{itemize}
-\item Com
+\item Inherent complexity in tasks
+\item From cooperation to collaboration
+\item Communication gap between the task supervisor and the task executor
 \end{itemize}
 \end{frame}
 
@@ -61,8 +67,15 @@ The problems in modeling human intent
 \column{0.5\textwidth}
 \begin{minipage}{\textwidth}
 \begin{itemize}
-\item Non-dominance
-\item 
+\item $ x_{a} \prec x_{b} $ (dominate)
+\begin{eqnarray*}
+\forall k, & f_{k} (x_{a}) \leq f_{k} (x_{b}) \\
+\exists k, & f_{k} (x_{a}) < f_{k} (x_{b})
+\end{eqnarray*}
+\item non-dominance
+\begin{eqnarray*}
+\nexists x \in \mathbb{X}, x \prec x_{a}
+\end{eqnarray*}
 \end{itemize}
 \end{minipage}
 \end{columns}
