@@ -2,15 +2,16 @@
 
 \begin{frame}{Path planning}{Introduction}
 \begin{itemize}
-\item
-\item 
+\item Efficiency vs Optimality
+\item Environment dynamics
+\item Prior information modeling
 \end{itemize}
 \end{frame}
 
 \begin{frame}{The need of multi-objective}{Introduction}
 \begin{itemize}
 \item Inherent complexity in tasks
-\item From cooperation to collaboration
+\item From cooperation to collaboration (Robot independence)
 \item Communication gap between the task supervisor and the task executor
 \end{itemize}
 \end{frame}
@@ -74,13 +75,38 @@ The problems in modeling human intent
 \end{eqnarray*}
 \item non-dominance
 \begin{eqnarray*}
-\nexists x \in \mathbb{X}, x \prec x_{a}
+\nexists x \in \mathbb{X}, x \prec x^{*}
 \end{eqnarray*}
 \end{itemize}
 \end{minipage}
 \end{columns}
 \end{frame}
 
-\begin{frame}{Hardness in finding Pareto optimality}{Introduction}
+\begin{frame}{Hardness in finding Pareto optimal set}{Introduction}
+Methods
+\begin{itemize}
+\item \emph{sorting based approach} : NSGA-II
+\item \emph{decomposition based approach} : MOEA-D
+\item \emph{approximation based approach} : PAES
+\item \emph{sampling based approach} : ALP
+\end{itemize}
+\end{frame}
 
+\begin{frame}{Hardness in finding Pareto optimal points}{Introduction}
+For the point representation
+\begin{itemize}
+\item constraints
+\item discontinuity
+\item nonconvex
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hardness in finding Pareto optimal paths}{Introduction}
+For the path representation
+\begin{itemize}
+\item constraints
+\item discontinuity
+\item nonconvex
+\item high dimension
+\end{itemize}
 \end{frame}
