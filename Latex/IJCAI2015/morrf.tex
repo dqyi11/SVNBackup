@@ -634,25 +634,25 @@ Given any other path $ \sigma $, we can represent the Tchebycheff cost as follow
 Because $ \sigma^{*} $ is Pareto optimal,
 %\begin{equation}
 %\label{eq:exist_geq}
-$\exists k' \in K, c_{k'} ( \sigma ) >  c_{k'} ( \sigma^{*} )$.
+$ [ \exists k' \in K, c_{k'} ( \sigma ) >  c_{k'} ( \sigma^{*} ) ] \lor [ \forall k \in K, c_{k'} ( \sigma ) =  c_{k'} ( \sigma^{*} ) ] $ for any $ \sigma $.
 %\end{equation}
 As $ \forall k,  c_{k}( \sigma^{*} ) > z^{\rm utop}_{k} $,
 we have $ \forall k,  c_{k}( \sigma^{*} ) - z^{\rm utop}_{k} > 0 $.
 This implies
 %\begin{equation}
 %\exists k' \in K, 
-$\frac{ c_{k'}( \sigma ) - c_{k'} ( \sigma^{*} )  }{  c_{k'} ( \sigma^{*} ) - z^{\rm utop}_{k'} }  > 0$,
+$ \exists k' \in K, \frac{ c_{k'}( \sigma ) - c_{k'} ( \sigma^{*} )  }{  c_{k'} ( \sigma^{*} ) - z^{\rm utop}_{k'} }  \geq 0$,
 %\end{equation}
 which, in turn, implies that
 %\begin{equation}
 $
-\max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| > 1.
+\max_{k \in K} \left| 1 + \frac{ c_{k}( \sigma ) - c_{k} ( \sigma^{*} )  }{  c_{k} ( \sigma^{*} ) - z^{\rm utop}_{k} } \right| \geq 1.
 $ %\end{equation}
 Therefore,
 %\begin{equation}
 %\begin{aligned}
 $
-g^{te} ( \sigma ) >  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} )$.
+g^{te} ( \sigma ) \geq  \frac{1}{\sum_{j=1}^K \ell_j} = g^{te} ( \sigma^{*} )$.
 %\end{aligned}
 %\end{equation}
 %It means,
