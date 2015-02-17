@@ -1,0 +1,30 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+
+\begin{equation}
+\nexists x \in \mathbb{X}, x \prec x^{*}
+\end{equation}
+equals to 
+\begin{equation}
+\lnot \exists x \in \mathbb{X}, \left[  \left( \forall x, f_{k} (x) \leq f(x^{*}) \right) \land \left( \exists k, f_{k} (x) < f(x^{*}) \right)  \right]
+\end{equation}
+
+\begin{equation}
+\forall x \in \mathbb{X}, \left[ \lnot \left( \forall x, f_{k} (x) \leq f(x^{*}) \right) \lor \lnot \left( \exists k, f_{k} (x) < f(x^{*}) \right) \right]
+\end{equation}
+
+\begin{equation}
+\forall x \in \mathbb{X}, \left[ \left( \exists x, f_{k} (x) > f(x^{*}) \right) \lor \left( \forall k, f_{k} (x) \geq f(x^{*}) \right) \right]
+\end{equation}
+
+\begin{equation}
+\forall x \in \mathbb{X}, \left[ \left( \exists x, f_{k} (x) > f(x^{*}) \right) \lor \left( \forall k, f_{k} (x) = f(x^{*}) \right) \right]
+\end{equation}
+
+
+\end{document}
