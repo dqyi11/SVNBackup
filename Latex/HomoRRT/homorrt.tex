@@ -6,7 +6,7 @@
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
 \title{\LARGE \bf
-Homotopy-based RRT$^{*}$
+Homotopy-aware RRT$^{*}$
 }
 
 \author{
@@ -25,7 +25,10 @@ Daqing Yi, Michael A. Goodrich and Kevin D. Seppi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-The homotopy 
+Because the topology factor is difficulty to abstract for a task planner, it is often ignored in modeling the problems of optimal motion planning, especially when it is not a hard constraint.
+In this paper, we propose HA-RRT$^{*}$, a homotopy-aware RRT$^{*}$, that explores the planning space for optimal solutions with the consideration of the topology of the paths.
+When the task planner has a clear will on the topology of the paths, the homotopy-aware RRT$^{*}$ could utilize this information as prior to reduce the working space of the optimal search.
+When the task planner has a vague will on the topology of the paths, the homotopy-aware RRT$^{*}$ could help the planner find the optimal solutions that satisfies his/her intent.
 
 
 \end{abstract}
@@ -35,7 +38,10 @@ The homotopy
 \section{INTRODUCTION}
 \label{sec:intro}
 
-The most popular focus on the robotic path planning is optimality.
+One of the most important targets of robotic path planning is the optimality to some level.
+%The most popular focus on the robotic path planning is optimality.
+This depends on an assumption that the problem has been well modeled.
+Thus, the solution 
 In planning the robot's motion in a task, the intent of the task supervisor is usually modeled into single objective~\cite{6974170} or multiple objective optimization~\cite{yi2014supporting}.
 The generated path is a solution that optimizes the given objectives, for example, minimizing the Euclidean distance.
 There exist plenty of other human intents that are hard to be modeled using measurable metrics.
@@ -47,18 +53,27 @@ However, sometimes this intent is only a preference instead of a hard constraint
 \emph{Homotopy} is imported to model the inherent topological similarity of the paths.
 Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez201544}.
 This leads to a \emph{homotopy class}, in which any two paths are homotopic.
-The homotopy of the paths can help to model the human intent, which can be applied to several scenarios.
-\begin{itemize}
-\item Human initialized homotopic constraint \\
-If the task supervisor has a strong opinion on the topology of the path, the supervisor can define the homotopic constraint by either initializing a reference path or defining via-regions.
-The problem becomes finding an optimal path of a given homotopy class~\cite{Hershberger199463}.
-The homotopic constraint reduce the exploring space, which brings the efficiency enhancement.
-\item Optimality of different homotopy classes \\
+The homotopy of the paths can help to model the human intent, which can be applied to four levels of planner's intent.
+\begin{enumerate}
+\item \emph{The planner has a clear intent of how the topology should be.}
+The objective becomes only finding the optimal solution in the paths of this homotopy class.
+The homotopy class becomes the constraint of the problem~\cite{Hershberger199463}.
+This homotopy class could be defined from a human initialized reference path.
+\item \emph{The planner expects the paths through some regions.}
+With the via-regions given, several homotopy classes that across those regions could be obtained.
+In this case, the homotopic constraint becomes several homotopy classes instead of only one.
+
+\item \emph{The planner could tell the preference of different homotopy classes.}
+With the preference of different homotopy classes, the homotopy classes could form a new objective as discrete variable.
+We could firstly find the non-dominant solutions.
+Thus the planner could figure out one from the Pareto optimal paths.
+\item \emph{The planner could not tell the preference of different homotopy classes.}
 If the task supervisor has a weak opinion on the topology of the path, the planning algorithm can provide the best solution of each homotopy class to the supervisor.
 The supervisor can then select one that satisfy his/her intent.
-\end{itemize}
+\end{enumerate}
 
-
+In this paper, we propose a homotopy-aware RRT$^{*}$ that awares the homotopy class while exploring the planning space.
+It could assist the planner finding the intended optimal path in considering the homotopy.
 
 \section{Related work}
 \label{sec:related_work}
