@@ -82,6 +82,7 @@ It could assist the planner finding the intended optimal path in considering the
 
 Homotopy-based path planning depends on the determination of the homotopy equivalence of two paths, which is usually computationally expensive.
 
+Voronoi diagram is naturally introduced to assist determining the homotopy classes, but it shows limitation on finding some paths in some cases~\cite{banerjee2013framework}.
 By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
 Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
 The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
@@ -96,8 +97,14 @@ By dividing the space using the rays crossing each obstacle, reference frames co
 Bidirectional RRT has been introduced to accelerate the exploration process while the optimality is still preserved~
 \cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
 
+With two trees exploring from two directions, we can have the optimal cost-to-go and the optimal cost-to-arrive at different position.
+This guarantee the optimality search with the homotopical constraint.
+We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology from the planner.
+
 \section{Algorithm}
 \label{sec:algorithm}
+
+
 
 \subsection{Homotopy-base space decomposition}
 
