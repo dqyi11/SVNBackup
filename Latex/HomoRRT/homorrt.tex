@@ -1,5 +1,9 @@
 \documentclass[letterpaper, 10 pt, conference]{ieeeconf}
 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{bm}
+
 \usepackage{comment}
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
@@ -112,6 +116,47 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 
 
 \subsection{Homotopy-base space decomposition}
+
+\begin{algorithm}[hbtp]
+	\begin{algorithmic}[1]
+		\If{ $ x_{new} = x_{nearest} $} 
+		\Return $G=(V,E)$ 
+		\EndIf
+		\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+		\State $ x_{min} \leftarrow x_{nearest} $
+		\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+		%\If{ $ x_{new} \neq x_{min} $ }
+		\For{\textbf{each} $ x_{near} \in X_{near} $ }
+		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+		\State $ \bm{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \bm{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+		\State $ \eta' =  $ \Call{Fitness}{ $ \bm{c}' , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
+		\State $ \bm{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
+		\State $ \eta_{new} = $ \Call{Fitness}{ $ \bm{c}_{new} , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
+		\If{ $ \eta' < \eta_{new} $ }
+		\State $ x_{min} \leftarrow x_{near} $
+		\EndIf
+		\EndIf
+		\EndFor
+		\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+		%\EndIf
+		\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+		\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+		\State $ \bm{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \bm{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
+		\State $ \eta' =  $ \Call{Fitness}{ $ \bm{c}' , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
+		\State $ \bm{c}_{near} = $ \Call{Cost}{$ x_{near} $} 
+		\State $ \eta_{near} = $ \Call{Fitness}{ $ \bm{c}_{near} , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
+		\If{ $ \eta' < \eta_{near} $ }
+		\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+		\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+		\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+		\EndIf
+		\EndIf
+		\EndFor
+		\Return $ G' = (V', E') $ 
+	\end{algorithmic}
+	\caption{ \textsc{Extend}$_{\it Sub} $ ($ G, x_{\it new}, x_{\it nearest},m$) }
+	\label{alg:morrtstar:extend:sub}
+\end{algorithm} 
 
 \subsection{Bidirection RRT$^{*}$}
 
