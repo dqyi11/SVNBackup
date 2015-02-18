@@ -4,6 +4,7 @@
 \usepackage[noend]{algpseudocode}
 \usepackage{bm}
 
+\usepackage{amsfonts}
 \usepackage{comment}
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
@@ -119,46 +120,70 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
-		\If{ $ x_{new} = x_{nearest} $} 
-		\Return $G=(V,E)$ 
-		\EndIf
-		\State $ V' \leftarrow V' \cup \{ x_{new} \} $
-		\State $ x_{min} \leftarrow x_{nearest} $
-		\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-		%\If{ $ x_{new} \neq x_{min} $ }
-		\For{\textbf{each} $ x_{near} \in X_{near} $ }
-		\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ \bm{c}' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + \bm{c}( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-		\State $ \eta' =  $ \Call{Fitness}{ $ \bm{c}' , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
-		\State $ \bm{c}_{new} = $ \Call{Cost}{$ x_{new} $} 
-		\State $ \eta_{new} = $ \Call{Fitness}{ $ \bm{c}_{new} , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
-		\If{ $ \eta' < \eta_{new} $ }
-		\State $ x_{min} \leftarrow x_{near} $
-		\EndIf
-		\EndIf
+		\State $ \bm{R} = \emptyset $
+		\For{\textbf{each} $ B_{k} \in \bm{B} $ }
+			\State $ b_{k} $ $ \leftarrow $ Sample from $ B_{k} $
+			\State $ \bm{b} \leftarrow \bm{b} \cup b_{k} $
 		\EndFor
-		\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-		%\EndIf
-		\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-		\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-		\State $ \bm{c}' \leftarrow $ \Call{Cost}{$ x_{new} $} $ + \bm{c}( $ \Call{Line}{$ x_{new}, x_{near} $} $ ) $ 
-		\State $ \eta' =  $ \Call{Fitness}{ $ \bm{c}' , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
-		\State $ \bm{c}_{near} = $ \Call{Cost}{$ x_{near} $} 
-		\State $ \eta_{near} = $ \Call{Fitness}{ $ \bm{c}_{near} , \hat{\bm{z}}^{\rm utop} \mid \lambda_{m} $ }
-		\If{ $ \eta' < \eta_{near} $ }
-		\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
-		\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
-		\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
-		\EndIf
-		\EndIf
+		\While{ $ \exists b_{k}, b_{k'} , c \in $ \Call{Line}{ $ b_{k}, b_{k'} $ } }
+			\State $ c \leftarrow  $ Sample from $ \bm{X}_{free} $
+		\EndWhile
+		\For{\textbf{each} $ b_{k} \in \bm{b} $ }
+			\State $ \alpha_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, c - b_{k} $ }
+			\State $ \beta_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, b_{k} - c $ }
+			\State $ \bm{\alpha} \leftarrow \bm{\alpha} \cup \alpha_{k} $
+			\State $ \bm{\beta} \leftarrow \bm{\beta} \cup \beta_{k} $			
 		\EndFor
-		\Return $ G' = (V', E') $ 
+		\For{\textbf{each} $ \alpha_{k} \in \bm{\alpha} $}
+			\State $ \{ \alpha_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \alpha_{k}, \bm{B} $}
+			\State $ \bm{R} \leftarrow \bm{R} \cup \{ \alpha_{k_{m}} \} $
+		\EndFor
+		\For{\textbf{each} $ \beta_{k} \in \bm{\beta} $}
+			\State $ \{ \beta_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \beta_{k}, \bm{B} $}
+			\State $ \bm{R} \leftarrow \bm{R} \cup \{ \beta_{k_{m}} \} $
+		\EndFor
+		\Return $ \bm{R} $
 	\end{algorithmic}
-	\caption{ \textsc{Extend}$_{\it Sub} $ ($ G, x_{\it new}, x_{\it nearest},m$) }
-	\label{alg:morrtstar:extend:sub}
+	\caption{ \textsc{InitRefFrames} ( $ \bm{X}_{free} , \bm{B} $ ) }
+	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-\subsection{Bidirection RRT$^{*}$}
+\begin{itemize}
+	\item \textsc{Line}($ p_{1}, p_{2} $):
+	Return a line that defined by $ p_{1} $ and $ p_{2} $.
+	\item \textsc{Ray}($ p, \vec{d} $):
+	Return a ray that starts from $ p $ with direction $ \vec{d}  $.
+	\item \textsc{Intersect}( $ r , \bm{B} $ ):
+\end{itemize}
+
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\State $ i \leftarrow 0 $
+		\State $ V_{s} \leftarrow \{ x_{init} \} $; $ E_{s} \leftarrow \emptyset $; $ G_{s} \leftarrow (V_{s}, E_{s}) $
+		\State $ V_{g} \leftarrow \{ x_{goal} \} $; $ E_{g} \leftarrow \emptyset $; $ G_{g} \leftarrow (V_{g}, E_{g}) $
+		\While{ $ i < N $ }
+			\State $ G_{s} \leftarrow $ \Call{Explore}{$ G_{s}, i $}
+			\State $ G_{g} \leftarrow $ \Call{Explore}{$ G_{g}, i $}
+			\State $ i \leftarrow i + 1 $
+		\EndWhile
+	\end{algorithmic}
+	\caption{HA-RRT$^{*}$ ($ x_{init} , x_{goal}  $) }
+	\label{alg:harrt}
+\end{algorithm}
+
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\State $ x_{rand} \leftarrow $ \Call{ Sample }{$ i $} ;
+		\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x_{rand} $}
+		\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x_{rand},\eta $}
+		\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+			\State $ G \leftarrow $ \Call{ Extend }{$ G, x_{new}, x_{\it nearest} $}
+		\EndIf
+		\Return $ G $
+	\end{algorithmic}
+	\caption{ \textsc{Explore}($ G, i $) }
+	\label{alg:harrt:explore}
+\end{algorithm}
 
 \section{Application}
 \label{sec:application}
