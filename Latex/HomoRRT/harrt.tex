@@ -144,7 +144,7 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 		\EndFor
 		\Return $ \bm{R} $
 	\end{algorithmic}
-	\caption{ \textsc{InitRefFrames} ( $ \bm{X}_{free} , \bm{B} $ ) }
+	\caption{ \textsc{InitRefFrames} ($ \bm{X}_{free} , \bm{B} $) }
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
@@ -185,8 +185,58 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 	\label{alg:harrt:explore}
 \end{algorithm}
 
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\State $ V' \leftarrow V $; $ E' \leftarrow E $
+		\State $ V' \leftarrow V' \cup \{ x_{new} \} $
+		\State $ x_{min} \leftarrow x_{nearest} $
+		\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+		\State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
+		\If{\Call{HomotopyCheck}{$ s $}}
+			\For{\textbf{each} $ x_{near} \in X_{near} $ }
+				\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+					\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
+					\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
+						\State $ x_{min} \leftarrow x_{near} $
+					\EndIf
+				\EndIf
+			\EndFor
+		\Else
+		    \State \Return $ G' = (V', E') $ 		
+		\EndIf
+		\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+		\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+			\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} $ > $ \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+			    \State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
+			    \If{\Call{HomotopyCheck}{$ s $}}
+					\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+					\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+					\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+					%\State \Call{STR}{$x_{near}$} $ \leftarrow $ \Call{STR}{$x_{new}$} 
+					%\State \Call{STR}{$x_{near}$} $ \leftarrow $ \Call{STR}{$x_{near}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
+				\EndIf
+			\EndIf
+		\EndFor
+		\Return $ G' = (V', E') $ 
+	\end{algorithmic}
+\label{alg:harrt:extend}
+\caption{ {\sc Extend } ($ G, x_{new}, x_{nearest} $) }
+\end{algorithm}
+
+\begin{itemize}
+	\item \textsc{CRF}($ l, \bm{R} $):
+	Returns the character that represents the crossed reference frames if any.
+	\item \textsc{STR}($ x $):	
+	\item \textsc{HomotopyCheck}{($ s $)}
+\end{itemize}
+
 \section{Application}
 \label{sec:application}
+
+\subsection{Verbal command}
+
+\subsection{Human initial reference path}
+
 
 \section{Analysis}
 \label{sec:analysis}
