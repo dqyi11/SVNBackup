@@ -7,6 +7,13 @@
 \usepackage{amsfonts}
 \usepackage{comment}
 
+%\usepackage{amsthm}
+%\newtheorem{thm}{Theorem}
+\newtheorem{lem}{Lemma}
+%\newtheorem{asmp}{Assumption}
+%\newtheorem{defn}{Definition}
+%\newtheorem{clm}{Claim}
+
 \IEEEoverridecommandlockouts                              % This command is only needed if 
                                                           % you want to use the \thanks command
 
@@ -111,12 +118,8 @@ With two trees exploring from two directions, we can have the optimal cost-to-go
 This guarantee the optimality search with the homotopical constraint.
 We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology from the planner.
 
-\section{Algorithm}
+\section{Homotopy-aware optimal exploration}
 \label{sec:algorithm}
-
-
-
-\subsection{Homotopy-base space decomposition}
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -166,6 +169,7 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 			\State $ G_{g} \leftarrow $ \Call{Explore}{$ G_{g}, i $}
 			\State $ i \leftarrow i + 1 $
 		\EndWhile
+		\State \Call{ExtractPaths}{$ G_{s}, G_{g} $}
 	\end{algorithmic}
 	\caption{HA-RRT$^{*}$ ($ x_{init} , x_{goal}  $) }
 	\label{alg:harrt}
@@ -230,16 +234,46 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 	\item \textsc{HomotopyCheck}{($ s $)}
 \end{itemize}
 
-\section{Application}
-\label{sec:application}
-
-\subsection{Verbal command}
-
-\subsection{Human initial reference path}
+\begin{algorithm}
+	\begin{algorithmic}[1]
+		\State $ V_{s,g} \leftarrow $ \Call{SameVertices}{$ G_{s}, G_{r} $}
+		\State $ P \leftarrow \emptyset $
+		\For{\textbf{each} $ v \in V_{s,g} $ }
+			\State $ p_{s} \leftarrow $ \Call{Path}{$ v, G_{s} $}
+			\State $ p_{g} \leftarrow $ \Call{Path}{$ v, G_{g} $}
+			\State $ p \leftarrow $ \Call{Concatenate}{$  p_{s}, p_{g} $}
+			\State $ P \leftarrow P \cup \{ p \} $
+		\EndFor
+		\Return $ P $
+	\end{algorithmic}
+	\caption{ \textsc{ExtractPaths}($ G_{s}, G_{r} $) }
+	\label{alg:harrt:binding}
+\end{algorithm}
 
 
 \section{Analysis}
 \label{sec:analysis}
+
+\subsection{Grammar checker}
+
+
+\subsection{Optimality with constraint}
+
+\begin{lem}
+\label{lem:optimal_via_point}
+\end{lem}
+
+
+
+\section{Application}
+\label{sec:application}
+
+\subsection{Homotopic constraint from a reference path}
+
+\subsection{Homotopic constraints }
+
+
+
 
 \section{Conclusion}
 \label{sec:conclusion}
