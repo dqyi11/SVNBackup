@@ -118,7 +118,7 @@ With two trees exploring from two directions, we can have the optimal cost-to-go
 This guarantee the optimality search with the homotopical constraint.
 We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology from the planner.
 
-\section{Homotopy-aware optimal exploration}
+\section{Homotopy-aware RRT$^{*}$}
 \label{sec:algorithm}
 
 \begin{algorithm}[hbtp]
@@ -261,16 +261,25 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 
 \begin{lem}
 \label{lem:optimal_via_point}
+Given Assumptions 1 - 3,
+the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
+\begin{proof}
+\end{proof}
 \end{lem}
 
 
 
-\section{Application}
+
+\section{Homotopy-aware optimal path planning}
 \label{sec:application}
 
 \subsection{Homotopic constraint from a reference path}
 
-\subsection{Homotopic constraints }
+\subsection{Homotopic constraints from required/forbidden regions}
+
+\subsection{Homotopy classes with preference}
+
+\subsection{Homotopy classes without preference}
 
 
 
