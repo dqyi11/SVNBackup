@@ -12,7 +12,7 @@
 \usepackage{subcaption}
 
 %\usepackage{amsthm}
-%\newtheorem{thm}{Theorem}
+\newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
 %\newtheorem{asmp}{Assumption}
 %\newtheorem{defn}{Definition}
@@ -267,22 +267,23 @@ The grammar of the strings could be introduced to manage the exploration process
 	\centering
 	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
+		\includegraphics[width=\textwidth]{fig/feasibility}
+		\caption{Feasibility}
+		\label{fig:grammar:feasibility}
+	\end{subfigure}  
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
 		\includegraphics[width=\textwidth]{fig/equivalence}
 		\caption{Equivalence}
 		\label{fig:grammar:equivalence}
 	\end{subfigure}
+	\\
 	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/recurring}
 		\caption{Recurring}
 		\label{fig:grammar:recurring}
 	\end{subfigure}  
-	\caption{Homotopic grammar.}
-	\label{fig:grammar:a}
-\end{figure}
-
-\begin{figure}
-	\centering
 	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/repeated_pattern}
@@ -290,7 +291,7 @@ The grammar of the strings could be introduced to manage the exploration process
 		\label{fig:grammar:repeated_pattern}
 	\end{subfigure} 
 	\caption{Homotopic grammar.}
-	\label{fig:grammar:b}
+	\label{fig:grammar}
 \end{figure}
 
 \begin{itemize}
@@ -319,7 +320,7 @@ It is stated in Lemma \ref{lem:optimal_via_point}.
 
 \begin{lem}
 \label{lem:optimal_via_point}
-Given Assumptions 1 - 3,
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
 \begin{proof}
 \end{proof}
@@ -335,6 +336,10 @@ the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{
 
 Initializing a reference path is an easy and straightforward way of defining the homotopic constraint.
 
+\begin{thm}
+\label{thm:constrained_optimality}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+\end{thm}
 
 
 \subsection{Homotopic constraints from required/forbidden regions}
