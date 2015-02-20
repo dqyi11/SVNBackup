@@ -24,7 +24,7 @@
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
 \title{\LARGE \bf
-Homotopy-aware RRT$^{*}$ : Homotopy-based sampling-based optimal path planning
+Homotopy-aware RRT$^{*}$ : Toward optimal path planning with the consideration of the topology
 }
 
 \author{
@@ -342,6 +342,8 @@ Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 \end{thm}
 
 Figure \ref{fig:reference_path} gives an example.
+A user firstly initializes a reference path, which indicates the intended homotopy class.
+The exploration of HA-RRT$^{*}$
 
 \begin{figure}
 	\centering
@@ -364,33 +366,79 @@ Figure \ref{fig:reference_path} gives an example.
 
 \subsection{Homotopic constraints from required/forbidden regions}
 
-
+The constraint can not only be one homotopy class, but also be a set of homotopy classes.
+If the user defines \emph{positive (required) regions} and \emph{negative (forbidden) regions}, 
+a set of homotopy classes satisfies these constraints can be obtained by searching on the topological graph.
 
 \subsection{Homotopy classes with preference}
 
-
-
-\subsection{Homotopy classes without preference}
+The topology can also be soft constraint.
+When the user has a preference on some of the homotopy classes or all the homotopy classes,
+the preference value of each homotopy class could be assigned.
+In this case, the topology can be viewed as a new objective.
+Each homotopy class is a value of the variable that represents the topology type.
+The variable of the topology type is discrete.
+The problem is converted into a two-objective optimization problem.
+Because the optimal solution in a homotopy class dominates all other solutions in the homotopy class.
+By combining the optimal solutions in all the homotopy classes, we can have the Pareto front of all the solution.
 
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.7\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/homotopyClassRRT.png}
-		\caption{Parallel Bi-RRT$^{*}$}
+		\caption{Share same exploration space.}
 		\label{fig:homotopy_no_pref:all}
 	\end{subfigure}  
 	\\
 	\begin{subfigure}[t]{0.7\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/homotopyClassRRTHalf.png}
-		\caption{Parallel Bi-RRT$^{*}$ with space decomposition}
+		\caption{Split the exploration space.}
 		\label{fig:homotopy_no_pref:half}
 	\end{subfigure}   
-	\caption{Parallel Bi-RRT$^{*}$ with no preference.}
+	\caption{Bidirectional RRT$^{*}$.}
 	\label{fig:homotopy_no_pref}
 \end{figure}
 
+\subsection{Homotopy classes without preference}
+
+Sometimes inherently the user has a mind of the topology preference but feels difficult to describe.
+Then, showing the optimal solution of all the homotopy classes helps the user figuring out an ``optimal'' solution that matches his inherent preference.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.7\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/pareto.png}
+		\caption{Pareto front with topology preference.}
+		\label{fig:homotopy_human_interaction:pareto}
+	\end{subfigure}  
+	\\
+	\begin{subfigure}[t]{0.7\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/navBestInHomotopy.png}
+		\caption{Navigate the best solution of each homotopy class.}
+		\label{fig:homotopy_human_interaction:all}
+	\end{subfigure}   
+	\caption{Interactive optimization.}
+	\label{fig:homotopy_human_interaction}
+\end{figure}
+
+
+\begin{thm}
+\label{thm:homotopy_no_pref:optimal}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+
+\end{thm}
+
+\subsection{Discussion}
+
+Dilemma between efficiency and scenario support
+
+\subsubsection{Scenario support}
+
+\subsubsection{Efficiency}
 
 \section{Conclusion}
 \label{sec:conclusion}
