@@ -5,7 +5,11 @@
 \usepackage{bm}
 
 \usepackage{amsfonts}
+\usepackage[pdftex]{graphicx}
 \usepackage{comment}
+
+\usepackage{caption}
+\usepackage{subcaption}
 
 %\usepackage{amsthm}
 %\newtheorem{thm}{Theorem}
@@ -259,14 +263,53 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 Each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
 The grammar of the strings could be introduced to manage the exploration process and sort the paths into different homotopy classes.
 
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/equivalence}
+		\caption{Equivalence}
+		\label{fig:grammar:equivalence}
+	\end{subfigure}
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/recurring}
+		\caption{Recurring}
+		\label{fig:grammar:recurring}
+	\end{subfigure}  
+	\caption{Homotopic grammar.}
+	\label{fig:grammar:a}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/repeated_pattern}
+		\caption{Equivalence}
+		\label{fig:grammar:repeated_pattern}
+	\end{subfigure} 
+	\caption{Homotopic grammar.}
+	\label{fig:grammar:b}
+\end{figure}
+
 \begin{itemize}
 \item \textbf{Feasibility}
+As the reference frames are connected by the regions, a feasible string follows some grammar defined by the connectivity.
 
 \item \textbf{Equivalence}
+Some characters of the reference frames are equivalent in constructing the strings.
+All the reference frames contains the center point $ c $ show this property.
+The segment crossing those reference frames in any sequence belongs to same homotopy class.
 
+
+\item \textbf{Recurring character}
+Recurring character in a string indicates that the path goes around some obstacles and back to a visited region.
 
 
 \item \textbf{Repeated pattern}
+Repeated pattern shows that the path is back and forth among some regions.
+
 \end{itemize}
 
 
