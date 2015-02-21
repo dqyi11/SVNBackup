@@ -95,9 +95,15 @@ The supervisor can then select one that satisfy his/her intent.
 
 In this paper, we propose a homotopy-aware RRT$^{*}$ that awares the homotopy class while exploring the planning space.
 It could assist the planner finding the intended optimal path in considering the homotopy.
+We review the relevant work in section \ref{sec:related_work}.
+We introduce the algorithm in section \ref{sec:algorithm} and analyze the algorithm in section \ref{sec:analysis}.
+The proposed algorithm is applied into different level of sliding autonomy in section \ref{sec:application}.
 
 \section{Related work}
 \label{sec:related_work}
+
+Homotopy reveals the similarity between two paths.
+It can be used to determine the similarity between a reference path and a normal path, or classify the paths into different classes.
 
 \subsection{Homotopy-based Path Planning}
 
