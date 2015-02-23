@@ -341,97 +341,19 @@ When the exploration process is finished, the {\sc ExtractPaths} procedure can c
 	If $ p_{a} $ and $  p_{b} $ are from different directions, one of the them will be reversed for the concatenation.
 \end{itemize}
 
-By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal path with given homotopy constraints and the relevant analyses and applications are given in the next sections.
-
-\section{Analysis}
-\label{sec:analysis}
-
-
-
-\subsection{homotopic grammar}
-
-Each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
-The grammar of the strings could be introduced to manage the exploration process and sort the paths into different homotopy classes.
-
-\begin{figure}
-	\centering
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/feasibility}
-		\caption{Feasibility}
-		\label{fig:grammar:feasibility}
-	\end{subfigure}  
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/equivalence}
-		\caption{Equivalence}
-		\label{fig:grammar:equivalence}
-	\end{subfigure}
-	\\
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/recurring}
-		\caption{Recurring}
-		\label{fig:grammar:recurring}
-	\end{subfigure}  
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/repeated_pattern}
-		\caption{Equivalence}
-		\label{fig:grammar:repeated_pattern}
-	\end{subfigure} 
-	\caption{Homotopic grammar.}
-	\label{fig:grammar}
-\end{figure}
-
-\begin{itemize}
-\item \textbf{Feasibility}
-As the reference frames are connected by the regions, a feasible string follows some grammar defined by the connectivity.
-
-\item \textbf{Equivalence}
-Some characters of the reference frames are equivalent in constructing the strings.
-All the reference frames contains the center point $ c $ show this property.
-The segment crossing those reference frames in any sequence belongs to same homotopy class.
-
-
-\item \textbf{Recurring character}
-Recurring character in a string indicates that the path goes around some obstacles and back to a visited region.
-
-
-\item \textbf{Repeated pattern}
-Repeated pattern shows that the path is back and forth among some regions.
-
-\end{itemize}
-
-\subsection{Optimality with constraint}
-
-We can have the asymptotic optimality with the constraint of via-points.
-It is stated in Lemma \ref{lem:optimal_via_point}.
-
-\begin{lem}
-\label{lem:optimal_via_point}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
-\begin{proof}
-\end{proof}
-\end{lem}
-
-
-
-
 \section{Homotopy-aware optimal path planning}
 \label{sec:application}
 
-In this section, we discuss the sliding autonomy in different levels of the human's intent on the topology.
+By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal path with given homotopy constraints.
+In this section, we show the sliding autonomy in different levels of the human's intent on the topology by using HA-RRT$^{*}$.
+
 
 \subsection{Homotopic constraint from a reference path}
 
-Initializing a reference path is an easy and straightforward way of defining the homotopic constraint.
+In planning a path for a task, if the human has a determined mind of how the topology of the path should be, the optimization process can help to find the optimal path in all the paths of a given topology.
+By an interactive process, the human can initialize a reference path to represent the topology from his/her intent.
 
-\begin{thm}
-\label{thm:constrained_optimality}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-\end{thm}
+
 
 Figure \ref{fig:reference_path} gives an example.
 A user firstly initializes a reference path, which indicates the intended homotopy class.
@@ -522,6 +444,86 @@ Then, showing the optimal solution of all the homotopy classes helps the user fi
 \label{thm:homotopy_no_pref:optimal}
 Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 
+\end{thm}
+
+\section{Analysis}
+\label{sec:analysis}
+
+The HA-RRT$^{*}$ is consist of the homotopy-aware exploration and the constrained optimization.
+We look at the 
+and give the constrained optimal guarantee in this section.
+
+\subsection{homotopic grammar}
+
+Each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
+The grammar of the strings could be introduced to manage the exploration process and sort the paths into different homotopy classes.
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/feasibility}
+		\caption{Feasibility}
+		\label{fig:grammar:feasibility}
+	\end{subfigure}  
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/equivalence}
+		\caption{Equivalence}
+		\label{fig:grammar:equivalence}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/recurring}
+		\caption{Recurring}
+		\label{fig:grammar:recurring}
+	\end{subfigure}  
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/repeated_pattern}
+		\caption{Equivalence}
+		\label{fig:grammar:repeated_pattern}
+	\end{subfigure} 
+	\caption{Homotopic grammar.}
+	\label{fig:grammar}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Feasibility}
+As the reference frames are connected by the regions, a feasible string follows some grammar defined by the connectivity.
+
+\item \textbf{Equivalence}
+Some characters of the reference frames are equivalent in constructing the strings.
+All the reference frames contains the center point $ c $ show this property.
+The segment crossing those reference frames in any sequence belongs to same homotopy class.
+
+
+\item \textbf{Recurring character}
+Recurring character in a string indicates that the path goes around some obstacles and back to a visited region.
+
+
+\item \textbf{Repeated pattern}
+Repeated pattern shows that the path is back and forth among some regions.
+
+\end{itemize}
+
+\subsection{Optimality with constraint}
+
+We can have the asymptotic optimality with the constraint of via-points.
+It is stated in Lemma \ref{lem:optimal_via_point}.
+
+\begin{lem}
+\label{lem:optimal_via_point}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
+\begin{proof}
+\end{proof}
+\end{lem}
+
+\begin{thm}
+\label{thm:constrained_optimality}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 \end{thm}
 
 \subsection{Discussion}
