@@ -15,7 +15,7 @@
 \newtheorem{thm}{Theorem}
 \newtheorem{lem}{Lemma}
 %\newtheorem{asmp}{Assumption}
-%\newtheorem{defn}{Definition}
+\newtheorem{defn}{Definition}
 %\newtheorem{clm}{Claim}
 
 \IEEEoverridecommandlockouts                              % This command is only needed if 
@@ -70,7 +70,7 @@ The generated path is a solution that optimizes the given objectives, for exampl
 Not all types of the human's intents can be easily modeled using measurable objectives.
 The ``shape'' of the planned path, which indicates the topology in the environments with complex obstacles, is one of them.
 Such intent can be a hope of avoiding visiting some regions, a will of moving around some objects or a preference of how the motion is like.
-Some of the intents are defined as constraints, for example via-point constraint~\cite{} or temporal logic constraint~\cite{}, in the optimization problems.
+Some of the intents are defined as constraints, for example via-point constraint, reference path constraint~\cite{6974170} or temporal logic constraint~\cite{5650896}, in the optimization problems.
 This method won't work when there is only preference on the ``shape'' of the paths instead of hard constraint.
 At the same time, the preference on the ``shape'' of the paths might also be fuzzy for the human to describe.
 
@@ -116,7 +116,7 @@ It can be used to determine the similarity between a reference path and a normal
 Homotopy-based path planning depends on the determination of the homotopy equivalence of two paths, which is usually computationally expensive.
 
 Voronoi diagram is naturally introduced to assist determining the homotopy classes, but it shows limitation on finding some paths in some cases~\cite{banerjee2013framework}.
-Particularly, it cannot support obstacles of complicated shapes well.
+Particularly, generating Voronoi diagram for obstacles of complicated shapes is hard.
 By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
 Similarly, the problem and complexity come when the shapes of the obstacles are not smooth and convex.
 Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
@@ -139,9 +139,25 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 \section{Homotopy-aware RRT$^{*}$}
 \label{sec:algorithm}
 
-In this section, we adopt the Jenkin's method ~\cite{Hernandez201544} to generate reference frames given a map with obstacles.
-With the generated reference frames, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+Without loss of generality, we look at a minimization problem.
+We can have the definition of homotopy-based optimal path planning problem.
+It can be extended into many homotopy-relevant optimal path planning.
+\begin{defn}{ \textbf{Homotopy-based optimal Path Planning} }
+Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{obs} $, an initial state $ x_{init} $, and a goal state $ x_{goal} $. 
+Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{obs} $.
+Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
+Define the cost of the path as the vector-valued function $ {\sc Cost} (\sigma) $.  
+The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
+\textit{ (a) }, $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
+\textit{ (b) }, $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
+\textit{ (c) }, $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $ with given homotopy constraints.
+\end{defn} 
 
+We adopt the Jenkin's method~\cite{Hernandez201544} to generate reference frames given a map with obstacles.
+The map is decomposed into several regions by the lines connecting the center point and points in each obstacles.
+The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.
+The topology of the path can be identified by how the sequence of crossing the reference frames is.
+With the generated reference frames, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
 The generation process of the reference frames is given in Algorithm \ref{alg:harrt:init_ref_frames}.
 
 \begin{algorithm}[hbtp]
@@ -174,9 +190,6 @@ The generation process of the reference frames is given in Algorithm \ref{alg:ha
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-After the reference frames are generated, we could have bidirectional RRT$^{*}$ explore the search space.
-The exploration process is given in Algorithm \ref{alg:harrt}.
-
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.45\linewidth}
@@ -202,7 +215,14 @@ The exploration process is given in Algorithm \ref{alg:harrt}.
 	\item \textsc{Ray}($ p, \vec{d} $):
 	Return a ray that starts from $ p $ with direction $ \vec{d}  $.
 	\item \textsc{Intersect}( $ r , \bm{B} $ ):
+	Return line segments that a line $ r $ cut by the obstacles in $ B $.
 \end{itemize}
+
+After the reference frames $ \mathbf{R} $ are generated, we could have bidirectional RRT$^{*}$ explore the search space.
+The exploration process is given in Algorithm \ref{alg:harrt}.
+Two trees $ G_{s} $ and $ G_{g} $ are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
+Two trees explore the map bidirectionally by calling {\sc Explore}() at each iteration.
+At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
 
 \begin{algorithm}
 	\begin{algorithmic}[1]
@@ -233,6 +253,14 @@ The exploration process is given in Algorithm \ref{alg:harrt}.
 	\caption{ \textsc{Explore}($ G, i $) }
 	\label{alg:harrt:explore}
 \end{algorithm}
+
+The {\sc Extend} procedure is inherited from the same method in \cite{Karaman-RSS-10}.
+The {\sc HomotopyCheck}() is added to guarantee that adding new edge or rewiring edges all satisfies the homotopy constraint.
+The homotopy constraint is defined as a \emph{homotopic grammar}.
+Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
+This path, which starts from the root to the vertex, indicates a string of characters sequentially.
+Each character represents a crossed reference frame.
+In the {\sc Extend} procedure, the {\sc HomotopyCheck}() uses a state machine to check whether the string satisfies the defined grammar.
 
 \begin{algorithm}
 	\begin{algorithmic}[1]
@@ -276,10 +304,13 @@ The exploration process is given in Algorithm \ref{alg:harrt}.
 	\item \textsc{CRF}($ l, \bm{R} $):
 	Returns the character that represents the crossed reference frames if any.
 	\item \textsc{STR}($ x $):	
+	Returns the string that represents the crossed reference frames sequentially.
 	\item \textsc{HomotopyCheck}{($ s $)}
+	Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-When the exploration process is finished, a binding process can extract paths from the two tree structures.
+%When the exploration process is finished, a binding process can extract paths from the two tree structures.
+
 
 \begin{algorithm}
 	\begin{algorithmic}[1]
@@ -310,26 +341,26 @@ The grammar of the strings could be introduced to manage the exploration process
 
 \begin{figure}
 	\centering
-	\begin{subfigure}[t]{0.45\linewidth}
+	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/feasibility}
 		\caption{Feasibility}
 		\label{fig:grammar:feasibility}
 	\end{subfigure}  
-	\begin{subfigure}[t]{0.45\linewidth}
+	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/equivalence}
 		\caption{Equivalence}
 		\label{fig:grammar:equivalence}
 	\end{subfigure}
 	\\
-	\begin{subfigure}[t]{0.45\linewidth}
+	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/recurring}
 		\caption{Recurring}
 		\label{fig:grammar:recurring}
 	\end{subfigure}  
-	\begin{subfigure}[t]{0.45\linewidth}
+	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/repeated_pattern}
 		\caption{Equivalence}
