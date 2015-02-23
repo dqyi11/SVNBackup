@@ -43,12 +43,14 @@ Daqing Yi, Michael A. Goodrich and Kevin D. Seppi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-Because the topology factor is difficulty to abstract for a task planner, it is often ignored in modeling the problems of optimal motion planning, especially when it is not a hard constraint.
+The topology factor of the paths is often ignored in the task planning.
+Because it is difficult to be modeled in the optimal motion planning problems, especially when it is not a hard constraint.
+In plenty of the tasks, the goal is not only to optimize some objective, i.e. ``go quickly from A to B avoiding C'', but also contains some topological constraints.
 In this paper, we propose HA-RRT$^{*}$, a homotopy-aware RRT$^{*}$, that explores the planning space for optimal solutions with the consideration of the topology of the paths.
-When the task planner has a clear will on the topology of the paths, the homotopy-aware RRT$^{*}$ could utilize this information as prior to reduce the working space of the optimal search.
-When the task planner has a vague will on the topology of the paths, the homotopy-aware RRT$^{*}$ could help the planner find the optimal solutions that satisfies his/her intent.
-
-
+Because the algorithm is aware of the homotopy classes of each branch, it can support sliding autonomy for different levels of human's intent on the path topology.
+Thus, a clear intent on the path topology provides the homotopic constraint, which reduces the working space of the optimal search;
+a vague intent on the path topology can be identified by comparing the optimal solutions in different homotopy classes.
+We provides the applications to show how it works in different cases and the corresponding theoretic analyses.
 \end{abstract}
 
 \begin{comment}
@@ -56,44 +58,51 @@ six pages
 \end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{INTRODUCTION}
+\section{Introduction}
 \label{sec:intro}
 
-One of the most important targets of robotic path planning is the optimality to some level.
-%The most popular focus on the robotic path planning is optimality.
-This depends on an assumption that the problem has been well modeled.
-Thus, the solution 
-In planning the robot's motion in a task, the intent of the task supervisor is usually modeled into single objective~\cite{6974170} or multiple objective optimization~\cite{yi2014supporting}.
+Optimality has been the most important heuristic in planning motions for the robots.
+An optimization problem is usually modeled by using the metric that measures the task performance.
+As the task supervisor, it is very essential that the human's intent can be correctly and precisely modeled into the optimization problem.
+Thus, the planned solution for the robot can be the one matches the human's intent.
+In planning the robot's motion in a task, the most common way of modeling the intent is by defining single objective~\cite{6974170} or multiple objectives~\cite{yi2014supporting}.
 The generated path is a solution that optimizes the given objectives, for example, minimizing the Euclidean distance.
-There exist plenty of other human intents that are hard to be modeled using measurable metrics.
-A class of them can be relevant with the ``shape'' of the planned path, especially in environments with complex obstacles.
-For example, the human supervisor would like the robot reaching a target in the shortest time while passing through some locations.
-The most common solution is defining via points as a constraint for the path planning problem.
-However, sometimes this intent is only a preference instead of a hard constraint.
+Not all types of the human's intents can be easily modeled using measurable objectives.
+The ``shape'' of the planned path, which indicates the topology in the environments with complex obstacles, is one of them.
+Such intent can be a hope of avoiding visiting some regions, a will of moving around some objects or a preference of how the motion is like.
+Some of the intents are defined as constraints, for example via-point constraint~\cite{} or temporal logic constraint~\cite{}, in the optimization problems.
+This method won't work when there is only preference on the ``shape'' of the paths instead of hard constraint.
+At the same time, the preference on the ``shape'' of the paths might also be fuzzy for the human to describe.
 
-\emph{Homotopy} is imported to model the inherent topological similarity of the paths.
+\emph{Homotopy} is commonly used to indicate the inherent topological similarity of the paths.
 Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez201544}.
-This leads to a \emph{homotopy class}, in which any two paths are homotopic.
-The homotopy of the paths can help to model the human intent, which can be applied to four levels of planner's intent.
-\begin{enumerate}
-\item \emph{The planner has a clear intent of how the topology should be.}
-The objective becomes only finding the optimal solution in the paths of this homotopy class.
-The homotopy class becomes the constraint of the problem~\cite{Hershberger199463}.
-This homotopy class could be defined from a human initialized reference path.
-\item \emph{The planner expects the paths through some regions.}
-With the via-regions given, several homotopy classes that across those regions could be obtained.
-In this case, the homotopic constraint becomes several homotopy classes instead of only one.
+Thus, we can have a \emph{homotopy class}, in which any two paths are homotopic.
+Given the start position and the end position, the obstacles in the map can determine several homotopy classes.
+The homotopy of the paths can then be used for modeling the human's intent on the path ``shape''. 
 
-\item \emph{The planner could tell the preference of different homotopy classes.}
-With the preference of different homotopy classes, the homotopy classes could form a new objective as discrete variable.
-We could firstly find the non-dominant solutions.
-Thus the planner could figure out one from the Pareto optimal paths.
-\item \emph{The planner could not tell the preference of different homotopy classes.}
-If the task supervisor has a weak opinion on the topology of the path, the planning algorithm can provide the best solution of each homotopy class to the supervisor.
+
+Now in a path planning problem, a human task supervisor is defining a task for a robot.
+The task is needed to be modeled so that the robot can understand and plan for execution.
+Assume the objective is only reaching to a target quickly, there can be several levels of how clear his intent is.
+\begin{enumerate}
+\item \emph{I only want the planned path sequentially visiting several regions.}
+It means that the planned path is constrained in one homotopy class.
+The homotopy class becomes the constraint of the optimization problem~\cite{Hershberger199463}.
+%This homotopy class could be defined from a human initialized reference path.
+\item \emph{I know some regions that have to be visited and some regions could not be reached.}
+There can exist several homotopy classes that can satisfy the requirement defined by the required regions and forbidden regions.
+In this case, the homotopic constraint becomes several homotopy classes instead of only one.
+\item \emph{I feel some path ``shape'' is better when comparing with another ``shape''.}
+It indicates that the human has preference on different homotopy classes.
+If the preference on the homotopy classes can be modeled as one objective, the non-dominant solutions can be found.
+Thus the human could select one from the Pareto optimal paths.
+\item \emph{I should have preference but it is hard for me to tell.}
+In this case, the human's preference could be identified through interactive process.
+Another straightforward way is that the planning algorithm provides the best solution of each homotopy class to the supervisor.
 The supervisor can then select one that satisfy his/her intent.
 \end{enumerate}
 
-In this paper, we propose a homotopy-aware RRT$^{*}$ that awares the homotopy class while exploring the planning space.
+In this paper, we propose a homotopy-aware RRT$^{*}$ that awares the homotopy class each branch belongs to while exploring the planning space by optimal heuristic.
 It could assist the planner finding the intended optimal path in considering the homotopy.
 We review the relevant work in section \ref{sec:related_work}.
 We introduce the algorithm in section \ref{sec:algorithm} and analyze the algorithm in section \ref{sec:analysis}.
@@ -104,32 +113,36 @@ The proposed algorithm is applied into different level of sliding autonomy in se
 
 Homotopy reveals the similarity between two paths.
 It can be used to determine the similarity between a reference path and a normal path, or classify the paths into different classes.
-
-\subsection{Homotopy-based Path Planning}
-
 Homotopy-based path planning depends on the determination of the homotopy equivalence of two paths, which is usually computationally expensive.
 
 Voronoi diagram is naturally introduced to assist determining the homotopy classes, but it shows limitation on finding some paths in some cases~\cite{banerjee2013framework}.
+Particularly, it cannot support obstacles of complicated shapes well.
 By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
+Similarly, the problem and complexity come when the shapes of the obstacles are not smooth and convex.
 Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
 The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
+Because the map is discretized, the computation cost expands greatly if the obstacles are reasonably approximated by the cells.
 
-\subsection{Homotopy RRT / PRM}
-
+Sampling-based path planning has been an effective and popular tool.
+The idea of homotopy has also been imported here.
 By homotopic redundancy, the paths from PRM could be compared by the homotopy classes~\cite{1041613}.
 By dividing the space using the rays crossing each obstacle, reference frames could be used to represent the paths into canonical sequences~\cite{Hernandez201544}.
+In this way, the extending process of the graph structure keeps tracking the homotopy class of the new branch so that the exploration process can be constrained by some homotopy classes.
 
-\subsection{Bidirectional RRT}
-
-Bidirectional RRT has been introduced to accelerate the exploration process while the optimality is still preserved~
+In order to accelerate the exploration process, bidirectional RRT has been introduced to accelerate the exploration process.
+In the optimal sampling process, the optimality is still preserved~
 \cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
-
 With two trees exploring from two directions, we can have the optimal cost-to-go and the optimal cost-to-arrive at different position.
 This guarantee the optimality search with the homotopical constraint.
 We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology from the planner.
 
 \section{Homotopy-aware RRT$^{*}$}
 \label{sec:algorithm}
+
+In this section, we adopt the Jenkin's method ~\cite{Hernandez201544} to generate reference frames given a map with obstacles.
+With the generated reference frames, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+
+The generation process of the reference frames is given in Algorithm \ref{alg:harrt:init_ref_frames}.
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -160,6 +173,25 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 	\caption{ \textsc{InitRefFrames} ($ \bm{X}_{free} , \bm{B} $) }
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.7\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/obs_map.png}
+		\caption{Decomposition of the map with obstacles.}
+		\label{fig:obs_map:map}
+	\end{subfigure}  
+	\\
+	\begin{subfigure}[t]{0.7\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/obs_topology.png}
+		\caption{The generated topological graph.}
+		\label{fig:obs_map:topology}
+	\end{subfigure}   
+	\caption{Map with obstacles.}
+	\label{fig:obs_map}
+\end{figure}
 
 \begin{itemize}
 	\item \textsc{Line}($ p_{1}, p_{2} $):
@@ -263,6 +295,8 @@ We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different lev
 
 \section{Analysis}
 \label{sec:analysis}
+
+
 
 \subsection{homotopic grammar}
 
