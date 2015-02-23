@@ -174,6 +174,9 @@ The generation process of the reference frames is given in Algorithm \ref{alg:ha
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
+After the reference frames are generated, we could have bidirectional RRT$^{*}$ explore the search space.
+The exploration process is given in Algorithm \ref{alg:harrt}.
+
 \begin{figure}
 	\centering
 	\begin{subfigure}[t]{0.45\linewidth}
@@ -275,6 +278,8 @@ The generation process of the reference frames is given in Algorithm \ref{alg:ha
 	\item \textsc{STR}($ x $):	
 	\item \textsc{HomotopyCheck}{($ s $)}
 \end{itemize}
+
+When the exploration process is finished, a binding process can extract paths from the two tree structures.
 
 \begin{algorithm}
 	\begin{algorithmic}[1]
