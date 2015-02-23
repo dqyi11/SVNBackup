@@ -219,9 +219,9 @@ The generation process of the reference frames is given in Algorithm \ref{alg:ha
 \end{itemize}
 
 After the reference frames $ \mathbf{R} $ are generated, we could have bidirectional RRT$^{*}$ explore the search space.
-The exploration process is given in Algorithm \ref{alg:harrt}.
+The process is given in Algorithm \ref{alg:harrt}.
 Two trees $ G_{s} $ and $ G_{g} $ are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
-Two trees explore the map bidirectionally by calling {\sc Explore}() at each iteration.
+Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
 At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
 
 \begin{algorithm}
@@ -255,6 +255,7 @@ At the end, paths are obtained by {\sc ExtractPaths}() from combining results of
 \end{algorithm}
 
 The {\sc Extend} procedure is inherited from the same method in \cite{Karaman-RSS-10}.
+It is given in Algorithm \ref{alg:harrt:extend}.
 The {\sc HomotopyCheck}() is added to guarantee that adding new edge or rewiring edges all satisfies the homotopy constraint.
 The homotopy constraint is defined as a \emph{homotopic grammar}.
 Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
@@ -309,7 +310,7 @@ In the {\sc Extend} procedure, the {\sc HomotopyCheck}() uses a state machine to
 	Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-%When the exploration process is finished, a binding process can extract paths from the two tree structures.
+When the exploration process is finished, the {\sc ExtractPaths} procedure can create paths from the two tree structures, which is given in Algorithm \ref{alg:harrt:binding}.
 
 
 \begin{algorithm}
@@ -328,6 +329,19 @@ In the {\sc Extend} procedure, the {\sc HomotopyCheck}() uses a state machine to
 	\label{alg:harrt:binding}
 \end{algorithm}
 
+\begin{itemize}
+	\item \textsc{SameVertices}($ G_{a}, G_{b} $):
+	Returns a set of vertice which are both in $ G_{a} $ and $ G_{b} $.
+	A threshold $ \epsilon $ can be defined in implementation.
+	If $ | v_{a} - v_{b} | < \epsilon $, we can have $ v_{a} = v_{b} $.
+	\item \textsc{Path}($ v, G $):	
+	Returns the path from the root of $ G $ to the vertex $ v $.
+	\item \textsc{Concatenate}{($ p_{a}, p_{b} $)}
+	Returns a concatenated path of $ p_{a} $ and $  p_{b} $.
+	If $ p_{a} $ and $  p_{b} $ are from different directions, one of the them will be reversed for the concatenation.
+\end{itemize}
+
+By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal path with given homotopy constraints and the relevant analyses and applications are given in the next sections.
 
 \section{Analysis}
 \label{sec:analysis}
