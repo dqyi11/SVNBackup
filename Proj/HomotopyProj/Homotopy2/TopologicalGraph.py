@@ -59,8 +59,9 @@ class TopologicalGraph(object):
         
         g.render(filename+'.png', view=True)
         '''
-        graph_pos = nx.graphviz_layout(self.G)
+        #graph_pos = nx.graphviz_layout(self.G)
         #graph_pos = nx.spring_layout(self.G, scale=4)
+        graph_pos = nx.spring_layout(self.G)
         nx.draw_networkx_edge_labels(self.G, pos=graph_pos, edge_labels=self.edge_labels)
         nx.draw_networkx_nodes(self.G, pos=graph_pos, node_size=1500, node_color=(153./255,178./255,255./255,1.0), wdith=0.0)
         nx.draw_networkx_edges(self.G, pos=graph_pos, width=3, edge_color='orange')
