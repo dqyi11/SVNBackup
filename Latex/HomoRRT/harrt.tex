@@ -573,14 +573,42 @@ HA-RRT$^{*}$ can find all the non-dominated paths when the topology is one objec
 
 \subsection{Discussion}
 
-Dilemma between efficiency and scenario support
+When the homotopy classes are used as the constraint, one directional RRT$^{*}$ can also find the optimal path.
+The problem is only a constrained optimization problem.
+The bidirectional RRT$^{*}$ accelerates the convergence rate.
+When the homotopy classes are used more than only the constraint, bidirectional RRT$^{*}$ is required so that each position can have the optimal-to-come subpath and optimal-to-go subpath.
+In this way, we can have the optimal path in each homotopy class.
 
-\subsubsection{Scenario support}
+In the bidirectional exploration, the two direction can share the same workspace or split the workspace.
+Figure \ref{fig:homotopy_no_pref} provides two cases.
+In Figure \ref{fig:homotopy_no_pref:all}, both two trees parallel explore on the same workspace.
+While in Figure \ref{fig:homotopy_no_pref:half}, the workspace has been split into two.
+Each tree explores only explore half ot the workspace it is in.
+Theoretically, HA-RRT$^{*}$ converge to have same solutions in both two cases.
+In most of the case, splitting the workspace makes better efficiency, especially there are less vertices belong to both two trees.
+However, the convergence rate depends on the convergence of the vertices near the boundary in both two trees.
 
-\subsubsection{Efficiency}
+As we noticed, with a topological graph, it is possible that several strings belong to same homotopy class.
+Thus, the string equivalence on the homotopy class should be considered.
+Because of the property of the repeated pattern, determining the strings in one homotopy class increases the algorithm complexity.
+In a minimization problem, assuming the path length is always relevant with the total cost, it is fair to forbid the properties of recurring and repeated pattern.
+In this way, a breath first search can return all the possible strings from the topological graph.
+Thus the efficiency can be enhanced.
+However, the flexibility in supporting more types of paths is lost.
+In application, the tradeoff between the efficiency and the topology versatility should be considered by case.
 
 \section{Conclusion}
 \label{sec:conclusion}
+
+In this paper, we propose a homotopy-aware RRT$*$, which tracks the homotopy class each branch belongs to.
+By using a bidirectional structure, the asymptotic optimality in each homotopy class can also be guaranteed.
+This enables the sliding autonomy to support different level of task supervisor's intent on the topology in planning paths.
+The way of communication is also more natural for the human, because the human can directly visualize the path ``shape'' instead of converting to the robot's data format.
+It also supports the application of more complicated tasks, especially when there is requirement on the topology of the paths in a complex map.
+The homotopy-aware RRT$^{*}$ can be introduced to the multi-objective optimization to cover the increasing complexity of the tasks to the robots.
+Also an online identification of the human's intent might start the workspace reduction earlier so that the efficiency could be enhanced.
+
+
 
 \bibliographystyle{IEEEtranS}
 \bibliography{reference}
