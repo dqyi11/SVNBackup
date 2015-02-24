@@ -297,8 +297,8 @@ In the {\sc Extend} procedure, the {\sc HomotopyCheck}() uses a state machine to
 		\EndFor
 		\Return $ G' = (V', E') $ 
 	\end{algorithmic}
-\label{alg:harrt:extend}
 \caption{ {\sc Extend } ($ G, x_{new}, x_{nearest} $) }
+\label{alg:harrt:extend}
 \end{algorithm}
 
 \begin{itemize}
@@ -347,17 +347,10 @@ When the exploration process is finished, the {\sc ExtractPaths} procedure can c
 By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal path with given homotopy constraints.
 In this section, we show the sliding autonomy in different levels of the human's intent on the topology by using HA-RRT$^{*}$.
 
-
 \subsection{Homotopic constraint from a reference path}
 
-In planning a path for a task, if the human has a determined mind of how the topology of the path should be, the optimization process can help to find the optimal path in all the paths of a given topology.
+In planning a path for a task, if the human has a determined mind of how the topology of the path should be, the HA-RRT$^{*}$ can help to find the optimal path in all the paths of a given topology.
 By an interactive process, the human can initialize a reference path to represent the topology from his/her intent.
-
-
-
-Figure \ref{fig:reference_path} gives an example.
-A user firstly initializes a reference path, which indicates the intended homotopy class.
-The exploration of HA-RRT$^{*}$
 
 \begin{figure}
 	\centering
@@ -378,11 +371,29 @@ The exploration of HA-RRT$^{*}$
 	\label{fig:reference_path}
 \end{figure}
 
+Figure \ref{fig:reference_path} gives an example.
+A user firstly initializes a reference path, which indicates the intended homotopy class as in Figure \ref{fig:reference_path:reference}.
+The string of the reference path is then extracted as the constraint.
+The exploration of HA-RRT$^{*}$ is then under this constraint.
+Thus, in Figure \ref{fig:reference_path:rrt}, the tree only explores the regions that does not violate the grammar to generate the constraint string.
+
 \subsection{Homotopic constraints from required/forbidden regions}
 
-The constraint can not only be one homotopy class, but also be a set of homotopy classes.
-If the user defines \emph{positive (required) regions} and \emph{negative (forbidden) regions}, 
-a set of homotopy classes satisfies these constraints can be obtained by searching on the topological graph.
+In planning a path for a task, if the human only can tell several regions that should be avoided or several regions that are required to visit, HA-RRT$^{*}$ explores the paths that satisfies the defined constraints as well.
+The {\sc InitRefFrames} procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
+We define the \emph{positive region} as the region that is required to visit and the \emph{negative region} as the region that is forbidden to visit.
+Then there is an interactive process for the human to label the positive regions and the negative regions.
+Unlabeled regions are neutral, which means no constraint here.
+
+Because the decomposed regions are randomly and automatically generated, a decomposed region might contain both positive regions and negative regions.
+In this case, the decomposed region will be split into several smaller regions so that each region might contain either positive region or negative region.
+After that, more reference frames will be created correspondingly and a new topological graph will be obtained.
+
+As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
+A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes.
+The grammar is then defined by this set of strings.
+The {\sc HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by this grammar.
+The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled constraint.
 
 \subsection{Homotopy classes with preference}
 
@@ -537,7 +548,7 @@ Dilemma between efficiency and scenario support
 \section{Conclusion}
 \label{sec:conclusion}
 
-\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtranS}
 \bibliography{reference}
 
 \end{document}
