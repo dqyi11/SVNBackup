@@ -400,16 +400,12 @@ The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled 
 Sometimes there exists no hard constraint on the topology of the paths.
 But there does exist the difference on different topology.
 For example, visiting some region benefits some sub-task, or going around some object enhances the task performance.
+If the human can tell the preference on the topology, scores can be assigned to each homotopy class.
 
-The topology can also be soft constraint.
-When the user has a preference on some of the homotopy classes or all the homotopy classes,
-the preference value of each homotopy class could be assigned.
-In this case, the topology can be viewed as a new objective.
-Each homotopy class is a value of the variable that represents the topology type.
-The variable of the topology type is discrete.
-The problem is converted into a two-objective optimization problem.
-Because the optimal solution in a homotopy class dominates all other solutions in the homotopy class.
-By combining the optimal solutions in all the homotopy classes, we can have the Pareto front of all the solution.
+Consider the topology as a discrete variable, the values of the variable is the set of all the homotopy classes.
+The problem can be viewed as a two-objective optimization problem.
+Because the optimal solution in one homotopy class dominates all other solutions in the same class.
+By combining the optimal paths in all the homotopy classes, we can find the non-dominated paths from them.
 
 \begin{figure}
 	\centering
@@ -430,10 +426,14 @@ By combining the optimal solutions in all the homotopy classes, we can have the 
 	\label{fig:homotopy_no_pref}
 \end{figure}
 
+Figure \ref{fig:homotopy_human_interaction:pareto} 
+
 \subsection{Homotopy classes without preference}
 
-Sometimes inherently the user has a mind of the topology preference but feels difficult to describe.
-Then, showing the optimal solution of all the homotopy classes helps the user figuring out an ``optimal'' solution that matches his inherent preference.
+Sometimes inherently the user has a mind of the topology preference but is too fuzzy to describe.
+If the topology is included to have a two-objective optimization problem, it means that the optimal paths in all the homotopy classes are non-dominant.
+Thus HA-RRT$^{*}$ will show the optimal paths of all the homotopy classes.
+The human can select one from them that matches his intent most.
 
 \begin{figure}
 	\centering
@@ -455,23 +455,17 @@ Then, showing the optimal solution of all the homotopy classes helps the user fi
 \end{figure}
 
 
-\begin{thm}
-\label{thm:homotopy_no_pref:optimal}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-
-\end{thm}
-
 \section{Analysis}
 \label{sec:analysis}
 
 The HA-RRT$^{*}$ is consist of the homotopy-aware exploration and the constrained optimization.
-We look at the 
-and give the constrained optimal guarantee in this section.
+In this section, we look at how to have better support on the homotopy classes and give the constrained optimal guarantee.
 
 \subsection{homotopic grammar}
 
-Each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
-The grammar of the strings could be introduced to manage the exploration process and sort the paths into different homotopy classes.
+Because each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
+When we have a set of homotopy classes, a homotopic grammar can be created to define all the strings of the set of homotopy classes.
+The homotopic grammar is used to manage the exploration process in {\sc HomotopyCheck} and determine which homotopy class a path belongs to by its string.
 
 \begin{figure}
 	\centering
@@ -504,28 +498,46 @@ The grammar of the strings could be introduced to manage the exploration process
 	\label{fig:grammar}
 \end{figure}
 
+There are several properties in the homotopic grammar which indicates some information of the paths.
 \begin{itemize}
 \item \textbf{Feasibility}
-As the reference frames are connected by the regions, a feasible string follows some grammar defined by the connectivity.
+As the reference frames are connected by the regions, any strings from the grammar must be a feasible one.
+A feasible string means that any two sequential characters of it are connected in the topological graph by the nodes of the regions.
+An example is given in Figure \ref{fig:grammar:feasibility}.
 
 \item \textbf{Equivalence}
 Some characters of the reference frames are equivalent in constructing the strings.
 All the reference frames contains the center point $ c $ show this property.
 The segment crossing those reference frames in any sequence belongs to same homotopy class.
-
+Figure \ref{fig:grammar:equivalence} shows an example.
 
 \item \textbf{Recurring character}
 Recurring character in a string indicates that the path goes around some obstacles and back to a visited region.
-
+Recurring equivalent characters also has same effect.
+One example is illustrated in Figure \ref{fig:grammar:recurring}.
 
 \item \textbf{Repeated pattern}
 Repeated pattern shows that the path is back and forth among some regions.
+In minimization problem, it is not useful and can be often ignored.
+Because repated pattern will only increase the cost if the cost function is additive.
+However, in some special scenario, for example it is expected to scan a region for a fixed number of times, the repeated pattern can be used.
 
 \end{itemize}
 
 \subsection{Optimality with constraint}
 
-We can have the asymptotic optimality with the constraint of via-points.
+The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from a root position.  
+The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
+We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman.Frazzoli:RSS10}.
+\begin{lem}
+\label{lem:tree_vex:conv}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely.
+\end{lem}
+
+HA-RRT$^{*}$ uses bidirectional trees to explore the workspace.
+In {\sc ExtractPaths} procedure, the vertex $ v $ in both $ G_{s} $ and $ G_{g} $ is used to find two paths to concatenate.
+If we see the position of $ v $ as a via-point of the paths, we can have the asymptotic optimality with the set of paths has $ v $ as via-point.
 It is stated in Lemma \ref{lem:optimal_via_point}.
 
 \begin{lem}
@@ -533,13 +545,31 @@ It is stated in Lemma \ref{lem:optimal_via_point}.
 Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
 \begin{proof}
+Let $ c_{s} (v) $ denote the cost of the $ v $ in $ G_{s} $, which is the cost-to-come from the start to the position of $ v $.
+Let $ c_{g} (v) $ denote the cost of the $ v $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $ v $.
+Let $ \sigma_{G_{s},G_{g}} (v) $ be a path concatenated by two paths of $ G_{s} $ and $ G_{g} $ with $ v $. 
+Its cost $ {\sc Cost} (\sigma_{G_{s},G_{g}} (v)) =  c_{s} (v) + c_{g} (v) $.
+It equals to the cost-to-go from the position of $ v $ to the goal.
+By Lemma \ref{lem:tree_vex:conv}, we know that $ c_{s} (v) $ and $ c_{g} (v) $ converge to optimal almost surely.
+Then the cost of $ \sigma_{G_{s},G_{g}} (v) $ converge to optimal almost surely. 
 \end{proof}
 \end{lem}
+
+By Lemma \ref{lem:optimal_via_point} we can have Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal}.
+Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal} guarantees that the applications mentioned in Section \ref{sec:application} can find the optimal solutions as stated.
 
 \begin{thm}
 \label{thm:constrained_optimality}
 Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+HA-RRT$^{*}$ can find the optimal path in one homotopy class almost surely.
 \end{thm}
+
+\begin{thm}
+\label{thm:homotopy_pref:optimal}
+Given Assumptions 1 - 3 in \cite{Karaman-RSS-10}, 
+HA-RRT$^{*}$ can find all the non-dominated paths when the topology is one objective.
+\end{thm}
+
 
 \subsection{Discussion}
 
