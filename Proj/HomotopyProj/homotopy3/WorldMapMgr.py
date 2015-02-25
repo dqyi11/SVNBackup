@@ -25,6 +25,8 @@ class WorldMapMgr(object):
         self.subsegments = []
         
         self.centralPoint = None
+        
+        self.tG = None
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -279,18 +281,30 @@ class WorldMapMgr(object):
                 else:
                     print "   " + regionB.name
                     
-    def getTopologicalGraph(self):
+    def initTopologicalGraph(self):
         
-        g = TopologicalGraph()
+        self.tG = TopologicalGraph()
         for reg in self.regions:
             for sr in reg.subregions:
-                g.addNode(sr.getName())
+                self.tG.addNode(sr.getName())
         for seg in self.subsegments:
-            nodeA = g.findNode(seg.regionAInfo.getName())
-            nodeB = g.findNode(seg.regionBInfo.getName())
-            g.addEdge(nodeA, nodeB, seg.name)
+            nodeA = self.tG.findNode(seg.regionAInfo.getName())
+            nodeB = self.tG.findNode(seg.regionBInfo.getName())
+            self.tG.addEdge(nodeA, nodeB, seg.name)
             
-        return g
+        return self.tG
+    
+    def getTopologicalGraph(self):
+        
+        return self.tG
+    
+    def getSubLineSegment(self, name):
+        
+        for seg in self.subsegments:
+            if seg.name == name:
+                return seg
+        return None
+    
                     
     def findNeighborRegion(self, rad):
         regionA = None

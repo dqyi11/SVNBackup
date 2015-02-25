@@ -17,8 +17,19 @@ if __name__ == '__main__':
     
     mapMgrViz.initVisualize()
     
-    tg = mapMgr.getTopologicalGraph()
+    tg = mapMgr.initTopologicalGraph()
     tg.visualize(MAP_FILE)
     
+    while mapMgrViz.start ==None and mapMgrViz.end ==None:
+        mapMgrViz.updateVisualize()
+   
+    print "START: " + mapMgrViz.start.getName() 
+    print "END: " + mapMgrViz.end.getName() 
+    
+    mapMgrViz.allHomotopyClasses = tg.findAllPathsByBFS(mapMgrViz.start.getName(), mapMgrViz.end.getName())
+    
+    for path in mapMgrViz.allHomotopyClasses:
+        print str(path)
+        
     while True:
         mapMgrViz.updateVisualize()

@@ -38,6 +38,8 @@ class InteractiveWorldMapVisualizer(object):
         self.start = None
         self.end = None
         
+        self.allHomotopyClasses = []
+        
         
     def initVisualize(self):
         pygame.init()
@@ -48,6 +50,7 @@ class InteractiveWorldMapVisualizer(object):
         self.region_idx = -1
         self.subregion_idx = 0
         self.subsegment_idx = -1
+        self.homotopy_idx = -1
         
         self.region_colors = []
         for i in range(self.world_map.regionNum):
@@ -101,6 +104,12 @@ class InteractiveWorldMapVisualizer(object):
                 pygame.draw.circle(self.screen, OBS_BK_COLOR, obs.bk, KEYPOINT_SIZE)
             self.screen.blit(self.font.render(obs.name, True, OBSTACLE_COLOR), obs.centroid)
             
+        if len(self.allHomotopyClasses) > 0 and self.homotopy_idx >= 0:
+            homotopy = self.allHomotopyClasses[self.homotopy_idx]
+            for homo in homotopy:
+                seg = self.world_map.getSubLineSegment(homo)
+                pygame.draw.line(self.screen, SUBSEGMENT_OPEN_COLOR, seg.open_seg[0], seg.open_seg[1], BORDER_LINE_WIDTH)
+            
         if len(self.world_map.subsegments) > 0 and self.subsegment_idx >= 0:
             subsegment = self.world_map.subsegments[self.subsegment_idx]
             
@@ -144,6 +153,10 @@ class InteractiveWorldMapVisualizer(object):
                     self.subregion_idx += 1
                 elif event.key == pygame.K_SPACE:
                     self.subsegment_idx += 1
+                elif event.key == pygame.K_PAGEUP:
+                    self.homotopy_idx += 1
+                elif event.key == pygame.K_PAGEDOWN:
+                    self.homotopy_idx -= 1
                 elif event.key == pygame.K_x:
                     if len(self.trackingPosList) > 0:
                         self.start =  self.world_map.findRegionByPoint( self.trackingPosList[0] )
@@ -170,6 +183,11 @@ class InteractiveWorldMapVisualizer(object):
             self.region_idx = len(self.world_map.regions)-1
         elif self.region_idx >= len(self.world_map.regions):
             self.region_idx = -1
+            
+        if self.homotopy_idx < -1:
+            self.homotopy_idx = len(self.allHomotopyClasses)-1
+        elif self.homotopy_idx >= len(self.allHomotopyClasses):
+            self.homotopy_idx = -1
         
         if len(self.world_map.regions) > 0:
             if self.subregion_idx < 0:

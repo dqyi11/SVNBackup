@@ -27,6 +27,7 @@ class TopologicalGraph(object):
         self.edges = []
         self.G = nx.Graph()
         self.edge_labels = {}
+        self.edge_label_strs = {}
         
     def addNode(self, name):
         n = TopologicalNode(name)
@@ -39,6 +40,8 @@ class TopologicalGraph(object):
         self.edges.append(e)
         self.G.add_edge(node_a.name, node_b.name, text=name)
         self.edge_labels[node_a.name, node_b.name] = name
+        self.edge_label_strs[node_a.name+"+"+node_b.name] = name
+        self.edge_label_strs[node_b.name+"+"+node_a.name] = name
         return e
     
     def findNode(self, name):
@@ -46,6 +49,11 @@ class TopologicalGraph(object):
             if n.name == name:
                 return n
         return None
+    
+    def getEdgeLabel(self, node_a_name, node_b_name):
+        label_name = node_a_name+"+"+node_b_name
+        label = self.edge_label_strs[label_name]
+        return label
         
     def visualize(self, filename):
         '''
@@ -66,7 +74,45 @@ class TopologicalGraph(object):
         nx.draw_networkx_edges(self.G, pos=graph_pos, width=3, edge_color='orange')
         nx.draw_networkx_labels(self.G, pos=graph_pos)
         plt.show()
-             
+        
+        
+    def findAllPathsByBFS(self, start, end):
+        paths = nx.all_simple_paths(self.G, start, end)
+        ps = []
+        for path in paths:
+            p = []
+            for i in range(len(path)-1):
+                p.append(self.getEdgeLabel(path[i], path[i+1]))
+            ps.append(p)
+            
+        return ps    
+                
+        '''
+        all_paths=[]
+        current_path=[]
+        def append_path(p):
+            all_paths.append( current_path )
+      
+        for e in nx.dfs_edges(nx.bfs_tree(self.G, start)):
+            if e[0]== start: #We start a new path
+                if len(current_path):
+                    # Do we end in an out node ? 
+                    append_path(current_path)
+                    current_path=[]
+            if e[1] == end: # We found a path
+                append_path(current_path) 
+      
+            current_path.append(e)          
+        if len(current_path):
+            append_path(current_path)
+        return all_paths
+        '''
+        
+        
+        
+        
+        
+        
         
 
         
