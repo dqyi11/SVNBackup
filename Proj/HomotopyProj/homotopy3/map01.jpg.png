@@ -1,0 +1,14 @@
+graph {
+	"REG-0-0"
+	"REG-1-0"
+	"REG-2-0"
+	"REG-3-0"
+	"REG-3-1"
+		"REG-3-0" -- "REG-0-0" [label="A1-1"]
+		"REG-3-1" -- "REG-0-0" [label="A1-2"]
+		"REG-0-0" -- "REG-1-0" [label="A0-1"]
+		"REG-1-0" -- "REG-2-0" [label="A1-0"]
+		"REG-1-0" -- "REG-2-0" [label="B1-0"]
+		"REG-2-0" -- "REG-3-0" [label="A0-0"]
+		"REG-2-0" -- "REG-3-1" [label="B0-0"]
+}
