@@ -23,6 +23,8 @@ class BiRRTstarPlanner(object):
         self.cost_func = cost_func
         
         
+    def connectPath(self, graph_s, graph_g):
+        return None
         
     def findPaths(self, start, goal, iterationNum, homotopyMgr):
         
