@@ -331,6 +331,14 @@ class WorldMapMgr(object):
                 if sg.polygon.contains(pnt):
                     return sg
         return None
+    
+    def findRegionByPoint(self, point):
+        pnt = shpgeo.Point(point)
+        for reg in self.regions:
+            for subreg in reg.subregions:
+                if subreg.polygon.contains(pnt):
+                    return subreg
+        return None
                 
     def isInObsBkLinePair(self, pos):
         

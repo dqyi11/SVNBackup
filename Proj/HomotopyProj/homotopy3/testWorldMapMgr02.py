@@ -5,7 +5,7 @@ Created on Jan 23, 2015
 '''
 
 from WorldMapMgr import *
-from WorldMapVisualizer import *
+from InteractiveWorldMapVisualizer import *
 
 if __name__ == '__main__':
     
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     mapMgr = WorldMapMgr()
     mapMgr.load(MAP_FILE)
     
-    mapMgrViz = WorldMapVisualizer(mapMgr)
+    mapMgrViz = InteractiveWorldMapVisualizer(mapMgr)
     
     mapMgrViz.initVisualize()
     

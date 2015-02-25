@@ -27,11 +27,17 @@ KEYPOINT_SIZE = 2
 BORDER_LINE_WIDTH = 10
 REGION_LINE_WIDTH = 6
 
-class WorldMapVisualizer(object):
+class InteractiveWorldMapVisualizer(object):
 
 
     def __init__(self, world_map):
         self.world_map = world_map
+        self.tracking = False
+        self.trackingPosList = []
+        
+        self.start = None
+        self.end = None
+        
         
     def initVisualize(self):
         pygame.init()
@@ -138,6 +144,27 @@ class WorldMapVisualizer(object):
                     self.subregion_idx += 1
                 elif event.key == pygame.K_SPACE:
                     self.subsegment_idx += 1
+                elif event.key == pygame.K_x:
+                    if len(self.trackingPosList) > 0:
+                        self.start =  self.world_map.findRegionByPoint( self.trackingPosList[0] )
+                        self.end = self.world_map.findRegionByPoint( self.trackingPosList[len(self.trackingPosList)-1] )
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.trackingPosList = []
+                self.tracking = True      
+            elif event.type == pygame.MOUSEBUTTONUP:
+                self.tracking = False
+            elif event.type == pygame.MOUSEMOTION:
+                if self.tracking == True:
+                    self.trackingPosList.append((event.pos[0], event.pos[1]))
+                    #print "mouse at (%d, %d)" % event.pos
+        
+        for i in range(len(self.trackingPosList)-1):
+            pygame.draw.line(self.screen, (255, 128, 0), self.trackingPosList[i], self.trackingPosList[i+1], 4)
+        trackingPosListLen = len(self.trackingPosList) 
+        if trackingPosListLen > 0:
+            pygame.draw.circle(self.screen, (76,0,153), self.trackingPosList[0], 5)
+            pygame.draw.rect(self.screen, (204,153,255), (self.trackingPosList[trackingPosListLen-1][0], self.trackingPosList[trackingPosListLen-1][1], 10, 10))
+        
                     
         if self.region_idx < -1:
             self.region_idx = len(self.world_map.regions)-1
