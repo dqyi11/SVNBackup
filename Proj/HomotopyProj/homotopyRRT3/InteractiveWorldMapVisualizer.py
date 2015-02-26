@@ -38,6 +38,9 @@ class InteractiveWorldMapVisualizer(object):
         self.convertedTrackingPosList = []
         self.refString = []
         
+        self.start = None
+        self.end = None
+        
     def initVisualize(self):
         pygame.init()
         self.screen = pygame.display.set_mode((self.world_map.width,self.world_map.height))
@@ -60,6 +63,9 @@ class InteractiveWorldMapVisualizer(object):
                     #self.convertedTrackingPosList = self.convertingPosList(self.trackingPosList)
                     self.convertedTrackingPosList, self.referenceInfo = self.reader.readPath(self.trackingPosList)
                     self.refString = self.reader.getString(self.referenceInfo)
+                    
+                    self.start =  self.world_map.findRegionByPoint( self.convertedTrackingPosList[0] )
+                    self.end = self.world_map.findRegionByPoint( self.convertedTrackingPosList[len(self.convertedTrackingPosList)-1] )
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.trackingPosList = []
                 self.convertedTrackingPosList = []

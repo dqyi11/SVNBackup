@@ -33,6 +33,9 @@ if __name__ == '__main__':
     start_pos = mapMgrViz.convertedTrackingPosList[0]
     end_pos = mapMgrViz.convertedTrackingPosList[len(mapMgrViz.convertedTrackingPosList)-1]
     
+    print "START " + mapMgrViz.start.getName()
+    print "END " + mapMgrViz.end.getName()
+     
     def calcDist(currentPos, referencePos):
         dist = 0.0
         if referencePos==None:
@@ -41,7 +44,7 @@ if __name__ == '__main__':
         return dist   
 
     homoMgr = HomotopyMgr(mapMgrViz.world_map, mapMgrViz.reader)
-    homoMgr.init(mapMgrViz.refString)
+    homoMgr.init(mapMgrViz.refString, mapMgrViz.start, mapMgrViz.end)
     planner = BiRRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
     
     for subseg in mapMgr.subsegments:

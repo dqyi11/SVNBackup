@@ -16,9 +16,21 @@ class HomotopyMgr(object):
         self.refStrPath = None
         
         self.dividingRefs = []
+        self.startReg = None
+        self.endReg = None
         
-    def init(self, refStrPath):
+        self.allHomotopyClasses = []
+        
+    def init(self, refStrPath, startReg, endReg):
         self.refStrPath = self.reader.shortenString(refStrPath)
+        self.startReg = startReg
+        self.endReg = endReg
+        self.allHomotopyClasses = self.world_map.getTopologicalGraph().findAllPathsByBFS(self.startReg.getName(), self.endReg.getName())
+        print "REF"
+        print self.refStrPath
+        print "ALL " + str(len(self.allHomotopyClasses))
+        print self.refStrPath in self.allHomotopyClasses
+        print self.allHomotopyClasses
         
     def inSameHomotopy(self, path):
         return self.reader.compareStringPath(path, self.refStrPath)
