@@ -23,8 +23,60 @@ class BiRRTstarPlanner(object):
         self.cost_func = cost_func
         
         
-    def connectPath(self, graph_s, graph_g):
-        return None
+    def connectPath(self, new_s_node, new_g_node, rrts):
+        minPath = None        
+
+        if new_s_node == None:
+            
+            near_node_list = rrts.findNearVertices(rrts.st_kdtree_root, new_g_node.pos)
+            
+            infoVec = []
+            for near_node in near_node_list:
+                if rrts.isObstacleFree(new_g_node.pos, near_node.pos):
+                    delta_cost = self.cost_func(new_g_node.pos, near_node.pos)
+                    total_cost = new_g_node.cost + near_node.cost + delta_cost
+                    infoVec.append((near_node, total_cost))
+            infoVec.sort( key=lambda x: x[1], reverse=False )
+            
+            if len(infoVec) > 0:
+                min_cost = infoVec[0][1]
+                min_node = infoVec[0][0]
+                min_path, min_stringbit = self.getPathFromTwoNodes(min_node, new_g_node)
+                
+                minPath = Path(min_path, min_cost, min_stringbit)
+ 
+        elif new_g_node == None:
+            
+            near_node_list = rrts.findNearVertices(rrts.st_kdtree_root, new_s_node.pos)
+            
+            infoVec = []
+            for near_node in near_node_list:
+                if rrts.isObstacleFree(new_s_node.pos, near_node.pos):
+                    delta_cost = self.cost_func(new_s_node.pos, near_node.pos)
+                    total_cost = new_s_node.cost + near_node.cost + delta_cost
+                    infoVec.append((near_node, total_cost))
+                    
+            if len(infoVec) > 0:
+                infoVec.sort( key=lambda x: x[1], reverse=False )       
+                
+                min_cost = infoVec[0][1]
+                min_node = infoVec[0][0]
+                min_path, min_stringbit = self.getPathFromTwoNodes(new_s_node, min_node)
+                
+                minPath = Path(min_path, min_cost, min_stringbit)
+  
+        return minPath
+    
+    def getPathFromTwoNodes(self, node_s, node_g, rrts):
+        path = []
+        stringbit = None
+        
+        subpathFromStart = self.getSubNodeList(node_s, rrts.st_root)
+        subpathFromGoal = self.getSubNodeList(node_g, rrts.gt_root)
+        
+        
+        
+        return path, stringbit
         
     def findPaths(self, start, goal, iterationNum, homotopyMgr):
         
@@ -35,10 +87,15 @@ class BiRRTstarPlanner(object):
         
         for i in range(iterationNum):
             print "Iter@" + str(i)
-            self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
-            self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
+            new_s_node = self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
+            new_g_node = self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
+            
+            self.connectPath(new_s_node, None, self.rrts)
+            self.connectPath(None, new_g_node, self.rrts)
+            
             self.rrts_viz.update()
             
+        '''    
         paths, infos, costs = self.rrts.findPaths()
         
         for i in range(len(paths)):
@@ -49,3 +106,4 @@ class BiRRTstarPlanner(object):
         #self.rrts_viz.update()
         
         return paths
+        '''

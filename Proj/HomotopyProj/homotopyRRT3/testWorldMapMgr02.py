@@ -6,7 +6,7 @@ Created on Jan 23, 2015
 
 from WorldMapMgr import *
 from InteractiveWorldMapVisualizer import *
-from RRTstarPlanner import *
+from BiRRTstarPlanner import *
 from HomotopyMgr import *
 
 if __name__ == '__main__':
@@ -16,7 +16,6 @@ if __name__ == '__main__':
     mapMgr.load(MAP_FILE)
     
     mapMgrViz = InteractiveWorldMapVisualizer(mapMgr)
-    
     mapMgrViz.initVisualize()
     
     print "CENTER GROUP " + str(len(mapMgrViz.reader.centerGroup))
@@ -33,6 +32,9 @@ if __name__ == '__main__':
     start_pos = mapMgrViz.convertedTrackingPosList[0]
     end_pos = mapMgrViz.convertedTrackingPosList[len(mapMgrViz.convertedTrackingPosList)-1]
     
+    print "START " + mapMgrViz.start.getName()
+    print "END " + mapMgrViz.end.getName()
+     
     def calcDist(currentPos, referencePos):
         dist = 0.0
         if referencePos==None:
@@ -41,17 +43,21 @@ if __name__ == '__main__':
         return dist   
 
     homoMgr = HomotopyMgr(mapMgrViz.world_map, mapMgrViz.reader)
-    homoMgr.init(mapMgrViz.refString)
-    planner = RRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
+    homoMgr.init(mapMgrViz.refString, mapMgrViz.start, mapMgrViz.end)
+    planner = BiRRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
     
     for subseg in mapMgr.subsegments:
         planner.rrts_viz.refLines.append([subseg.line_seg.coords[0], subseg.line_seg.coords[1]])
 
-    path = planner.findPath(start_pos, end_pos, 1000,homoMgr)
-    print path
+    paths = planner.findPaths(start_pos, end_pos, 6000, homoMgr)
     
-    import pygame.image
-    pygame.image.save(planner.rrts_viz.screen, 'RRTstar02.png')
+    #planner.pathMgr.classify()    
+    #planner.pathMgr.savePaths('RRstar02-path.txt')
     
+    #import pygame.image
+    #pygame.image.save(planner.rrts_viz.screen, 'RRTstar02.png')
+    
+    
+    print paths
     while True:
         planner.rrts_viz.update()

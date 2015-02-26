@@ -55,7 +55,6 @@ class PathManager(object):
             print str(len(self.classes[cstr])) + " : " + str(cstr) 
         
         
-        
     def calcCost(self, path): 
         score = 0.0
         pathLen = len(path)

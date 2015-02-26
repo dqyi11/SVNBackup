@@ -169,6 +169,8 @@ class BiRRTstar(object):
                                     near_node.homoPath = new_homo_path
                                     near_node.strBit = new_bit
                                     
+        return new_node
+                                    
             
     def findNearVertices(self, kdtree_root, pos):
         return self.findNearVerticesByRadius(kdtree_root, pos, self.radius)   
