@@ -32,6 +32,8 @@ class BiRRTVisualizer(object):
         self.states = ("START", "GOAL", "BOTH")
         self.currentState = 2
         
+        self.currentPaths = []
+        
         self.font = pygame.font.SysFont(None, 24)
         
         self.pathIdx = 0
@@ -107,7 +109,11 @@ class BiRRTVisualizer(object):
                 connected_node = (int(self.rrt.gt_connected_node[0]), int(self.rrt.gt_connected_node[1]))
                 pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
                 
-                
+        if len(self.currentPaths) > 0:
+            for path in self.currentPaths:
+                pathLen = len(path)
+                for i in range(0, pathLen-1, 1):
+                    pygame.draw.line(self.screen, (255, 0, 0), path[i], path[i+1], 2)        
                 
         if len(self.pathMgr.classes.keys()) > 0:
             cls = self.pathMgr.classes.keys()[self.classIdx]

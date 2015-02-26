@@ -168,7 +168,7 @@ class BiRRTstar(object):
                                     self.updateCostToChildren(near_node, delta_cost)
                                     near_node.homoPath = new_homo_path
                                     near_node.strBit = new_bit
-                                    
+                       
         return new_node
                                     
             
@@ -282,8 +282,10 @@ class BiRRTstar(object):
         node_list = []
         curr_node = node
         node_list.append(curr_node)
-        while curr_node != root and curr_node!=None:
+        while curr_node != root:
             curr_node = curr_node.parent
+            if curr_node == None:
+                return []
             node_list.append(curr_node)
             
         return node_list

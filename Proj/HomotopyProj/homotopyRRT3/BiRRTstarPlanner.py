@@ -36,9 +36,10 @@ class BiRRTstarPlanner(object):
                     delta_cost = self.cost_func(new_g_node.pos, near_node.pos)
                     total_cost = new_g_node.cost + near_node.cost + delta_cost
                     infoVec.append((near_node, total_cost))
-            infoVec.sort( key=lambda x: x[1], reverse=False )
             
             if len(infoVec) > 0:
+                infoVec.sort( key=lambda x: x[1], reverse=False )
+                
                 min_cost = infoVec[0][1]
                 min_node = infoVec[0][0]
                 min_path, min_stringbit = self.getPathFromTwoNodes(min_node, new_g_node, self.rrts)
@@ -47,7 +48,7 @@ class BiRRTstarPlanner(object):
  
         elif new_g_node == None:
             
-            near_node_list = rrts.findNearVertices(rrts.st_kdtree_root, new_s_node.pos)
+            near_node_list = rrts.findNearVertices(rrts.gt_kdtree_root, new_s_node.pos)
             
             infoVec = []
             for near_node in near_node_list:
@@ -74,15 +75,18 @@ class BiRRTstarPlanner(object):
         if node_s == None or node_g == None:
             return path, stringbit
         
+        if rrts.isObstacleFree(node_s.pos, node_g.pos) == False:
+            return path, stringbit
+        
         subpathFromStart = rrts.getSubNodeList(node_s, rrts.st_root)
         subpathFromGoal = rrts.getSubNodeList(node_g, rrts.gt_root)
         
         crossInt = self.rrts.homotopyMgr.world_map.getCrossingSubsegment(node_s.pos, node_g.pos)
         
-        for p in subpathFromStart:
-            path.append(p)
-        for p in reversed(subpathFromGoal):
-            path.append(p)
+        for p in reversed(subpathFromStart):
+            path.append(p.pos)
+        for p in subpathFromGoal:
+            path.append(p.pos)
             
         if node_s.strBit != None:   
             for c in node_s.strBit:
@@ -106,7 +110,7 @@ class BiRRTstarPlanner(object):
             print "Iter@" + str(i)
             new_s_node = self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
             new_g_node = self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
-            
+        
             min_s_path = self.connectPath(new_s_node, None, self.rrts)
             min_g_path = self.connectPath(None, new_g_node, self.rrts)
             
