@@ -26,9 +26,15 @@ if __name__ == '__main__':
     print "START: " + mapMgrViz.start.getName() 
     print "END: " + mapMgrViz.end.getName() 
     
-    mapMgrViz.allHomotopyClasses = tg.findAllPathsByBFS(mapMgrViz.start.getName(), mapMgrViz.end.getName())
+    mapMgrViz.allHomotopyClasses = tg.findAllPathsByBFS(mapMgrViz.start.getName(), mapMgrViz.end.getName(), True)
     
+    print "Filtered " + str(len(mapMgrViz.allHomotopyClasses))
     for path in mapMgrViz.allHomotopyClasses:
+        print str(path)
+        
+    allOfHomotpoy = tg.findAllPathsByBFS(mapMgrViz.start.getName(), mapMgrViz.end.getName())
+    print "All " + str(len(allOfHomotpoy))
+    for path in allOfHomotpoy:
         print str(path)
         
     while True:

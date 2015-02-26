@@ -286,12 +286,20 @@ class WorldMapMgr(object):
         self.tG = TopologicalGraph()
         for reg in self.regions:
             for sr in reg.subregions:
-                self.tG.addNode(sr.getName())
+                node_name = sr.getName()
+                self.tG.addNode(node_name)
+                self.tG.nodes_property[node_name] = sr.label_id
+                
+                if sr.label_id > 0:
+                    self.tG.positive_list.append(node_name)
+                elif sr.label_id < 0:
+                    self.tG.negative_list.append(node_name)
+            
         for seg in self.subsegments:
             nodeA = self.tG.findNode(seg.regionAInfo.getName())
             nodeB = self.tG.findNode(seg.regionBInfo.getName())
             self.tG.addEdge(nodeA, nodeB, seg.name)
-            
+
         return self.tG
     
     def getTopologicalGraph(self):

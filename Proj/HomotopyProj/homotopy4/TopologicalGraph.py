@@ -29,6 +29,11 @@ class TopologicalGraph(object):
         self.edge_labels = {}
         self.edge_label_strs = {}
         
+        self.nodes_property = {}
+        self.positive_list = []
+        self.negative_list = []
+        
+        
     def addNode(self, name):
         n = TopologicalNode(name)
         self.nodes.append(n)
@@ -77,14 +82,30 @@ class TopologicalGraph(object):
         plt.show()
         
         
-    def findAllPathsByBFS(self, start, end):
+    def isEligiblePath(self, path):
+        for pl in self.positive_list:
+            if not (pl in path):
+                return False
+        for p in path:
+            if self.nodes_property[p] == -1:
+                return False
+        return True
+        
+    def findAllPathsByBFS(self, start, end, filter=False):
         paths = nx.all_simple_paths(self.G, start, end)
         ps = []
         for path in paths:
             p = []
-            for i in range(len(path)-1):
-                p.append(self.getEdgeLabel(path[i], path[i+1]))
-            ps.append(p)
+            if filter==True:
+                if self.isEligiblePath(path)==True:
+                    for i in range(len(path)-1):
+                        p.append(self.getEdgeLabel(path[i], path[i+1]))
+                    ps.append(p)
+            else:
+                for i in range(len(path)-1):
+                    p.append(self.getEdgeLabel(path[i], path[i+1]))
+                ps.append(p)
+                
             
         return ps    
                 
