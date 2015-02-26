@@ -41,7 +41,7 @@ class BiRRTstarPlanner(object):
             if len(infoVec) > 0:
                 min_cost = infoVec[0][1]
                 min_node = infoVec[0][0]
-                min_path, min_stringbit = self.getPathFromTwoNodes(min_node, new_g_node)
+                min_path, min_stringbit = self.getPathFromTwoNodes(min_node, new_g_node, self.rrts)
                 
                 minPath = Path(min_path, min_cost, min_stringbit)
  
@@ -61,7 +61,7 @@ class BiRRTstarPlanner(object):
                 
                 min_cost = infoVec[0][1]
                 min_node = infoVec[0][0]
-                min_path, min_stringbit = self.getPathFromTwoNodes(new_s_node, min_node)
+                min_path, min_stringbit = self.getPathFromTwoNodes(new_s_node, min_node, self.rrts)
                 
                 minPath = Path(min_path, min_cost, min_stringbit)
   
@@ -71,10 +71,13 @@ class BiRRTstarPlanner(object):
         path = []
         stringbit = []
         
-        subpathFromStart = self.getSubNodeList(node_s, rrts.st_root)
-        subpathFromGoal = self.getSubNodeList(node_g, rrts.gt_root)
+        if node_s == None or node_g == None:
+            return path, stringbit
         
-        crossInt = self.homotopyMgr.world_map.getCrossingSubsegment(node_s.pos, node_g.pos)
+        subpathFromStart = rrts.getSubNodeList(node_s, rrts.st_root)
+        subpathFromGoal = rrts.getSubNodeList(node_g, rrts.gt_root)
+        
+        crossInt = self.rrts.homotopyMgr.world_map.getCrossingSubsegment(node_s.pos, node_g.pos)
         
         for p in subpathFromStart:
             path.append(p)
@@ -107,8 +110,10 @@ class BiRRTstarPlanner(object):
             min_s_path = self.connectPath(new_s_node, None, self.rrts)
             min_g_path = self.connectPath(None, new_g_node, self.rrts)
             
-            self.pathMgr.importPath(min_s_path)
-            self.pathMgr.importPath(min_g_path)
+            if min_s_path != None:
+                self.pathMgr.importPath(min_s_path)
+            if min_g_path != None:
+                self.pathMgr.importPath(min_g_path)
             
             self.rrts_viz.currentPaths = self.pathMgr.getPaths()
             
