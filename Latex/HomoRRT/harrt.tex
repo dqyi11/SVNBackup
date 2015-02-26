@@ -234,7 +234,10 @@ With the generated reference frames $ \mathbf{R} $, we could import the bidirect
 The process is given in Algorithm \ref{alg:harrt}.
 Two trees $ G_{s} $ and $ G_{g} $ are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
 Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
-At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
+%At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
+By using each new vertex returned from {\sc Explore}(), we can call {\sc Connect}() to create a path with a vertex in the other tree.
+The created path will be compared with the current best path that belongs to the same homotopy class.
+If it is a better one, the best path in this homotopy class will be updated, which is implemented in {\sc UpdateBestPathByClass}().
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -242,13 +245,18 @@ At the end, paths are obtained by {\sc ExtractPaths}() from combining results of
 		\State $ V_{s} \leftarrow \{ x_{init} \} $; $ E_{s} \leftarrow \emptyset $; $ G_{s} \leftarrow (V_{s}, E_{s}) $
 		\State $ V_{g} \leftarrow \{ x_{goal} \} $; $ E_{g} \leftarrow \emptyset $; $ G_{g} \leftarrow (V_{g}, E_{g}) $
 		\While{ $ i < N $ }
-			\State $ G_{s} \leftarrow $ \Call{Explore}{$ G_{s}, i $}
-			\State $ G_{g} \leftarrow $ \Call{Explore}{$ G_{g}, i $}
+			\State $ G_{s}, x_{s}^{new} \leftarrow $ \Call{Explore}{$ G_{s}, i $}
+			\State $ G_{g}, , x_{g}^{new} \leftarrow $ \Call{Explore}{$ G_{g}, i $}
+			\State $ p_{s} \leftarrow $ \Call{Connect}{$  x_{s}^{new}, G_{g} $}
+			\State $ p_{g} \leftarrow $ \Call{Connect}{$  x_{g}^{new}, G_{s} $}
+			\State $ P \leftarrow $ \Call{UpdateBestPathByClass}{$ p_{s}, P $}
+			\State $ P \leftarrow $ \Call{UpdateBestPathByClass}{$ p_{g}, P $}
 			\State $ i \leftarrow i + 1 $
 		\EndWhile
-		\State \Call{ExtractPaths}{$ G_{s}, G_{g} $}
+		\State $ P \leftarrow $ \Call{MergePaths}{$ P $}
+		\Return $ P $
 	\end{algorithmic}
-	\caption{HA-RRT$^{*}$ ($ x_{init} , x_{goal}  $) }
+	\caption{HA-RRT$^{*}$ ($ x_{init} , x_{goal} $) }
 	\label{alg:harrt}
 \end{algorithm}
 
@@ -259,17 +267,40 @@ At the end, paths are obtained by {\sc ExtractPaths}() from combining results of
 		\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x_{rand} $}
 		\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x_{rand},\eta $}
 		\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
-			\State $ G \leftarrow $ \Call{ Extend }{$ G, x_{new}, x_{\it nearest} $}
+			%\State $ G \leftarrow $ \Call{ Extend }{$ G, x_{new}, x_{\it nearest} $}
+			\State $ x_{min} \leftarrow x_{nearest} $
+			\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
+			\State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
+			\If{\Call{HomotopyCheck}{$ s $}}
+				\For{\textbf{each} $ x_{near} \in X_{near} $ }
+					\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
+						\If{ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) < $ \Call{Cost}{$ x_{new} $} } 
+							\State $ x_{min} \leftarrow x_{near} $
+						\EndIf
+					\EndIf
+				\EndFor
+
+				\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
+				\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
+					\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} $ > $ \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
+					   \State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
+					   \If{\Call{HomotopyCheck}{$ s $}}
+					   		\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
+							\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
+							\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
+					   \EndIf
+					\EndIf
+				\EndFor	
+			\EndIf
 		\EndIf
-		\Return $ G $
+		\Return $ G, x_{new} $
 	\end{algorithmic}
 	\caption{ \textsc{Explore}($ G, i $) }
 	\label{alg:harrt:explore}
 \end{algorithm}
 
-The {\sc Extend} procedure is inherited from the same method in \cite{Karaman-RSS-10}.
-It is given in Algorithm \ref{alg:harrt:extend}.
-In the {\sc Extend} procedure, the {\sc HomotopyCheck}() uses a state machine to check whether the string satisfies the defined grammar.
+The {\sc Explore} procedure is inherited from the process in \cite{Karaman-RSS-10}.
+In the {\sc Explore} procedure, the {\sc HomotopyCheck}() uses a state machine to check whether the string satisfies the defined grammar.
 The called methods are defined as following:
 \begin{itemize}
 	\item \textsc{CRF}($ l, \bm{R} $):
@@ -286,51 +317,10 @@ Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to a
 This path, which starts from the root to the vertex, indicates a string of characters sequentially.
 Each character represents a crossed reference frame.
 
-\begin{algorithm}[hbtp]
-	\begin{algorithmic}[1]
-		\State $ V' \leftarrow V $; $ E' \leftarrow E $
-		\State $ V' \leftarrow V' \cup \{ x_{new} \} $
-		\State $ x_{min} \leftarrow x_{nearest} $
-		\State $ X_{near} \leftarrow $ \Call{Near}{$ G, x_{new}, | V | $}
-		\State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
-		\If{\Call{HomotopyCheck}{$ s $}}
-			\For{\textbf{each} $ x_{near} \in X_{near} $ }
-				\If{ \Call{ObstacleFree}{$ x_{new} , x_{near} $} }
-					\State $ c' \leftarrow $ \Call{Cost}{$ x_{near} $} $ + c( $ \Call{Line}{$ x_{near}, x_{new} $} $ ) $ 
-					\If{ $ c' < $ \Call{Cost}{$ x_{new} $} }
-						\State $ x_{min} \leftarrow x_{near} $
-					\EndIf
-				\EndIf
-			\EndFor
-		\Else
-		    \State \Return $ G' = (V', E') $ 		
-		\EndIf
-		\State $ E' \leftarrow E' \cup \{ ( x_{min}, x_{new} ) \} $
-		\For{\textbf{each} $ x_{near} \in X_{near} \setminus \{ x_{min} \} $ }
-			\If{\Call{ObstacleFree}{$ x_{new} , x_{near} $} and \Call{Cost}{$ x_{near} $} $ > $ \Call{Cost}{$ x_{new} $} + c(\Call{Line}{$ x_{new}, x_{near} $}) }
-			    \State $ s \leftarrow $ \Call{STR}{$x_{new}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
-			    \If{\Call{HomotopyCheck}{$ s $}}
-					\State $ x_{parent} \leftarrow $ \Call{Parent}{$ x_{near} $}
-					\State $ E' \leftarrow E' \setminus \{ ( x_{parent}, x_{near} ) \} $
-					\State $ E' \leftarrow E' \cup \{ ( x_{new}, x_{near} ) \} $
-					%\State \Call{STR}{$x_{near}$} $ \leftarrow $ \Call{STR}{$x_{new}$} 
-					%\State \Call{STR}{$x_{near}$} $ \leftarrow $ \Call{STR}{$x_{near}$} $ \cup $ \Call{CRF}{$ ( x_{new}, x_{near} ), \bm{B} $}
-				\EndIf
-			\EndIf
-		\EndFor
-		\Return $ G' = (V', E') $ 
-	\end{algorithmic}
-\caption{ {\sc Extend } ($ G, x_{new}, x_{nearest} $) }
-\label{alg:harrt:extend}
-\end{algorithm}
-
-When the exploration process is finished, the {\sc ExtractPaths} procedure can create paths from the two tree structures, which is given in Algorithm \ref{alg:harrt:binding}.
+The {\sc Connect} procedure connects a vertex with the other tree to generate a path from the start to goal.
+In order to guarantee optimality, a set of near vertices is provided to find the best vertex to be connected with.
 The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 \begin{itemize}
-	\item \textsc{SameVertices}($ G_{a}, G_{b} $):
-	Returns a set of vertice which are both in $ G_{a} $ and $ G_{b} $.
-	A threshold $ \epsilon $ can be defined in implementation.
-	If $ | v_{a} - v_{b} | < \epsilon $, we can have $ v_{a} = v_{b} $.
 	\item \textsc{Path}($ v, G $):	
 	Returns the path from the root of $ G $ to the vertex $ v $.
 	\item \textsc{Concatenate}{($ p_{a}, p_{b} $)}
@@ -340,19 +330,28 @@ The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
-		\State $ V_{s,g} \leftarrow $ \Call{SameVertices}{$ G_{s}, G_{r} $}
-		\State $ P \leftarrow \emptyset $
-		\For{\textbf{each} $ v \in V_{s,g} $ }
-			\State $ p_{s} \leftarrow $ \Call{Path}{$ v, G_{s} $}
-			\State $ p_{g} \leftarrow $ \Call{Path}{$ v, G_{g} $}
-			\State $ p \leftarrow $ \Call{Concatenate}{$  p_{s}, p_{g} $}
-			\State $ P \leftarrow P \cup \{ p \} $
+		\State $ p_{min} = \emptyset $
+		\State $ X_{near} \leftarrow $ \Call{NEAR}{$ G, x_{new}, |V| $}
+		\For{\textbf{each} $ x_{near} \in X_{near} $ }
+		    \If{ \Call{ObstacleFree}{$ x_{new}, x_{near} $} } 
+			    \If{ $ x_{new} \in G_{s} $ }
+					\State $ p \leftarrow $ \Call{Concatenate}{$  x_{new} ,  x_{near} $}
+				\Else
+				    \State $ p \leftarrow $ \Call{Concatenate}{$  x_{near}, x_{new} $}			
+				\EndIf
+			    \If{ \Call{HomotopyCheck}{$ p $} and $ c( p ) < c( p_{min} ) $ }
+			    	\State $ p_{min} = p $
+			    \EndIf 
+			\EndIf
 		\EndFor
-		\Return $ P $
+		\Return $ p_{min} $
 	\end{algorithmic}
-	\caption{ \textsc{ExtractPaths}($ G_{s}, G_{r} $) }
+	\caption{ \textsc{Connect}($ x_{new}, G $) }
 	\label{alg:harrt:binding}
 \end{algorithm}
+
+When the exploration process is finished, the {\sc MergePaths} procedure will merge the equivalent homotopy classes. 
+Thus the set of paths $ P $ will be updated.
 
 \section{Homotopy-aware optimal path planning}
 \label{sec:application}
