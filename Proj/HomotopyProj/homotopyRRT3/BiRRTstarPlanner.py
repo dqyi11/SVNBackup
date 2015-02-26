@@ -107,17 +107,13 @@ class BiRRTstarPlanner(object):
             min_s_path = self.connectPath(new_s_node, None, self.rrts)
             min_g_path = self.connectPath(None, new_g_node, self.rrts)
             
+            self.pathMgr.importPath(min_s_path)
+            self.pathMgr.importPath(min_g_path)
+            
+            self.rrts_viz.currentPaths = self.pathMgr.getPaths()
+            
             self.rrts_viz.update()
             
-        '''    
-        paths, infos, costs = self.rrts.findPaths()
+        self.rrts_viz.currentPaths = []
         
-        for i in range(len(paths)):
-            self.pathMgr.addPath(Path(paths[i], costs[i], infos[i]))
-        
-        self.rrts_viz.activePaths = paths
-        
-        #self.rrts_viz.update()
-        
-        return paths
-        '''
+        return self.pathMgr.getPaths()

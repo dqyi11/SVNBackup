@@ -49,15 +49,7 @@ if __name__ == '__main__':
     for subseg in mapMgr.subsegments:
         planner.rrts_viz.refLines.append([subseg.line_seg.coords[0], subseg.line_seg.coords[1]])
 
-    paths = planner.findPaths(start_pos, end_pos, 6000, homoMgr)
+    planner.findPaths(start_pos, end_pos, 6000, homoMgr)
     
-    #planner.pathMgr.classify()    
-    #planner.pathMgr.savePaths('RRstar02-path.txt')
-    
-    #import pygame.image
-    #pygame.image.save(planner.rrts_viz.screen, 'RRTstar02.png')
-    
-    
-    print paths
     while True:
         planner.rrts_viz.update()

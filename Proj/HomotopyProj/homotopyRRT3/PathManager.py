@@ -39,6 +39,14 @@ class PathManager(object):
                 self.bestPaths[str_out] = path
         else:
             self.bestPaths[str_out] = path
+            
+    def getPaths(self):
+        paths = []
+        
+        for kstr in self.bestPaths.keys():
+            paths.append(self.bestPaths[kstr].points)
+        
+        return paths
 
         
     def getClass(self, strBit):

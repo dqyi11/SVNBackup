@@ -26,6 +26,8 @@ class RRTVisualizer(object):
         self.activePath = None
         self.dispMap = True
         
+        self.currentPaths = []
+        
         self.refLines = []
         
     def loadObj(self, objFile):    
@@ -73,6 +75,12 @@ class RRTVisualizer(object):
             pathLen = len(self.activePath)
             for i in range(0, pathLen-1, 1):
                 pygame.draw.line(self.screen, (255, 160, 0), self.activePath[i], self.activePath[i+1], 2)
+        
+        if len(self.currentPaths) > 0:
+            for path in self.currentPaths:
+                pathLen = len(path)
+                for i in range(0, pathLen-1, 1):
+                    pygame.draw.line(self.screen, (255, 160, 0), path[i], path[i+1], 2)
         
         #pygame.display.update()
         '''
