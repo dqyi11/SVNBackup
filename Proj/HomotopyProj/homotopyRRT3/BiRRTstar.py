@@ -282,7 +282,7 @@ class BiRRTstar(object):
         node_list = []
         curr_node = node
         node_list.append(curr_node)
-        while curr_node != root:
+        while curr_node != root and curr_node!=None:
             curr_node = curr_node.parent
             node_list.append(curr_node)
             
