@@ -59,14 +59,19 @@ class BiRRTVisualizer(object):
                     self.pathIdx -= 1
                 elif e.key == pygame.K_RIGHT:
                     self.pathIdx += 1
-                
+                elif e.key == pygame.K_s:
+                    if self.displayRefFrames == True:
+                        self.displayRefFrames = False
+                    else:
+                        self.displayRefFrames = True
                     
-        if self.pathIdx >= len(self.activePaths):
+        if self.pathIdx >= len(self.pathMgr.bestPaths.keys()):
             self.pathIdx = -1
         elif self.pathIdx < -1:
-            self.pathIdx = len(self.activePaths)-1
+            self.pathIdx = len(self.pathMgr.bestPaths.keys())-1
             
         self.screen.fill((255,255,255))
+        
         if self.dispMap==True:
             if self.mapImg != None:
                 self.screen.blit(self.mapImg,(0,0))
@@ -75,8 +80,9 @@ class BiRRTVisualizer(object):
                 self.screen.blit(self.objImg,(0,0))
                 
         for refLine in self.refLines:
-            pygame.draw.line(self.screen, (50,50,50), refLine[0], refLine[1])
-         
+            pygame.draw.line(self.screen, (50,50,50), refLine[0][0], refLine[0][1])
+            if self.displayRefFrames == True:
+                self.screen.blit(self.font.render(refLine[1], True, (0,255,0)), refLine[2])
         '''
         for dr in self.rrt.dividingRefs:
             pygame.draw.line(self.screen, (255,204,153), dr[0], dr[1], 10)
@@ -115,11 +121,13 @@ class BiRRTVisualizer(object):
                 for i in range(0, pathLen-1, 1):
                     pygame.draw.line(self.screen, (255, 0, 0), path[i], path[i+1], 2)        
                 
-        if len(self.activePaths) > 0 and self.pathIdx >= 0:
-            activePath = self.activePaths[self.pathIdx]
+        if len(self.pathMgr.bestPaths.keys()) > 0 and self.pathIdx >= 0:
+            kstr = self.pathMgr.bestPaths.keys()[self.pathIdx]
+            activePath = self.pathMgr.bestPaths[kstr].points
             pathLen = len(activePath)
             for i in range(0, pathLen-1, 1):
-                pygame.draw.line(self.screen, (0, 102, 204), activePath[i], activePath[i+1], 2)    
+                pygame.draw.line(self.screen, (0, 102, 204), activePath[i], activePath[i+1], 2)  
+            self.screen.blit(self.font.render(kstr, True, (255,0,0)), (10,10))
                 
                 
         start = (int(self.rrt.start[0]), int(self.rrt.start[1]))
