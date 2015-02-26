@@ -69,12 +69,26 @@ class BiRRTstarPlanner(object):
     
     def getPathFromTwoNodes(self, node_s, node_g, rrts):
         path = []
-        stringbit = None
+        stringbit = []
         
         subpathFromStart = self.getSubNodeList(node_s, rrts.st_root)
         subpathFromGoal = self.getSubNodeList(node_g, rrts.gt_root)
         
+        crossInt = self.homotopyMgr.world_map.getCrossingSubsegment(node_s.pos, node_g.pos)
         
+        for p in subpathFromStart:
+            path.append(p)
+        for p in reversed(subpathFromGoal):
+            path.append(p)
+            
+        if node_s.strBit != None:   
+            for c in node_s.strBit:
+                stringbit.append(c)
+        if crossInt != None:
+            stringbit.append(crossInt)
+        if node_g.strBit != None:
+            for c in reversed(node_g.strBit):
+                stringbit.append(c)
         
         return path, stringbit
         
@@ -90,8 +104,8 @@ class BiRRTstarPlanner(object):
             new_s_node = self.rrts.extend(self.rrts.st_kdtree_root, self.rrts.st_nodes)
             new_g_node = self.rrts.extend(self.rrts.gt_kdtree_root, self.rrts.gt_nodes)
             
-            self.connectPath(new_s_node, None, self.rrts)
-            self.connectPath(None, new_g_node, self.rrts)
+            min_s_path = self.connectPath(new_s_node, None, self.rrts)
+            min_g_path = self.connectPath(None, new_g_node, self.rrts)
             
             self.rrts_viz.update()
             

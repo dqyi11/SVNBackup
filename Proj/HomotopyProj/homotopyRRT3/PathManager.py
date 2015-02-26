@@ -19,13 +19,27 @@ class PathManager(object):
     def __init__(self, cost_func):
 
         self.costFunc = cost_func
-        self.paths = []
         
         self.classes = {}
+        self.bestPaths = {}
         
-    def addPath(self, path):
-        self.paths.append(path)
-        self.pathNum = len(self.paths)
+    def getString(self, stringBits):
+        str_out = ""
+        if len(stringBits) > 0:
+            for i in range(len(stringBits)-1):
+                str_out += str(stringBits[i])+"-"
+            str_out += str(stringBits[len(stringBits)-1])
+        return str_out    
+        
+    def importPath(self, path):
+        
+        str_out = self.getString(path.stringBits)
+        if str_out in self.bestPaths.keys():
+            if path.cost < self.bestPaths[str_out]:
+                self.bestPaths[str_out] = path
+        else:
+            self.bestPaths[str_out] = path
+
         
     def getClass(self, strBit):
         for cstr in self.classes.keys():
@@ -37,24 +51,7 @@ class PathManager(object):
             if same==True:
                 return self.classes[cstr]
         return None
-     
-    def classify(self):
-        for path in self.paths:
-            cls = self.getClass(str(path.stringBits))
-            if cls==None:
-                self.classes[str(path.stringBits)] = []
-                self.classes[str(path.stringBits)].append(path)
-            else:
-                cls.append(path)
-                
-        for i in range(len(self.classes.keys())):
-            self.classes[self.classes.keys()[i]].sort( key=lambda x: x.cost, reverse=False )
-                
-        print "Total Num " + str(len(self.paths))
-        for cstr in self.classes.keys():
-            print str(len(self.classes[cstr])) + " : " + str(cstr) 
-        
-        
+
     def calcCost(self, path): 
         score = 0.0
         pathLen = len(path)
@@ -66,11 +63,11 @@ class PathManager(object):
                     
     def savePaths(self, filename):
         with open(filename, 'w') as f1:
-            f1.write( "Total Num " + str(len(self.paths)) + "\n")
-            for cstr in self.classes.keys():
+            f1.write( "Total Num " + str(len(self.bestPaths.keys())) + "\n")
+            for cstr in self.bestPaths.keys():
                 f1.write( str(len(self.classes[cstr])) + " : " + str(cstr) + "\n" )
-            
-            for p in self.paths:
+                
+                p = self.bestPaths[cstr]
                 f1.write(str(p.points))
                 f1.write(str(p.stringBits))
                 f1.write(str(p.cost))
