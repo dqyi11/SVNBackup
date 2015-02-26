@@ -374,13 +374,38 @@ class WorldMapMgr(object):
         return False
     
     def getCrossingSubsegments(self, pos_s, pos_e):
+        
+        s_rad = numpy.arctan2(pos_s[1]-self.centralPoint[1], pos_s[0]-self.centralPoint[0])
+        if s_rad < 0:
+            s_rad += 2 * numpy.pi
+        e_rad = numpy.arctan2(pos_e[1]-self.centralPoint[1], pos_e[0]-self.centralPoint[0])
+        if e_rad < 0:
+            e_rad += 2 * numpy.pi
+            
+        subseg_checklist = []
+        if e_rad >= s_rad:
+            for subseg in self.subsegments:
+                if subseg.rad > s_rad and subseg.rad < e_rad:
+                    subseg_checklist.append(subseg)
+        if e_rad < s_rad:
+            for subseg in self.subsegments:
+                if subseg.rad > s_rad:
+                    subseg_checklist.append(subseg)            
+            for subseg in self.subsegments:
+                if subseg.rad < s_rad:
+                    subseg_checklist.append(subseg)  
+        
+        return self.getCrossingSubsegmentsFromSubsegList(pos_s, pos_e, subseg_checklist)
+        '''
         subsegment_list = []
         linS = shpgeo.LineString([pos_s, pos_e])
         for subseg in self.subsegments:
             if subseg.line_seg.intersects(linS):
                 subsegment_list.append( subseg )
         return subsegment_list
-    
+        '''
+
+
     def getCrossingSubsegmentsFromSubsegList(self, pos_s, pos_e, subsegList):
         subsegment_list = []
         linS = shpgeo.LineString([pos_s, pos_e])
@@ -388,6 +413,7 @@ class WorldMapMgr(object):
             if subseg.line_seg.intersects(linS):
                 subsegment_list.append( subseg )
         return subsegment_list
+
  
     def findIntersectionWithBoundary(self, a_ray):
         for bl in self.boundary_lines:

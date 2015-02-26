@@ -127,5 +127,6 @@ class BiRRTstarPlanner(object):
             self.rrts_viz.update()
             
         self.rrts_viz.currentPaths = []
+        self.rrts_viz.activePaths = self.pathMgr.getPaths()
         
-        return self.pathMgr.getPaths()
+        return self.pathMgr.getPathInfos()

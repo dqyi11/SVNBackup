@@ -41,9 +41,10 @@ class PathManager(object):
     def importPath(self, path):
         
         str_out = self.getString(path.stringBits)
-        if str_out in self.supportingClasses:
+        if True:
+        #if str_out in self.supportingClasses:
             if str_out in self.bestPaths.keys():
-                if path.cost < self.bestPaths[str_out]:
+                if path.cost < self.bestPaths[str_out].cost:
                     self.bestPaths[str_out] = path
             else:
                 self.bestPaths[str_out] = path
@@ -55,6 +56,12 @@ class PathManager(object):
             paths.append(self.bestPaths[kstr].points)
         
         return paths
+    
+    def getPathInfos(self):
+        pathInfos = []
+        for kstr in self.bestPaths.keys():
+            pathInfos.append(self.bestPaths[kstr].points)
+        return pathInfos
 
         
     def getClass(self, strBit):
@@ -93,5 +100,11 @@ class PathManager(object):
         
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        ax.plot([], [])
+        index = np.arange(len(self.bestPaths.keys()))
+        bar_width = 0.4
+        scores = []
+        for kstr in self.bestPaths.keys():
+            scores.append(self.bestPaths[kstr].cost)
+            
+        ax.bar(index, scores, bar_width)    
         plt.show()
