@@ -23,6 +23,8 @@ class PathManager(object):
         self.classes = {}
         self.bestPaths = {}
         
+        self.supportingClasses = []
+        
     def getString(self, stringBits):
         str_out = ""
         if len(stringBits) > 0:
@@ -30,15 +32,21 @@ class PathManager(object):
                 str_out += str(stringBits[i])+"-"
             str_out += str(stringBits[len(stringBits)-1])
         return str_out    
+    
+    def loadSupportingClasses(self, classes):
+        for cls in classes:
+            cls_str = self.getString(cls)
+            self.supportingClasses.append(cls_str)
         
     def importPath(self, path):
         
         str_out = self.getString(path.stringBits)
-        if str_out in self.bestPaths.keys():
-            if path.cost < self.bestPaths[str_out]:
+        if str_out in self.supportingClasses:
+            if str_out in self.bestPaths.keys():
+                if path.cost < self.bestPaths[str_out]:
+                    self.bestPaths[str_out] = path
+            else:
                 self.bestPaths[str_out] = path
-        else:
-            self.bestPaths[str_out] = path
             
     def getPaths(self):
         paths = []

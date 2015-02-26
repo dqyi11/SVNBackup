@@ -42,10 +42,11 @@ class TrajectoryReader(object):
         subsegmentList = []
         convertedPosList.append(posList[0])  
         for i in range(1, len(posList)-1):
-            subseg = self.world_map.getCrossingSubsegment(posList[i], posList[i+1])
-            if subseg != None:
-                subsegmentList.append(subseg)
-                convertedPosList.append(posList[i])
+            subseg_list = self.world_map.getCrossingSubsegments(posList[i], posList[i+1])
+            if len(subseg_list) > 0:
+                for subseg in subseg_list:
+                    subsegmentList.append(subseg)
+            convertedPosList.append(posList[i])
         convertedPosList.append(posList[len(posList)-1])
         
         return convertedPosList, (start_region, end_region, subsegmentList)

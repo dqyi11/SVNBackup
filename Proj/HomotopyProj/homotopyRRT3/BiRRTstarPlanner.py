@@ -81,20 +81,21 @@ class BiRRTstarPlanner(object):
         subpathFromStart = rrts.getSubNodeList(node_s, rrts.st_root)
         subpathFromGoal = rrts.getSubNodeList(node_g, rrts.gt_root)
         
-        crossInt = self.rrts.homotopyMgr.world_map.getCrossingSubsegment(node_s.pos, node_g.pos)
+        crossInts = self.rrts.homotopyMgr.world_map.getCrossingSubsegments(node_s.pos, node_g.pos)
         
         for p in reversed(subpathFromStart):
             path.append(p.pos)
         for p in subpathFromGoal:
             path.append(p.pos)
             
-        if node_s.strBit != None:   
-            for c in node_s.strBit:
+        if len(node_s.homoPath) > 0:   
+            for c in node_s.homoPath:
                 stringbit.append(c)
-        if crossInt != None:
-            stringbit.append(crossInt)
-        if node_g.strBit != None:
-            for c in reversed(node_g.strBit):
+        if len(crossInts) > 0:
+            for crossInt in crossInts:
+                stringbit.append(crossInt.name)
+        if len(node_g.homoPath) > 0:
+            for c in reversed(node_g.homoPath):
                 stringbit.append(c)
         
         return path, stringbit
@@ -105,6 +106,8 @@ class BiRRTstarPlanner(object):
         dividingRefs = homotopyMgr.getDividingRefs(start, goal)
         for dr in dividingRefs:
             self.rrts.dividingRefs.append([dr.open_seg[0], dr.open_seg[1]])
+        
+        self.pathMgr.loadSupportingClasses( homotopyMgr.allHomotopyClasses )
         
         for i in range(iterationNum):
             print "Iter@" + str(i)

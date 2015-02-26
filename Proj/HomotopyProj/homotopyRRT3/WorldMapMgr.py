@@ -373,19 +373,21 @@ class WorldMapMgr(object):
                 return True
         return False
     
-    def getCrossingSubsegment(self, pos_s, pos_e):
+    def getCrossingSubsegments(self, pos_s, pos_e):
+        subsegment_list = []
         linS = shpgeo.LineString([pos_s, pos_e])
         for subseg in self.subsegments:
             if subseg.line_seg.intersects(linS):
-                return subseg
-        return None
+                subsegment_list.append( subseg )
+        return subsegment_list
     
-    def getCrossingSubsegList(self, pos_s, pos_e, subsegList):
+    def getCrossingSubsegmentsFromSubsegList(self, pos_s, pos_e, subsegList):
+        subsegment_list = []
         linS = shpgeo.LineString([pos_s, pos_e])
         for subseg in subsegList:
             if subseg.line_seg.intersects(linS):
-                return subseg
-        return None
+                subsegment_list.append( subseg )
+        return subsegment_list
  
     def findIntersectionWithBoundary(self, a_ray):
         for bl in self.boundary_lines:
