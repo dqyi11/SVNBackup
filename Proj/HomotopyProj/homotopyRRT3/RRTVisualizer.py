@@ -83,11 +83,6 @@ class RRTVisualizer(object):
                     pygame.draw.line(self.screen, (255, 160, 0), path[i], path[i+1], 2)
         
         #pygame.display.update()
-        '''
-        for e in pygame.event.get():
-            if e.type == QUIT or (e.type == KEYUP and e.key == K_ESCAPE):
-                sys.exit("Leaving because you requested it.")
-        '''
         pygame.display.flip();
         #pygame.time.delay(200)
         
