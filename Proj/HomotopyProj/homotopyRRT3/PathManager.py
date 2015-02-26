@@ -29,7 +29,7 @@ class PathManager(object):
         str_out = ""
         if len(stringBits) > 0:
             for i in range(len(stringBits)-1):
-                str_out += str(stringBits[i])+"-"
+                str_out += str(stringBits[i])+","
             str_out += str(stringBits[len(stringBits)-1])
         return str_out    
     

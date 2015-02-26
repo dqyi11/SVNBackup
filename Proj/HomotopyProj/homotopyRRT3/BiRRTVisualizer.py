@@ -37,6 +37,8 @@ class BiRRTVisualizer(object):
         self.font = pygame.font.SysFont(None, 24)
         
         self.pathIdx = -1
+        
+        self.displayRefFrames = False
 
         
     def loadObj(self, objFile):    
