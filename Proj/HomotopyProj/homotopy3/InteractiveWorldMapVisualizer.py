@@ -21,6 +21,9 @@ SUBSEGMENT_COLOR = (255,255,0,100)
 SUBREGION_BORDER_COLOR = (255,0,0,100)
 SUBSEGMENT_OPEN_COLOR = (255,165,0,100)
 
+SUBSEGMENT_CONNECT_COLOR = (76, 0, 153)
+SUBSEGMENT_CONNECT_WIDTH = 3
+
 SEGMENT_LINE_WIDTH = 1
 OBSTACLE_LINE_WIDTH = 2
 KEYPOINT_SIZE = 2
@@ -37,6 +40,8 @@ class InteractiveWorldMapVisualizer(object):
         
         self.start = None
         self.end = None
+        self.start_pos = None
+        self.end_pos = None
         
         self.allHomotopyClasses = []
         
@@ -106,9 +111,26 @@ class InteractiveWorldMapVisualizer(object):
             
         if len(self.allHomotopyClasses) > 0 and self.homotopy_idx >= 0:
             homotopy = self.allHomotopyClasses[self.homotopy_idx]
+            seg = None
+            prev_seg = None
             for homo in homotopy:
                 seg = self.world_map.getSubLineSegment(homo)
                 pygame.draw.line(self.screen, SUBSEGMENT_OPEN_COLOR, seg.open_seg[0], seg.open_seg[1], BORDER_LINE_WIDTH)
+                if prev_seg == None:
+                    p_a = self.start_pos
+                    p_b = seg.midpoint
+                else:
+                    p_a = prev_seg.midpoint
+                    p_b = seg.midpoint
+                
+                pygame.draw.line(self.screen, SUBSEGMENT_CONNECT_COLOR, p_a, p_b, SUBSEGMENT_CONNECT_WIDTH)
+                prev_seg = seg
+            
+            p_a = prev_seg.midpoint
+            p_b = self.end_pos
+            pygame.draw.line(self.screen, SUBSEGMENT_CONNECT_COLOR, p_a, p_b, SUBSEGMENT_CONNECT_WIDTH)
+            
+            
             
         if len(self.world_map.subsegments) > 0 and self.subsegment_idx >= 0:
             subsegment = self.world_map.subsegments[self.subsegment_idx]
@@ -159,8 +181,10 @@ class InteractiveWorldMapVisualizer(object):
                     self.homotopy_idx -= 1
                 elif event.key == pygame.K_x:
                     if len(self.trackingPosList) > 0:
-                        self.start =  self.world_map.findRegionByPoint( self.trackingPosList[0] )
-                        self.end = self.world_map.findRegionByPoint( self.trackingPosList[len(self.trackingPosList)-1] )
+                        self.start_pos = self.trackingPosList[0]
+                        self.start =  self.world_map.findRegionByPoint( self.start_pos )
+                        self.end_pos = self.trackingPosList[len(self.trackingPosList)-1]
+                        self.end = self.world_map.findRegionByPoint( self.end_pos )
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.trackingPosList = []
                 self.tracking = True      
