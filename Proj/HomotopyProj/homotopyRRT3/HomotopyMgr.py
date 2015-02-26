@@ -22,7 +22,8 @@ class HomotopyMgr(object):
         self.allHomotopyClasses = []
         
     def init(self, refStrPath, startReg, endReg):
-        self.refStrPath = self.reader.shortenString(refStrPath)
+        self.refStrPath = refStrPath
+        self.refStrPathShort = self.reader.shortenString(refStrPath)
         self.startReg = startReg
         self.endReg = endReg
         self.allHomotopyClasses = self.world_map.getTopologicalGraph().findAllPathsByBFS(self.startReg.getName(), self.endReg.getName())

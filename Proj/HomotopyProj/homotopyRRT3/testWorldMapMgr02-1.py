@@ -16,7 +16,6 @@ if __name__ == '__main__':
     mapMgr.load(MAP_FILE)
     
     mapMgrViz = InteractiveWorldMapVisualizer(mapMgr)
-    
     mapMgrViz.initVisualize()
     
     print "CENTER GROUP " + str(len(mapMgrViz.reader.centerGroup))
