@@ -401,6 +401,25 @@ Because the decomposed regions are randomly and automatically generated, a decom
 In this case, the decomposed region will be split into several smaller regions so that each region might contain either positive region or negative region.
 After that, more reference frames will be created correspondingly and a new topological graph will be obtained.
 
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.47\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/regionlabel1.png}
+		\caption{Labeling the regions}
+		\label{fig:region_label:reference}
+	\end{subfigure}  
+	%\\
+	\begin{subfigure}[t]{0.47\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/regionlabelhomo1.png}
+		\caption{Homotopy class satisfies the labeled regions}
+		\label{fig:region_label:rrt}
+	\end{subfigure}   
+	\caption{Labeling region to generate homotopic constraints.}
+	\label{fig:region_label}
+\end{figure}
+
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
 A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes.
 The grammar is then defined by this set of strings.
