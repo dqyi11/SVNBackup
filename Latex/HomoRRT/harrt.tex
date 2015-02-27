@@ -455,28 +455,28 @@ Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pare
 	\centering
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy3.png}
+		\includegraphics[width=\textwidth]{fig/all_homotopy1.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:01}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy1.png}
+		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:02}
 	\end{subfigure}
 	\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
+		\includegraphics[width=\textwidth]{fig/all_homotopy3.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:03}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
+		\includegraphics[width=\textwidth]{fig/all_homotopy4.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:all_scores}
 	\end{subfigure}	   
@@ -515,8 +515,8 @@ With the interface of visualizing the optimal path in different homotopy class, 
 \section{Analysis}
 \label{sec:analysis}
 
-The HA-RRT$^{*}$ is consist of the homotopy-aware exploration and the constrained optimization.
-In this section, we look at how to have better support on the homotopy classes and give the constrained optimal guarantee.
+The HA-RRT$^{*}$ consists of the homotopy-aware exploration and the constrained optimization.
+In this section, we look at how to have better support on the homotopy classes and provide the constrained optimal guarantee.
 
 \subsection{homotopic grammar}
 
@@ -593,7 +593,7 @@ the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 \end{lem}
 
 HA-RRT$^{*}$ uses bidirectional trees to explore the workspace.
-In {\sc ExtractPaths} procedure, the vertex $ v $ in both $ G_{s} $ and $ G_{g} $ is used to find two paths to concatenate.
+In {\sc Connect} procedure, the vertex $ v $ in either $ G_{s} $ or $ G_{g} $ is used to create a path by connecting with another vertex in the other tree.
 If we see the position of $ v $ as a via-point of the paths, we can have the asymptotic optimality with the set of paths has $ v $ as via-point.
 It is stated in Lemma \ref{lem:optimal_via_point}.
 
@@ -601,14 +601,19 @@ It is stated in Lemma \ref{lem:optimal_via_point}.
 \label{lem:optimal_via_point}
 Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
 the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
+
 \begin{proof}
-Let $ c_{s} (v) $ denote the cost of the $ v $ in $ G_{s} $, which is the cost-to-come from the start to the position of $ v $.
-Let $ c_{g} (v) $ denote the cost of the $ v $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $ v $.
-Let $ \sigma_{G_{s},G_{g}} (v) $ be a path concatenated by two paths of $ G_{s} $ and $ G_{g} $ with $ v $. 
-Its cost $ {\sc Cost} (\sigma_{G_{s},G_{g}} (v)) =  c_{s} (v) + c_{g} (v) $.
-It equals to the cost-to-go from the position of $ v $ to the goal.
-By Lemma \ref{lem:tree_vex:conv}, we know that $ c_{s} (v) $ and $ c_{g} (v) $ converge to optimal almost surely.
-Then the cost of $ \sigma_{G_{s},G_{g}} (v) $ converge to optimal almost surely. 
+Look at connecting a vertex $ v_{s} $ in $ G_{s} $ with the $ G_{g} $.
+Let $ c (v_{s}) $ denote the cost of the $  v_{s}  $ in $ G_{s} $, which is the cost-to-come from the start to the position of $  v_{s} $.
+Let $ v_{g} $ be the vertex to be connected in $ G_{g} $.
+Let $ c ( v_{g} ) $ denote the cost of the $  v_{g} $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $  v_{g} $.
+It equals to the cost-to-go from the position of $ v_{g} $ to the goal.
+Let $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ be a path concatenated by two sub-paths from $  v_{s} $ and $  v_{g} $. 
+Its cost $ {\sc Cost} (\sigma_{G_{s},G_{g}} ( v_{s}, v_{g} )) =  c (v_{s}) + c (v_{g}) + c (${\sc Line}$ (v_{s}, v_{g})  ) $.
+By Lemma \ref{lem:tree_vex:conv}, we know that $ c (v_{s}) $ and $ c (v_{g}) $ converge to optimal almost surely.
+$ c (${\sc Line}$ (v_{s}, v_{g})  ) $ will also converge, because $ v_{g} $ is selected from a set of near vertices.
+Thus, the cost of $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ converges to optimal almost surely. 
+Similarly, we can have the same result on connecting a vertex $ v_{g} $ in $ G_{g} $ with the $ G_{s} $.
 \end{proof}
 \end{lem}
 
@@ -636,6 +641,7 @@ The bidirectional RRT$^{*}$ accelerates the convergence rate, like in \cite{star
 When the homotopy classes are used more than only the constraint, bidirectional RRT$^{*}$ is required so that each position can have the optimal-to-come sub-path and optimal-to-go sub-path.
 In this way, we can have the optimal path in each homotopy class.
 
+\begin{comment}
 In the bidirectional exploration, the two direction can share the same workspace or split the workspace.
 Figure \ref{fig:homotopy_no_pref} provides two cases.
 In Figure \ref{fig:homotopy_no_pref:all}, both two trees parallel explore on the same workspace.
@@ -644,6 +650,7 @@ Each tree explores only explore half ot the workspace it is in.
 Theoretically, HA-RRT$^{*}$ converge to have same solutions in both two cases.
 In most of the case, splitting the workspace makes better efficiency, especially there are less vertices belong to both two trees.
 However, the convergence rate depends on the convergence of the vertices near the boundary in both two trees.
+\end{comment}
 
 As we noticed, with a topological graph, it is possible that several strings belong to same homotopy class.
 Thus, the string equivalence on the homotopy class should be considered.
