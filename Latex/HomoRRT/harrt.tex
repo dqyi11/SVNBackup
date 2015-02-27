@@ -196,8 +196,8 @@ The nodes are the regions and the edges are the reference frames.
 Any path can be mapped into a sequence of nodes in the topological graph.
 In determining the homotopy class, two paths share same start and goal.
 Thus they can be compared also by using only the visited edges, which are equivalent with the crossed reference frames.
-Assign each reference frame a character.
-Each path can be mapped into a string, which is determined by the sequence of the crossed reference frames.
+Assign each reference frame a {\em character}.
+Each path can be mapped into a {\em string}, which is determined by the sequence of the crossed reference frames.
 The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
 \begin{algorithm}[hbtp]
@@ -311,7 +311,7 @@ The called methods are defined as following:
 	%Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-The {\sc HomotopyCheck}() is added to guarantee that adding new edge or rewiring edges all satisfies the homotopy constraint.
+The {\sc HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint.
 The homotopy constraint is defined as a \emph{homotopic grammar}.
 Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
 This path, which starts from the root to the vertex, indicates a string of characters sequentially.
@@ -350,7 +350,14 @@ The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 	\label{alg:harrt:binding}
 \end{algorithm}
 
-When the exploration process is finished, the {\sc MergePaths} procedure will merge the equivalent homotopy classes. 
+Because both the start tree $ G_{s} $ and the goal tree $ G_{g} $ add a new vertex. 
+The {\sc Connect} procedure creates a path by connecting the new vertex with the other tree, which are $ p_{s} $ and $ p_{g} $ correspondingly.
+The new paths will be used to update the best path of the homotopy classes they belong to in {\sc UpdateBestPathByClass} ().
+
+When the exploration process is finished, there is a set that contains the best paths for all the homotopy classes.
+Because the homotopy class is defined by the string,
+there exist different strings belong to same homotopy classes.
+The {\sc MergePaths} procedure will be called to merge the equivalent homotopy classes. 
 Thus the set of paths $ P $ will be updated.
 
 \section{Homotopy-aware optimal path planning}
@@ -421,7 +428,7 @@ After that, more reference frames will be created correspondingly and a new topo
 \end{figure}
 
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
-A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes.
+A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes. nb
 The grammar is then defined by this set of strings.
 The {\sc HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by this grammar.
 The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled constraint.
@@ -443,19 +450,33 @@ Figure \ref{fig:homotopy_human_interaction:pareto} illustrates such a Pareto fro
 	\centering
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/homotopyClassRRT.png}
-		\caption{Share same exploration space.}
-		\label{fig:homotopy_no_pref:all}
+		\includegraphics[width=\textwidth]{fig/all_homotopy3.png}
+		\caption{Best path in one homotopy class.}
+		\label{fig:all_homotopy:01}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/homotopyClassRRTHalf.png}
-		\caption{Split the exploration space.}
-		\label{fig:homotopy_no_pref:half}
-	\end{subfigure}   
+		\includegraphics[width=\textwidth]{fig/all_homotopy1.png}
+		\caption{Best path in one homotopy class.}
+		\label{fig:all_homotopy:02}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[t]{0.47\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
+		\caption{Best path in one homotopy class.}
+		\label{fig:all_homotopy:03}
+	\end{subfigure}  
+	%\\
+	\begin{subfigure}[t]{0.47\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
+		\caption{Best path in one homotopy class.}
+		\label{fig:all_homotopy:all_scores}
+	\end{subfigure}	   
 	\caption{Bidirectional RRT$^{*}$.}
-	\label{fig:homotopy_no_pref}
+	\label{fig:all_homotopy:no_pref}
 \end{figure}
 
 \subsection{Homotopy classes without preference}
@@ -471,14 +492,14 @@ The human can select one from them that matches his intent most.
 		\centering
 		\includegraphics[width=\textwidth]{fig/pareto.png}
 		\caption{Pareto front with topology preference.}
-		\label{fig:homotopy_human_interaction:pareto}
+		\label{fig:homotopy_human_interaction:pareto_score}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/navBestInHomotopy.png}
-		\caption{Navigate the best solution of each homotopy class.}
-		\label{fig:homotopy_human_interaction:all}
+		\includegraphics[width=\textwidth]{fig/all_homotopy_score.png}
+		\caption{Minimum cost in all the homotopy classes.}
+		\label{fig:homotopy_human_interaction:all_scores}
 	\end{subfigure}   
 	\caption{Interactive optimization.}
 	\label{fig:homotopy_human_interaction}
