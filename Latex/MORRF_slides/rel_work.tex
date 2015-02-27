@@ -50,11 +50,12 @@ Drawbacks
 		\end{figure}
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
-			\begin{itemize} %[leftmargin=*]
-				\item \begin{equation}
-				\nonumber
-				\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x)
-				\end{equation}
+			\begin{equation}
+			\nonumber
+			\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x)
+			\end{equation}
+			\begin{itemize}
+				\item convex
 			\end{itemize}
 		\end{minipage}
 	\end{columns}
@@ -71,12 +72,10 @@ Drawbacks
 		\end{figure}
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
-			\begin{itemize}%[leftmargin=*]
-				\item \begin{equation}
-				\nonumber
-				%\arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{utop}_{k}  | \} 
-				\end{equation}
-			\end{itemize}
+            \begin{equation}
+			\nonumber
+			\arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{utop}_{k}  | \} 
+			\end{equation}
 		\end{minipage}
 	\end{columns}
 \end{frame}
@@ -92,12 +91,12 @@ Drawbacks
 		\end{figure}
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
-			\begin{itemize}[leftmargin=*]
-				\item 
-				\begin{equation}
-				%\nonumber
-				%\arg \min_x \{ d \mid \bm{z}^{utop} - F(x) = d \bm{\lambda} \}
-				\end{equation}
+			\begin{equation}
+			\nonumber
+			\arg \min_x \{ d \mid \bm{z}^{utop} - F(x) = d \bm{\lambda} \}
+			\end{equation}
+			\begin{itemize}
+				\item better diversity
 			\end{itemize}
 		\end{minipage}
 	\end{columns}
@@ -105,7 +104,7 @@ Drawbacks
 
 \subsection{RRT$^{*}$}
 
-\begin{frame}{RRT}{RRT$^{*}$}
+\begin{frame}{RRT}{Sampling-based path planning}
 	\begin{figure}
 		\centering
 		\includegraphics[width=.5\linewidth]{figure/RRT_graph1}
@@ -120,11 +119,14 @@ Drawbacks
 	\end{figure}
 \end{frame}
 
-\begin{frame}{RRT}{RRT$^{*}$}
-	
+\begin{frame}{RRT}{Sampling-based path planning}
+	\begin{itemize}
+		\item probabilistic complete 
+		\item not asymptotic optimal
+	\end{itemize}
 \end{frame}
 
 
-\begin{frame}{RRT$^{*}$}{RRT$^{*}$}
+\begin{frame}{RRT$^{*}$}{Optimal sampling-based path planning}
 	
 \end{frame}
