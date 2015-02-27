@@ -76,6 +76,9 @@ Drawbacks
 			\nonumber
 			\arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{utop}_{k}  | \} 
 			\end{equation}
+			\begin{itemize}
+				\item non-convex
+			\end{itemize}
 		\end{minipage}
 	\end{columns}
 \end{frame}
@@ -121,6 +124,8 @@ Drawbacks
 
 \begin{frame}{RRT}{Sampling-based path planning}
 	\begin{itemize}
+	    \item simple (=efficient)
+	    \item high degrees of freedom
 		\item probabilistic complete 
 		\item not asymptotic optimal
 	\end{itemize}
@@ -128,5 +133,91 @@ Drawbacks
 
 
 \begin{frame}{RRT$^{*}$}{Optimal sampling-based path planning}
-	
+{\Large \textbf{Sampling}}
+\begin{columns}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs00.png}
+		%\caption{}
+		\label{fig:rrts:00}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs01.png}
+		%\caption{}
+		\label{fig:rrts:01}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs02.png}
+		%\caption{}
+		\label{fig:rrts:02}
+	\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{RRT$^{*}$}{Optimal sampling-based path planning}
+{\Large \textbf{Adding}}
+\begin{columns}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs03.png}
+		%\caption{}
+		\label{fig:rrts:03}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs04.png}
+		%\caption{}
+		\label{fig:rrts:04}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs05.png}
+		%\caption{}
+		\label{fig:rrts:05}
+	\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{RRT$^{*}$}{Optimal sampling-based path planning}
+{\Large \textbf{Rewiring}}
+\begin{columns}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs06.png}
+		%\caption{}
+		\label{fig:rrts:06}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs07.png}
+		%\caption{}
+		\label{fig:rrts:07}
+	\end{figure}
+	\column{0.33\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/RRTs08.png}
+		%\caption{}
+		\label{fig:rrts:08}
+	\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{RRT vs RRT$^{*}$}{Optimal sampling-based path planning}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.8\linewidth]{figure/RRT_RRTs.png}
+		%\caption{}
+		\label{fig:rrt:result}
+	\end{figure}
 \end{frame}

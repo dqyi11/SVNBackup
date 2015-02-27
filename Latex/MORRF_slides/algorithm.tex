@@ -1,11 +1,110 @@
 \section{Algorithm}
 
+\subsection{probelm}
 
-\begin{frame}{Structure}{MORRF$^{*}$}
+\begin{frame}{Multi-objective path planning}{Problem}
 	
 \begin{itemize}
-	\item \textbf{reference tree}
-	\item \textbf{subproblem tree}
+\item a bounded, connected open set $ X \subset \mathbb{R}^{d} $
+\item an obstacle space $ X_{obs} $
+\item an initial state $ x_{init} $
+\item a goal region $ X_{goal} $. 
+\item $K$ objectives  $ \bm{c}(\cdot) = [ c_{1} (\cdot), \ldots , c_{K}(\cdot) ]^{T}$ 
+\item the path  $\sigma : [0,s] \rightarrow X$. 
 \end{itemize}
+
+\textbf{problem} \\
+find $ M $ Pareto optimal paths $ \sigma^{*} \in \Sigma^{*}$ 
+\begin{itemize}
+\item $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
+\item $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) \in X_{goal}  $;
+\item $ \nexists \sigma, \sigma \prec \sigma^{*} $     
+\end{itemize}                        
 	
+\end{frame}
+
+\subsection{algorithm}
+
+\begin{frame}{Structure}{MORRF$^{*}$}
+Multi-Objective Rapidly exploring Random Forest$^{*}$
+\begin{itemize}
+	\item \textbf{reference tree}
+	\begin{itemize}
+	\item
+	\item
+	\end{itemize}	
+	\item \textbf{subproblem tree}
+	\begin{itemize}
+	\item
+	\item
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Process}{MORRF$^{*}$}
+\begin{figure}
+	\centering
+	\includegraphics[width=.8\linewidth]{figure/MORRTstar.pdf}
+	%\caption{}
+	\label{fig:morrt:process}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Process}{MORRF$^{*}$}
+	\begin{algorithmic}[1]
+		\For{ \textbf{each} $ V_{r} \in \mathbf{V}_{r} $ } 
+		\State $ V_{r} \leftarrow \{ x_{init} \} $; $ E_{r} \leftarrow \emptyset $; $ i \leftarrow 0 $
+		\EndFor
+		\For{ \textbf{each} $ V_{s} \in \mathbf{V}_{s} $ } 
+		\State $ V_{s} \leftarrow \{ x_{init} \} $; $ E_{s} \leftarrow \emptyset $; $ i \leftarrow 0 $
+		\EndFor
+		\While{ $ i < N $ }
+		%\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
+		%\State $ G_{r} \leftarrow (V_{r}, E_{r}) $
+		%\EndFor
+		%\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
+		%\State $ G_{s} \leftarrow (V_{s}, E_{s}) $
+		%\EndFor
+		\State $ x_{rand} \leftarrow $ \Call{ Sample }{$ i $} ; $ i \leftarrow i + 1 $
+		%\State $ V' \leftarrow V $; $ E' \leftarrow E $
+		\State $G$ is any graph from ${\mathbf G}_r\cup {\mathbf G}_s$.
+		\State $ x_{nearest} \leftarrow $ \Call{Nearest}{$ G, x_{rand} $}
+		\State $ x_{new} \leftarrow $ \Call{Steer}{$ x_{nearest}, x_{rand},\eta $}
+		\If{ \Call{ObstacleFree}{$ x_{nearest}, x_{new} $} }
+		\For{ \textbf{each} $ G_{r} \in \mathbf{G}_{r} $ } 
+		%\State $ (V_{r}, E_{r}) \leftarrow $ \Call{ Extend$_{\it Ref}$ }{$ G_{r}, x_{new}, x_{\it nearest}, r$}
+		\State $ G_{r} \leftarrow $ \Call{ Extend$_{\it Ref}$ }{$ G_{r}, x_{new}, x_{\it nearest}, r$}
+		\EndFor
+		\For{ \textbf{each} $ G_{s} \in \mathbf{G}_{s} $ } 
+		%\State $ (V_{s}, E_{s}) \leftarrow $ \Call{ Extend$_{\it Sub}$ }{$ G_{s}, x_{new}, x_{\it nearest},s $}
+		\State $ G_{s} \leftarrow $ \Call{ Extend$_{\it Sub}$ }{$ G_{s}, x_{new}, x_{\it nearest},s $}
+		\EndFor
+		\EndIf
+		\EndWhile
+	\end{algorithmic}
+\end{frame}
+
+\subsection{analysis}
+
+\begin{frame}{Analysis}{MORRF$^{*}$}
+\begin{columns}
+	\column{0.5\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/cascade}
+		%\caption{}
+		\label{fig:morrt:cascade}
+	\end{figure}
+	\column{0.4\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{figure/conv}
+		%\caption{}
+		\label{fig:morrt:conv}
+	\end{figure}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Analysis}{MORRF$^{*}$}
+
 \end{frame}
