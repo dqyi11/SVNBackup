@@ -3,6 +3,8 @@
 \subsection{Multi-objective path planning}
 
 \begin{frame}{Graph based approach}{Multi-objective path planning}
+\begin{columns}
+\column{0.6\textwidth}
 \begin{itemize}
 \item Discretization $ \rightarrow $ graph topology
 \item Vector-based cost
@@ -13,9 +15,20 @@ Drawbacks
 \item information lose
 \item discretization resolution
 \end{itemize}
+\column{0.4\textwidth}
+	\begin{figure}
+		\centering
+		%\nonumber
+		\includegraphics[width=.9\linewidth]{figure/graph_based_solution.png}
+		%\caption{Solutions pace}
+		\label{fig:graph_based_solution}
+	\end{figure}
+\end{columns}
 \end{frame}
 
 \begin{frame}{Point-equivalence based approach}{Multi-objective path planning}
+\begin{columns}
+\column{0.6\textwidth}
 \begin{itemize}
 \item Direction or waypoint 
 \item Encode into solution
@@ -26,11 +39,21 @@ Drawbacks
 \item obstacles $ \rightarrow $ discontinuity
 \item giant search space
 \end{itemize}
+\column{0.4\textwidth}
+	\begin{figure}
+		\centering
+		%\nonumber
+		\includegraphics[width=.9\linewidth]{figure/chain_based_solution.png}
+		%\caption{Solutions pace}
+		\label{fig:chain_based_solution}
+	\end{figure}
+\end{columns}
 \end{frame}
 
 \subsection{MOEA-D}
 
 \begin{frame}{Decomposition method}{MOEA-D}
+    {\bf MOEA-D} \\
 	Decompose a multi-objective optimization problem into subproblems
 	\begin{itemize}
 		\item Weighted sum approach
@@ -108,6 +131,7 @@ Drawbacks
 \subsection{RRT$^{*}$}
 
 \begin{frame}{RRT}{Sampling-based path planning}
+{\bf Rapidly exploring Random Tree}
 	\begin{figure}
 		\centering
 		\includegraphics[width=.5\linewidth]{figure/RRT_graph1}
@@ -123,12 +147,15 @@ Drawbacks
 \end{frame}
 
 \begin{frame}{RRT}{Sampling-based path planning}
+    Properties
 	\begin{itemize}
 	    \item simple (=efficient)
 	    \item high degrees of freedom
 		\item probabilistic complete 
-		\item not asymptotic optimal
+		\item \emph{not asymptotic optimal}
 	\end{itemize}
+	$ \Longrightarrow $
+	A $ * $ version of RRT
 \end{frame}
 
 

@@ -16,7 +16,7 @@
 \item Efficiency vs Optimality
 \item Environment dynamics
 \item Prior information modeling
-\item Multi agents
+\item Multiple agents
 \item Human influence
 \end{itemize}
 \end{frame}
@@ -108,15 +108,33 @@ Methods
 \end{frame}
 
 \begin{frame}{Hardness in finding Pareto optimal points}{Introduction}
+\begin{columns}
+\column{0.5\textwidth}
 For the point representation
 \begin{itemize}
 \item constraints
 \item discontinuity
 \item nonconvex
 \end{itemize}
+\column{0.5\textwidth}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.6\linewidth]{figure/point_solution_space.png}
+		%\caption{}
+		\label{fig:point_solution_space}
+	\end{figure}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.6\linewidth]{figure/point_fitness_space.png}
+		%\caption{}
+		\label{fig:point_fitness_space}
+	\end{figure}
+\end{columns}
 \end{frame}
 
 \begin{frame}{Hardness in finding Pareto optimal paths}{Introduction}
+\begin{columns}
+\column{0.5\textwidth}
 For the path representation
 \begin{itemize}
 \item constraints
@@ -124,4 +142,19 @@ For the path representation
 \item nonconvex
 \item high dimension
 \end{itemize}
+\column{0.5\textwidth}
+	\begin{figure}
+		\centering
+		%\nonumber
+		\includegraphics[width=.6\linewidth]{figure/sim1-2obj/MORRTstar00-ALL.png}
+		%\caption{Solutions pace}
+		\label{fig:path_solution_space}
+	\end{figure}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.6\linewidth]{figure/sim1-2obj/PF01-MORRT.png}
+		%\caption{}
+		\label{fig:path_fitness_space}
+	\end{figure}
+\end{columns}
 \end{frame}
