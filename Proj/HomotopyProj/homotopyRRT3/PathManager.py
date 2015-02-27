@@ -88,12 +88,12 @@ class PathManager(object):
         with open(filename, 'w') as f1:
             f1.write( "Total Num " + str(len(self.bestPaths.keys())) + "\n")
             for cstr in self.bestPaths.keys():
-                f1.write( str(len(self.classes[cstr])) + " : " + str(cstr) + "\n" )
+                f1.write( cstr + "\n" )
                 
                 p = self.bestPaths[cstr]
-                f1.write(str(p.points))
-                f1.write(str(p.stringBits))
-                f1.write(str(p.cost))
+                f1.write(str(p.points) + "\n" )
+                f1.write(str(p.stringBits) + "\n" )
+                f1.write(str(p.cost) + "\n" )
                 f1.write("\n")
                     
     def visualize(self):
