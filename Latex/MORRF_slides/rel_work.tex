@@ -50,7 +50,7 @@ Drawbacks
 		\end{figure}
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
-			\begin{itemize}[leftmargin=*]
+			\begin{itemize} %[leftmargin=*]
 				\item \begin{equation}
 				\nonumber
 				\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x)
@@ -71,10 +71,10 @@ Drawbacks
 		\end{figure}
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
-			\begin{itemize}[leftmargin=*]
+			\begin{itemize}%[leftmargin=*]
 				\item \begin{equation}
 				\nonumber
-				\arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} 
+				%\arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{utop}_{k}  | \} 
 				\end{equation}
 			\end{itemize}
 		\end{minipage}
@@ -93,9 +93,10 @@ Drawbacks
 		\column{0.5\textwidth}
 		\begin{minipage}{\textwidth}
 			\begin{itemize}[leftmargin=*]
-				\item \begin{equation}
-				\nonumber
-				\arg\min_x \{ d \mid \bm{z}^{\rm utop} - F(x) = d \bm{\lambda} \}
+				\item 
+				\begin{equation}
+				%\nonumber
+				%\arg \min_x \{ d \mid \bm{z}^{utop} - F(x) = d \bm{\lambda} \}
 				\end{equation}
 			\end{itemize}
 		\end{minipage}
