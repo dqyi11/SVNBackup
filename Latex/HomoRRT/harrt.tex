@@ -232,7 +232,7 @@ The string is used for the homotopy awareness in this paper, which inherits from
 
 With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
 The process is given in Algorithm \ref{alg:harrt}.
-Two trees $ G_{s} $ and $ G_{g} $ are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
+Two trees, the {\emph start tree} $ G_{s} $ and the {\sc goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
 Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
 %At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
 By using each new vertex returned from {\sc Explore}(), we can call {\sc Connect}() to create a path with a vertex in the other tree.
@@ -403,10 +403,14 @@ The {\sc InitRefFrames} procedure decomposes the map and generates the topologic
 We define the \emph{positive region} as the region that is required to visit and the \emph{negative region} as the region that is forbidden to visit.
 Then there is an interactive process for the human to label the positive regions and the negative regions.
 Unlabeled regions are neutral, which means no constraint here.
+Figure \ref{fig:region_label} shows an example.
+By defining the positive region and the negative region in Figure \ref{fig:region_label:label}, the homotopy classes that satisfy the constraint can be obtained by traversing the topological graph.
+Figure \ref{fig:region_label:constraint} gives one example.
 
 Because the decomposed regions are randomly and automatically generated, a decomposed region might contain both positive regions and negative regions.
 In this case, the decomposed region will be split into several smaller regions so that each region might contain either positive region or negative region.
 After that, more reference frames will be created correspondingly and a new topological graph will be obtained.
+
 
 \begin{figure}
 	\centering
@@ -414,14 +418,14 @@ After that, more reference frames will be created correspondingly and a new topo
 		\centering
 		\includegraphics[width=\textwidth]{fig/regionlabel1.png}
 		\caption{Labeling the regions}
-		\label{fig:region_label:reference}
+		\label{fig:region_label:label}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/regionlabelhomo1.png}
 		\caption{Homotopy class satisfies the labeled regions}
-		\label{fig:region_label:rrt}
+		\label{fig:region_label:constraint}
 	\end{subfigure}   
 	\caption{Labeling region to generate homotopic constraints.}
 	\label{fig:region_label}
@@ -442,9 +446,10 @@ If the human can tell the preference on the topology, scores can be assigned to 
 
 Consider the topology as a discrete variable, the values of the variable is the set of all the homotopy classes.
 The problem can be viewed as a two-objective optimization problem.
+Figure \ref{fig:all_homotopy:no_pref} provides an example of the optimal paths in four homotopy classes.
 Because the optimal solution in one homotopy class dominates all other solutions in the same class.
 By combining the optimal paths in all the homotopy classes, we can find the non-dominated paths from them.
-Figure \ref{fig:homotopy_human_interaction:pareto} illustrates such a Pareto front.
+Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pareto front.
 
 \begin{figure}
 	\centering
@@ -484,7 +489,8 @@ Figure \ref{fig:homotopy_human_interaction:pareto} illustrates such a Pareto fro
 Sometimes inherently the user has a mind of the topology preference but is too fuzzy to describe.
 If the topology is included to have a two-objective optimization problem, it means that the optimal paths in all the homotopy classes are non-dominant.
 Thus HA-RRT$^{*}$ will show the optimal paths of all the homotopy classes.
-The human can select one from them that matches his intent most.
+Figure \ref{fig:homotopy_human_interaction:all_scores} gives an example of the scores.
+With the interface of visualizing the optimal path in different homotopy class, the human can select one from them that matches his intent most.
 
 \begin{figure}
 	\centering
