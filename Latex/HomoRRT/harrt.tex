@@ -404,13 +404,12 @@ We define the \emph{positive region} as the region that is required to visit and
 Then there is an interactive process for the human to label the positive regions and the negative regions.
 Unlabeled regions are neutral, which means no constraint here.
 Figure \ref{fig:region_label} shows an example.
-By defining the positive region and the negative region in Figure \ref{fig:region_label:label}, the homotopy classes that satisfy the constraint can be obtained by traversing the topological graph.
-Figure \ref{fig:region_label:constraint} gives one example.
+By defining the positive region and the negative region in Figure \ref{fig:region_label:label}, in which the red region indicates the negative region and the green region indicates the positive region.
+The homotopy classes that satisfy the constraint can be obtained by traversing the topological graph, which is illustrated in Figure \ref{fig:region_label:constraint}.
 
 Because the decomposed regions are randomly and automatically generated, a decomposed region might contain both positive regions and negative regions.
 In this case, the decomposed region will be split into several smaller regions so that each region might contain either positive region or negative region.
 After that, more reference frames will be created correspondingly and a new topological graph will be obtained.
-
 
 \begin{figure}
 	\centering
