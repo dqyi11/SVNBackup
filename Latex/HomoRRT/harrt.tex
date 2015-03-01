@@ -24,7 +24,7 @@
 \overrideIEEEmargins                                      % Needed to meet printer requirements.
 
 \title{\LARGE \bf
-Homotopy-aware RRT$^{*}$ : Toward optimal path planning with the consideration of the topology
+Homotopy-Aware RRT$^{*}$ : Toward Human-Robot Topological Path-Planning
 }
 
 \author{
@@ -43,14 +43,14 @@ Daqing Yi, Michael A. Goodrich and Kevin D. Seppi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-The topological factor of the paths is often ignored in the path planning.
-Because it is difficult to be modeled into the optimal path planning problems, especially when it is not a hard constraint.
-In plenty of tasks, the goal is not only to optimize some objective, but also contains some topological constraints, i.e. ``go quickly from A to B avoiding C''.
-In this paper, we propose HA-RRT$^{*}$, a homotopy-aware RRT$^{*}$, that explores the planning space for optimal solutions with the consideration of the path topology.
-Because the algorithm is aware of the homotopy class each branch belongs to, it can support sliding autonomy for different levels of human's intent on the path topology.
-Thus, a clear intent on the path topology provides the homotopic constraint, which reduces the working space of the optimal search;
-a vague intent on the path topology can be identified by comparing the optimal solutions in different homotopy classes.
-We provides the applications to show how it works in different cases and the corresponding theoretic analyses.
+Many researchers have noted that humans often represent the world using a topological rather than metric-based path-planning~\cite{kuipers99,aginsky1997two}, and various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{mataric1992integration,thrun1998learning,fasola2013modeling,shah2013qualitative}.  
+The idea of these planners is often to create algorithms that blend the benefits of graph-based path planners with the postulated topological representations used by a human partner or supervisor.
+Such planners can produce paths consistent with well-reasoned topologies, but the planners may not work well in worlds that have sparse features or when the human intends a topological reference to be a ``soft'' constraint rather than a rigid path requirement. 
+In this paper, we propose HA-RRT$^{*}$, a homotopy-aware RRT$^{*}$, that explores the planning space for optimal solutions while respecting the path topology.
+The paper restricts attention to problems where the goal is not only to optimize some objective but also contains ``soft'' or ``hard'' topological constraints, i.e. ``go quickly from A to B avoiding C''.
+Because the algorithm is aware of the homotopy class of each branch of the tree produced by the RRT algorithm, the algoirthm can enable type of sliding autonomy for different levels of human's intent on the path topology.
+Thus, a clear intent on the path topology provides the homotopic constraint, which reduces the working space of the optimal search; a vague intent on the path topology can be identified by comparing the optimal solutions in different homotopy classes.
+The paper includes a set of simulation case studies and a corresponding theoretic analysis.
 \end{abstract}
 
 \begin{comment}
@@ -61,9 +61,10 @@ six pages
 \section{Introduction}
 \label{sec:intro}
 
-Optimality has been the most important heuristic in planning motions for the robots.
-An optimization problem is usually modeled by using the metric that measures the task performance.
-As the task supervisor, it is very essential that the human's intent can be correctly and precisely modeled for the optimization.
+An optimization problem is usually formed by a human who specifies a metric that attempts to encode task performance in a numerically amenable form.
+As the task supervisor, the so-called {\em problem holder} in Woods' nomenclature~\cite{woods2004envisioning}, it is essential that the human's intent is correctly and precisely modeled.
+%Optimality has been the most important heuristic in planning motions for the robots.
+
 It is the condition that the planned solution for the robot can match the human's intent.
 In planning the robot's motion for a task, the most common way of modeling the intent is by defining single objective~\cite{6974170} or multiple objectives~\cite{yi2014supporting}.
 The generated path is a solution that optimizes the given objectives, for example, minimizing the Euclidean distance.
@@ -80,6 +81,9 @@ Thus, we can have a \emph{homotopy class}, in which any two paths are homotopic.
 In the map with obstacles, homotopy partitions the paths with same start position and end position into several homotopy classes.
 The homotopy of the paths can then be used for modeling the human's intent on the path ``shape''. 
 
+{\sc Fundamental (algebraic) group of topology. How our approach isn't about arbitrarily complex paths within a homotopic class, but rather has some ``natural'' boundaries in metric space.  
+How this lends itself to efficient RRT*.  
+How this differs from Vijay's homotopy-based path planning.  Homology or homotopy?}
 
 Assume in a path planning problem, a human task supervisor is defining a task for a robot.
 The task is needed to be modeled so that the robot can understand and plan for execution.
