@@ -44,6 +44,8 @@ class TopologicalGraph(object):
         e = TopologicalEdge(node_a, node_b, name)
         self.edges.append(e)
         self.G.add_edge(node_a.name, node_b.name, text=name)
+        self.G.add_edge(node_b.name, node_a.name, text=name)
+        self.edge_labels[node_b.name, node_a.name] = name
         self.edge_labels[node_a.name, node_b.name] = name
         self.edge_label_strs[node_a.name+"+"+node_b.name] = name
         self.edge_label_strs[node_b.name+"+"+node_a.name] = name

@@ -48,6 +48,8 @@ class InteractiveWorldMapVisualizer(object):
         
         self.allHomotopyClasses = []
         
+        self.displayFrameNames = False
+        
         
     def initVisualize(self):
         pygame.init()
@@ -192,10 +194,15 @@ class InteractiveWorldMapVisualizer(object):
                     self.subregion_idx += 1
                 elif event.key == pygame.K_SPACE:
                     self.subsegment_idx += 1
-                elif event.key == pygame.K_PAGEUP:
+                elif event.key == pygame.K_a:
                     self.homotopy_idx += 1
-                elif event.key == pygame.K_PAGEDOWN:
+                elif event.key == pygame.K_s:
                     self.homotopy_idx -= 1
+                elif event.key == pygame.K_p:
+                    if self.displayFrameNames == True:
+                        self.displayFrameNames = False
+                    else:
+                        self.displayFrameNames = True
                 elif event.key == pygame.K_x:
                     if len(self.trackingPosList) > 0:
                         self.start_pos = self.trackingPosList[0]
@@ -238,6 +245,10 @@ class InteractiveWorldMapVisualizer(object):
             pygame.draw.circle(self.screen, (76,0,153), self.trackingPosList[0], 5)
             pygame.draw.rect(self.screen, (204,153,255), (self.trackingPosList[trackingPosListLen-1][0], self.trackingPosList[trackingPosListLen-1][1], 10, 10))
         
+        if self.displayFrameNames == True:
+            for subseg in self.world_map.subsegments:
+                self.screen.blit(self.font.render(subseg.name, True, OBSTACLE_COLOR), subseg.midpoint)
+            
                     
         if self.region_idx < -1:
             self.region_idx = len(self.world_map.regions)-1

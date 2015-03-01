@@ -17,7 +17,7 @@ if __name__ == '__main__':
     
     mapMgrViz.initVisualize()
     
-    tg = mapMgr.getTopologicalGraph()
+    tg = mapMgr.initTopologicalGraph()
     tg.visualize(MAP_FILE)
     
     while mapMgrViz.start ==None and mapMgrViz.end ==None:
@@ -30,4 +30,7 @@ if __name__ == '__main__':
     
     for path in allpaths:
         print str(path)
+        
+    while True:
+        mapMgrViz.updateVisualize()
             
