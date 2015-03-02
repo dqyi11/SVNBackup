@@ -39,17 +39,17 @@ class HomotopyMgr(object):
     def extendPath(self, currentPath, start, end):
         
         newPath = copy.deepcopy(currentPath)
-        newBit = None
+        newBit = []
         subseg_list = self.world_map.getCrossingSubsegments(start, end)
         if len(subseg_list) > 0:
             for subseg in subseg_list:
                 if len(newPath) > 0:
                     if subseg.name != newPath[len(newPath)-1]:
                         newPath.append(subseg.name)
-                        newBit = subseg.name
+                        newBit.append( subseg.name )
                 else:
                     newPath.append(subseg.name)
-                    newBit = subseg.name
+                    newBit.append( subseg.name )
         return newPath, newBit
     
     def isCrossingDividingRefs(self, start, end):

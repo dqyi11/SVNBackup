@@ -196,12 +196,10 @@ class BiRRTstar(object):
             return True
         return False
     
-    def isHomotopyFree(self, node, new_pos):
-        
-        newPath, newBit = self.homotopyMgr.extendPath(node.homoPath, node.pos, new_pos)
+    def isHomotopyFree(self, node, new_pos):       
+        newPath, newBits = self.homotopyMgr.extendPath(node.homoPath, node.pos, new_pos)
         ret =  self.homotopyMgr.inSameHomotopy(newPath)
-        return ret, newPath, newBit
-    
+        return ret, newPath, newBits
     
     
     def isObstacleFree(self, pos_a, pos_b):  
