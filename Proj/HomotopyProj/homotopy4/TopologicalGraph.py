@@ -7,30 +7,8 @@ Created on Nov 17, 2014
 #from graphviz import Graph
 import networkx as nx
 import matplotlib.pyplot as plt
+import copy
 
-def AllSimplePath(G, source, target, cutoff=None):
-    if cutoff < 1:
-        return
-    visited = [(source, None)]
-    stack = [(v for u,v in G.edges(source))]
-    while stack:
-        children = stack[-1]
-        child = next(children, None)
-        if child is None:
-            stack.pop()
-            visited.pop()
-        elif len(visited) < cutoff:
-            if child == target:
-                yield visited + [target]
-            elif child not in visited:
-                visited.append(child)
-                stack.append((v for u,v in G.edges(child)))
-        else: #len(visited) == cutoff:
-            count = ([child]+list(children)).count(target)
-            for i in range(count):
-                yield visited + [target]
-            stack.pop()
-            visited.pop()
 
 class TopologicalNode(object):
     
@@ -49,9 +27,8 @@ class TopologicalGraph(object):
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.G = nx.MultiGraph()
+        self.G = nx.Graph()
         self.edge_labels = {}
-        self.edge_label_strs = {}
         
         self.nodes_property = {}
         self.positive_list = []
@@ -69,9 +46,12 @@ class TopologicalGraph(object):
         self.edges.append(e)
         self.G.add_edge(node_a.name, node_b.name, key=name)
         #self.G.add_edge(node_b.name, node_a.name, text=name)
-        self.edge_labels[node_a.name, node_b.name] = name
+        if not( (node_a.name, node_b.name) in self.edge_labels.keys() ):
+            self.edge_labels[node_a.name, node_b.name] = []
+            
+        self.edge_labels[node_a.name, node_b.name].append(name)
         #self.edge_labels[node_b.name, node_a.name] = name
-        self.edge_label_strs[node_a.name+"+"+node_b.name] = name
+        #self.edge_label_strs[node_a.name+"+"+node_b.name] = name
         #self.edge_label_strs[node_b.name+"+"+node_a.name] = name
         return e
     
@@ -81,10 +61,6 @@ class TopologicalGraph(object):
                 return n
         return None
     
-    def getEdgeLabel(self, node_a_name, node_b_name):
-        label_name = node_a_name+"+"+node_b_name
-        label = self.edge_label_strs[label_name]
-        return label
         
     def visualize(self, filename):
         '''
@@ -127,44 +103,56 @@ class TopologicalGraph(object):
         print paths
         ps = []
         for path in paths:
-            p = []
-            
+           
             print path
-            '''
+            
             if filter==True:
                 if self.isEligiblePath(path)==True:
-                    for i in range(len(path)-1):
-                        p.append(self.getEdgeLabel(path[i], path[i+1]))
-                    ps.append(p)
+                    strings = self.getStringsFromPath(path)
+                    for s in strings:
+                        ps.append(s)
             else:
-                for i in range(len(path)-1):
-                    p.append(self.getEdgeLabel(path[i], path[i+1]))
-                ps.append(p)
-            '''
-                
+                strings = self.getStringsFromPath(path)
+                for s in strings:
+                    ps.append(s)           
+        return ps  
+    
+    def getEdgeLabels(self, name_a, name_b):
+        
+        if (name_a, name_b) in self.edge_labels.keys():
+            return self.edge_labels[name_a, name_b]
+        elif (name_b, name_a) in self.edge_labels.keys():
+            return self.edge_labels[name_b, name_a]
+        
+        return []
+        
+    
+    def getStringsFromPath(self, path):
+        strings = [[]]
+        
+        for i in range(len(path)-1):
+            name_a = path[i]
+            name_b = path[i+1]
+            edge_labels = self.getEdgeLabels(name_a, name_b)
+            edge_num = len(edge_labels)
+            if edge_num == 1:
+                for string in strings:
+                    string.append(edge_labels[0])
+            elif edge_num > 1:
+                str_len = len(strings)
+                for j in range(edge_num-1):
+                    edge_label = edge_labels[j+1]
+                    for i in range(str_len):
+                        new_string = copy.deepcopy(strings[i])
+                        new_string.append(edge_label)
+                        strings.append(new_string)
+                        
+                for i in range(str_len):
+                    strings[i].append(edge_labels[0])
             
-        return ps    
+        return strings  
                 
-        '''
-        all_paths=[]
-        current_path=[]
-        def append_path(p):
-            all_paths.append( current_path )
-      
-        for e in nx.dfs_edges(nx.bfs_tree(self.G, start)):
-            if e[0]== start: #We start a new path
-                if len(current_path):
-                    # Do we end in an out node ? 
-                    append_path(current_path)
-                    current_path=[]
-            if e[1] == end: # We found a path
-                append_path(current_path) 
-      
-            current_path.append(e)          
-        if len(current_path):
-            append_path(current_path)
-        return all_paths
-        '''
+
         
         
         
