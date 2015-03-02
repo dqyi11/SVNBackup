@@ -8,6 +8,30 @@ Created on Nov 17, 2014
 import networkx as nx
 import matplotlib.pyplot as plt
 
+def AllSimplePath(G, source, target, cutoff=None):
+    if cutoff < 1:
+        return
+    visited = [(source, None)]
+    stack = [(v for u,v in G.edges(source))]
+    while stack:
+        children = stack[-1]
+        child = next(children, None)
+        if child is None:
+            stack.pop()
+            visited.pop()
+        elif len(visited) < cutoff:
+            if child == target:
+                yield visited + [target]
+            elif child not in visited:
+                visited.append(child)
+                stack.append((v for u,v in G.edges(child)))
+        else: #len(visited) == cutoff:
+            count = ([child]+list(children)).count(target)
+            for i in range(count):
+                yield visited + [target]
+            stack.pop()
+            visited.pop()
+
 class TopologicalNode(object):
     
     def __init__(self, name):
@@ -25,7 +49,7 @@ class TopologicalGraph(object):
     def __init__(self):
         self.nodes = []
         self.edges = []
-        self.G = nx.Graph()
+        self.G = nx.MultiGraph()
         self.edge_labels = {}
         self.edge_label_strs = {}
         
@@ -43,12 +67,12 @@ class TopologicalGraph(object):
     def addEdge(self, node_a, node_b, name):
         e = TopologicalEdge(node_a, node_b, name)
         self.edges.append(e)
-        self.G.add_edge(node_a.name, node_b.name, text=name)
-        self.G.add_edge(node_b.name, node_a.name, text=name)
-        self.edge_labels[node_b.name, node_a.name] = name
+        self.G.add_edge(node_a.name, node_b.name, key=name)
+        #self.G.add_edge(node_b.name, node_a.name, text=name)
         self.edge_labels[node_a.name, node_b.name] = name
+        #self.edge_labels[node_b.name, node_a.name] = name
         self.edge_label_strs[node_a.name+"+"+node_b.name] = name
-        self.edge_label_strs[node_b.name+"+"+node_a.name] = name
+        #self.edge_label_strs[node_b.name+"+"+node_a.name] = name
         return e
     
     def findNode(self, name):
@@ -76,6 +100,10 @@ class TopologicalGraph(object):
         '''
         #graph_pos = nx.graphviz_layout(self.G)
         #graph_pos = nx.spring_layout(self.G, scale=4)
+        
+        for e in self.G.edges():
+            print e
+        
         graph_pos = nx.spring_layout(self.G)
         nx.draw_networkx_edge_labels(self.G, pos=graph_pos, edge_labels=self.edge_labels)
         nx.draw_networkx_nodes(self.G, pos=graph_pos, node_size=1500, node_color=(153./255,178./255,255./255,1.0), wdith=0.0)
@@ -95,9 +123,14 @@ class TopologicalGraph(object):
         
     def findAllPathsByBFS(self, start, end, filter=False):
         paths = nx.all_simple_paths(self.G, start, end)
+        
+        print paths
         ps = []
         for path in paths:
             p = []
+            
+            print path
+            '''
             if filter==True:
                 if self.isEligiblePath(path)==True:
                     for i in range(len(path)-1):
@@ -107,6 +140,7 @@ class TopologicalGraph(object):
                 for i in range(len(path)-1):
                     p.append(self.getEdgeLabel(path[i], path[i+1]))
                 ps.append(p)
+            '''
                 
             
         return ps    

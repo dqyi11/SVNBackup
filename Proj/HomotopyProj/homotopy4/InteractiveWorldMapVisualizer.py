@@ -248,6 +248,10 @@ class InteractiveWorldMapVisualizer(object):
         if self.displayFrameNames == True:
             for subseg in self.world_map.subsegments:
                 self.screen.blit(self.font.render(subseg.name, True, OBSTACLE_COLOR), subseg.midpoint)
+                
+            for reg in self.world_map.regions:
+                for subreg in reg.subregions:
+                    self.screen.blit(self.font.render(subreg.getName(), True, OBSTACLE_COLOR), subreg.center)
             
                     
         if self.region_idx < -1:
