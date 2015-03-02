@@ -28,13 +28,14 @@ class BiRRTVisualizer(object):
         
         self.pathMgr = pathMgr
         self.refLines = []
+        self.ref_subregs = []
         
         self.states = ("START", "GOAL", "BOTH")
         self.currentState = 2
         
         self.currentPaths = []
         
-        self.font = pygame.font.SysFont(None, 24)
+        self.font = pygame.font.SysFont(None, 16)
         
         self.pathIdx = -1
         
@@ -83,37 +84,43 @@ class BiRRTVisualizer(object):
             pygame.draw.line(self.screen, (50,50,50), refLine[0][0], refLine[0][1])
             if self.displayRefFrames == True:
                 self.screen.blit(self.font.render(refLine[1], True, (0,255,0)), refLine[2])
+                
+        if self.displayRefFrames == True:
+            for subreg in self.ref_subregs:
+                self.screen.blit(self.font.render(subreg[0], True, (0,0,255)), subreg[1])
         '''
         for dr in self.rrt.dividingRefs:
             pygame.draw.line(self.screen, (255,204,153), dr[0], dr[1], 10)
         '''
          
-        if self.currentState==0 or self.currentState==2:       
-            for n in self.rrt.st_nodes:
-                for c in n.children:
-                    #print str(n.pos) + "-" + str(c.pos)
-                    n_pos = (int(n.pos[0]), int(n.pos[1]))
-                    c_pos = (int(c.pos[0]), int(c.pos[1]))
-                    pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
-
-            if self.rrt.st_new_node != None and self.rrt.st_connected_node != None:
-                new_node = (int(self.rrt.st_new_node[0]), int(self.rrt.st_new_node[1]))
-                connected_node = (int(self.rrt.st_connected_node[0]), int(self.rrt.st_connected_node[1]))
-                pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
-                
-        
-        if self.currentState==1 or self.currentState==2:
-            for n in self.rrt.gt_nodes:
-                for c in n.children:
-                    #print str(n.pos) + "-" + str(c.pos)
-                    n_pos = (int(n.pos[0]), int(n.pos[1]))
-                    c_pos = (int(c.pos[0]), int(c.pos[1]))
-                    pygame.draw.line(self.screen, (200,128,0), n_pos, c_pos)
-
-            if self.rrt.gt_new_node != None and self.rrt.gt_connected_node != None:
-                new_node = (int(self.rrt.gt_new_node[0]), int(self.rrt.gt_new_node[1]))
-                connected_node = (int(self.rrt.gt_connected_node[0]), int(self.rrt.gt_connected_node[1]))
-                pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
+        if self.displayRefFrames == False:
+            
+            if self.currentState==0 or self.currentState==2:       
+                for n in self.rrt.st_nodes:
+                    for c in n.children:
+                        #print str(n.pos) + "-" + str(c.pos)
+                        n_pos = (int(n.pos[0]), int(n.pos[1]))
+                        c_pos = (int(c.pos[0]), int(c.pos[1]))
+                        pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
+    
+                if self.rrt.st_new_node != None and self.rrt.st_connected_node != None:
+                    new_node = (int(self.rrt.st_new_node[0]), int(self.rrt.st_new_node[1]))
+                    connected_node = (int(self.rrt.st_connected_node[0]), int(self.rrt.st_connected_node[1]))
+                    pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
+                    
+            
+            if self.currentState==1 or self.currentState==2:
+                for n in self.rrt.gt_nodes:
+                    for c in n.children:
+                        #print str(n.pos) + "-" + str(c.pos)
+                        n_pos = (int(n.pos[0]), int(n.pos[1]))
+                        c_pos = (int(c.pos[0]), int(c.pos[1]))
+                        pygame.draw.line(self.screen, (200,128,0), n_pos, c_pos)
+    
+                if self.rrt.gt_new_node != None and self.rrt.gt_connected_node != None:
+                    new_node = (int(self.rrt.gt_new_node[0]), int(self.rrt.gt_new_node[1]))
+                    connected_node = (int(self.rrt.gt_connected_node[0]), int(self.rrt.gt_connected_node[1]))
+                    pygame.draw.line(self.screen, (200,128,0), new_node, connected_node)
                 
         if len(self.currentPaths) > 0:
             for path in self.currentPaths:
