@@ -85,6 +85,11 @@ The homotopy of the paths can then be used for modeling the human's intent on th
 How this lends itself to efficient RRT*.  
 How this differs from Vijay's homotopy-based path planning.  Homology or homotopy?}
 
+{\it In Vijay's paper, the map is discretized to graph, and then calculating the complex values of each edge. The complex value tells whether two paths are in same homotopy class. Ours follows another approach, which is sampling based. While exploring, we can tell if the current sub-path can still lead to a path that belongs to some homotopy class. That is why it is called homotopy aware. 
+
+When we have the homotopy class as constraint, it can be used to reduce the exploring region so that the efficiency can be improved.
+Because a branch of the tree will not be extended if it leads to a region that is not satisfied by the homotopic constraint.}
+
 Assume in a path planning problem, a human task supervisor is defining a task for a robot.
 The task is needed to be modeled so that the robot can understand and plan for execution.
 Let the objective be only reaching to a target quickly, there can be several levels of how clear his intent is.
@@ -138,8 +143,8 @@ In order to accelerate the exploration process, bidirectional RRT has been intro
 In the optimal sampling process, the optimality is still preserved~
 \cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
 With two trees exploring from two directions, we can have the optimal cost-to-go and the optimal cost-to-arrive at different position.
-This guarantee the optimality search with the homotopical constraint.
-We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology fir the task supervisor.
+This guarantee the optimality search with the homotopic constraint.
+We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology fr the task supervisor.
 
 \section{Homotopy-aware RRT$^{*}$}
 \label{sec:algorithm}
@@ -157,7 +162,7 @@ Define the cost of the path as $ {\sc Cost} (\sigma) $.
 The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 \textit{ (a) }, $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
 \textit{ (b) }, $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
-\textit{ (c) }, $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $ with given homotopy constraints.
+\textit{ (c) }, $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $ with given homotopic constraints.
 \end{defn} 
 
 \begin{figure}
