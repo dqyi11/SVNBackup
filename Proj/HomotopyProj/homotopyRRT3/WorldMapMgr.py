@@ -26,6 +26,8 @@ class WorldMapMgr(object):
         self.rad_list = []
         
         self.centralPoint = None
+        
+        self.crossingCheckResolution = 1
     
     def load(self, mapfile):
         self.mapfile = mapfile
@@ -375,6 +377,39 @@ class WorldMapMgr(object):
     
     def getCrossingSubsegments(self, pos_s, pos_e):
         
+        '''
+        subsegments = []
+        if pos_s[0] == pos_e[0] and pos_s[1] == pos_e[1]:
+            return subsegments
+        
+        x_dist = np.abs(pos_s[0] - pos_e[0])
+        y_dist = np.abs(pos_s[1] - pos_e[1])
+        
+        points = []
+        if x_dist > y_dist:
+            k = y_dist/x_dist
+            
+            for coordX in np.arange(pos_s[0], pos_e[0]+self.crossingCheckResolution, self.crossingCheckResolution):
+                coordY = int(k*(coordX-pos_s[0]) + pos_s[1])
+                points.append([coordX, coordY]) 
+        else:
+            k = x_dist/y_dist                
+            for coordY in np.arange(pos_s[1], pos_e[1]+self.crossingCheckResolution, self.crossingCheckResolution):
+                coordX = int(k*(coordY-pos_s[1]) + pos_s[0])
+                points.append([coordX, coordY]) 
+                
+        for i in range(len(points)-1):
+            linS = shpgeo.LineString([points[i], points[i+1]])
+            for subseg in self.subsegments:
+                if subseg.line_seg.intersects(linS):
+                    if len(subsegments) == 0:      
+                        subsegments.append( subseg )
+                    elif subseg != subsegments[len(subsegments)-1]:
+                        subsegments.append( subseg )
+                    
+        return subsegments
+
+        '''
         s_rad = numpy.arctan2(pos_s[1]-self.centralPoint[1], pos_s[0]-self.centralPoint[0])
         if s_rad < 0:
             s_rad += 2 * numpy.pi
@@ -382,28 +417,12 @@ class WorldMapMgr(object):
         if e_rad < 0:
             e_rad += 2 * numpy.pi
             
-        subseg_checklist = []
         if e_rad >= s_rad:
-            for subseg in self.subsegments:
-                if subseg.rad > s_rad and subseg.rad < e_rad:
-                    subseg_checklist.append(subseg)
+            return self.getCrossingSubsegmentsFromSubsegList( pos_s, pos_e, self.subsegments )
         if e_rad < s_rad:
-            for subseg in self.subsegments:
-                if subseg.rad > s_rad:
-                    subseg_checklist.append(subseg)            
-            for subseg in self.subsegments:
-                if subseg.rad < s_rad:
-                    subseg_checklist.append(subseg)  
+            return self.getCrossingSubsegmentsFromSubsegList( pos_s, pos_e, reversed(self.subsegments) )
+            
         
-        return self.getCrossingSubsegmentsFromSubsegList(pos_s, pos_e, subseg_checklist)
-        '''
-        subsegment_list = []
-        linS = shpgeo.LineString([pos_s, pos_e])
-        for subseg in self.subsegments:
-            if subseg.line_seg.intersects(linS):
-                subsegment_list.append( subseg )
-        return subsegment_list
-        '''
 
 
     def getCrossingSubsegmentsFromSubsegList(self, pos_s, pos_e, subsegList):

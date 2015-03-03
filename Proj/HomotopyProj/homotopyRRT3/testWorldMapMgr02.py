@@ -49,7 +49,7 @@ if __name__ == '__main__':
     for subseg in mapMgr.subsegments:
         planner.rrts_viz.refLines.append(([subseg.line_seg.coords[0], subseg.line_seg.coords[1]], subseg.name, subseg.midpoint))
 
-    pathInfos = planner.findPaths(start_pos, end_pos, 6000, homoMgr)
+    pathInfos = planner.findPaths(start_pos, end_pos, 8000, homoMgr)
     
     planner.pathMgr.visualize()
     

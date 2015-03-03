@@ -52,7 +52,7 @@ if __name__ == '__main__':
         for subreg in reg.subregions:
             planner.rrts_viz.ref_subregs.append((subreg.getName(), subreg.center))
 
-    pathInfos = planner.findPaths(start_pos, end_pos, 6000, homoMgr)
+    pathInfos = planner.findPaths(start_pos, end_pos, 8000, homoMgr)
     
     planner.pathMgr.visualize()
     
