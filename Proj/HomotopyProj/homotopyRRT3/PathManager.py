@@ -25,6 +25,8 @@ class PathManager(object):
         
         self.supportingClasses = []
         
+        self.foundClasses = []
+        
     def getString(self, stringBits):
         str_out = ""
         if len(stringBits) > 0:
@@ -48,6 +50,7 @@ class PathManager(object):
                     self.bestPaths[str_out] = path
             else:
                 self.bestPaths[str_out] = path
+                self.foundClasses.append(path.stringBits)
             
     def getPaths(self):
         paths = []
@@ -108,3 +111,16 @@ class PathManager(object):
             
         ax.bar(index, scores, bar_width)    
         plt.show()
+        
+    def reportEquivalence(self, trajectoryReader):
+        
+        for i in range( len(self.foundClasses)-1 ):
+            for j in range( i+1, len(self.foundClasses) ):
+                
+                refPathStr = self.foundClasses[i]
+                pathStr = self.foundClasses[j]
+                if trajectoryReader.compareStringPath(pathStr, refPathStr)==True:
+                    print "Found Equivalence"
+                    print self.getString(pathStr) 
+                    print self.getString(refPathStr)
+                

@@ -65,7 +65,7 @@ class TrajectoryReader(object):
                 return True
         return False
     
-    def compareStr(self, nameA, nameB):
+    def compareChar(self, nameA, nameB):
         if nameA == nameB:
             return True
         if self.isInCenterGroup(nameA)==True and self.isInCenterGroup(nameB)==True:
@@ -81,9 +81,11 @@ class TrajectoryReader(object):
         newStrPath.append(strPath[0])
         
         for i in range(1, len(strPath)):
-            if self.compareStr(newStrPath[len(newStrPath)-1], strPath[i])==False:
+            if len(newStrPath) > 0 and self.compareChar(newStrPath[len(newStrPath)-1], strPath[i])==True:
+                newStrPath.pop()
+            else:
                 newStrPath.append(strPath[i])
-                
+        
         return newStrPath
                 
     
@@ -101,11 +103,12 @@ class TrajectoryReader(object):
             return False
         
         for i in range(len(s_strPath)):
-            if self.compareStr(s_strPath[i], s_refStrPath[i]) == False:
+            if self.compareChar(s_strPath[i], s_refStrPath[i]) == False:
                 return False           
         return True
-            
-            
+
+        
+        
             
                                 
                                 
