@@ -56,7 +56,7 @@ if __name__ == '__main__':
     
     planner.pathMgr.visualize()
     
-    planner.pathMgr.savePaths("paths.txt")
+    planner.pathMgr.savePaths("pathscore01.txt")
     
     while True:
         planner.rrts_viz.update()
