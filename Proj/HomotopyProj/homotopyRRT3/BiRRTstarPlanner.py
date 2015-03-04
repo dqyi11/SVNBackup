@@ -10,16 +10,17 @@ from PathManager import *
 
 class BiRRTstarPlanner(object):
     
-    def __init__(self, planning_range, segment_length, cost_func=None, map_file=None):
+    def __init__(self, planning_range, segment_length, cost_func=None, map_file=None, name=None):
         self.planningRange = planning_range
         self.segmentLength = segment_length
         self.mapFile = map_file
+        self.name = name
         self.rrts = BiRRTstar(self.planningRange, self.segmentLength)
         if self.mapFile!= None:
             self.rrts.loadMap(self.mapFile)
             
         self.pathMgr = PathManager(cost_func)
-        self.rrts_viz = BiRRTVisualizer(self.rrts, self.pathMgr)
+        self.rrts_viz = BiRRTVisualizer(self.rrts, self.pathMgr, name)
         self.cost_func = cost_func
         
         

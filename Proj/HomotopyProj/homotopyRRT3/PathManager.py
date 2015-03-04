@@ -65,6 +65,25 @@ class PathManager(object):
         for kstr in self.bestPaths.keys():
             pathInfos.append(self.bestPaths[kstr].points)
         return pathInfos
+    
+    def mergeBestPaths(self, trajectoryReader):
+        
+        for kstr1 in self.bestPaths.keys():
+            for kstr2 in self.bestPaths.keys():
+                if kstr1 != kstr2:
+                    bp1 = self.bestPaths[kstr1]
+                    bp2 = self.bestPaths[kstr2]
+                    
+                    if bp1 != None and bp2 != None:
+                        if trajectoryReader.compareStringPath(bp1.stringBits, bp2.stringBits, True)==True:
+                            if bp1.cost <= bp2.cost:
+                                self.bestPaths[kstr2] = None
+                            else:
+                                self.bestPaths[kstr1] = None
+                                
+        for kstr in self.bestPaths.keys():
+            if self.bestPaths[kstr] == None:
+                del self.bestPaths[kstr]                            
 
         
     def getClass(self, strBit):

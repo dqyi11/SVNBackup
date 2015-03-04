@@ -10,7 +10,7 @@ import numpy as np
 
 class BiRRTVisualizer(object):
 
-    def __init__(self, rrt, pathMgr):
+    def __init__(self, rrt, pathMgr, name=None):
         self.rrt = rrt
         pygame.init()
         self.screen = pygame.display.set_mode((self.rrt.sampling_width,self.rrt.sampling_height))
@@ -22,6 +22,7 @@ class BiRRTVisualizer(object):
             self.mapImg = None
         
         self.objImg = None
+        self.name = name
             
         self.activePaths = []
         self.dispMap = True
@@ -65,6 +66,13 @@ class BiRRTVisualizer(object):
                         self.displayRefFrames = False
                     else:
                         self.displayRefFrames = True
+                        
+                elif e.key == pygame.K_g:
+                    self.pathMgr.mergeBestPaths(self.rrt.homotopyMgr.reader)
+                    self.activePaths = self.pathMgr.getPaths()
+                    
+                    self.pathMgr.visualize()
+                    self.pathMgr.savePaths(self.name+"-merged.txt")
                     
         if self.pathIdx >= len(self.pathMgr.bestPaths.keys()):
             self.pathIdx = -1

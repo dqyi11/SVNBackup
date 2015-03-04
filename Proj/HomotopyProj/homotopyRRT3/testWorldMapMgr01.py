@@ -42,9 +42,10 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist   
 
+    NAME = "BestPath01"
     homoMgr = HomotopyMgr(mapMgrViz.world_map, mapMgrViz.reader)
     homoMgr.init(mapMgrViz.refString, mapMgrViz.start, mapMgrViz.end)
-    planner = BiRRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE) 
+    planner = BiRRTstarPlanner([mapMgr.width, mapMgr.height], 10, calcDist, MAP_FILE, NAME) 
     
     for subseg in mapMgr.subsegments:
         planner.rrts_viz.refLines.append(([subseg.line_seg.coords[0], subseg.line_seg.coords[1]], subseg.name, subseg.midpoint))

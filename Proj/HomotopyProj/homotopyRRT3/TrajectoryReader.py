@@ -89,18 +89,26 @@ class TrajectoryReader(object):
         return newStrPath
                 
     
-    def compareStringPath(self, strPath, refStrPath):
+    def compareStringPath(self, strPath, refStrPath, completeCompare=False):
         
         s_strPath = self.shortenString(strPath)
         s_refStrPath = self.shortenString(refStrPath)
         
         s_strPath_len = len(s_strPath)
         s_refStrPath_len = len(s_refStrPath)
-        if s_strPath_len==0 or s_refStrPath_len == 0:
-            return True
+        
+        if s_strPath_len==0:
+            if s_refStrPath_len == 0:
+                return True
+            else:
+                return False
         
         if s_strPath_len > s_refStrPath_len:
             return False
+        
+        if completeCompare==True:
+            if s_strPath_len != s_refStrPath_len:
+                return False
         
         for i in range(len(s_strPath)):
             if self.compareChar(s_strPath[i], s_refStrPath[i]) == False:
