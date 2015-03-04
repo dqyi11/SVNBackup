@@ -32,7 +32,8 @@ def findNondominance(solutions):
 if __name__ == '__main__':
     
     # load txt and plot
-    FILENAME = "paths01.txt"
+    #FILENAME = "paths01.txt"
+    FILENAME = "bestpath02s.txt"
     data = np.loadtxt(FILENAME, dtype=float)
     #
     print data
