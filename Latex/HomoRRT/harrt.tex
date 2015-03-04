@@ -206,7 +206,17 @@ The called methods are explained as following,
 %{\sc What is B?}
 
 Figure \ref{fig:obs_map:map} illustrates how the reference frames of a map is initialized.
-$ b_{1} $ and $ b_{2} $
+$ b_{1} $ and $ b_{2} $ are randomly sampled from each obstacles.
+Then a center point $ c $ is randomly sampled, which does not locate in any line connects any two $ b_{k} $.
+For each $ b_{k} $, two rays are generated from two directions, $ \alpha_{k} $ is towards the center point $ c $, $ \beta_{k} $ is the reserved direction.
+Both $ \alpha_{k} $ and $ \beta_{k} $ intersect with the obstacles $ B $, the line segment of which are the reference frames.
+More details can be found in \cite{Hernandez201544}.
+
+The reference frames can also be generated from a Voronoi diagram.
+The improved Jenkin's method shows better efficiency in complex obstacles, especially in avoid of the intersection between the reference frames and 
+It also simplifies the boundary. 
+Because the reference frames are generated from the rays that rotate along the center point, 
+
 
 By the connectivity of the regions, we can generate a topological graph.  {\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
 The nodes are the regions and the edges are the reference frames. 
@@ -225,7 +235,8 @@ Assign each reference frame a {\em character}.
 Each path can be mapped into a {\em string}, which is determined by the sequence of the crossed reference frames.
 The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
-{\sc Do you explain how the string indicates the homotopy class?  The term ``homotopy awareness" is not defined adequately, and I suggest avoiding it.  
+{\sc Do you explain how the string indicates the homotopy class?  
+The term ``homotopy awareness" is not defined adequately, and I suggest avoiding it.  
 
 Stating that some property of the algorithm ``inherits from [some reference]" doesn't explain to the reader what you did. Are you just saying that we are describing how to algorithm in the reference works?  If so, say that instead of "inherits from."}
 
