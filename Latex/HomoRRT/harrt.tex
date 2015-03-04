@@ -156,12 +156,12 @@ Definition \ref{def:homo_path_planning} presents the homotopy-based optimal path
 Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{\it obs} $, an initial state $ x_{init} $, and a goal state $ x_{goal} $. 
 Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{\it obs} $.
 Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
-Define the cost of the path as $ {\sc Cost} (\sigma) $.  
+Define the cost of the path as $ \mbox{\sc Cost} (\sigma) $.  
 The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
-\textit{ (a) } $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
+\textit{ (a) } $ \forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
 \textit{ (b) } $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
-\textit{ (c) } $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $; and
-\textit{(d)} $\sigma^{*}$ satisfies one or more homotopic constraints, defined below.
+\textit{ (c) } $ \sigma^{*} = \min_{\sigma \in X_{\it free} } \mbox{\sc Cost}  (\sigma) $; and
+\textit{ (d) } $ \sigma^{*}$ satisfies one or more homotopic constraints, defined below.
 \end{defn} 
 
 \begin{figure}[htbp]
@@ -184,15 +184,16 @@ The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 \end{figure}
 
 We adopt the improved Jenkins' method in \cite{Hernandez201544} to generate reference frames given a map with obstacles.
-In this method, the map is decomposed into several regions using the line segments formed by connecting the center point {\sc of what?} to {to which?} points in each obstacle.
-The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.  
-{\sc This is ambiguous.  Elaborate and use figure 1(a) to help describe how you form the line segments.}  
+The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.
+The reference frames decompose the map into several regions, which are the line segments formed by connecting the \emph{center point} $ c $ to a random \emph{obstacle point} $ b_{k} $ in each obstacle.
+%{\sc This is ambiguous. Elaborate and use figure 1(a) to help describe how you form the line segments.}  
+Given two paths, how they sequentially cross the reference frames can be used to identify homotopy equivalence.
+
+%Observe how this process partitions the space $X$ into distinct regions, but note that the partition of $X$ differs from the partition of all possible paths through the space created by grouping paths into homotopic classes. 
+%We use the partition of $X$ to identify a homotopic class as follows, again using the improved Jenkins' method.
 
 Let $ \bm{B} $ denote the set of obstacles and $ B_{k} $ denote one of the obstacles.  
-Observe how this process partitions the space $X$ into distinct regions, but note that the partition of $X$ differs from the partition of all possible paths through the space created by grouping paths into homotpic classes. We use the partition of $X$ to identify a homotopic class as follows, again using Jenkins' method.
-
-The topology of the path can be identified by how the sequence of crossing the reference frames is.
-The generation process of the reference frames is given in Algorithm \ref{alg:harrt:init_ref_frames}.
+The generation of the reference frame is given in Algorithm \ref{alg:harrt:init_ref_frames}, which returns a set of reference frames $ \bm{R} $.
 The called methods are explained as following,
 \begin{itemize}
 	\item \textsc{Line}($ p_{1}, p_{2} $):
@@ -200,13 +201,21 @@ The called methods are explained as following,
 	\item \textsc{Ray}($ p, \vec{d} $):
 	Return a ray that starts from $ p $ with direction $ \vec{d}  $.
 	\item \textsc{Intersect}( $ r , \bm{B} $ ):
-	Return line segments that a line $ r $ cut by the obstacles in $ B $.
+	Return line segments that a line $ r $ cut by the obstacles $ B $.
 \end{itemize}
-{\sc What is B?}
+%{\sc What is B?}
 
-Figure \ref{fig:obs_map:map} illustrates how a map is decomposed.
+Figure \ref{fig:obs_map:map} illustrates how the reference frames of a map is initialized.
+$ b_{1} $ and $ b_{2} $
+
 By the connectivity of the regions, we can generate a topological graph.  {\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
-The nodes are the regions and the edges are the reference frames. {\sc What do you mean "reference frame"?  This term hasn't been defined.}
+The nodes are the regions and the edges are the reference frames. 
+%{\sc What do you mean "reference frame"?  This term hasn't been defined.}
+
+compare with voronoi diagram
+(1) simpler (2) boundary (3) radius can be sort
+
+
 
 Any path can be mapped into a sequence of nodes in the topological graph.  {\sc Explain how or given an example.}
 In determining the homotopy class, two paths share same start and goal.
@@ -224,11 +233,11 @@ Stating that some property of the algorithm ``inherits from [some reference]" do
 	\begin{algorithmic}[1]
 		\State $ \bm{R} = \emptyset, \bm{b} = \emptyset, \bm{\alpha} = \emptyset, \bm{\beta} = \emptyset $
 		\For{\textbf{each} $ B_{k} \in \bm{B} $ }
-			\State $ b_{k} $ $ \leftarrow $ Sample from $ B_{k} $
+			\State $ b_{k} $ $ \leftarrow $ Randomly sample from $ B_{k} $
 			\State $ \bm{b} \leftarrow \bm{b} \cup b_{k} $
 		\EndFor
 		\While{ $ \exists b_{k}, b_{k'} , c \in $ \Call{Line}{ $ b_{k}, b_{k'} $ } }
-			\State $ c \leftarrow  $ Uniformly sample from $ \bm{X}_{free} $
+			\State $ c \leftarrow  $ Randomly sample from $ \bm{X}_{free} $
 		\EndWhile
 		\For{\textbf{each} $ b_{k} \in \bm{b} $ }
 			\State $ \alpha_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, c - b_{k} $ }
