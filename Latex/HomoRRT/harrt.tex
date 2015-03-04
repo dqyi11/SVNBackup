@@ -64,108 +64,107 @@ six pages
 An optimization problem is usually formed by a human who specifies a metric that attempts to encode task performance in a numerically amenable form.
 As the task supervisor, the so-called {\em problem holder} in Woods' nomenclature~\cite{woods2004envisioning}, it is essential that the human's intent is correctly and precisely modeled.
 %Optimality has been the most important heuristic in planning motions for the robots.
+In planning a robot's motion for a task, the most common ways to model intent is with single numerical objective~\cite{6974170} or with multiple numerical objectives~\cite{yi2014supporting}.  Examples of objectives are many: Euclidean distance, minimum time, etc.
+A numerical solver is then used to generate a path that optimizes the given objectives.
 
-It is the condition that the planned solution for the robot can match the human's intent.
-In planning the robot's motion for a task, the most common way of modeling the intent is by defining single objective~\cite{6974170} or multiple objectives~\cite{yi2014supporting}.
-The generated path is a solution that optimizes the given objectives, for example, minimizing the Euclidean distance.
-Not all types of the human's intents can be easily modeled using measurable objectives.
-One of them is the ``shape'' of the planned path, which indicates the topology in the environments with complex obstacles.
-Such intent can be a hope of avoiding visiting some regions, a will of moving around some objects or a preference of how the motion is like.
-Some of the intents are defined as constraints, for example via-point constraint, reference path constraint~\cite{6974170} or temporal logic constraint~\cite{5650896}, in the optimization problems.
-This method won't work when there is only preference on the ``shape'' of the paths instead of hard constraint.
-At the same time, the preference on the ``shape'' of the paths might also be fuzzy for the human to describe.
+Unfortunately, not all types of human intent can be easily modeled using common measurable objectives.
+One difficult-to-model intent is the ``shape'' of the planned path.  Although shape properties like continuity and smoothness can be modeled using standard numerical constraints, shapes that refer to environment topology, such as ``go around building A and then between the two trees while avoiding region C,'' benefit from topological approaches.  In particular, concepts from algebraic topology can be used to create numerical representations of these topological desiderata or constraints.  In this paper, we present an algorithm that allows the human to specify avoiding regions, moving around objects, and satisfying constraints: via-point/waypoint constraints, reference path constraints~\cite{6974170} and temporal logic constraints~\cite{5650896}.
+%This method won't work when there is only preference on the ``shape'' of the paths instead of hard constraint.
+%At the same time, the preference on the ``shape'' of the paths might also be fuzzy for the human to describe.
 
-\emph{Homotopy} is commonly used to indicate the inherent topological similarity of the paths.
+The topological concept of \emph{homotopy} is a mathematical formalism of the inherent similarity or dissimilarity of two paths.
 Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez201544}.
-Thus, we can have a \emph{homotopy class}, in which any two paths are homotopic.
-In the map with obstacles, homotopy partitions the paths with same start position and end position into several homotopy classes.
-The homotopy of the paths can then be used for modeling the human's intent on the path ``shape''. 
+The set of paths that are homotopic to each other form a \emph{homotopy class}, and the  set of homotopy classes partition the set of all possible paths between any two points $A$ and $B$.
+In an environment containing obstacles, the homotopy partition can provide a useful way of grouping paths together based on the similarities of their ``shapes," where the term ``shape'' is interpreted using the formal topological notion.
+%{\sc Walter, I think we actually use a slightly different partitioning of the space.  The first difference is that we are using homologies instead of homotopies.  This is a technical difference that shouldn't make much difference, but we should point out to the reader that we are aware of this difference.  The second difference is that we don't actually partition the set of possible paths.  Instead, we partition the 2-D space of the environment.  The partition of the environment space is motivated by a desire to group paths through that space into intuitive groups based on topological properties, and this is an important distinction.}
 
-{\sc Fundamental (algebraic) group of topology. How our approach isn't about arbitrarily complex paths within a homotopic class, but rather has some ``natural'' boundaries in metric space.  
-How this lends itself to efficient RRT*.  
-How this differs from Vijay's homotopy-based path planning.  Homology or homotopy?}
+%{\sc Fundamental (algebraic) group of topology. How our approach isn't about arbitrarily complex paths within a homotopic class, but rather has some ``natural'' boundaries in metric space.  
+%How this lends itself to efficient RRT*.  
+%How this differs from Vijay's homotopy-based path planning.  Homology or homotopy?}
 
-{\it In Vijay's paper, the map is discretized to graph, and then calculating the complex values of each edge. The complex value tells whether two paths are in same homotopy class. Ours follows another approach, which is sampling based. While exploring, we can tell if the current sub-path can still lead to a path that belongs to some homotopy class. That is why it is called homotopy aware. 
+%{\it In Vijay's paper, the map is discretized to graph, and then calculating the complex values of each edge. The complex value tells whether two paths are in same homotopy class. Ours follows another approach, which is sampling based. While exploring, we can tell if the current sub-path can still lead to a path that belongs to some homotopy class. That is why it is called homotopy aware. 
 
-When we have the homotopy class as constraint, it can be used to reduce the exploring region so that the efficiency can be improved.
-Because a branch of the tree will not be extended if it leads to a region that is not satisfied by the homotopic constraint.}
+%When we have the homotopy class as constraint, it can be used to reduce the exploring region so that the efficiency can be improved.
+%Because a branch of the tree will not be extended if it leads to a region that is not satisfied by the homotopic constraint.}
 
-Assume in a path planning problem, a human task supervisor is defining a task for a robot.
-The task is needed to be modeled so that the robot can understand and plan for execution.
-Let the objective be only reaching to a target quickly, there can be several levels of how clear his intent is.
+Importantly, simple representative paths from within a homotopy class can often be associated with human intent.
+Consider a path-planning problem where a human supervisor defines the task for a robot.  Further, consider the following list of ways in which a human can express intent about path shape, and the corresponding homotopy-based constraint:
+%The task is needed to be modeled so that the robot can understand and plan for execution.
+%Let the objective be only reaching to a target quickly, there can be several levels of how clear his intent is.
 \begin{enumerate}
-\item \emph{I only want the planned path sequentially visiting several regions.}
-It often means that the planned path is constrained in one homotopy class.
-The homotopy class becomes the constraint of the optimization problem~\cite{Hershberger199463}.
+\item \emph{I want the path to visit a sequence of specific regions.}
+Topologically, such a path is constrained to one homotopy class, so this homotopy class becomes the constraint of the optimization problem~\cite{Hershberger199463}.
 %This homotopy class could be defined from a human initialized reference path.
-\item \emph{I know some regions that have to be visited and some regions could not be reached.}
-There can exist several homotopy classes that can satisfy the requirement defined by the required regions and forbidden regions.
-In this case, the homotopic constraint becomes several homotopy classes instead of only one.
-\item \emph{I feel some path ``shape'' is better when comparing with another ``shape''.}
-It indicates that the human has preference on different homotopy classes.
-If the preference on the homotopy classes can be modeled as one objective, the non-dominant solutions can be found.
-Thus the human could select one from the Pareto optimal paths.
-\item \emph{I should have preference but it is hard for me to tell.}
+\item \emph{I want the path to visit some regions and avoid other regions.}
+Since it is possible that several homotopy classes can satisfy these requirements, the homotopic constraint restricts the path to  the set of homotopy classes that satisfy the requirements.
+\end{enumerate}
+The first two ways of expressing human intent translate into homotopic path constraints.  The next two allow a human to express preference among different path shapes, but also allow the human to tradeoff between following a desired path shape and optimizing another performance objective.
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item \emph{I prefer some path shapes over others, but I recognize that tradeoffs may be needed.} 
+This indicates that the human has preferences over different homotopy classes, but also acknowledges that certain homotopy classes may not allow an acceptable optimization of another task-based objective.
+If the preference on the homotopy classes can be modeled using an objective function, then non-dominant solutions over the task-based objective and homotopic objective can be found, and the human can select one of these solutions.
+\item \emph{I have preferences over paths but it need help in understanding these preferences.}
 In this case, the human's preference could be identified through interactive process.
 Another straightforward way is that the planning algorithm provides the best solution of each homotopy class to the supervisor.
 The supervisor can then select one that satisfy his/her intent.
 \end{enumerate}
 
-In order to support those scenarios, we propose a homotopy-aware RRT$^{*}$ that awares the homotopy class each branch belongs to while exploring the planning space by optimal heuristic.
-It could assist the task supervisor finding the intended optimal path in considering the homotopy.
-We review the relevant work in section \ref{sec:related_work}.
-We introduce the algorithm in section \ref{sec:algorithm} and apply it into different level of sliding autonomy in section \ref{sec:application}.
-The analysis of the algorithm is given in section \ref{sec:analysis}.
+In order to support these forms of human intent, expressed as homotopic constraints and preferences, we propose a homotopy-aware RRT$^{*}$ (HA-RRT) algorithm.  This algorithm uses an RRT$^*$ algorithm to explore possible paths, but each branch of the random tree is aware of the homotopy class to which it belongs.  The remainder of the paper presents this algorithm. We first review the relevant work in section~\ref{sec:related_work}.
+We then introduce the algorithm in section~\ref{sec:algorithm} and show how it can be used to implement the different forms of human intent in section~\ref{sec:application}. An analysis of the algorithm is given in section~\ref{sec:analysis}, and then conclusions are presented.
 
 \section{Related work}
 \label{sec:related_work}
 
-Homotopy reveals the similarity between two paths.
-It can be used to determine the similarity between a reference path and a normal path, or classify the paths into different classes.
-Homotopy-based path planning depends on the determination of the homotopy equivalence of two paths, which is usually computationally expensive.
+Humans often represent the world using a topological rather than metric-based path-planning~\cite{kuipers99,aginsky1997two}, and various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{mataric1992integration,thrun1998learning,fasola2013modeling,shah2013qualitative}.  
+The topological notion of homotopy presents a formal definition of the similarity between two paths.
+This definition can be used both to determine the similarity between two paths as well as to partition paths into different classes.
+Homotopy-based path planning requires an algorithm to determine the homotopic equivalence of two paths, which is usually computationally expensive.
 
-Voronoi diagram is naturally introduced to assist determining the homotopy classes, but it shows limitation on finding some paths in some cases~\cite{banerjee2013framework}.
-Particularly, generating Voronoi diagram for obstacles of complicated shapes is hard.
+{\sc rewrite the following three paragraphs -- there are English language issues.}
+
+A Voronoi diagram-based algorithm has been used to determine homotopy classes, but this algorithm shows limitations on finding some paths in some cases~\cite{banerjee2013framework}.
+%Specifically, generating Voronoi diagram for obstacles of complicated shapes is hard.
 By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
-Similarly, the problem and complexity come when the shapes of the obstacles are not smooth and convex.
+Similarly, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex.
 Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
 The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
-Given two paths sharing same start and goal, we can determine whether there is an obstacle inside the region that the two paths close by the value of the complex integral.
+Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside the region that the two paths close by the value of the complex integral.
 Because the map is discretized, the computation cost expands greatly if the obstacles are reasonably approximated by the cells.
 
-Sampling-based path planning has been an effective and popular tool.
-The idea of homotopy has also been imported here.
+Sampling-based path planning, like RRT or PRM, has been an effective and popular tool of generating planning paths.
+The idea of homotopy has also been integrated as well.
 By homotopic redundancy, the paths from PRM could be compared by the homotopy classes~\cite{1041613}.
 By dividing the space using the rays crossing each obstacle, reference frames could be used to represent the paths into canonical sequences~\cite{Hernandez201544}.
-In this way, the extending process of the graph structure keeps tracking the homotopy class of the new branch so that the exploration process can be constrained by some homotopy classes.
+In this way, the extending process of the graph structure keeps tracking the homotopy class of the new branch so that the exploration process can be constrained in some homotopy classes.
 
 In order to accelerate the exploration process, bidirectional RRT has been introduced to accelerate the exploration process.
-In the optimal sampling process, the optimality is still preserved~
-\cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
+The bidirectional exploration reserves the optimality in the optimal sampling process
+~\cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
 With two trees exploring from two directions, we can have the optimal cost-to-go and the optimal cost-to-arrive at different position.
 This guarantee the optimality search with the homotopic constraint.
-We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology fr the task supervisor.
+We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology for the task supervisor.
 
 \section{Homotopy-aware RRT$^{*}$}
 \label{sec:algorithm}
 
-Without loss of generality, we only look at the minimization problem of the path planning.
-We introduce the definition of homotopy-based optimal path planning problem in Definition \ref{def:homo_path_planning}.
-It can be extended into other homotopy-relevant optimal path planning.
-
-\begin{defn}{ \textbf{Homotopy-based optimal Path Planning} }
+%Without loss of generality, we only look at the minimization problem of the path planning.
+Definition \ref{def:homo_path_planning} presents the homotopy-based optimal path-planning problem formed as a minimization problem.
+%It can be extended into other homotopy-relevant optimal path planning.
+\begin{defn}{ \textbf{Homotopy-Based Optimal Path-Planning} }
 \label{def:homo_path_planning}
 Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle space $ X_{\it obs} $, an initial state $ x_{init} $, and a goal state $ x_{goal} $. 
 Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{\it obs} $.
 Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
 Define the cost of the path as $ {\sc Cost} (\sigma) $.  
 The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
-\textit{ (a) }, $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
-\textit{ (b) }, $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
-\textit{ (c) }, $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $ with given homotopic constraints.
+\textit{ (a) } $\forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
+\textit{ (b) } $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
+\textit{ (c) } $ \sigma^{*} = \min_{\sigma \in X_{\it free} } {\sc Cost} (\sigma) $; and
+\textit{(d)} $\sigma^{*}$ satisfies one or more homotopic constraints, defined below.
 \end{defn} 
 
-\begin{figure}
+\begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[t]{0.45\linewidth}
 		\centering
@@ -184,9 +183,14 @@ The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 	\label{fig:obs_map}
 \end{figure}
 
-We adopt the Jenkin's method~\cite{Hernandez201544} to generate reference frames given a map with obstacles.
-The map is decomposed into several regions by the lines connecting the center point and points in each obstacles.
-The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.
+We adopt the improved Jenkins' method in \cite{Hernandez201544} to generate reference frames given a map with obstacles.
+In this method, the map is decomposed into several regions using the line segments formed by connecting the center point {\sc of what?} to {to which?} points in each obstacle.
+The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.  
+{\sc This is ambiguous.  Elaborate and use figure 1(a) to help describe how you form the line segments.}  
+
+Let $ \bm{B} $ denote the set of obstacles and $ B_{k} $ denote one of the obstacles.  
+Observe how this process partitions the space $X$ into distinct regions, but note that the partition of $X$ differs from the partition of all possible paths through the space created by grouping paths into homotpic classes. We use the partition of $X$ to identify a homotopic class as follows, again using Jenkins' method.
+
 The topology of the path can be identified by how the sequence of crossing the reference frames is.
 The generation process of the reference frames is given in Algorithm \ref{alg:harrt:init_ref_frames}.
 The called methods are explained as following,
@@ -198,26 +202,33 @@ The called methods are explained as following,
 	\item \textsc{Intersect}( $ r , \bm{B} $ ):
 	Return line segments that a line $ r $ cut by the obstacles in $ B $.
 \end{itemize}
+{\sc What is B?}
 
 Figure \ref{fig:obs_map:map} illustrates how a map is decomposed.
-By the connectivity of the regions, we can generate a topological graph.
-The nodes are the regions and the edges are the reference frames.
-Any path can be mapped into a sequence of nodes in the topological graph.
+By the connectivity of the regions, we can generate a topological graph.  {\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
+The nodes are the regions and the edges are the reference frames. {\sc What do you mean "reference frame"?  This term hasn't been defined.}
+
+Any path can be mapped into a sequence of nodes in the topological graph.  {\sc Explain how or given an example.}
 In determining the homotopy class, two paths share same start and goal.
-Thus they can be compared also by using only the visited edges, which are equivalent with the crossed reference frames.
-Assign each reference frame a {\em character}.
+Thus they can be compared also by using only the visited edges, which are equivalent with the crossed reference frames. {\sc Again, "reference frame" hasn't been adequately defined.  I believe it is the boundary between two regions.}
+Assign each reference frame a {\em character}. 
+{\sc Equivalently, assign each edge a character.}
 Each path can be mapped into a {\em string}, which is determined by the sequence of the crossed reference frames.
 The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
+{\sc Do you explain how the string indicates the homotopy class?  The term ``homotopy awareness" is not defined adequately, and I suggest avoiding it.  
+
+Stating that some property of the algorithm ``inherits from [some reference]" doesn't explain to the reader what you did. Are you just saying that we are describing how to algorithm in the reference works?  If so, say that instead of "inherits from."}
+
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
-		\State $ \bm{R} = \emptyset $
+		\State $ \bm{R} = \emptyset, \bm{b} = \emptyset, \bm{\alpha} = \emptyset, \bm{\beta} = \emptyset $
 		\For{\textbf{each} $ B_{k} \in \bm{B} $ }
 			\State $ b_{k} $ $ \leftarrow $ Sample from $ B_{k} $
 			\State $ \bm{b} \leftarrow \bm{b} \cup b_{k} $
 		\EndFor
 		\While{ $ \exists b_{k}, b_{k'} , c \in $ \Call{Line}{ $ b_{k}, b_{k'} $ } }
-			\State $ c \leftarrow  $ Sample from $ \bm{X}_{free} $
+			\State $ c \leftarrow  $ Uniformly sample from $ \bm{X}_{free} $
 		\EndWhile
 		\For{\textbf{each} $ b_{k} \in \bm{b} $ }
 			\State $ \alpha_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, c - b_{k} $ }
@@ -239,11 +250,15 @@ The string is used for the homotopy awareness in this paper, which inherits from
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process. 
+
+{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
+
+%{\sc How is $c$ sampled in line 6? What is $\mathbf{b}$ and how is it initialized -- line 4.}
+
 The process is given in Algorithm \ref{alg:harrt}.
 Two trees, the {\emph start tree} $ G_{s} $ and the {\sc goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
 Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
-%At the end, paths are obtained by {\sc ExtractPaths}() from combining results of both two trees.
 By using each new vertex returned from {\sc Explore}(), we can call {\sc Connect}() to create a path with a vertex in the other tree.
 The created path will be compared with the current best path that belongs to the same homotopy class.
 If it is a better one, the best path in this homotopy class will be updated, which is implemented in {\sc UpdateBestPathByClass}().
@@ -320,11 +335,13 @@ The called methods are defined as following:
 	%Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-The {\sc HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint.
+The {\sc HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint. {\sc How?}
 The homotopy constraint is defined as a \emph{homotopic grammar}.
+{\sc New concept.  You need to introduce a concept and explain something about it before you use it, or you must tell the reader what purpose the concept serves {\bf and} that you will explain it later in the paper.}
 Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
 This path, which starts from the root to the vertex, indicates a string of characters sequentially.
-Each character represents a crossed reference frame.
+Each character represents a crossed reference frame. 
+{\sc Need to explain  this better.}
 
 The {\sc Connect} procedure connects a vertex with the other tree to generate a path from the start to goal.
 In order to guarantee optimality, a set of near vertices is provided to find the best vertex to be connected with.
