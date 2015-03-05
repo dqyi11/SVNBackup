@@ -213,32 +213,41 @@ Both $ \alpha_{k} $ and $ \beta_{k} $ intersect with the obstacles $ B $, the li
 More details can be found in \cite{Hernandez201544}.
 
 The reference frames can also be generated from a Voronoi diagram.
-The improved Jenkin's method shows better efficiency in complex obstacles, especially in avoid of the intersection between the reference frames and 
-It also simplifies the boundary. 
-Because the reference frames are generated from the rays that rotate along the center point, 
+The improved Jenkin's method provides a much simpler initialization process in complex obstacles, especially in the regions adjacent to the map boundary.
+It also avoids that the reference frames intersects with each other.
+%As the reference frames are from the rays that rotate along the center point, the rotation order implies the direction of the path.
 
-
-By the connectivity of the regions, we can generate a topological graph.  {\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
-The nodes are the regions and the edges are the reference frames. 
+We can create a topological graph by the connectivity of the regions.
+Each region from the map decomposition is a node in the topological graph.
+Each reference frame is adjacent to two regions, thus it becomes an edge that connects two nodes.
+Figure \ref{fig:obs_map:topology} shows a topological graph from the map decomposition in Figure \ref{fig:obs_map:map}.
+%By the connectivity of the regions, we can generate a topological graph.  
+%{\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
+%The nodes are the regions and the edges are the reference frames. 
 %{\sc What do you mean "reference frame"?  This term hasn't been defined.}
 
-compare with voronoi diagram
-(1) simpler (2) boundary (3) radius can be sort
+Any path sequentially visits the regions maps to a node walk on the topological graph.
+It is noticeable that two adjacent regions might be connected with not only one reference frame, which means that two nodes in the topological graph might be connected with more than one edge.
+Thus, two path with same edge sequence belong to same homotopy class but two path with same node sequence don't.  
+%Any path can be mapped into a sequence of nodes in the topological graph.  
+%{\sc Explain how or given an example.}
+%In determining the homotopy class, two paths share same start and goal.
+%Thus they can be compared also by using only the visited edges, which are equivalent with the crossed reference frames. 
+%{\sc Again, "reference frame" hasn't been adequately defined.  I believe it is the boundary between two regions.}
+%Assign each reference frame a {\em character}. 
+%{\sc Equivalently, assign each edge a character.}
+%It is noticeable that the 
+Label each reference frame with a \emph{character}.
+Each path can be mapped into a {\em string}, which represents the sequence of the crossed reference frames.
+In \cite{Hernandez201544}, the string is used to identify the homotopy class of each branch in RRT so that the growing of a tree is constrained in a homotopy class.
+In this paper, each branch of the tree structure tracks the corresponding string as the homotopy information so that the homotopic constraints can be satisfied or the homotopy class can be identified.
 
+%The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
+%{\sc Do you explain how the string indicates the homotopy class?  
+%The term ``homotopy awareness" is not defined adequately, and I suggest avoiding it.  
 
-Any path can be mapped into a sequence of nodes in the topological graph.  {\sc Explain how or given an example.}
-In determining the homotopy class, two paths share same start and goal.
-Thus they can be compared also by using only the visited edges, which are equivalent with the crossed reference frames. {\sc Again, "reference frame" hasn't been adequately defined.  I believe it is the boundary between two regions.}
-Assign each reference frame a {\em character}. 
-{\sc Equivalently, assign each edge a character.}
-Each path can be mapped into a {\em string}, which is determined by the sequence of the crossed reference frames.
-The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
-
-{\sc Do you explain how the string indicates the homotopy class?  
-The term ``homotopy awareness" is not defined adequately, and I suggest avoiding it.  
-
-Stating that some property of the algorithm ``inherits from [some reference]" doesn't explain to the reader what you did. Are you just saying that we are describing how to algorithm in the reference works?  If so, say that instead of "inherits from."}
+%Stating that some property of the algorithm ``inherits from [some reference]" doesn't explain to the reader %what you did. Are you just saying that we are describing how to algorithm in the reference works?  If so, say that instead of "inherits from."}
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -272,7 +281,7 @@ Stating that some property of the algorithm ``inherits from [some reference]" do
 
 With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process. 
 
-{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
+%{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
 
 %{\sc How is $c$ sampled in line 6? What is $\mathbf{b}$ and how is it initialized -- line 4.}
 
