@@ -279,14 +279,16 @@ In this paper, each branch of the tree structure tracks the corresponding string
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process. 
+With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+We notice that two string
+
 
 %{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
 
 %{\sc How is $c$ sampled in line 6? What is $\mathbf{b}$ and how is it initialized -- line 4.}
 
 The process is given in Algorithm \ref{alg:harrt}.
-Two trees, the {\emph start tree} $ G_{s} $ and the {\sc goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
+Two trees, the \emph{start tree} $ G_{s} $ and the \emph{goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
 Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
 By using each new vertex returned from {\sc Explore}(), we can call {\sc Connect}() to create a path with a vertex in the other tree.
 The created path will be compared with the current best path that belongs to the same homotopy class.
