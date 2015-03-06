@@ -221,7 +221,7 @@ We can create a topological graph by the connectivity of the regions.
 Each region from the map decomposition is a node in the topological graph.
 Each reference frame is adjacent to two regions, thus it becomes an edge that connects two nodes.
 Figure \ref{fig:obs_map:topology} shows a topological graph from the map decomposition in Figure \ref{fig:obs_map:map}.
-%By the connectivity of the regions, we can generate a topological graph.  
+%By the connectivity of the regions, we can generate a topological graph.
 %{\sc Explain how.  Essentially, each region in the partition of $X$ created by Jenkins' method is a vertex in the graph.  Edges between vertices are added between vertices if the vertices represent adjacent regions.}
 %The nodes are the regions and the edges are the reference frames. 
 %{\sc What do you mean "reference frame"?  This term hasn't been defined.}
@@ -241,6 +241,7 @@ Label each reference frame with a \emph{character}.
 Each path can be mapped into a {\em string}, which represents the sequence of the crossed reference frames.
 In \cite{Hernandez201544}, the string is used to identify the homotopy class of each branch in RRT so that the growing of a tree is constrained in a homotopy class.
 In this paper, each branch of the tree structure tracks the corresponding string as the homotopy information so that the homotopic constraints can be satisfied or the homotopy class can be identified.
+How the homotopic grammar is defined will be discussed in Section \ref{sec:homotopic_grammar}.
 
 %The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
@@ -282,6 +283,7 @@ In this paper, each branch of the tree structure tracks the corresponding string
 With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
 We notice that two string can be generated from two paths that belongs to same homotopy class.
 We define the \emph{homotopic grammar} to determine whether two string belongs to same homotopy class.
+Also the homotopic grammar can be used to determine whether the string of a sub-path belongs to some homotopy class so that we can know whether the extension of the tree is under the homotopic constraint.
 
 
 %{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
@@ -576,6 +578,7 @@ The HA-RRT$^{*}$ consists of the homotopy-aware exploration and the constrained 
 In this section, we look at how to have better support on the homotopy classes and provide the constrained optimal guarantee.
 
 \subsection{homotopic grammar}
+\label{sec:homotopic_grammar}
 
 Because each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
 When we have a set of homotopy classes, a homotopic grammar can be created to define all the strings of the set of homotopy classes.
@@ -639,6 +642,7 @@ However, in some special scenario, for example it is expected to scan a region f
 \end{itemize}
 
 \subsection{Optimality with constraint}
+\label{sec:optimality_constraint}
 
 The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from a root position.  
 The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
