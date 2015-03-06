@@ -280,7 +280,8 @@ In this paper, each branch of the tree structure tracks the corresponding string
 \end{algorithm} 
 
 With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
-We notice that two string
+We notice that two string can be generated from two paths that belongs to same homotopy class.
+We define the \emph{homotopic grammar} to determine whether two string belongs to same homotopy class.
 
 
 %{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
