@@ -164,11 +164,12 @@ Consider a bounded, connected open set $ X \subset \mathbb{R}^{d} $, an obstacle
 Denote the obstacle-free space by $ X_{\it free} = X \setminus X_{\it obs} $.
 Define a {\em path} in $X$ as a continuous curve parameterized by $s$, denoted by $\sigma : [0,s] \rightarrow X$. 
 Define the cost of the path as $ \mbox{\sc Cost} (\sigma) $.  
+Define a set homotopy classes $ H \subseteq \bm{H} ( x_{init}, x_{goal} ) $, in which $ \bm{H} ( x_{init}, x_{goal} ) $ is the set of all the homotopy classes defined by $ x_{init} $ and $ x_{goal} $.
 The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 \textit{ (a) } $ \forall \tau\in[0,s], \sigma^*(\tau) \in X_{\it free}$;
-\textit{ (b) } $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $;
-\textit{ (c) } $ \sigma^{*} = \min_{\sigma \in X_{\it free} } \mbox{\sc Cost}  (\sigma) $; and
-\textit{ (d) } $ \sigma^{*}$ satisfies one or more homotopic constraints, defined below.
+\textit{ (b) } $ \sigma^{*} (0) = x_{init} $ and $ \sigma^{*} (s) = x_{goal}  $; and
+\textit{ (c) } $ \forall h \in H, \sigma^{*} = \min_{\sigma \in X_{\it free} \land h(\sigma^{*}) = h } \mbox{\sc Cost}  (\sigma) $. %; and
+%\textit{ (d) } $ \sigma^{*}$ satisfies one or more homotopic constraints, defined below.
 \end{defn} 
 
 \begin{figure}[htbp]
@@ -182,13 +183,17 @@ The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 	%\\
 	\begin{subfigure}[t]{0.5\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/obs_topology.png}
+		\includegraphics[width=\textwidth]{fig/obs_topology.pdf}
 		\caption{The generated topological graph.}
 		\label{fig:obs_map:topology}
 	\end{subfigure}   
 	\caption{Map with obstacles.}
 	\label{fig:obs_map}
 \end{figure}
+
+The solve of the homotopy-based path planning, we need to figure out an efficient way to identify the homotopy class a path belongs to.
+In this paper, we use a set of reference frames to identify which homotopy class a path belongs to.
+Figure \ref{fig:obs_map:map} gives an example.
 
 We adopt the improved Jenkins' method in \cite{Hernandez201544} to generate reference frames given a map with obstacles.
 The reference frames can also be generated from a Voronoi diagram.
@@ -287,13 +292,17 @@ How the homotopic grammar is defined will be discussed in Section \ref{sec:homot
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+
 We notice that two string can be generated from two paths that belongs to same homotopy class.
 We define the \emph{homotopic grammar} to determine whether two string belongs to same homotopy class.
 Also the homotopic grammar can be used to determine whether the string of a sub-path belongs to some homotopy class so that we can know whether the extension of the tree is under the homotopic constraint.
 
 %{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
 %{\sc How is $c$ sampled in line 6? What is $\mathbf{b}$ and how is it initialized -- line 4.}
+
+With the generated reference frames $ \mathbf{R} $, we could import the bidirectional RRT$^{*}$ to accomplish the homotopy-aware exploration process.
+A single RRT$^{*}$ answers on the problem of the optimal path in the workspace.
+In the homotopy-based optimal path-planning problem, 
 
 The process is given in Algorithm \ref{alg:harrt}.
 Two trees, the \emph{start tree} $ G_{s} $ and the \emph{goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
