@@ -373,8 +373,9 @@ If it is a better one, the best path in this homotopy class will be updated, whi
 	\label{alg:harrt:explore}
 \end{algorithm}
 
-The {\sc Explore} procedure is inherited from the process in \cite{Karaman-RSS-10}.
-In the {\sc Explore} procedure, the {\sc HomotopyCheck}() uses a state machine to check whether the string satisfies the defined grammar.
+The exploration process of a tree structure is similar with that in RRT$^{*}$~\cite{Karaman-RSS-10}, 
+which is described in the {\sc Explore} procedure in this paper.
+The only difference is that the string of each branch is updated and there is the {\sc HomotopyCheck}() to check whether the string satisfies the defined grammar.
 The called methods are defined as following:
 \begin{itemize}
 	\item \textsc{CRF}($ l, \bm{R} $):
@@ -446,6 +447,8 @@ In this section, we show the sliding autonomy in different levels of the human's
 
 In planning a path for a task, if the human has a determined mind of how the topology of the path should be, the HA-RRT$^{*}$ can help to find the optimal path in all the paths of a given topology.
 By an interactive process, the human can initialize a reference path to represent the topology from his/her intent.
+In this case, it is fair to assume that the user has a clear idea on how the path should sequentially visit several regions.
+Thus the constraint can be modeled as a constrained region, especially in a minimization problem.
 
 \begin{figure}
 	\centering
@@ -530,28 +533,28 @@ Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pare
 	\centering
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy1.png}
+		\includegraphics[width=\textwidth]{fig/screenshot1/all_homotopy1.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:01}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy2.png}
+		\includegraphics[width=\textwidth]{fig/screenshot1/all_homotopy2.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:02}
 	\end{subfigure}
 	\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy3.png}
+		\includegraphics[width=\textwidth]{fig/screenshot1/all_homotopy3.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:03}
 	\end{subfigure}  
 	%\\
 	\begin{subfigure}[t]{0.47\linewidth}
 		\centering
-		\includegraphics[width=\textwidth]{fig/all_homotopy4.png}
+		\includegraphics[width=\textwidth]{fig/screenshot1/all_homotopy4.png}
 		\caption{Best path in one homotopy class.}
 		\label{fig:all_homotopy:all_scores}
 	\end{subfigure}	   
