@@ -217,7 +217,7 @@ The called methods are explained as following,
 	Return a line that defined by $ p_{1} $ and $ p_{2} $.
 	\item \textsc{Ray}($ p, \vec{d} $):
 	Return a ray that starts from $ p $ with direction $ \vec{d}  $.
-	\item \textsc{Intersect}( $ r , \bm{B} $ ):
+	\item \textsc{Intersect}($ r , \bm{B} $):
 	Return line segments that a line $ r $ cut by the obstacles $ B $.
 \end{itemize}
 %{\sc What is B?}
@@ -308,10 +308,10 @@ Because the homotopy classes of the branches of both two trees are tracked in th
 The exploration process is given in Algorithm \ref{alg:harrt}.
 
 Two trees, the \emph{start tree} $ G_{s} $ and the \emph{goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
-Two trees explore the map bidirectionally by calling {\sc Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
-By using each new vertex returned from {\sc Explore}(), we can call {\sc Connect}() to create a path with a vertex in the other tree.
+Two trees explore the map bidirectionally by calling \textsc{Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
+By using each new vertex returned from \textsc{Explore}(), we can call \textsc{Connect}() to create a path with a vertex in the other tree.
 The created path will be compared with the current best path that belongs to the same homotopy class.
-If it is a better one, the best path in this homotopy class will be updated, which is implemented in {\sc UpdateBestPathByClass}().
+If it is a better one, the best path in this homotopy class will be updated, which is implemented in \textsc{UpdateBestPathByClass}().
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -374,8 +374,8 @@ If it is a better one, the best path in this homotopy class will be updated, whi
 \end{algorithm}
 
 The exploration process of a tree structure is similar with that in RRT$^{*}$~\cite{Karaman-RSS-10}, 
-which is described in the {\sc Explore} procedure in this paper.
-The only difference is that the string of each branch is updated and there is the {\sc HomotopyCheck}() to check whether the string satisfies the defined grammar.
+which is described in the \textsc{Explore} procedure in this paper.
+The only difference is that the string of each branch is updated and there is the \textsc{HomotopyCheck}() to check whether the string satisfies the defined grammar.
 The called methods are defined as following:
 \begin{itemize}
 	\item \textsc{CRF}($ l, \bm{R} $):
@@ -386,7 +386,7 @@ The called methods are defined as following:
 	%Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-The {\sc HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint. %{\sc How?}
+The \textsc{HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint. %{\sc How?}
 %The homotopy constraint is defined as a \emph{homotopic grammar}.
 %{\sc New concept.  You need to introduce a concept and explain something about it before you use it, or you must tell the reader what purpose the concept serves {\bf and} that you will explain it later in the paper.}
 Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
@@ -394,7 +394,7 @@ This path, which starts from the root to the vertex, indicates a string of chara
 Each character represents a crossed reference frame. 
 %{\sc Need to explain  this better.}
 
-The {\sc Connect} procedure connects a vertex with the other tree to generate a path from the start to goal.
+The \textsc{Connect} procedure connects a vertex with the other tree to generate a path from the start to goal.
 In order to guarantee optimality, a set of near vertices is provided to find the best vertex to be connected with.
 The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 \begin{itemize}
@@ -428,13 +428,13 @@ The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 \end{algorithm}
 
 Because both the start tree $ G_{s} $ and the goal tree $ G_{g} $ add a new vertex. 
-The {\sc Connect} procedure creates a path by connecting the new vertex with the other tree, which are $ p_{s} $ and $ p_{g} $ correspondingly.
-The new paths will be used to update the best path of the homotopy classes they belong to in {\sc UpdateBestPathByClass} ().
+The \textsc{Connect} procedure creates a path by connecting the new vertex with the other tree, which are $ p_{s} $ and $ p_{g} $ correspondingly.
+The new paths will be used to update the best path of the homotopy classes they belong to in \textsc{UpdateBestPathByClass} ().
 
 When the exploration process is finished, there is a set that contains the best paths for all the homotopy classes.
 Because the homotopy class is defined by the string,
 there exist different strings belong to same homotopy classes.
-The {\sc MergePaths} procedure will be called to merge the equivalent homotopy classes. 
+The \textsc{MergePaths} procedure will be called to merge the equivalent homotopy classes. 
 Thus the set of paths $ P $ will be updated.
 
 \section{Homotopy-aware optimal path planning}
@@ -478,7 +478,7 @@ Thus, in Figure \ref{fig:reference_path:rrt}, the tree only explores the regions
 \subsection{Homotopic constraints from required/forbidden regions}
 
 In planning a path for a task, if the human only can tell several regions that should be avoided or several regions that are required to visit, HA-RRT$^{*}$ explores the paths that satisfies the defined constraints as well.
-The {\sc InitRefFrames} procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
+The \textsc{InitRefFrames} procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
 We define the \emph{positive region} as the region that is required to visit and the \emph{negative region} as the region that is forbidden to visit.
 Then there is an interactive process for the human to label the positive regions and the negative regions.
 Unlabeled regions are neutral, which means no constraint here.
@@ -512,7 +512,7 @@ After that, more reference frames will be created correspondingly and a new topo
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
 A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes. nb
 The grammar is then defined by this set of strings.
-The {\sc HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by this grammar.
+The \textsc{HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by this grammar.
 The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled constraint.
 
 \subsection{Homotopy classes with preference}
@@ -601,7 +601,7 @@ In this section, we look at how to have better support on the homotopy classes a
 
 Because each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
 When we have a set of homotopy classes, a homotopic grammar can be created to define all the strings of the set of homotopy classes.
-The homotopic grammar is used to manage the exploration process in {\sc HomotopyCheck} and determine which homotopy class a path belongs to by its string.
+The homotopic grammar is used to manage the exploration process in \textsc{HomotopyCheck} and determine which homotopy class a path belongs to by its string.
 
 \begin{figure}
 	\centering
@@ -673,7 +673,7 @@ the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ conve
 \end{lem}
 
 HA-RRT$^{*}$ uses bidirectional trees to explore the workspace.
-In {\sc Connect} procedure, the vertex $ v $ in either $ G_{s} $ or $ G_{g} $ is used to create a path by connecting with another vertex in the other tree.
+In \textsc{Connect} procedure, the vertex $ v $ in either $ G_{s} $ or $ G_{g} $ is used to create a path by connecting with another vertex in the other tree.
 If we see the position of $ v $ as a via-point of the paths, we can have the asymptotic optimality with the set of paths has $ v $ as via-point.
 It is stated in Lemma \ref{lem:optimal_via_point}.
 
@@ -689,9 +689,9 @@ Let $ v_{g} $ be the vertex to be connected in $ G_{g} $.
 Let $ c ( v_{g} ) $ denote the cost of the $  v_{g} $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $  v_{g} $.
 It equals to the cost-to-go from the position of $ v_{g} $ to the goal.
 Let $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ be a path concatenated by two sub-paths from $  v_{s} $ and $  v_{g} $. 
-Its cost $ {\sc Cost} (\sigma_{G_{s},G_{g}} ( v_{s}, v_{g} )) =  c (v_{s}) + c (v_{g}) + c (${\sc Line}$ (v_{s}, v_{g})  ) $.
+Its cost $ \mbox{\sc Cost} (\sigma_{G_{s},G_{g}} ( v_{s}, v_{g} )) =  c (v_{s}) + c (v_{g}) + c (\mbox{\sc Line} (v_{s}, v_{g}) ) $.
 By Lemma \ref{lem:tree_vex:conv}, we know that $ c (v_{s}) $ and $ c (v_{g}) $ converge to optimal almost surely.
-$ c (${\sc Line}$ (v_{s}, v_{g})  ) $ will also converge, because $ v_{g} $ is selected from a set of near vertices.
+$ c (\mbox{\sc Line} (v_{s}, v_{g})  ) $ will also converge, because $ v_{g} $ is selected from a set of near vertices.
 Thus, the cost of $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ converges to optimal almost surely. 
 Similarly, we can have the same result on connecting a vertex $ v_{g} $ in $ G_{g} $ with the $ G_{s} $.
 \end{proof}
