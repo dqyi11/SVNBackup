@@ -1,0 +1,38 @@
+\section{Related work}
+\label{sec:rel_work}
+
+Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
+The initial analysis starts from replacing stochastic terms with constant terms in order to predict the convergence of a particle at stagnation~\cite{985692}~\cite{4424687}.
+Based on such convergence analyses, parameters can be set for best effect~\cite{Trelea2003317}.
+Another approach for handling the stochastic factors is based on the stochastic analysis.
+By taking the mean of the stochastic variables, the stochastic terms are naturally converted into
+constant terms.
+A convergence analysis of the mean and variance of a particle at stagnation can also be obtained using the characteristic equation in a discrete-time model 
+\cite{Jiang20078}.
+In a similar way, 
+other moments can be computed
+\cite{5175367,Poli:2007:EAS:1276958.1276977,Poli:2008:DSS:1384929.1384944}.
+Using the discrete-time system model of different moments, the equilibrium can be found.
+The stability requirements can be obtained from the norm by setting the root values of the characteristic equation to all be less than 1.
+
+There are also several works involving the consideration of the stochastic behavior of the particle swarm optimization.
+All the stochastic terms can be modeled as a bounded nonlinear feedback in \cite{1637686}.
+The global best and the personal best are integrated into the nonlinear feedback, which depends an assumption of the constant personal best and constant global best.
+The analysis tool of $ l-2 $ stability has also been imported to understand the impact of the stochastic terms on the convergence~\cite{5160341}.
+As the global best and personal best are plugged into feedback term, it becomes hard to evaluate the impacts from the updates of the global best and personal best.
+
+There is also some work that addresses the dynamics when a particle is not in the stagnation phase.
+The discrete-time dynamics of PSO, that is, the dynamics of particle trajectory, can be approximated
+using a continuous-time model
+\cite{5675669}, thus the global best and the personal best can be modeled as time-variant variables.
+Furthermore, the probability of convergence in time can be analyzed by viewing the update process as a random search process~\cite{vandenBergh:2010:CPP:2010420.2010421}.
+The process of particles reaching a local optimum has also been analyzed~\cite{Schmitt:2013:PSO:2463372.2463563}.
+
+Most of the efforts are still made on analyzing the particle level.
+The influence from the swarm on the behavior of the particle has not been considered enough.
+An analysis with the swarm level will help to understand better on what happens in the optimization process.
+
+In this paper, we firstly model the personal best and global best as the input to the position update component in order to evaluate the influence from the swarm in section \ref{sec:system}.
+We provide the input-to-state stability of the position update component of a particle in section \ref{sec:iss}.
+We use this tool to analyze the behavior of a particle in section \ref{sec:particle}.
+Then we extend the analysis to the scope of a swarm in section \ref{sec:swarm}.

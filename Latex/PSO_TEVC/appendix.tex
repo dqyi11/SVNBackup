@@ -1,0 +1,26 @@
+\section{Appendix}
+
+\subsection{Mean model of the position update component}
+\label{app:mean_pso}
+
+By applying mean to \eqref{eq:pso_up_linalg_simp}, we can have the mean of the position update component as
+\begin{equation}
+\label{eq:pso_up_linalg_simp:mean}
+E( X(k+1) ) = A(k) E( X(k) ) + B(k) E( U(k) )
+\end{equation}
+with
+$ A(k) = \begin{bmatrix}
+\chi & - \chi \phi^{G}/2 - \chi \phi^{P}/2
+\\ 
+\chi & 1 - \chi \phi^{G}/2 - \chi \phi^{P}/2
+\end{bmatrix} $
+and
+$ B(k) = \begin{bmatrix}
+\chi \phi^{G}/2 & \chi \phi^{P}/2
+\\ 
+\chi \phi^{G}/2 & \chi \phi^{P}/2
+\end{bmatrix} $.
+
+$ E( X(k) ) = [ E( v(k) ), E( x(k) - x^{R} ) ]^{T} $ and $ E( U(k) ) = [ E( x^{G}(k) - x^{R} ) , E( x^{P}(k) - x^{R} ) ]^{T} $.
+
+By taking $ x^{R} = x^{*} $, we can have \eqref{eq:mean:opt_bound}.

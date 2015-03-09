@@ -1,0 +1,258 @@
+\section{Swarm analysis}
+\label{sec:swarm}
+
+%\subsection{Consensus of a swarm}
+
+%\begin{itemize}
+%\item Combinations of ISS parts are ISS
+%\item Swarm as such a combination
+%\item Conditions where update is ISS
+%\item trivially at stagnation. But also when on a single hill
+%\end{itemize}
+
+%\begin{itemize}
+%\item Bound on swarm for the single hill case (perhaps as function of the width of the hill?
+%Or width of the hill as a percentage of the feasible region?)
+%\item test on 2-d case to show that the bound can prevent a particle from reaching another hill.
+%This is one form of the swarm failing to converge the global optimal.
+%\item Can we look at parameters for the whole swarm?
+%\end{itemize}
+
+In section \ref{sec:particle}, we can see the pros and cons of the search capability of a particle.
+The movement of a particle is a randomized walk in an attractive potential field defined by the global best and the personal best.
+There exist a lot of factors that prevent the particle reaching the optimal.
+The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
+The import of interaction topology enhances the search capability, which adds information exchange to a beam-search style optimization.
+In this section, our analysis is based on the star topology of global best update.
+In this topology, the global best update imports the competition among the particles.
+The particle finds a new global best becomes the leader of the swarm.
+
+%unimodal
+%\begin{itemize}
+%\item bound -> convergence
+%\item swarm converges more quickly
+%\end{itemize}
+%multimodal
+%\begin{itemize}
+%\item bounded converge to bound
+%\item explore better
+%\end{itemize}
+
+As we can see in Figure \ref{fig:pso_sys_flow}, the system of a swarm can be viewed as that the global best update component provides a global best $ x^{G} $ and feedbacks into each particle.
+The update rule of the global best update component is the same with that of the personal best update component.
+Several of the properties of the personal best update component can be inherited here.
+We have Lemma \ref{lem:unimodal:swarm:gb_up_iss}.
+
+\begin{mylem}
+\label{lem:unimodal:swarm:gb_up_iss}
+If $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $, the global best update component is input-to-state stable.
+$ \alpha_{1} () $ and $ \alpha_{2} () $ are $ K_{\infty} $-function.
+\begin{proof}
+Same as that in the proof of Lemma \ref{lem:unimodal:particle:input_iss}.
+\end{proof}
+\end{mylem}
+
+We can naturally derive Theorem \ref{thm:unimodal:swarm:garuantee_converge}.
+
+\begin{mythm}
+\label{thm:unimodal:swarm:garuantee_converge}
+If $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ and $ \gamma_{s} \circ \gamma_{p} (s)  < s $, the particles in the swarm will converge to $ x^{*} $ if the position-update component of the particle is input-to-state stable.
+$ \gamma_{s} () $ is the boundary function of the global best update component and $ \gamma_{p} () $ is the boundary function of the particle component.
+\begin{proof}
+When both the particles and the global best update are input-to-state stable, we can have the particles all gradually converge to $ x^{*} $, by Corollary 4.2 in \cite{Jiang2001857}.
+\end{proof}
+\end{mythm}
+
+As we know, when $ x^{G}(k) = x^{*} $, the swarm becomes only a set of particles without interactions.
+The problem falls into how each particle can solve the inconsistency between the personal best and the global best so that the convergence is toward the optimal.
+In analyzing the swarm behavior, here we are interested with how the global best $ x^{G} $ of the swarm can converge to $ x^{*} $.
+
+\subsection{Unimodal fitness distribution}
+
+Because of the competition exists in the swarm, a guarantee that finds a better solution leads to a guarantee that finds the optimal.
+The refinement will never stop till the optimal is reached.
+We have Theorem \ref{thm:unimodal:swarm:converge}.
+
+\begin{mythm}
+\label{thm:unimodal:swarm:converge}
+In the unimodal case, when there are more than two particles, $ x^{G} $ converges to $ x^{*} $ if all the particles has input-to-state stable position update component.
+\begin{proof}
+There are two cases, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $
+If the global best is $ x^{*} $, the particles will gradually converge to $ x^{*} $ by Theorem \ref{thm:unimodal:particle:converge}.
+If the global best is not $ x^{*} $, $ x^{G} $ converges to $ x^{*} $.
+This can be proved using contradiction.
+Assume that $ x^{G} $ will not converge to $ x^{*} $.
+It means that at least more than one particle stop finding better solution.
+This contradicts with Theorem \ref{thm:unimodal:particle:better}.
+\end{proof}
+\end{mythm}
+
+%[TODO:] More particles --> convergence rate
+%This is hard. Because convergence rate is not a constant.
+
+%\subsubsection{Simulation}
+
+Even though there are cases that finding a better solution cannot be guaranteed by the particles as in Theorem \ref{thm:unimodal:swarm:converge}, a swarm could still enhance the search capability.
+We have Lemma \ref{lem:swarm:prob_find_better}.
+
+\begin{mylem}
+\label{lem:swarm:prob_find_better}
+The probability that a swarm finds a better solution is higher than the probability that any particle does.
+The bigger number of the particles is, the higher probability that the swarm finds a better solution is.
+\begin{proof}
+Let $ P_{s} $ be the probability that a swarm of size $ N $ finds a better solution.
+Let $ P_{i}, i \in [1, N] $ be the probability that particle $ i $ finds a better solution.
+We can have  $ P_{s} = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ) $.
+By writing it as $ P_{s} = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $, we have $ \forall i \in [1, N], P_{s} > P_{i} $.
+
+If we add a new particle to the swarm, we have
+$ P_{s'}  = 1 - (1- P_{s}) *(1-P_{i+1}) $. 
+Similarly, $ P_{s'} \geq P_{s} $.
+Thus we can say that the increase of the particle number will not decrease the probability that the swarm finds a better solution.
+\end{proof}
+\end{mylem}
+
+Define $ \Delta = f(x^{G}(k+1)) - f(x^{G}(k)) $ as the improvement of the search in one iteration.
+The mean of $ \Delta $ indicates the general convergence rate of different position.
+
+\begin{mylem}
+\label{lem:swarm:higher_improve}
+The swarm has a higher expected improvement than any particle.
+\begin{proof}
+Define $ p( \Delta \geq \Delta_{c} \mid  x_{i}(k) ) $ as the probability of having improvement larger than or equal to $ \Delta_{c} $ given particle $ i $'s position $ x_{i}(k) $,
+and $ p( \Delta \geq \Delta_{c} \mid x_{1}(k) \cdots x_{N}(k ) $ as the probability that the swarm has improvement larger than or equal to $ \Delta_{c} $ given all the particles' positions.
+The improvement $ \Delta \in [0, f(x^{*}) - f(x^{G}(k))] $.
+We can have the mean of $ \Delta $ for particle $ i $ as
+$ E( \Delta \mid x_{i}(k) ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta p( \Delta \mid  x_{i}(k) ) d \Delta $
+and that for the swarm as 
+$ E( \Delta \mid x_{i}(k) ) =  \int_{0}^{ f(x^{*}) - f(x^{G}(k)) } \Delta p( \Delta \mid  x_{1}(k) \cdots x_{N}(k) ) d \Delta $
+By Lemma \ref{lem:swarm:prob_find_better}, we have $ p( \Delta \mid  x_{1}(k) \cdots x_{N}(k) ) \geq  p( \Delta \mid  x_{i}(k) ) $.
+We know that $ E_{s} ( \Delta ) \geq E_{i} ( \Delta )  $, which means that the swarm has a higher expected improvement than any particle.
+\end{proof}
+\end{mylem}
+
+We can have Theorem \ref{thm:swarm:higher_conv_rate} that the swarm accelerates the convergence of the particles.
+
+\begin{mythm}
+\label{thm:swarm:higher_conv_rate}
+The make of a swarm accelerates the expected convergence rate.
+\begin{proof}
+By Lemma \ref{lem:swarm:higher_improve}, the swarm has a higher expected improvement.
+With the global best converging faster, the particles can all converge faster as well.
+\end{proof}
+\end{mythm}
+
+\subsection{Multi-modal fitness distribution}
+
+When the fitness distribution is not unimodal, there exists more varieties in the movement patterns of the particles.
+The probability that a particle find a new global best depends on the position, the personal best and the fitness distribution near around.
+
+Increasing the number of the particles raise the probability that the swarm can find a new global best, as in Lemma \ref{lem:swarm:prob_find_better}.
+As we know that the movement of a particle is bounded, because of the import of the stochastic terms, we can view the exploration as sequentially sampling on the solution space.
+There are two factors that determine the capability of the exploration.
+\begin{itemize}
+\item how the samples are distributed;
+\item how is the boundary of the samples.
+\end{itemize}
+
+\begin{myprop}
+\label{prop:swarm:more_samplings}
+Running a particle ( with same initial position, global best and personal best ) at different time generates different samplings.
+\end{myprop}
+Naturally, more particles form the parallel sampling, which generate more diverse samplings in one iteration.
+As a result, the swarm could generate more diverse samplings on a search region, as in Property \ref{prop:swarm:more_samplings}.
+
+It is not surprising that a swarm makes a bigger exploration range.
+Because the exploration range of a swarm is the join of the exploration ranges of all the particles.
+However, the explore range of each single particle might be changed as well, due to the change of the global best.
+We have Theorem \ref{thm:swarm:expand_range}.
+
+\begin{mythm}
+\label{thm:swarm:expand_range}
+When a particle is not in the modal that has the optimal solution, joining into a swarm increases the probability that the particle moves into a better region.
+\begin{proof}
+Because we have that the movement boundary of a particle depends on the difference between the personal best and the global best, as in Theorem \ref{thm:stagnation_bound}.
+When a particle is not in the modal that has the optimal solution, the global best is more likely to deviate from the personal best.
+This gives a bigger movement bound to the particle, which makes a higher probability that the particle can move into a better region, as in Theorem \ref{thm:multimodal:in_scope}.
+\end{proof}
+\end{mythm}
+
+Theorem \ref{thm:swarm:expand_range} indicates how the swarm could influence the explore capacity of each single particle.
+
+%\begin{mythm}
+%\label{thm:multimodal:swarm:prob}
+%The probability that the swarm finds a better global best depends on the probabilities that the particles find better global best, which is
+%\begin{equation}
+%\label{eq:prob_sum}
+%P = 1 - \prod_{i=1}^{N} ( 1 - P_{i} ),
+%\end{equation}
+%$ P_{i} $ is the probability of particle $ i $ finds a new global best
+%and $ P $ is the probability that the swarm finds a new global best.
+%\begin{equation}
+%\label{eq:prob_less}
+%\forall i \in [1, N], P > P_{i}.
+%\end{equation}
+%\begin{proof}
+%The search process is a competition among the particles in the swarm.
+%If the swarm does not find a better global best, it means that none of the particle finds a better global best.
+%For particle $ i $, the probability that a new global best cannot be found is $ 1 - P_{i} $.
+%Because the global best is constant, the movements of the particles are independent in the search process.
+%Thus, the probability that no particle finds a new global best becomes
+%$ \prod_{i=1}^{N} ( 1 - P_{i} ) $.
+%Then we can know that the probability that a new global best can be found by the swarm.
+%By writing \eqref{eq:prob_sum} as $ P = 1 - ( 1 - P_{i} ) \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) $ and $ \prod_{j=1, j \not = i}^{N}  ( 1 - P_{j} ) \leq 1 $,
+%we have \eqref{eq:prob_less}.
+%\end{proof}
+%\end{mythm}
+
+%\begin{figure}
+%\centering
+%includegraphics[width=0.7\linewidth]{./fig/probRise}
+%\caption{The probability increases with the particle number.}
+%\label{fig:probRise}
+%\end{figure}
+
+%Figure \ref{fig:probRise} illustrates how the probability of the swarm increases with the number of the particles, assuming that the probabilities of all the particles are the same.
+%The uniformly random initialization enables the diversity of the probabilities of the particles, which should increase the probability of the swarm as well.
+
+%\subsubsection{Simulation}
+
+\subsection{Value of a swarm}
+
+%Being on one hill is the unlikely case bound in the multi hill case.
+%Might not seem useful but is the essence of what makes a swarm a swarm.
+%Bounds the swarm to a region around p-bests where g-best has been unable to pull other particles to its hill.
+%For a function with narrow hills, g-bests on a narrow hills is less likely to capture another particle, thus the swarm searches more, for functions with broad hills, p-gest are more likely to be pulled to g-bests hill and search there.
+%Thus swarm diversity is the mechanism that allows the swarm to not converge when searching is likely needed but focus and converge when the fitness landscape appear to favor exploitation.
+%This does not happen at stagnation and does not happen without multiple members. <need to say this in a more mathematical way>>
+
+%example ?? function for exploration case
+%example sphere function for the exploitation case
+%try to use bound as a function of hill width metric
+
+%Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
+
+\subsubsection{Competition}
+
+The competition is imported when there is a swarm.
+The competition prevents the global best stuck in a position, especially a local optimal, as in Theorem \ref{thm:unimodal:swarm:garuantee_converge}.
+As a result, the probability that the global optimal can be found would be increased.
+
+\subsubsection{Diversity}
+
+Swarm also brings the diversity.
+Because the particles are randomly initialized.
+As the particles are initialized at different positions, the diversity of the probabilities of finding a better solution $ P_{i} $ is increased.
+By Lemma \ref{lem:swarm:prob_find_better}, we know that the probability of the swarm that finds a better solution is also increased.
+
+At the same time, there also exists diversity of the personal best.
+This also enlarges the inconsistencies between the personal best and the global best.
+Not only that the swarm enables a parallel exploration on a bigger joint search range,
+, but also, by Theorem \ref{thm:swarm:expand_range}, the swarm also impacts the explore range of each particle.
+
+\subsection{Diversity injection}
+
+%Work with the Rastrigin function has lead others to experiment with diversity injection to prevent pre-mature convergence (or prevent convergence at all)
+%I am not sure, do we want it to converge? ever?
+%On what basis would I propose a new algorithm?
+%Show that it would converge based on ISS?

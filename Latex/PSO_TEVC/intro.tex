@@ -1,0 +1,39 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Particle swarm optimization has been a popular computational method that could efficiently find the solutions to given optimization problems, even when the gradient of the objective function is not available.
+It is inspired from the social behavior of the flock of birds and the school of fish.
+Therefore, algorithmic interpretations are needed to evaluate and support the PSO algorithm. 
+There are a few research work that try to interpret why the PSO could effectively find the ``optimal'' solutions, when the PSO fails to find the optimal solutions and how the convergence process is like.
+
+\emph{Stagnation} is one important phenomenon in understanding the search process of the evolutionary optimization algorithms.
+It is commonly defined that the algorithm stops finding a better solution.
+In the PSO, it means that all the particles in the swarm cannot find a better solution than the current global best.
+Plenty of works consider the ``stagnation'' that a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $~\cite{Clerc06stagnationanalysis}.
+It means that the personal best and global best keep constant over some time steps \cite{4223160}.
+Understanding the dynamics of the particles in stagnation is very helpful in analyzing the behavior and the optimization search capability of the particle swarm optimization.
+Plenty of work have focused on the behavior of a particle when this happens, particularly where it converges to~\cite{Schmitt:2013:PSO:2463372.2463563,Poli:2008:DSS:1384929.1384944}.
+
+If we decompose the search process of the PSO by the times of the global-best update, we can see that in each span the global best is a constant.
+It is known that the PSO can usually converge very fast.
+There could be a long time that the global best is constant, although the personal best of each particle is being frequently updated in each iteration.
+Define the time span that the global best is unchanged as the \emph{global-best stagnation}.
+The process of the PSO consists of a sequence of the global-best stagnations, in which the global best is refined in a newer global-best stagnation.
+
+The information exchange among the particles depends on the update of the global best.
+Thus in the global-best stagnation, the particles have no interaction between each other and they become a collection of independent agents.
+Then the particles are in a competition relationship.
+A particle that finds a better solution than the current global best updates the global best and transits the swarm into a new global-best stagnation.
+
+If we view the movement of a particle is driven by a force from the personal best and a force from the global best, 
+The stochastic terms in how a particle updates its position determines that a particle won't stop moving unless the global best and the personal best are the same.
+Thus, we can have Property \ref{prop:unconverge_neq_gb}.
+\begin{myprop}
+\label{prop:unconverge_neq_gb}
+A particle won't stop moving when its personal best and global best are not the same, 
+which means that 
+$ \lim_{k \rightarrow \infty} v(k) \neq 0 $, if $ x^{P} \neq x^{G} $.
+\end{myprop}
+It indicates that the import of the stochastic factors prevents the existence of an equilibrium position for a particle before its global best and personal best reach a consensus.
+It means that the conventional analyses of point convergence methods are not enough to understand the dynamics of the optimization process in PSO.
+In this paper, we will analyze the region convergence in the particle swarm optimization.
