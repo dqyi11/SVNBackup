@@ -105,8 +105,8 @@ $ B(k) = \begin{bmatrix}
 \\ 
 \chi \phi^{G} u^{G}(k) & \chi \phi^{P} u^{P}(k)
 \end{bmatrix} $.
-The system state is $ X(k) = [ v(k), x(k) - x^{*} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} $.
-\footnote{$ x^{*} $ means a reference point to the system.
+The system state is $ X(k) = [ v(k), x(k) - x^{R} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{R} , x^{P}(k) - x^{R} ]^{T} $.
+\footnote{$ x^{R} $ means a reference point to the system.
 When applying to the PSO, it can be a local optimum, a global optimum, or an estimated optimum.
 We use it as a reference point to check the bounds.}
 With a new $ x(k+1) $, the personal best update component will update the personal best $ x^{P}(k+1) $ that are fed into the position update component.
@@ -114,7 +114,7 @@ With a new $ x(k+1) $, the personal best update component will update the person
 The input-update component consists of a \emph{global-best input} and a \emph{personal-best update}.
 The personal best and global best are fed into the position-update component as input.
 As in Figure \ref{fig:sys_flow}, the global-best input only takes the input from the swarm.
-Thus the state to the reference point $ x^{R} $ is $  x^{G}(k) - x^{*} $.
+Thus the state to the reference point $ x^{R} $ is $  x^{G}(k) - x^{R} $.
 The personal-best update compares the current $ x(k) $ with the $ x^{P}(k-1) $.
 If  $ x_{i}(k) $ is better, the personal best is updated with it.
 We can write the personal-best update as 
@@ -122,7 +122,7 @@ We can write the personal-best update as
 \label{eq:pso_input_up}
 U = g^{PU}(V)
 \end{equation}
-with $ U = x^{P}(k) - x^{*} $ 
+with $ U = x^{P}(k) - x^{R} $ 
 and $ V = x(k) - x^{R} $
 from \eqref{eq:pb_up}. 
 
