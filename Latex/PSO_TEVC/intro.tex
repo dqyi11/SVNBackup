@@ -25,7 +25,7 @@ Thus in the global-best stagnation, the particles have no interaction between ea
 Then the particles are in a competition relationship.
 A particle that finds a better solution than the current global best updates the global best and transits the swarm into a new global-best stagnation.
 
-If we view the movement of a particle is driven by a force from the personal best and a force from the global best, 
+If we view the movement of a particle is driven by a force from the personal best and a force from the global best, when the global best and the personal best are not the same, the two forces will never reach a balance.
 The stochastic terms in how a particle updates its position determines that a particle won't stop moving unless the global best and the personal best are the same.
 Thus, we can have Property \ref{prop:unconverge_neq_gb}.
 \begin{myprop}
@@ -34,6 +34,11 @@ A particle won't stop moving when its personal best and global best are not the 
 which means that 
 $ \lim_{k \rightarrow \infty} v(k) \neq 0 $, if $ x^{P} \neq x^{G} $.
 \end{myprop}
-It indicates that the import of the stochastic factors prevents the existence of an equilibrium position for a particle before its global best and personal best reach a consensus.
-It means that the conventional analyses of point convergence methods are not enough to understand the dynamics of the optimization process in PSO.
-In this paper, we will analyze the region convergence in the particle swarm optimization.
+It indicates that the stochastic factors prevent the existence of an equilibrium position for a particle before the global best and the personal best reach a consensus.
+It means that the conventional analyses of point convergence methods that ignore the stochastic factors are not enough to understand the dynamics of the optimization process in the PSO.
+
+In this paper, we decompose the particle into two components, which form the feedback cascaded structure for the dynamics.
+We import input-to-state stability analysis to each component of a particle.
+This enables the investigation on how the movement of the particle is influenced by the fitness space and the swarm.
+Then we extend the scope from a particle to a swarm and show how organizing the particles into a swarm empowers the search capability.
+%In this paper, we will analyze the region convergence in the particle swarm optimization.
