@@ -40,7 +40,15 @@ The share of the global best leads to a star topology in the swarm.
 %The organization of the swarm is implemented by the star topology.
 When particle $ i $ finds a position that is better than the current global best, it updates the global best and its personal best.
 The swarm moves to a new global-best stagnation.
-In this case, $ x_{i}(k) = x_{i}^{P}(k) = x_{i}^{G}(k) $, which means that the movement of this particle will only be driven by the inertia of the previous velocity till a new global best is found.
+In this case, there is $ x_{i}(k) = x_{i}^{P}(k) = x_{i}^{G}(k) $ in the particle.
+Equation \eqref{eq:up_vel} becomes
+\begin{equation}
+v_{ij}(k+1) = \chi [ v_{ij}(k) 
+ +( \phi^{P} u^{P}_{ij}(k) + \phi^{G} u^{G}_{ij}(k) ) (x^{G}_{ij}(k) - x_{ij}(k))  ].
+\end{equation}
+As the inertia of the previous velocity $ v_{ij}(k) $ will decay to zero,
+the particle is attracted to $ x^{G}_{ij}(k) $ as $ \phi^{P} u^{P}_{ij}(k) + \phi^{G} u^{G}_{ij}(k) \geq 0 $.
+%It means that the movement of this particle is driven by the inertia of the previous velocity till a new global best is found.
 This particle can be viewed as a leader of this swarm.
 The topology is given in Figure \ref{fig:leader_follower}.
 \begin{figure}[tbph]
