@@ -1,7 +1,7 @@
 \section{System}
 \label{sec:system}
 
-In this work we use the formulas from Kennedy's most recent definition of PSO~\cite{4223164}.
+In this paper we use the formulas from Kennedy's most recent definition of PSO~\cite{4223164}.
 It can be easily extended to many versions of PSO.
 This version of PSO includes a constricted position update rule, a personal best update and a star topology formed by a global best update.
 The constricted position update rule is
@@ -35,10 +35,11 @@ The global best update is
 \label{eq:gb_up}
 x_{i}^{G}(k) = \arg \max_{ x \in \{ x_{i}(k), x_{i}^{G}(k-1) \} } f(x).
 \end{equation}
-The share of the global best makes a star topology in the swarm.
+The share of the global best leads to a star topology in the swarm.
 
 %The organization of the swarm is implemented by the star topology.
-When particle $ i $ finds a new global best, it triggers a new ``global-best stagnation'' and its personal best is updated as well.
+When particle $ i $ finds a position that is better than the current global best, it updates the global best and its personal best.
+The swarm moves to a new global-best stagnation.
 In this case, $ x_{i}(k) = x_{i}^{P}(k) = x_{i}^{G}(k) $, which means that the movement of this particle will only be driven by the inertia of the previous velocity till a new global best is found.
 This particle can be viewed as a leader of this swarm.
 The topology is given in Figure \ref{fig:leader_follower}.

@@ -1,9 +1,9 @@
 \section{Related work}
 \label{sec:rel_work}
 
-Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
-The initial analysis starts from replacing stochastic terms with constant terms in order to predict the convergence of a particle at stagnation~\cite{985692}~\cite{4424687}.
-Based on such convergence analyses, parameters can be set for best effect~\cite{Trelea2003317}.
+The dynamics of the PSO is hard to evaluate in general, due to the stochastic nature of the particle's path and the social interaction represented by the topology.
+The early analysis starts from replacing stochastic terms with constant terms in order to predict the convergence of a particle at stagnation~\cite{985692}~\cite{4424687}.
+Based on such convergence analyses, parameters can be set for the best effect~\cite{Trelea2003317}.
 Another approach for handling the stochastic factors is based on the stochastic analysis.
 By taking the mean of the stochastic variables, the stochastic terms are naturally converted into
 constant terms.
@@ -30,9 +30,6 @@ The process of particles reaching a local optimum has also been analyzed~\cite{S
 
 Most of the efforts are still made on analyzing the particle level.
 The influence from the swarm on the behavior of the particle has not been considered enough.
-An analysis with the swarm level will help to understand better on what happens in the optimization process.
+Looking at how the particles impact each other in the fitness space is the way to answer what happens in the optimization process.
 
-In this paper, we firstly model the personal best and global best as the input to the position update component in order to evaluate the influence from the swarm in section \ref{sec:system}.
-We provide the input-to-state stability of the position update component of a particle in section \ref{sec:iss}.
-We use this tool to analyze the behavior of a particle in section \ref{sec:particle}.
-Then we extend the analysis to the scope of a swarm in section \ref{sec:swarm}.
+
