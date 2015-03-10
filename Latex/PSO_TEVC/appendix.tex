@@ -1,4 +1,228 @@
-\section{Appendix}
+\section*{Appendix}
+
+\subsection{ISS-Lyapunov function}
+\label{sec:iss_lyapunov:func}
+
+Using the definitions of a $ K $-function and a $ KL $-function in Section \ref{sec:system}
+we can define a ISS-Lyapunov function as follows,
+%\begin{itemize}
+%\item 
+an ISS-Lyapunov function $ V : \mathbb{R}^{n} \rightarrow \mathbb{R}_{\geq 0} $ satisfies:
+\begin{enumerate}
+\item $ \exists \alpha_{1}, \alpha_{2} \in \mathbb{K} $ such that 
+$ \forall \xi \in \mathbb{R}^{n} $ , $ \alpha_{1} ( | \xi | ) \leq V( \xi ) \leq \alpha_{2}  ( | \xi | ) $.
+\item $ \exists \alpha_{3} \in \mathbb{K}_{\infty} , \sigma \in \mathbb{K} $ such that $ \forall \xi \in \mathbb{R}^{n}, \forall \mu \in \mathbb{R}^{m} $,$  V( f( \xi, \mu ) ) - V( \xi ) \leq - \alpha_{3} ( | \xi | ) + \sigma ( | \mu | ) $. 
+\end{enumerate}
+
+\subsection{Proof of Theorem \ref{thm:iss}}
+\label{sec:thm:iss:proof}
+		
+\begin{proof} 
+Let $ P $ be an identity matrix.
+As $ | \lambda_{\max} ( A(k) ) | < 1 $, we have
+%\begin{equation}
+%\nonumber
+$
+\lVert A^{T}(k) P A(k) \rVert \leq \lVert P \rVert \lVert A(k) \rVert^{2} \leq \lVert P \rVert | \lambda_{\max} ( A(k) ) |^{2} $ $  <  \lVert P \rVert .
+$
+%\end{equation}
+Because $ P $ is an identity matrix it is positive definite, and thus $ A^{T}(k) P A(k) $ is positive definite or positive semi-definite by definition.
+So by positive definite ordering we have $ A^{T}(k) P A(k) < P $.
+		
+Let $ -Q(k) = A^{T}(k) P A(k) - P $. Since $ A^{T}(k) P A(k) < P $ then $ - Q(k) < 0 $ furthermore $ \exists Q' \forall k, Q(k) > Q' > 0 $. 
+		
+By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, then the system is ISS.
+		
+Define a Lyapunov function
+\begin{equation}
+\label{eq:lyapunov_v}
+V( X(k) ) = X^{T} (k) P X(k).
+\end{equation}
+We can have
+$
+\lambda_{min}(P) | X(k) |^{2} \leq V( X(k) )\leq \lambda_{max}(P) | X(k) |^{2}
+$ and $ \lambda_{min}(P) = \lambda_{max}(P) $.
+		
+Let $ \alpha_{1} ( \xi )= \lambda_{min} \xi^{2} $
+and 
+$ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
+we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
+		
+By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
+\begin{equation}
+\label{eq:lyapunov_delta2}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+%	= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+%	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+%	\leq & - X^{T}(k) Q' X(k) + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+%	& + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+%	\leq & - \lambda_{min}(Q') | X(k) |^{2} + 2  \lVert A^{T}(k) P B(k) \rVert  U(k) | | X(k) | \\
+%	& + \lVert B^{T}(k) P B(k) \rVert | U(k) |^{2}.
+= & [ X^{T}(k)  A^{T}(k) + U^{T}(k) B^{T}(k) ] P [ A(k) X(k) + B(k) U(k) ] \\ & - X^{T}(k) P X(k) \\
+= & X^{T}(k)  A^{T}(k) P A(k) X(k) +  X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+& + U^{T}(k) B^{T}(k) P A(k) X(k) + U^{T}(k) B^{T}(k) P B(k) U(k) \\ & - X^{T}(k) P X(k) \\
+\end{aligned}
+\end{equation}
+As $ P $ is identity matrix, it is symmetric, thus
+\begin{equation}
+[ X^{T}(k)  A^{T}(k) P B(k) U(k) ]^{T} =  U^{T}(k) B^{T}(k) P A(k) X(k).
+\end{equation}
+$ V( X(k+1) ) , V( X(k) ) \in \mathbb{R} $, 
+we have $ X^{T}(k)  A^{T}(k) P B(k) U(k) $ and $  U^{T}(k) B^{T}(k) P A(k) X(k) $ are both real value (like $ 1 \times 1 $ matrix).
+Thus, 
+\begin{equation}
+ X^{T}(k)  A^{T}(k) P B(k) U(k) =   U^{T}(k) B^{T}(k) P A(k) X(k) .
+\end{equation}
+We then have
+\begin{equation}
+\label{eq:lyapunov_delta3}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+= & - X^{T}(k) [ A^{T}(k) P A(k) - P ] X(k) \\
+& + U^{T}(k) B^{T}(k) P B(k) U(k)  \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+\leq & - X^{T}(k) Q' X(k)  + U^{T}(k) B^{T}(k) P B(k) U(k) \\
+& + 2 X^{T}(k)  A^{T}(k) P B(k) U(k) \\
+\end{aligned}
+\end{equation}
+
+By applying matrix norm, we have
+\begin{equation}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+\leq & - \lambda_{min}(Q') | X(k) |^{2}  + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+& + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) | \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + | B^{T}(k) P B(k) | | U(k) |^{2} \\
+& - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + 2  | A^{T}(k) P B(k) | | U(k) | | X(k) |  \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+& + \left( \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) |  \right) | U(k) |^{2} \\
+& - \frac{1}{2} \lambda_{min}(Q') [ | X(k) |^{2} - \frac{4 | A^{T}(k) P B(k) | }{ \lambda_{min}(Q') }  | X(k) | | U(k) | \\
+& + \frac{4 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } | U(k) |^{2} ] \\
+\end{aligned}
+\end{equation}
+		
+By completing the square, we have
+\begin{equation}
+\label{eq:lyapunov_delta4}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+& + \left( \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) | \right) | U(k) |^{2} \\
+& - \frac{1}{2} \lambda_{min}(Q') \left( | X(k) | - \frac{2 | A^{T}(k) P B(k) | }{ \lambda_{min}(Q') } | U(k) | \right)^{2} \\
+	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+ &	+ \left( \frac{2 \lVert A^{T}(k) P B(k) \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } 
+	 + \lVert B^{T}(k) P B(k) \rVert \right) | U(k) |^{2}. 
+\end{aligned}
+\end{equation}
+		
+Because $ u^{P}(k) \in [0, 1] $, there exist an $ A' $ and $ B' $ such that $ \lVert A(k) \rVert \leq \lVert A' \rVert $ and $ \lVert B(k) \rVert \leq \lVert B' \rVert $.
+We have $ \lVert A^{T}(k) P B(k) \rVert $ $  \leq \lVert A' \rVert \lVert P \rVert \lVert B' \rVert $ and $ \lVert B^{T}(k) P B(k) \rVert \leq \lVert P \rVert \lVert B' \rVert^{2} $.
+		
+Since the identity matrix $ P $ has $ || P || = 1 $:
+\begin{equation}
+\label{eq:lyapunov_delta5}
+\begin{aligned}
+& V( X(k+1) ) - V( X(k) ) \\
+	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} + \left( \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } + \lVert B' \rVert^{2} \right) | U(k) |^{2}.
+\end{aligned}
+\end{equation}
+		
+Let
+\begin{equation}
+\nonumber
+\alpha_{3} ( \xi )= \frac{1}{2} \lambda_{min}(Q') \xi^{2} ,
+\end{equation}
+and
+\begin{equation}
+\nonumber
+\sigma ( \xi ) = \left( \frac{2 \lVert A' \rVert^{2} \lVert B' \rVert^{2}}{ ( \lambda_{min}(Q') )^{2} } +  \lVert B' \rVert^{2} \right) \xi^{2} .
+\end{equation} 
+Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
+so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
+Using Jiang's Lemma 3.5\cite{Jiang2001857}, the position-update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
+\end{proof}
+
+\subsection{Proof of Corollary \ref{coro:param_unit_disc}}
+\label{sec:coro:param_unit_disc:proof}
+
+\begin{proof}
+Let $ a = (1 + \chi) - \chi \phi $. 
+The eigenvalues of $ A(k) $ are
+\begin{equation}
+\nonumber
+ \lambda = \frac{ a \pm \sqrt{ a^{2} - 4 \chi } }{2} .
+\end{equation}
+There can be two cases.		
+\begin{enumerate}
+\item If $ a^{2} \geq 4 \chi $, the eigenvalues are complex number.
+We have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
+			
+If $ a \geq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives 
+\begin{equation}
+\nonumber
+0 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 1 .
+\end{equation}
+It means that $ 2 \sqrt{ \chi } \leq a < 1 + \chi $.
+			
+If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives
+\begin{equation}
+\nonumber
+-1 < \frac{a-\sqrt{a^{2}-4\chi}}{2} \leq \frac{a+\sqrt{a^{2}-4\chi}}{2} < 0 .
+\end{equation}
+It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
+			
+\item If $ a^{2} < 4 \chi $, the eigenvalues are real number.
+We have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+			
+$ | \lambda_{\max} | < 1 $ derives
+\begin{equation}
+\nonumber
+\frac{ a^{2} }{4} + \frac{ a^{2} - 4\chi }{4} < 1 .
+\end{equation}
+It means that $ - 2 \sqrt{ 2(1+\chi) } < a < 2 \sqrt{ 2(1+\chi) } $.
+Because $ \sqrt{ 2(1+\chi) } > 2 \sqrt{ \chi } $, we have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
+\end{enumerate}
+Combining these two cases, we have  $ - (1 + \chi) < a < 1 + \chi $.
+It equals to $ \phi \in \left( 0 , \frac{2(1+\chi)}{\chi} \right) $.
+\end{proof}	
+
+\subsection{Proof of the Theorem \ref{thm:state_bound}}	
+\label{sec:thm:state_bound:proof}
+
+\begin{proof}
+As we have the update equation as
+$ X(k+1) = A(k) X(k) + B(k) U(k) $, we can derive 
+\begin{equation}
+X(k+1) = ( \prod_{k}^{i=0} A(i) ) X(0) + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} A(j) ) B(i) U(i)  ] 
+\end{equation}
+by recursively applying it.
+
+By the property of matrix norm, we have
+\begin{equation}
+| X(k+1) | \leq ( \prod_{i=0}^{k} \lVert A(i) \rVert ) | X(0) | + \sum_{i=0}^{k} [ ( \prod_{j=0}^{i-1} \lVert A(j) \rVert ) \lVert B(i) \rVert | U(i) |  ].
+\end{equation}
+
+$ \forall i \in [0, k] $, let $ \lVert A(i) \rVert \leq \lVert A \rVert $, $  \lVert B(i) \rVert \leq \lVert B \rVert $ and $ | U(k) | = [ x^{G}(k) - x^{R}, x^{P}(k) - x^{R} ]^{T} $, we have
+\begin{equation}
+\label{eq:bound:final}
+\begin{aligned}
+& |  x(k+1) - x^{R} | \leq | X(k+1) | \\
+& \leq ( \lVert A \rVert )^{k+1} | X(0) | + \sum_{i=0}^{k} [ ( \lVert A \rVert )^{i} \lVert B \rVert | U(i) |  ] \\
+& = ( \lVert A \rVert )^{k+1} | X(0) | + \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert | U(i) |
+\end{aligned}
+\end{equation}
+
+%The boundary will be a function of $ bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+%Thus the minimum boundary is $ \min_{k} bound ( \lVert A \rVert, \lVert B \rVert, | X(0) |, | U |, k ) $.
+%When we have $ \lVert A \rVert < 1 $, 
+%$ ( \lVert A \rVert )^{k+1} \rightarrow 0 $ and
+%$ \frac{1 - (\lVert A \rVert )^{k+1} }{1 - \lVert A \rVert} \rightarrow \frac{1}{1 - \lVert A \rVert } $
+%as $ k \rightarrow \infty $.
+
+$ ( \lVert A \rVert )^{k+1} $ shows the decay term and $ \frac{1 - ( \lVert A \rVert )^{k+1} }{1 - \lVert A \rVert }  \lVert B \rVert $ makes the boundary function $ \gamma () $.
+\end{proof}
+
 
 \subsection{Mean model of the position update component}
 \label{app:mean_pso}
@@ -24,3 +248,17 @@ $ B(k) = \begin{bmatrix}
 $ E( X(k) ) = [ E( v(k) ), E( x(k) - x^{R} ) ]^{T} $ and $ E( U(k) ) = [ E( x^{G}(k) - x^{R} ) , E( x^{P}(k) - x^{R} ) ]^{T} $.
 
 By taking $ x^{R} = x^{*} $, we can have \eqref{eq:mean:opt_bound}.
+
+\subsection{Proof of Corollary \ref{coro:param_unit_disc:mean}}
+\label{sec:coro:param_unit_disc:proof:mean}
+
+\begin{proof}
+The proof is similar with that in Subsection \ref{sec:coro:param_unit_disc:proof}.
+In this case, $ a = (1 + \chi) - \frac{ \phi }{2} \chi $.
+Similarly, we can have two cases and derive
+$ - (1 + \chi) < a < 1 + \chi $.
+It equals to 
+$
+\phi \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) .
+$
+\end{proof}
