@@ -132,7 +132,7 @@ The proof is given in Appendix \ref{sec:lem:unimodal:particle:input_iss:proof}.
 \end{proof}
 \end{mylem}
 
-When both two components of a particle are input-to-state stable, we can have the condition that the particle is input-to-state stable in Lemma \ref{lem:unimodal:particle:iss}.
+When both the personal-best update component and the position-update component of a particle are input-to-state stable, we can have the condition that the particle is input-to-state stable in Lemma \ref{lem:unimodal:particle:iss}.
 
 \begin{mylem}
 \label{lem:unimodal:particle:iss}
@@ -147,7 +147,8 @@ By Theorem 2 in \cite{Jiang2001857}, we can directly have Lemma \ref{lem:unimoda
 \end{mylem}
 
 We can have the condition that the particle converge to the optimal $ x^{*} $ in Theorem \ref{thm:unimodal:particle:garuantee_converge}.
-The unimodal fitness distribution is one of the cases that satisfy $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $.
+When the fitness distribution is unimodal, $ f(x^{*}) - \alpha_{2} ( |x| ) \leq  f(x) \leq f(x^{*}) - \alpha_{1} ( |x| ) $ is satisfied.
+Thus we can have Theorem \ref{thm:unimodal:particle:garuantee_converge}.
 
 \begin{mythm}
 \label{thm:unimodal:particle:garuantee_converge}
@@ -162,7 +163,7 @@ By the property of the input-to-state stability, $ | x(k) - x^{*} | $ will conve
 
 Theorem \ref{thm:unimodal:particle:garuantee_converge} shows the condition that the convergence could be guaranteed.
 If we consider the stochastic terms in the position update component, $ \gamma_{1} \circ \gamma_{2} (s)  < s $ is not easy to guarantee.
-Because $ \phi^{P} u^{P} (k) $ and $  \phi^{G} u^{G} (k)  $ are randomly sampled at each iteration.
+Because $ \phi^{P} u^{P} (k) $ and $ \phi^{G} u^{G} (k) $ are randomly sampled at each iteration.
 However, the stochastic terms contribute to the almost surely convergence.
 We can have Theorem \ref{thm:unimodal:particle:converge}.
 
@@ -182,8 +183,7 @@ It means that the personal best will almost surely converge to the global best, 
 
 \begin{figure}[tbph]
 \centering
-\includegraphics[width=0.7
-\linewidth]{./fig/two_sets_split}
+\includegraphics[width=0.7\linewidth]{./fig/two_sets_split}
 \caption{How sets $ A $ and $ B $ are defined.}
 \label{fig:two_sets_split}
 \end{figure}
@@ -191,23 +191,23 @@ It means that the personal best will almost surely converge to the global best, 
 \end{proof}
 \end{mythm}
 
-\subsubsection{ $ x^{G} \not = x^{*}  $ }
+\subsubsection{ $ x^{G} \neq x^{*}  $ }
 
 When the global best is not yet the optimal solution, the convergence of the particle will be harder to evaluate.
 If  $ f(x^{*}) - \alpha_{2} ( |x| ) <  f(x) < f(x^{*}) - \alpha_{1} ( |x| ) $ is still satisfied, we can similarly have the result in Theorem \ref{thm:unimodal:particle:converge}.
-Otherwise, if the particle accidentally reaches into a region that the fitness is better than the current global best, a new global best is found.
+Otherwise, if the particle accidentally reaches into a region that the fitness is better than the current global best, a global best will be updated and a new global-best stagnation is triggered.
 The particle might also runs stochastically in a region that the fitness is worse than both the personal best and the global best.
-If the particle at least gets into a position that is better than the current personal best, the personal best will be updated. 
-We notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:unimodal:particle:nonstop}.
+If the particle at least gets into a position that is better than the current personal best but worse than the current global best, the personal best will be updated. 
 
+Before analyzing what happens when $ x^{G} \neq x^{*}  $, we notice that the particle should never stop at the current global best $ x^{G} $, which is stated in Lemma \ref{lem:unimodal:particle:nonstop}.
 \begin{mylem}
 \label{lem:unimodal:particle:nonstop}
-In a unimodal case, if $ x^{G} \not = x^{*} $, a particle will never stop at $ x^{G} $. 
+In a unimodal case, if $ x^{G} \neq x^{*} $, a particle will never stop at $ x^{G} $. 
 \footnote{The precision cut-off in implementation is ignored.}
 \begin{proof}
 Consider the velocity $ v(k+1) $ consists of two parts, inertia $ \chi v(k) $ and attractive force $ \chi \phi^{P} (x^{P}(k) - x(k) ) + \chi \phi^{G} ( x^{G} - x(k) ) $.
 While the particle moves into $ x^{G} $, the attractive force becomes zero but the inertia still exists, due to the velocity moves the particle into this current position.
-Thus, theoretically the particle will never stop at $ x^{G} $ when $ x^{G} \not = x^{*} $.
+Thus, theoretically the particle will never stop at $ x^{G} $ when $ x^{G} \neq x^{*} $.
 \end{proof} 
 \end{mylem}
 
@@ -277,8 +277,8 @@ It means that the particle will almost surely find a better solution.
 
 \subsection{Multi-model fitness distribution}
 
-When there are multiple modalities in the range that the particle moves, it is not easy to figure out a pattern of the behaviors that the particles share.
-More factors of the fitness distribution can impact the optimal search process.
+When there are multiple modalities in the the particle's movement range, figuring out a pattern of the behaviors that the particles share is difficult.
+Because there are more factors of the fitness distribution can impact the optimal search process.
 When the movement of the particle is bounded, there can be cases that the particle cannot reach the region that contains a better solution.
 %[TODO: Give an example that the particle will wander between the personal best and the global best]
 
@@ -305,9 +305,10 @@ These can be obtained by applying $ x^{*} $ and $ x^{0} $ to Theorem \ref{thm:st
 \end{mylem}
 Lemma \ref{lem:particle:bound_mov} shows that the boundary of a particle's movement is determined by where the global best $ x^{G} $ and the personal best $ x^{P}(k) $ locate.
 
-As we are interested with the probability that the particle gets into a position that is better than the current global best, we hope the distance from this position to the optimal is closer than that from the global best to the optimal.
+As we are interested with the probability that the particle gets into a position that is better than the current global best, we hope the distance from this position to the optimal is smaller than that from the global best to the optimal.
 
 If the boundary of the particle's movement does not contain a solution that is better than the personal best, the personal best and the global best have no chance to be updated and the particle will not be able to find a better solution.
+We have Theorem \ref{thm:multimodal:out_of_scope}
 \begin{mythm}
 \label{thm:multimodal:out_of_scope}
 $ \forall s \in \{ s | \, |s - x(0)| < \gamma^{0} ( \max ( | x^{G} - x^{0} | , | x^{P}(k) - x^{0}  | ) \}, f(s) < f(x^{P})  $, the probability that a particle finds a better solution is zero.
@@ -360,7 +361,7 @@ If the region $ R $ of $ | x - x^{*} | < \epsilon $ is monotonic, $ x(k) \in R $
 
 \subsection{Exploitation and exploration}
 
-The property showed above provides the exploitation and exploration at a particle level.
+The property showed above provides an interpretation of the exploitation and exploration at a particle level.
 
 \subsubsection{Exploitation}
 
