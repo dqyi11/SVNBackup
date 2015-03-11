@@ -29,8 +29,11 @@
 
 In one global-best stagnation, the global best is unchanged.
 Thus we denote the global best as a constant $ x^{G} $ in one global-best stagnation.
-In this case, the particle is isolated from the impacts from other particles till any particle in the swarm finds a better solution.
-We are interested with 
+In this case, the movement of any particle in the swarm is not influenced by any other particles till any particle in the swarm finds a better solution.
+The particle with the leader role might deviate from $ x^{G}(k) $ due to the velocity inertia.
+But it will gradually converge to $ x^{G}(k) $ by Equation \eqref{eq:up_vel:leader}.
+The particle with the follower role is hard to evaluate because there are effects from both the personal best and the global best.
+In one global-best stagnation, we are interested with 
 \begin{itemize}
 \item whether the particle converges to the global best;
 \item and the probability that the particle find a new global best.
@@ -63,7 +66,7 @@ We have property \ref{prop:particle:nonoptimal}.
 
 \begin{myprop}
 \label{prop:particle:nonoptimal}
-Whether a particle can reach the optimal is determined by the boundary of its movement.
+Whether a particle can reach the optimal is impacted by the boundary of its movement.
 \end{myprop}
 
 \begin{figure}[tbph]
@@ -73,14 +76,14 @@ Whether a particle can reach the optimal is determined by the boundary of its mo
 \label{fig:bound_position}
 \end{figure}
 
-Not only $ | x^{P} - x^{G} | $ but also the parameters have impact on the size of the boundary.
+By Theorem \ref{thm:state_bound}, we know that the size of the boundary are determined by both  $ | x^{P} - x^{G} | $ and the parameters.
 Figure \ref{fig:bound_position} gives an example on the boundary impacting the moving toward the optimal.
 Parameter 1 is $ \chi = 0.3, \phi^{P} = 0.2, \phi^{G} = 0.2 $ and parameter 2 is $ \chi = 0.72984, \phi^{P} = 2.05, \phi^{G} = 2.05 $.
 As a result, parameter 1 makes a smaller movement boundary, which prevents the particle reaching the optimal.
 
 \subsection{Stagnation}
 
-In stagnation, we have both the personal best and the global best are not updated, which are denoted as $ x^{P} $ and $ x^{G} $ respectively.
+In stagnation, both the personal best and the global best are not updated, which can be denoted as constant, $ x^{P} $ and $ x^{G} $ respectively.
 By Theorem \ref{thm:state_bound}, we know that $ \lVert x(k) - x^{G} \rVert $ indicates the distance from position $ x(k) $ to the global best, which depends on  $ \lVert x^{P} - x^{G} \rVert $.
 Thus we have Theorem \ref{thm:stagnation_bound}.
 
@@ -95,23 +98,27 @@ $  | x(k) - x^{G} | \leq \gamma ( | x^{P} - x^{G} | ). $
 $ \gamma () $ is a boundary function.
 \end{mythm}
 
-As the process of an optimization process is a sequence of ``global-bestder stagnation''.
-Stagnation usually only is sub-section of a ``global-best stagnation''.
-What happens to a particle in ``global-best stagnation'' directly impacts the convergence and the optimal search.
+Theorem \ref{thm:stagnation_bound} indicates how the movement of the particle is bounded by the distance between the global best and the personal best.
+The result of the stagnation is not enough to evaluate the convergence of the entire optimal search.
+A stagnation is a sub-section of a global-best stagnation.
+A sequence of global-best stagnations consist of the procedure of the PSO.
+We need the results of the global-best stagnation for the convergence analysis.
+We look at two categories of fitness distribution, unimodal and multi-modal respectively in following two subsections.
 
 \subsection{Unimodal fitness distribution}
 
 Unimodal is one of the most typical fitness distributions.
 It provides a partial monotonic form.
-In most of the cases the final convergence happens on one unimodal of a fitness distribution.
-Any other form can usually be viewed as a combination of unimodalities as well.
-The are two type of cases in a unimodal fitness distribution, $ x^{G} = x^{*} $ and $ x^{G} \not = x^{*} $.
+Any form of fitness distribution can be approximated as a combination of unimodalities.
+In most of the cases, the particles finally convergence towards one unimodal of a fitness distribution.
+Unimodal fitness distribution is a typical and bare case to analyze.
+In a unimodal fitness distribution, there are two type of cases, $ x^{G} = x^{*} $ and $ x^{G} \neq x^{*} $.
 
 \subsubsection{$ x^{G} = x^{*} $}
 
-When the global best is already the optimal solution, there is no chance for the particle to find a better.
-The particle should gradually converge to the global best if the position-update component is input-to-state stable, as in Theorem \ref{thm:unimodal:particle:converge}.
-
+When $ x^{G} = x^{*} $, it means that the global best is already the optimal solution.
+There is no chance for a particle to find a better.
+By Theorem \ref{thm:unimodal:particle:converge}, we know that the particle should gradually converge to the global best if the position-update component is input-to-state stable.
 The fitness distribution determines the property of the personal best update component.
 We have the condition of the fitness distribution that makes the personal best update component input-to-state stable.
 It is given in Lemma \ref{lem:unimodal:particle:input_iss}.
