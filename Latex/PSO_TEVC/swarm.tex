@@ -19,12 +19,14 @@
 %\end{itemize}
 
 In section \ref{sec:particle}, we can see the pros and cons of the search capability of a particle.
-The movement of a particle is a randomized walk in an attractive potential field defined by the global best and the personal best.
+The movement of a particle is equivalent to a randomized walk in an attractive potential field defined by the global best and the personal best.
 There exist a lot of factors that prevent the particle reaching the optimal.
-The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously, which forms a beam-search style.
+Organizing the particles into a swarm empowers the search capability.
+The swarm initializes the particles randomly in the search space and has the particles searching the optimal simultaneously.
+This forms a beam-search style.
 The import of interaction topology enhances the search capability, which adds information exchange to a beam-search style optimization.
-In this section, our analysis is based on the star topology of global best update.
-In this topology, the global best update imports the competition among the particles.
+In this section, our analysis is based on the star topology of global-best update.
+In this topology, the global-best update imports the competition among the particles.
 The particle finds a new global best becomes the leader of the swarm.
 
 %unimodal
@@ -39,7 +41,7 @@ The particle finds a new global best becomes the leader of the swarm.
 %\end{itemize}
 
 As we can see in Figure \ref{fig:pso_sys_flow}, the system of a swarm can be viewed as that the global best update component provides a global best $ x^{G} $ and feedbacks into each particle.
-The update rule of the global best update component is the same with that of the personal best update component.
+The update rule of the global best update component is the same with that of the personal best update component, as defined in Equation \eqref{eq:gb_up}.
 Several of the properties of the personal best update component can be inherited here.
 We have Lemma \ref{lem:unimodal:swarm:gb_up_iss}.
 
@@ -52,7 +54,7 @@ Same as that in the proof of Lemma \ref{lem:unimodal:particle:input_iss}.
 \end{proof}
 \end{mylem}
 
-We can naturally derive Theorem \ref{thm:unimodal:swarm:garuantee_converge}.
+By Lemma \ref{lem:unimodal:swarm:gb_up_iss}, we can derive Theorem \ref{thm:unimodal:swarm:garuantee_converge}.
 
 \begin{mythm}
 \label{thm:unimodal:swarm:garuantee_converge}
@@ -64,12 +66,12 @@ When both the particles and the global best update are input-to-state stable, we
 \end{mythm}
 
 As we know, when $ x^{G}(k) = x^{*} $, the swarm becomes only a set of particles without interactions.
-The problem falls into how each particle can solve the inconsistency between the personal best and the global best so that the convergence is toward the optimal.
+The problem can be viewed as how each particle can solve the inconsistency between the personal best and the global best so that the convergence is toward the optimal.
 In analyzing the swarm behavior, here we are interested with how the global best $ x^{G} $ of the swarm can converge to $ x^{*} $.
 
 \subsection{Unimodal fitness distribution}
 
-Because of the competition exists in the swarm, a guarantee that finds a better solution leads to a guarantee that finds the optimal.
+Because there exists a competition in the swarm, as long as that there is a guarantee that a better solution will be found, there is a guarantee that the optimal can be found.
 The refinement will never stop till the optimal is reached.
 We have Theorem \ref{thm:unimodal:swarm:converge}.
 
@@ -92,12 +94,13 @@ This contradicts with Theorem \ref{thm:unimodal:particle:better}.
 
 %\subsubsection{Simulation}
 
-Even though there are cases that finding a better solution cannot be guaranteed by the particles as in Theorem \ref{thm:unimodal:swarm:converge}, a swarm could still enhance the search capability.
+As in Theorem \ref{thm:unimodal:swarm:converge},
+there are cases that the particles finds a better solution cannot be guaranteed, working in a swarm will enhance the search capability then.
 We have Lemma \ref{lem:swarm:prob_find_better}.
 
 \begin{mylem}
 \label{lem:swarm:prob_find_better}
-The probability that a swarm finds a better solution is higher than the probability that any particle does.
+The probability that a swarm finds a better solution is higher than the probability that any particle in the swarm.
 The bigger number of the particles is, the higher probability that the swarm finds a better solution is.
 \begin{proof}
 Let $ P_{s} $ be the probability that a swarm of size $ N $ finds a better solution.
@@ -131,7 +134,7 @@ We know that $ E_{s} ( \Delta ) \geq E_{i} ( \Delta )  $, which means that the s
 \end{proof}
 \end{mylem}
 
-We can have Theorem \ref{thm:swarm:higher_conv_rate} that the swarm accelerates the convergence of the particles.
+We can have Theorem \ref{thm:swarm:higher_conv_rate} that the convergence rate of a particle is accelerated in a swarm.
 
 \begin{mythm}
 \label{thm:swarm:higher_conv_rate}
@@ -162,7 +165,7 @@ Running a particle ( with same initial position, global best and personal best )
 Naturally, more particles form the parallel sampling, which generate more diverse samplings in one iteration.
 As a result, the swarm could generate more diverse samplings on a search region, as in Property \ref{prop:swarm:more_samplings}.
 
-It is not surprising that a swarm makes a bigger exploration range.
+It is straightforward that a swarm makes a bigger exploration range.
 Because the exploration range of a swarm is the join of the exploration ranges of all the particles.
 However, the explore range of each single particle might be changed as well, due to the change of the global best.
 We have Theorem \ref{thm:swarm:expand_range}.
@@ -217,7 +220,7 @@ Theorem \ref{thm:swarm:expand_range} indicates how the swarm could influence the
 
 %\subsubsection{Simulation}
 
-\subsection{Value of a swarm}
+\subsection{Empowered by organizing into a swarm}
 
 %Being on one hill is the unlikely case bound in the multi hill case.
 %Might not seem useful but is the essence of what makes a swarm a swarm.
@@ -231,6 +234,8 @@ Theorem \ref{thm:swarm:expand_range} indicates how the swarm could influence the
 %try to use bound as a function of hill width metric
 
 %Rastrigin as a counter example? Does it get stuck or just sample for ever? It certainly runs longer.
+
+We have shown that the search capability of a particle has been enhanced when it is organized into a swarm structure.
 
 \subsubsection{Competition}
 
