@@ -262,3 +262,39 @@ $
 \phi \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) .
 $
 \end{proof}
+
+\subsection{Proof of Theorem \ref{lem:unimodal:particle:input_iss}}
+\label{sec:lem:unimodal:particle:input_iss:proof}
+
+\begin{proof}
+Let $ V(x^{P}(k)) = f(x^{G}) - f(x^{P}(k)) $.
+Because we have
+$ \alpha_{1} ( |x^{P}(k)| ) \leq V( x^{P}(k) ) \leq \alpha_{2} ( |x^{P}(k)| )  $.
+We have $ V ( x^{P}(k) ) $ satisfying condition 1 of the ISS-Lyapunov function definition.
+
+We also have
+\begin{equation}
+\begin{aligned}
+& V(x^{P}(k+1)) - V(x^{P}(k)) \\
+= & f(x^{P} (k)) - f(x^{P} (k+1)) \\
+= & f(x^{P}(k)) - f( \arg \max_{ \{ x^{P}(k), x(k+1)  \} } f(x) )  \\
+= & 
+\left\{\begin{matrix}
+0  & \mbox{if } f(x(k+1)) \leq f(x^{P}(k)) \\ 
+f(x^{P}(k)) - f(x(k+1)) & \mbox{if } f(x(k+1)) > f(x^{P}(k))
+\end{matrix}\right. \\
+\leq & 
+\left\{\begin{matrix}
+f(x^{P}(k)) - f(x(k+1))  & \mbox{if } f(x(k+1)) \leq f(x^{P}(k)) \\ 
+f(x^{P}(k)) - f(x(k+1)) & \mbox{if } f(x(k+1)) > f(x^{P}(k))
+\end{matrix}\right. \\
+\leq & f(x^{P}(k)) - f(x(k+1)) \\
+\leq & - V(x^{P}(k)) + V(x(k+1)) \\
+\leq & - \alpha_{1} ( | x^{P}(k) | ) + \alpha_{2} ( | x(k+1) | ).
+\end{aligned}
+\end{equation} 
+We have that $ \alpha_{1} () $ is $ K_{\infty} $-function and $ \alpha_{2} () $ is $ K $-function.
+Thus the condition 2 of the ISS-Lyapunov function definition is also satisfied.
+$ V(x) $ is an ISS-Lyapunov function.
+By Lemma 3.5 in \cite{Jiang2001857}, in this case, the personal best update component is input-to-state stable.
+\end{proof}
