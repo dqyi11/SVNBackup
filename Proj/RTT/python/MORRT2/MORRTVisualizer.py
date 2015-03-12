@@ -34,16 +34,23 @@ class MORRTVisualizer(object):
         
         self.font = pygame.font.SysFont(None, 24)
         
+        self.useDistance = False
+        self.useObstacle = False
+        
     def setName(self, name):
         self.name = name
     
     def loadObj(self, objFiles):    
         for obj in objFiles:
             self.objImgs.append(pygame.image.load(obj))
+            
+    def loadObs(self, obsFile):
+        self.obsImg = pygame.image.load(obsFile)
 
     def setLineColors(self, colors):
-        self.lineColors = colors    
+        self.lineColors = colors   
         
+            
     def saveResultInOne(self):
         self.screen.fill((255,255,255))
         for idx in range(self.totalIdx):
@@ -58,9 +65,7 @@ class MORRTVisualizer(object):
         pygame.draw.circle(self.screen, (255,0,0), start, 5)
         pygame.draw.circle(self.screen, (0,0,255), goal, 5)
                 
-        pygame.image.save(self.screen, './fig/'+self.name+"-ALL.png")
-            
-            
+        pygame.image.save(self.screen, './fig/'+self.name+"-ALL.png") 
         
     def saveResult(self):
         for idx in range(self.totalIdx):
@@ -76,8 +81,17 @@ class MORRTVisualizer(object):
                         pygame.draw.line(self.screen, (128,200,0), n_pos, c_pos)
             else:
                 disp_idx = idx
+                if disp_idx == 0:
+                    if self.useDistance == True and self.useObstacle == True: 
+                        self.screen.blit(self.obsImg, (0,0))
+                    else:
+                        self.screen.blit(self.objImgs[disp_idx], (0,0))
+                    
                 if disp_idx > 0:
-                    self.screen.blit(self.objImgs[disp_idx-1],(0,0))
+                    if self.useDistance == True:
+                        self.screen.blit(self.objImgs[disp_idx-1],(0,0))
+                    else:
+                        self.screen.blit(self.objImgs[disp_idx], (0,0))
                 for n in self.morrt.referenceTrees[disp_idx].nodes:
                     for c in n.children:
                         n_pos = (int(n.pos[0]), int(n.pos[1]))

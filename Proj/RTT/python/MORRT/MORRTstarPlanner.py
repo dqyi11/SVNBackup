@@ -42,7 +42,7 @@ class MORRTstarPlanner(object):
         self.morrts.init(start, goal, self.costFuncs, self.weights)
 
         for it in range(iterationNum):
-            #print "Iter@" + str(it)
+            print "Iter@" + str(it)
             self.morrts.extend()
             self.morrts_viz.update()
                 
