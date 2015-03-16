@@ -195,8 +195,9 @@ The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 The solve of the homotopy-based path planning, we need to figure out an efficient way to identify the homotopy class a path belongs to.
 In this paper, we use a set of reference frames to identify which homotopy class a path belongs to.
 Figure \ref{fig:obs_map:map} shows how the reference frames (blue and green dash lines) can be used determine how a path (orange line) sequentially visits different regions.
-
-As the reference frames decompose the map by the obstacles, they can be generated from the Voronoi diagram.
+A reference frame connects either two obstacles or  an obstacle with a boundary, thus crossing a reference reveals a position in between two obstacles or between an obstacle and a boundary.
+Given the start position and the end position, how a path sequentially crosses the reference frames indicates the topology information.
+By the property of the reference frames, they can be generated from the Voronoi diagram.
 In this paper, we adopt the improved Jenkins' method in \cite{Hernandez201544}.
 The improved Jenkin's method provides a much simpler initialization process in complex obstacles, especially in the regions adjacent to the map boundary.
 It also avoids that the reference frames intersects with each other.
@@ -241,7 +242,7 @@ Figure \ref{fig:obs_map:topology} shows a topological graph from the map decompo
 
 Any path sequentially visits the regions maps to a node walk on the topological graph.
 It is noticeable that two adjacent regions might be connected with not only one reference frame, which means that two nodes in the topological graph might be connected with more than one edge.
-Thus, two path with same edge sequence belong to same homotopy class but two path with same node sequence don't.  
+Thus, two paths with same edge sequence belong to same homotopy class but two path with same node sequence don't.  
 %Any path can be mapped into a sequence of nodes in the topological graph.  
 %{\sc Explain how or given an example.}
 %In determining the homotopy class, two paths share same start and goal.
@@ -294,7 +295,7 @@ How the homotopic grammar is defined will be discussed in Section \ref{sec:homot
 \end{algorithm} 
 
 
-We notice that two string can be generated from two paths that belongs to same homotopy class.
+We notice that two strings can be generated from two paths that belongs to same homotopy class.
 We define the \emph{homotopic grammar} to determine whether two string belongs to same homotopy class.
 Also the homotopic grammar can be used to determine whether the string of a sub-path belongs to some homotopy class so that we can know whether the extension of the tree is under the homotopic constraint.
 
