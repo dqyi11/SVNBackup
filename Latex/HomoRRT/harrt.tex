@@ -230,6 +230,7 @@ The called methods are explained as following,
 \end{itemize}
 %{\sc What is B?}
 
+
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
 		\State $ \bm{R} = \emptyset, \bm{b} = \emptyset, \bm{\alpha} = \emptyset, \bm{\beta} = \emptyset $
@@ -293,7 +294,7 @@ Each path can be mapped into a {\em string}, which represents the sequence of th
 In \cite{Hernandez201544}, the string is used to identify the homotopy class of each branch in RRT so that the growing of a tree is constrained in a homotopy class.
 In this paper, each branch of the tree structure tracks the corresponding string as the homotopy information so that the homotopic constraints can be satisfied or the homotopy class can be identified.
 We define the paths with same string as a \emph{string class}.
-Because two string classes might still belong to same homotopy class, e.g. a string class $ \alpha_{1,1} - \alpha_{2,1} $ and a string class $ \alpha_{2,1} - \alpha_{1,1} $ by the reference frames in Figure \ref{fig:obs_map}.
+Because two string classes might still belong to same homotopy class, e.g. a string class $ \alpha_{1,1}-\alpha_{2,1} $ and a string class $ \alpha_{2,1}-\alpha_{1,1} $ by the reference frames in Figure \ref{fig:obs_map}.
 A homotopic grammar is needed to identify the equivalence.
 Also the homotopic grammar can be used to find all the equivalent string classes in the same homotopy class by giving one string class.
 The definition of the homotopic grammar will be discussed in Section \ref{sec:homotopic_grammar}.
@@ -631,9 +632,10 @@ In this section, we look at how to have better support on the homotopy classes a
 \subsection{homotopic grammar}
 \label{sec:homotopic_grammar}
 
-Because each path or subpath can be converted into a string, which represents a sequence of characters by crossed reference frames.
-When we have a set of homotopy classes, a homotopic grammar can be created to define all the strings of the set of homotopy classes.
-The homotopic grammar is used to manage the exploration process in \textsc{HomotopyCheck} and determine which homotopy class a path belongs to by its string.
+The reference frames do not have any intersection between each other so that the map can be divided into regions without overlap.
+Any path in the map belongs to a string class by how it sequentially crosses the reference frames.
+In a homotopy-based path planning problem, given the start position and the goal position, we have a structural rule of how the string should be like, which is defined as the homotopic grammar.
+
 
 \begin{figure}
 	\centering
@@ -659,36 +661,50 @@ The homotopic grammar is used to manage the exploration process in \textsc{Homot
 	\begin{subfigure}[t]{0.4\linewidth}
 		\centering
 		\includegraphics[width=\textwidth]{fig/repeated_pattern}
-		\caption{Equivalence}
-		\label{fig:grammar:repeated_pattern}
+		\caption{Palindrome pattern}
+		\label{fig:grammar:palindrome_pattern}
 	\end{subfigure} 
 	\caption{Homotopic grammar.}
 	\label{fig:grammar}
 \end{figure}
 
-There are several properties in the homotopic grammar which indicates some information of the paths.
+The homotopic grammar defines the acceptable strings, the equivalence of the strings in homotopy and other relevant shape information.
+The grammar can be represented by a finite state machine, which is constructed from the topological graph.
+The region that the start position is in defines the initial state.
+The region that the goal position is in defines the end state.
 \begin{itemize}
 \item \textbf{Feasibility}
 As the reference frames are connected by the regions, any strings from the grammar must be a feasible one.
 A feasible string means that any two sequential characters of it are connected in the topological graph by the nodes of the regions.
 An example is given in Figure \ref{fig:grammar:feasibility}.
+A string of $ \beta_{1,1} $ cannot be from a correct path from the start to the goal.
+The finite state machine can be used to check whether a string is accepted by the homotopic grammar, which indicates that the path is a feasible one.
 
 \item \textbf{Equivalence}
 Some characters of the reference frames are equivalent in constructing the strings.
-All the reference frames contains the center point $ c $ show this property.
+All the reference frames contain the center point $ c $ show this property.
 The segment crossing those reference frames in any sequence belongs to same homotopy class.
 Figure \ref{fig:grammar:equivalence} shows an example.
+A path in string class $ \alpha_{1,1}-\alpha_{2,1} $ and a path in string class $ \alpha_{2,0}-\alpha_{1,0} $ belong to the same homotopy class.
+
 
 \item \textbf{Recurring character}
-Recurring character in a string indicates that the path goes around some obstacles and back to a visited region.
-Recurring equivalent characters also has same effect.
+Recurring character in a string indicates that the path goes around some obstacles and back to cross a visited reference frame.
 One example is illustrated in Figure \ref{fig:grammar:recurring}.
+A string $ \beta_{2,1}-\alpha_{1,2}-\alpha_{1,0}-\alpha_{2,0}-\beta_{2,1} $ contains the recurring of $ \beta_{2,1} $, which indicates that a path crosses a reference twice.
+It usually means that the path goes back to a visited region again.
 
-\item \textbf{Repeated pattern}
-Repeated pattern shows that the path is back and forth among some regions.
+\item \textbf{Palindrome pattern}
+Palindrome pattern is a particular case of recurring character.
+It shows that the path is back and forth among some regions,
+which is very important in checking the equivalence of two string classes.
 In minimization problem, it is not useful and can be often ignored.
-Because repated pattern will only increase the cost if the cost function is additive.
-However, in some special scenario, for example it is expected to scan a region for a fixed number of times, the repeated pattern can be used.
+Because a palindrome pattern will only increase the cost if the cost function is additive.
+However, in some special scenario, for example it is expected to scan a region for a fixed number of times, the palindrome pattern can be used.
+
+In Figure \ref{fig:grammar:palindrome_pattern}, the string $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1}-\beta_{1,1}-\alpha_{2,2} $ contains a palindrome structure $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1} $.
+It can be removed in determining the homotopy equivalence.
+Thus it equals to the string $ \beta_{1,1}-\alpha_{2,2} $.
 
 \end{itemize}
 
