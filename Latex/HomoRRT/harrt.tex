@@ -537,8 +537,8 @@ After that, more reference frames will be created correspondingly and a new topo
 \end{figure}
 
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
-A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes. 
-By the homotopic grammar, a set of string classes can be obtained from a set of homotopy classes.
+A breath first search on the topological graph can return a set of string classes that satisfy the labeled constraints, which also indicates a set of homotopy classes. 
+%By the homotopic grammar, a set of string classes can be obtained from a set of homotopy classes.
 The \textsc{HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by these string classes.
 The problem is then similar with that in Section \ref{sec:string_constraint}.
 Because only the optimal path in all these homotopy classes is wanted, a single-directional tree structure of HA-RRT$^{*}$ is also enough to explore the working space.
@@ -551,13 +551,10 @@ Sometimes there exists no hard constraint on the topology of the paths.
 But there does exist the difference on different topology.
 For example, visiting some region benefits some sub-task, or going around some object enhances the task performance.
 If the human can tell the preference on the topology, scores can be assigned to each homotopy class.
-
-Consider the topology as a discrete variable, the values of the variable is the set of all the homotopy classes.
+In this case, the homotopy-based path planning returns a set of optimal paths of the homotopy classes.
+Thus, a bi-directional tree structure is needed in HA-RRT$^{*}$.
 The problem can be viewed as a two-objective optimization problem.
-Figure \ref{fig:all_homotopy:no_pref} provides an example of the optimal paths in four homotopy classes.
-Because the optimal solution in one homotopy class dominates all other solutions in the same class.
-By combining the optimal paths in all the homotopy classes, we can find the non-dominated paths from them.
-Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pareto front.
+One is the objective to be optimized, the other is the human's preference.
 
 \begin{figure}
 	\centering
@@ -591,6 +588,11 @@ Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pare
 	\caption{Bidirectional RRT$^{*}$.}
 	\label{fig:all_homotopy:no_pref}
 \end{figure}
+
+Figure \ref{fig:all_homotopy:no_pref} provides an example of the optimal paths in four homotopy classes.
+Because the optimal solution in one homotopy class dominates all other solutions in the same class.
+By combining the optimal paths in all the homotopy classes, we can find the non-dominated paths from them.
+Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pareto front.
 
 \subsection{Homotopy classes without preference}
 \label{sec:without_preference}
