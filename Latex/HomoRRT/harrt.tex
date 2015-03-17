@@ -35,6 +35,7 @@ Daqing Yi, Michael A. Goodrich and Kevin D. Seppi
 
 \begin{document}
 
+
 \maketitle
 \thispagestyle{empty}
 \pagestyle{empty}
@@ -117,7 +118,8 @@ The supervisor can then select one that satisfy his/her intent.
 In order to support these forms of human intent, expressed as homotopic constraints and preferences, we propose a homotopy-aware RRT$^{*}$ (HA-RRT$^{*}$) algorithm. 
 This algorithm uses an RRT$^*$ algorithm to explore possible paths, but each branch of the random tree is aware of the homotopy class to which it belongs. 
 The remainder of the paper presents this algorithm. We first review the relevant work in section~\ref{sec:related_work}.
-We then introduce the algorithm in section~\ref{sec:algorithm} and show how it can be used to implement the different forms of human intent in section~\ref{sec:application}. An analysis of the algorithm is given in section~\ref{sec:analysis}, and then conclusions are presented.
+We then introduce the algorithm in section~\ref{sec:algorithm} and show how it can be used to implement the different forms of human intent in section~\ref{sec:application}. 
+An analysis of the algorithm is given in section~\ref{sec:analysis}, and then conclusions are presented.
 
 \section{Related work}
 \label{sec:related_work}
@@ -195,21 +197,22 @@ The goal is to find paths $ \sigma^{*} \in \Sigma^{*}$ such that
 	\label{fig:obs_map}
 \end{figure}
 
-The solve of the homotopy-based path planning, we need to figure out an efficient way to identify the homotopy class a path belongs to.
+To solve of the homotopy-based path planning, we need to figure out an efficient way to identify the homotopy class a path belongs to.
 In this paper, we use a set of reference frames to identify which homotopy class a path belongs to.
-Figure \ref{fig:obs_map:map} shows how the reference frames (blue and green dash lines) can be used determine how a path (orange line) sequentially visits different regions.
-A reference frame connects either two obstacles or  an obstacle with a boundary, thus crossing a reference reveals a position in between two obstacles or between an obstacle and a boundary.
+Figure \ref{fig:obs_map:map} shows an example of a map decomposed with the reference frames(blue and green dash lines).
+A \emph{reference frame} is defined as a line segment that connects either two obstacles or  an obstacle with a boundary. Thus crossing a reference reveals a position in between two corresponding obstacles or between an obstacle and a boundary.
 Given the start position and the end position, how a path sequentially crosses the reference frames indicates the topology information.
+Figure \ref{fig:obs_map:map} illustrates how the reference frames can be used determine how a path (orange line) sequentially visits different regions.
 By the property of the reference frames, they can be generated from the Voronoi diagram.
-In this paper, we adopt the improved Jenkins' method in \cite{Hernandez201544}.
-The improved Jenkin's method provides a much simpler initialization process in complex obstacles, especially in the regions adjacent to the map boundary.
+However, in this paper, we adopt the improved Jenkins' method in \cite{Hernandez201544}.
+The improved Jenkin's method provides a much simpler initialization process in complex obstacles than using Voronoi diagram, especially in the regions adjacent to the map boundary.
 It also avoids that the reference frames intersects with each other.
 %As the reference frames are from the rays that rotate along the center point, the rotation order implies the direction of the path.
 
-The line segments, two ends of which connect with obstacles, are defined as \emph{reference frames}.
 The reference frames decompose the map into several regions, which are the line segments formed by connecting the \emph{center point} $ c $ to a random \emph{obstacle point} $ b_{k} $ in each obstacle.
-%{\sc This is ambiguous. Elaborate and use figure 1(a) to help describe how you form the line segments.}  
-Given two paths, how they sequentially cross the reference frames can be used to identify homotopy equivalence.
+%{\sc This is ambiguous. Elaborate and use figure 1(a) to help describe how you form the line segments.} 
+The obstacle point $ b_{k} $ is randomly sampled from the region of the obstacle $ B_{k} $.
+The center point $ c $ is randomly sampled in $ X_{\it free} $, which is not in a line that connects any two different $ b_{k} $.
 
 %Observe how this process partitions the space $X$ into distinct regions, but note that the partition of $X$ differs from the partition of all possible paths through the space created by grouping paths into homotopic classes. 
 %We use the partition of $X$ to identify a homotopic class as follows, again using the improved Jenkins' method.
@@ -227,6 +230,37 @@ The called methods are explained as following,
 \end{itemize}
 %{\sc What is B?}
 
+
+\begin{algorithm}[hbtp]
+	\begin{algorithmic}[1]
+		\State $ \bm{R} = \emptyset, \bm{b} = \emptyset, \bm{\alpha} = \emptyset, \bm{\beta} = \emptyset $
+		\For{\textbf{each} $ B_{k} \in \bm{B} $ }
+		\State $ b_{k} $ $ \leftarrow $ Randomly sample from $ B_{k} $
+		\State $ \bm{b} \leftarrow \bm{b} \cup b_{k} $
+		\EndFor
+		\While{ $ \exists b_{k}, b_{k'} , c \in $ \Call{Line}{ $ b_{k}, b_{k'} $ } }
+		\State $ c \leftarrow  $ Randomly sample from $ \bm{X}_{free} $
+		\EndWhile
+		\For{\textbf{each} $ b_{k} \in \bm{b} $ }
+		\State $ \alpha_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, c - b_{k} $ }
+		\State $ \beta_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, b_{k} - c $ }
+		\State $ \bm{\alpha} \leftarrow \bm{\alpha} \cup \alpha_{k} $
+		\State $ \bm{\beta} \leftarrow \bm{\beta} \cup \beta_{k} $			
+		\EndFor
+		\For{\textbf{each} $ \alpha_{k} \in \bm{\alpha} $}
+		\State $ \{ \alpha_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \alpha_{k}, \bm{B} $}
+		\State $ \bm{R} \leftarrow \bm{R} \cup \{ \alpha_{k_{m}} \} $
+		\EndFor
+		\For{\textbf{each} $ \beta_{k} \in \bm{\beta} $}
+		\State $ \{ \beta_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \beta_{k}, \bm{B} $}
+		\State $ \bm{R} \leftarrow \bm{R} \cup \{ \beta_{k_{m}} \} $
+		\EndFor
+		\Return $ \bm{R} $
+	\end{algorithmic}
+	\caption{ \textsc{InitRefFrames} ($ \bm{X}_{free} , \bm{B} $) }
+	\label{alg:harrt:init_ref_frames}
+\end{algorithm} 
+
 Figure \ref{fig:obs_map:map} illustrates how the reference frames of a map is initialized.
 $ b_{1} $ and $ b_{2} $ are randomly sampled from each obstacles.
 Then a center point $ c $ is randomly sampled, which does not locate in any line connects any two $ b_{k} $.
@@ -243,6 +277,7 @@ Figure \ref{fig:obs_map:topology} shows a topological graph from the map decompo
 %The nodes are the regions and the edges are the reference frames. 
 %{\sc What do you mean "reference frame"?  This term hasn't been defined.}
 
+Given two paths, how they sequentially cross the reference frames can be used to identify homotopy equivalence.
 Any path sequentially visits the regions maps to a node walk on the topological graph.
 It is noticeable that two adjacent regions might be connected with not only one reference frame, which means that two nodes in the topological graph might be connected with more than one edge.
 Thus, two paths with same edge sequence belong to same homotopy class but two path with same node sequence don't.  
@@ -258,7 +293,11 @@ Label each reference frame with a \emph{character}.
 Each path can be mapped into a {\em string}, which represents the sequence of the crossed reference frames.
 In \cite{Hernandez201544}, the string is used to identify the homotopy class of each branch in RRT so that the growing of a tree is constrained in a homotopy class.
 In this paper, each branch of the tree structure tracks the corresponding string as the homotopy information so that the homotopic constraints can be satisfied or the homotopy class can be identified.
-How the homotopic grammar is defined will be discussed in Section \ref{sec:homotopic_grammar}.
+We define the paths with same string as a \emph{string class}.
+Because two string classes might still belong to same homotopy class, e.g. a string class $ \alpha_{1,1} - \alpha_{2,1} $ and a string class $ \alpha_{2,1} - \alpha_{1,1} $ by the reference frames in Figure \ref{fig:obs_map}.
+A homotopic grammar is needed to identify the equivalence.
+Also the homotopic grammar can be used to find all the equivalent string classes in the same homotopy class by giving one string class.
+The definition of the homotopic grammar will be discussed in Section \ref{sec:homotopic_grammar}.
 
 %The string is used for the homotopy awareness in this paper, which inherits from \cite{Hernandez201544}.
 
@@ -267,56 +306,25 @@ How the homotopic grammar is defined will be discussed in Section \ref{sec:homot
 
 %Stating that some property of the algorithm ``inherits from [some reference]" doesn't explain to the reader %what you did. Are you just saying that we are describing how to algorithm in the reference works?  If so, say that instead of "inherits from."}
 
-\begin{algorithm}[hbtp]
-	\begin{algorithmic}[1]
-		\State $ \bm{R} = \emptyset, \bm{b} = \emptyset, \bm{\alpha} = \emptyset, \bm{\beta} = \emptyset $
-		\For{\textbf{each} $ B_{k} \in \bm{B} $ }
-			\State $ b_{k} $ $ \leftarrow $ Randomly sample from $ B_{k} $
-			\State $ \bm{b} \leftarrow \bm{b} \cup b_{k} $
-		\EndFor
-		\While{ $ \exists b_{k}, b_{k'} , c \in $ \Call{Line}{ $ b_{k}, b_{k'} $ } }
-			\State $ c \leftarrow  $ Randomly sample from $ \bm{X}_{free} $
-		\EndWhile
-		\For{\textbf{each} $ b_{k} \in \bm{b} $ }
-			\State $ \alpha_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, c - b_{k} $ }
-			\State $ \beta_{k} \leftarrow $ \Call{Ray}{ $ b_{k}, b_{k} - c $ }
-			\State $ \bm{\alpha} \leftarrow \bm{\alpha} \cup \alpha_{k} $
-			\State $ \bm{\beta} \leftarrow \bm{\beta} \cup \beta_{k} $			
-		\EndFor
-		\For{\textbf{each} $ \alpha_{k} \in \bm{\alpha} $}
-			\State $ \{ \alpha_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \alpha_{k}, \bm{B} $}
-			\State $ \bm{R} \leftarrow \bm{R} \cup \{ \alpha_{k_{m}} \} $
-		\EndFor
-		\For{\textbf{each} $ \beta_{k} \in \bm{\beta} $}
-			\State $ \{ \beta_{k_{m}} \} \leftarrow $ \Call{Intersect}{$ \beta_{k}, \bm{B} $}
-			\State $ \bm{R} \leftarrow \bm{R} \cup \{ \beta_{k_{m}} \} $
-		\EndFor
-		\Return $ \bm{R} $
-	\end{algorithmic}
-	\caption{ \textsc{InitRefFrames} ($ \bm{X}_{free} , \bm{B} $) }
-	\label{alg:harrt:init_ref_frames}
-\end{algorithm} 
-
-
-We notice that two strings can be generated from two paths that belongs to same homotopy class.
-We define the \emph{homotopic grammar} to determine whether two string belongs to same homotopy class.
-Also the homotopic grammar can be used to determine whether the string of a sub-path belongs to some homotopy class so that we can know whether the extension of the tree is under the homotopic constraint.
 
 %{\sc So, is $\mathbf{R}$ the set of unique characters assigned to the edges of your graph? Is $\mathbf{B}$ the set of regions in the world, so each $B_k \in \mathbf{B}$ is a region?}
 %{\sc How is $c$ sampled in line 6? What is $\mathbf{b}$ and how is it initialized -- line 4.}
 
-With the generated reference frames $ \mathbf{R} $ to identify the homotopy classes, the next question is how to search the optimal in the homotopy classes.
-RRT$^{*}$ explores the map to generate an optimal tree structure based on the cost.
-The homotopy-based path planning problem essentially asks the optimal solution with the constraints of visiting some regions, which a single optimal tree structure cannot support.
-Here, we use a bidirectional RRT$^{*}$ to obtain the optimal cost-to-come and cost-to-go for the sampled positions, which assists the search of the optimal solution in the homotopy classes.
-Because the homotopy classes of the branches of both two trees are tracked in the exploration process, the proposed algorithm is named HA-RRT$^{*}$ (Homotopy-aware RRT$^{*}$).
+With the generated reference frames $ \mathbf{R} $ to identify the homotopy classes, the next question is how to search the optimal paths in the homotopy classes.
+RRT$^{*}$ explores the map to generate an optimal tree structure based on the cost distribution in the map.
+The homotopy-based path planning problem essentially asks the optimal solution with the constraints of visiting different regions, which a single optimal tree structure only explore the only best and cannot support.
+Here, we use a bidirectional RRT$^{*}$ to obtain the optimal cost-to-come and cost-to-go for different positions.
+We can eventually have the optimal path from the start to the goal via some position by combining the optimal cost-to-come to this position and the optimal cost-to-go to this position.
+Because the string classes of the branches of both two trees are also tracked in the exploration process, the optimal path that visits a specific position can be used to update the optimal paths of the string classes. 
+Because the string class is tracked during the exploration process, the homotopy class a branch of the tree is awared.
+The proposed algorithm is named Homotopy-aware RRT$^{*}$ (HA-RRT$^{*}$).
 The exploration process is given in Algorithm \ref{alg:harrt}.
 
 Two trees, the \emph{start tree} $ G_{s} $ and the \emph{goal tree} $ G_{g} $, are constructed from $ x_{init} $ and $ x_{goal} $ respectively.
 Two trees explore the map bidirectionally by calling \textsc{Explore}(), defined in Algorithm \ref{alg:harrt:explore}, at each iteration.
 By using each new vertex returned from \textsc{Explore}(), we can call \textsc{Connect}() to create a path with a vertex in the other tree.
-The created path will be compared with the current best path that belongs to the same homotopy class.
-If it is a better one, the best path in this homotopy class will be updated, which is implemented in \textsc{UpdateBestPathByClass}().
+The created path will be compared with the current best path that belongs to the same string class.
+If it is a better one, the best path in this string class will be updated, which is implemented in \textsc{UpdateBestPathByClass}().
 
 \begin{algorithm}[hbtp]
 	\begin{algorithmic}[1]
@@ -380,7 +388,7 @@ If it is a better one, the best path in this homotopy class will be updated, whi
 
 The exploration process of a tree structure is similar with that in RRT$^{*}$~\cite{Karaman-RSS-10}, 
 which is described in the \textsc{Explore} procedure in this paper.
-The only difference is that the string of each branch is updated and there is the \textsc{HomotopyCheck}() to check whether the string satisfies the defined grammar.
+The only difference is that the string of each branch is updated and there is the \textsc{HomotopyCheck}() to check whether the string of a branch is a substring of one reference strings.
 The called methods are defined as following:
 \begin{itemize}
 	\item \textsc{CRF}($ l, \bm{R} $):
@@ -391,12 +399,16 @@ The called methods are defined as following:
 	%Returns if the path or subpath $ s $ satisfies a given homotopy constraint.
 \end{itemize}
 
-The \textsc{HomotopyCheck}() guarantees that adding new edge or rewiring edges all satisfies the homotopy constraint. %{\sc How?}
-%The homotopy constraint is defined as a \emph{homotopic grammar}.
-%{\sc New concept.  You need to introduce a concept and explain something about it before you use it, or you must tell the reader what purpose the concept serves {\bf and} that you will explain it later in the paper.}
 Because RRT$^{*}$ maintains a tree structure, each vertex has only one path to arrive from the root.
 This path, which starts from the root to the vertex, indicates a string of characters sequentially.
-Each character represents a crossed reference frame. 
+Each character represents a crossed reference frame.
+The \textsc{HomotopyCheck}() guarantees that a new node is added or an edge is rewired only when the string of the new branch is a substring of one reference string.
+For example, if the reference string is defined as $ A-B $, a branch with string $ A $ satisfies the constraint but a branch with string $ B $ doesn't.
+The reference strings are generated by the equivalence of a given homotopy class defined by the homotopic grammar.
+Indirectly, the homotopic constraint can be guaranteed by using the \textsc{HomotopyCheck}().
+%{\sc How?}
+%The homotopy constraint is defined as a \emph{homotopic grammar}.
+%{\sc New concept.  You need to introduce a concept and explain something about it before you use it, or you must tell the reader what purpose the concept serves {\bf and} that you will explain it later in the paper.} 
 %{\sc Need to explain  this better.}
 
 The \textsc{Connect} procedure connects a vertex with the other tree to generate a path from the start to goal.
@@ -406,7 +418,7 @@ The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 	\item \textsc{Path}($ v, G $):	
 	Returns the path from the root of $ G $ to the vertex $ v $.
 	\item \textsc{Concatenate}{($ p_{a}, p_{b} $)}
-	Returns a concatenated path of $ p_{a} $ and $  p_{b} $.
+	Returns a concatenated path of $ p_{a} $ and $ p_{b} $.
 	If $ p_{a} $ and $  p_{b} $ are from different directions, one of the them will be reversed for the concatenation.
 \end{itemize}
 
@@ -434,13 +446,14 @@ The methods in Algorithm \ref{alg:harrt:binding} are defined as following:
 
 Because both the start tree $ G_{s} $ and the goal tree $ G_{g} $ add a new vertex. 
 The \textsc{Connect} procedure creates a path by connecting the new vertex with the other tree, which are $ p_{s} $ and $ p_{g} $ correspondingly.
-The new paths will be used to update the best path of the homotopy classes they belong to in \textsc{UpdateBestPathByClass} ().
+The new paths will be used to update the best path of the string classes they belong to in \textsc{UpdateBestPathByClass} ().
 
-When the exploration process is finished, there is a set that contains the best paths for all the homotopy classes.
-Because the homotopy class is defined by the string,
-there exist different strings belong to same homotopy classes.
-The \textsc{MergePaths} procedure will be called to merge the equivalent homotopy classes. 
+When the exploration process is finished, there is a set that contains the best paths for all the string classes.
+Because we are interested with the optimal paths in all the homotopy classes.
+We need to merge the optimal paths in the string classes that belongs to same homotopy class.
+The \textsc{MergePaths} procedure will be called to merge the equivalent string classes into the same homotopy classes. 
 Thus the set of paths $ P $ will be updated.
+We can have the optimal paths of all the homotopy classes under given homotopic constraint.
 
 \section{Homotopy-aware optimal path planning}
 \label{sec:application}
