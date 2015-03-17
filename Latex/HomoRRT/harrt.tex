@@ -131,16 +131,19 @@ Homotopy-based path planning requires an algorithm to determine the homotopic eq
 
 Research work have been finding effective and efficient ways of identifying the homotopy class a path belongs to or the homotopic equivalence of two paths.
 %One straightforward way is constructing a set of reference frames in the map, so that the how a path crosses the frames can be used for identification. 
-A Voronoi diagram-based algorithm has been used to determine homotopy classes, but this algorithm shows limitations on finding some paths in some cases~\cite{banerjee2013framework}.
+%A Voronoi diagram-based algorithm has been used to determine homotopy classes, but this algorithm shows limitations on finding some paths in some cases~\cite{banerjee2013framework}.
+The Voronoi diagram is used to identify a path from any homotopy class in \cite{banerjee2013framework}.
+By converting any path into a simple path from the Voronoi diagram, the homotopy class of the path can be determined, but it shows limitations on finding some paths in some cases.
 %Specifically, generating Voronoi diagram for obstacles of complicated shapes is hard.
-By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
+%By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
+By applying the funnel algorithm in the universal covering space, the minimum-length path is efficiently optimized in a given homotopy class in \cite{Hershberger199463}.
 Similarly, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex.
 Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
 The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
 Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside the region that the two paths close by the value of the complex integral.
 Because the map is discretized, the computation cost expands greatly if the obstacles are reasonably approximated by the cells.
 
-Sampling-based path planning, like RRT or PRM, has been an effective and popular tool of generating planning paths.
+Sampling-based path planning, like RRT or PRM, has been an effective and popular tool to generate planning paths.
 The idea of homotopy has also been integrated as well.
 By homotopic redundancy, the paths from PRM could be compared by the homotopy classes~\cite{1041613}.
 By dividing the space using the rays crossing each obstacle, reference frames could be used to represent the paths into canonical sequences~\cite{Hernandez201544}.
