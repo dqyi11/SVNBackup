@@ -455,6 +455,144 @@ The \textsc{MergePaths} procedure will be called to merge the equivalent string 
 Thus the set of paths $ P $ will be updated.
 We can have the optimal paths of all the homotopy classes under given homotopic constraint.
 
+\section{Analysis}
+\label{sec:analysis}
+
+The HA-RRT$^{*}$ consists of the homotopy-aware exploration and the constrained optimization.
+In this section, we look at how to have better support on the homotopy classes and provide the constrained optimal guarantee.
+
+\subsection{homotopic grammar}
+\label{sec:homotopic_grammar}
+
+The reference frames do not have any intersection between each other so that the map can be divided into regions without overlap.
+Any path in the map belongs to a string class by how it sequentially crosses the reference frames.
+In a homotopy-based path planning problem, given the start position and the goal position, we have a structural rule of how the string should be like, which is defined as the homotopic grammar.
+
+
+\begin{figure}
+	\centering
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/feasibility}
+		\caption{Feasibility}
+		\label{fig:grammar:feasibility}
+	\end{subfigure}  
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/equivalence}
+		\caption{Equivalence}
+		\label{fig:grammar:equivalence}
+	\end{subfigure}
+	\\
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/recurring}
+		\caption{Recurring}
+		\label{fig:grammar:recurring}
+	\end{subfigure}  
+	\begin{subfigure}[t]{0.4\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/repeated_pattern}
+		\caption{Palindrome pattern}
+		\label{fig:grammar:palindrome_pattern}
+	\end{subfigure} 
+	\caption{Homotopic grammar.}
+	\label{fig:grammar}
+\end{figure}
+
+The homotopic grammar defines the acceptable strings, the equivalence of the strings in homotopy and other relevant shape information.
+The grammar can be represented by a finite state machine, which is constructed from the topological graph.
+The region that the start position is in defines the initial state.
+The region that the goal position is in defines the end state.
+\begin{itemize}
+	\item \textbf{Feasibility}
+	As the reference frames are connected by the regions, any strings from the grammar must be a feasible one.
+	A feasible string means that any two sequential characters of it are connected in the topological graph by the nodes of the regions.
+	An example is given in Figure \ref{fig:grammar:feasibility}.
+	A string of $ \beta_{1,1} $ cannot be from a correct path from the start to the goal.
+	The finite state machine can be used to check whether a string is accepted by the homotopic grammar, which indicates that the path is a feasible one.
+	
+	\item \textbf{Equivalence}
+	Some characters of the reference frames are equivalent in constructing the strings.
+	All the reference frames contain the center point $ c $ show this property.
+	The segment crossing those reference frames in any sequence belongs to same homotopy class.
+	Figure \ref{fig:grammar:equivalence} shows an example.
+	A path in string class $ \alpha_{1,1}-\alpha_{2,1} $ and a path in string class $ \alpha_{2,0}-\alpha_{1,0} $ belong to the same homotopy class.
+	
+	
+	\item \textbf{Recurring character}
+	Recurring character in a string indicates that the path goes around some obstacles and back to cross a visited reference frame.
+	One example is illustrated in Figure \ref{fig:grammar:recurring}.
+	A string $ \beta_{2,1}-\alpha_{1,2}-\alpha_{1,0}-\alpha_{2,0}-\beta_{2,1} $ contains the recurring of $ \beta_{2,1} $, which indicates that a path crosses a reference twice.
+	It usually means that the path goes back to a visited region again.
+	
+	\item \textbf{Palindrome pattern}
+	Palindrome pattern is a particular case of recurring character.
+	It shows that the path is back and forth among some regions,
+	which is very important in checking the equivalence of two string classes.
+	In minimization problem, it is not useful and can be often ignored.
+	Because a palindrome pattern will only increase the cost if the cost function is additive.
+	However, in some special scenario, for example it is expected to scan a region for a fixed number of times, the palindrome pattern can be used.
+	
+	In Figure \ref{fig:grammar:palindrome_pattern}, the string $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1}-\beta_{1,1}-\alpha_{2,2} $ contains a palindrome structure $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1} $.
+	It can be removed in determining the homotopy equivalence.
+	Thus it equals to the string $ \beta_{1,1}-\alpha_{2,2} $.
+	
+\end{itemize}
+
+\subsection{Optimality with constraint}
+\label{sec:optimality_constraint}
+
+The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from the root position.  
+The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
+We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman-RSS-10}.
+\begin{lem}
+	\label{lem:tree_vex:conv}
+	Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+	the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely.
+\end{lem}
+
+HA-RRT$^{*}$ uses bidirectional trees to explore the map.
+In the \textsc{Connect} procedure, a vertex $ v $ in either $ G_{s} $ or $ G_{g} $ is used to create a path by connecting with another vertex in the other tree.
+If we see the position of $ v $ as a via-point of the paths, we can have the asymptotic optimality with the set of paths has $ v $ as via-point.
+It is stated in Lemma \ref{lem:optimal_via_point}.
+
+\begin{lem}
+	\label{lem:optimal_via_point}
+	Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+	the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
+	
+	\begin{proof}
+		Look at connecting a vertex $ v_{s} $ in $ G_{s} $ with the $ G_{g} $.
+		Let $ c (v_{s}) $ denote the cost of the $  v_{s}  $ in $ G_{s} $, which is the cost-to-come from the start to the position of $  v_{s} $.
+		Let $ v_{g} $ be the vertex to be connected in $ G_{g} $.
+		Let $ c ( v_{g} ) $ denote the cost of the $  v_{g} $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $  v_{g} $.
+		It equals to the cost-to-go from the position of $ v_{g} $ to the goal.
+		Let $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ be a path concatenated by two sub-paths from $  v_{s} $ and $  v_{g} $. 
+		Its cost $ \mbox{\sc Cost} (\sigma_{G_{s},G_{g}} ( v_{s}, v_{g} )) =  c (v_{s}) + c (v_{g}) + c (\mbox{\sc Line} (v_{s}, v_{g}) ) $.
+		By Lemma \ref{lem:tree_vex:conv}, we know that $ c (v_{s}) $ and $ c (v_{g}) $ converge to optimal almost surely.
+		$ c (\mbox{\sc Line} (v_{s}, v_{g})  ) $ will also converge, because $ v_{g} $ is selected from a set of near vertices.
+		Thus, the cost of $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ converges to optimal almost surely. 
+		Similarly, we can have the same result on connecting a vertex $ v_{g} $ in $ G_{g} $ with the $ G_{s} $.
+	\end{proof}
+\end{lem}
+
+By Lemma \ref{lem:optimal_via_point} we can have Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal}.
+Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal} guarantee that the applications mentioned in Section \ref{sec:application} can find the optimal solutions as stated.
+
+\begin{thm}
+	\label{thm:constrained_optimality}
+	Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
+	HA-RRT$^{*}$ can find the optimal path in one simple homotopy class almost surely.
+\end{thm}
+
+\begin{thm}
+	\label{thm:homotopy_pref:optimal}
+	Given Assumptions 1 - 3 in \cite{Karaman-RSS-10}, 
+	HA-RRT$^{*}$ can find all the non-dominated paths when the topology is an objective.
+\end{thm}
+
+
 \section{Homotopy-aware optimal path planning}
 \label{sec:application}
 
@@ -500,6 +638,7 @@ Assume that the optimal path is known in the string class of the reference path.
 The string of the reference path is then extracted as the constraint.
 A single-directional tree is then used to explore only the relevant regions under this constraint, as shown in Figure \ref{fig:reference_path:rrt}.
 If more than one string classes in the same homotopy class are hoped to be checked, more relevant regions are then needed to be explored.
+
 
 \subsection{Homotopic constraints from required/forbidden regions}
 \label{sec:region_constraint}
@@ -623,177 +762,24 @@ With the interface of visualizing the optimal path in different homotopy class, 
 \end{figure}
 
 
-\section{Analysis}
-\label{sec:analysis}
-
-The HA-RRT$^{*}$ consists of the homotopy-aware exploration and the constrained optimization.
-In this section, we look at how to have better support on the homotopy classes and provide the constrained optimal guarantee.
-
-\subsection{homotopic grammar}
-\label{sec:homotopic_grammar}
-
-The reference frames do not have any intersection between each other so that the map can be divided into regions without overlap.
-Any path in the map belongs to a string class by how it sequentially crosses the reference frames.
-In a homotopy-based path planning problem, given the start position and the goal position, we have a structural rule of how the string should be like, which is defined as the homotopic grammar.
-
-
-\begin{figure}
-	\centering
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/feasibility}
-		\caption{Feasibility}
-		\label{fig:grammar:feasibility}
-	\end{subfigure}  
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/equivalence}
-		\caption{Equivalence}
-		\label{fig:grammar:equivalence}
-	\end{subfigure}
-	\\
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/recurring}
-		\caption{Recurring}
-		\label{fig:grammar:recurring}
-	\end{subfigure}  
-	\begin{subfigure}[t]{0.4\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/repeated_pattern}
-		\caption{Palindrome pattern}
-		\label{fig:grammar:palindrome_pattern}
-	\end{subfigure} 
-	\caption{Homotopic grammar.}
-	\label{fig:grammar}
-\end{figure}
-
-The homotopic grammar defines the acceptable strings, the equivalence of the strings in homotopy and other relevant shape information.
-The grammar can be represented by a finite state machine, which is constructed from the topological graph.
-The region that the start position is in defines the initial state.
-The region that the goal position is in defines the end state.
-\begin{itemize}
-\item \textbf{Feasibility}
-As the reference frames are connected by the regions, any strings from the grammar must be a feasible one.
-A feasible string means that any two sequential characters of it are connected in the topological graph by the nodes of the regions.
-An example is given in Figure \ref{fig:grammar:feasibility}.
-A string of $ \beta_{1,1} $ cannot be from a correct path from the start to the goal.
-The finite state machine can be used to check whether a string is accepted by the homotopic grammar, which indicates that the path is a feasible one.
-
-\item \textbf{Equivalence}
-Some characters of the reference frames are equivalent in constructing the strings.
-All the reference frames contain the center point $ c $ show this property.
-The segment crossing those reference frames in any sequence belongs to same homotopy class.
-Figure \ref{fig:grammar:equivalence} shows an example.
-A path in string class $ \alpha_{1,1}-\alpha_{2,1} $ and a path in string class $ \alpha_{2,0}-\alpha_{1,0} $ belong to the same homotopy class.
-
-
-\item \textbf{Recurring character}
-Recurring character in a string indicates that the path goes around some obstacles and back to cross a visited reference frame.
-One example is illustrated in Figure \ref{fig:grammar:recurring}.
-A string $ \beta_{2,1}-\alpha_{1,2}-\alpha_{1,0}-\alpha_{2,0}-\beta_{2,1} $ contains the recurring of $ \beta_{2,1} $, which indicates that a path crosses a reference twice.
-It usually means that the path goes back to a visited region again.
-
-\item \textbf{Palindrome pattern}
-Palindrome pattern is a particular case of recurring character.
-It shows that the path is back and forth among some regions,
-which is very important in checking the equivalence of two string classes.
-In minimization problem, it is not useful and can be often ignored.
-Because a palindrome pattern will only increase the cost if the cost function is additive.
-However, in some special scenario, for example it is expected to scan a region for a fixed number of times, the palindrome pattern can be used.
-
-In Figure \ref{fig:grammar:palindrome_pattern}, the string $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1}-\beta_{1,1}-\alpha_{2,2} $ contains a palindrome structure $ \beta_{1,1}-\alpha_{2,2}-\alpha_{2,2}-\beta_{1,1} $.
-It can be removed in determining the homotopy equivalence.
-Thus it equals to the string $ \beta_{1,1}-\alpha_{2,2} $.
-
-\end{itemize}
-
-\subsection{Optimality with constraint}
-\label{sec:optimality_constraint}
-
-The way that the RRT$^{*}$ algorithm works is that it incrementally constructs a tree from a root position.  
-The cost of the path from the position of the root node to the positions of every other node converges to the minimal possible cost between the positions as the number of iterations approaches infinity.  
-We restate this as a lemma, and note that the corresponds exactly to that given for Theorem 22 in~\cite{Karaman-RSS-10}.
-\begin{lem}
-\label{lem:tree_vex:conv}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-the cost of the minimum cost path from the root to any vertex in RRT$^{*}$ converges to the optimal cost almost surely.
-\end{lem}
-
-HA-RRT$^{*}$ uses bidirectional trees to explore the workspace.
-In \textsc{Connect} procedure, the vertex $ v $ in either $ G_{s} $ or $ G_{g} $ is used to create a path by connecting with another vertex in the other tree.
-If we see the position of $ v $ as a via-point of the paths, we can have the asymptotic optimality with the set of paths has $ v $ as via-point.
-It is stated in Lemma \ref{lem:optimal_via_point}.
-
-\begin{lem}
-\label{lem:optimal_via_point}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-the path concatenated from a path from $ G_{s} $ for $ v $ and a path from $ G_{g} $ for $ v $ converges to the optimal path through $ v $ almost surely. 
-
-\begin{proof}
-Look at connecting a vertex $ v_{s} $ in $ G_{s} $ with the $ G_{g} $.
-Let $ c (v_{s}) $ denote the cost of the $  v_{s}  $ in $ G_{s} $, which is the cost-to-come from the start to the position of $  v_{s} $.
-Let $ v_{g} $ be the vertex to be connected in $ G_{g} $.
-Let $ c ( v_{g} ) $ denote the cost of the $  v_{g} $ in $ G_{g} $, which is the cost-to-come from the goal to the position of $  v_{g} $.
-It equals to the cost-to-go from the position of $ v_{g} $ to the goal.
-Let $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ be a path concatenated by two sub-paths from $  v_{s} $ and $  v_{g} $. 
-Its cost $ \mbox{\sc Cost} (\sigma_{G_{s},G_{g}} ( v_{s}, v_{g} )) =  c (v_{s}) + c (v_{g}) + c (\mbox{\sc Line} (v_{s}, v_{g}) ) $.
-By Lemma \ref{lem:tree_vex:conv}, we know that $ c (v_{s}) $ and $ c (v_{g}) $ converge to optimal almost surely.
-$ c (\mbox{\sc Line} (v_{s}, v_{g})  ) $ will also converge, because $ v_{g} $ is selected from a set of near vertices.
-Thus, the cost of $ \sigma_{G_{s},G_{g}} (v_{s}, v_{g}) $ converges to optimal almost surely. 
-Similarly, we can have the same result on connecting a vertex $ v_{g} $ in $ G_{g} $ with the $ G_{s} $.
-\end{proof}
-\end{lem}
-
-By Lemma \ref{lem:optimal_via_point} we can have Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal}.
-Theorem \ref{thm:constrained_optimality} and Theorem \ref{thm:homotopy_pref:optimal} guarantees that the applications mentioned in Section \ref{sec:application} can find the optimal solutions as stated.
-
-\begin{thm}
-\label{thm:constrained_optimality}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10},
-HA-RRT$^{*}$ can find the optimal path in one homotopy class almost surely.
-\end{thm}
-
-\begin{thm}
-\label{thm:homotopy_pref:optimal}
-Given Assumptions 1 - 3 in \cite{Karaman-RSS-10}, 
-HA-RRT$^{*}$ can find all the non-dominated paths when the topology is an objective.
-\end{thm}
-
-
-\subsection{Discussion}
-
-When the homotopy classes are used as the constraint, one directional RRT$^{*}$ can also find the optimal path.
-It is only a constrained optimization problem.
-The bidirectional RRT$^{*}$ accelerates the convergence rate, like in \cite{starek2014bidirectional}.
-When the homotopy classes are used more than only the constraint, bidirectional RRT$^{*}$ is required so that each position can have the optimal-to-come sub-path and optimal-to-go sub-path.
-In this way, we can have the optimal path in each homotopy class.
-
-\begin{comment}
-In the bidirectional exploration, the two direction can share the same workspace or split the workspace.
-Figure \ref{fig:homotopy_no_pref} provides two cases.
-In Figure \ref{fig:homotopy_no_pref:all}, both two trees parallel explore on the same workspace.
-While in Figure \ref{fig:homotopy_no_pref:half}, the workspace has been split into two.
-Each tree explores only explore half ot the workspace it is in.
-Theoretically, HA-RRT$^{*}$ converge to have same solutions in both two cases.
-In most of the case, splitting the workspace makes better efficiency, especially there are less vertices belong to both two trees.
-However, the convergence rate depends on the convergence of the vertices near the boundary in both two trees.
-\end{comment}
-
-As we noticed, with a topological graph, it is possible that several strings belong to same homotopy class.
-Thus, the string equivalence on the homotopy class should be considered.
-Because of the property of the repeated pattern, determining the strings in one homotopy class increases the algorithm complexity.
-In a minimization problem, assuming the path length is always relevant with the total cost, it is fair to forbid the properties of recurring and repeated pattern.
-In this way, a breath first search can return all the possible strings from the topological graph.
-Thus the efficiency can be enhanced.
-However, the flexibility in supporting more types of paths is lost.
-In application, the trade-off between the efficiency and the topology versatility should be considered by case.
-
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this paper, we propose a homotopy-aware RRT$^{*}$, which tracks the homotopy class each branch belongs to.
+In the homotopy-based path planning, the homotopy classes can either be used as the constraint or the category of optimal search.
+HA-RRT$^{*}$ wares the string class of each branch in the exploration process, which indirectly attains the homotopy awareness with the assistance of the homotopic grammar.
+The homotopic grammar can be used to determine the string classes in the same homotopy class.
+With the string classess to represent the homotopy class, we can check whether a path satisfies a homotopic constraint 
+or identify the homotopy class that a path belongs to.
+
+The homotopic grammar can support the determination of the homotopy class 
+However, the limitation of the RRT$^{*}$ leads to that HA-RRT$^{*}$ cannot well support when the optimal path is not a simple path, which means that the path has at least one self-intersection.
+The problem can be solved using the non-orientable surface like in \cite{Hershberger199463}.
+
+When only single optimal solution is to be found, a single-directional RRT$^{*}$ can be enough to find the optimal path.
+However, a bidirectional tree structure can accelerate the convergence rate, like in \cite{starek2014bidirectional}.
+When the optimal solutions of more than one homotopy classes are to be found, the bidirectional RRT$^{*}$ is required so that each position can have the optimal-to-come sub-path and optimal-to-go sub-path.
 By using a bidirectional structure, the asymptotic optimality in each homotopy class can also be guaranteed.
+
 This enables the sliding autonomy to support different level of task supervisor's intent on the topology in planning paths.
 The way of communication is also more natural for the human, because the human can directly visualize the path ``shape'' instead of converting to the robot's data format.
 It also supports the application of more complicated tasks, especially when there is requirement on the topology of the paths in a complex map.
