@@ -458,17 +458,17 @@ We can have the optimal paths of all the homotopy classes under given homotopic 
 \section{Homotopy-aware optimal path planning}
 \label{sec:application}
 
-By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal path with given homotopy constraints.
+By the homotopy-aware exploration process, HA-RRT$^{*}$ can return optimal paths of different homotopy classes with given homotopy constraints.
 In this section, we show the sliding autonomy in different levels of the human's intent on the topology by using HA-RRT$^{*}$.
 
 \subsection{Homotopic constraint from a reference path}
+\label{sec:string_constraint}
 
 In planning a path for a task, if the human has a determined mind of how the topology of the path should be, the HA-RRT$^{*}$ can help to find the optimal path in all the paths of a given topology.
-By an interactive process, the human can initialize a reference path to represent the topology from his/her intent.
-The homotopy-based optimal path planning becomes finding the optimal path in one given homotopy class.
-Thus the homotopy class becomes a constraint.
-In this case, it is fair to assume that the user has a clear idea on how the path should sequentially visit several regions.
-Thus the constraint can be modeled as a constrained region, especially in a minimization problem.
+By an interactive process, the human can initialize a reference path to represent the topology from his/her intent, which defines a homotopy class.
+The homotopy-based optimal path planning becomes finding the optimal path in a given homotopy class.
+The given homotopy class is the constraint.
+Because HA-RRT$^{*}$ only returns the optimal path in this homotopy class, a single-directional tree structure is enough to explore the regions.
 
 \begin{figure}
 	\centering
@@ -489,13 +489,20 @@ Thus the constraint can be modeled as a constrained region, especially in a mini
 	\label{fig:reference_path}
 \end{figure}
 
+In this case, it is sometimes fair to assume that the optimal path of a homotopy class is known as the optimal path of a string class in the homotopy class in the minimization problem.
+It indicates that the optimal path only sequentially visits several regions by the string.
+Then, the exploration of the tree can be only in the relevant regions.
+Because of the reduced working space and the single-directional tree structure, the search efficiency should be increased.
+
 Figure \ref{fig:reference_path} gives an example.
 A user firstly initializes a reference path, which indicates the intended homotopy class as in Figure \ref{fig:reference_path:reference}.
+Assume that the optimal path is known in the string class of the reference path.
 The string of the reference path is then extracted as the constraint.
-The exploration of HA-RRT$^{*}$ is then under this constraint.
-Thus, in Figure \ref{fig:reference_path:rrt}, the tree only explores the regions that does not violate the grammar to generate the constraint string.
+A single-directional tree is then used to explore only the relevant regions under this constraint, as shown in Figure \ref{fig:reference_path:rrt}.
+If more than one string classes in the same homotopy class are hoped to be checked, more relevant regions are then needed to be explored.
 
 \subsection{Homotopic constraints from required/forbidden regions}
+\label{sec:region_constraint}
 
 In planning a path for a task, if the human only can tell several regions that should be avoided or several regions that are required to visit, HA-RRT$^{*}$ explores the paths that satisfies the defined constraints as well.
 The \textsc{InitRefFrames} procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
@@ -531,11 +538,14 @@ After that, more reference frames will be created correspondingly and a new topo
 
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
 A breath first search on the topological graph can return a set of strings that satisfy the labeled constraints, which also indicates a set of homotopy classes. 
-The grammar is then defined by this set of strings.
-The \textsc{HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by this grammar.
+By the homotopic grammar, a set of string classes can be obtained from a set of homotopy classes.
+The \textsc{HomotopyCheck} in the exploration of HA-RRT$^{*}$ will be defined by these string classes.
+The problem is then similar with that in Section \ref{sec:string_constraint}.
+Because only the optimal path in all these homotopy classes is wanted, a single-directional tree structure of HA-RRT$^{*}$ is also enough to explore the working space.
 The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled constraint.
 
 \subsection{Homotopy classes with preference}
+\label{sec:with_preference}
 
 Sometimes there exists no hard constraint on the topology of the paths.
 But there does exist the difference on different topology.
@@ -583,6 +593,7 @@ Figure \ref{fig:homotopy_human_interaction:pareto_score} illustrates such a Pare
 \end{figure}
 
 \subsection{Homotopy classes without preference}
+\label{sec:without_preference}
 
 Sometimes inherently the user has a mind of the topology preference but is too fuzzy to describe.
 If the topology is included to have a two-objective optimization problem, it means that the optimal paths in all the homotopy classes are non-dominant.
