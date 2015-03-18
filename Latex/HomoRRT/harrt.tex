@@ -202,8 +202,8 @@ In this paper, we use a set of reference frames to identify which homotopy class
 Figure \ref{fig:obs_map:map} shows an example of a map decomposed with the reference frames(blue and green dash lines).
 A \emph{reference frame} is defined as a line segment that connects either two obstacles or  an obstacle with a boundary. Thus crossing a reference reveals a position in between two corresponding obstacles or between an obstacle and a boundary.
 Given the start position and the end position, how a path sequentially crosses the reference frames indicates the topology information.
-Figure \ref{fig:obs_map:map} illustrates how the reference frames can be used determine how a path (orange line) sequentially visits different regions.
-By the property of the reference frames, they can be generated from the Voronoi diagram.
+Figure \ref{fig:obs_map:map} illustrates how the reference frames can be used to determine how a path (orange line) sequentially visits different regions.
+As something that decomposes the map into regions without overlaps, the reference frames can be generated from the Voronoi diagram.
 However, in this paper, we adopt the improved Jenkins' method in \cite{Hernandez201544}.
 The improved Jenkin's method provides a much simpler initialization process in complex obstacles than using Voronoi diagram, especially in the regions adjacent to the map boundary.
 It also avoids that the reference frames intersects with each other.
@@ -261,7 +261,7 @@ The called methods are explained as following,
 	\label{alg:harrt:init_ref_frames}
 \end{algorithm} 
 
-Figure \ref{fig:obs_map:map} illustrates how the reference frames of a map is initialized.
+Figure \ref{fig:obs_map:map} illustrates how the reference frames of a map are initialized.
 $ b_{1} $ and $ b_{2} $ are randomly sampled from each obstacles.
 Then a center point $ c $ is randomly sampled, which does not locate in any line connects any two $ b_{k} $.
 For each $ b_{k} $, two rays are generated from two directions, $ \alpha_{k} $ is towards the center point $ c $, $ \beta_{k} $ is the reserved direction.
@@ -278,7 +278,7 @@ Figure \ref{fig:obs_map:topology} shows a topological graph from the map decompo
 %{\sc What do you mean "reference frame"?  This term hasn't been defined.}
 
 Given two paths, how they sequentially cross the reference frames can be used to identify homotopy equivalence.
-Any path sequentially visits the regions maps to a node walk on the topological graph.
+Any path sequentially visits the regions can be mapped to a node walk on the topological graph.
 It is noticeable that two adjacent regions might be connected with not only one reference frame, which means that two nodes in the topological graph might be connected with more than one edge.
 Thus, two paths with same edge sequence belong to same homotopy class but two path with same node sequence don't.  
 %Any path can be mapped into a sequence of nodes in the topological graph.  
