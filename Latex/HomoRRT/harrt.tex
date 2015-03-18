@@ -651,7 +651,7 @@ If more than one string classes in the same homotopy class are hoped to be check
 \label{sec:region_constraint}
 
 In planning a path for a task, if the human only can tell several regions that should be avoided or several regions that are required to visit, the HA-RRT$^{*}$ explores the paths that satisfies the defined constraints as well.
-The \textsc{InitRefFrames} procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
+The \textsc{InitRefFrames}() procedure decomposes the map and generates the topological graph, for which Figure \ref{fig:obs_map:map} gives an example.
 We define the \emph{positive region} as the region that is required to visit and the \emph{negative region} as the region that is forbidden to visit.
 Then there is an interactive process for the human to label the positive regions and the negative regions.
 Unlabeled regions are neutral, which means no constraint here.
@@ -685,7 +685,7 @@ After that, more reference frames will be created correspondingly and a new topo
 As each region is a node in the topological graph, the nodes of the negative regions can be trimmed firstly.
 A breath first search on the topological graph can return a set of string classes that satisfy the labeled constraints, which also indicates a set of homotopy classes. 
 %By the homotopic grammar, a set of string classes can be obtained from a set of homotopy classes.
-The \textsc{HomotopyCheck} in the exploration of the HA-RRT$^{*}$ will be defined by these string classes.
+The \textsc{HomotopyCheck}() in the exploration of the HA-RRT$^{*}$ will be defined by these string classes.
 The problem is then similar with that in Section \ref{sec:string_constraint}.
 Because only the optimal path in all these homotopy classes is wanted, a single-directional tree structure of the HA-RRT$^{*}$ is also enough to explore the working space.
 The path returned by the HA-RRT$^{*}$ is the optimal solution under the labeled constraint.
