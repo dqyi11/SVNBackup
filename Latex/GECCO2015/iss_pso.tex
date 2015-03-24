@@ -245,7 +245,8 @@ This means that the influence $ \beta () $ term gradually decreases to zero and 
 \subsection{Importance of input-to-state stability}
 \label{sec:connect_iss_to_pso}
 
-Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. We will take this approach with PSO. 
+Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. 
+We will take this approach with PSO. 
 Parallel combinations of input-to-state stable components yields a combined structure that is also input-to-state stable property~\cite{khalil1996nonlinear}.
 In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing a single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
 Thus we have property \ref{prop:iss:parallel}.
@@ -287,13 +288,13 @@ However, if the personal best and global best converge to an estimated optimal p
 In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
 We then show that PSO satisfies this definition when the parameters of PSO are
 set in a requisite range. 
-We also derive the bounds implied by the ISS property and
-use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
+We also derive the bounds implied by the ISS property and use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
 Last, we will use ISS to analyze the moments (the mean and higher moments) of particle motion.
 
 In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
 
-For this analysis we use a one-dimension particle and extract the linear form of the position-update component. As noted above, the one dimensional case can be extended to many dimensions.
+For this analysis we use a one-dimension particle and extract the linear form of the position-update component.
+As noted above, the one dimensional case can be extended to many dimensions.
 
 We begin our analysis of PSO input to state stability by rewriting the PSO equations in \eqref{eq:pso_alg} in the following way:
 % We assume that all the dimensions are within same parameters.
