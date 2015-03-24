@@ -16,7 +16,6 @@ if __name__ == '__main__':
     objVals = np.array(imread(FIT_FILE, True))
     stepLen = 1
     
-    
     def calcCost(currentPos, referencePos):
         cost = 0.0
         if referencePos==None:
@@ -77,7 +76,7 @@ if __name__ == '__main__':
     planner.morrts_viz.setName('MORRTstar01')
     planner.morrts_viz.loadObj([MAP_FILE, FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 5000)
+    paths = planner.findPaths([40,40], [500, 40], 10000)
     print paths
     
     planner.morrts_viz.saveResult()
