@@ -117,8 +117,8 @@ Using the ISS property of the input-update component, we can analyze the dynamic
 \label{sec:relwork}
 
 Although the input-to-state stable analysis given in this paper can be applied to many versions of PSO,
-for this work we use the formulas from Kennedy's most recent definition of PSO\cite{4223164}.
-This version of PSO includes a star topology, and a constricted position-update rule. 
+for this work we use the formulas from Kennedy's most recent definition of PSO\cite{4223164} for the constricted position-update rule.
+%This version of PSO includes a star topology, and a constricted position-update rule. 
 The constricted position-update rule is
 
 \begin{subequations}
@@ -264,7 +264,7 @@ However, as a particle finishes exploring and reach stagnation, a particle's pos
 
 Input-to-state stability implies that the state of the system is bounded in a range determined by the bounds on the input.
 Before stagnation, when the personal best and global best values have not converged, we can expect only a loose bound on the particle state.
-These looser bounds reflect both what is know about the what is know about the update process itself and what is know about the inputs to the update process, that is, the personal best and the global best.
+These looser bounds reflect both what is know about the update process itself and what is know about the inputs to the update process, that is, the personal best and the global best.
 
 We call the bounds on the global best and personal best the ``exploit radius'' and the bounds on the particle's position a ``explore radius''.
 The ratio of the explore radius to the exploit radius is determined by the parameters of the position-update component.
@@ -381,7 +381,7 @@ Figure \ref{fig:boundary} gives an example on how a particle's boundary is deter
 \centering
 \includegraphics[width=0.8\linewidth]{./boundary}
 \caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation \ref{eq:state_bound:conv}.
-The ratio of wo radii indicates $ \gamma $.}
+The ratio of two radii indicates $ \gamma $.}
 \label{fig:boundary}
 \end{figure}
 
