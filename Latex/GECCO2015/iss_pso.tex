@@ -145,7 +145,7 @@ $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
 Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
-Understanding how the particles move guides how to enhance the algorithm design~\cite{bonyadi2014analysis}, particular the stochastic factors in the velocity update of Equation \eqref{eq:up_vel}.
+Understanding how the particles move guides how to enhance the algorithm design~\cite{bonyadi2014analysis}, particular the stochastic factors in the velocity update of equation \eqref{eq:up_vel}.
 However once a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $, it exhibits the \emph{stagnation phenomenon} \cite{Clerc06stagnationanalysis}.
 In this state the analysis is easier since there is no effect from the topology.
 
@@ -385,7 +385,7 @@ Figure \ref{fig:boundary} gives an example on how a particle's boundary is deter
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./boundary}
-\caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation \ref{eq:state_bound:conv}.
+\caption{A bound on a particle's position by a reference point $ x^{*} $ from equation \ref{eq:state_bound:conv}.
 The ratio of two radii indicates $ \gamma $.}
 \label{fig:boundary}
 \end{figure}
@@ -604,7 +604,7 @@ As in Figure \ref{fig:sys_flow}, there exists a feedback cascade system structur
 If we assume that there is another model for swarm information sharing, which implements the $ x^{G}(k) $ update.
 Then in the particle, the $ x^{G}(k) $ can be viewed as an input that is independent with the current particle state.
 The feedback loop uses the current state to update the $ x^{P}(k) $.
-As in Equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates the input-to-state stability relies on the shape of the fitness distribution.
+As in equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates the input-to-state stability relies on the shape of the fitness distribution.
 Assuming that the PSO parameters are set such that the position-update component is input-to-state stable, there are three cases in analyzing the dynamics of a particle.
 \begin{itemize}
 \item \emph{When only the $ x^{G} (k) $ is constant} \\
