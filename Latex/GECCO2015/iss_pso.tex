@@ -24,28 +24,28 @@
 \numberofauthors{3}
 
 \author{
-Author Names Omitted for Anonymous Review. 
+%Author Names Omitted for Anonymous Review. 
 % 1st. author	
-%\alignauthor
-%Daqing Yi \\
-%\affaddr{Computer Science Department}\\
-%\affaddr{Brigham Young University}\\
-%\affaddr{Provo, UT, USA}\\
-%\email{daqing.yi@byu.edu}
+\alignauthor
+Daqing Yi \\
+\affaddr{Computer Science Department}\\
+\affaddr{Brigham Young University}\\
+\affaddr{Provo, UT, USA}\\
+\email{daqing.yi@byu.edu}
 % 2nd. author	
-%\alignauthor
-%Kevin D. Seppi \\
-%\affaddr{Computer Science Department}\\
-%\affaddr{Brigham Young University}\\
-%\affaddr{Provo, UT, USA}\\
-%\email{kseppi@cs.byu.edu}
+\alignauthor
+Kevin D. Seppi \\
+\affaddr{Computer Science Department}\\
+\affaddr{Brigham Young University}\\
+\affaddr{Provo, UT, USA}\\
+\email{kseppi@cs.byu.edu}
 % 3rd. author
-%\alignauthor
-%Michael A. Goodrich \\
-%\affaddr{Computer Science Department}\\
-%\affaddr{Brigham Young University}\\
-%\affaddr{Provo, UT, USA}\\
-%\email{mike@cs.byu.edu}	
+\alignauthor
+Michael A. Goodrich \\
+\affaddr{Computer Science Department}\\
+\affaddr{Brigham Young University}\\
+\affaddr{Provo, UT, USA}\\
+\email{mike@cs.byu.edu}	
 }
 
 \maketitle
@@ -62,6 +62,8 @@ This work also illuminates the way in which the personal-best and the global-bes
 \keywords{Particle Swarm Optimization, Input-to-state stability}
 
 \begin{comment}
+Full Regular Papers = 8 Page Limit
+
 \emph{Input-to-state stable analysis} = 
 Modeling by decomposition + Input-to-state stability
 \begin{itemize}
@@ -143,12 +145,14 @@ $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
 Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
+Understanding how the particles move guides how to enhance the algorithm design~\cite{bonyadi2014analysis}, particular the stochastic factors in the velocity update of Equation \eqref{eq:up_vel}.
 However once a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $, it exhibits the \emph{stagnation phenomenon} \cite{Clerc06stagnationanalysis}.
 In this state the analysis is easier since there is no effect from the topology.
 
 Previous work that assumes stagnation can be categorized into two groups each based on how the analysis treats the stochastic factors.
 The first approach is to ignore the stochastic factors.
-Using this simplification, the convergence of a particle at stagnation can be analyzed \cite{985692}. 
+Using this simplification, the convergence of a particle at stagnation can be analyzed~\cite{985692,cleghorn2014generalized}. 
+The convergence trajectories can be obtained~\cite{vandenBergh2006937} and the results are compared with empirical results~\cite{6900439}.
 By building a linear system model \cite{4424687}, the PSO algorithm can be viewed as a closed loop system and the convergence can be analyzed.
 Based on such a convergence analysis, parameters can be set for best effect \cite{Trelea2003317}.
 
