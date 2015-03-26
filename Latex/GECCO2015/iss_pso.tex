@@ -145,14 +145,14 @@ $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
 Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
-Understanding how the particles move guides how to enhance the algorithm design~\cite{bonyadi2014analysis}, particular the stochastic factors in the velocity update of equation \eqref{eq:up_vel}.
+Understanding how the particles move guides how to improve the algorithm design~\cite{bonyadi2014analysis}, particularly the stochastic factors in the velocity update of equation \eqref{eq:up_vel}.
 However once a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $, it exhibits the \emph{stagnation phenomenon} \cite{Clerc06stagnationanalysis}.
 In this state the analysis is easier since there is no effect from the topology.
 
 Previous work that assumes stagnation can be categorized into two groups each based on how the analysis treats the stochastic factors.
 The first approach is to ignore the stochastic factors.
 Using this simplification, the convergence of a particle at stagnation can be analyzed~\cite{985692,cleghorn2014generalized}. 
-The convergence trajectories can be obtained~\cite{vandenBergh2006937} and the results are compared with empirical results~\cite{6900439}.
+The convergence trajectories can be estimated~\cite{vandenBergh2006937} and the conclusions are compared with empirical results~\cite{6900439}.
 By building a linear system model \cite{4424687}, the PSO algorithm can be viewed as a closed loop system and the convergence can be analyzed.
 Based on such a convergence analysis, parameters can be set for best effect \cite{Trelea2003317}.
 
@@ -195,7 +195,7 @@ We also explain why ISS should be applied to PSO.
 
 %In the purpose of input-to-state stability analysis, we model the system structure of a particle in PSO.
 %This enables analysis of PSO with stochastic factors preserved and without the stagnation assumption.
-For the purpose of input-to-state stability analysis we decompose the PSO algorithm into components as shown in Figure \ref{fig:sys_flow}. This decomposition is comprised of cascaded components (the input update, followed by the position update) and feedback of the historical state.
+For the purpose of input-to-state stability analysis we decompose the PSO algorithm into components as shown in Figure \ref{fig:sys_flow}. This decomposition is comprised of cascaded components (the input update, followed by the position update) and the feedback of the historical state.
 These two components are the 
 \emph{input-update component} for the global best ($ x^{G}_{i}(k) $) and the personal best ($ x^{P}_{i}(k) $), and the 
 \emph{position-update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $.
@@ -251,12 +251,12 @@ This means that the influence $ \beta () $ term gradually decreases to zero and 
 
 Under certain conditions the dynamics of complex systems can be understood by first decomposing the system into a set of individual input-to-state stable components. 
 We will take this approach with PSO. 
-Parallel combinations of input-to-state stable components yields a combined structure that is also input-to-state stable property~\cite{khalil1996nonlinear}.
+Parallel combination of input-to-state stable components yields a combined structure that is also input-to-state stable~\cite{khalil1996nonlinear}.
 In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing a single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
 Thus we have property \ref{prop:iss:parallel}.
 \begin{myprop}
 \label{prop:iss:parallel}
-The position-update component is input-to-state stable if the update in each dimension is input-to-state stable.
+The position-update component is input-to-state stable if the position update in each dimension is input-to-state stable.
 \end{myprop}
 This simplifies the analysis of the system since it allows us to consider each dimension separately.
 The serial connection and the feedback connection also lead to some interesting property from input-to-state stability, which will be discussed in Section \ref{sec:sys_dynamics}.
@@ -590,12 +590,12 @@ Thus we have shown the convergence of PSO in stagnation without treating the ran
 
 Input-to-state stable analysis also supports understanding the cases before stagnation.
 When the $ x^{P}(k) $ and $ x^{G}(k) $ are not constant, the system state depends on the property of the input-update component.
-The personal best update is
+The personal-best update is
 \begin{equation}
 \label{eq:pb_up}
 x_{i}^{P}(k) = \arg \max_{ x \in \{ x_{i}(k), x_{i}^{P}(k-1) \} } f(x).
 \end{equation}
-The global best update is
+The global-best update is
 \begin{equation}
 \label{eq:gb_up}
 x_{i}^{G}(k) = \arg \max_{ x \in \{ x_{i}(k), x_{i}^{G}(k-1) \} } f(x).
@@ -604,13 +604,13 @@ As in Figure \ref{fig:sys_flow}, there exists a feedback cascade system structur
 If we assume that there is another model for swarm information sharing, which implements the $ x^{G}(k) $ update.
 Then in the particle, the $ x^{G}(k) $ can be viewed as an input that is independent with the current particle state.
 The feedback loop uses the current state to update the $ x^{P}(k) $.
-As in equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates the input-to-state stability relies on the shape of the fitness distribution.
+As in equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates that the input-to-state stability relies on the shape of the fitness distribution.
 Assuming that the PSO parameters are set such that the position-update component is input-to-state stable, there are three cases in analyzing the dynamics of a particle.
 \begin{itemize}
 \item \emph{When only the $ x^{G} (k) $ is constant} \\
 This happens usually when a ``good'' global best is found.
 Thus the swarm stops finding better global bests.
-The input from the swarm can be modeled as the constant factor of the system. 
+The input from the swarm can be modeled as a constant factor of the system. 
 However, the particle still finds new personal best positions and updates the personal best.
 The system dynamics of the particle is determined by the feedback state,
 which updates the personal best.
@@ -625,8 +625,8 @@ In this case, the feedback of the system does not impact the input-update compon
 In this case the system model can be simplified by ignoring the feedback.
 As a result, the system falls into only a serial cascade system because there is no feedback for this particle.
 If the input-update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable (it can be shown that a serial cascade of ISS components is also ISS~\cite{khalil1996nonlinear}).
-Since this serial cascade system is ISS, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converging toward the $ x^{G} (k) $.
-If we have  $ f(x^{G} > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there exits some region that $ f(x) > f(x^{P}) $.
+Since this serial cascade system is ISS, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converge toward the $ x^{G} (k) $.
+If we have  $ f(x^{G}) > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there exits some region that $ f(x) > f(x^{P}) $.
 The $ x^{P} $ will start to change.
 \item \emph{When both the $ x^{G} $ and $ x^{P} $ are not constant} \\
 This usually means that both the particle and the swarm it belongs to keep on finding better positions.
@@ -635,7 +635,7 @@ In this case, the input-to-state stability of the input-update component is hard
 However, if the change of $ x^{G}(k) $ and $ x^{P}(k) $ is bounded, the movement of the particle is still bounded by Corollary \ref{coro:state_bound}.
 \end{itemize}
 
-Generally, in the PSO, the dynamics of a particle switches in between those cases before eventually reaching the stagnation.
+Generally, in the PSO, the dynamics of a particle switches in between these cases before eventually reaching the stagnation.
 Understanding the dynamics of the particles before stagnation supports the exploration and exploitation capability of particles in optimal search.
 
 \section{Conclusion}
@@ -647,13 +647,13 @@ For an input-to-state stable position-update component, if the input to this com
 The convergence of a particle in PSO is determined by the output of the input-update component, which are the personal best and global best.
 If they are in stagnation, the particle converges.
 
-The analysis of a cascade structure used here can be applied to a wide range of the PSO variants.
+The analysis of a cascade structure used here can be applied to a wide range of PSO variants.
 In the cases that the same position-update component but different input-update components are used, the convergence and the boundary of the particles are determined by whether the input-update component generates converging or bounded personal best and global best.
 For variants that use a different position-update component, the ISS properties would need to be verified.
 
 The ISS property of the input-update component depends on the fitness distribution.
 We provide several scenarios for the dynamics of the particle.
-We show that the optimal search process switches among those scenarios and how the input-to-state stability analysis should be applied into different scenarios.
+We show that the optimal search process switches among these scenarios and how the input-to-state stability analysis should be applied into different scenarios.
 
 \section*{Appendix}
 \label{sec:appendix}
@@ -662,7 +662,7 @@ We show that the optimal search process switches among those scenarios and how t
 \label{sec:iss_lyapunov:func}
 
 Using the definitions of a $ K $-function and a $ KL $-function in Section \ref{sec:sys_model}
-we can define a ISS-Lyapunov function as follows,
+we can define an ISS-Lyapunov function as follows,
 %\begin{itemize}
 %\item 
 an ISS-Lyapunov function $ V : \mathbb{R}^{n} \rightarrow \mathbb{R}_{\geq 0} $ satisfies:
@@ -690,7 +690,7 @@ So by positive definite ordering we have $ A^{T}(k) P A(k) < P $.
 		
 Let $ -Q(k) = A^{T}(k) P A(k) - P $. Since $ A^{T}(k) P A(k) < P $ then $ - Q(k) < 0 $ furthermore $ \exists Q' \forall k, Q(k) > Q' > 0 $. 
 		
-By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, then the system is ISS.
+By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, the system is ISS.
 		
 Define a Lyapunov function
 \begin{equation}
@@ -766,7 +766,7 @@ By completing the square, we have
 \label{eq:lyapunov_delta4}
 \begin{aligned}
 & V( X(k+1) ) - V( X(k) ) \\
-= & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
+\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
 & + \left( \frac{2 | A^{T}(k) P B(k) |^{2}}{ ( \lambda_{min}(Q') )^{2} } + | B^{T}(k) P B(k) | \right) | U(k) |^{2} \\
 & - \frac{1}{2} \lambda_{min}(Q') \left( | X(k) | - \frac{2 | A^{T}(k) P B(k) | }{ \lambda_{min}(Q') } | U(k) | \right)^{2} \\
 	\leq & - \frac{1}{2} \lambda_{min}(Q') | X(k) |^{2} \\
@@ -814,7 +814,7 @@ The eigenvalues of $ A(k) $ are
 \end{equation}
 There can be two cases.		
 \begin{enumerate}
-\item If $ a^{2} \geq 4 \chi $, the eigenvalues are complex number.
+\item If $ a^{2} \geq 4 \chi $, the eigenvalues are real number.
 We have $ a \geq 2 \sqrt{\chi} $ or $ a \leq - 2 \sqrt{\chi} $.
 			
 If $ a \geq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives 
@@ -831,7 +831,7 @@ If $ a \leq 2 \sqrt{\chi} $, then $ | \lambda_{\max} | < 1 $ derives
 \end{equation}
 It means that $ - (\chi+1) < a \leq - 2 \sqrt{\chi} $.
 			
-\item If $ a^{2} < 4 \chi $, the eigenvalues are real number.
+\item If $ a^{2} < 4 \chi $, the eigenvalues are complex number.
 We have $ - 2 \sqrt{\chi} < a < 2 \sqrt{\chi} $.
 			
 $ | \lambda_{\max} | < 1 $ derives
