@@ -9,6 +9,32 @@
 \newtheorem{mycoro}{Corollary}
 
 \begin{document}
+
+% Copyright
+\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+
+% DOI
+%\doi{10.475/123_4}
+
+% ISBN
+%\isbn{123-4567-24-567/08/06}
+
+%Conference
+\conferenceinfo{GECCO '15,}{July 11 - 16, 2015, Madrid, Spain}
+\isbn{978-1-4503-3472-3/15/07}\acmPrice{\$15.00}
+%\acmPrice{\$15.00}
+
+\doi{http://dx.doi.org/10.1145/2739480.XXXXXXXX}
+
+\clubpenalty=10000 
+\widowpenalty = 10000
 	
 % --- Author Metadata here ---
 \conferenceinfo{GECCO'15,} {July 11-15, 2015, Madrid, Spain.}
@@ -18,7 +44,7 @@
 \widowpenalty = 10000
 % --- End of Author Metadata ---	
 
-\title{Input-to-state stable analysis on Particle Swarm Optimization}
+\title{Input-to-State Stability Analysis on Particle Swarm Optimization}
 %\subtitle{[Extended Abstract]
 
 \numberofauthors{3}
@@ -28,24 +54,24 @@
 % 1st. author	
 \alignauthor
 Daqing Yi \\
-\affaddr{Computer Science Department}\\
+\email{daqing.yi@byu.edu} \\
+\affaddr{Computer Science Dept.}\\
 \affaddr{Brigham Young University}\\
-\affaddr{Provo, UT, USA}\\
-\email{daqing.yi@byu.edu}
+\affaddr{Provo, UT, USA}
 % 2nd. author	
 \alignauthor
 Kevin D. Seppi \\
-\affaddr{Computer Science Department}\\
+\email{kseppi@cs.byu.edu} \\
+\affaddr{Computer Science Dept.}\\
 \affaddr{Brigham Young University}\\
-\affaddr{Provo, UT, USA}\\
-\email{kseppi@cs.byu.edu}
+\affaddr{Provo, UT, USA}
 % 3rd. author
 \alignauthor
 Michael A. Goodrich \\
-\affaddr{Computer Science Department}\\
+\email{mike@cs.byu.edu}	\\
+\affaddr{Computer Science Dept.}\\
 \affaddr{Brigham Young University}\\
-\affaddr{Provo, UT, USA}\\
-\email{mike@cs.byu.edu}	
+\affaddr{Provo, UT, USA}
 }
 
 \maketitle
@@ -99,17 +125,17 @@ At that point the algorithm can be mimicked by simply sampling from the appropri
 In this paper we extend the limited work that has been done to understand
 the behavior \emph{before} stagnation, that is, when the unique mechanisms of PSO are directing the behavior of the algorithm.
 
-By using a \emph{feedback cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the affect of the personal and global best.
+By using a \emph{feedback cascade model} we are able to include both what we refer to as the \emph{position update} which comes from the PSO equations, but also the \emph{input update}, that is, the effect of the personal and global best.
 This paper does so in contrast to prior work which focuses on the position update.
 A cascade model also allows us to make fewer assumptions in mapping from PSO to a dynamical system model.
-Using this model we are able to derive the conditions under which the process is input-to-state stable (ISS)\cite{Jiang2001857}, produce bounds on particle motion, as well as prove bounds on the mean of particle motion.
-The ISS conditions and the bounds can inform parameter adjustments and other properties that can, in turn, control the extent to which the algorithm explores or exploits the fitness landscape.
+Using this model we are able to derive the conditions under which the process is input-to-state stable \cite{Jiang2001857}, prove bounds on both the particle motion and the mean of particle motion.
+The input-to-state stable conditions and the bounds can inform parameter adjustments and other properties that can, in turn, control the extent to which the algorithm explores or exploits the fitness landscape.
 This is especially valuable in the context of the design of future PSO variants. 
 
 The body of this paper is organized as described here.
 In section \ref{sec:sys_model}, we model the PSO dynamics as a feedback cascade system, which enables the input-to-state stability analysis.
 The definition of input-to-state stability (ISS) and its meaning in the context of PSO are also given.
-Section \ref{sec:iss} shows that for particular parameter values, the position-update component of a particle is ISS. 
+Section \ref{sec:iss} shows that for particular parameter values, the position-update component of a particle is input-to-state stable. 
 Using the ISS property we then give the bound on particle motion.
 We also use the ISS property in the context of the analysis of the moments (the mean and higher moments) of particle motion.
 In section \ref{sec:sys_dynamics}, we use the ISS property to help analyze the dynamics of the particle.
@@ -139,13 +165,13 @@ x_{ij}(k+1) = x_{ij}(k) + v_{ij}(k+1).
 \end{equation}
 \end{subequations}
 $ x_{ij}(k) $ represents the position of particle $ i $ in dimension $ j $ at time $ k $.
-$ v_{ij}(k) $ similarly represents the velocity of particle $ i $ in dimension $ j $ also at time $ k $.
+Similarly, $ v_{ij}(k) $ represents the velocity of particle $ i $ in dimension $ j $ also at time $ k $.
 $ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global best (actually the topology best or local best) and personal best positions observed by the swarm and the particle respectively. 
 $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from $ [0,1] $.
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
 Due to the stochastic nature of the particle's path and the social interaction represented by the topology, the dynamics of the algorithm is hard to evaluate in general.
-Understanding how the particles move guides how to improve the algorithm design~\cite{bonyadi2014analysis}, particularly the stochastic factors in the velocity update of equation \eqref{eq:up_vel}.
+Understanding how the particles move guides how to improve the algorithm design~\cite{bonyadi2014analysis}, particularly the stochastic factors in the velocity update of Equation \eqref{eq:up_vel}.
 However once a particle is no longer able to find improvements in $ x^{G} $ and $ x^{P} $, it exhibits the \emph{stagnation phenomenon} \cite{Clerc06stagnationanalysis}.
 In this state the analysis is easier since there is no effect from the topology.
 
@@ -156,7 +182,7 @@ The convergence trajectories can be estimated~\cite{vandenBergh2006937} and the 
 By building a linear system model \cite{4424687}, the PSO algorithm can be viewed as a closed loop system and the convergence can be analyzed.
 Based on such a convergence analysis, parameters can be set for best effect \cite{Trelea2003317}.
 
-The second approach for handling the stochastic factors is based on the stochastic analysis.
+The second approach for handling the stochastic factors is based on stochastic analysis.
 By taking the mean of the stochastic variables, the stochastic terms can be converted into
 constant terms.
 A convergence analysis of the mean and variance of a particle at stagnation can also be obtained by using the characteristic equation in a discrete-time model 
@@ -183,8 +209,8 @@ has also been analyzed
 
 Input-to-state stability analysis consists of two parts:
 \begin{itemize}
-\item the decomposition of the PSO algorithm into components;
-\item and the input-to-state stability of each component.
+\item the decomposition of the PSO algorithm into components, and
+\item the input-to-state stability of each component.
 \end{itemize}
 In this section, we model particle motion using a feedback cascade model.
 Then we review the definition of the input-to-state stability (ISS).
@@ -198,7 +224,7 @@ We also explain why ISS should be applied to PSO.
 For the purpose of input-to-state stability analysis we decompose the PSO algorithm into components as shown in Figure \ref{fig:sys_flow}. This decomposition is comprised of cascaded components (the input update, followed by the position update) and the feedback of the historical state.
 These two components are the 
 \emph{input-update component} for the global best ($ x^{G}_{i}(k) $) and the personal best ($ x^{P}_{i}(k) $), and the 
-\emph{position-update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the last position $ x_{i}(k) $.
+\emph{position-update component} for particle position ($ x_{i}(k+1) $), which depends on the inputs $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $ as well as the previous position $ x_{i}(k) $.
 
 \begin{figure}
 	\centering
@@ -242,9 +268,9 @@ with $ f(0,0) = 0 $
 \end{equation}
 \end{mydef}
 
-The $ \beta () $ term in equation \eqref{eq:def_iss} defines an initial bound with a decaying property.
-The $ \gamma () $ term in equation \eqref{eq:def_iss} defines a bound determined by the input.
-This means that the influence $ \beta () $ term gradually decreases to zero and the position is bounded by a range determined by the bound on the input.
+The $ \beta () $ term in Equation \eqref{eq:def_iss} defines an initial bound with a decaying property.
+The $ \gamma () $ term in Equation \eqref{eq:def_iss} defines a bound determined by the input.
+This means that the $ \beta () $ term gradually decreases to zero and the position is bounded by a range determined by the bound on the input.
 
 \subsection{Importance of input-to-state stability}
 \label{sec:connect_iss_to_pso}
@@ -253,7 +279,7 @@ Under certain conditions the dynamics of complex systems can be understood by fi
 We will take this approach with PSO. 
 Parallel combination of input-to-state stable components yields a combined structure that is also input-to-state stable~\cite{khalil1996nonlinear}.
 In the case of PSO and as shown in Figure \ref{fig:sys_flow}, if each component (representing a single dimension) is input-to-state stable, the position-update component which combines all the dimensions is also input-to-state stable.
-Thus we have property \ref{prop:iss:parallel}.
+Thus we have Property \ref{prop:iss:parallel}.
 \begin{myprop}
 \label{prop:iss:parallel}
 The position-update component is input-to-state stable if the position update in each dimension is input-to-state stable.
@@ -289,13 +315,11 @@ However, if the personal best and global best converge to an estimated optimal p
 \section{Analysis of Input-to-state stability in PSO}
 \label{sec:iss}
 
-In this section, we briefly review the definition of input-to-state stability (ISS) including both the conditions that guarantee it and the bound that ISS implies\cite{Jiang2001857}. 
-We then show that PSO satisfies this definition when the parameters of PSO are
-set in a requisite range. 
+We then show PSO satisfies the definition of input-to-state stability when the parameters of PSO are set in a requisite range. 
 We also derive the bounds implied by the ISS property and use the ISS property in Section \ref{sec:sys_dynamics} to find bounds on particle motion.
 Last, we will use ISS to analyze the moments (the mean and higher moments) of particle motion.
 
-In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the optimal position.
+In our analysis of the PSO algorithm, we seek to understand how the particles converge to some position $ x^{*} $, which is intended (not guaranteed) by the algorithm to be the global minimum position of the objective function.
 
 For this analysis we use a one-dimension particle and extract the linear form of the position-update component.
 As noted above, the one dimensional case can be extended to many dimensions.
@@ -325,8 +349,8 @@ B(k) = \begin{bmatrix}
 \end{bmatrix}.
 \end{equation}
 
-The system state is $ X(k) = [ v(k), x(k) - x^{*} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} $
-\footnote{$ x^{*} $ means an equilibrium point to the system.
+The system state is $ X(k) = [ v(k), \; x(k) - x^{*} ]^{T} $, and the system input is $ U(k) = [ x^{G}(k) - x^{*} , \;  x^{P}(k) - x^{*} ]^{T} $
+\footnote{We use $ x^{*} $ to represent an equilibrium point to the system.
 In PSO, it can be a local optimum, a global optimum, or an estimated optimum.
 We use it as a reference point to check the bounds.}.
 The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \rightarrow x^{*} $.
@@ -334,65 +358,65 @@ The convergence of this model means that $ v(k) \rightarrow 0 $ and $ x(k) \righ
 \subsection{Conditions for input-to-state stability for position update in PSO}
 \label{sec:iss_proof}
 
-Using the definition of the PSO position update as given in equation \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be ISS as defined in definition \ref{def:iss}.
+Using the definition of the PSO position update as given in Equation \eqref{eq:pso_up_linalg_simp}, PSO can be shown to be input-to-state stable as defined in definition \ref{def:iss}.
 
 \begin{mythm}
 \label{thm:iss}
 When $ | \lambda_{\max} ( A(k) ) | < 1 $ PSO \eqref{eq:pso_up_linalg_simp} is input-to-state stable. 
 %The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, if there exists a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q' $ that has $ A(k)^{T} P A(k) - P = - Q(k) \leq - Q' $.
-\begin{proof}
+%\begin{proof}
+%\end{proof}
+\end{mythm}
 The proof follows the ISS-Lyapunov-function approach. 
 The ISS-Lyapunov function, defined in Appendix \ref{sec:iss_lyapunov:func}, can be used to prove the input-to-state stability of a system and analyze the state bound\cite{Jiang2001857}.
 The details of the proof are given in Appendix \ref{sec:thm:iss:proof}.
-\end{proof}
-\end{mythm}
 
-Note that in equation \eqref{eq:pso_up_linalg_simp},
-$ [ v(k), x(k) - x^{*} ]^{T} = [0, 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , x^{P}(k) - x^{*} ]^{T} = [0, 0]^{T} $.
+Note that in Equation \eqref{eq:pso_up_linalg_simp},
+$ [ v(k), \; x(k) - x^{*} ]^{T} = [0, \; 0]^{T} $ is an equilibrium position when the input $ [ x^{G}(k) - x^{*} , \; x^{P}(k) - x^{*} ]^{T} = [0,  \; 0]^{T} $.
 Without loss of generality, for an arbitrary optimization problem $ x^{*} $ would typically not be at the origin. 
 In such a problem, input-to-state stability means that the boundaries of $ | v(k) | $ and $ | x(k) - x^{*} | $ would be transformed and thus determined by $ | x^{G}(k) - x^{*} | $ and $ | x^{P}(k) - x^{*} | $,
 but the properties of ISS apply independent of where the function is centered.
 
-Having shown that PSO is ISS we can now state a bound on particle position.
+Having shown that PSO is input-to-state stable we can now state a bound on particle position.
 
 \begin{mycoro}
 \label{coro:state_bound}
-Given a bound on the input $ || u || $ in the position-update component, we have the bound on the particle position from equation \eqref{eq:pso_up_linalg_simp}.
+Given a bound on the input $ || u || $ in the position-update component, we have the bound on the particle position from Equation \eqref{eq:pso_up_linalg_simp}.
 \begin{equation}
 \label{eq:state_bound}
 \begin{aligned}
 \forall k, 
 & | x(k) - x^{*} | \leq \\
-& \max \left( | x(0) - x^{*} | , \gamma ( | [ x^{G}(k) - x^{*}, x^{P}(k) - x^{*} ]^{T} | ) \right),
+& \max \left( | x(0) - x^{*} | , \gamma ( | [ x^{G}(k) - x^{*}, \; x^{P}(k) - x^{*} ]^{T} | ) \right),
 \end{aligned}
 \end{equation}
 in which $ \gamma = \alpha_{3}^{-1} \circ \sigma $.
 ($ \alpha_{3} $ and $ \sigma $ are defined in Appendix \ref{sec:thm:iss:proof}.)
+\begin{proof}
+This is obtained from Remark 3.7 in \cite{Jiang2001857} and by choosing $ P $ be a symmetric identity matrix.
+Furthermore we drop the velocity part because $ | x(k) - x^{*} | \leq | [ v(k), \; x(k) - x^{*} ]^{T} | $.
+\end{proof}
+\end{mycoro}
+
 The $ \max $ part is needed to account for the effect of the starting point, represented by the first parameter. Eventually the effect of the starting point no longer affects the system, formally:
 \begin{equation}
 \label{eq:state_bound:conv}
 \exists T, \forall k \geq T, 
-|  x(k) - x^{*} | \leq \gamma ( | [ x^{G}(k) - x^{*}, x^{P}(k) - x^{*} ]^{T} | ).
+|  x(k) - x^{*} | \leq \gamma ( | [ x^{G}(k) - x^{*}, \; x^{P}(k) - x^{*} ]^{T} | ).
 \end{equation}
-\begin{proof}
-This is obtained from Remark 3.7 in \cite{Jiang2001857} and by choosing $ P $ be a symmetric identity matrix.
-Furthermore we drop the velocity part because $ | x(k) - x^{*} | \leq | [ v(k), x(k) - x^{*} ]^{T} | $.
-\end{proof}
-\end{mycoro}
-
 Figure \ref{fig:boundary} gives an example on how a particle's boundary is determined by the personal best and global best.
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./boundary}
-\caption{A bound on a particle's position by a reference point $ x^{*} $ from equation \ref{eq:state_bound:conv}.
+\caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation \eqref{eq:state_bound:conv}.
 The ratio of two radii indicates $ \gamma $.}
 \label{fig:boundary}
 \end{figure}
 
 \begin{mycoro}
 \label{coro:param_unit_disc}
-Write $ A(k) = 
+Let $ A(k) = 
 \begin{bmatrix}
 \chi & - \chi \phi \\
 \chi & 1 - \chi \phi
@@ -400,13 +424,13 @@ Write $ A(k) =
 $, in which
 $ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
 When $ \phi \in \left( 0 , \frac{2(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
-\begin{proof}
-The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof}.
-\end{proof}
+%\begin{proof}
+%\end{proof}
 \end{mycoro}
+The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof}.
 
 Figure \ref{fig:paramSpace} shows the parameter space.
-The x-axis is $ \phi = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
+The x-axis is $ \phi^{sup} = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
 The stable region in dark blue is obtained from eigenvalue test on Theorem \ref{thm:iss} and the red boundary is obtained from Corollary \ref{coro:param_unit_disc}.
 \begin{figure}
 \centering
@@ -471,9 +495,9 @@ B_{m} = \begin{bmatrix}
 
 The convergence of $ E( x(k) ) $ in stagnation is given in \cite{Jiang20078,Poli:2008:DSS:1384929.1384944}.
 Even without the stagnation assumption, 
-the input-to-state stable analysis on equation \eqref{eq:pso1_alg_mean_linalg:final} indicates how $ E(x(k)) $ will deviate from $ \hat{x} $ anytime we know how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from $ \hat{x} $. Stagnation is a simple case of knowing how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from $ \hat{x} $. This special case is discussed more later in this paper.
+the input-to-state stable analysis on Equation \eqref{eq:pso1_alg_mean_linalg:final} indicates how $ E(x(k)) $ will deviate from $ \hat{x} $ anytime we know how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from $ \hat{x} $. Stagnation is a simple case of knowing how $ E( x^{G}(k) ) $ and $ E( x^{P}(k) ) $ deviate from $ \hat{x} $. This special case is discussed more later in this paper.
 
-We now proceed to show the conditions that must hold for the mean model to be ISS.
+We now proceed to show the conditions that must hold for the mean model to be input-to-state stable.
 \begin{mythm}
 \label{thm:iss:mean}
 	The system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, if $ | \lambda_{\max} ( A_{m} ) | < 1 $.
@@ -492,17 +516,17 @@ This means that when the system \eqref{eq:pso_up_linalg_simp} is input-to-state 
 
 \begin{mycoro}
 \label{coro:param_unit_disc:mean}
-Write $ A_{m} = \begin{bmatrix}
+Let $ A_{m} = \begin{bmatrix}
 1 + \chi - \frac{ \chi \phi^{P} }{2} - \frac{ \chi \phi^{G} }{2} & -\chi \\
 1 & 0
 \end{bmatrix} 
 $, in which
 $ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
 When $ \phi \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable.
-\begin{proof}
-The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof:mean}.
-\end{proof}
+%\begin{proof}
+%\end{proof}
 \end{mycoro}
+The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof:mean}.
 
 
 Similar to Corollary \ref{coro:state_bound}, we can use the $ Q_{m} $ to determine the state bound.
@@ -512,7 +536,7 @@ If the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable, we
 \begin{equation}
 \begin{aligned}
 \exists & T , \forall  k > T, \\
-& | E( x(k) ) - \hat{x} | \leq  \gamma_{m} | [ E( x^{P}(k) ) - \hat{x} ,  E( x^{G}(k) ) - \hat{x} ]^{T} |,
+& | E( x(k) ) - \hat{x} | \leq  \gamma_{m} | \left[ E( x^{P}(k) ) - \hat{x} , \; E( x^{G}(k) ) - \hat{x} \right]^{T} |,
 \end{aligned}
 \end{equation}
 with 
@@ -540,7 +564,7 @@ In this section, we add the input-update component that was first shown in Figur
 %\end{equation}
 %in which $ X^{G}(k) $ is a set that contains the $ x^{G} (k) $ of all the particles.
 
-Since by Theorem \ref{thm:iss} PSO is ISS, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input-update component. 
+Since by Theorem \ref{thm:iss} PSO is input-to-state stable, and therefore by Corollary \ref{coro:state_bound} the stability of the cascade system depends on the output of the input-update component. 
 We can say:
 \begin{enumerate}
 \item If the input-update component generates converging personal best and global best, the bound of the particle position will converge;
@@ -551,7 +575,7 @@ We can say:
 By Theorem \ref{thm:iss:mean} and \ref{coro:bound:mean}, we can make similar statements about the particle mean.
 As well, this boundary analysis could be applied to higher moments.
 
-Furthermore, by equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $ when the position-update component is input-to-state stable.
+Furthermore, by Equation \eqref{eq:state_bound}, we know that the convergence of a particle's position $ x(k) $ to $ x^{*} $ depends on how $ x^{P}(k) $ and $ x^{G}(k) $ converge to $ x^{*} $ when the position-update component is input-to-state stable.
 In particular, the bound on the distance between a particle's position and  $ x^{*} $ is determined by the initial distance $ x(0) -  x^{*} $, $ x^{P}(k) -  x^{*} $ and $ x^{G}(k) -  x^{*} $.
 
 \subsection{Stagnation}
@@ -573,7 +597,7 @@ by Corollary \ref{coro:state_bound}, we can go beyond prior work and can identif
 \begin{equation}
 \label{eq:single_obj_input_bound}
 \exists T, \forall k > T, 
-| x(k) - \hat{x} | \leq  \gamma_{d} | [ x^{P} - \hat{x}, x^{G} - \hat{x} ]^{T} |,
+| x(k) - \hat{x} | \leq  \gamma_{d} | [ x^{P} - \hat{x},\; x^{G} - \hat{x} ]^{T} |,
 \end{equation}
 with 
 \begin{equation}
@@ -581,7 +605,7 @@ with
 \end{equation}
 Particularly, when $ x^{P} = x^{G} $, we have
 $ \hat{x} = x^{G} = x^{P} $.
-By equation \eqref{eq:single_obj_input_bound} we know that
+By Equation \eqref{eq:single_obj_input_bound} we know that
 $ \exists T , x(T) = x^{G} $, 
 which means $ x(k) \rightarrow x^{G} $.
 Thus we have shown the convergence of PSO in stagnation without treating the random terms as constants required by the work described in Section \ref{sec:relwork}.
@@ -604,7 +628,7 @@ As in Figure \ref{fig:sys_flow}, there exists a feedback cascade system structur
 If we assume that there is another model for swarm information sharing, which implements the $ x^{G}(k) $ update.
 Then in the particle, the $ x^{G}(k) $ can be viewed as an input that is independent with the current particle state.
 The feedback loop uses the current state to update the $ x^{P}(k) $.
-As in equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates that the input-to-state stability relies on the shape of the fitness distribution.
+As in Equation \eqref{eq:pb_up} and \eqref{eq:gb_up}, the input-to-state stability of the input-update component depends on $ f(x) $, which indicates that the input-to-state stability relies on the shape of the fitness distribution.
 Assuming that the PSO parameters are set such that the position-update component is input-to-state stable, there are three cases in analyzing the dynamics of a particle.
 \begin{itemize}
 \item \emph{When only the $ x^{G} (k) $ is constant} \\
@@ -624,8 +648,8 @@ Thus the global best is being updated.
 In this case, the feedback of the system does not impact the input-update component and thus nor does it impact the position-update component.
 In this case the system model can be simplified by ignoring the feedback.
 As a result, the system falls into only a serial cascade system because there is no feedback for this particle.
-If the input-update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable (it can be shown that a serial cascade of ISS components is also ISS~\cite{khalil1996nonlinear}).
-Since this serial cascade system is ISS, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converge toward the $ x^{G} (k) $.
+If the input-update component is input-to-state stable, the serial connection of two input-to-state stable component is still input-to-state stable (it can be shown that a serial cascade of ISS components is also input-to-state stable~\cite{khalil1996nonlinear}).
+Since this serial cascade system is input-to-state stable, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converge toward the $ x^{G} (k) $.
 If we have  $ f(x^{G}) > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there exits some region that $ f(x) > f(x^{P}) $.
 The $ x^{P} $ will start to change.
 \item \emph{When both the $ x^{G} $ and $ x^{P} $ are not constant} \\
@@ -690,7 +714,7 @@ So by positive definite ordering we have $ A^{T}(k) P A(k) < P $.
 		
 Let $ -Q(k) = A^{T}(k) P A(k) - P $. Since $ A^{T}(k) P A(k) < P $ then $ - Q(k) < 0 $ furthermore $ \exists Q' \forall k, Q(k) > Q' > 0 $. 
 		
-By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, the system is ISS.
+By the Lemma 3.5 in \cite{Jiang2001857}, if we can show that a proposed positive definite Lyapunov function is an ISS-Lyapunov function, the system is input-to-state stable.
 		
 Define a Lyapunov function
 \begin{equation}
@@ -707,7 +731,7 @@ and
 $ \alpha_{2} ( \xi )= \lambda_{max} \xi^{2} $,
 we have $ V(x) $ satisfying condition 1 of the ISS-Lyapunov function definition.
 		
-By applying equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
+By applying Equation \eqref{eq:pso_up_linalg_simp} to $ V( X(k+1) ) - V( X(k) ) $, we have
 \begin{equation}
 \label{eq:lyapunov_delta2}
 \begin{aligned}
@@ -799,7 +823,7 @@ and
 \end{equation} 
 Thus we have $  V( X(k+1) ) - V( X(k) ) $ satisfying condition 2 of the ISS-Lyapunov function definition and
 so \eqref{eq:lyapunov_v} is an ISS-Lyapunov function.
-Using Jiang's Lemma 3.5\cite{Jiang2001857}, the position-update component of PSO (equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
+Using Jiang's Lemma 3.5\cite{Jiang2001857}, the position-update component of PSO (Equation \eqref{eq:pso_up_linalg_simp}) is input-to-state stable.
 \end{proof}
 
 \subsection{Proof of Corollary \ref{coro:param_unit_disc}}
