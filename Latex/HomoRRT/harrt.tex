@@ -48,7 +48,7 @@ The idea of these planners is often to create algorithms that blend the benefits
 Such planners can produce paths consistent with well-reasoned topologies, but the planners may not work well in worlds that have sparse features or when the human intends a topological reference to be a ``soft'' constraint rather than a rigid path requirement. 
 In this paper, we propose the HA-RRT$^{*}$, a homotopy-aware RRT$^{*}$, that explores the planning space for optimal solutions while respecting the path topology.
 The paper restricts attention to problems where the goal is not only to optimize some objective but also contains ``soft'' or ``hard'' topological constraints, i.e. ``go quickly from A to B and better avoid C''.
-Because the algorithm is aware of the homotopy class of each branch of the tree produced by the RRT$^{*}$ algorithm, the algoirthm can enable type of sliding autonomy for different levels of human's intent on the path topology.
+Because the algorithm is aware of the homotopy class of each branch of the tree produced by the RRT$^{*}$ algorithm, the algorithm can enable a type of sliding autonomy for different levels of human's intent on the path topology.
 Thus, a clear intent on the path topology provides the homotopic constraint, which reduces the working space of the optimal search; a vague intent on the path topology can be identified by comparing the optimal solutions in different homotopy classes.
 The paper includes a set of simulation case studies and a corresponding theoretic analysis.
 \end{abstract}
@@ -65,30 +65,18 @@ An optimization problem is usually formed by a human who specifies a metric that
 As the task supervisor, the so-called {\em problem holder} in Woods' nomenclature~\cite{woods2004envisioning}, it is essential that the human's intent is correctly and precisely modeled.
 %Optimality has been the most important heuristic in planning motions for the robots.
 In planning a robot's motion for a task, the most common ways to model intent is with single numerical objective~\cite{6974170} or with multiple numerical objectives~\cite{yi2014supporting}.  Examples of objectives are many: Euclidean distance, minimum time, etc.
-A numerical solver is then used to generate a path that optimizes the given objectives.
+A numerical solver or calculus of variations is then used to generate a path that optimizes the given objectives.
 
 Unfortunately, not all types of human intent can be easily modeled using common measurable objectives.
 One difficult-to-model intent is the ``shape'' of the planned path.
 Although shape properties like continuity and smoothness can be modeled using standard numerical constraints, shapes that refer to environment topology, such as ``go around building A and then between the two trees while avoiding region C,'' benefit from topological approaches.
 In particular, concepts from algebraic topology can be used to create numerical representations of these topological desiderata or constraints.
 In this paper, we present an algorithm that allows the human to specify avoiding regions, moving around objects, and satisfying constraints: via-point/waypoint constraints, reference path constraints~\cite{6974170} and temporal logic constraints~\cite{5650896}.
-%This method won't work when there is only preference on the ``shape'' of the paths instead of hard constraint.
-%At the same time, the preference on the ``shape'' of the paths might also be fuzzy for the human to describe.
 
 The topological concept of \emph{homotopy} is a mathematical formalism of the inherent similarity or dissimilarity of two paths.
 Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez201544}.
 The set of paths that are homotopic to each other form a \emph{homotopy class}, and the  set of homotopy classes partition the set of all possible paths between any two points $A$ and $B$.
 In an environment containing obstacles, the homotopy partition can provide a useful way of grouping paths together based on the similarities of their ``shapes," where the term ``shape'' is interpreted using the formal topological notion.
-%{\sc Walter, I think we actually use a slightly different partitioning of the space.  The first difference is that we are using homologies instead of homotopies.  This is a technical difference that shouldn't make much difference, but we should point out to the reader that we are aware of this difference.  The second difference is that we don't actually partition the set of possible paths.  Instead, we partition the 2-D space of the environment.  The partition of the environment space is motivated by a desire to group paths through that space into intuitive groups based on topological properties, and this is an important distinction.}
-
-%{\sc Fundamental (algebraic) group of topology. How our approach isn't about arbitrarily complex paths within a homotopic class, but rather has some ``natural'' boundaries in metric space.  
-%How this lends itself to efficient RRT*.  
-%How this differs from Vijay's homotopy-based path planning.  Homology or homotopy?}
-
-%{\it In Vijay's paper, the map is discretized to graph, and then calculating the complex values of each edge. The complex value tells whether two paths are in same homotopy class. Ours follows another approach, which is sampling based. While exploring, we can tell if the current sub-path can still lead to a path that belongs to some homotopy class. That is why it is called homotopy aware. 
-
-%When we have the homotopy class as constraint, it can be used to reduce the exploring region so that the efficiency can be improved.
-%Because a branch of the tree will not be extended if it leads to a region that is not satisfied by the homotopic constraint.}
 
 Importantly, simple representative paths from within a homotopy class can often be associated with human intent.
 Consider a path-planning problem where a human supervisor defines the task for a robot.
@@ -109,10 +97,10 @@ The next two allow a human to express preference among different path shapes, bu
 \item \emph{I prefer some path shapes over others, but I recognize that tradeoffs may be needed.} 
 This indicates that the human has preferences over different homotopy classes, but also acknowledges that certain homotopy classes may not allow an acceptable optimization of another task-based objective.
 If the preference on the homotopy classes can be modeled using an objective function, then non-dominant solutions over the task-based objective and homotopic objective can be found, and the human can select one of these solutions.
-\item \emph{I have preferences over paths but it need help in understanding these preferences.}
-In this case, the human's preference could be identified through interactive process.
-Another straightforward way is that the planning algorithm provides the best solution of each homotopy class to the supervisor.
-The supervisor can then select one that satisfy his/her intent.
+\item \emph{I have preferences over paths but I need help in understanding these preferences.}
+In this case, the human's preference could be identified through an interactive process.
+A straightforward way is for the planning algorithm to provide the best solution of each homotopy class to the supervisor.
+The supervisor can then select one that satisfies his/her intent.
 \end{enumerate}
 
 In order to support these forms of human intent, expressed as homotopic constraints and preferences, we propose a homotopy-aware RRT$^{*}$ (HA-RRT$^{*}$) algorithm. 
@@ -124,38 +112,41 @@ An analysis of the algorithm is given in section~\ref{sec:analysis}, and then co
 \section{Related work}
 \label{sec:related_work}
 
-Humans often represent the world using a topological rather than metric-based path-planning~\cite{kuipers99,aginsky1997two}, and various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{mataric1992integration,thrun1998learning,fasola2013modeling,shah2013qualitative}.  
+Humans often represent the world using a topological rather than metric-based path-planning~\cite{kuipers99,aginsky1997two}.
+Various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{mataric1992integration,thrun1998learning,fasola2013modeling,shah2013qualitative}.  
+The obstacles in the map divides the paths into topological groups by the similarity.
 The topological notion of homotopy presents a formal definition of the similarity between two paths.
 This definition can be used both to determine the similarity between two paths as well as to partition paths into different classes.
+
 Homotopy-based path planning requires an algorithm to determine the homotopic equivalence of two paths, which is usually computationally expensive.
-
-%{\sc rewrite the following three paragraphs -- there are English language issues.}
-
-Research work have been finding effective and efficient ways of identifying the homotopy class to which a path belongs or the homotopic equivalence of two paths.
+There are a few research work that focus on effectively and efficiently identifying the homotopy class to which a path belongs or determining the homotopic equivalence of two paths.
 %One straightforward way is constructing a set of reference frames in the map, so that the how a path crosses the frames can be used for identification. 
 %A Voronoi diagram-based algorithm has been used to determine homotopy classes, but this algorithm shows limitations on finding some paths in some cases~\cite{banerjee2013framework}.
 The Voronoi diagram is used to identify a path from any homotopy class in \cite{banerjee2013framework}.
-By converting any path into a simple path from the Voronoi diagram, the homotopy class of the path can be determined, but it shows limitations on finding some paths in some cases.
+By converting any path into a simple path from the Voronoi diagram, the homotopy class of the path can be determined.
+However there exist limitations on finding some paths in complex obstacles in this approach.
 %Specifically, generating Voronoi diagram for obstacles of complicated shapes is hard.
 %By algebraic topology, the path of same homotopy class can be determined by using orientable band~\cite{Hershberger199463}.
 By applying the funnel algorithm in the universal covering space, the minimum-length path is efficiently optimized in a given homotopy class in \cite{Hershberger199463}.
-Similarly, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex.
-Semi-algebraic cuts are used to converting the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
-The Cauchy Integral theorem has been introduced to determine homotopy class by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
-Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside the region that the two paths close by the value of the complex integral.
+Similar with the Voronoi approach, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex.
+Semi-algebraic cuts are used to convert the path into ``word'' so that the homotopic equivalence can be compared~\cite{Grigoriev:1998:PAS:281508.281528}.
+The Cauchy Integral theorem has been introduced to determine the homotopic equivalence of any two paths by marking the positions in the obstacles as undefined~\cite{AAAI101920}.
+Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside a region that is closed by  two paths by the value of the complex integral.
 Because the map is discretized, the computation cost expands greatly if the obstacles are reasonably approximated by the cells.
 
-Sampling-based path planning, like the RRT or PRM, has been an effective and popular tool to generate planning paths.
-The idea of homotopy has also been integrated when exploring the map by branching and reconfiguring the tree structure.
-By homotopic redundancy, the paths from PRM could be compared by the homotopy classes~\cite{1041613}.
-By dividing the space using the rays crossing each obstacle, reference frames could be used to represent the paths into canonical sequences~\cite{Hernandez201544}.
-In this way, the exploration process of the graph structure keeps tracking the homotopy class of the new branch so that the exploration process can be constrained in some homotopy classes.
+Sampling-based path planning, like the RRT or PRM algorithm, has been an effective and popular tool to plan paths.
+The idea of homotopy has also been integrated when a sampling-based algorithm explores a given map by branching and reconfiguring its discrete structure of the world representation.
+By homotopic redundancy, the paths from PRM could be categorized into different homotopy classes~\cite{1041613}.
+By dividing the space using the rays crossing each obstacle, reference frames can be used to represent the paths as canonical sequences~\cite{Hernandez201544}.
+In this way, the exploration process of the graph structure keeps tracking the homotopy class of the new branch in the tree structure so that the exploration process can be constrained in some homotopy classes.
 
-In order to accelerate the exploration process, the bidirectional RRT$^{*}$ has been introduced to accelerate the exploration process.
-The bidirectional exploration reserves the optimality in the optimal sampling process
+The bidirectional RRT was originally proposed to accelerate the exploration process.
+For a bidirectional RRT$^{*}$, the exploration process can still converge to the optimal solution with efficiency improvement
 ~\cite{Jordan.Perez.ea:CSAIL13}~\cite{starek2014bidirectional}.
-With two trees exploring from two directions, we can have the optimal cost-to-go and the optimal cost-to-arrive at different position.
-This guarantee the optimality search with the homotopic constraint.
+With two trees exploring from two directions, 
+the cost-to-go and the cost-to-arrive of a given position converge to the optimal.
+It means that a solution, which is generated by connecting the subpaths from two trees with shared position, converges to the optimal solution that has the shared position as a via constraint.
+It can be used to support the optimal search with the homotopic constraint.
 We introduce the homotopy-aware bidirectional RRT$^{*}$ to support different level of intent on topology for the task supervisor.
 
 \section{Homotopy-aware RRT$^{*}$}
@@ -286,7 +277,7 @@ Given two paths, how they sequentially cross the reference frames indicate the h
 Any path that sequentially visits the regions can be mapped to a node walk on the topological graph.
 It is noticeable that two adjacent regions might be connected with not only one reference frame, which means that two nodes in the topological graph might be connected with more than one edge.
 Thus, two paths with same edge sequence belong to same homotopy class but two path with same node sequence don't.
-We select the sequence of the visited reference frames instead of the sequence of the visited regions to represent the homotopical information.
+We select the sequence of the visited reference frames instead of the sequence of the visited regions to represent the homotopic information.
 %Any path can be mapped into a sequence of nodes in the topological graph.  
 %{\sc Explain how or given an example.}
 %In determining the homotopy class, two paths share same start and goal.
