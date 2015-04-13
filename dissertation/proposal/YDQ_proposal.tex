@@ -40,6 +40,9 @@
     pdfborder={0 0 0},
     colorlinks=false,
     ]{hyperref}
+    
+\usepackage{caption}
+\usepackage{subcaption}
 
 % Rewrite the itemize, description, and enumerate environments to have more
 % reasonable spacing:
@@ -61,7 +64,11 @@
 % Because I use these things in more than one place, I created new commands for
 % them.  I did not use \providecommand because I absolutely want LaTeX to error
 % out if these already exist.
-\newcommand{\Title}{Toward human-in-the-loop robotic decision making}
+\newcommand{\Title}{
+%Toward human-in-the-loop robotic path planning and navigation
+Robot understanding of human intent : 
+toward the collaboration in the human-robot team
+}
 \newcommand{\Author}{Daqing Yi}
 \newcommand{\SubmissionMonth}{April}
 \newcommand{\SubmissionYear}{2015}
@@ -132,11 +139,34 @@ As the made decision, an optimized solution leads how the robot should execute t
 % 1) What problem do you want to solve?
 % 2) Who cares about this problem and why?
 
-The humans are expertized at making qualitative decision, from low-level movement to high-level reasoning.
-While the robots show great strength of solving quantitative problem, like high data-processing speed, high precisely repeated motion and etc. 
-In organizing the human and the robot in a team, especially when the human and the robot collaborate together, the roles of the robot and the human are usually different.
+Although the robot intelligence is made by simulating human rationality, the ways how robot and the human think are still very different.
+The human is expertized at making qualitative decision, from low-level movement to high-level reasoning.
+While the robot shows great strength of solving quantitative problem, like high data-processing speed, high precisely repeated motion and etc.
+In organizing the human and the robot in a team, the difference between the human and the robot should be considered in order to maximize the team performance.
+When the human and the robot collaborate together, they are usually assigned different roles.
+The human works on the high level, including high-level planning and scheduling, splitting the task into subtasks for different teammates, reacting to the situation changes.  
+The robot works on the lower level, including low-level planning and task execution.
 
-Like any collaboration in a shared environment, the mutual understanding and the information sharing between the robot and the human determine the team performance.
+In a collaborative team, the shared mental model helps explaining the team functioning~\cite{Jonker:2010:SMM:2018118.2018128}.
+
+
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/team_info_flow.pdf}
+\caption{The information flow in the team.}
+\label{fig:team_info_flow}
+\end{figure}
+
+
+The mutual understanding in the collaboration between the human and the robot is important to the team performance.
+[Discuss the influence of bad mutual understanding]
+[priori + online]
+There are a few methods to help the human understand the robot, like training and interactive display.
+Having the robot understand the human is more difficult, because of the asymmetry in how the human and the robot process information.
+
+%Like any collaboration in a shared environment, the mutual understanding and the information sharing between the robot and the human determine the team performance.
+%By the training and a few interactive technologies, the human could better read what is happening to the robot.
 
 
 
@@ -173,6 +203,109 @@ Like any collaboration in a shared environment, the mutual understanding and the
 % Answers:
 % 4) What is your proposed solution to this problem?
 
+\subsection{Modeling the human's intent}
+
+\subsubsection{Reference path constrained optimal path planning}
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.5\linewidth]{./fig/Wingman.pdf}
+\caption{A Robot Wingman Framework.}
+\label{fig:Wingman}
+\end{figure}
+
+\begin{figure}[hbtp]
+\centering
+\includegraphics[width=0.6\linewidth]{./fig/humanConstraint}
+\caption{How the multi-partite graph is obtained.}
+\label{fig:humanConstraint}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.6\linewidth]{./fig/MultiPartite.pdf}
+\caption{A multi-partite graph from a human path constraint.}
+\label{fig:MultiPartite}
+\end{figure}
+
+\subsubsection{Homotopy-based optimal path planning}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[t]{0.35\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/obs_map.pdf}
+		\caption{Decomposition of the map with obstacles.}
+		\label{fig:obs_map:map}
+	\end{subfigure}  
+	%\\
+	\begin{subfigure}[t]{0.35\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/obs_topology.pdf}
+		\caption{The generated topological graph.}
+		\label{fig:obs_map:topology}
+	\end{subfigure}   
+	\caption{Map with obstacles.}
+	\label{fig:obs_map}
+\end{figure}
+
+\subsection{Multi-objective path planning}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{fig/Tchebycheff}
+\caption{Tchebycheff method of finding Pareto front.}
+\label{fig:Tchebycheff}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.8\linewidth]{./fig/MORRTstar}
+	\caption{Rapidly exploring process}
+	\label{fig:MORRTstar}
+\end{figure}
+
+\subsection{Reaching a consensus}
+
+\subsubsection{The consensus in a swarm}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\linewidth]{./fig/particle_sys_flow.pdf}
+\caption{System structure of Particle.}
+\label{fig:sys:particle}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{./fig/pso_sys_flow.pdf}
+\caption{System structure of Swarm}
+\label{fig:sys:swarm}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{./fig/param2.png}
+\caption{Parameter space}
+\label{fig:paramSpace}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.6\linewidth]{./fig/boundary}
+\caption{A bound on a particle's position by a reference point $ x^{*} $ from Equation %\eqref{eq:state_bound:conv}.
+The ratio of two radii indicates $ \gamma $.}
+\label{fig:boundary}
+\end{figure}
+
+
+\subsection{The consensus between human and robot}
+
+
+\subsection{Including information uncertainty}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Validation}
 % 1-2 pages
@@ -185,6 +318,21 @@ Like any collaboration in a shared environment, the mutual understanding and the
 % specifying dates for completion of major milestones, including potential
 % papers and their submission dates
 
+\begin{itemize}
+\item Conference Paper: Toward Task-Based Mental Models of Human-Robot Teaming: A Bayesian Approach. (July 2013)
+\item Conference Paper: Supporting task-oriented collaboration in human-robot teams using semantic-based path planning. (June 2014)
+\item Conference Paper: Path Planning with a Human
+Path Constraint. (October 2014)
+\item Conference Paper: Input-to-state stable analysis on Particle Swarm Optimization. (July 2015)
+\item Conference Paper: MORRF$^{*}$ : Sampling-Based Multi-Objective Motion Planning. (2015)
+\item Conference Paper: Homotopy-Aware RRT$^{*}$ : Toward Human-Robot Topological Path-Planning. (2015)
+\item Journal Paper: Understanding the Particle Swarm Optimization by component decomposition. (2015)
+\item Submission of the dissertation to advisor ()
+\item Submission of the dissertation to committee members ()
+\item Dissertation Defense ()
+\item Conference Paper:
+\item Journal Paper: 
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Change these to reflect the bibliography style and bibtex database file you want to use
