@@ -8,7 +8,7 @@
 \newtheorem{myprop}{Property}
 \newtheorem{mycoro}{Corollary}
 
-\begin{document}
+
 
 % Copyright
 \setcopyright{acmcopyright}
@@ -27,22 +27,22 @@
 %\isbn{123-4567-24-567/08/06}
 
 %Conference
-\conferenceinfo{GECCO '15,}{July 11 - 16, 2015, Madrid, Spain}
+\conferenceinfo{GECCO '15,}{July 11--15, 2015, Madrid, Spain}
 \isbn{978-1-4503-3472-3/15/07}\acmPrice{\$15.00}
-%\acmPrice{\$15.00}
-
-\doi{http://dx.doi.org/10.1145/2739480.XXXXXXXX}
+\doi{http://dx.doi.org/10.1145/2739480.2754782}
 
 \clubpenalty=10000 
 \widowpenalty = 10000
 	
 % --- Author Metadata here ---
-\conferenceinfo{GECCO'15,} {July 11-15, 2015, Madrid, Spain.}
-\CopyrightYear{2015}
-\crdata{TBA}
-\clubpenalty=10000
-\widowpenalty = 10000
+%\conferenceinfo{GECCO'15,} {July 11-15, 2015, Madrid, Spain.}
+%\CopyrightYear{2015}
+%\crdata{TBA}
+%\clubpenalty=10000
+%\widowpenalty = 10000
 % --- End of Author Metadata ---	
+
+\begin{document}
 
 \title{Input-to-State Stability Analysis on Particle Swarm Optimization}
 %\subtitle{[Extended Abstract]
@@ -84,6 +84,13 @@ In addition, the use of input-to-state stability allows this analysis to preserv
 This analysis is important because it can inform the setting of PSO parameters and better characterize the nature of PSO as a dynamic system.
 This work also illuminates the way in which the personal-best and the global-best updates influence the bound on the particle's position and hence, how the algorithm exploits and explores the fitness landscape as a function of the personal best and global best.
 \end{abstract}
+
+% A category with the (minimum) three required fields
+\category{I.2.8}{Artificial Intelligence}{Problem Solving, Control Methods, and Search}[Heuristic methods]
+%A category including the fourth, optional field follows...
+%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+
+\terms{Algorithms, Theory}
 
 \keywords{Particle Swarm Optimization, Input-to-state stability}
 
@@ -241,7 +248,8 @@ Given an input-to-state stable position-update component, we will see that the c
 
 Before reviewing the definition of input-to-state stability, we first introduce several types of functions \cite{Jiang2001857}.
 \begin{itemize}
-	\item $ K $-function $ \mathbb{K} $ : a function $ \alpha  : [ 0, a ) \rightarrow [ 0, \infty ) $ is continuous, strictly increasing and $ \alpha (0) = 0 $; it is a $ K_{\infty} $-function, if $ \alpha (s) \rightarrow \infty $ as $ s \rightarrow \infty $;
+	\item $ K $-function $ \mathbb{K} $ : a function $ \alpha  : [ 0, a ) \rightarrow [ 0, \infty ) $ is continuous, strictly increasing and $ \alpha (0) = 0 $.
+	\item $ K_{\infty} $-function $ \mathbb{K}_{\infty} $ :  a function $ \alpha  : [ 0, a ) \rightarrow [ 0, \infty ) $ is a $ K $-function and $ \alpha (s) \rightarrow \infty $ as $ s \rightarrow \infty $.
 	\item $ KL $-function $ \mathbb{KL} $ : a function $ \beta : [ 0, a ) \times [ 0 , \infty ) \rightarrow [ 0, \infty ) $ satisfies:
 	\begin{enumerate}
 		\item $ \forall t \geq 0 $, $ \beta (\cdot , t ) $ is a $ K $-function;
@@ -362,7 +370,7 @@ Using the definition of the PSO position update as given in Equation \eqref{eq:p
 
 \begin{mythm}
 \label{thm:iss}
-When $ | \lambda_{\max} ( A(k) ) | < 1 $ PSO \eqref{eq:pso_up_linalg_simp} is input-to-state stable. 
+When $ | \lambda_{\max} ( A(k) ) | < 1 $, the position-update component of PSO \eqref{eq:pso_up_linalg_simp} is input-to-state stable. 
 %The system \eqref{eq:pso_up_linalg_simp} is input-to-state stable, if there exists a symmetric positive definite matrix $ P $ and a symmetric positive definite matrix $ Q' $ that has $ A(k)^{T} P A(k) - P = - Q(k) \leq - Q' $.
 %\begin{proof}
 %\end{proof}
@@ -387,7 +395,7 @@ Given a bound on the input $ || u || $ in the position-update component, we have
 \begin{aligned}
 \forall k, 
 & | x(k) - x^{*} | \leq \\
-& \max \left( | x(0) - x^{*} | , \gamma ( | [ x^{G}(k) - x^{*}, \; x^{P}(k) - x^{*} ]^{T} | ) \right),
+& \max \left( | x(0) - x^{*} | , \gamma ( | \left[ x^{G}(k) - x^{*}, \; x^{P}(k) - x^{*} \right]^{T} | ) \right),
 \end{aligned}
 \end{equation}
 in which $ \gamma = \alpha_{3}^{-1} \circ \sigma $.
@@ -422,8 +430,8 @@ Let $ A(k) =
 \chi & 1 - \chi \phi
 \end{bmatrix}
 $, in which
-$ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
-When $ \phi \in \left( 0 , \frac{2(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
+$ \phi \in [0, \phi^{sup}] $ , $ \phi^{sup} = \phi^{P} + \phi^{G} $ and $ \chi \in ( 0, 1 ) $.
+When $ \phi^{sup} \in \left( 0 , \frac{2(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso_up_linalg_simp} is input-to-state stable.
 %\begin{proof}
 %\end{proof}
 \end{mycoro}
@@ -521,7 +529,7 @@ Let $ A_{m} = \begin{bmatrix}
 1 & 0
 \end{bmatrix} 
 $, in which
-$ \phi \in [0,  \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
+$ \phi \in [0,  \phi^{sup} ] $ and $ \phi^{sup} = \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
 When $ \phi \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable.
 %\begin{proof}
 %\end{proof}
@@ -652,7 +660,7 @@ If the input-update component is input-to-state stable, the serial connection of
 Since this serial cascade system is input-to-state stable, the new position will be bounded somewhere around $ x^{G} (k) $. This implies that the particle will converge toward the $ x^{G} (k) $.
 If we have  $ f(x^{G}) > f(x^{P}) $, in the assumption of the continuity in the fitness space, when the particle gets closer to the global best, there exits some region that $ f(x) > f(x^{P}) $.
 The $ x^{P} $ will start to change.
-\item \emph{When both the $ x^{G} $ and $ x^{P} $ are not constant} \\
+\item \emph{When both the $ x^{G}(k) $ and $ x^{P}(k) $ are not constant} \\
 This usually means that both the particle and the swarm it belongs to keep on finding better positions.
 Thus both the particle updates the personal best and the swarm updates the global best.
 In this case, the input-to-state stability of the input-update component is harder to guarantee.
