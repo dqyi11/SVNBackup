@@ -109,9 +109,6 @@ When the robot can independently and autonomously execute the tasks, the role of
 How the robot could understand the human's intent and how the robot responds to the environment dynamic and uncertainty determine the collaborative performance and the interaction experience.
 These are usually modeled as the information flow in the shared mental model of the collaborative human-robot team.
 
-
-%In guiding the robot's decision making, the tasks are often modeled into optimization problems. 
-%As the made decision, an optimized solution leads how the robot should execute the task.
 From the perspective of the robot in the motion planning and navigation problems, we propose a series of algorithms to support the robot utilizing and understanding the information flow in the shared mental model.
 For planning for the task, we will propose algorithms on supporting the versatile human's intents with the information in the human-natural format.
 We will consider the planning problem with the human-motion constraint, with the topological requirement and with multiple objectives.
@@ -162,7 +159,8 @@ The human is expertized at making qualitative decision, from low-level movement 
 While the robot shows great strength of solving quantitative problem, like high-speed data processing, high precisely repeated motion and etc.
 In organizing the human and the robot in a team, the difference between the human and the robot should be considered in the purpose of maximizing the team performance.
 When the human and the robot collaborate together, they are usually assigned different roles.
-The human works on the high level, including high-level planning and scheduling, splitting the task into subtasks for different teammates, reacting to the situation changes.  
+The human works on the high level, including high-level planning and scheduling, splitting the task into subtasks for different teammates, reacting to the situation changes.
+The task is the goal of the team, while each subtask is the goal for a team player.  
 The robot works on the lower level, including low-level planning and task execution.
 
 In a collaborative team, the shared mental model helps explaining the team functioning~\cite{Jonker:2010:SMM:2018118.2018128}.
@@ -283,12 +281,12 @@ It supports the shared mental model in the robot team, which improves the robust
 
 In this team-centered approach, both humans and robots can take on roles that match their strengths. Properly designed, this can facilitate the performance of the entire team.
 This idea has already been applied to reform human-robot interaction in many areas, like object identification, collaborative tasks performance, etc. ~\cite{Hoffman2004}. 
-In this paper, we adopt the notion of collaboration, operationally defined as the process of utilizing shared resources (communication, space, time) in the presence of asymmetric goals, asymmetric information, and asymmetric abilities as illustrated in Figure \ref{fig:collaboration}. 
+We adopt the notion of collaboration, operationally defined as the process of utilizing shared resources (communication, space, time) in the presence of asymmetric goals, asymmetric information, and asymmetric abilities as illustrated in Figure \ref{fig:collaboration}. 
 The word collaboration suggests that there are both overlaps and differences between the goals, information, and abilities of the agents involved. Colloquially, collaboration can happen when everyone has something unique to offer and something unique to gain, but there is some benefit to each individual if activity is correlated.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.5\linewidth]{./fig/collaboration.png}
+\includegraphics[width=0.4\linewidth]{./fig/collaboration.png}
 \caption{Operational Elements of Collaboration.}
 \label{fig:collaboration}
 \end{figure}
@@ -296,10 +294,7 @@ The word collaboration suggests that there are both overlaps and differences bet
 In a human-robot team, the asymmetries on abilties and information mostly come from the natural difference on agents’ sensors and actuators. 
 Additionally, an agent may exhibit ability and information asymmetry in different states of interacting with the environment, like location, lighting condition etc. 
 Often, a team goal will be decomposed into subgoals in execution. 
-The subgoals are usually assigned to agents in the team by organizing agents into specific roles with specific responsibilities, and this leads to goal asymmetries. 
-In a collaboration framework, the interaction between agents not only focuses on common goals, but may also require providing support for others’ goals. 
-In a team search tasks, for example, the robot and the human might work together for target searching, while the robot might assist the human to deal with an emergency.
-
+The subgoals are usually assigned to agents in the team by organizing agents into specific roles with specific responsibilities, and this leads to goal asymmetries.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Research-Related Work}
@@ -308,6 +303,9 @@ In a team search tasks, for example, the robot and the human might work together
 % Answers:
 % 3) What have others done to solve this problem and why is this inadequate?
 %    (only a small overlap with the area exam from the introduction)
+
+In a collaboration framework, the interaction between agents not only focuses on common goals, but may also require providing support for others’ goals. 
+In a team search tasks, for example, the robot and the human might work together for target searching, while the robot might assist the human to deal with an emergency.
 
 In planning motion for a robot in a human-robot team, search is one of the most important tasks we are interested with.
 In planning motion for a search task, the objective is usually to maximize the information collected with a limited motion resource.
