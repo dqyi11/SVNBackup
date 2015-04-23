@@ -105,16 +105,16 @@ Robotic understanding of human information: supporting the path planning and nav
 
 %Note that there is a blank line between paragraphs, here.
 Improvements in robot autonomy is changing the human-robot interaction from low-level manipulation to high-level task-based collaboration.
-When the robot can independently and autonomously execute the tasks, the role of the human in a human-robot team is a collaborator and a task supervisor~\cite{Goodrich2013,Yi2014}.
+When the robot can independently and autonomously execute the tasks, the role of the human in a human-robot team is a collaborator and a task supervisor.
 How the robot could understand the human's intent and how the robot responds to the environment dynamic and uncertainty determine the collaborative performance and the interaction experience.
 These are usually modeled as the information flow in the shared mental model of the collaborative human-robot team.
 
-From the perspective of the robot in the motion planning and navigation problems, we propose a series of algorithms to support the robot utilizing and understanding the information flow in the shared mental model.
-For planning for the task, we will propose algorithms on supporting the versatile human's intents with the information in the human-natural format.
-We will consider the planning problem with the human-motion constraint, with the topological requirement and with multiple objectives.
-For executing the task, we will propose algorithms and analyses on how to share and utilize the information.
-We will analyze how the consensus is reached within a swarm of autonomous agents with own subtasks.
-We will also propose algorithm on how the robot interprets the online information from the human in task execution.
+From the perspective of the robot in the motion planning and navigation, we propose a series of algorithms to support the robot utilizing and understanding the information flow in the shared mental model.
+For planning for the task, we will propose algorithms on supporting versatile human's intents with information in the human-natural format.
+We will consider the planning problem with human-motion constraint, with topological requirement and with multiple objectives.
+For executing the task, we will propose algorithms and analyses on how to share and utilize the information from human.
+We will analyze how the consensus is reached within a swarm of autonomous agents with individual subtasks.
+We will also propose algorithms on how the robot interprets the online information from the human in task execution.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -154,54 +154,53 @@ We will also propose algorithm on how the robot interprets the online informatio
 
 \subsection{Shared mental model in human-robot collaboration}
 
-Although the robot intelligence is made by simulating human rationality, the ways how robot and the human think are still very different.
+Although the robot intelligence is made by simulating human rationality, the ways how robot and human think are still very different.
 The human is expertized at making qualitative decision, from low-level movement to high-level reasoning.
-While the robot shows great strength of solving quantitative problem, like high-speed data processing, high precisely repeated motion and etc.
-In organizing the human and the robot in a team, the difference between the human and the robot should be considered in the purpose of maximizing the team performance.
+While the robot shows great strength of solving quantitative problem, like high-speed data processing, high-precision repeated motion and etc.
+In organizing humans and robots in a team, the difference between the human and the robot should be considered to maximize the team performance.
 When the human and the robot collaborate together, they are usually assigned different roles.
-The human works on the high level, including high-level planning and scheduling, splitting the task into subtasks for different teammates, reacting to the situation changes.
-The task is the goal of the team, while each subtask is the goal for a team player.  
+The human works on the high level, including high-level planning and scheduling, splitting the team task into subtasks for teammates, reacting to the situation changes.
+The team task is the goal of the team, while each subtask is the goal for a team player.  
 The robot works on the lower level, including low-level planning and task execution.
 
 In a collaborative team, the shared mental model helps explaining the team functioning~\cite{Jonker:2010:SMM:2018118.2018128}.
 The running of the shared mental model is by the information sharing between the agents in the team.
 The roles in the team determine the directions of the information flow~\cite{Yen_implementingshared}.
 Figure \ref{fig:team_info_flow} gives an example of the information flow in a human-robot team.
-In completing the team task, the human coach distributes the subtasks to the human players and the robot players, which indicates the information flowing toward the players.
+In completing the team task, a human coach distributes the subtasks to human players and robot players, which indicates the information flowing toward players.
 The {\em offline information flow} brings the priori of the shared mental model to the player, which includes~\cite{Goodrich2013}
 \begin{itemize}
 \item {\em team task model} : the knowledge of procedures, equipment, situations and constraint; 
 \item {\em teammate model} : the knowledge of teammates skills, abilities and tendencies.
 \end{itemize}
 The offline information flow impacts the effectiveness of task execution.
-It guarantees that the player can understand the coach's intent so that the planning and execution of the autonomous agent is for the correct rationality.
+It guarantees that the player can understand the coach's intent so that the planning and execution of the autonomous agent is for correct rationality.
 While the task is being executed, the players also share the information with each other, which forms the mutual information flow between the players.
 The {\em online information flow} exchanges the information between team players by interaction, which is about
 \begin{itemize} 
 \item {\em team interaction model} : knowledge of roles, responsibilities, information sources, communication channels, role interdependencies and task execution states.
-How the human interprets the robot's information can be addressed by a few techniques. 
 \end{itemize}
 The online information flow improves the efficiency of task execution.
 A better mutual information improves the team performance.
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.8\linewidth]{./fig/team_info_flow.pdf}
+\includegraphics[width=0.6\linewidth]{./fig/team_info_flow.pdf}
 \caption{The information flow in the team.}
 \label{fig:team_info_flow}
 \end{figure}
 
 Due to the asymmetry in the information processing between human and robot, the information flow in the shared mental model of a human-robot team is very different with that of a human team or a robot team.
 It is relatively easy that the human understands the information from the robot without requiring professional training, because the human is more adaptive and there are a few interactive tools for translating the robotic information into readable format.
-The information flow from the human to the robot is usually by conversion.
-The human has to be trained so that they can convert the task into a format that can be directly fed to the robot.
+The information flow from the human to the robot also needs conversion.
+The human has to be trained so that they can program the task into a format that is directly readable.
 This prevents the prevalence of human-robot interaction, because the best user experience is that the human can express in the nature way, e.g. the natural language.
-Some information of the human's intent is likely to be lost in the conversion process, because it is hard to precisely model the qualitative information using a quantitative data format.
+Usually information of the human's intent is likely to be partially lost in the conversion process, because of the qualitative-quantitative conversion.
 
 \subsection{Impacts of information flow in robot motion}
 
-How the robot could exactly understand the information from the human is now the bottleneck of the performance of the human-robot team.
-In a robot motion problem, the offline information determines how the robot plans the motion for the given task.
+How the robot could exactly understand the information from the human is currently the bottleneck of the performance of the human-robot team.
+In a robot motion problem, the offline information determines how the robot plans the motion for the assigned subtask.
 The bias in modeling the coach's intent leads to an unsatisfied planned solution, which impacts the outcome of the task execution.
 While the online information helps the robot acknowledging the environment and responding to the dynamics.
 The mutual information flow extends the observation capability of each agent in execution, because the fed information is extended from local range to neighboring range.
@@ -213,41 +212,42 @@ The reduction of the environment uncertainty could be accelerated by the paralle
 The offline information flow origins from the task coach.
 The task is split by the task coach into a few subtasks, which are assigned to each player in the team. 
 The robot player plans motion for the assigned subtask and executes as planned.
-In the offline information flow, we focus on how the robot considers the teammate's behavior and how the robot can identify the task coach's intent so that the planned motion satisfies the requirement.
+In the offline information flow, we focus on how the robot considers the teammate's behavior and how the robot identifies the task coach's intent so that the planned motion satisfies the requirement.
 
 \begin{itemize}
 \item {\em Constrained by the teammate's behavior} \\
 In a team-work scenario, the motion of the player needs to consider the motions of other players.
 A common application is that the motion planning of multiple agents, in which the team performance is to be maximized while the collision avoidance of the agents is also considered.
 In a cooperative framework, the motion of a player can also be constrained by the motion of another player. 
-For example, in a collaborative search problem, the motion of a wingman robot is expected to maximize some objective while is constrained to stay in a region near around a moving human.
-Considering the offline information flow in a human-robot team enables the team performance maximization in a collaborative relationship.
+The case that we are interested with is a little different.
+In a collaborative search problem, the motion of a wingman robot is expected to maximize some objective while is constrained to stay in a region near around a moving human.
+Considering the offline information flow in a human-robot team contributes to the team performance maximization in a collaborative relationship.
 	
 \item {\em Supporting the coach's subtask definition in the natural and fuzzy way of expression} \\
 Another important element in the offline information flow is the subtask definition.
 A precise understanding of the coach's intent on the subtask guarantees the planned motion satisfying the coach's intent, because a wrong model cannot lead to a correct answer.
-There do exist a few types of intents that are difficulty to be modeled into quantitative factors.
+There are a few types of intents that are difficult to be modeled into quantitative factors.
 Usually the coach is involved in an interactive planning process to help the robot identifying the coach's preference within multiple objectives and topological intent.
 \end{itemize}
 
 \subsubsection{Online information flow}
 
 The online information flow supports the information sharing between the agents when the task is being executed.
-The need of an online information flow comes from the incomplete prior information and the environment dynamics.
+The need of an online information flow often comes from the incomplete prior information and the environment dynamics.
 In the human-robot team, the environmental information is collected distributively, which increases the efficiency and the robustness of the task execution.
-In the online information flow, we focus on how the players in the team reach the consensus and how to update the shared mental model by the new information from observation.
+In the online information flow, we focus on how the players in the team reach the consensus and how the shared mental model is updated by the new observed information.
 
 \begin{itemize}
 \item {\em Consensus reaching} \\
 When a team of robots work together, each robot only perceives local information in the environment.
 If the distributed information can be shared in the team, the information that each agent obtain can be expanded.
 A common way of combining both local information and neighboring information is by consensus reaching.
-The consensus reaching process targets at reducing the conflict between the local information and the neighboring information, while each robot executes its own subtask.
+The goal of the consensus reaching is reducing the conflict between the local information and the neighboring information, while each robot executes his/her own subtask.
 
-\item {\em Information fusion} \\
+\item {\em Human information fusion} \\
 Not all the tasks can be planned with complete and precise environment information.
 Sometimes, there is only a rough description of the environment for the motion planning.
-While the players, both the robot and the human, update the environment model and adapt to the correction or update on the environment model.
+Thus, the players, both the robot and the human, will update the environment model and adapt to the correction or update on the environment model.
 
 \end{itemize}
 
@@ -255,11 +255,11 @@ While the players, both the robot and the human, update the environment model an
 \section{Related Work}
 
 The human-robot interaction focuses on understanding, designing, and evaluating robotic systems for use by or with humans~\cite{goodrich2007human}.
-The research on the human-robot interaction evolves with the development on the level of autonomy~\cite{goodrich2007human}.
-The interaction between human and robot transits from tele-operation to cooperation.
-When the robots can be autonomous enough, they will start to complete tasks independently.
-The interaction between the human and the robot becomes collaboration.
-In this section, we review the research studies on the robot motion planning and navigation in consideration of the human interaction.
+The research on the human-robot interaction evolves with the development on the level of autonomy of the robot~\cite{goodrich2007human}.
+The interaction between humans and robots is extended from tele-operation to cooperation.
+When the robots can be autonomous enough, they will start to complete tasks independently,
+which enables the collaboration in human-robot interaction.
+In this section, we review the research studies in the robot motion planning and navigation in consideration of the human interaction.
 Then we discuss related work with the specific topics that we are interested with.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -274,10 +274,10 @@ It origins from the cognitive psychology, which is a hypothetical construct that
 It provides a framework of mutual awareness, which serves as the means by which an agent selects actions that are consistent and coordinated with those of its teammates.
 A few research studies look at modeling the shared mental model in order to improve the performance of human-robot team~\cite{nikolaidis2012human,Yen_implementingshared,FSS149109,Jonker:2010:SMM:2018118.2018128,Neerincx2011,Mathieu2000,Kennedy2007}, which supports how the shared mental model enhances the team performance.
 In \cite{nikolaidis2012human}, the shared mental model is modeled by POMDP. 
-Experiments show that the information share process between the human and the robot enhances the team performance.
+Experiments show that the information sharing between the human and the robot enhances the team performance.
 Also a computational framework of the shared mental model is constructed for the robot's information synchronization~\cite{FSS149109}.
-In CAST~\cite{FSS149109}, which is another computational framework of the shared mental model, a information flow graph in included. 
-It supports the shared mental model in the robot team, which improves the robustness to the information accuracy.
+In CAST~\cite{FSS149109}, which is another computational framework of the shared mental model, a information flow graph is included. 
+It supports that the shared mental model in the robot team, which improves the robustness to the information accuracy.
 
 In this team-centered approach, both humans and robots can take on roles that match their strengths. Properly designed, this can facilitate the performance of the entire team.
 This idea has already been applied to reform human-robot interaction in many areas, like object identification, collaborative tasks performance, etc. ~\cite{Hoffman2004}. 
@@ -306,10 +306,15 @@ The subgoals are usually assigned to agents in the team by organizing agents int
 
 In a collaboration framework, the interaction between agents not only focuses on common goals, but may also require providing support for others’ goals. 
 In a team search tasks, for example, the robot and the human might work together for target searching, while the robot might assist the human to deal with an emergency.
+We will review several problems that are relevant with the information flow to the robot in the human-robot collaboration.
+How the robot understands the goal received from the human includes the submodularity, homotopy and multiple objectives in path planning.
+How the robot utilizes the information received from the human in execution includes the consensus reaching and information fusion.
 
-In planning motion for a robot in a human-robot team, search is one of the most important tasks we are interested with.
+\subsubsection{Submodularity in path planing}
+
+In planning motion for a robot in a human-robot team, search is one of the most important tasks that we are interested with.
 In planning motion for a search task, the objective is usually to maximize the information collected with a limited motion resource.
-Because the observation covers a region near around the search agent, using a coverage model for the robot makes the path planning a {\em maximum coverage problem}.
+Because an observation at a time covers a region near around the search agent, using a coverage model for the robot makes the path planning a {\em maximum coverage problem}.
 Maximum coverage is known to be a classic NP-hard combinatorial optimization problem~\cite{Megiddo1983} because coverage overlap can not be ignored. 
 Mutual information is introduced to measure the total information
 of a set of observation coverages, which implies a property of
@@ -323,12 +328,14 @@ If the reward function of a vertex has submodularity as in a maximum coverage pr
 Unfortunately in the submodular orienteering case the location of the robot at time t constrains the reachable locations at time t+1.
 Thus, naively applying a greedy algorithm to the submodular orienteering case, that is, with a “teleport” assumption, yields poor results~\cite{Krause2012}. 
 For a generalization of the submodular orienteering problem in which the neighboring constraint can be converted into time budget, a recursive greedy algorithm can be applied~\cite{Chekuri2005}.
+However, when we import the constraints from a human teammate's behavior to the submodular path planning, this solution won't work any more. 
 
-\subsubsection{Homotopy-based optimal path planning}
+\subsubsection{Homotopy in path planning}
 
-Humans often represent the world using a topological rather than metric-based path-planning~\cite{Aginsky1997,kuipers1999}. 
+Different from the common optimization problem, the solution of the path planning cannot only be evaluated by fitness but also carries a shape property.
+Humans often represent the world using a topological rather than metric-based path planning~\cite{Aginsky1997,kuipers1999}. 
 Various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{Mataric1992,Thrun1998,Fasola2013,Shah2013}.
-The obstacles in the map divides the paths into topological groups by similarity. 
+The obstacles in the map divide the paths into topological groups by similarity. 
 The topological notion of homotopy presents a formal definition of the similarity between two paths. 
 This definition can be used both to determine the similarity between two paths as well as to partition paths into different classes.
 
@@ -343,47 +350,52 @@ Semialgebraic cuts are used to convert the path into “word” so that the homo
 The Cauchy Integral theorem has been introduced to determine the homotopic equivalence of any two paths by marking the positions in the obstacles as undefined~\cite{Bhattachary2010}. 
 Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside a region that is closed by two paths by the value of the complex integral. 
 Because the map is discretized, the computation cost expands greatly if the obstacles are reasonably approximated by the cells.
+How to efficiently and effectively find the optimal paths in different homotopy classes is still an open question.
 
-\subsubsection{Multi-objective path planning}
+\subsubsection{Multiple objective in path planning}
 
-Most popular methods in multi-objective optimization do not naturally apply to path-planning problems~\cite{Zhang2007,Deb2014}.
+It is very common that there exist several objectives in a task, which means multiple objectives are needed to consider in planning paths.
+Most popular methods in multi-objective optimization are not naturally applicable to path-planning problems~\cite{Zhang2007,Deb2014}.
 One approach to addressing this issue is to change the representation for a path by coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,Howlett2006} or waypoints~\cite{Sujit2009,Pires2004} so that an evolutionary algorithm can be applied. 
 Unfortunately, these approaches do not scale well for large problems, and estimating the required number of segments a priori is very challenging. 
 Another approach is to represent the path as a point in a very high-dimensional vector space.
 In this approach a path is represented as a point in a $ n * d $ dimensional space formed by n d-dimensional way-points.
 However the search can be more difficult if we allow the number of way-points, and therefor the dimensionality of the optimization problem, to vary. 
 Indeed, we will use this as to guide our solution, but the algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{Sujit2009,Zhang2007}.
+There is still the need of an algorithm that can efficiently and effectively find a set of Pareto optimal paths for given multiple objectives.
 
-\subsubsection{Consensus reaching of multi-agent}
+\subsubsection{Consensus reaching}
 
 Consensus reaching is often an important topic for a group of cooperative agents.
-The consensus reaching can be applied to a team of distributed agent in forming a robust structure and synchronizing by the instructive input~\cite{1431045,5990997,5229134,1333204}.
+The consensus reaching can be applied to a team of distributed agents in forming a robust structure and synchronizing by the instructive input~\cite{1431045,5990997,5229134,1333204}.
 The research studies focus on different types of models, which include nonlinear dynamics~\cite{5229134}, changing interactive topologies~\cite{1431045}, time delay~\cite{1333204} and etc.
-In the distributed team structure, the agents can gradually converge to a given reference position or a given reference trajectory by the consensus reaching process.
-The consensus seeking is also the essential in the distributed information fusion~\cite{1470210,1470240,sharma2010distributed}.
+In the distributed team structure, the agents can gradually converge to a reference position or a reference trajectory by consensus reaching.
+The consensus reaching is also the essential in the distributed information fusion~\cite{1470210,1470240,sharma2010distributed}.
 The consensus reaching becomes solving the information conflict between the local information and the neighboring information in state estimation.
 One of the interpretation on the consensus reaching is using input-to-state stability~\cite{1470210}.
 It indicates that the consensus reaching property depends on the input-to-stable components of the systems.
+We can decompose the networked system into components and apply input-to-state stability to evaluate whether and how the consensus can be reached. 
 
-\subsubsection{Understanding the information from the human}
+\subsubsection{Fusing the information from the human}
 
-The current human-robot communication still heavily relies on the training of the human, which means that the human should adapt to send the information that the robot could understand.
-This prevents the human-robot interaction into wider application fields.
-Research studies are focusing to support the robot understanding the natural information from the human.
-
-In path planning, the map in a human's mind is usually a qualitative description~\cite{mcclelland2012qualitative,6425551,mcclelland2014qualitative,shah2013qualitative}.
+The current human-robot communication still heavily relies on the training of the human, which means that the human should program the information fpr the robot.
+This prevents the human-robot interaction applied into more fields.
+The goal of current research studies is supporting the robot to understand the natural information from the human.
+ 
 Not all the tasks can be planned and executed with a precisely defined quantitative map.
-However, human could provide a qualitative description about the environment, which works as the prior information.
+If the map information is from a human's mind, it is usually a qualitative description~\cite{mcclelland2012qualitative,6425551,mcclelland2014qualitative,shah2013qualitative}.
+The qualitative description provides inadequate but at least some infomration as the prior for planning.
 While the robot navigates the environment based on the roughly described map, the robot could update the map description by the online observation.
 This roughly described prior information can also be modeled from the human natural language~\cite{tellex2011understanding,walter2014framework}.
-The natural language instructions can be used as the observation in the robotic SLAM problem.
-Three layers of maps, which are semantic, topological and metric layers, are maintained as a graphical model structure~\cite{walter2014framework}.
-Both the sensor information and human's online instruction can be merged into the environmental learning process.
+The natural language instructions can be used as the observations in the robotic SLAM problem.
+Three layers of maps, which are semantic, topological and metric layers, are maintained as a graphical model structure~\cite{walter2014framework} so that the input can be either precise sensor reading or fuzzy verbal description.
+Thus, both the sensor information and human's online instruction can be merged into the environmental learning process.
 
-Also the fuzziness in the human language might also provides the information for the robot.
+Also the fuzziness in the human language might also provide information for the robot.
 There is research work on fusing the information from human for localizing the robot~\cite{6301744,5509521,ahmed2014enabling}.
 By using the Bayesian filter framework, the human's information is modeled into softmax likelihood model so that it can be applied into Bayesian update.
 Planners have been proposed to infer the human's intent from the human's verbal instructions~\cite{howard2014natural,Duvallet_2014_7795}.
+Allowing the human to express in an easy and natural way to the robot enhances the online information flow from the human to the robot.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Thesis Statement}
@@ -398,7 +410,7 @@ Planners have been proposed to infer the human's intent from the human's verbal 
 \end{itemize}
 \end{comment}
 
-Because the difference in the ways that how robot and the human think, there is the difficulty in how the robot can interpret the online and offline information from the human.
+Because the difference in the ways that how robot and human think, there is the difficulty in how the robot can understand the online and offline information from the human.
 We develop a set of algorithms that help the robot understand human intent when the human expresses in the human natural ways, so that the effectiveness and efficiency in the performance of human-robot team can be enhanced.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -408,20 +420,22 @@ We develop a set of algorithms that help the robot understand human intent when 
 % 4) What is your proposed solution to this problem?
 
 In order to utilize and enhance the information flow in the shared mental model of the human-robot team, we look at several problems in the offline information flow and the online information flow.
-We propose the solutions or analyses on each problem.
+We propose the solutions or analyses on these problems.
 Theoretical proofs and experiments will be provided to support the algorithms or the propositions.
+For the offline information, we consider three different path planning problems, which are about reference path constrained, homotopy-based and multi-objective respectively.
+For the online information, we consider problems of consensus reaching and how to fuse the human's information.
 
-\subsection{Reference path constrained optimal path planning}
+\subsection{Submodular path planning with reference path constraint}
 
-Before the task execution, the coach assign the subtask to the robot.
-The information of the other human player might also be obtained for the planning purpose.
-If the human player's motion can be predicted or known and the robot player's motion is constrained by the human player's motion, we can have a path planning problem with reference-path constraint.
+Before the task execution, the coach assign a subtask to a robot player as the goal.
+The information of another human player might also be given for the planning purpose.
+If the human player's motion can be predicted or known and the robot player's motion is constrained by the human player's motion, we have a path planning problem with reference-path constraint.
 We consider this situation in a search task with the robot wingman.
 
 Consider a discretized map of the world formed by a set of cells $ \mathbf{S}$ and suppose that the robot moves with constant speed from a cell to its neighbors.
 In the search task, each cell in a discretized map is assigned an entropy value to represent the information distribution.
-Because the robot's path must be connected, the robot's motion is constrained by a graph topology determined by the cell neighborhood. 
-In a period of time of length $ T $, we denote the robot's path as $ X = [x_{1}, x_{2} , \cdots , x_{T}] $, and note that this path must satisfy the connection constraint on the discretized map.
+The robot's motion is constrained by a graph topology determined by the cell neighborhood. 
+In a period of time of length $ T $, we denote the robot's path as $ X = [x_{1}, x_{2} , \cdots , x_{T}] $.
 We adopt an observation coverage model for the robot, which means that the robot can observe not only the cell it currently occupies but also neighboring cells within a given range.
 Let the observation at time step $ t $ be $ O^{X}_{t} $, which describes both the observed cells and how well they are observed.
 Thus the robot's path, $X$, induces a sequence of observations $ \mathbf{O}^{X} = \{ O^{X}_{1}, \cdots , O^{X}_{T-1}, O^{X}_{T} \}$.
@@ -432,7 +446,7 @@ The entropy reduction over the problem space $ \mathbf{S} $ by the observation $
 
 \begin{figure}[hbtp]
 \centering
-\includegraphics[width=0.4\linewidth]{./fig/Wingman.pdf}
+\includegraphics[width=0.37\linewidth]{./fig/Wingman.pdf}
 \caption{A Robot Wingman Framework.}
 \label{fig:Wingman}
 \end{figure}
@@ -473,20 +487,19 @@ Note that a cell in the discretized map might appear in multiple partitions due 
 \end{figure}
 
 In order to guarantee that the search process on a multi-partite graph $ G = (V, E, T) $ always ends with a path of length $ T $, we use a pruning process to ensure that each vertex can be reached from the previous partition and is connected to a vertex in the next partition.
-The pruning process includes a forward pruning and a backward pruning.
-The forward pruning traverses from partition $ V(2) $ to partition $ V(T) $ and removes any vertex that has no incoming edge; all edges incident to this vertex are also removed.
-The backward pruning traverses from partition $ V(T-1) $ to partition $ V(1) $, and removes any vertex that has no outgoing edge; all edges incident to this vertex are also removed.
+we use backtracking to estimate the maximum total reward and use this estimate as our search heuristic.
+We then use an expanding tree to create an anytime algorithm approximate solution to the submodular orienteering problem on the multi-partite graph.
 
 \subsection{Homotopy-based optimal path planning}
 
-In planning the path for the robot player, some of the preferences on the paths for the subtask might be hard for the coach to express.
+We also notice that, in planning the path for the robot player, some of the preferences on the paths for the subtask might be hard for the coach to express.
 Topology of a path is one of the factors that are hard to model into the quantitative models.
 The topological concept of \emph{homotopy} is a mathematical formalism of the inherent similarity or dissimilarity of two paths.
 Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez2015}.
 The set of paths that are homotopic to each other form a \emph{homotopy class}, and the  set of homotopy classes partition the set of all possible paths between any two points $A$ and $B$.
 In an environment containing obstacles, the homotopy partition can provide a useful way of grouping paths together based on the similarities of their ``shapes," where the term ``shape'' is interpreted using the formal topological notion.
 
-In order to support these forms of human intent, expressed as homotopic constraints and preferences, we propose a homotopy-aware RRT$^{*}$ (HA-RRT$^{*}$) algorithm. 
+In order to support these forms of human intents, expressed as homotopic constraints and preferences, we propose a homotopy-aware RRT$^{*}$ (HA-RRT$^{*}$) algorithm. 
 This algorithm uses an RRT$^*$ algorithm to explore possible paths, but each branch of the random tree is aware of the homotopy class to which it belongs. 
 We use a set of reference frames for homotopy class identification.
 Figure \ref{fig:obs_map:map} shows an example of a map that is decomposed with the reference frames (blue and green dash lines).
@@ -518,9 +531,9 @@ Figure \ref{fig:obs_map:topology} shows a topological graph from the map decompo
 Label each reference frame with a \emph{character}.
 Each path can be mapped into a {\em string}, which represents the sequence of the crossed reference frames.
 In \cite{Hernandez2015}, the string is used to identify the homotopy class of each branch in the RRT so that the growth of a tree is constrained in a homotopy class, because starting from the root of the tree to each branch makes a subpath.
-In this paper, each branch of the tree structure tracks the corresponding string as the homotopy information, so that the homotopic constraints can be satisfied or the homotopy class can be identified.
+We have each branch of the tree structure tracking the corresponding string as the homotopy information, so that the homotopic constraints can be satisfied or the homotopy class can be identified.
 
-We define the paths with same string as a \emph{string class} and use $ - $ to concatenate characters as a string.
+We define the paths with same string as a \emph{string class} and use $ - $ to concatenate characters into a string.
 Two string classes might still belong to the same homotopy class, e.g. a string class $ \alpha_{1,1}-\alpha_{2,1} $ and a string class $ \alpha_{2,1}-\alpha_{1,1} $ by the reference frames in Figure \ref{fig:obs_map}.
 A homotopic grammar is needed to identify the equivalence.
 Also, the homotopic grammar can be used to find all the equivalent string classes in the same homotopy class by giving one string class.
@@ -536,15 +549,24 @@ Thus, in the exploration process, the homotopy classes of each branch of the tre
 
 \subsection{Multi-objective path planning}
 
-In contrast to searching through and comparing solutions in order to find the Pareto optimal set, decomposition-based methods provide an attractive alternative.  
-In this paper we uses a decomposition-based method similar to MOE-D~\cite{Zhang2007}.  
+When there are multiple objectives in a task, the goal is finding a solution that balances between different objectives.
+A common method for finding a solution to a multi-objective optimization problem is to optimize a single objective created by a weighted sum of the multiple objectives.
+This means that either the programmer, designer , or a human teammate must decide how to assign the weights so that the qualitative behavior matches what is intended. 
+Optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
+
+Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
+Without loss of generality, assume that each $c_{k}(\cdot)$ is a cost function such that the objective is to minimize these functions.  
+Since the Pareto optimal set is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
+By ``representative" we mean a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.
+
+In contrast to searching through and comparing solutions in order to find the Pareto optimal set, we use a decomposition-based method similar to MOEA-D~\cite{Zhang2007}.  
 MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a set of subproblems.  
 Each subproblem uses a weighed combination of the objectives to find specific points in the Pareto set or to guide the search for such points.  
 %Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
 Let $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ be a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $.  
 Let $\{c_{1}(\cdot), c_{2}(\cdot), \ldots c_{K}(\cdot)\}$ denote the $K$-element set of objective functions, let $\bm{c}(x) = [c_{1}(x), c_{2}(x), \ldots, c_{K}(x)]^T$, and let $x$ denote a potential solution.  
 Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote the so-called Utopia reference vector. %, described in more detail in the next section. 
-Three types of decomposition methods have been used in prior work~\cite{Zhang2007}; however we will use only the two methods described below, leaving the third (the boundary intersection method) to future work.
+Three types of decomposition methods have been used in prior work~\cite{Zhang2007}.
 \begin{eqnarray}
  \arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
  \arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} \mid c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} & {\rm Tchebycheff} \label{eq:Tchebycheff}\\
@@ -554,34 +576,28 @@ The solutions generated by each method are a subset of the Pareto optimal set.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.35\linewidth]{fig/Tchebycheff}
+\includegraphics[width=0.3\linewidth]{fig/Tchebycheff}
 \caption{Tchebycheff method of finding Pareto front.}
 \label{fig:Tchebycheff}
 \end{figure}
 
-In this section, we present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
+We present an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
-
-Consider a multi-objective path planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
-Without loss of generality, assume that each $c_{k}(\cdot)$ is a cost function such that the objective is to minimize these functions.  
-Since the Pareto optimal set is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
-By ``representative" we mean a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.  
 
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.6\linewidth]{./fig/MORRTstar}
+	\includegraphics[width=0.55\linewidth]{./fig/MORRTstar}
 	\caption{Rapidly exploring process}
 	\label{fig:MORRTstar}
 \end{figure}
 
 Adopting the idea from the MOEA-D algorithm~\cite{Zhang2007}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
-In this paper, we use the Tchebycheff approach from MOEA-D. 
-The MOEA-D Boundary Intersection Approach could be used with only slight modifications. 
-The Tchebycheff approach requires us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
+Both the Tchebycheff approach and Boundary Intersection approach require us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
 Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 
-Recall from the previous section that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{the}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
-As illustrated in Figure~\ref{fig:Tchebycheff}, the Utopia reference vector is defined as that point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
+Take the Tchebycheff approach as an example.
+Recall that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{te}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
+As illustrated in Figure~\ref{fig:Tchebycheff}, the Utopia reference vector is defined as the point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
 It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
@@ -593,25 +609,24 @@ The cost of each vertex is calculated using the $ k^{\rm th} $ objective functio
 \item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) , m \in M $.
 The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
-Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $, which is described below.  
+Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
+The solutions obtained from $ M $ subproblem trees constitute a set of Pareto optimal paths, which is the solutions to the multi-objective path planning problem. 
 
-\subsection{Reaching a consensus}
+\subsection{Consensus reaching}
 
-%\subsubsection{The consensus in a swarm intelligence}
-We analyses the consensus reaching problem in a team of autonomous agents.
+We analyze the consensus reaching problem in a team of autonomous agents.
 As learned the spirit from \cite{1470210}, we introduce input-to-state stability analysis~\cite{Jiang2001} to each agent in the system, which assists the analysis of the consensus reaching.
 We apply it to the Particle Swarm Optimization problem(PSO).
 In PSO, each particle is an independent agent.
 Each particle has its own subtask, which is seeking the optimal.
 For the purpose of the subtask, random factors are imported to the search dynamics.
-At the same time, each particle maintains the local information ( a personal best ) and receives the neighboring information ( a global best ).
-The consensus reaching process is that all the particle agree with where the optimal is, so that they share the same global best and personal best.
+At the same time, each particle maintains a local information (a personal best) and receives the neighboring information (a global best).
+The consensus reaching is that all the particle agree with where the optimal is, so that they share the same global best and personal best.
 This is usually called the convergence of the particles.
 
-Although the input-to-state stable analysis given in this paper can be applied to many versions of PSO,
-for this work we use the formulas from Kennedy's most recent definition of PSO~\cite{Bratton2007} for the constricted position-update rule.
-%This version of PSO includes a star topology, and a constricted position-update rule. 
+Although the input-to-state stable analysis can be applied to many versions of PSO,
+for this work we use the formulas from Kennedy's most recent definition of PSO~\cite{Bratton2007} for the constricted position-update rule. 
 The constricted position-update rule is
 
 \begin{subequations}
@@ -631,7 +646,7 @@ x_{ij}(k+1) = x_{ij}(k) + v_{ij}(k+1).
 \end{subequations}
 $ x_{ij}(k) $ represents the position of particle $ i $ in dimension $ j $ at time $ k $.
 Similarly, $ v_{ij}(k) $ represents the velocity of particle $ i $ in dimension $ j $ also at time $ k $.
-$ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global best (actually the topology best or local best) and personal best positions observed by the swarm and the particle respectively. 
+$ x^{G}_{ij}(k) $ and $ x^{P}_{ij}(k) $ are global best and personal best positions observed by the swarm and the particle respectively. 
 $ u^{G}_{ij}(k) $ and $ u^{P}_{ij}(k) $ are independent random values drawn from $ [0,1] $.
 $ \chi \in ( 0, 1 ) $, $ \phi^{P} $ and $ \phi^{G} $ are algorithm parameters.
 
@@ -688,12 +703,12 @@ Let $ \phi^{sup}  = \phi^{G} + \phi^{P} $, we can have an input-to-state stable 
 Given an input-to-state stable position-update component, we will see that the convergence of $ x_{i}(k) $ depends on bounds on $ x^{G}_{i}(k) $ and $ x^{P}_{i}(k) $.
 Figure \ref{fig:boundary} illustrates a boundary on the particle motion, which indicates the exploring capability and exploitation property of one particle.
 As in the Figure \ref{fig:sys:swarm}, the particles in the swarm form a networked feedback structure.
-Integrating the input-to-state stability of each component in the swarm enables us to understand the convergence of the swarm in fitness landscapes with different shapes.
+Integrating the input-to-state stability of each component in the swarm helps us understand the convergence of the swarm.
 This helps us to analyze the capability of optimal search of the PSO in different fitness landscapes with different parameter selections.
 
-\subsection{Including information uncertainty}
+\subsection{Fusing human information}
 
-The online information interpretation is difficult when the human and the robot are executing the subtask.
+The online information interpretation is difficult when the human and the robot are executing the subtask simultaneously.
 Relatively, it is easier that the human can adapt to the information from the robot.
 We focus on how the robot can understand the information from the human, which remains a challenge.
 
@@ -704,13 +719,11 @@ The metric map is a pixel-based description of the accessible regions and obstac
 The topological map describes the topology relationship between the landmarks.
 The connection is determined by the regions connecting the landmarks.
 
-The observation are from both the human and the robot.
+Both the human and the robot are information sources.
 The information from human is topological relationship between the landmarks.
-The information from robot is from the sensors, which works in the way of the simultaneous localization and mapping (SLAM).
+The information from robot is from the sensors, which works like the way of the simultaneous localization and mapping (SLAM).
 Because the robot is better at processing quantitative data.
-Both two types of information will be used to update the world model.  
-
-
+Both two types of information will be used to update the world model.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Validation}
@@ -718,14 +731,14 @@ Both two types of information will be used to update the world model.
 % Answers:
 % 5) How can you demonstrate that this is a good solution?
 
-We will formally validate each proposed algorithm individually by theoretical analysis and experiments.
-Theoretical analysis and proofs will be used to support the validity and performance of the algorithms or the propositions.
+We will formally validate each proposed algorithm by theoretical analyses and experiments.
+Theoretical analyses and proofs will be used to support the validity and the performance of the algorithms or the propositions.
 Experiments and simulations will be taken to support that the algorithms can help the robot understand and utilize the information from the human.
 
 \subsection{Reference path constrained optimal path planning}
 
-We use theoretical analysis to prove the convergence to the optimal.
-The proof is split in two two steps.
+We theoretically prove the convergence of the solution to the optimal.
+The proof is split in two steps.
 The first step is proving that the backtracking process proposed will never underestimate the maximum reward by utilizing the submodular property of the problem.
 The next step is showing that given enough run time, the proposed algorithm can always find an optimal solution.
 This is proved by showing that a proposed pruning process will never ``froze'' a node that is in the optimal path.
@@ -736,23 +749,24 @@ We define several metrics to measure the performance of the proposed algorithm.
 We use a \emph{fully expanded tree size} to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
 Due to the human constraint, the planning length is determined by the human's path length.
 The performance of the heuristic is measured by the \emph{percentage of optimal at first iteration}, that is a percentage computed from the value obtain in the first iteration of the proposed algorithm over the optimal value.
-We use \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
+We use the \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
 In particular, we are interested in whether freezing nodes improves search efficiency.
 In the anytime algorithm, the exploration might not stop when the optimal is found, due to the existence of overestimation.
 If current best of a search can reach the optimal very quickly, it means that a best solution found in a fixed time has high probability of being optimal.
-We use \emph{number of iterations reaching optimal (normalized)} to measure this optimal search capability of the proposed algorithm.
+We use the \emph{number of iterations reaching optimal (normalized)} to measure this optimal search capability of the proposed algorithm.
 
-The backtracking heuristic is compare with the greedy heuristic in experiments to show the performance advantage.
-We test the algorithms with different types of workspace and different types of human reference path to show the robustness of the performance.
+The backtracking heuristic is compared with the greedy heuristic in experiments to show the advantage of the performance.
+We test the algorithms with different types of workspaces and different types of human reference paths to show the robustness of the performance.
 
 
 \subsection{Homotopy-based optimal path planning}
 
-Theoretical prove that the algorithm could find the optimal solutions of all the given homotopy classes.
+We will provide theoretical proof that the proposed algorithm could find the optimal solutions of all the given homotopy classes.
 We will show that with the support of a bidirectional tree structure, the solutions of HA-RRT$^{*}$ gradually converge to the best paths in the given homotopy classes.
-The proof depends on the convergence of the trees from two directions to an optimal structure so that we can have the optimal paths from a given position to the start and the goal respectively.
+The proof depends both the trees from two directions converge to optimal structures so that we can have the optimal subpaths from a given via-position to the start and the goal respectively.
+The concatenation of the two optimal subpaths makes the optimal path from the start to the goal with the given via-position.
 As we can identify the string class that each path belongs to, we can have the optimal paths in each string class.
-By the homotopic grammar, we can have the optimal paths in each given homotopy class.
+By the homotopic grammar, we can have the optimal path of each given homotopy class.
 
 We also implement experiments to show how the HA-RRT$^{*}$ can support the sliding autonomy in different levels of human intent on the topology.
 Consider the following list of ways in which a human can express intent about path shape, and the corresponding homotopy-based constraint:
@@ -767,36 +781,35 @@ Consider the following list of ways in which a human can express intent about pa
 
 We prove that the solutions found by the proposed MORRF$^{*}$ can almost surely converge to be Pareto optimal.
 The proof is split into several steps.
-Firstly, it is proved that the multi-objective path planning problem can be decomposed into a set of weighted subproblems so that the path from each subproblem is a Pareto optimal path.
-Secondly, we proved that the solutions of MORRF$^{*}$ almost surely converge to the answers of the weighted subproblems.
-There exist two converging process, the convergence of the reference trees and the convergence of the subproblem trees.
+Firstly, it is proved that the multi-objective path planning problem can be decomposed into a set of weighted subproblems;
+the path from each subproblem is a Pareto optimal path.
+Secondly, we prove that the solutions of MORRF$^{*}$ almost surely converge to the answers of the weighted subproblems.
+There are two converging processes, the convergence of the reference trees and the convergence of the subproblem trees.
 The convergence of the subproblem trees depends on the convergence of the reference trees.
 
-We now present a series of simulation studies that provide evidence that MORRF$^{*}$ produces a representative set of samples from the Pareto set.
-Results from MORRF$^{*}$ are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORRF$^{*}$ that uses a weighted sum rather than the Tchebycheff approach.
+We then present a series of simulation studies that provide evidence that MORRF$^{*}$ produces a representative set of samples from the Pareto set.
+Results from MORRF$^{*}$ are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORRF$^{*}$ that uses a weighted sum approach.
 NSGA-II was selected because evidence suggests that it provides more uniform samples from the Pareto set than other approaches~\cite{Deb2002}.  
 
 \subsection{Consensus reaching}
 
 The evaluation of the consensus reaching of the PSO is mainly dependent on theoretical proofs.
-Because the algorithm runs in discrete steps, we model the dynamics of the particles into a discrete-time system.
+Because the algorithm runs in discrete steps, we model the dynamics of a particle into a discrete-time system.
 We prove that the particle shows the property of input-to-state stability when some conditions are satisfied.
-It means that when the global best and personal best converges as the input to the system, the motion of the particle will converge.
+It means that when the global best and personal best converge as the inputs to the system, the motion of the particle will converge.
 The boundary of the particle motion, which is indicated by the input-to-state stability, can be applied to analyze the likelihood that the particle reaches the optimal.
 
 The input-to-state stability analysis is also applied to the swarm.
 By the way we model the swarm as in Figure \ref{fig:sys:swarm}, the input-to-state stability of each component can be used to predict the convergence of the swarm, which is consensus reaching on the optimal position.
 We will analyze and discuss the relationship between the consensus reaching process and the likelihood that the PSO finds the optimal.
 
-
 \subsection{Human information}
 
 The validation of how the human information can be understood by the robot includes both theoretical analyses and experiments.
 
 The theoretical analyses will focus on the validity of the algorithm designs and the performance of the algorithm.
-The experiment will be taken on the gazebo simulator or turtlebot.
-The experiment will be designed to support the theoretical results and compare the performance in different cases.
-
+The experiment will be taken on the gazebo simulator or the turtlebot.
+The experiment will be designed to support the theoretical results and to compare the performance in different cases.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -811,15 +824,15 @@ The experiment will be designed to support the theoretical results and compare t
 \item Conference Paper: Path Planning with a Human
 Path Constraint. (IEEE SMC 2014, October 2014)
 \item Conference Paper: Input-to-State Stability Analysis on Particle Swarm Optimization. (GECCO 2015, July 2015)
-\item Conference Paper: MORRF$^{*}$ : Sampling-Based Multi-Objective Motion Planning. (IJCAI 2015, July 2015)
+\item Conference Paper: MORRF$^{*}$ : Sampling-based Multi-Objective Motion Planning. (IJCAI 2015, July 2015)
 \item Journal Paper: Understanding the Particle Swarm Optimization by component decomposition. (TEVC, Submitted by June 2015)
 \item Conference Paper: Homotopy-Aware RRT$^{*}$ : Toward Human-Robot Topological Path-Planning. (AAAI 2016, Submitted by September 2016)
 \item Submission of the dissertation to advisor (March 2016)
-\item Journal Paper: MORRF$^{*}$ (Submitted by September 2016)
-\item Conference Paper: (IJCAI 2016, Submitted by February 2016)
+\item Journal Paper: Sampling-based Multi-Objective Path Planning (Submitted by September 2016)
+\item Conference Paper: Robotic environment learning with human instructions (IJCAI 2016, Submitted by February 2016)
 \item Submission of the dissertation to committee members (April 2016)
 \item Dissertation Defense (June 2016)
-\item Journal Paper: (HA-RRT$^{*}$ ) (Submitted by April 2016)
+\item Journal Paper: HA-RRT$^{*}$ : Finding the optimal path planning with different homotopy classes (Submitted by April 2016)
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
