@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-//#include <QtGui/QMainWindow>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
