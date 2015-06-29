@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     
-    PARTICLE_NUM = 100
+    PARTICLE_NUM = 1000
     
     pf = ParticleFilter(PARTICLE_NUM, 2, 2, motionModel, sensorModel)
     
