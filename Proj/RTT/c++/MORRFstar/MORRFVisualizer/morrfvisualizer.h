@@ -20,9 +20,11 @@ public slots:
 
 private:
     MORRF* mpMORRF;
+    int mCurrentTreeIdx;
 
 private slots:
     void paintEvent(QPaintEvent * e);
+
 
     
 };

@@ -5,7 +5,7 @@ MORRFVisualizer::MORRFVisualizer(QWidget *parent) :
     QLabel(parent)
 {
     mpMORRF = NULL;
-
+    mCurrentTreeIdx = 0;
 }
 
 void MORRFVisualizer::setMORRF(MORRF* pMorrf)

@@ -18,6 +18,8 @@ INCLUDEPATH += ../MORRF \
 LIBS += -L../lib -lMORRF -lMORRFViz
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    configobjdialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    configobjdialog.h

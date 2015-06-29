@@ -1,6 +1,6 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = MORRF MORRFVisualizer KDTreeTest MORRFTest MORRFVisualizerTest01
+SUBDIRS = MORRF MORRFVisualizer MORRFVisualizerTest01
 
 CONFIG += ordered
