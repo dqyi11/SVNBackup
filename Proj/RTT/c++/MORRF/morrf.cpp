@@ -200,5 +200,4 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
     mpKDTree->find_within_range(node, mRange, std::back_inserter(near_list));
 
     return near_list;
-
 }

@@ -4,28 +4,28 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core
+QT       -= gui
 
 TARGET = MORRF
+CONFIG += console
+CONFIG -= app_bundle
+
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     morrf.cpp \
     subtree.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += \
     kdtree++/region.hpp \
     kdtree++/node.hpp \
     kdtree++/kdtree.hpp \
     kdtree++/iterator.hpp \
     kdtree++/function.hpp \
     kdtree++/allocator.hpp \
+    subtree.h \
     morrf.h \
-    KDTree2D.h \
-    subtree.h
+    KDTree2D.h
 
-FORMS    += mainwindow.ui
