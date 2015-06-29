@@ -4,14 +4,16 @@
 #include <QDialog>
 #include <QListWidget>
 #include <QPushButton>
+#include <QCheckBox>
+#include <QLabel>
 
-class mainwindow;
+class MainWindow;
 
 class ConfigObjDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ConfigObjDialog(mainwindow * parent);
+    ConfigObjDialog(MainWindow * parent);
 
 private:
     QListWidget * mpListWidget;
@@ -20,7 +22,13 @@ private:
     QPushButton * mpBtnOK;
     QPushButton * mpBtnCancel;
 
-    mainwindow * mpParentWindow;
+    QCheckBox * mpCheckMinDist;
+    QLabel    * mpLabelMinDist;
+
+    MainWindow * mpParentWindow;
+
+public slots:
+    void checkBoxStateChanged(int state);
 };
 
 #endif // CONFIGOBJDIALOG_H

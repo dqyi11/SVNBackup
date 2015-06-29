@@ -8,6 +8,8 @@
 #include <QPixmap>
 #include "morrfvisualizer.h"
 
+class ConfigObjDialog;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -38,6 +40,8 @@ private:
     QPixmap * mpMap;
 
     QPoint mCursorPoint;
+
+    ConfigObjDialog * mpConfigObjDialog;
 
 
 private slots:

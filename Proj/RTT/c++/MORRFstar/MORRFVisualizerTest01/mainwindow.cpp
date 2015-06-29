@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <QFileDialog>
+#include <configobjdialog.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -13,11 +14,19 @@ MainWindow::MainWindow(QWidget *parent)
 
     mpMap = NULL;
 
+    mpConfigObjDialog = new ConfigObjDialog(this);
+    mpConfigObjDialog->hide();
+
     setCentralWidget(mpViz);
 }
 
 MainWindow::~MainWindow()
 {
+    if(mpConfigObjDialog)
+    {
+        delete mpConfigObjDialog;
+        mpConfigObjDialog = NULL;
+    }
     if(mpViz)
     {
         delete mpViz;
@@ -98,7 +107,7 @@ void MainWindow::onLoadMap()
 
 void MainWindow::onLoadObj()
 {
-    qDebug("onLoadObj()");
+    mpConfigObjDialog->show();
 }
 
 void MainWindow::onRun()
