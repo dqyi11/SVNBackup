@@ -8,7 +8,9 @@ class MORRFVisualizer : public QLabel
 {
     Q_OBJECT
 public:
-    explicit MORRFVisualizer(MORRF* morrf, QWidget *parent = 0);
+    explicit MORRFVisualizer(QWidget *parent = 0);
+
+    void setMORRF(MORRF* pMorrf);
     
 signals:
     

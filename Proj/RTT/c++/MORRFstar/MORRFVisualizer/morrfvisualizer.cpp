@@ -1,7 +1,13 @@
 #include "morrfvisualizer.h"
 
-MORRFVisualizer::MORRFVisualizer(MORRF* morrf, QWidget *parent) :
+MORRFVisualizer::MORRFVisualizer(QWidget *parent) :
     QLabel(parent)
 {
-    mpMORRF = morrf;
+    mpMORRF = NULL;
+
+}
+
+void MORRFVisualizer::setMORRF(MORRF* pMorrf)
+{
+
 }

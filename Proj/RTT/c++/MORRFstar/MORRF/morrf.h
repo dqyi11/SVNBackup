@@ -30,6 +30,8 @@ public:
     bool isObstacleFree(POS2D pos_a, POS2D pos_b);
     bool isInObstacle(POS2D pos);
 
+    int getSamplingWidth() { return mSamplingWidth; }
+    int getSamplingHeight() { return mSamplingHeight; }
 
 protected:
     void initWeights();
