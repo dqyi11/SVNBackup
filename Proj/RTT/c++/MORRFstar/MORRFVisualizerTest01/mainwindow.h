@@ -1,7 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+//#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
@@ -23,25 +24,32 @@ protected:
 private:
     MORRFVisualizer * mpViz;
     QMenu *mpFileMenu;
-    QMenu *mpEditMenu;
-
     QAction *mpOpenAction;
     QAction *mpSaveAction;
+
+    QMenu *mpEditMenu;
     QAction *mpLoadMapAction;
     QAction *mpLoadObjAction;
     QAction *mpRunAction;
 
-    QPixmap * mpMap;
-    QString mMapFilename;
+    QMenu *mpContextMenu;
+    QAction *mpAddStartAction;
+    QAction *mpAddGoalAction;
 
-    int mObjectiveNum;
+    QPixmap * mpMap;
+
+    QPoint mCursorPoint;
+
 
 private slots:
+    void contextMenuRequested(QPoint point);
     void onOpen();
     void onSave();
     void onLoadMap();
     void onLoadObj();
     void onRun();
+    void onAddStart();
+    void onAddGoal();
 };
 
 #endif // MAINWINDOW_H

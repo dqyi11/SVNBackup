@@ -16,7 +16,9 @@ INCLUDEPATH += ../MORRF
 
 LIBS += -L../lib -lMORRF
 
-SOURCES += morrfvisualizer.cpp
+SOURCES += morrfvisualizer.cpp \
+    multiobjpathplanninginfo.cpp
 
-HEADERS  += morrfvisualizer.h
+HEADERS  += morrfvisualizer.h \
+    multiobjpathplanninginfo.h
 

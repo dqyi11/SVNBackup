@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include "morrf.h"
+#include "multiobjpathplanninginfo.h"
 
 class MORRFVisualizer : public QLabel
 {
@@ -11,13 +12,18 @@ public:
     explicit MORRFVisualizer(QWidget *parent = 0);
 
     void setMORRF(MORRF* pMorrf);
-    
+
+    MultiObjPathPlanningInfo mMOPPInfo;
 signals:
     
 public slots:
 
 private:
     MORRF* mpMORRF;
+
+private slots:
+    void paintEvent(QPaintEvent * e);
+
     
 };
 

@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
     createActions();
     createMenuBar();
 
+
+
     mpMap = NULL;
 
     setCentralWidget(mpViz);
@@ -25,14 +27,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::createMenuBar()
 {
-     mpFileMenu = menuBar()->addMenu("&File");
-     mpFileMenu->addAction(mpOpenAction);
-     mpFileMenu->addAction(mpSaveAction);
+    mpFileMenu = menuBar()->addMenu("&File");
+    mpFileMenu->addAction(mpOpenAction);
+    mpFileMenu->addAction(mpSaveAction);
 
-     mpEditMenu = menuBar()->addMenu("&Edit");
-     mpEditMenu->addAction(mpLoadMapAction);
-     mpEditMenu->addAction(mpLoadObjAction);
-     mpEditMenu->addAction(mpRunAction);
+    mpEditMenu = menuBar()->addMenu("&Edit");
+    mpEditMenu->addAction(mpLoadMapAction);
+    mpEditMenu->addAction(mpLoadObjAction);
+    mpEditMenu->addAction(mpRunAction);
+
+    mpContextMenu = new QMenu();
+    setContextMenuPolicy(Qt::CustomContextMenu);
+
+    mpContextMenu->addAction(mpAddStartAction);
+    mpContextMenu->addAction(mpAddGoalAction);
 
 }
 
@@ -49,10 +57,19 @@ void MainWindow::createActions()
     connect(mpLoadMapAction, SIGNAL(triggered()), this, SLOT(onLoadMap()));
     connect(mpLoadObjAction, SIGNAL(triggered()), this, SLOT(onLoadObj()));
     connect(mpRunAction, SIGNAL(triggered()), this, SLOT(onRun()));
+
+    mpAddStartAction = new QAction("Add Start", this);
+    mpAddGoalAction = new QAction("Add Goal", this);
+
+    connect(mpAddStartAction, SIGNAL(triggered()), this, SLOT(onAddStart()));
+    connect(mpAddGoalAction, SIGNAL(triggered()), this, SLOT(onAddGoal()));
+
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint)),this, SLOT(contextMenuRequested(QPoint)));
 }
 
 void MainWindow::onOpen()
 {
+
 }
 
 void MainWindow::onSave()
@@ -63,18 +80,18 @@ void MainWindow::onSave()
 void MainWindow::onLoadMap()
 {
 
-    mMapFilename = QFileDialog::getOpenFileName(this,
-             tr("Open Map File 1"), "./", tr("Map Files (*.*)"));
+    mpViz->mMOPPInfo.mMapFilename = QFileDialog::getOpenFileName(this,
+             tr("Open Map File"), "./", tr("Map Files (*.*)"));
 
     qDebug("OPENING ");
-    qDebug(mMapFilename.toStdString().c_str());
+    qDebug(mpViz->mMOPPInfo.mMapFilename.toStdString().c_str());
 
     if(mpMap)
     {
         delete mpMap;
         mpMap = NULL;
     }
-    mpMap = new QPixmap(mMapFilename);
+    mpMap = new QPixmap(mpViz->mMOPPInfo.mMapFilename);
 
     mpViz->setPixmap(*mpMap);
 }
@@ -87,4 +104,36 @@ void MainWindow::onLoadObj()
 void MainWindow::onRun()
 {
 
+}
+
+void MainWindow::onAddStart()
+{
+    mpViz->mMOPPInfo.mStart = mCursorPoint;
+    /*
+    QString msg = "Add Start ";
+    msg.append(QString::number(mpViz->mMOPPInfo.mStart.x()));
+    msg.append(" ");
+    msg.append(QString::number(mpViz->mMOPPInfo.mStart.y()));
+    qDebug(msg.toStdString().c_str());
+    */
+    repaint();
+}
+
+void MainWindow::onAddGoal()
+{
+    mpViz->mMOPPInfo.mGoal = mCursorPoint;
+    /*
+    QString msg = "Add Goal ";
+    msg.append(QString::number(mpViz->mMOPPInfo.mGoal.x()));
+    msg.append(" ");
+    msg.append(QString::number(mpViz->mMOPPInfo.mGoal.y()));
+    qDebug(msg.toStdString().c_str());
+    */
+    repaint();
+}
+
+void MainWindow::contextMenuRequested(QPoint point)
+{
+    mCursorPoint = point;
+    mpContextMenu->popup(mapToGlobal(point));
 }
