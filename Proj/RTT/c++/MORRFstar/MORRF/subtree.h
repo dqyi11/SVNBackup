@@ -4,8 +4,6 @@
 #include "KDTree2D.h"
 #include <list>
 
-typedef double (*COST_FUNC_PTR)(POS2D, POS2D);
-
 class MORRF;
 
 class RRTNode
@@ -30,7 +28,7 @@ public:
     enum TREE_TYPE{ SUBPROBLEM, REFERENCE };
     RRTree(MORRF* parent, int objective_num);
 
-    void init(POS2D start, POS2D goal, COST_FUNC_PTR* pFuncs);
+    void init(POS2D start, POS2D goal);
     RRTNode* createNewNode(POS2D pos);
     bool removeEdge(RRTNode* pNode_p, RRTNode* pNode_c);
     bool hasEdge(RRTNode* pNode_p, RRTNode* pNode_c);
@@ -41,14 +39,10 @@ public:
     virtual double calcFitness(double * pCost) = 0;
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost) = 0;
 
-    double * calcCost(RRTNode* pNode_a, RRTNode* pNode_b);
-
-
     TREE_TYPE mType;
     int mIndex;
     int mObjectiveNum;
 
-    COST_FUNC_PTR * mpFuncs;
     POS2D mStart;
     POS2D mGoal;
 

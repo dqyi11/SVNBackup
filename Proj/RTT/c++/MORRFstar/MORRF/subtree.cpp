@@ -1,4 +1,5 @@
 #include "subtree.h"
+#include "morrf.h"
 
 RRTNode::RRTNode(POS2D pos, int objective_num)
 {
@@ -25,11 +26,10 @@ RRTree::RRTree(MORRF* parent, int objective_num)
     mNodes.clear();
 }
 
-void RRTree::init(POS2D start, POS2D goal, COST_FUNC_PTR* pFuncs)
+void RRTree::init(POS2D start, POS2D goal)
 {
     mStart = start;
     mGoal = goal;
-    mpFuncs = pFuncs;
 }
 
 RRTNode*  RRTree::createNewNode(POS2D pos)
@@ -88,24 +88,6 @@ bool RRTree::addEdge(RRTNode* pNode_p, RRTNode* pNode_c)
     return true;
 }
 
-double * RRTree::calcCost(RRTNode* pNode_a, RRTNode* pNode_b)
-{
-    double * pCost = new double[mObjectiveNum];
-    if (pNode_a == NULL || pNode_b == NULL)
-    {
-        return pCost;
-    }
-
-    for(int k=0;k<mObjectiveNum;k++)
-    {
-        pCost[k] = mpFuncs[k](pNode_a->mPos, pNode_b->mPos);
-    }
-
-    return pCost;
-}
-
-
-
 ReferenceTree::ReferenceTree(MORRF* parent, int objective_num, int index)
     : RRTree(parent, objective_num)
 {
@@ -161,7 +143,7 @@ void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, st
     double * pMinEdgeCost = new double[mObjectiveNum];
     for(int k=0;k<mObjectiveNum;k++)
     {
-        pMinEdgeCost[k] = node_nearest.mNodeList[mObjectiveNum+mIndex]->mpCost[k] + mpFuncs[k](node_nearest, pNode_new->mPos);
+        pMinEdgeCost[k] = node_nearest.mNodeList[mObjectiveNum+mIndex]->mpCost[k] + mpParent->calcCost(node_nearest, pNode_new->mPos, k);
     }
 
 

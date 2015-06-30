@@ -4,6 +4,7 @@
 #include <QString>
 #include <QPoint>
 #include <list>
+#include <vector>
 
 class MultiObjPathPlanningInfo
 {
@@ -11,6 +12,7 @@ public:
     MultiObjPathPlanningInfo();
 
     int** getObstacleInfo();
+    std::vector<int**> getFitnessDistributions();
 
     int** getPixInfo(QString filename);
 

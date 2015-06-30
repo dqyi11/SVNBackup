@@ -11,7 +11,6 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, MORRF
     mType = type;
 
     mpKDTree = new KDTree2D(std::ptr_fun(tac));
-    mpFuncs = new COST_FUNC_PTR[mObjectiveNum];
 
     mRange = 100.0;
     mObsCheckResolution = 1;
@@ -28,9 +27,10 @@ MORRF::~MORRF()
     }
 }
 
-void MORRF::addFunc( COST_FUNC_PTR func, int objective_idx )
+void MORRF::addFuncs( std::vector<COST_FUNC_PTR> funcs, std::vector<int**> fitnessDistributions)
 {
-    mpFuncs[objective_idx] = func;
+    mFuncs = funcs;
+    mFitnessDistributions = fitnessDistributions;
 }
 
 void MORRF::initWeights()
@@ -234,8 +234,6 @@ void MORRF::extend()
                 mSubproblems[m].attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
                 mSubproblems[m].rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
-
-
         }
     }
 }
@@ -257,4 +255,20 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
     mpKDTree->find_within_range(node, mRange, std::back_inserter(near_list));
 
     return near_list;
+}
+
+double * MORRF::calcCost(POS2D& pos_a, POS2D& pos_b)
+{
+    double * pCost = new double[mObjectiveNum];
+    for(int k=0;k<mObjectiveNum;k++)
+    {
+        pCost[k] = calcCost(pos_a, pos_b, k);
+    }
+
+    return pCost;
+}
+
+double MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, int k)
+{
+    return mFuncs[k](pos_a, pos_b, mFitnessDistributions[k]);
 }

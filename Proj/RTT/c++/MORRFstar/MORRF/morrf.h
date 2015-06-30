@@ -4,7 +4,7 @@
 #include "KDTree2D.h"
 #include "subtree.h"
 
-
+typedef double (*COST_FUNC_PTR)(POS2D, POS2D,int**);
 
 
 class MORRF
@@ -14,7 +14,7 @@ public:
     MORRF(int width, int height, int objective_num, int subproblem_num, MORRF_TYPE type=WEIGHTED_SUM);
     ~MORRF();
 
-    void addFunc( COST_FUNC_PTR func, int objective_idx );
+    void addFuncs( std::vector<COST_FUNC_PTR> funcs, std::vector<int**> fitnessDistributions);
 
     void init(POS2D start, POS2D goal, std::vector<COST_FUNC_PTR> funcs);
 
@@ -29,6 +29,9 @@ public:
     double* getReferenceCost(POS2D pos);
     bool isObstacleFree(POS2D pos_a, POS2D pos_b);
     bool isInObstacle(POS2D pos);
+
+    double * calcCost(POS2D& pos_a, POS2D& pos_b);
+    double calcCost(POS2D& pos_a, POS2D& pos_b, int k);
 
     int getSamplingWidth() { return mSamplingWidth; }
     int getSamplingHeight() { return mSamplingHeight; }
@@ -51,7 +54,8 @@ private:
 
     KDTree2D * mpKDTree;
 
-    COST_FUNC_PTR* mpFuncs;
+    std::vector<COST_FUNC_PTR> mFuncs;
+    std::vector<int**> mFitnessDistributions;
 
     std::vector<double *> mWeights;
 
