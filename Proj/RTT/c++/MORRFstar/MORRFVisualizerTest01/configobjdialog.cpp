@@ -18,11 +18,16 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     {
         mpCheckMinDist->setChecked(false);
     }
-    connect(mpCheckMinDist , SIGNAL(stateChanged(int)),this,SLOT(checkBoxStateChanged(int)));
+    //connect(mpCheckMinDist , SIGNAL(stateChanged(int)),this,SLOT(checkBoxStateChanged(int)));
     mpLabelMinDist = new QLabel("Minimize distance");
+    mpLabelSubProb = new QLabel("Subproblem Num: ");
+    mpLineEditSubProb = new QLineEdit();
+    mpLineEditSubProb->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mSubproblemNum));
     QHBoxLayout * minDistLayout = new QHBoxLayout();
     minDistLayout->addWidget(mpCheckMinDist);
     minDistLayout->addWidget(mpLabelMinDist);
+    minDistLayout->addWidget(mpLabelSubProb);
+    minDistLayout->addWidget(mpLineEditSubProb);
 
     mpListWidget = new QListWidget();
     mpListWidget->setViewMode(QListView::IconMode);
@@ -59,24 +64,9 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     setLayout(mainLayout);
 }
 
-void ConfigObjDialog::checkBoxStateChanged(int state)
-{
-    QMessageBox* msg = new QMessageBox(this->parentWidget());
-    msg->setWindowTitle("Hello !");
-
-    if(state)
-    {
-        msg->setText("CheckBox is Checked !");
-    }
-    else
-    {
-        msg->setText("CheckBox is Unchecked !");
-    }
-    msg->show();
-}
-
 void ConfigObjDialog::onBtnOKClicked()
 {
+    updateConfiguration();
     close();
 }
 

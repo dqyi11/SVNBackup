@@ -16,7 +16,7 @@ public:
 
     void addFuncs( std::vector<COST_FUNC_PTR> funcs, std::vector<int**> fitnessDistributions);
 
-    void init(POS2D start, POS2D goal, std::vector<COST_FUNC_PTR> funcs);
+    void init(POS2D start, POS2D goal);
 
     void loadMap(int **map);
     POS2D sampling();
@@ -59,8 +59,8 @@ private:
 
     std::vector<double *> mWeights;
 
-    std::vector<SubproblemTree> mSubproblems;
-    std::vector<ReferenceTree> mReferences;
+    std::vector<SubproblemTree*> mSubproblems;
+    std::vector<ReferenceTree*> mReferences;
 
     double mRange;
     double mSegmentLength;

@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>
+#include <QLineEdit>
 
 class MainWindow;
 
@@ -24,13 +25,15 @@ private:
 
     QCheckBox * mpCheckMinDist;
     QLabel    * mpLabelMinDist;
+    QLabel    * mpLabelSubProb;
+    QLineEdit * mpLineEditSubProb;
 
     MainWindow * mpParentWindow;
 
     void updateConfiguration();
 
 public slots:
-    void checkBoxStateChanged(int state);
+    //void checkBoxStateChanged(int state);
     void onBtnOKClicked();
     void onBtnCancelClicked();
     void onBtnAddClicked();

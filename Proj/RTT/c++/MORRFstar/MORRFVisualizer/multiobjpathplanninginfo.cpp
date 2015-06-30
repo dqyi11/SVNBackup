@@ -13,6 +13,8 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
     mGoal.setY(-1);
 
     mMinDistEnabled = false;
+
+    mSubproblemNum = 10;
 }
 
 int** MultiObjPathPlanningInfo::getObstacleInfo()
@@ -51,7 +53,35 @@ int** MultiObjPathPlanningInfo::getPixInfo(QString filename)
             pValueArray[i][j] = qGray(col);
         }
     }
-
     return pValueArray;
 }
+
+void MultiObjPathPlanningInfo::initFuncsParams()
+{
+    mFuncs.clear();
+    mDistributions.clear();
+
+    std::vector<int**> fitnessDistributions = getFitnessDistributions();
+
+    if(mMinDistEnabled==true)
+    {
+        mFuncs.push_back(MultiObjPathPlanningInfo::calcDist);
+        mDistributions.push_back(NULL);
+
+        for(int k=0;k<mObjectiveNum-1;k++)
+        {
+            mFuncs.push_back(MultiObjPathPlanningInfo::calcFitness);
+            mDistributions.push_back(fitnessDistributions[k]);
+        }
+    }
+    else
+    {
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            mFuncs.push_back(MultiObjPathPlanningInfo::calcFitness);
+            mDistributions.push_back(fitnessDistributions[k]);
+        }
+    }
+}
+
 

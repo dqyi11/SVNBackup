@@ -9,6 +9,7 @@
 #include "morrfvisualizer.h"
 
 class ConfigObjDialog;
+class MORRF;
 
 class MainWindow : public QMainWindow
 {
@@ -25,6 +26,8 @@ protected:
     void createActions();
 
 private:
+
+    void updateTitle();
 
     QMenu *mpFileMenu;
     QAction *mpOpenAction;
@@ -44,6 +47,7 @@ private:
     QPoint mCursorPoint;
 
     ConfigObjDialog * mpConfigObjDialog;
+    MORRF           * mpMORRF;
 
 
 private slots:

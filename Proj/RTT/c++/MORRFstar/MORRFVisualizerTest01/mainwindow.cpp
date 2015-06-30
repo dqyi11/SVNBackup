@@ -10,14 +10,15 @@ MainWindow::MainWindow(QWidget *parent)
     createActions();
     createMenuBar();
 
-
-
     mpMap = NULL;
+    mpMORRF = NULL;
 
     mpConfigObjDialog = new ConfigObjDialog(this);
     mpConfigObjDialog->hide();
 
     setCentralWidget(mpViz);
+
+    updateTitle();
 }
 
 MainWindow::~MainWindow()
@@ -89,8 +90,13 @@ void MainWindow::onSave()
 void MainWindow::onLoadMap()
 {
 
-    mpViz->mMOPPInfo.mMapFilename = QFileDialog::getOpenFileName(this,
+    QString tempFilename = QFileDialog::getOpenFileName(this,
              tr("Open Map File"), "./", tr("Map Files (*.*)"));
+
+    QFileInfo fileInfo(tempFilename);
+    QString filename(fileInfo.fileName());
+    mpViz->mMOPPInfo.mMapFilename = filename;
+    mpViz->mMOPPInfo.mMapFullpath = tempFilename;
 
     qDebug("OPENING ");
     qDebug(mpViz->mMOPPInfo.mMapFilename.toStdString().c_str());
@@ -100,44 +106,44 @@ void MainWindow::onLoadMap()
         delete mpMap;
         mpMap = NULL;
     }
-    mpMap = new QPixmap(mpViz->mMOPPInfo.mMapFilename);
+    mpMap = new QPixmap(mpViz->mMOPPInfo.mMapFullpath);
 
     mpViz->setPixmap(*mpMap);
+
+    updateTitle();
 }
 
 void MainWindow::onLoadObj()
 {
     mpConfigObjDialog->exec();
+    updateTitle();
 }
 
 void MainWindow::onRun()
 {
+    if(mpMORRF)
+    {
+        delete mpMORRF;
+        mpMORRF = NULL;
+    }
+    mpViz->mMOPPInfo.initFuncsParams();
+    mpMORRF = new MORRF(mpMap->width(), mpMap->height(), mpViz->mMOPPInfo.mObjectiveNum, mpViz->mMOPPInfo.mSubproblemNum);
+    mpMORRF->addFuncs(mpViz->mMOPPInfo.mFuncs, mpViz->mMOPPInfo.mDistributions);
+    POS2D start(mpViz->mMOPPInfo.mStart.x(), mpViz->mMOPPInfo.mStart.y());
+    POS2D goal(mpViz->mMOPPInfo.mGoal.x(), mpViz->mMOPPInfo.mGoal.y());
 
+    mpMORRF->init(start, goal);
 }
 
 void MainWindow::onAddStart()
 {
     mpViz->mMOPPInfo.mStart = mCursorPoint;
-    /*
-    QString msg = "Add Start ";
-    msg.append(QString::number(mpViz->mMOPPInfo.mStart.x()));
-    msg.append(" ");
-    msg.append(QString::number(mpViz->mMOPPInfo.mStart.y()));
-    qDebug(msg.toStdString().c_str());
-    */
     repaint();
 }
 
 void MainWindow::onAddGoal()
 {
     mpViz->mMOPPInfo.mGoal = mCursorPoint;
-    /*
-    QString msg = "Add Goal ";
-    msg.append(QString::number(mpViz->mMOPPInfo.mGoal.x()));
-    msg.append(" ");
-    msg.append(QString::number(mpViz->mMOPPInfo.mGoal.y()));
-    qDebug(msg.toStdString().c_str());
-    */
     repaint();
 }
 
@@ -145,4 +151,11 @@ void MainWindow::contextMenuRequested(QPoint point)
 {
     mCursorPoint = point;
     mpContextMenu->popup(mapToGlobal(point));
+}
+
+void MainWindow::updateTitle()
+{
+    QString title = "ObjNum( " + QString::number(mpViz->mMOPPInfo.mObjectiveNum) + " )";
+    title += " ==> " + mpViz->mMOPPInfo.mMapFilename;
+    setWindowTitle(title);
 }

@@ -71,18 +71,22 @@ void MORRF::deinitWeights()
     mWeights.clear();
 }
 
-void MORRF::init(POS2D start, POS2D goal, std::vector<COST_FUNC_PTR> funcs)
+void MORRF::init(POS2D start, POS2D goal)
 {
     initWeights();
 
     for(int k=0;k<mObjectiveNum;k++)
     {
-
+        ReferenceTree * pRefTree = new ReferenceTree(this, mObjectiveNum, k);
+        pRefTree->init(start, goal);
+        mReferences.push_back(pRefTree);
     }
 
     for(int m=0;m<mSubproblemNum;m++)
     {
-
+        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, m+mObjectiveNum);
+        pSubTree->init(start, goal);
+        mSubproblems.push_back(pSubTree);
     }
 }
 
@@ -207,14 +211,14 @@ void MORRF::extend()
             // create new nodes of reference trees
             for(int k=0;k<mObjectiveNum;k++)
             {
-                RRTNode * pNewRefNode = mReferences[k].createNewNode(new_pos);
+                RRTNode * pNewRefNode = mReferences[k]->createNewNode(new_pos);
                 new_node.mNodeList.push_back(pNewRefNode);
             }
 
             // create new nodes of subproblem trees
             for (int m=0;m<mSubproblemNum;m++)
             {
-                RRTNode * pNewSubNode = mSubproblems[m].createNewNode(new_pos);
+                RRTNode * pNewSubNode = mSubproblems[m]->createNewNode(new_pos);
                 new_node.mNodeList.push_back(pNewSubNode);
             }
 
@@ -222,8 +226,8 @@ void MORRF::extend()
             // rewire near nodes of reference trees
             for (int k=0;k<mObjectiveNum;k++)
             {
-                mReferences[k].attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
-                mReferences[k].rewireNearNodes(new_node.mNodeList[k], near_nodes);
+                mReferences[k]->attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
+                mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
             }
 
 
@@ -231,8 +235,8 @@ void MORRF::extend()
             // rewire near nodes of subproblem trees
             for(int m=0;m<mSubproblemNum;m++)
             {
-                mSubproblems[m].attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
-                mSubproblems[m].rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
+                mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
+                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
     }
