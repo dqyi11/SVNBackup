@@ -23,11 +23,19 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     mpLabelSubProb = new QLabel("Subproblem Num: ");
     mpLineEditSubProb = new QLineEdit();
     mpLineEditSubProb->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mSubproblemNum));
+    mpLineEditSubProb->setMaximumWidth(40);
+    mpLabelIterationNum = new QLabel("Iteration Num: ");
+    mpLineEditIterationNum = new QLineEdit();
+    mpLineEditIterationNum->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mMaxIterationNum));
+    mpLineEditIterationNum->setMaximumWidth(40);
+
     QHBoxLayout * minDistLayout = new QHBoxLayout();
     minDistLayout->addWidget(mpCheckMinDist);
     minDistLayout->addWidget(mpLabelMinDist);
     minDistLayout->addWidget(mpLabelSubProb);
     minDistLayout->addWidget(mpLineEditSubProb);
+    minDistLayout->addWidget(mpLabelIterationNum);
+    minDistLayout->addWidget(mpLineEditIterationNum);
 
     mpListWidget = new QListWidget();
     mpListWidget->setViewMode(QListView::IconMode);

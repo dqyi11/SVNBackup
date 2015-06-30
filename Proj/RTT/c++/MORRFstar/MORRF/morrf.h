@@ -38,6 +38,8 @@ public:
 
     void setObstacleInfo(int ** pObstacle) { mpObstacle = pObstacle; }
 
+    int getCurrentIteration() { return mCurrentIteration; }
+
 protected:
     void initWeights();
     void deinitWeights();
@@ -65,6 +67,8 @@ private:
     double mRange;
     double mSegmentLength;
     int mObsCheckResolution;
+
+    int mCurrentIteration;
 };
 
 #endif // MORRF_H

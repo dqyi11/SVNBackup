@@ -15,6 +15,10 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
     mMinDistEnabled = false;
 
     mSubproblemNum = 10;
+    mMaxIterationNum = 0;
+
+    mMapWidth = 0;
+    mMapHeight = 0;
 }
 
 int** MultiObjPathPlanningInfo::getObstacleInfo()

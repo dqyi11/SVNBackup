@@ -14,6 +14,7 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, MORRF
 
     mRange = 100.0;
     mObsCheckResolution = 1;
+    mCurrentIteration = 0;
 }
 
 MORRF::~MORRF()
@@ -88,6 +89,7 @@ void MORRF::init(POS2D start, POS2D goal)
         pSubTree->init(start, goal);
         mSubproblems.push_back(pSubTree);
     }
+    mCurrentIteration = 0;
 }
 
 void MORRF::loadMap(int **map)
@@ -239,6 +241,8 @@ void MORRF::extend()
                 mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
+
+        mCurrentIteration++;
     }
 }
 

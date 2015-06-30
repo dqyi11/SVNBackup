@@ -32,6 +32,9 @@ public:
     QString mInfoFilename;
     QString mMapFilename;
     QString mMapFullpath;
+    int mMapWidth;
+    int mMapHeight;
+
     int mObjectiveNum;
     QPoint mStart;
     QPoint mGoal;
@@ -43,6 +46,7 @@ public:
     std::vector<int**>         mDistributions;
 
     int mSubproblemNum;
+    int mMaxIterationNum;
 };
 
 #endif // MULTIOBJPATHPLANNINGINFO_H

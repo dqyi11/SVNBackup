@@ -61,7 +61,6 @@ public:
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
     virtual double calcFitness(double * pCost);
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
-
 };
 
 class ReferenceTree : public RRTree
@@ -74,7 +73,6 @@ public:
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
     virtual double calcFitness(double * pCost);
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
-
 };
 
 #endif // SUBTREE_H

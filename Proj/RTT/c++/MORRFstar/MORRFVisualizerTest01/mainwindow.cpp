@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QFileDialog>
 #include <configobjdialog.h>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -107,8 +108,12 @@ void MainWindow::onLoadMap()
         mpMap = NULL;
     }
     mpMap = new QPixmap(mpViz->mMOPPInfo.mMapFullpath);
-
-    mpViz->setPixmap(*mpMap);
+    if(mpMap)
+    {
+        mpViz->mMOPPInfo.mMapWidth = mpMap->width();
+        mpViz->mMOPPInfo.mMapHeight = mpMap->height();
+        mpViz->setPixmap(*mpMap);
+    }
 
     updateTitle();
 }
@@ -121,6 +126,22 @@ void MainWindow::onLoadObj()
 
 void MainWindow::onRun()
 {
+    if (mpViz->mMOPPInfo.mMapWidth <= 0 || mpViz->mMOPPInfo.mMapHeight <= 0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Map is not initialized.");
+        msgBox.exec();
+        return;
+    }
+
+    if (mpViz->mMOPPInfo.mObjectiveNum < 2)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Objective Number is less than 2.");
+        msgBox.exec();
+        return;
+    }
+
     if(mpMORRF)
     {
         delete mpMORRF;
@@ -133,6 +154,15 @@ void MainWindow::onRun()
     POS2D goal(mpViz->mMOPPInfo.mGoal.x(), mpViz->mMOPPInfo.mGoal.y());
 
     mpMORRF->init(start, goal);
+    mpViz->setMORRF(mpMORRF);
+
+    while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)
+    {
+        mpMORRF->extend();
+        repaint();
+        QString msg = "CurrentIteration " + QString::number(mpMORRF->getCurrentIteration());
+        qDebug(msg.toStdString().c_str());
+    }
 }
 
 void MainWindow::onAddStart()

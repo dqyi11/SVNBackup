@@ -27,6 +27,8 @@ private:
     QLabel    * mpLabelMinDist;
     QLabel    * mpLabelSubProb;
     QLineEdit * mpLineEditSubProb;
+    QLabel    * mpLabelIterationNum;
+    QLineEdit * mpLineEditIterationNum;
 
     MainWindow * mpParentWindow;
 
