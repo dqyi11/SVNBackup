@@ -107,7 +107,7 @@ void MainWindow::onLoadMap()
 
 void MainWindow::onLoadObj()
 {
-    mpConfigObjDialog->show();
+    mpConfigObjDialog->exec();
 }
 
 void MainWindow::onRun()

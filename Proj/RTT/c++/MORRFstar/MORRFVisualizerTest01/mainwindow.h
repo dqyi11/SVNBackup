@@ -18,12 +18,14 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    MORRFVisualizer * mpViz;
+
 protected:
     void createMenuBar();
     void createActions();
 
 private:
-    MORRFVisualizer * mpViz;
+
     QMenu *mpFileMenu;
     QAction *mpOpenAction;
     QAction *mpSaveAction;

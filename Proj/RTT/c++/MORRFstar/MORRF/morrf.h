@@ -33,11 +33,14 @@ public:
     int getSamplingWidth() { return mSamplingWidth; }
     int getSamplingHeight() { return mSamplingHeight; }
 
+    void setObstacleInfo(int ** pObstacle) { mpObstacle = pObstacle; }
+
 protected:
     void initWeights();
     void deinitWeights();
 
 private:
+    int ** mpObstacle;
 
     MORRF_TYPE mType;
     int mSamplingWidth;
@@ -57,6 +60,7 @@ private:
 
     double mRange;
     double mSegmentLength;
+    int mObsCheckResolution;
 };
 
 #endif // MORRF_H

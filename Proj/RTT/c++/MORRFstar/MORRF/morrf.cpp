@@ -14,6 +14,7 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, MORRF
     mpFuncs = new COST_FUNC_PTR[mObjectiveNum];
 
     mRange = 100.0;
+    mObsCheckResolution = 1;
 }
 
 MORRF::~MORRF()
@@ -118,11 +119,67 @@ POS2D MORRF::steer(POS2D pos_a, POS2D pos_b)
 
 bool MORRF::isInObstacle(POS2D pos)
 {
+    int x = (int)pos[0];
+    int y = (int)pos[1];
+    if( mpObstacle[x][y] < 255)
+        return true;
     return false;
 }
 
 bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
 {
+    if (pos_a == pos_b)
+        return true;
+    int x_dist = std::abs(pos_a[0] - pos_b[0]);
+    int y_dist = std::abs(pos_a[1] - pos_b[1]);
+    if (x_dist > y_dist)
+    {
+        double k = (double)y_dist/ x_dist;
+        int startX, endX, startY;
+        if (pos_a[0] < pos_b[0])
+        {
+            startX = pos_a[0];
+            endX = pos_b[0];
+            startY = pos_a[1];
+        }
+        else
+        {
+            startX = pos_b[0];
+            endX = pos_a[0];
+            startY = pos_b[1];
+        }
+        for (int coordX = startX; coordX < endX + mObsCheckResolution ; coordX+=mObsCheckResolution)
+        {
+            int coordY = (int)(k*(coordX-startX)+startY);
+            if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
+            if (mpObstacle[coordX][coordY] < 255)
+                return false;
+        }
+    }
+    else
+    {
+        double k = (double)x_dist/ y_dist;
+        int startY, endY, startX;
+        if (pos_a[1] < pos_b[1])
+        {
+            startY = pos_a[1];
+            endY = pos_b[1];
+            startX = pos_a[0];
+        }
+        else
+        {
+            startY = pos_b[1];
+            endY = pos_a[1];
+            startX = pos_b[0];
+        }
+        for (int coordY = startY; coordY < endY + mObsCheckResolution ; coordY+=mObsCheckResolution)
+        {
+            int coordX = (int)(k*(coordY-startY)+startX);
+            if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
+            if (mpObstacle[coordX][coordY] < 255)
+                return false;
+        }
+    }
     return true;
 }
 

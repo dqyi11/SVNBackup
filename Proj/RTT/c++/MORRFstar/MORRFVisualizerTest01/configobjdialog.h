@@ -27,8 +27,14 @@ private:
 
     MainWindow * mpParentWindow;
 
+    void updateConfiguration();
+
 public slots:
     void checkBoxStateChanged(int state);
+    void onBtnOKClicked();
+    void onBtnCancelClicked();
+    void onBtnAddClicked();
+    void onBtnRemoveClicked();
 };
 
 #endif // CONFIGOBJDIALOG_H
