@@ -2,7 +2,7 @@
 #include "morrf.h"
 #include <cstdlib>
 
-MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, MORRF_TYPE type)
+MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int segmentLength, MORRF_TYPE type)
 {
     mSamplingWidth = width;
     mSamplingHeight = height;
@@ -15,6 +15,7 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, MORRF
     mRange = 100.0;
     mObsCheckResolution = 1;
     mCurrentIteration = 0;
+    mSegmentLength = segmentLength;
 }
 
 MORRF::~MORRF()
@@ -76,6 +77,7 @@ void MORRF::init(POS2D start, POS2D goal)
 {
     initWeights();
 
+    KDNode2D root(start);
     for(int k=0;k<mObjectiveNum;k++)
     {
         ReferenceTree * pRefTree = new ReferenceTree(this, mObjectiveNum, k);
@@ -89,12 +91,13 @@ void MORRF::init(POS2D start, POS2D goal)
         pSubTree->init(start, goal);
         mSubproblems.push_back(pSubTree);
     }
+    mpKDTree->insert(root);
     mCurrentIteration = 0;
 }
 
 void MORRF::loadMap(int **map)
 {
-
+    mpMapInfo = map;
 }
 
 POS2D MORRF::sampling()
@@ -127,7 +130,7 @@ bool MORRF::isInObstacle(POS2D pos)
 {
     int x = (int)pos[0];
     int y = (int)pos[1];
-    if( mpObstacle[x][y] < 255)
+    if( mpMapInfo[x][y] < 255)
         return true;
     return false;
 }
@@ -158,7 +161,7 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         {
             int coordY = (int)(k*(coordX-startX)+startY);
             if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
-            if (mpObstacle[coordX][coordY] < 255)
+            if (mpMapInfo[coordX][coordY] < 255)
                 return false;
         }
     }
@@ -182,7 +185,7 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         {
             int coordX = (int)(k*(coordY-startY)+startX);
             if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
-            if (mpObstacle[coordX][coordY] < 255)
+            if (mpMapInfo[coordX][coordY] < 255)
                 return false;
         }
     }

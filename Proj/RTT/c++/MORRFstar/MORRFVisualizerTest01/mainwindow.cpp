@@ -133,7 +133,6 @@ void MainWindow::onRun()
         msgBox.exec();
         return;
     }
-
     if (mpViz->mMOPPInfo.mObjectiveNum < 2)
     {
         QMessageBox msgBox;
@@ -141,19 +140,41 @@ void MainWindow::onRun()
         msgBox.exec();
         return;
     }
-
+    if(mpViz->mMOPPInfo.mStart.x()<0 || mpViz->mMOPPInfo.mStart.y()<0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Start is not set.");
+        msgBox.exec();
+        return;
+    }
+    if(mpViz->mMOPPInfo.mGoal.x()<0 || mpViz->mMOPPInfo.mGoal.y()<0)
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Goal is not set.");
+        msgBox.exec();
+        return;
+    }
     if(mpMORRF)
     {
         delete mpMORRF;
         mpMORRF = NULL;
     }
+
     mpViz->mMOPPInfo.initFuncsParams();
-    mpMORRF = new MORRF(mpMap->width(), mpMap->height(), mpViz->mMOPPInfo.mObjectiveNum, mpViz->mMOPPInfo.mSubproblemNum);
+    QString msg = "RUNNING MORRF ... \n";
+    msg += "ObjNum( " + QString::number(mpViz->mMOPPInfo.mObjectiveNum) + " ) \n";
+    msg += "SubproblemNum( " + QString::number(mpViz->mMOPPInfo.mSubproblemNum) + " ) \n";
+    msg += "SegmentLen( " + QString::number(mpViz->mMOPPInfo.mSegmentLength) + " ) \n";
+    msg += "MaxIterationNum( " + QString::number(mpViz->mMOPPInfo.mMaxIterationNum) + " ) \n";
+    qDebug(msg.toStdString().c_str());
+
+    mpMORRF = new MORRF(mpMap->width(), mpMap->height(), mpViz->mMOPPInfo.mObjectiveNum, mpViz->mMOPPInfo.mSubproblemNum, mpViz->mMOPPInfo.mSegmentLength);
     mpMORRF->addFuncs(mpViz->mMOPPInfo.mFuncs, mpViz->mMOPPInfo.mDistributions);
     POS2D start(mpViz->mMOPPInfo.mStart.x(), mpViz->mMOPPInfo.mStart.y());
     POS2D goal(mpViz->mMOPPInfo.mGoal.x(), mpViz->mMOPPInfo.mGoal.y());
 
     mpMORRF->init(start, goal);
+    mpMORRF->loadMap(mpViz->mMOPPInfo.getObstacleInfo());
     mpViz->setMORRF(mpMORRF);
 
     while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)

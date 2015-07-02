@@ -29,10 +29,14 @@ private:
     QLineEdit * mpLineEditSubProb;
     QLabel    * mpLabelIterationNum;
     QLineEdit * mpLineEditIterationNum;
+    QLabel    * mpLabelSegmentLength;
+    QLineEdit * mpLineEditSegmentLength;
 
     MainWindow * mpParentWindow;
 
     void updateConfiguration();
+
+    bool isCompatible(QString fitnessFile);
 
 public slots:
     //void checkBoxStateChanged(int state);

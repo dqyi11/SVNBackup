@@ -23,13 +23,20 @@ RRTree::RRTree(MORRF* parent, int objective_num)
     mObjectiveNum = objective_num;
     mIndex = -1;
 
+    mpRoot = NULL;
     mNodes.clear();
 }
 
 void RRTree::init(POS2D start, POS2D goal)
 {
+    if(mpRoot)
+    {
+        delete mpRoot;
+        mpRoot = NULL;
+    }
     mStart = start;
     mGoal = goal;
+    mpRoot = new RRTNode(start, mObjectiveNum);
 }
 
 RRTNode*  RRTree::createNewNode(POS2D pos)

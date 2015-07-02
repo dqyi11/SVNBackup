@@ -11,10 +11,10 @@ class MORRF
 {
 public:
     enum MORRF_TYPE{ WEIGHTED_SUM, TCHEBYCHEFF, BOUNDARY_INTERSACTION };
-    MORRF(int width, int height, int objective_num, int subproblem_num, MORRF_TYPE type=WEIGHTED_SUM);
+    MORRF(int width, int height, int objective_num, int subproblem_num, int segmentLength, MORRF_TYPE type=WEIGHTED_SUM);
     ~MORRF();
 
-    void addFuncs( std::vector<COST_FUNC_PTR> funcs, std::vector<int**> fitnessDistributions);
+    void addFuncs( std::vector<COST_FUNC_PTR> funcs, std::vector<int**> fitnessDistributions );
 
     void init(POS2D start, POS2D goal);
 
@@ -36,7 +36,7 @@ public:
     int getSamplingWidth() { return mSamplingWidth; }
     int getSamplingHeight() { return mSamplingHeight; }
 
-    void setObstacleInfo(int ** pObstacle) { mpObstacle = pObstacle; }
+    void setObstacleInfo(int ** pObstacle) { mpMapInfo = pObstacle; }
 
     int getCurrentIteration() { return mCurrentIteration; }
 
@@ -45,7 +45,7 @@ protected:
     void deinitWeights();
 
 private:
-    int ** mpObstacle;
+    int ** mpMapInfo;
 
     MORRF_TYPE mType;
     int mSamplingWidth;

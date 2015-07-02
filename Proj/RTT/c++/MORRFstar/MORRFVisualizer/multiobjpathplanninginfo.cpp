@@ -14,8 +14,9 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
 
     mMinDistEnabled = false;
 
-    mSubproblemNum = 10;
-    mMaxIterationNum = 0;
+    mSubproblemNum = 30;
+    mMaxIterationNum = 100;
+    mSegmentLength = 10.0;
 
     mMapWidth = 0;
     mMapHeight = 0;
@@ -74,7 +75,7 @@ void MultiObjPathPlanningInfo::initFuncsParams()
 
         for(int k=0;k<mObjectiveNum-1;k++)
         {
-            mFuncs.push_back(MultiObjPathPlanningInfo::calcFitness);
+            mFuncs.push_back(MultiObjPathPlanningInfo::calcCost);
             mDistributions.push_back(fitnessDistributions[k]);
         }
     }
@@ -82,7 +83,7 @@ void MultiObjPathPlanningInfo::initFuncsParams()
     {
         for(int k=0;k<mObjectiveNum;k++)
         {
-            mFuncs.push_back(MultiObjPathPlanningInfo::calcFitness);
+            mFuncs.push_back(MultiObjPathPlanningInfo::calcCost);
             mDistributions.push_back(fitnessDistributions[k]);
         }
     }

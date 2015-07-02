@@ -28,6 +28,10 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     mpLineEditIterationNum = new QLineEdit();
     mpLineEditIterationNum->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mMaxIterationNum));
     mpLineEditIterationNum->setMaximumWidth(40);
+    mpLabelSegmentLength = new QLabel("Segment Len: ");
+    mpLineEditSegmentLength = new QLineEdit();
+    mpLineEditSegmentLength->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mSegmentLength));
+    mpLineEditSegmentLength->setMaximumWidth(40);
 
     QHBoxLayout * minDistLayout = new QHBoxLayout();
     minDistLayout->addWidget(mpCheckMinDist);
@@ -36,6 +40,8 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     minDistLayout->addWidget(mpLineEditSubProb);
     minDistLayout->addWidget(mpLabelIterationNum);
     minDistLayout->addWidget(mpLineEditIterationNum);
+    minDistLayout->addWidget(mpLabelSegmentLength);
+    minDistLayout->addWidget(mpLineEditSegmentLength);
 
     mpListWidget = new QListWidget();
     mpListWidget->setViewMode(QListView::IconMode);
@@ -89,8 +95,17 @@ void ConfigObjDialog::onBtnAddClicked()
                  tr("Open Objective File"), "./", tr("Objective Files (*.*)"));
    if (objFilename!="")
    {
-       mpListWidget->addItem(objFilename);
-       repaint();
+       if(true==isCompatible(objFilename))
+       {
+           mpListWidget->addItem(objFilename);
+           repaint();
+       }
+   }
+   else
+   {
+       QMessageBox msg;
+       msg.setText("Fitness distribution file is not compatible!");
+       msg.exec();
    }
 }
 
@@ -123,4 +138,19 @@ void ConfigObjDialog::updateConfiguration()
 
     mpParentWindow->mpViz->mMOPPInfo.mObjectiveNum = numObj;
 
+    mpParentWindow->mpViz->mMOPPInfo.mMaxIterationNum = mpLineEditIterationNum->text().toInt();
+    mpParentWindow->mpViz->mMOPPInfo.mSubproblemNum = mpLineEditSubProb->text().toInt();
+    mpParentWindow->mpViz->mMOPPInfo.mSegmentLength = mpLineEditSegmentLength->text().toDouble();
+
+}
+
+bool ConfigObjDialog::isCompatible(QString fitnessFile)
+{
+    QPixmap pixmap(fitnessFile);
+    if (pixmap.width()==mpParentWindow->mpViz->mMOPPInfo.mMapWidth
+            && pixmap.height()==mpParentWindow->mpViz->mMOPPInfo.mMapHeight)
+    {
+        return true;
+    }
+    return false;
 }

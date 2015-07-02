@@ -21,12 +21,77 @@ public:
 
     static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
     {
-        return 0.0;
+        double dist = 0.0;
+        if (pos_a[0]==pos_b[0] || pos_a[1]==pos_b[1])
+            return dist;
+        dist = std::sqrt(std::pow(pos_a[0]-pos_b[0],2)+std::pow(pos_a[1]-pos_b[1],2));
+        return dist;
     }
 
-    static double calcFitness(POS2D pos_a, POS2D pos_b, int** distribution)
+    static double calcCost(POS2D pos_a, POS2D pos_b, int** distribution)
     {
-        return 0.0;
+        double cost = 0.0;
+        if (pos_a[0]==pos_b[0] || pos_a[1]==pos_b[1])
+            return cost;
+        if(distribution==NULL)
+            return cost;
+
+        int width = sizeof(distribution)/sizeof(distribution[0]);
+        int height = sizeof(distribution[0])/sizeof(int);
+
+        double x_dist = std::abs(pos_a[0]-pos_b[0]);
+        double y_dist = std::abs(pos_a[1]-pos_b[1]);
+        if (x_dist > y_dist)
+        {
+            double startX = 0.0, endX = 0.0, startY = 0.0;
+            double k = y_dist / x_dist;
+            if (pos_a[0] < pos_b[0])
+            {
+                startX = pos_a[0];
+                endX = pos_b[0];
+                startY = pos_a[1];
+            }
+            else
+            {
+                startX = pos_b[0];
+                endX = pos_a[0];
+                startY = pos_b[1];
+            }
+            for(int coordX =(int)startX; coordX <(int)endX; coordX++)
+            {
+                int coordY = (int)(k*(coordX-startX)+startY);
+                if (coordX >= width || coordY >= height)
+                {
+                    cost += distribution[coordX][coordY]/255.0;
+                }
+            }
+        }
+        else
+        {
+            double startY = 0.0, endY = 0.0, startX = 0.0;
+            double k = x_dist / y_dist;
+            if (pos_a[0] < pos_b[0])
+            {
+                startY = pos_a[1];
+                endY = pos_b[1];
+                startX = pos_a[0];
+            }
+            else
+            {
+                startY = pos_b[1];
+                endY = pos_a[1];
+                startX = pos_b[0];
+            }
+            for(int coordY =(int)startY; coordY <(int)endY; coordY++)
+            {
+                int coordX = (int)(k*(coordY-startY)+startX);
+                if (coordX >= width || coordY >= height)
+                {
+                    cost += distribution[coordX][coordY]/255.0;
+                }
+            }
+        }
+        return cost;
     }
 
     QString mInfoFilename;
@@ -47,6 +112,7 @@ public:
 
     int mSubproblemNum;
     int mMaxIterationNum;
+    double mSegmentLength;
 };
 
 #endif // MULTIOBJPATHPLANNINGINFO_H

@@ -47,6 +47,7 @@ public:
     POS2D mGoal;
 
     MORRF* mpParent;
+    RRTNode * mpRoot;
 
     std::list<RRTNode*> mNodes;
 };
@@ -61,6 +62,7 @@ public:
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
     virtual double calcFitness(double * pCost);
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
+
 };
 
 class ReferenceTree : public RRTree
