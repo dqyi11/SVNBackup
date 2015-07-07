@@ -27,7 +27,7 @@ class RRTree
 {
 public:
     enum TREE_TYPE{ SUBPROBLEM, REFERENCE };
-    RRTree(MORRF* parent, int objective_num);
+    RRTree(MORRF* parent, int objective_num, double * p_weight);
 
     RRTNode* init(POS2D start, POS2D goal);
     RRTNode* createNewNode(POS2D pos);
@@ -49,6 +49,7 @@ public:
 
     MORRF* mpParent;
     RRTNode * mpRoot;
+    double * mpWeight;
 
     std::list<RRTNode*> mNodes;
 };
@@ -56,7 +57,7 @@ public:
 class SubproblemTree : public RRTree
 {
 public:
-    SubproblemTree(MORRF* parent, int objective_num, int index);
+    SubproblemTree(MORRF* parent, int objective_num, double * p_weight, int index);
     ~SubproblemTree();
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);

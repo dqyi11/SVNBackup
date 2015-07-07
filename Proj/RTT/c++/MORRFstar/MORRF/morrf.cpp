@@ -88,7 +88,7 @@ void MORRF::init(POS2D start, POS2D goal)
 
     for(int m=0;m<mSubproblemNum;m++)
     {
-        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, m+mObjectiveNum);
+        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, mWeights[m], m+mObjectiveNum);
         RRTNode * pRootNode = pSubTree->init(start, goal);
         root.mNodeList.push_back(pRootNode);
         mSubproblems.push_back(pSubTree);
@@ -274,18 +274,77 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
     return near_list;
 }
 
-double * MORRF::calcCost(POS2D& pos_a, POS2D& pos_b)
+bool MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, double * p_cost)
 {
-    double * pCost = new double[mObjectiveNum];
+    if (p_cost==NULL)
+    {
+        return false;
+    }
     for(int k=0;k<mObjectiveNum;k++)
     {
-        pCost[k] = calcCost(pos_a, pos_b, k);
+        p_cost[k] = calcCost(pos_a, pos_b, k);
     }
-
-    return pCost;
+    return true;
 }
 
 double MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, int k)
 {
     return mFuncs[k](pos_a, pos_b, mFitnessDistributions[k]);
+}
+
+double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
+{
+    double fitness = 0.0;
+    if(p_cost == NULL || p_weight==NULL)
+    {
+        return fitness;
+    }
+    if(mType==MORRF::WEIGHTED_SUM)
+    {
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            fitness += p_cost[k] * p_weight[k];
+        }
+    }
+    else if(mType==MORRF::TCHEBYCHEFF)
+    {
+        double p_utopia[mObjectiveNum];
+        if(true == getUtopiaReferenceVector(pos, p_utopia))
+        {
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+               double weighted_dist = p_weight[k] * std::abs(p_cost[k] - p_utopia[k]);
+               if (weighted_dist > fitness)
+               {
+                   fitness = weighted_dist;
+               }
+            }
+        }
+    }
+    else
+    {
+
+    }
+
+    return fitness;
+}
+
+bool MORRF::getUtopiaReferenceVector(POS2D& pos, double * p_utopia)
+{
+    if (p_utopia==NULL)
+    {
+        return false;
+    }
+    KDNode2D ref_node = findNearest(pos);
+    if(ref_node.mNodeList.size()<mObjectiveNum)
+    {
+        return false;
+    }
+
+    for(int k=0;k<mObjectiveNum;k++)
+    {
+        RRTNode* pRRTNode = ref_node.mNodeList[k];
+        p_utopia[k] = pRRTNode->mFitness;
+    }
+    return true;
 }

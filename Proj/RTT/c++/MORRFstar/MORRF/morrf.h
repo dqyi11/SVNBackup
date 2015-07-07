@@ -26,12 +26,14 @@ public:
     KDNode2D findNearest(POS2D pos);
     std::list<KDNode2D> findNear(POS2D pos);
 
-    double* getReferenceCost(POS2D pos);
     bool isObstacleFree(POS2D pos_a, POS2D pos_b);
     bool isInObstacle(POS2D pos);
 
-    double * calcCost(POS2D& pos_a, POS2D& pos_b);
+    bool calcCost(POS2D& pos_a, POS2D& pos_b, double * p_cost);
     double calcCost(POS2D& pos_a, POS2D& pos_b, int k);
+    double calcFitness(double * p_cost, double * p_weight, POS2D& pos);
+
+    bool getUtopiaReferenceVector(POS2D& pos, double * p_utopia);
 
     int getSamplingWidth() { return mSamplingWidth; }
     int getSamplingHeight() { return mSamplingHeight; }
