@@ -179,10 +179,11 @@ void MainWindow::onRun()
 
     while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)
     {
-        mpMORRF->extend();
-        repaint();
         QString msg = "CurrentIteration " + QString::number(mpMORRF->getCurrentIteration());
         qDebug(msg.toStdString().c_str());
+
+        mpMORRF->extend();
+        repaint();
     }
 }
 

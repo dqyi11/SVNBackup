@@ -27,7 +27,7 @@ RRTree::RRTree(MORRF* parent, int objective_num)
     mNodes.clear();
 }
 
-void RRTree::init(POS2D start, POS2D goal)
+RRTNode* RRTree::init(POS2D start, POS2D goal)
 {
     if(mpRoot)
     {
@@ -37,6 +37,8 @@ void RRTree::init(POS2D start, POS2D goal)
     mStart = start;
     mGoal = goal;
     mpRoot = new RRTNode(start, mObjectiveNum);
+
+    return mpRoot;
 }
 
 RRTNode*  RRTree::createNewNode(POS2D pos)
@@ -56,7 +58,7 @@ bool RRTree::removeEdge(RRTNode* pNode_p, RRTNode*  pNode_c)
 
     pNode_c->mpParent = NULL;
     bool removed = false;
-    for(std::list<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
+    for(std::vector<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
     {
         RRTNode* pCurrent = (RRTNode*)(*it);
         if (pCurrent==pNode_c)
@@ -147,15 +149,26 @@ double SubproblemTree::calcFitness(double * pCost)
 
 void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes)
 {
-    double * pMinEdgeCost = new double[mObjectiveNum];
-    for(int k=0;k<mObjectiveNum;k++)
+    RRTNode* pNearestNode = node_nearest.mNodeList[mIndex];
+    double min_new_node_fitness = pNearestNode->mFitness + mpParent->calcCost(pNearestNode->mPos, pNode_new->mPos, mIndex);
+    RRTNode* pMinNode = pNearestNode;
+
+    for(std::list<KDNode2D>::iterator it=near_nodes.begin();it!=near_nodes.end();it++)
     {
-        pMinEdgeCost[k] = node_nearest.mNodeList[mObjectiveNum+mIndex]->mpCost[k] + mpParent->calcCost(node_nearest, pNode_new->mPos, k);
+        RRTNode* pNearNode = it->mNodeList[mIndex];
+        if (true == mpParent->isObstacleFree(pNearNode->mPos, pNode_new->mPos))
+        {
+            double fitness = pNearNode->mFitness + mpParent->calcCost(pNearNode->mPos, pNode_new->mPos, mIndex);
+            if (fitness < min_new_node_fitness)
+            {
+                pMinNode = pNearNode;
+                min_new_node_fitness = fitness;
+            }
+        }
     }
 
-
-
-
+    addEdge(pMinNode, pNode_new);
+    pNode_new->mFitness = min_new_node_fitness;
 }
 
 void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes)

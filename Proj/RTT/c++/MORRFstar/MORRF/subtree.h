@@ -2,6 +2,7 @@
 #define SUBTREE_H
 
 #include "KDTree2D.h"
+#include <vector>
 #include <list>
 
 class MORRF;
@@ -19,7 +20,7 @@ public:
     RRTNode * mpParent;
     POS2D mPos;
 
-    std::list<RRTNode*> mChildNodes;
+    std::vector<RRTNode*> mChildNodes;
 };
 
 class RRTree
@@ -28,7 +29,7 @@ public:
     enum TREE_TYPE{ SUBPROBLEM, REFERENCE };
     RRTree(MORRF* parent, int objective_num);
 
-    void init(POS2D start, POS2D goal);
+    RRTNode* init(POS2D start, POS2D goal);
     RRTNode* createNewNode(POS2D pos);
     bool removeEdge(RRTNode* pNode_p, RRTNode* pNode_c);
     bool hasEdge(RRTNode* pNode_p, RRTNode* pNode_c);

@@ -81,14 +81,16 @@ void MORRF::init(POS2D start, POS2D goal)
     for(int k=0;k<mObjectiveNum;k++)
     {
         ReferenceTree * pRefTree = new ReferenceTree(this, mObjectiveNum, k);
-        pRefTree->init(start, goal);
+        RRTNode * pRootNode = pRefTree->init(start, goal);
+        root.mNodeList.push_back(pRootNode);
         mReferences.push_back(pRefTree);
     }
 
     for(int m=0;m<mSubproblemNum;m++)
     {
         SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, m+mObjectiveNum);
-        pSubTree->init(start, goal);
+        RRTNode * pRootNode = pSubTree->init(start, goal);
+        root.mNodeList.push_back(pRootNode);
         mSubproblems.push_back(pSubTree);
     }
     mpKDTree->insert(root);
@@ -227,12 +229,15 @@ void MORRF::extend()
                 new_node.mNodeList.push_back(pNewSubNode);
             }
 
+            mpKDTree->insert(*pNewNode);
+
             // attach new node to reference trees
             // rewire near nodes of reference trees
             for (int k=0;k<mObjectiveNum;k++)
             {
-                mReferences[k]->attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
-                mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
+                // std::cout << "@ " << k << std::endl;
+                mReferences[k]->attachNewNode(pNewNode->mNodeList[k], nearest_node, near_nodes);
+                mReferences[k]->rewireNearNodes(pNewNode->mNodeList[k], near_nodes);
             }
 
 
@@ -240,8 +245,9 @@ void MORRF::extend()
             // rewire near nodes of subproblem trees
             for(int m=0;m<mSubproblemNum;m++)
             {
-                mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
-                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
+                // std::cout << "@ " << m+mObjectiveNum << std::endl;
+                //mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
+                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
 
