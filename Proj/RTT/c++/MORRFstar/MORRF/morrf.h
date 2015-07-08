@@ -45,6 +45,10 @@ public:
     ReferenceTree* getReferenceTree(int k);
     SubproblemTree* getSubproblemTree(int m);
 
+    int** getMapInfo() { return mpMapInfo; };
+
+    void dumpMapInfo( std::string filename );
+
 
 protected:
     void initWeights();

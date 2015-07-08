@@ -1,6 +1,10 @@
 
 #include "morrf.h"
 #include <cstdlib>
+#include <iostream>
+#include <fstream>
+
+#define OBSTACLE_THRESHOLD 200
 
 MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int segmentLength, MORRF_TYPE type)
 {
@@ -18,6 +22,12 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
     mSegmentLength = segmentLength;
 
     mpWeights = NULL;
+
+    mpMapInfo = new int*[mSamplingWidth];
+    for(int i=0;i<mSamplingWidth;i++)
+    {
+        mpMapInfo[i] = new int[mSamplingHeight];
+    }
 }
 
 MORRF::~MORRF()
@@ -107,7 +117,13 @@ void MORRF::init(POS2D start, POS2D goal)
 
 void MORRF::loadMap(int **map)
 {
-    mpMapInfo = map;
+    for(int i=0;i<mSamplingWidth;i++)
+    {
+        for(int j=0;j<mSamplingHeight;j++)
+        {
+            mpMapInfo[i][j] = map[i][j];
+        }
+    }
 }
 
 POS2D MORRF::sampling()
@@ -123,16 +139,21 @@ POS2D MORRF::sampling()
 
 POS2D MORRF::steer(POS2D pos_a, POS2D pos_b)
 {
+    POS2D new_pos(pos_a[0], pos_a[1]);
     double delta[2];
     delta[0] = pos_a[0] - pos_b[0];
     delta[1] = pos_a[1] - pos_b[1];
     double delta_len = std::sqrt(delta[0]*delta[0]+delta[1]*delta[1]);
-    double scale = mSegmentLength / delta_len;
-    delta[0] *= scale;
-    delta[1] *= scale;
 
-    POS2D new_pos(pos_b[0]+delta[0], pos_b[1]+delta[1]);
+    if (delta_len > mSegmentLength)
+    {
+        double scale = mSegmentLength / delta_len;
+        delta[0] = delta[0] * scale;
+        delta[1] = delta[1] * scale;
 
+        new_pos.setX( pos_b[0]+delta[0] );
+        new_pos.setY( pos_b[1]+delta[1] );
+    }
     return new_pos;
 }
 
@@ -149,9 +170,9 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
 {
     if (pos_a == pos_b)
         return true;
-    int x_dist = std::abs(pos_a[0] - pos_b[0]);
-    int y_dist = std::abs(pos_a[1] - pos_b[1]);
-    if (x_dist > y_dist)
+    int x_dist = pos_a[0] - pos_b[0];
+    int y_dist = pos_a[1] - pos_b[1];
+    if (std::abs(x_dist) > std::abs(y_dist))
     {
         double k = (double)y_dist/ x_dist;
         int startX, endX, startY;
@@ -170,9 +191,11 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         for (int coordX = startX; coordX < endX + mObsCheckResolution ; coordX+=mObsCheckResolution)
         {
             int coordY = (int)(k*(coordX-startX)+startY);
-            if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
-            if (mpMapInfo[coordX][coordY] < 255)
+            if (coordY >= mSamplingHeight || coordX >= mSamplingWidth) break;
+            if (mpMapInfo[coordX][coordY] < OBSTACLE_THRESHOLD)
+            {
                 return false;
+            }
         }
     }
     else
@@ -194,9 +217,11 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         for (int coordY = startY; coordY < endY + mObsCheckResolution ; coordY+=mObsCheckResolution)
         {
             int coordX = (int)(k*(coordY-startY)+startX);
-            if (coordY > mSamplingHeight || coordX <= mSamplingWidth) break;
-            if (mpMapInfo[coordX][coordY] < 255)
+            if (coordY >= mSamplingHeight || coordX >= mSamplingWidth) break;
+            if (mpMapInfo[coordX][coordY] < OBSTACLE_THRESHOLD)
+            {
                 return false;
+            }
         }
     }
     return true;
@@ -373,4 +398,23 @@ SubproblemTree* MORRF::getSubproblemTree(int m)
         return NULL;
     }
     return mSubproblems[m];
+}
+
+void MORRF::dumpMapInfo( std::string filename )
+{
+    std::ofstream mapInfoFile;
+    mapInfoFile.open(filename.c_str());
+    if(mpMapInfo)
+    {
+
+        for(int j=0;j<mSamplingHeight;j++)
+        {
+            for(int i=0;i<mSamplingWidth;i++)
+            {
+                mapInfoFile << mpMapInfo[i][j] << " ";
+            }
+            mapInfoFile << std::endl;
+        }
+    }
+    mapInfoFile.close();
 }

@@ -13,10 +13,10 @@ class MultiObjPathPlanningInfo
 public:
     MultiObjPathPlanningInfo();
 
-    int** getObstacleInfo();
+    bool getObstacleInfo(int** obstacleInfo);
     std::vector<int**> getFitnessDistributions();
 
-    int** getPixInfo(QString filename);
+    bool getPixInfo(QString filename, int** pixInfo);
     void initFuncsParams();
 
     static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
@@ -39,9 +39,9 @@ public:
         int width = sizeof(distribution)/sizeof(distribution[0]);
         int height = sizeof(distribution[0])/sizeof(int);
 
-        double x_dist = std::abs(pos_a[0]-pos_b[0]);
-        double y_dist = std::abs(pos_a[1]-pos_b[1]);
-        if (x_dist > y_dist)
+        double x_dist = pos_a[0]-pos_b[0];
+        double y_dist = pos_a[1]-pos_b[1];
+        if (std::abs(x_dist) > std::abs(y_dist))
         {
             double startX = 0.0, endX = 0.0, startY = 0.0;
             double k = y_dist / x_dist;

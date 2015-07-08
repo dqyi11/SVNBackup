@@ -16,15 +16,19 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
 
     mSubproblemNum = 30;
     mMaxIterationNum = 100;
-    mSegmentLength = 10.0;
+    mSegmentLength = 5.0;
 
     mMapWidth = 0;
     mMapHeight = 0;
 }
 
-int** MultiObjPathPlanningInfo::getObstacleInfo()
+bool MultiObjPathPlanningInfo::getObstacleInfo(int** obstacleInfo)
 {
-    return getPixInfo(mMapFilename);
+    if(obstacleInfo==NULL)
+    {
+        return false;
+    }
+    return getPixInfo(mMapFilename, obstacleInfo);
 }
 
 std::vector<int**> MultiObjPathPlanningInfo::getFitnessDistributions()
@@ -33,32 +37,37 @@ std::vector<int**> MultiObjPathPlanningInfo::getFitnessDistributions()
     for(std::list<QString>::iterator it=mObjectiveFiles.begin();it!=mObjectiveFiles.end();it++)
     {
         QString fitnessName = (*it);
-        int** fitness = getPixInfo(fitnessName);
+        int** fitness = new int*[mMapWidth];
+        for(int i=0;i<mMapWidth;i++)
+        {
+            fitness[i] = new int[mMapHeight];
+        }
+        getPixInfo(fitnessName, fitness);
         fitnessDistributions.push_back(fitness);
     }
     return fitnessDistributions;
 }
 
-int** MultiObjPathPlanningInfo::getPixInfo(QString filename)
+bool MultiObjPathPlanningInfo::getPixInfo(QString filename, int ** pixInfo)
 {
+    if(pixInfo==NULL)
+    {
+        return false;
+    }
     QPixmap map(filename);
     QImage grayImg = map.toImage();
     int width = map.width();
     int height = map.height();
-    int ** pValueArray = new int*[width];
-    for(int i=0;i<width;i++)
-    {
-        pValueArray[i] = new int[height];
-    }
+
     for(int i=0;i<width;i++)
     {
         for(int j=0;j<height;j++)
         {
             QRgb col = grayImg.pixel(i,j);
-            pValueArray[i][j] = qGray(col);
+            pixInfo[i][j] = qGray(col);
         }
     }
-    return pValueArray;
+    return true;
 }
 
 void MultiObjPathPlanningInfo::initFuncsParams()

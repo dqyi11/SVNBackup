@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <configobjdialog.h>
 #include <QMessageBox>
+#include <QtDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -174,8 +175,12 @@ void MainWindow::onRun()
     POS2D goal(mpViz->mMOPPInfo.mGoal.x(), mpViz->mMOPPInfo.mGoal.y());
 
     mpMORRF->init(start, goal);
-    mpMORRF->loadMap(mpViz->mMOPPInfo.getObstacleInfo());
+    mpViz->mMOPPInfo.getObstacleInfo(mpMORRF->getMapInfo());
     mpViz->setMORRF(mpMORRF);
+
+    qDebug() << "Check " << mpMORRF->isObstacleFree(start, goal);
+
+    //mpMORRF->dumpMapInfo("map.txt");
 
     while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)
     {
