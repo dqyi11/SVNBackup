@@ -57,7 +57,7 @@ class KDNode2D : public POS2D
 {
 public:
     KDNode2D(value_type x, value_type y) : POS2D(x, y) { mNodeList.clear(); }
-    KDNode2D(POS2D & pos) : POS2D(pos.d[0], pos.d[1]) { mNodeList.clear(); }
+    KDNode2D(POS2D & pos) : POS2D(pos) { mNodeList.clear(); }
 
     std::vector<RRTNode*> mNodeList;
 };

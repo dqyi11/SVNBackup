@@ -16,6 +16,8 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
     mObsCheckResolution = 1;
     mCurrentIteration = 0;
     mSegmentLength = segmentLength;
+
+    mpWeights = NULL;
 }
 
 MORRF::~MORRF()
@@ -39,38 +41,44 @@ void MORRF::initWeights()
 {
     deinitWeights();
 
+    mpWeights = new double*[mSubproblemNum];
+
     if (mObjectiveNum == 2)
     {
         for(int i=0;i<mSubproblemNum;i++)
         {
-            double * weight = new double[mObjectiveNum];
-            weight[0] = (double)(i+1) / (double)(mSubproblemNum+2);
-            weight[1] = (double)(mSubproblemNum-i+1) / (double)(mSubproblemNum+2);
+            mpWeights[i] = new double[mObjectiveNum];
+            mpWeights[i][0] = (double)(i+1) / (double)(mSubproblemNum+2);
+            mpWeights[i][1] = (double)(mSubproblemNum-i+1) / (double)(mSubproblemNum+2);
         }
     }
     else
     {
         for(int i=0;i<mSubproblemNum;i++)
         {
-            double * weight = new double[mObjectiveNum];
+            mpWeights[i] = new double[mObjectiveNum];
             for(int j=0;j<mObjectiveNum;j++)
             {
-                weight[j] = (double)rand()/RAND_MAX;
+                mpWeights[i][j] = (double)rand()/RAND_MAX;
             }
-            mWeights.push_back(weight);
         }
     }
 }
 
 void MORRF::deinitWeights()
 {
-    for(std::vector<double*>::iterator it=mWeights.begin();it!=mWeights.end();it++)
+    if(mpWeights)
     {
-        double * weight = (double*)(*it);
-        delete weight;
-        weight = NULL;
+        int size = sizeof(mpWeights)/sizeof(double*);
+        for(int i=0;i<size;i++)
+        {
+            if(mpWeights[i])
+            {
+                delete mpWeights[i];
+                mpWeights[i] = NULL;
+            }
+        }
     }
-    mWeights.clear();
 }
 
 void MORRF::init(POS2D start, POS2D goal)
@@ -88,7 +96,7 @@ void MORRF::init(POS2D start, POS2D goal)
 
     for(int m=0;m<mSubproblemNum;m++)
     {
-        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, mWeights[m], m+mObjectiveNum);
+        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, mpWeights[m], m+mObjectiveNum);
         RRTNode * pRootNode = pSubTree->init(start, goal);
         root.mNodeList.push_back(pRootNode);
         mSubproblems.push_back(pSubTree);
@@ -196,8 +204,8 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
 
 void MORRF::extend()
 {
-    KDNode2D * pNewNode = NULL;
-    while(pNewNode==NULL)
+    bool node_inserted = false;
+    while(false==node_inserted)
     {
         POS2D rndPos = sampling();
         KDNode2D nearest_node = findNearest(rndPos);
@@ -229,24 +237,24 @@ void MORRF::extend()
                 new_node.mNodeList.push_back(pNewSubNode);
             }
 
-            mpKDTree->insert(*pNewNode);
+            mpKDTree->insert(new_node);
+            node_inserted = true;
 
             // attach new node to reference trees
             // rewire near nodes of reference trees
             for (int k=0;k<mObjectiveNum;k++)
             {
                 // std::cout << "@ " << k << std::endl;
-                mReferences[k]->attachNewNode(pNewNode->mNodeList[k], nearest_node, near_nodes);
-                mReferences[k]->rewireNearNodes(pNewNode->mNodeList[k], near_nodes);
+                mReferences[k]->attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
+                //mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
             }
-
 
             // attach new nodes to subproblem trees
             // rewire near nodes of subproblem trees
             for(int m=0;m<mSubproblemNum;m++)
             {
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
-                //mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
+                mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
                 //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
@@ -347,4 +355,22 @@ bool MORRF::getUtopiaReferenceVector(POS2D& pos, double * p_utopia)
         p_utopia[k] = pRRTNode->mFitness;
     }
     return true;
+}
+
+ReferenceTree* MORRF::getReferenceTree(int k)
+{
+    if(k<0 || k>=mObjectiveNum)
+    {
+        return NULL;
+    }
+    return mReferences[k];
+}
+
+SubproblemTree* MORRF::getSubproblemTree(int m)
+{
+    if(m<0 || m>=mSubproblemNum)
+    {
+        return NULL;
+    }
+    return mSubproblems[m];
 }

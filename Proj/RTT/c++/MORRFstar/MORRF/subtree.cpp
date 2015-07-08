@@ -45,6 +45,7 @@ RRTNode* RRTree::init(POS2D start, POS2D goal)
     mStart = start;
     mGoal = goal;
     mpRoot = new RRTNode(start, mObjectiveNum);
+    mNodes.push_back(mpRoot);
 
     return mpRoot;
 }
@@ -116,12 +117,6 @@ ReferenceTree::~ReferenceTree()
 
 }
 
-double ReferenceTree::calcFitness(double * pCost)
-{
-    double fitness = 0.0;
-    return fitness;
-}
-
 void ReferenceTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes)
 {
     RRTNode* pNearestNode = node_nearest.mNodeList[mIndex];
@@ -153,14 +148,38 @@ void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near
     {
         KDNode2D near_node = (KDNode2D)(*it);
 
-        if(near_node ==pNode_new->mPos ||  near_node==mpRoot->mPos || pNode_new->mpParent->mPos==near_node)
+        RRTNode * pNearNode = near_node.mNodeList[mIndex];
+
+        if(pNearNode->mPos ==pNode_new->mPos ||  pNearNode->mPos==mpRoot->mPos || pNode_new->mpParent->mPos==pNearNode->mPos)
         {
             continue;
         }
 
         if(true==mpParent->isObstacleFree(pNode_new->mPos, near_node))
         {
+            double temp_fitness_from_new_node = pNode_new->mFitness + mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, mIndex);
+            if(temp_fitness_from_new_node < pNearNode->mFitness)
+            {
+                double temp_cost_from_new_node[mObjectiveNum];
+                double temp_delta_cost_from_new_node[mObjectiveNum];
+                mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, temp_delta_cost_from_new_node);
+                for(int k=0;k<mObjectiveNum;k++)
+                {
+                    temp_cost_from_new_node[k] = pNode_new->mpCost[k] + temp_delta_cost_from_new_node[k];
+                }
 
+                RRTNode * pParentNode = pNearNode->mpParent;
+                removeEdge(pParentNode, pNearNode);
+                addEdge(pNode_new, pNearNode);
+                double delta_cost[mObjectiveNum];
+                for(int k=0;k<mObjectiveNum;k++)
+                {
+                    delta_cost[k] = pNearNode->mpCost[k] - temp_cost_from_new_node[k];
+                    pNearNode->mpCost[k] = temp_cost_from_new_node[k];
+                    pNearNode->mFitness = temp_fitness_from_new_node;
+                }
+                updateCostToChildren(pNearNode, delta_cost);
+            }
         }
 
     }
@@ -182,11 +201,6 @@ SubproblemTree::~SubproblemTree()
 
 }
 
-double SubproblemTree::calcFitness(double * pCost)
-{
-    double fitness = 0.0;
-    return fitness;
-}
 
 void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes)
 {
@@ -237,7 +251,46 @@ void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, st
 
 void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes)
 {
+    for(std::list<KDNode2D>::iterator it=near_nodes.begin(); it!=near_nodes.end(); it++)
+    {
+        KDNode2D near_node = (KDNode2D)(*it);
 
+        RRTNode * pNearNode = near_node.mNodeList[mIndex+mObjectiveNum];
+
+        if(pNearNode->mPos ==pNode_new->mPos ||  pNearNode->mPos==mpRoot->mPos || pNode_new->mpParent->mPos==pNearNode->mPos)
+        {
+            continue;
+        }
+
+        if(true==mpParent->isObstacleFree(pNode_new->mPos, near_node))
+        {
+            double temp_cost_from_new_node[mObjectiveNum];
+            double temp_delta_cost_from_new_node[mObjectiveNum];
+
+            mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, temp_delta_cost_from_new_node);
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                temp_cost_from_new_node[k] = pNode_new->mpCost[k] + temp_delta_cost_from_new_node[k];
+            }
+            double temp_fitness_from_new_node = mpParent->calcFitness(temp_cost_from_new_node, mpWeight, pNearNode->mPos);
+
+            if(temp_fitness_from_new_node < pNearNode->mFitness)
+            {
+                RRTNode * pParentNode = pNearNode->mpParent;
+                removeEdge(pParentNode, pNearNode);
+                addEdge(pNode_new, pNearNode);
+                double delta_cost[mObjectiveNum];
+                for(int k=0;k<mObjectiveNum;k++)
+                {
+                    delta_cost[k] = pNearNode->mpCost[k] - temp_cost_from_new_node[k];
+                    pNearNode->mpCost[k] = temp_cost_from_new_node[k];
+                    pNearNode->mFitness = temp_fitness_from_new_node;
+                }
+                updateCostToChildren(pNearNode, delta_cost);
+            }
+        }
+
+    }
 
 }
 

@@ -42,6 +42,10 @@ public:
 
     int getCurrentIteration() { return mCurrentIteration; }
 
+    ReferenceTree* getReferenceTree(int k);
+    SubproblemTree* getSubproblemTree(int m);
+
+
 protected:
     void initWeights();
     void deinitWeights();
@@ -61,7 +65,7 @@ private:
     std::vector<COST_FUNC_PTR> mFuncs;
     std::vector<int**> mFitnessDistributions;
 
-    std::vector<double *> mWeights;
+    double** mpWeights;
 
     std::vector<SubproblemTree*> mSubproblems;
     std::vector<ReferenceTree*> mReferences;

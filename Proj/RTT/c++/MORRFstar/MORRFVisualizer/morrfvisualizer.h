@@ -13,6 +13,9 @@ public:
 
     void setMORRF(MORRF* pMorrf);
 
+    void prevTree();
+    void nextTree();
+
     MultiObjPathPlanningInfo mMOPPInfo;
 signals:
     

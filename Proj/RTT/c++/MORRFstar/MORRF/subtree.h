@@ -37,7 +37,6 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes) = 0;
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes) = 0;
-    virtual double calcFitness(double * pCost) = 0;
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost) = 0;
 
     TREE_TYPE mType;
@@ -62,7 +61,6 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
-    virtual double calcFitness(double * pCost);
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
 
 };
@@ -75,7 +73,6 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
-    virtual double calcFitness(double * pCost);
     virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
 };
 
