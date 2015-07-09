@@ -28,10 +28,13 @@ if __name__ == '__main__':
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
-        x_dist = np.abs(pos_a[0] - pos_b[0])
-        y_dist = np.abs(pos_a[1] - pos_b[1])
+        x_dist = pos_a[0] - pos_b[0]
+        y_dist = pos_a[1] - pos_b[1]
         
-        if x_dist > y_dist:
+        abs_x_dist = np.abs(x_dist)
+        abs_y_dist = np.abs(y_dist)
+        
+        if abs_x_dist > abs_y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
                 startX = pos_a[0]
@@ -74,10 +77,13 @@ if __name__ == '__main__':
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
-        x_dist = np.abs(pos_a[0] - pos_b[0])
-        y_dist = np.abs(pos_a[1] - pos_b[1])
+        x_dist = pos_a[0] - pos_b[0]
+        y_dist = pos_a[1] - pos_b[1]
         
-        if x_dist > y_dist:
+        abs_x_dist = np.abs(x_dist)
+        abs_y_dist = np.abs(y_dist)
+        
+        if abs_x_dist > abs_y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
                 startX = pos_a[0]
@@ -117,7 +123,7 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist   
     
-    planner = MORRTstarPlanner([600,400], 10, 3, [calcDist, calcCost1, calcCost2], 100) 
+    planner = MORRTstarPlanner([600,400], 10, 3, [calcDist, calcCost1, calcCost2], 200) 
     
     planner.morrts_viz.setName('MORRTstar02')
     planner.morrts_viz.loadObj([FIT_FILE1, FIT_FILE2])
@@ -128,8 +134,8 @@ if __name__ == '__main__':
     #import pygame.image
     #pygame.image.save(planner.morrts_viz.screen, 'MORRTstar00.png')
     
-    planner.morrts_viz.saveResult()
-    planner.morrts_viz.saveResultInOne()
+    #planner.morrts_viz.saveResult()
+    #planner.morrts_viz.saveResultInOne()
     
     
     evaluator = MOPathEvaluator([calcDist, calcCost1, calcCost2])

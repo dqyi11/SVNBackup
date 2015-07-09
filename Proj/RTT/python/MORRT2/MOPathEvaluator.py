@@ -33,7 +33,19 @@ class MOPathEvaluator(object):
         
         with open(filename, 'w') as f1:
             for p in self.paths:
-                f1.write(str(p))
+                for s in p:
+                    f1.write(str(s[0])+" "+str(s[1]))
+                    f1.write('\t')
+                f1.write('\n')  
+                
+    def saveScores(self, filename):
+        
+        with open(filename, 'w') as f1:
+            for p in self.scores:
+                for k in range(self.objectiveNum):
+                    f1.write(str(p[k]))
+                    f1.write('\t')
+                f1.write('\n')    
                     
     def visualize(self):
         

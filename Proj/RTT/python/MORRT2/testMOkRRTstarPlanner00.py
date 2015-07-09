@@ -27,10 +27,13 @@ if __name__ == '__main__':
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
-        x_dist = np.abs(pos_a[0] - pos_b[0])
-        y_dist = np.abs(pos_a[1] - pos_b[1])
+        x_dist = pos_a[0] - pos_b[0]
+        y_dist = pos_a[1] - pos_b[1]
         
-        if x_dist > y_dist:
+        abs_x_dist = np.abs(x_dist)
+        abs_y_dist = np.abs(y_dist)
+        
+        if abs_x_dist > abs_y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
                 startX = pos_a[0]
@@ -75,14 +78,16 @@ if __name__ == '__main__':
     planner.mokrrts_viz.setName('MOkRRTstar00')
     planner.mokrrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 4000)
-    print paths
+    paths = planner.findPaths([40,40], [500, 40], 10)
+
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
     evaluator.load(paths)
-    evaluator.visualize()
     
-    print evaluator.scores
+    evaluator.savePaths('MORRTstar00-path.txt')
+    evaluator.saveScores('MORRTstar00-score.txt')
+    
+    evaluator.visualize()
     
     while True:
         planner.mokrrts_viz.update()

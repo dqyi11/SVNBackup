@@ -16,7 +16,6 @@ if __name__ == '__main__':
     objVals = np.array(imread(FIT_FILE, True))
     stepLen = 1
     
-    
     def calcCost(currentPos, referencePos):
         cost = 0.0
         if referencePos==None:
@@ -27,10 +26,13 @@ if __name__ == '__main__':
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
-        x_dist = np.abs(pos_a[0] - pos_b[0])
-        y_dist = np.abs(pos_a[1] - pos_b[1])
+        x_dist = pos_a[0] - pos_b[0]
+        y_dist = pos_a[1] - pos_b[1]
         
-        if x_dist > y_dist:
+        abs_x_dist = np.abs(x_dist)
+        abs_y_dist = np.abs(y_dist)
+        
+        if abs_x_dist > abs_y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
                 startX = pos_a[0]
@@ -61,7 +63,7 @@ if __name__ == '__main__':
                 if coordY >= objVals.shape[0] or coordX >= objVals.shape[1]: break
                 cost += objVals[int(coordY),int(coordX)]/255.0
 
-        return cost   
+        return cost 
     
     def calcDist(currentPos, referencePos):
         dist = 0.0

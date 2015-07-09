@@ -27,10 +27,13 @@ if __name__ == '__main__':
         if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
             return cost
         
-        x_dist = np.abs(pos_a[0] - pos_b[0])
-        y_dist = np.abs(pos_a[1] - pos_b[1])
+        x_dist = pos_a[0] - pos_b[0]
+        y_dist = pos_a[1] - pos_b[1]
         
-        if x_dist > y_dist:
+        abs_x_dist = np.abs(x_dist)
+        abs_y_dist = np.abs(y_dist)
+        
+        if abs_x_dist > abs_y_dist:
             k = y_dist/x_dist
             if pos_a[0] < pos_b[0]:
                 startX = pos_a[0]
@@ -61,7 +64,7 @@ if __name__ == '__main__':
                 if coordY >= objVals.shape[0] or coordX >= objVals.shape[1]: break
                 cost += objVals[int(coordY),int(coordX)]/255.0
 
-        return cost   
+        return cost 
     
     def calcDist(currentPos, referencePos):
         dist = 0.0
@@ -70,27 +73,27 @@ if __name__ == '__main__':
         dist = np.sqrt((currentPos[0]-referencePos[0])**2+(currentPos[1]-referencePos[1])**2)
         return dist   
     
-    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 30) 
+    planner = MORRTstarPlanner([600,400], 10, 2, [calcDist, calcCost], 50) 
     
     planner.morrts_viz.setName('MORRTstar00')
     planner.morrts_viz.loadObj([FIT_FILE])
 
-    paths = planner.findPaths([40,40], [500, 40], 5000)
+    paths = planner.findPaths([40,40], [500, 40], 3000)
     print paths
     
-    planner.morrts_viz.saveResult()
-    planner.morrts_viz.saveResultInOne()
+    #planner.morrts_viz.saveResult()
+    #planner.morrts_viz.saveResultInOne()
     
     #import pygame.image
     #pygame.image.save(planner.morrts_viz.screen, 'MORRTstar00.png')
     
     evaluator = MOPathEvaluator([calcDist, calcCost])
     evaluator.load(paths)
-    evaluator.visualize()
-    
+        
     evaluator.savePaths('MORRTstar00-path.txt')
-    np.savetxt('MORRTstar00-score.txt', evaluator.scores)
+    evaluator.saveScores('MORRTstar00-score.txt')
     
+    evaluator.visualize()    
     print evaluator.scores
     
     while True:
