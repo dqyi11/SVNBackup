@@ -3,6 +3,8 @@
 #include <configobjdialog.h>
 #include <QMessageBox>
 #include <QtDebug>
+#include <QKeyEvent>
+#include <QStatusBar>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +21,13 @@ MainWindow::MainWindow(QWidget *parent)
     mpConfigObjDialog->hide();
 
     setCentralWidget(mpViz);
+
+    mpStatusLabel = new QLabel();
+    mpStatusProgressBar = new QProgressBar();
+
+    statusBar()->addWidget(mpStatusProgressBar);
+    statusBar()->addWidget(mpStatusLabel);
+
 
     updateTitle();
 }
@@ -178,7 +187,7 @@ void MainWindow::onRun()
     mpViz->mMOPPInfo.getObstacleInfo(mpMORRF->getMapInfo());
     mpViz->setMORRF(mpMORRF);
 
-    qDebug() << "Check " << mpMORRF->isObstacleFree(start, goal);
+    //qDebug() << "Check " << mpMORRF->isObstacleFree(start, goal);
 
     //mpMORRF->dumpMapInfo("map.txt");
 
@@ -188,6 +197,8 @@ void MainWindow::onRun()
         qDebug(msg.toStdString().c_str());
 
         mpMORRF->extend();
+
+        updateStatus();
         repaint();
     }
 }
@@ -215,4 +226,47 @@ void MainWindow::updateTitle()
     QString title = "ObjNum( " + QString::number(mpViz->mMOPPInfo.mObjectiveNum) + " )";
     title += " ==> " + mpViz->mMOPPInfo.mMapFilename;
     setWindowTitle(title);
+}
+
+void MainWindow::updateStatus()
+{
+    if(mpViz==NULL || mpMORRF==NULL)
+    {
+        return;
+    }
+    if(mpStatusProgressBar)
+    {
+        mpStatusProgressBar->setMinimum(0);
+        mpStatusProgressBar->setMaximum(mpViz->mMOPPInfo.mMaxIterationNum);
+        mpStatusProgressBar->setValue(mpMORRF->getCurrentIteration());
+    }
+    if(mpStatusLabel)
+    {
+        QString status = "";
+        status += "TreeIdx: " + QString::number(mpViz->getCurrentTreeIndex());
+        mpStatusLabel->setText(status);
+    }
+    repaint();
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Right)
+    {
+        if(mpViz)
+        {
+            mpViz->nextTree();
+            updateStatus();
+            repaint();
+        }
+    }
+    else if(event->key() == Qt::Key_Left)
+    {
+        if(mpViz)
+        {
+            mpViz->prevTree();
+            updateStatus();
+            repaint();
+        }
+    }
 }

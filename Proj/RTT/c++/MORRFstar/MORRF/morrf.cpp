@@ -106,7 +106,7 @@ void MORRF::init(POS2D start, POS2D goal)
 
     for(int m=0;m<mSubproblemNum;m++)
     {
-        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, mpWeights[m], m+mObjectiveNum);
+        SubproblemTree * pSubTree = new SubproblemTree(this, mObjectiveNum, mpWeights[m], m);
         RRTNode * pRootNode = pSubTree->init(start, goal);
         root.mNodeList.push_back(pRootNode);
         mSubproblems.push_back(pSubTree);
@@ -271,7 +271,7 @@ void MORRF::extend()
             {
                 // std::cout << "@ " << k << std::endl;
                 mReferences[k]->attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
-                //mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
+                mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
             }
 
             // attach new nodes to subproblem trees
@@ -280,7 +280,7 @@ void MORRF::extend()
             {
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
                 mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
-                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
+                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
 

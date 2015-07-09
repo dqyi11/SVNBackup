@@ -15,6 +15,7 @@ public:
 
     void prevTree();
     void nextTree();
+    int getCurrentTreeIndex() { return mCurrentTreeIdx; }
 
     MultiObjPathPlanningInfo mMOPPInfo;
 signals:

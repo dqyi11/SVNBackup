@@ -71,7 +71,7 @@ void MORRFVisualizer::paintEvent(QPaintEvent * e)
                 RRTNode* pNode = (*it);
                 if(pNode)
                 {
-                    for(std::vector<RRTNode*>::iterator itc= pNode->mChildNodes.begin(); itc!=pNode->mChildNodes.end();itc++)
+                    for(std::list<RRTNode*>::iterator itc= pNode->mChildNodes.begin(); itc!=pNode->mChildNodes.end();itc++)
                     {
                         RRTNode* pChildNode = (*itc);
                         if(pChildNode)

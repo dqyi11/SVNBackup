@@ -6,6 +6,7 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QPixmap>
+#include <QProgressBar>
 #include "morrfvisualizer.h"
 
 class ConfigObjDialog;
@@ -25,6 +26,8 @@ protected:
     void createMenuBar();
     void createActions();
 
+    void keyPressEvent(QKeyEvent *event);
+    void updateStatus();
 private:
 
     void updateTitle();
@@ -41,6 +44,9 @@ private:
     QMenu *mpContextMenu;
     QAction *mpAddStartAction;
     QAction *mpAddGoalAction;
+
+    QLabel * mpStatusLabel;
+    QProgressBar * mpStatusProgressBar;
 
     QPixmap * mpMap;
 

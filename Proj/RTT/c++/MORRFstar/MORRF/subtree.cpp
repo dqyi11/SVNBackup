@@ -67,7 +67,7 @@ bool RRTree::removeEdge(RRTNode* pNode_p, RRTNode*  pNode_c)
 
     pNode_c->mpParent = NULL;
     bool removed = false;
-    for(std::vector<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
+    for(std::list<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
     {
         RRTNode* pCurrent = (RRTNode*)(*it);
         if (pCurrent==pNode_c)
@@ -257,7 +257,7 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> nea
 
         RRTNode * pNearNode = near_node.mNodeList[mIndex+mObjectiveNum];
 
-        if(pNearNode->mPos ==pNode_new->mPos ||  pNearNode->mPos==mpRoot->mPos || pNode_new->mpParent->mPos==pNearNode->mPos)
+        if(pNearNode->mPos == pNode_new->mPos ||  pNearNode->mPos == mpRoot->mPos || pNode_new->mpParent->mPos == pNearNode->mPos)
         {
             continue;
         }

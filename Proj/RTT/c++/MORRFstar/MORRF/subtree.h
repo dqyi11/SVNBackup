@@ -20,7 +20,7 @@ public:
     RRTNode * mpParent;
     POS2D mPos;
 
-    std::vector<RRTNode*> mChildNodes;
+    std::list<RRTNode*> mChildNodes;
 };
 
 class RRTree
