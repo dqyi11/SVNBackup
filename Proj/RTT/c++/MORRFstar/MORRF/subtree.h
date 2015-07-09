@@ -35,9 +35,11 @@ public:
     bool hasEdge(RRTNode* pNode_p, RRTNode* pNode_c);
     bool addEdge(RRTNode* pNode_p, RRTNode* pNode_c);
 
+    std::list<RRTNode*> findAllChildren(RRTNode* pNode);
+
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes) = 0;
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes) = 0;
-    virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost) = 0;
+
 
     TREE_TYPE mType;
     int mIndex;
@@ -53,18 +55,6 @@ public:
     std::list<RRTNode*> mNodes;
 };
 
-class SubproblemTree : public RRTree
-{
-public:
-    SubproblemTree(MORRF* parent, int objective_num, double * p_weight, int index);
-    ~SubproblemTree();
-
-    virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
-    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
-    virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
-
-};
-
 class ReferenceTree : public RRTree
 {
 public:
@@ -73,7 +63,21 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
-    virtual void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
+protected:
+    void updateFitnessToChildren(RRTNode* pNode, double delta_fitness);
+};
+
+class SubproblemTree : public RRTree
+{
+public:
+    SubproblemTree(MORRF* parent, int objective_num, double * p_weight, int index);
+    ~SubproblemTree();
+
+    virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
+    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
+protected:
+    void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
+
 };
 
 #endif // SUBTREE_H

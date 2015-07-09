@@ -106,6 +106,48 @@ bool RRTree::addEdge(RRTNode* pNode_p, RRTNode* pNode_c)
     return true;
 }
 
+
+std::list<RRTNode*> RRTree::findAllChildren(RRTNode* pNode)
+{
+    int level = 0;
+    bool finished = false;
+    std::list<RRTNode*> child_list;
+
+    std::list<RRTNode*> current_level_nodes;
+    current_level_nodes.push_back(pNode);
+    while(false==finished)
+    {
+        std::list<RRTNode*> current_level_children;
+        int child_list_num = current_level_children.size();
+
+        for(std::list<RRTNode*>::iterator it=current_level_nodes.begin(); it!=current_level_nodes.end(); it++)
+        {
+            RRTNode* pCurrentNode = (*it);
+            for(std::list<RRTNode*>::iterator itc=pCurrentNode->mChildNodes.begin(); itc!=pCurrentNode->mChildNodes.end();itc++)
+            {
+                RRTNode *pChildNode= (*itc);
+                current_level_children.push_back(pChildNode);
+                child_list.push_back(pChildNode);
+            }
+
+        }
+
+        if (current_level_children.size()==0)
+            finished = true;
+        else if (child_list.size()==child_list_num)
+        {
+            finished = true;
+        }
+        else
+        {
+            current_level_nodes = current_level_children;
+            level +=1;
+        }
+    }
+
+    return child_list;
+}
+
 ReferenceTree::ReferenceTree(MORRF* parent, int objective_num, int index)
     : RRTree(parent, objective_num, NULL)
 {
@@ -160,33 +202,29 @@ void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near
             double temp_fitness_from_new_node = pNode_new->mFitness + mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, mIndex);
             if(temp_fitness_from_new_node < pNearNode->mFitness)
             {
-                double temp_cost_from_new_node[mObjectiveNum];
-                double temp_delta_cost_from_new_node[mObjectiveNum];
-                mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, temp_delta_cost_from_new_node);
-                for(int k=0;k<mObjectiveNum;k++)
-                {
-                    temp_cost_from_new_node[k] = pNode_new->mpCost[k] + temp_delta_cost_from_new_node[k];
-                }
-
                 RRTNode * pParentNode = pNearNode->mpParent;
                 removeEdge(pParentNode, pNearNode);
                 addEdge(pNode_new, pNearNode);
-                double delta_cost[mObjectiveNum];
-                for(int k=0;k<mObjectiveNum;k++)
-                {
-                    delta_cost[k] = pNearNode->mpCost[k] - temp_cost_from_new_node[k];
-                    pNearNode->mpCost[k] = temp_cost_from_new_node[k];
-                    pNearNode->mFitness = temp_fitness_from_new_node;
-                }
-                updateCostToChildren(pNearNode, delta_cost);
+
+                double delta_fitness = pNearNode->mFitness - temp_fitness_from_new_node;
+                updateFitnessToChildren(pNearNode, delta_fitness);
             }
         }
 
     }
 }
 
-void ReferenceTree::updateCostToChildren(RRTNode* pNode, double* pDelta_cost)
+void ReferenceTree::updateFitnessToChildren(RRTNode* pNode, double delta_fitness)
 {
+    std::list<RRTNode*> child_list = findAllChildren(pNode);
+    for(std::list<RRTNode*>::iterator it=child_list.begin();it!=child_list.end();it++)
+    {
+        RRTNode* pChildNode = (*it);
+        if(pChildNode)
+        {
+            pChildNode->mFitness -= delta_fitness;
+        }
+    }
 
 }
 
@@ -296,5 +334,18 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> nea
 
 void SubproblemTree::updateCostToChildren(RRTNode* pNode, double* pDelta_cost)
 {
-
+    std::list<RRTNode*> child_list = findAllChildren(pNode);
+    for(std::list<RRTNode*>::iterator it=child_list.begin();it!=child_list.end();it++)
+    {
+        RRTNode* pChildNode = (*it);
+        if(pChildNode)
+        {
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                pChildNode->mpCost[k] -= pDelta_cost[k];
+            }
+            pChildNode->mFitness = mpParent->calcFitness(pChildNode->mpCost, mpWeight, pChildNode->mPos);
+        }
+    }
 }
+
