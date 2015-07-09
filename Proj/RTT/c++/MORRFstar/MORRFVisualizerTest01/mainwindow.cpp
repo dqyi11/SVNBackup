@@ -210,6 +210,28 @@ void MainWindow::onRun()
         {
             msg += "F ";
         }
+        if(true == mpMORRF->areAllNodesFitnessPositive())
+        {
+            msg += "T ";
+        }
+        else
+        {
+            msg += "F ";
+        }
+        if(true == mpMORRF->isNodeNumberIdentical())
+        {
+            msg += "T ";
+        }
+        else
+        {
+            msg += "F ";
+        }
+        for(int k=0;k<mpViz->mMOPPInfo.mObjectiveNum;k++)
+        {
+            std::list<RRTNode*> list = mpMORRF->getReferenceTree(k)->findAllChildren(mpMORRF->getReferenceTree(k)->mpRoot);
+            int num = list.size();
+            msg += QString::number(num) + " ";
+        }
         qDebug(msg.toStdString().c_str());
 
         mpMORRF->extend();

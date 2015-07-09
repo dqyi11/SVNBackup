@@ -16,7 +16,7 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
 
     mpKDTree = new KDTree2D(std::ptr_fun(tac));
 
-    mRange = 100.0;
+    mRange = 200.0;
     mObsCheckResolution = 1;
     mCurrentIteration = 0;
     mSegmentLength = segmentLength;
@@ -433,19 +433,17 @@ bool MORRF::isStructureCorrect()
         }
     }
 
-    /*
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
-        SubproblemTree* pRefTree = (*it);
-        if(pRefTree)
+        SubproblemTree* pSubTree = (*it);
+        if(pSubTree)
         {
-            if(false==pRefTree->isStructureCorrect())
+            if(false==pSubTree->isStructureCorrect())
             {
                 return false;
             }
         }
     }
-    */
     return true;
 }
 
@@ -463,18 +461,75 @@ bool MORRF::areAllNodesTractable()
         }
     }
 
-    /*
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
-        SubproblemTree* pRefTree = (*it);
-        if(pRefTree)
+        SubproblemTree* pSubTree = (*it);
+        if(pSubTree)
         {
-            if(false==pRefTree->areAllNodesTractable())
+            if(false==pSubTree->areAllNodesTractable())
             {
                 return false;
             }
         }
     }
-    */
+    return true;
+}
+
+bool MORRF::areAllNodesFitnessPositive()
+{
+    for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
+    {
+        ReferenceTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            if(false==pRefTree->areAllNodesFitnessPositive())
+            {
+                return false;
+            }
+        }
+    }
+
+    for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
+    {
+        SubproblemTree* pSubTree = (*it);
+        if(pSubTree)
+        {
+            if(false==pSubTree->areAllNodesFitnessPositive())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool MORRF::isNodeNumberIdentical()
+{
+    int ref_num = mReferences[0]->mNodes.size();
+
+    for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
+    {
+        ReferenceTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            int num = pRefTree->mNodes.size();
+            if(num != ref_num)
+            {
+                return false;
+            }
+        }
+    }
+    for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
+    {
+        SubproblemTree* pSubTree = (*it);
+        if(pSubTree)
+        {
+            int num = pSubTree->mNodes.size();
+            if(num != ref_num)
+            {
+                return false;
+            }
+        }
+    }
     return true;
 }

@@ -42,6 +42,7 @@ public:
 
     bool isStructureCorrect();
     bool areAllNodesTractable();
+    bool areAllNodesFitnessPositive();
     RRTNode* findAncestor(RRTNode *pNode);
 
 

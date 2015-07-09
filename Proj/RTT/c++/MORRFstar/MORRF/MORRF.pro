@@ -22,5 +22,6 @@ HEADERS  += \
     kdtree++/allocator.hpp \
     subtree.h \
     morrf.h \
-    KDTree2D.h
+    KDTree2D.h \
+    utilities.h
 

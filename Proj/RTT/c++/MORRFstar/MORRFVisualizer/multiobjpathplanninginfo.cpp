@@ -14,7 +14,7 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
 
     mMinDistEnabled = false;
 
-    mSubproblemNum = 30;
+    mSubproblemNum = 4;
     mMaxIterationNum = 100;
     mSegmentLength = 5.0;
 

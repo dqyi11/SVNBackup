@@ -7,6 +7,10 @@ RRTNode::RRTNode(POS2D pos, int objective_num)
     mObjectiveNum = objective_num;
 
     mpCost = new double[mObjectiveNum];
+    for(int k=0;k<mObjectiveNum;k++)
+    {
+        mpCost[k] = 0.0;
+    }
     mFitness = 0.0;
     mpParent = NULL;
 }
@@ -165,6 +169,7 @@ std::list<RRTNode*> RRTree::findAllChildren(RRTNode* pNode)
         }
     }
 
+    child_list.unique();
     return child_list;
 }
 
@@ -222,6 +227,23 @@ bool RRTree::areAllNodesTractable()
     }
     return true;
 }
+
+bool RRTree::areAllNodesFitnessPositive()
+{
+    for(std::list<RRTNode*>::iterator it=mNodes.begin();it!=mNodes.end();it++)
+    {
+        RRTNode * pNode = (*it);
+        if(pNode)
+        {
+            if(pNode->mFitness < 0.0)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 
 ReferenceTree::ReferenceTree(MORRF* parent, int objective_num, int index)
     : RRTree(parent, objective_num, NULL)
@@ -293,7 +315,6 @@ void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near
 void ReferenceTree::updateFitnessToChildren(RRTNode* pNode, double delta_fitness)
 {
     std::list<RRTNode*> child_list = findAllChildren(pNode);
-    child_list.unique();
     for(std::list<RRTNode*>::iterator it=child_list.begin();it!=child_list.end();it++)
     {
         RRTNode* pChildNode = (*it);
@@ -390,9 +411,6 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> nea
 
             if(temp_fitness_from_new_node < pNearNode->mFitness)
             {
-                RRTNode * pParentNode = pNearNode->mpParent;
-                removeEdge(pParentNode, pNearNode);
-                addEdge(pNode_new, pNearNode);
                 double delta_cost[mObjectiveNum];
                 for(int k=0;k<mObjectiveNum;k++)
                 {
@@ -401,6 +419,9 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> nea
                     pNearNode->mFitness = temp_fitness_from_new_node;
                 }
                 updateCostToChildren(pNearNode, delta_cost);
+                RRTNode * pParentNode = pNearNode->mpParent;
+                removeEdge(pParentNode, pNearNode);
+                addEdge(pNode_new, pNearNode);
             }
         }
 

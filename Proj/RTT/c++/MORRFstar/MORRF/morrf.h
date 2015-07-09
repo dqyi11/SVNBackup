@@ -51,6 +51,8 @@ public:
 
     bool isStructureCorrect();
     bool areAllNodesTractable();
+    bool areAllNodesFitnessPositive();
+    bool isNodeNumberIdentical();
 
 protected:
     void initWeights();
