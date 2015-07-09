@@ -193,7 +193,23 @@ void MainWindow::onRun()
 
     while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)
     {
-        QString msg = "CurrentIteration " + QString::number(mpMORRF->getCurrentIteration());
+        QString msg = "CurrentIteration " + QString::number(mpMORRF->getCurrentIteration()) + " ";
+        if(true == mpMORRF->isStructureCorrect())
+        {
+            msg += "T ";
+        }
+        else
+        {
+            msg += "F ";
+        }
+        if(true == mpMORRF->areAllNodesTractable())
+        {
+            msg += "T ";
+        }
+        else
+        {
+            msg += "F ";
+        }
         qDebug(msg.toStdString().c_str());
 
         mpMORRF->extend();

@@ -280,7 +280,7 @@ void MORRF::extend()
             {
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
                 mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
-                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
+                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
             }
         }
 
@@ -417,4 +417,64 @@ void MORRF::dumpMapInfo( std::string filename )
         }
     }
     mapInfoFile.close();
+}
+
+bool MORRF::isStructureCorrect()
+{
+    for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
+    {
+        ReferenceTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            if(false==pRefTree->isStructureCorrect())
+            {
+                return false;
+            }
+        }
+    }
+
+    /*
+    for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
+    {
+        SubproblemTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            if(false==pRefTree->isStructureCorrect())
+            {
+                return false;
+            }
+        }
+    }
+    */
+    return true;
+}
+
+bool MORRF::areAllNodesTractable()
+{
+    for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
+    {
+        ReferenceTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            if(false==pRefTree->areAllNodesTractable())
+            {
+                return false;
+            }
+        }
+    }
+
+    /*
+    for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
+    {
+        SubproblemTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            if(false==pRefTree->areAllNodesTractable())
+            {
+                return false;
+            }
+        }
+    }
+    */
+    return true;
 }

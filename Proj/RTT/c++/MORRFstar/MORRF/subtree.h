@@ -40,6 +40,10 @@ public:
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes) = 0;
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes) = 0;
 
+    bool isStructureCorrect();
+    bool areAllNodesTractable();
+    RRTNode* findAncestor(RRTNode *pNode);
+
 
     TREE_TYPE mType;
     int mIndex;

@@ -49,6 +49,8 @@ public:
 
     void dumpMapInfo( std::string filename );
 
+    bool isStructureCorrect();
+    bool areAllNodesTractable();
 
 protected:
     void initWeights();
