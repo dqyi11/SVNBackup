@@ -118,7 +118,7 @@ std::list<RRTNode*> RRTree::findAllChildren(RRTNode* pNode)
     while(false==finished)
     {
         std::list<RRTNode*> current_level_children;
-        int child_list_num = current_level_children.size();
+        int child_list_num = child_list.size();
 
         for(std::list<RRTNode*>::iterator it=current_level_nodes.begin(); it!=current_level_nodes.end(); it++)
         {
@@ -126,21 +126,36 @@ std::list<RRTNode*> RRTree::findAllChildren(RRTNode* pNode)
             for(std::list<RRTNode*>::iterator itc=pCurrentNode->mChildNodes.begin(); itc!=pCurrentNode->mChildNodes.end();itc++)
             {
                 RRTNode *pChildNode= (*itc);
-                current_level_children.push_back(pChildNode);
-                child_list.push_back(pChildNode);
+                if(pChildNode)
+                {
+                    current_level_children.push_back(pChildNode);
+                    child_list.push_back(pChildNode);
+                }
             }
-
         }
 
+        child_list.unique();
+        current_level_children.unique();
+
         if (current_level_children.size()==0)
+        {
             finished = true;
+        }
         else if (child_list.size()==child_list_num)
         {
             finished = true;
         }
         else
         {
-            current_level_nodes = current_level_children;
+            current_level_nodes.clear();
+            for(std::list<RRTNode*>::iterator itt=current_level_children.begin();itt!=current_level_children.end();itt++)
+            {
+                RRTNode * pTempNode = (*itt);
+                if(pTempNode)
+                {
+                    current_level_nodes.push_back(pTempNode);
+                }
+            }
             level +=1;
         }
     }
