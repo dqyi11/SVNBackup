@@ -1,5 +1,9 @@
 #include "multiobjpathplanninginfo.h"
 #include <QPixmap>
+#include <QJsonArray>
+#include <QFile>
+#include <QJsonDocument>
+#include <list>
 
 MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
 {
@@ -34,7 +38,7 @@ bool MultiObjPathPlanningInfo::getObstacleInfo(int** obstacleInfo)
 std::vector<int**> MultiObjPathPlanningInfo::getFitnessDistributions()
 {
     std::vector<int**> fitnessDistributions;
-    for(std::list<QString>::iterator it=mObjectiveFiles.begin();it!=mObjectiveFiles.end();it++)
+    for(std::vector<QString>::iterator it=mObjectiveFiles.begin();it!=mObjectiveFiles.end();it++)
     {
         QString fitnessName = (*it);
         int** fitness = new int*[mMapWidth];
@@ -98,4 +102,92 @@ void MultiObjPathPlanningInfo::initFuncsParams()
     }
 }
 
+void MultiObjPathPlanningInfo::read(const QJsonObject &json)
+{
+    mInfoFilename;
+    mMapFilename = json["mapFilename"].toString();
+    mMapFullpath = json["mapFullpath"].toString();
+    mMapWidth = json["mapWidth"].toInt();
+    mMapHeight = json["mapHeight"].toInt();
 
+    mObjectiveNum = json["objectiveNum"].toInt();
+    mStart = QPoint(json["startX"].toInt(), json["startY"].toInt());
+    mGoal = QPoint(json["goalX"].toInt(), json["goalY"].toInt());
+
+    mMinDistEnabled = json["minDistEnabled"].toBool();
+    mObjectiveFiles.clear();
+    QJsonArray objArray = json["objectiveFiles"].toArray();
+    for(int objIdx = 0; objIdx < objArray.size(); objIdx++)
+    {
+        QJsonObject objObject = objArray[objIdx].toObject();
+        QString objFile = objObject["filepath"].toString();
+        mObjectiveFiles.push_back(objFile);
+    }
+
+    mSubproblemNum = json["subproblemNum"].toInt();
+    mMaxIterationNum = json["maxIterationNum"].toInt();
+    mSegmentLength = json["segmentLength"].toDouble();
+}
+
+void MultiObjPathPlanningInfo::write(QJsonObject &json) const
+{
+    json["mapFilename"] = mMapFilename;
+    json["mapFullpath"] = mMapFullpath;
+    json["mapWidth"] = mMapWidth;
+    json["mapHeight"] = mMapHeight;
+
+    json["objectiveNum"] = mObjectiveNum;
+    json["startX"] = mStart.x();
+    json["startY"] = mStart.y();
+    json["goalX"] = mGoal.x();
+    json["goalY"] = mGoal.y();
+
+    json["minDistEnabled"] = mMinDistEnabled;
+    QJsonArray objArray;
+    for(int i=0;i<mObjectiveFiles.size();i++)
+    {
+        QString filepath = mObjectiveFiles[i];
+        QJsonObject objObject;
+        objObject["filepath"] = filepath;
+        objArray.append(objObject);
+    }
+    json["objectiveFiles"] = objArray;
+
+    json["subproblemNum"] = mSubproblemNum;
+    json["maxIterationNum"] = mMaxIterationNum;
+    json["segmentLength"] = mSegmentLength;
+}
+
+bool MultiObjPathPlanningInfo::saveToFile(QString filename)
+{
+    QFile saveFile(filename);
+
+    if(false==saveFile.open(QIODevice::WriteOnly))
+    {
+        qWarning("Couldn't open file.");
+        return false;
+    }
+
+    QJsonObject infoObject;
+    write(infoObject);
+    QJsonDocument saveDoc(infoObject);
+    saveFile.write(saveDoc.toJson());
+    return true;
+
+}
+
+bool MultiObjPathPlanningInfo::loadFromFile(QString filename)
+{
+    QFile loadFile(filename);
+
+    if(false==loadFile.open(QIODevice::ReadOnly))
+    {
+        qWarning("Couldn't open file.");
+        return false;
+    }
+
+    QByteArray saveData = loadFile.readAll();
+    QJsonDocument loadDoc = QJsonDocument::fromJson(saveData);
+    read(loadDoc.object());
+    return true;
+}

@@ -90,12 +90,25 @@ void MainWindow::createActions()
 
 void MainWindow::onOpen()
 {
+    QString tempFilename = QFileDialog::getOpenFileName(this,
+             tr("Open File"), "./", tr("Json Files (*.json)"));
 
+    if(mpViz)
+    {
+        mpViz->mMOPPInfo.loadFromFile(tempFilename);
+        openMap(mpViz->mMOPPInfo.mMapFullpath);
+        repaint();
+    }
 }
 
 void MainWindow::onSave()
 {
+    QString tempFilename = QFileDialog::getSaveFileName(this, tr("Save File"), "./", tr("Json Files (*.json)"));
 
+    if(mpViz)
+    {
+        mpViz->mMOPPInfo.saveToFile(tempFilename);
+    }
 }
 
 void MainWindow::onLoadMap()
@@ -108,16 +121,22 @@ void MainWindow::onLoadMap()
     QString filename(fileInfo.fileName());
     mpViz->mMOPPInfo.mMapFilename = filename;
     mpViz->mMOPPInfo.mMapFullpath = tempFilename;
-
     qDebug("OPENING ");
     qDebug(mpViz->mMOPPInfo.mMapFilename.toStdString().c_str());
 
+    openMap(mpViz->mMOPPInfo.mMapFullpath);
+
+}
+
+
+bool MainWindow::openMap(QString filename)
+{
     if(mpMap)
     {
         delete mpMap;
         mpMap = NULL;
     }
-    mpMap = new QPixmap(mpViz->mMOPPInfo.mMapFullpath);
+    mpMap = new QPixmap(filename);
     if(mpMap)
     {
         mpViz->mMOPPInfo.mMapWidth = mpMap->width();

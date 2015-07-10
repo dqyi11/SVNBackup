@@ -45,7 +45,7 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
 
     mpListWidget = new QListWidget();
     mpListWidget->setViewMode(QListView::IconMode);
-    for(std::list<QString>::iterator it=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.begin();it!=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.end();it++)
+    for(std::vector<QString>::iterator it=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.begin();it!=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.end();it++)
     {
         QString filename = (*it);
         mpListWidget->addItem(filename);

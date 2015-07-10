@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QPoint>
+#include <QJsonObject>
 #include <list>
 #include <vector>
 
@@ -18,6 +19,12 @@ public:
 
     bool getPixInfo(QString filename, int** pixInfo);
     void initFuncsParams();
+
+    bool saveToFile(QString filename);
+    bool loadFromFile(QString filename);
+
+    void read(const QJsonObject &json);
+    void write(QJsonObject &json) const;
 
     static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
     {
@@ -94,6 +101,7 @@ public:
         return cost;
     }
 
+    /* Member variables */
     QString mInfoFilename;
     QString mMapFilename;
     QString mMapFullpath;
@@ -105,7 +113,7 @@ public:
     QPoint mGoal;
 
     bool mMinDistEnabled;
-    std::list<QString> mObjectiveFiles;
+    std::vector<QString> mObjectiveFiles;
 
     std::vector<COST_FUNC_PTR> mFuncs;
     std::vector<int**>         mDistributions;

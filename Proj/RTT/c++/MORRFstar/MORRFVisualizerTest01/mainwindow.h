@@ -25,6 +25,7 @@ public:
 protected:
     void createMenuBar();
     void createActions();
+    bool openMap(QString filename);
 
     void keyPressEvent(QKeyEvent *event);
     void updateStatus();
