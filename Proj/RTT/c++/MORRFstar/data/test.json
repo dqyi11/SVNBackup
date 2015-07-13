@@ -1,0 +1,20 @@
+{
+    "goalX": 369,
+    "goalY": 117,
+    "mapFilename": "map.png",
+    "mapFullpath": "C:/Users/daqing_yi/qt_workspace/build-MORRFs-Desktop_Qt_5_4_2_MinGW_32bit-Debug/bin/map.png",
+    "mapHeight": 400,
+    "mapWidth": 600,
+    "maxIterationNum": 1000,
+    "minDistEnabled": true,
+    "objectiveFiles": [
+        {
+            "filepath": "C:/Users/daqing_yi/qt_workspace/build-MORRFs-Desktop_Qt_5_4_2_MinGW_32bit-Debug/bin/fitness1.png"
+        }
+    ],
+    "objectiveNum": 2,
+    "segmentLength": 10,
+    "startX": 159,
+    "startY": 64,
+    "subproblemNum": 4
+}
