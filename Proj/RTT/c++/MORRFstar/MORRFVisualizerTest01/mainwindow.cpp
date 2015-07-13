@@ -97,6 +97,10 @@ void MainWindow::onOpen()
     {
         mpViz->mMOPPInfo.loadFromFile(tempFilename);
         openMap(mpViz->mMOPPInfo.mMapFullpath);
+        if(mpConfigObjDialog)
+        {
+            mpConfigObjDialog->updateDisplay();
+        }
         repaint();
     }
 }

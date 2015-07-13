@@ -16,6 +16,9 @@ class ConfigObjDialog : public QDialog
 public:
     ConfigObjDialog(MainWindow * parent);
 
+    void updateConfiguration();
+    void updateDisplay();
+
 private:
     QListWidget * mpListWidget;
     QPushButton * mpBtnAdd;
@@ -33,8 +36,6 @@ private:
     QLineEdit * mpLineEditSegmentLength;
 
     MainWindow * mpParentWindow;
-
-    void updateConfiguration();
 
     bool isCompatible(QString fitnessFile);
 

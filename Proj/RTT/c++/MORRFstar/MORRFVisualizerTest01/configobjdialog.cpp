@@ -114,6 +114,38 @@ void ConfigObjDialog::onBtnRemoveClicked()
     qDeleteAll(mpListWidget->selectedItems());
 }
 
+void ConfigObjDialog::updateDisplay()
+{
+    if(mpParentWindow)
+    {
+        if(mpParentWindow->mpViz)
+        {
+            if(mpParentWindow->mpViz->mMOPPInfo.mMinDistEnabled==true)
+            {
+                mpCheckMinDist->setChecked(true);
+            }
+            else
+            {
+                mpCheckMinDist->setChecked(false);
+            }
+            mpLineEditSubProb->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mSubproblemNum));
+            mpLineEditSegmentLength->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mSegmentLength));
+            mpLineEditIterationNum->setText(QString::number(mpParentWindow->mpViz->mMOPPInfo.mMaxIterationNum));
+            if(mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.size()>0)
+            {
+                mpListWidget->clear();
+                for(std::vector<QString>::iterator it= mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.begin();
+                    it!=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.end();it++)
+                {
+                    QString objFilename = (*it);
+                    mpListWidget->addItem(objFilename);
+                }
+            }
+        }
+    }
+
+}
+
 void ConfigObjDialog::updateConfiguration()
 {
     int numObj = 0;
