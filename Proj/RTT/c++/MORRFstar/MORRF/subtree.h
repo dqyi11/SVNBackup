@@ -51,8 +51,8 @@ public:
 
     std::list<RRTNode*> findAllChildren(RRTNode* pNode);
 
-    virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes) = 0;
-    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes) = 0;
+    virtual void attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes) = 0;
+    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes) = 0;
     virtual RRTNode * getClosetToGoal(double * deltaCost, double& deltaFitness) = 0;
 
     bool isStructureCorrect();
@@ -83,8 +83,8 @@ public:
     ReferenceTree(MORRF* parent, int objective_num, int index);
     ~ReferenceTree();
 
-    virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
-    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
+    virtual void attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes);
+    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes);
     virtual RRTNode * getClosetToGoal(double * deltaCost, double& deltaFitness);
 protected:
     void updateFitnessToChildren(RRTNode* pNode, double delta_fitness);
@@ -96,8 +96,8 @@ public:
     SubproblemTree(MORRF* parent, int objective_num, double * p_weight, int index);
     ~SubproblemTree();
 
-    virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
-    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
+    virtual void attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes);
+    virtual void rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes);
     virtual RRTNode * getClosetToGoal(double * deltaCost, double& deltaFitness);
 protected:
     void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);

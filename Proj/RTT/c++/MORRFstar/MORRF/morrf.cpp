@@ -276,8 +276,20 @@ void MORRF::extend()
             for (int k=0;k<mObjectiveNum;k++)
             {
                 // std::cout << "@ " << k << std::endl;
-                mReferences[k]->attachNewNode(new_node.mNodeList[k], nearest_node, near_nodes);
-                mReferences[k]->rewireNearNodes(new_node.mNodeList[k], near_nodes);
+                int index = k;
+                RRTNode* pNearestRefNode = nearest_node.mNodeList[index];
+                std::list<RRTNode*> nearRefNodes;
+                nearRefNodes.clear();
+                for(std::list<KDNode2D>::iterator itr = near_nodes.begin();
+                    itr != near_nodes.end(); itr++)
+                {
+                    KDNode2D kd_node = (*itr);
+                    RRTNode* pRefNode = kd_node.mNodeList[index];
+                    nearRefNodes.push_back(pRefNode);
+                }
+
+                mReferences[k]->attachNewNode(new_node.mNodeList[index], pNearestRefNode, nearRefNodes);
+                //mReferences[k]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
             }
 
             // attach new nodes to subproblem trees
@@ -286,8 +298,19 @@ void MORRF::extend()
             {
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
                 int index = m+mObjectiveNum;
-                mSubproblems[m]->attachNewNode(new_node.mNodeList[index], nearest_node, near_nodes);
-                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
+                RRTNode* pNearestSubNode = nearest_node.mNodeList[index];
+                std::list<RRTNode*> nearSubNodes;
+                nearSubNodes.clear();
+                for(std::list<KDNode2D>::iterator its = near_nodes.begin();
+                    its != near_nodes.end(); its++)
+                {
+                    KDNode2D kd_node = (*its);
+                    RRTNode* pSubNode = kd_node.mNodeList[index];
+                    nearSubNodes.push_back(pSubNode);
+                }
+
+                mSubproblems[m]->attachNewNode(new_node.mNodeList[index], pNearestSubNode, nearSubNodes);
+                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
             }
         }
         mCurrentIteration++;

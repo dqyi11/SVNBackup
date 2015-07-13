@@ -296,15 +296,14 @@ ReferenceTree::~ReferenceTree()
 
 }
 
-void ReferenceTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes)
+void ReferenceTree::attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes)
 {
-    RRTNode* pNearestNode = node_nearest.mNodeList[mIndex];
     double min_new_node_fitness = pNearestNode->mFitness + mpParent->calcCost(pNearestNode->mPos, pNode_new->mPos, mIndex);
     RRTNode* pMinNode = pNearestNode;
 
-    for(std::list<KDNode2D>::iterator it=near_nodes.begin();it!=near_nodes.end();it++)
+    for(std::list<RRTNode*>::iterator it=near_nodes.begin();it!=near_nodes.end();it++)
     {
-        RRTNode* pNearNode = it->mNodeList[mIndex];
+        RRTNode* pNearNode = *it;
         if (true == mpParent->isObstacleFree(pNearNode->mPos, pNode_new->mPos))
         {
             double fitness = pNearNode->mFitness + mpParent->calcCost(pNearNode->mPos, pNode_new->mPos, mIndex);
@@ -316,39 +315,44 @@ void ReferenceTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std
         }
     }
 
-    addEdge(pMinNode, pNode_new);
-    pNode_new->mFitness = min_new_node_fitness;
-    pNode_new->mpCost[mIndex] = pNode_new->mFitness;
+    bool added = addEdge(pMinNode, pNode_new);
+    if(added)
+    {
+        pNode_new->mFitness = min_new_node_fitness;
+        pNode_new->mpCost[mIndex] = pNode_new->mFitness;
+    }
 
 }
 
-void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes)
+void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes)
 {
-    for(std::list<KDNode2D>::iterator it=near_nodes.begin(); it!=near_nodes.end(); it++)
+    for(std::list<RRTNode*>::iterator it=near_nodes.begin(); it!=near_nodes.end(); it++)
     {
-        KDNode2D near_node = (KDNode2D)(*it);
-
-        RRTNode * pNearNode = near_node.mNodeList[mIndex];
+        RRTNode * pNearNode = (*it);
 
         if(pNearNode->mPos ==pNode_new->mPos ||  pNearNode->mPos==mpRoot->mPos || pNode_new->mpParent->mPos==pNearNode->mPos)
         {
             continue;
         }
 
-        if(true==mpParent->isObstacleFree(pNode_new->mPos, near_node))
+        if(true==mpParent->isObstacleFree(pNode_new->mPos, pNearNode->mPos))
         {
             double temp_fitness_from_new_node = pNode_new->mFitness + mpParent->calcCost(pNode_new->mPos, pNearNode->mPos, mIndex);
             if(temp_fitness_from_new_node < pNearNode->mFitness)
             {
                 double delta_fitness = pNearNode->mFitness - temp_fitness_from_new_node;
-
-                pNearNode->mFitness = temp_fitness_from_new_node;
-                pNearNode->mpCost[mIndex] = pNearNode->mFitness;
-                updateFitnessToChildren(pNearNode, delta_fitness);
-
                 RRTNode * pParentNode = pNearNode->mpParent;
-                removeEdge(pParentNode, pNearNode);
-                addEdge(pNode_new, pNearNode);
+                bool removed = removeEdge(pParentNode, pNearNode);
+                if(removed)
+                {
+                    bool added = addEdge(pNode_new, pNearNode);
+                    if(added)
+                    {
+                        pNearNode->mFitness = temp_fitness_from_new_node;
+                        pNearNode->mpCost[mIndex] = pNearNode->mFitness;
+                        updateFitnessToChildren(pNearNode, delta_fitness);
+                    }
+                }
             }
         }
     }
@@ -422,9 +426,8 @@ SubproblemTree::~SubproblemTree()
 }
 
 
-void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes)
+void SubproblemTree::attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes)
 {
-    RRTNode* pNearestNode = node_nearest.mNodeList[mIndex+mObjectiveNum];
     double p_min_new_node_cost[mObjectiveNum];
     double p_min_new_node_cost_delta[mObjectiveNum];
     mpParent->calcCost(pNearestNode->mPos, pNode_new->mPos, p_min_new_node_cost_delta);
@@ -436,9 +439,9 @@ void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, st
 
     RRTNode* pMinNode = pNearestNode;
 
-    for(std::list<KDNode2D>::iterator it=near_nodes.begin();it!=near_nodes.end();it++)
+    for(std::list<RRTNode*>::iterator it=near_nodes.begin();it!=near_nodes.end();it++)
     {
-        RRTNode* pNearNode = it->mNodeList[mIndex+mObjectiveNum];
+        RRTNode* pNearNode = (*it);
         if (true == mpParent->isObstacleFree(pNearNode->mPos, pNode_new->mPos))
         {
             double p_cost_temp[mObjectiveNum];
@@ -461,28 +464,29 @@ void SubproblemTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, st
         }
     }
 
-    addEdge(pMinNode, pNode_new);
-    pNode_new->mFitness = min_new_node_fitness;
-    for(int k=0;k<mObjectiveNum;k++)
+    bool added = addEdge(pMinNode, pNode_new);
+    if(added)
     {
-       pNode_new->mpCost[k] = p_min_new_node_cost[k];
+        pNode_new->mFitness = min_new_node_fitness;
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+           pNode_new->mpCost[k] = p_min_new_node_cost[k];
+        }
     }
 }
 
-void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes)
+void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes)
 {
-    for(std::list<KDNode2D>::iterator it=near_nodes.begin(); it!=near_nodes.end(); it++)
+    for(std::list<RRTNode*>::iterator it=near_nodes.begin(); it!=near_nodes.end(); it++)
     {
-        KDNode2D near_node = (KDNode2D)(*it);
-
-        RRTNode * pNearNode = near_node.mNodeList[mIndex+mObjectiveNum];
+        RRTNode * pNearNode = (*it);
 
         if(pNearNode->mPos == pNode_new->mPos ||  pNearNode->mPos == mpRoot->mPos || pNode_new->mpParent->mPos == pNearNode->mPos)
         {
             continue;
         }
 
-        if(true==mpParent->isObstacleFree(pNode_new->mPos, near_node))
+        if(true==mpParent->isObstacleFree(pNode_new->mPos, pNearNode->mPos))
         {
             double temp_cost_from_new_node[mObjectiveNum];
             double temp_delta_cost_from_new_node[mObjectiveNum];
@@ -496,17 +500,23 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> nea
 
             if(temp_fitness_from_new_node < pNearNode->mFitness)
             {
-                double delta_cost[mObjectiveNum];
-                for(int k=0;k<mObjectiveNum;k++)
-                {
-                    delta_cost[k] = pNearNode->mpCost[k] - temp_cost_from_new_node[k];
-                    pNearNode->mpCost[k] = temp_cost_from_new_node[k];
-                    pNearNode->mFitness = temp_fitness_from_new_node;
-                }
-                updateCostToChildren(pNearNode, delta_cost);
                 RRTNode * pParentNode = pNearNode->mpParent;
-                removeEdge(pParentNode, pNearNode);
-                addEdge(pNode_new, pNearNode);
+                bool removed = removeEdge(pParentNode, pNearNode);
+                if(removed)
+                {
+                    bool added = addEdge(pNode_new, pNearNode);
+                    if(added)
+                    {
+                        double delta_cost[mObjectiveNum];
+                        for(int k=0;k<mObjectiveNum;k++)
+                        {
+                            delta_cost[k] = pNearNode->mpCost[k] - temp_cost_from_new_node[k];
+                            pNearNode->mpCost[k] = temp_cost_from_new_node[k];
+                            pNearNode->mFitness = temp_fitness_from_new_node;
+                        }
+                        updateCostToChildren(pNearNode, delta_cost);
+                    }
+                }
             }
         }
 
