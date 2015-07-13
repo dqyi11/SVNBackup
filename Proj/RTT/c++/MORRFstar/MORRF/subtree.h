@@ -23,6 +23,20 @@ public:
     std::list<RRTNode*> mChildNodes;
 };
 
+class Path
+{
+public:
+    Path(POS2D start, POS2D goal, int objectiveNum);
+    ~Path();
+
+    int mObjectiveNum;
+    double * mpCost;
+    double mFitness;
+    POS2D mStart;
+    POS2D mGoal;
+    std::list<POS2D> mWaypoints;
+};
+
 class RRTree
 {
 public:
@@ -39,11 +53,14 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes) = 0;
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes) = 0;
+    virtual bool getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness) = 0;
 
     bool isStructureCorrect();
     bool areAllNodesTractable();
     bool areAllNodesFitnessPositive();
     RRTNode* findAncestor(RRTNode *pNode);
+
+    Path findPath();
 
 
     TREE_TYPE mType;
@@ -68,6 +85,7 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
+    virtual bool getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness);
 protected:
     void updateFitnessToChildren(RRTNode* pNode, double delta_fitness);
 };
@@ -80,6 +98,7 @@ public:
 
     virtual void attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std::list<KDNode2D> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near_nodes);
+    virtual bool getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness);
 protected:
     void updateCostToChildren(RRTNode* pNode, double* pDelta_cost);
 
@@ -99,6 +118,16 @@ inline RRTNode* getAncestor(RRTNode * pNode)
     {
         return getAncestor(pNode->mpParent);
     }
+}
+
+inline void getParentNodeList(RRTNode * pNode, std::list<RRTNode*>& mPath)
+{
+    if(pNode==NULL)
+    {
+        return;
+    }
+    getParentNodeList(pNode->mpParent, mPath);
+    return;
 }
 
 #endif // SUBTREE_H

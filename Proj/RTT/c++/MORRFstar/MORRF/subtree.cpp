@@ -20,6 +20,24 @@ bool RRTNode::operator==(const RRTNode &other)
     return mPos==other.mPos;
 }
 
+Path::Path(POS2D start, POS2D goal, int objectiveNum)
+{
+    mStart = start;
+    mGoal = goal;
+    mObjectiveNum = objectiveNum;
+    mpCost = new double[mObjectiveNum];
+    mFitness = 0.0;
+}
+
+Path::~Path()
+{
+    if(mpCost)
+    {
+        delete mpCost;
+        mpCost = NULL;
+    }
+}
+
 RRTree::RRTree(MORRF* parent, int objective_num, double * p_weight)
 {
     mpParent = parent;
@@ -201,6 +219,38 @@ RRTNode* RRTree::findAncestor(RRTNode *pNode)
     return getAncestor(pNode);
 }
 
+Path RRTree::findPath()
+{
+    Path newPath(mStart, mGoal, mObjectiveNum);
+
+    std::list<RRTNode*> node_list;
+
+    RRTNode * pFirstNode = NULL;
+    double deltaCost[mObjectiveNum];
+    double deltaFitness = 0.0;
+    getClosetToGoal(pFirstNode, deltaCost, deltaFitness);
+
+    if(pFirstNode)
+    {
+        getParentNodeList(pFirstNode, node_list);
+        for(std::list<RRTNode*>::reverse_iterator rit=node_list.rbegin();
+            rit!=node_list.rend(); ++rit)
+        {
+            RRTNode* pNode = (*rit);
+            newPath.mWaypoints.push_back(pNode->mPos);
+        }
+        newPath.mWaypoints.push_back(mStart);
+
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            newPath.mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
+        }
+        newPath.mFitness = pFirstNode->mFitness + deltaFitness;
+    }
+
+    return newPath;
+}
+
 bool RRTree::areAllNodesTractable()
 {
     for(std::list<RRTNode*>::iterator it=mNodes.begin();it!=mNodes.end();it++)
@@ -313,6 +363,12 @@ void ReferenceTree::updateFitnessToChildren(RRTNode* pNode, double delta_fitness
         }
     }
 }
+
+bool ReferenceTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
+{
+    return false;
+}
+
 
 SubproblemTree::SubproblemTree(MORRF* parent, int objective_num, double * p_weight, int index)
     : RRTree(parent, objective_num, p_weight)
@@ -433,5 +489,10 @@ void SubproblemTree::updateCostToChildren(RRTNode* pNode, double* pDelta_cost)
             pChildNode->mFitness = mpParent->calcFitness(pChildNode->mpCost, mpWeight, pChildNode->mPos);
         }
     }
+}
+
+bool SubproblemTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
+{
+    return false;
 }
 
