@@ -1,5 +1,6 @@
 #include "subtree.h"
 #include "morrf.h"
+#include <limits>
 
 RRTNode::RRTNode(POS2D pos, int objective_num)
 {
@@ -317,6 +318,7 @@ void ReferenceTree::attachNewNode(RRTNode* pNode_new, KDNode2D node_nearest, std
 
     addEdge(pMinNode, pNode_new);
     pNode_new->mFitness = min_new_node_fitness;
+    pNode_new->mpCost[mIndex] = pNode_new->mFitness;
 
 }
 
@@ -341,6 +343,7 @@ void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<KDNode2D> near
                 double delta_fitness = pNearNode->mFitness - temp_fitness_from_new_node;
 
                 pNearNode->mFitness = temp_fitness_from_new_node;
+                pNearNode->mpCost[mIndex] = pNearNode->mFitness;
                 updateFitnessToChildren(pNearNode, delta_fitness);
 
                 RRTNode * pParentNode = pNearNode->mpParent;
@@ -360,12 +363,52 @@ void ReferenceTree::updateFitnessToChildren(RRTNode* pNode, double delta_fitness
         if(pChildNode)
         {
             pChildNode->mFitness -= delta_fitness;
+            pChildNode->mpCost[mIndex] = pChildNode->mFitness;
         }
     }
 }
 
 bool ReferenceTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
 {
+    if(pClosestNode!=NULL)
+    {
+        return false;
+    }
+    if(mpParent)
+    {
+        std::list<KDNode2D> near_nodes = mpParent->findNear(mGoal);
+        double min_total_fitness = std::numeric_limits<double>::max();
+        double min_delta_fitness = 0.0;
+        RRTNode * pMinPrevNode = NULL;
+        for(std::list<KDNode2D>::iterator it=near_nodes.begin();
+            it!=near_nodes.end();it++)
+        {
+            KDNode2D kd_node = (*it);
+            RRTNode* pNode = kd_node.mNodeList[mIndex];
+            double delta_fitness = mpParent->calcCost(pNode->mPos, mGoal, mIndex);
+            double new_total_fitness = pNode->mFitness + delta_fitness;
+            if (new_total_fitness < min_total_fitness)
+            {
+                pMinPrevNode = pNode;
+                min_delta_fitness = delta_fitness;
+                min_total_fitness = new_total_fitness;
+            }
+        }
+        pClosestNode = pMinPrevNode;
+        deltaFitness = min_delta_fitness;
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            if(k==mIndex)
+            {
+                deltaCost[k] = deltaFitness;
+            }
+            else
+            {
+                deltaCost[k] = 0.0;
+            }
+        }
+
+    }
     return false;
 }
 
@@ -493,6 +536,46 @@ void SubproblemTree::updateCostToChildren(RRTNode* pNode, double* pDelta_cost)
 
 bool SubproblemTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
 {
+    if(pClosestNode!=NULL)
+    {
+        return false;
+    }
+    if(mpParent)
+    {
+        std::list<KDNode2D> near_nodes = mpParent->findNear(mGoal);
+        double min_total_fitness = std::numeric_limits<double>::max();
+        double min_delta_fitness = 0.0;
+        double min_delta_cost[mObjectiveNum];
+        RRTNode * pMinPrevNode = NULL;
+        for(std::list<KDNode2D>::iterator it=near_nodes.begin();
+            it!=near_nodes.end();it++)
+        {
+            KDNode2D kd_node = (*it);
+            int index = mIndex + mObjectiveNum;
+            RRTNode* pNode = kd_node.mNodeList[index];
+            double new_delta_cost[mObjectiveNum];
+            mpParent->calcCost(pNode->mPos, mGoal, new_delta_cost);
+            double new_delta_fitness = mpParent->calcFitness(new_delta_cost, mpWeight, mGoal);
+            double new_total_fitness = pNode->mFitness + new_delta_fitness;
+            if (new_total_fitness < min_total_fitness)
+            {
+                pMinPrevNode = pNode;
+                min_delta_fitness = new_delta_fitness;
+                min_total_fitness = new_total_fitness;
+                for(int k=0;k<mObjectiveNum;k++)
+                {
+                    min_delta_cost[k] = new_delta_cost[k];
+                }
+            }
+        }
+        pClosestNode = pMinPrevNode;
+        deltaFitness = min_delta_fitness;
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            deltaCost[k] = min_delta_cost[k];
+        }
+
+    }
     return false;
 }
 

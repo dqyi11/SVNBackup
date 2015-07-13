@@ -531,7 +531,6 @@ bool MORRF::areAllReferenceNodesFitnessPositive()
 
 bool MORRF::areAllSubproblemNodesFitnessPositive()
 {
-
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
         SubproblemTree* pSubTree = (*it);
