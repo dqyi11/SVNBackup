@@ -21,6 +21,30 @@ int main(int argc, char *argv[])
     KDNode2D c8(2, 2); src.insert(c8);
     KDNode2D c9(2, 0); src.insert(c9);
 
+    KDNode2D f1(1,1);
+    KDNode2D f2(2,2);
+    KDTree2D::const_iterator it1 = src.find_exact(f1);
+    KDTree2D::const_iterator it2 = src.find_exact(f2);
+
+
+    if(it1!=src.end())
+    {
+        std::cout << "Found " << f1 << std::endl;
+    }
+    else
+    {
+        std::cout << "Not found " << f1 << std::endl;
+    }
+
+    if(it2!=src.end())
+    {
+        std::cout << "Found " << f2 << std::endl;
+    }
+    else
+    {
+        std::cout << "Not found " << f2 << std::endl;
+    }
+
     KDNode2D target(3,5);
     std::pair<KDTree2D::const_iterator,double> found = src.find_nearest(target);
     KDNode2D found_node = *found.first;

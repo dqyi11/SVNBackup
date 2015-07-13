@@ -48,7 +48,7 @@ public:
     void setX(value_type x) { d[0] = x; }
     void setY(value_type y) { d[1] = y; }
 
-    bool operator==(const POS2D &other)
+    bool operator==(const POS2D &other) const
     {
         return d[0] == other.d[0] && d[1] == other.d[1];
     }

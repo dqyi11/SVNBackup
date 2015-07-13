@@ -167,6 +167,7 @@ bool MORRF::isInObstacle(POS2D pos)
     return false;
 }
 
+
 bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
 {
     if (pos_a == pos_b)
@@ -238,6 +239,10 @@ void MORRF::extend()
 
         POS2D new_pos = steer(rndPos, nearest_node);
 
+        if(true == contains(new_pos))
+        {
+            continue;
+        }
         if( true==isInObstacle(new_pos) )
         {
             continue;
@@ -310,6 +315,25 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
     mpKDTree->find_within_range(node, mBallRadius, std::back_inserter(near_list));
 
     return near_list;
+}
+
+
+bool MORRF::contains(POS2D pos)
+{
+    if(mpKDTree)
+    {
+        KDNode2D node(pos[0], pos[1]);
+        KDTree2D::const_iterator it = mpKDTree->find(node);
+        if(it!=mpKDTree->end())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    return false;
 }
 
 bool MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, double * p_cost)
@@ -424,7 +448,7 @@ void MORRF::dumpMapInfo( std::string filename )
     mapInfoFile.close();
 }
 
-bool MORRF::isStructureCorrect()
+bool MORRF::areReferenceStructuresCorrect()
 {
     for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
     {
@@ -437,7 +461,11 @@ bool MORRF::isStructureCorrect()
             }
         }
     }
+    return true;
+}
 
+bool MORRF::areSubproblemStructuresCorrect()
+{
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
         SubproblemTree* pSubTree = (*it);
@@ -452,7 +480,7 @@ bool MORRF::isStructureCorrect()
     return true;
 }
 
-bool MORRF::areAllNodesTractable()
+bool MORRF::areAllReferenceNodesTractable()
 {
     for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
     {
@@ -465,6 +493,11 @@ bool MORRF::areAllNodesTractable()
             }
         }
     }
+    return true;
+}
+
+bool MORRF::areAllSubproblemNodesTractable()
+{
 
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
@@ -480,7 +513,7 @@ bool MORRF::areAllNodesTractable()
     return true;
 }
 
-bool MORRF::areAllNodesFitnessPositive()
+bool MORRF::areAllReferenceNodesFitnessPositive()
 {
     for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
     {
@@ -493,6 +526,11 @@ bool MORRF::areAllNodesFitnessPositive()
             }
         }
     }
+    return true;
+}
+
+bool MORRF::areAllSubproblemNodesFitnessPositive()
+{
 
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {

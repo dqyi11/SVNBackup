@@ -28,6 +28,7 @@ public:
 
     bool isObstacleFree(POS2D pos_a, POS2D pos_b);
     bool isInObstacle(POS2D pos);
+    bool contains(POS2D pos);
 
     bool calcCost(POS2D& pos_a, POS2D& pos_b, double * p_cost);
     double calcCost(POS2D& pos_a, POS2D& pos_b, int k);
@@ -49,9 +50,12 @@ public:
 
     void dumpMapInfo( std::string filename );
 
-    bool isStructureCorrect();
-    bool areAllNodesTractable();
-    bool areAllNodesFitnessPositive();
+    bool areReferenceStructuresCorrect();
+    bool areSubproblemStructuresCorrect();
+    bool areAllReferenceNodesTractable();
+    bool areAllSubproblemNodesTractable();
+    bool areAllReferenceNodesFitnessPositive();
+    bool areAllSubproblemNodesFitnessPositive();
     bool isNodeNumberIdentical();
     double getBallRadius() { return mBallRadius; };
 

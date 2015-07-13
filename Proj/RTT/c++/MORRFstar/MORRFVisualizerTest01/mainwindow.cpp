@@ -129,7 +129,6 @@ void MainWindow::onLoadMap()
     qDebug(mpViz->mMOPPInfo.mMapFilename.toStdString().c_str());
 
     openMap(mpViz->mMOPPInfo.mMapFullpath);
-
 }
 
 
@@ -217,29 +216,53 @@ void MainWindow::onRun()
     while(mpMORRF->getCurrentIteration() <= mpViz->mMOPPInfo.mMaxIterationNum)
     {
         QString msg = "CurrentIteration " + QString::number(mpMORRF->getCurrentIteration()) + " ";
-        if(true == mpMORRF->isStructureCorrect())
+        if(true == mpMORRF->areReferenceStructuresCorrect())
         {
-            msg += "T ";
+            msg += "R(T) ";
         }
         else
         {
-            msg += "F ";
+            msg += "R(F) ";
         }
-        if(true == mpMORRF->areAllNodesTractable())
+        if(true == mpMORRF->areSubproblemStructuresCorrect())
         {
-            msg += "T ";
-        }
-        else
-        {
-            msg += "F ";
-        }
-        if(true == mpMORRF->areAllNodesFitnessPositive())
-        {
-            msg += "T ";
+            msg += "S(T) ";
         }
         else
         {
-            msg += "F ";
+            msg += "S(F) ";
+        }
+        if(true == mpMORRF->areAllReferenceNodesTractable())
+        {
+            msg += "R(T) ";
+        }
+        else
+        {
+            msg += "R(F) ";
+        }
+        if(true == mpMORRF->areAllSubproblemNodesTractable())
+        {
+            msg += "S(T) ";
+        }
+        else
+        {
+            msg += "S(F) ";
+        }
+        if(true == mpMORRF->areAllReferenceNodesFitnessPositive())
+        {
+            msg += "R(T) ";
+        }
+        else
+        {
+            msg += "R(F) ";
+        }
+        if(true == mpMORRF->areAllSubproblemNodesFitnessPositive())
+        {
+            msg += "S(T) ";
+        }
+        else
+        {
+            msg += "S(F) ";
         }
         if(true == mpMORRF->isNodeNumberIdentical())
         {
