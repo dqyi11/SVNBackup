@@ -575,3 +575,30 @@ bool MORRF::isNodeNumberIdentical()
     }
     return true;
 }
+
+std::vector<Path*> MORRF::getPaths()
+{
+    std::vector<Path*> paths;
+
+    for(std::vector<ReferenceTree*>::iterator it=mReferences.begin();it!=mReferences.end();it++)
+    {
+        ReferenceTree* pRefTree = (*it);
+        if(pRefTree)
+        {
+            Path* pRefPath = pRefTree->findPath();
+            paths.push_back(pRefPath);
+        }
+    }
+
+    for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
+    {
+        SubproblemTree* pSubTree = (*it);
+        if(pSubTree)
+        {
+            Path* pSubPath = pSubTree->findPath();
+            paths.push_back(pSubPath);
+        }
+    }
+
+    return paths;
+}

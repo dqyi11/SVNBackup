@@ -26,6 +26,8 @@ public:
     void read(const QJsonObject &json);
     void write(QJsonObject &json) const;
 
+    void loadPaths(std::vector<Path*> paths);
+
     static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
     {
         double dist = 0.0;
@@ -121,6 +123,8 @@ public:
     int mSubproblemNum;
     int mMaxIterationNum;
     double mSegmentLength;
+
+    std::vector<Path*> mFoundPaths;
 };
 
 #endif // MULTIOBJPATHPLANNINGINFO_H

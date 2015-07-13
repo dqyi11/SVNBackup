@@ -220,9 +220,9 @@ RRTNode* RRTree::findAncestor(RRTNode *pNode)
     return getAncestor(pNode);
 }
 
-Path RRTree::findPath()
+Path* RRTree::findPath()
 {
-    Path newPath(mStart, mGoal, mObjectiveNum);
+    Path* pNewPath = new Path(mStart, mGoal, mObjectiveNum);
 
     std::list<RRTNode*> node_list;
 
@@ -238,18 +238,18 @@ Path RRTree::findPath()
             rit!=node_list.rend(); ++rit)
         {
             RRTNode* pNode = (*rit);
-            newPath.mWaypoints.push_back(pNode->mPos);
+            pNewPath->mWaypoints.push_back(pNode->mPos);
         }
-        newPath.mWaypoints.push_back(mStart);
+        pNewPath->mWaypoints.push_back(mStart);
 
         for(int k=0;k<mObjectiveNum;k++)
         {
-            newPath.mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
+            pNewPath->mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
         }
-        newPath.mFitness = pFirstNode->mFitness + deltaFitness;
+        pNewPath->mFitness = pFirstNode->mFitness + deltaFitness;
     }
 
-    return newPath;
+    return pNewPath;
 }
 
 bool RRTree::areAllNodesTractable()

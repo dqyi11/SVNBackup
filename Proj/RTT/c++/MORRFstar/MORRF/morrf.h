@@ -46,6 +46,8 @@ public:
     ReferenceTree* getReferenceTree(int k);
     SubproblemTree* getSubproblemTree(int m);
 
+    std::vector<Path*> getPaths();
+
     int** getMapInfo() { return mpMapInfo; };
 
     void dumpMapInfo( std::string filename );

@@ -191,3 +191,13 @@ bool MultiObjPathPlanningInfo::loadFromFile(QString filename)
     read(loadDoc.object());
     return true;
 }
+
+void MultiObjPathPlanningInfo::loadPaths(std::vector<Path*> paths)
+{
+    mFoundPaths.clear();
+    for(std::vector<Path*>::iterator it=paths.begin(); it!=paths.end(); it++)
+    {
+        Path* p = *it;
+        mFoundPaths.push_back(p);
+    }
+}

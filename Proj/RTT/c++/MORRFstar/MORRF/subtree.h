@@ -34,7 +34,7 @@ public:
     double mFitness;
     POS2D mStart;
     POS2D mGoal;
-    std::list<POS2D> mWaypoints;
+    std::vector<POS2D> mWaypoints;
 };
 
 class RRTree
@@ -60,7 +60,7 @@ public:
     bool areAllNodesFitnessPositive();
     RRTNode* findAncestor(RRTNode *pNode);
 
-    Path findPath();
+    Path* findPath();
 
 
     TREE_TYPE mType;

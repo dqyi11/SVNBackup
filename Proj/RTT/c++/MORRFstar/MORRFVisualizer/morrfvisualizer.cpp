@@ -82,6 +82,31 @@ void MORRFVisualizer::paintEvent(QPaintEvent * e)
                 }
             }
         }
+
+        if(mCurrentTreeIdx < mMOPPInfo.mFoundPaths.size())
+        {
+            Path * p = mMOPPInfo.mFoundPaths[mCurrentTreeIdx];
+            QPainter painter(this);
+            QPen paintpen(QColor(255,140,0));
+            paintpen.setWidth(1);
+            painter.setPen(paintpen);
+
+            int point_num = p->mWaypoints.size();
+
+            if(point_num > 0)
+            {
+                painter.drawLine(mMOPPInfo.mStart, QPoint(p->mWaypoints[0][0], p->mWaypoints[0][1]));
+                for(int i=0;i<point_num-1;i++)
+                {
+                    painter.drawLine(QPoint(p->mWaypoints[i][0], p->mWaypoints[i][1]), QPoint(p->mWaypoints[i+1][0], p->mWaypoints[i+1][1]));
+                }
+                painter.drawLine(QPoint(p->mWaypoints[0][0], p->mWaypoints[0][1]), mMOPPInfo.mGoal);
+            }
+            else
+            {
+                painter.drawLine(mMOPPInfo.mStart, mMOPPInfo.mGoal);
+            }
+        }
     }
 
     if(mMOPPInfo.mStart.x() >= 0 && mMOPPInfo.mStart.y() >= 0)
