@@ -85,4 +85,20 @@ protected:
 
 };
 
+inline RRTNode* getAncestor(RRTNode * pNode)
+{
+    if(NULL == pNode)
+    {
+        return NULL;
+    }
+    if(NULL == pNode->mpParent)
+    {
+        return pNode;
+    }
+    else
+    {
+        return getAncestor(pNode->mpParent);
+    }
+}
+
 #endif // SUBTREE_H

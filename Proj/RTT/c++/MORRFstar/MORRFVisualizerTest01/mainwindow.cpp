@@ -255,6 +255,7 @@ void MainWindow::onRun()
             int num = list.size();
             msg += QString::number(num) + " ";
         }
+        msg += QString::number(mpMORRF->getBallRadius());
         qDebug(msg.toStdString().c_str());
 
         mpMORRF->extend();

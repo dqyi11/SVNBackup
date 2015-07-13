@@ -198,18 +198,7 @@ bool RRTree::isStructureCorrect()
 
 RRTNode* RRTree::findAncestor(RRTNode *pNode)
 {
-    if(NULL==pNode)
-    {
-        return NULL;
-    }
-    if(NULL==pNode->mpParent)
-    {
-        return pNode;
-    }
-    else
-    {
-        return findAncestor(pNode->mpParent);
-    }
+    return getAncestor(pNode);
 }
 
 bool RRTree::areAllNodesTractable()
@@ -219,7 +208,7 @@ bool RRTree::areAllNodesTractable()
         RRTNode * pNode = (*it);
         if(pNode)
         {
-            if(mpRoot!=findAncestor(pNode))
+            if(mpRoot != findAncestor(pNode))
             {
                 return false;
             }

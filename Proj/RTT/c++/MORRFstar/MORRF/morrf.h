@@ -53,6 +53,7 @@ public:
     bool areAllNodesTractable();
     bool areAllNodesFitnessPositive();
     bool isNodeNumberIdentical();
+    double getBallRadius() { return mBallRadius; };
 
 protected:
     void initWeights();
@@ -79,6 +80,7 @@ private:
     std::vector<ReferenceTree*> mReferences;
 
     double mRange;
+    double mBallRadius;
     double mSegmentLength;
     int mObsCheckResolution;
 

@@ -16,7 +16,8 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
 
     mpKDTree = new KDTree2D(std::ptr_fun(tac));
 
-    mRange = 200.0;
+    mRange = (mSamplingWidth < mSamplingHeight) ? mSamplingWidth:mSamplingHeight;
+    mBallRadius = mRange;
     mObsCheckResolution = 1;
     mCurrentIteration = 0;
     mSegmentLength = segmentLength;
@@ -279,11 +280,11 @@ void MORRF::extend()
             for(int m=0;m<mSubproblemNum;m++)
             {
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
-                mSubproblems[m]->attachNewNode(new_node.mNodeList[m+mObjectiveNum], nearest_node, near_nodes);
-                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[m+mObjectiveNum], near_nodes);
+                int index = m+mObjectiveNum;
+                mSubproblems[m]->attachNewNode(new_node.mNodeList[index], nearest_node, near_nodes);
+                mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
             }
         }
-
         mCurrentIteration++;
     }
 }
@@ -302,7 +303,11 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
     std::list<KDNode2D> near_list;
     KDNode2D node(pos);
 
-    mpKDTree->find_within_range(node, mRange, std::back_inserter(near_list));
+    int numVertices = mpKDTree->size();
+    int numDimensions = 2;
+    mBallRadius = mRange * std::pow( std::log((double)(numVertices + 1.0))/((double)(numVertices + 1.0)), 1.0/((double)numDimensions) );
+
+    mpKDTree->find_within_range(node, mBallRadius, std::back_inserter(near_list));
 
     return near_list;
 }
