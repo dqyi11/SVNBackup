@@ -229,9 +229,9 @@ Path* RRTree::findPath()
     RRTNode * pFirstNode = NULL;
     double deltaCost[mObjectiveNum];
     double deltaFitness = 0.0;
-    getClosetToGoal(pFirstNode, deltaCost, deltaFitness);
+    pFirstNode = getClosetToGoal(deltaCost, deltaFitness);
 
-    if(pFirstNode)
+    if(pFirstNode!=NULL)
     {
         getParentNodeList(pFirstNode, node_list);
         for(std::list<RRTNode*>::reverse_iterator rit=node_list.rbegin();
@@ -247,6 +247,12 @@ Path* RRTree::findPath()
             pNewPath->mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
         }
         pNewPath->mFitness = pFirstNode->mFitness + deltaFitness;
+    }
+
+    if(pFirstNode)
+    {
+        delete pFirstNode;
+        pFirstNode = NULL;
     }
 
     return pNewPath;
@@ -368,12 +374,9 @@ void ReferenceTree::updateFitnessToChildren(RRTNode* pNode, double delta_fitness
     }
 }
 
-bool ReferenceTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
+RRTNode * ReferenceTree::getClosetToGoal(double * deltaCost, double& deltaFitness)
 {
-    if(pClosestNode!=NULL)
-    {
-        return false;
-    }
+    RRTNode* pClosestNode = NULL;
     if(mpParent)
     {
         std::list<KDNode2D> near_nodes = mpParent->findNear(mGoal);
@@ -409,7 +412,7 @@ bool ReferenceTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, 
         }
 
     }
-    return false;
+    return pClosestNode;
 }
 
 
@@ -534,12 +537,9 @@ void SubproblemTree::updateCostToChildren(RRTNode* pNode, double* pDelta_cost)
     }
 }
 
-bool SubproblemTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost, double& deltaFitness)
+RRTNode * SubproblemTree::getClosetToGoal(double * deltaCost, double& deltaFitness)
 {
-    if(pClosestNode!=NULL)
-    {
-        return false;
-    }
+    RRTNode * pClosestNode = NULL;
     if(mpParent)
     {
         std::list<KDNode2D> near_nodes = mpParent->findNear(mGoal);
@@ -576,6 +576,6 @@ bool SubproblemTree::getClosetToGoal(RRTNode * pClosestNode, double * deltaCost,
         }
 
     }
-    return false;
+    return pClosestNode;
 }
 
