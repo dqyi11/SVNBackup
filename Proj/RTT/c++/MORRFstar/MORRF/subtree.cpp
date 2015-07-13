@@ -240,19 +240,13 @@ Path* RRTree::findPath()
             RRTNode* pNode = (*rit);
             pNewPath->mWaypoints.push_back(pNode->mPos);
         }
-        pNewPath->mWaypoints.push_back(mStart);
+        pNewPath->mWaypoints.push_back(mGoal);
 
         for(int k=0;k<mObjectiveNum;k++)
         {
             pNewPath->mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
         }
         pNewPath->mFitness = pFirstNode->mFitness + deltaFitness;
-    }
-
-    if(pFirstNode)
-    {
-        delete pFirstNode;
-        pFirstNode = NULL;
     }
 
     return pNewPath;

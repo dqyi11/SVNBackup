@@ -289,7 +289,7 @@ void MainWindow::onRun()
 
     std::vector<Path*> paths = mpMORRF->getPaths();
     mpViz->mMOPPInfo.loadPaths(paths);
-
+    repaint();
 }
 
 void MainWindow::onAddStart()

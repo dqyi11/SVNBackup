@@ -126,6 +126,7 @@ inline void getParentNodeList(RRTNode * pNode, std::list<RRTNode*>& mPath)
     {
         return;
     }
+    mPath.push_back(pNode);
     getParentNodeList(pNode->mpParent, mPath);
     return;
 }
