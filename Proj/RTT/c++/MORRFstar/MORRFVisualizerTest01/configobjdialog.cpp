@@ -55,6 +55,7 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     mpComboType->addItem(BOUNDARY_INTERSECTION_STR);
     typeLayout->addWidget(mpLabelType);
     typeLayout->addWidget(mpComboType);
+    mpComboType->setCurrentIndex((int)mpParentWindow->mpViz->mMOPPInfo.mMethodType);
 
 
     mpListWidget = new QListWidget();
@@ -157,18 +158,8 @@ void ConfigObjDialog::updateDisplay()
                 }
             }
 
-            if(MORRF::WEIGHTED_SUM == mpParentWindow->mpViz->mMOPPInfo.mMethodType)
-            {
-                mpComboType->setCurrentIndex(0);
-            }
-            else if(MORRF::WEIGHTED_SUM == MORRF::TCHEBYCHEFF)
-            {
-                mpComboType->setCurrentIndex(1);
-            }
-            else if(MORRF::WEIGHTED_SUM == MORRF::BOUNDARY_INTERSACTION)
-            {
-                mpComboType->setCurrentIndex(2);
-            }
+
+            mpComboType->setCurrentIndex((int)mpParentWindow->mpViz->mMOPPInfo.mMethodType);
         }
     }
 
