@@ -35,6 +35,8 @@ MORRF::~MORRF()
 {
     deinitWeights();
 
+
+
     if(mpKDTree)
     {
         delete mpKDTree;
@@ -289,7 +291,7 @@ void MORRF::extend()
                 }
 
                 mReferences[k]->attachNewNode(new_node.mNodeList[index], pNearestRefNode, nearRefNodes);
-                //mReferences[k]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
+                // mReferences[k]->rewireNearNodes(new_node.mNodeList[index], nearRefNodes);
             }
 
             // attach new nodes to subproblem trees
@@ -310,7 +312,7 @@ void MORRF::extend()
                 }
 
                 mSubproblems[m]->attachNewNode(new_node.mNodeList[index], pNearestSubNode, nearSubNodes);
-                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], near_nodes);
+                // mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], nearSubNodes);
             }
         }
         mCurrentIteration++;

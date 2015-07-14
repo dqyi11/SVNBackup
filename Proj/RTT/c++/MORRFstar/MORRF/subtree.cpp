@@ -353,6 +353,10 @@ void ReferenceTree::rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near
                         updateFitnessToChildren(pNearNode, delta_fitness);
                     }
                 }
+                else
+                {
+                    std::cout << " Failed in removing " << std::endl;
+                }
             }
         }
     }

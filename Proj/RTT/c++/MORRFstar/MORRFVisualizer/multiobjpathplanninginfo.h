@@ -124,6 +124,8 @@ public:
     int mMaxIterationNum;
     double mSegmentLength;
 
+    MORRF::MORRF_TYPE mMethodType;
+
     std::vector<Path*> mFoundPaths;
 };
 

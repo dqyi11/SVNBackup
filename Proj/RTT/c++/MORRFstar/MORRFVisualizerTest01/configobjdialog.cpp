@@ -5,6 +5,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
+#define WEIGHTED_SUM_STR           "Weighted-sum"
+#define TCHEBYCHEFF_STR           "Tchebycheff"
+#define BOUNDARY_INTERSECTION_STR "Boundary-intersection"
+
 ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
 {
     mpParentWindow = parent;
@@ -43,6 +47,16 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
     minDistLayout->addWidget(mpLabelSegmentLength);
     minDistLayout->addWidget(mpLineEditSegmentLength);
 
+    QHBoxLayout * typeLayout = new QHBoxLayout();
+    mpLabelType = new QLabel("Type: ");
+    mpComboType = new QComboBox();
+    mpComboType->addItem(WEIGHTED_SUM_STR);
+    mpComboType->addItem(TCHEBYCHEFF_STR);
+    mpComboType->addItem(BOUNDARY_INTERSECTION_STR);
+    typeLayout->addWidget(mpLabelType);
+    typeLayout->addWidget(mpComboType);
+
+
     mpListWidget = new QListWidget();
     mpListWidget->setViewMode(QListView::IconMode);
     for(std::vector<QString>::iterator it=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.begin();it!=mpParentWindow->mpViz->mMOPPInfo.mObjectiveFiles.end();it++)
@@ -70,6 +84,7 @@ ConfigObjDialog::ConfigObjDialog(MainWindow * parent)
 
     QVBoxLayout * mainLayout = new QVBoxLayout();
     mainLayout->addLayout(minDistLayout);
+    mainLayout->addLayout(typeLayout);
     mainLayout->addWidget(mpListWidget);
     mainLayout->addLayout(buttonsLayout);
 
@@ -141,6 +156,19 @@ void ConfigObjDialog::updateDisplay()
                     mpListWidget->addItem(objFilename);
                 }
             }
+
+            if(MORRF::WEIGHTED_SUM == mpParentWindow->mpViz->mMOPPInfo.mMethodType)
+            {
+                mpComboType->setCurrentIndex(0);
+            }
+            else if(MORRF::WEIGHTED_SUM == MORRF::TCHEBYCHEFF)
+            {
+                mpComboType->setCurrentIndex(1);
+            }
+            else if(MORRF::WEIGHTED_SUM == MORRF::BOUNDARY_INTERSACTION)
+            {
+                mpComboType->setCurrentIndex(2);
+            }
         }
     }
 
@@ -173,6 +201,9 @@ void ConfigObjDialog::updateConfiguration()
     mpParentWindow->mpViz->mMOPPInfo.mMaxIterationNum = mpLineEditIterationNum->text().toInt();
     mpParentWindow->mpViz->mMOPPInfo.mSubproblemNum = mpLineEditSubProb->text().toInt();
     mpParentWindow->mpViz->mMOPPInfo.mSegmentLength = mpLineEditSegmentLength->text().toDouble();
+
+    int type = mpComboType->currentIndex();
+    mpParentWindow->mpViz->mMOPPInfo.mMethodType = (MORRF::MORRF_TYPE) type;
 
 }
 

@@ -24,6 +24,8 @@ MultiObjPathPlanningInfo::MultiObjPathPlanningInfo()
 
     mMapWidth = 0;
     mMapHeight = 0;
+
+    mMethodType = MORRF::WEIGHTED_SUM;
 }
 
 bool MultiObjPathPlanningInfo::getObstacleInfo(int** obstacleInfo)
@@ -110,6 +112,8 @@ void MultiObjPathPlanningInfo::read(const QJsonObject &json)
     mMapWidth = json["mapWidth"].toInt();
     mMapHeight = json["mapHeight"].toInt();
 
+    mMethodType = (MORRF::MORRF_TYPE)json["methodType"].toInt();
+
     mObjectiveNum = json["objectiveNum"].toInt();
     mStart = QPoint(json["startX"].toInt(), json["startY"].toInt());
     mGoal = QPoint(json["goalX"].toInt(), json["goalY"].toInt());
@@ -135,6 +139,7 @@ void MultiObjPathPlanningInfo::write(QJsonObject &json) const
     json["mapFullpath"] = mMapFullpath;
     json["mapWidth"] = mMapWidth;
     json["mapHeight"] = mMapHeight;
+    json["methodType"] = (int)mMethodType;
 
     json["objectiveNum"] = mObjectiveNum;
     json["startX"] = mStart.x();

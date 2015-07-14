@@ -7,6 +7,7 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
+#include <QComboBox>
 
 class MainWindow;
 
@@ -34,6 +35,9 @@ private:
     QLineEdit * mpLineEditIterationNum;
     QLabel    * mpLabelSegmentLength;
     QLineEdit * mpLineEditSegmentLength;
+
+    QLabel    * mpLabelType;
+    QComboBox * mpComboType;
 
     MainWindow * mpParentWindow;
 
