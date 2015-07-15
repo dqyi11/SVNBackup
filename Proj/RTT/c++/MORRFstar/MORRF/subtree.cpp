@@ -53,7 +53,6 @@ RRTree::RRTree(MORRF* parent, int objective_num, double * p_weight)
             mpWeight[k] = p_weight[k];
         }
     }
-
     mpRoot = NULL;
     mNodes.clear();
 }
@@ -93,7 +92,7 @@ bool RRTree::removeEdge(RRTNode* pNode_p, RRTNode*  pNode_c)
     for(std::list<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
     {
         RRTNode* pCurrent = (RRTNode*)(*it);
-        if (pCurrent==pNode_c)
+        if (pCurrent==pNode_c || pCurrent->mPos==pNode_c->mPos)
         {
             pCurrent->mpParent = NULL;
             it = pNode_p->mChildNodes.erase(it);
@@ -107,24 +106,41 @@ bool RRTree::hasEdge(RRTNode* pNode_p, RRTNode* pNode_c)
 {
     if (pNode_p==NULL || pNode_c==NULL)
         return false;
+    for(std::list<RRTNode*>::iterator it=pNode_p->mChildNodes.begin();it!=pNode_p->mChildNodes.end();it++)
+    {
+        RRTNode* pCurrNode = (*it);
+        if(pCurrNode==pNode_c)
+        {
+            return true;
+        }
+    }
+    /*
     if (pNode_p == pNode_c->mpParent)
         return true;
+    */
     return false;
 }
 
 bool RRTree::addEdge(RRTNode* pNode_p, RRTNode* pNode_c)
 {
-    if (pNode_p == pNode_c)
+    if(pNode_p==NULL || pNode_c==NULL || pNode_p==pNode_c)
     {
         return false;
     }
-    if (hasEdge(pNode_p, pNode_c))
+    if (pNode_p->mPos == pNode_c->mPos)
+    {
+        return false;
+    }
+    if (true == hasEdge(pNode_p, pNode_c))
     {
         pNode_c->mpParent = pNode_p;
     }
-
-    pNode_p->mChildNodes.push_back(pNode_c);
-    pNode_c->mpParent = pNode_p;
+    else
+    {
+        pNode_p->mChildNodes.push_back(pNode_c);
+        pNode_c->mpParent = pNode_p;
+    }
+    pNode_c->mChildNodes.unique();
 
     return true;
 }

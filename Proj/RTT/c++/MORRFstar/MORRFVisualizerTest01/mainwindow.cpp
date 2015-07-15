@@ -201,6 +201,7 @@ void MainWindow::onRun()
     qDebug(msg.toStdString().c_str());
 
     mpMORRF = new MORRF(mpMap->width(), mpMap->height(), mpViz->mMOPPInfo.mObjectiveNum, mpViz->mMOPPInfo.mSubproblemNum, mpViz->mMOPPInfo.mSegmentLength, mpViz->mMOPPInfo.mMethodType);
+
     mpMORRF->addFuncs(mpViz->mMOPPInfo.mFuncs, mpViz->mMOPPInfo.mDistributions);
     POS2D start(mpViz->mMOPPInfo.mStart.x(), mpViz->mMOPPInfo.mStart.y());
     POS2D goal(mpViz->mMOPPInfo.mGoal.x(), mpViz->mMOPPInfo.mGoal.y());
@@ -208,8 +209,6 @@ void MainWindow::onRun()
     mpMORRF->init(start, goal);
     mpViz->mMOPPInfo.getObstacleInfo(mpMORRF->getMapInfo());
     mpViz->setMORRF(mpMORRF);
-
-    //qDebug() << "Check " << mpMORRF->isObstacleFree(start, goal);
 
     //mpMORRF->dumpMapInfo("map.txt");
 

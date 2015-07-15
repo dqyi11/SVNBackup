@@ -47,8 +47,12 @@ std::vector<int**> MultiObjPathPlanningInfo::getFitnessDistributions()
         for(int i=0;i<mMapWidth;i++)
         {
             fitness[i] = new int[mMapHeight];
+            for(int j=0;j<mMapHeight;j++)
+            {
+                fitness[i][j] = 0;
+            }
         }
-        getPixInfo(fitnessName, fitness);
+        bool sucess = getPixInfo(fitnessName, fitness);
         fitnessDistributions.push_back(fitness);
     }
     return fitnessDistributions;
@@ -70,7 +74,12 @@ bool MultiObjPathPlanningInfo::getPixInfo(QString filename, int ** pixInfo)
         for(int j=0;j<height;j++)
         {
             QRgb col = grayImg.pixel(i,j);
-            pixInfo[i][j] = qGray(col);
+            int gVal = qGray(col);
+            if(gVal < 0 || gVal > 255)
+            {
+                qWarning() << "gray value out of range";
+            }
+            pixInfo[i][j] = gVal;
         }
     }
     return true;

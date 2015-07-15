@@ -1,4 +1,3 @@
-
 #include "morrf.h"
 #include <cstdlib>
 #include <iostream>
@@ -34,8 +33,6 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
 MORRF::~MORRF()
 {
     deinitWeights();
-
-
 
     if(mpKDTree)
     {
@@ -176,7 +173,7 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         return true;
     int x_dist = pos_a[0] - pos_b[0];
     int y_dist = pos_a[1] - pos_b[1];
-    if (std::abs(x_dist) > std::abs(y_dist))
+    if (abs(x_dist) > abs(y_dist))
     {
         double k = (double)y_dist/ x_dist;
         int startX, endX, startY;
@@ -253,7 +250,6 @@ void MORRF::extend()
         if(true==isObstacleFree(nearest_node, new_pos))
         {
             std::list<KDNode2D> near_nodes = findNear(new_pos);
-
             KDNode2D new_node(new_pos);
 
             // create new nodes of reference trees
@@ -280,6 +276,7 @@ void MORRF::extend()
                 // std::cout << "@ " << k << std::endl;
                 int index = k;
                 RRTNode* pNearestRefNode = nearest_node.mNodeList[index];
+                RRTNode* pNewRefNode = new_node.mNodeList[index];
                 std::list<RRTNode*> nearRefNodes;
                 nearRefNodes.clear();
                 for(std::list<KDNode2D>::iterator itr = near_nodes.begin();
@@ -290,7 +287,7 @@ void MORRF::extend()
                     nearRefNodes.push_back(pRefNode);
                 }
 
-                mReferences[k]->attachNewNode(new_node.mNodeList[index], pNearestRefNode, nearRefNodes);
+                mReferences[k]->attachNewNode(pNewRefNode, pNearestRefNode, nearRefNodes);
                 // mReferences[k]->rewireNearNodes(new_node.mNodeList[index], nearRefNodes);
             }
 
@@ -301,6 +298,7 @@ void MORRF::extend()
                 // std::cout << "@ " << m+mObjectiveNum << std::endl;
                 int index = m+mObjectiveNum;
                 RRTNode* pNearestSubNode = nearest_node.mNodeList[index];
+                RRTNode* pNewSubNode = new_node.mNodeList[index];
                 std::list<RRTNode*> nearSubNodes;
                 nearSubNodes.clear();
                 for(std::list<KDNode2D>::iterator its = near_nodes.begin();
@@ -311,12 +309,12 @@ void MORRF::extend()
                     nearSubNodes.push_back(pSubNode);
                 }
 
-                mSubproblems[m]->attachNewNode(new_node.mNodeList[index], pNearestSubNode, nearSubNodes);
+                mSubproblems[m]->attachNewNode(pNewSubNode, pNearestSubNode, nearSubNodes);
                 // mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], nearSubNodes);
             }
         }
-        mCurrentIteration++;
     }
+    mCurrentIteration++;
 }
 
 KDNode2D MORRF::findNearest(POS2D pos)
@@ -400,7 +398,7 @@ double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
         {
             for(int k=0;k<mObjectiveNum;k++)
             {
-               double weighted_dist = p_weight[k] * std::abs(p_cost[k] - p_utopia[k]);
+               double weighted_dist = p_weight[k] * abs(p_cost[k] - p_utopia[k]);
                if (weighted_dist > fitness)
                {
                    fitness = weighted_dist;
@@ -460,7 +458,6 @@ void MORRF::dumpMapInfo( std::string filename )
     mapInfoFile.open(filename.c_str());
     if(mpMapInfo)
     {
-
         for(int j=0;j<mSamplingHeight;j++)
         {
             for(int i=0;i<mSamplingWidth;i++)

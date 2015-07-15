@@ -6,6 +6,8 @@
 #include <QJsonObject>
 #include <list>
 #include <vector>
+#include <qDebug>
+#include <math.h>
 
 #include "morrf.h"
 
@@ -31,16 +33,23 @@ public:
     static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
     {
         double dist = 0.0;
-        if (pos_a[0]==pos_b[0] || pos_a[1]==pos_b[1])
+        if (pos_a == pos_b)
             return dist;
-        dist = std::sqrt(std::pow(pos_a[0]-pos_b[0],2)+std::pow(pos_a[1]-pos_b[1],2));
+        double delta_x = abs(pos_a[0]-pos_b[0]);
+        double delta_y = abs(pos_a[1]-pos_b[1]);
+        dist = sqrt(delta_x*delta_x+delta_y*delta_y);
+        //dist = (delta_x*delta_x+delta_y*delta_y);
+        if(dist < 0.0)
+        {
+            qWarning() << "Dist negative " << dist ;
+        }
         return dist;
     }
 
     static double calcCost(POS2D pos_a, POS2D pos_b, int** distribution)
     {
         double cost = 0.0;
-        if (pos_a[0]==pos_b[0] || pos_a[1]==pos_b[1])
+        if (pos_a == pos_b)
             return cost;
         if(distribution==NULL)
             return cost;
@@ -50,7 +59,7 @@ public:
 
         double x_dist = pos_a[0]-pos_b[0];
         double y_dist = pos_a[1]-pos_b[1];
-        if (std::abs(x_dist) > std::abs(y_dist))
+        if (abs(x_dist) > abs(y_dist))
         {
             double startX = 0.0, endX = 0.0, startY = 0.0;
             double k = y_dist / x_dist;
@@ -71,7 +80,12 @@ public:
                 int coordY = (int)(k*(coordX-startX)+startY);
                 if (coordX >= width || coordY >= height)
                 {
-                    cost += distribution[coordX][coordY]/255.0;
+                    double fitnessVal = (double)distribution[coordX][coordY];
+                    if(fitnessVal < 0)
+                    {
+                        qWarning() << "Cost negative " << fitnessVal;
+                    }
+                    cost += fitnessVal/255.0;
                 }
             }
         }
@@ -96,10 +110,16 @@ public:
                 int coordX = (int)(k*(coordY-startY)+startX);
                 if (coordX >= width || coordY >= height)
                 {
-                    cost += distribution[coordX][coordY]/255.0;
+                    double fitnessVal = (double)distribution[coordX][coordY];
+                    if(fitnessVal < 0)
+                    {
+                        qWarning() << "Cost negative " << fitnessVal;
+                    }
+                    cost += fitnessVal/255.0;
                 }
             }
         }
+
         return cost;
     }
 
