@@ -54,31 +54,35 @@ public:
         if(distribution==NULL)
             return cost;
 
-        int width = sizeof(distribution)/sizeof(distribution[0]);
-        int height = sizeof(distribution[0])/sizeof(int);
+        //int width = sizeof(distribution)/sizeof(distribution[0]);
+        //int height = sizeof(distribution[0])/sizeof(int);
+        //int width = sizeof(distribution)/sizeof(*distribution);
+        //int height = sizeof(*distribution)/sizeof(*distribution[0]);
 
         double x_dist = pos_a[0]-pos_b[0];
         double y_dist = pos_a[1]-pos_b[1];
         if (abs(x_dist) > abs(y_dist))
         {
-            double startX = 0.0, endX = 0.0, startY = 0.0;
+            int startX = 0, endX = 0, startY = 0, endY = 0;
             double k = y_dist / x_dist;
             if (pos_a[0] < pos_b[0])
             {
-                startX = pos_a[0];
-                endX = pos_b[0];
-                startY = pos_a[1];
+                startX = (int)floor(pos_a[0]);
+                endX = (int)floor(pos_b[0]);
+                startY = (int)floor(pos_a[1]);
+                endY = (int)floor(pos_b[1]);
             }
             else
             {
-                startX = pos_b[0];
-                endX = pos_a[0];
-                startY = pos_b[1];
+                startX = (int)floor(pos_b[0]);
+                endX = (int)floor(pos_a[0]);
+                startY = (int)floor(pos_b[1]);
+                endY = (int)floor(pos_a[1]);
             }
-            for(int coordX =(int)startX; coordX <(int)endX; coordX++)
+            for(int coordX = startX; coordX < endX; coordX++)
             {
-                int coordY = (int)(k*(coordX-startX)+startY);
-                if (coordX >= width || coordY >= height)
+                int coordY = (int)floor(k*(coordX-startX)+startY);
+                //if (coordX < pos || coordY >= height)
                 {
                     double fitnessVal = (double)distribution[coordX][coordY];
                     if(fitnessVal < 0)
@@ -91,24 +95,26 @@ public:
         }
         else
         {
-            double startY = 0.0, endY = 0.0, startX = 0.0;
+            int startY = 0, endY = 0, startX = 0, endX = 0;
             double k = x_dist / y_dist;
             if (pos_a[0] < pos_b[0])
             {
-                startY = pos_a[1];
-                endY = pos_b[1];
-                startX = pos_a[0];
+                startY = (int)floor(pos_a[1]);
+                endY = (int)floor(pos_b[1]);
+                startX = (int)floor(pos_a[0]);
+                endX = (int)floor(pos_b[0]);
             }
             else
             {
-                startY = pos_b[1];
-                endY = pos_a[1];
-                startX = pos_b[0];
+                startY = (int)floor(pos_b[1]);
+                endY = (int)floor(pos_a[1]);
+                startX = (int)floor(pos_b[0]);
+                endX = (int)floor(pos_a[0]);
             }
-            for(int coordY =(int)startY; coordY <(int)endY; coordY++)
+            for(int coordY = startY; coordY < endY; coordY++)
             {
-                int coordX = (int)(k*(coordY-startY)+startX);
-                if (coordX >= width || coordY >= height)
+                int coordX = (int)floor(k*(coordY-startY)+startX);
+                //if (coordX >= width || coordY >= height)
                 {
                     double fitnessVal = (double)distribution[coordX][coordY];
                     if(fitnessVal < 0)
