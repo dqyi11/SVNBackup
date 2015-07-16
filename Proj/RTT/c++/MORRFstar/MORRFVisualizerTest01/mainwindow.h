@@ -36,6 +36,7 @@ private:
     QMenu *mpFileMenu;
     QAction *mpOpenAction;
     QAction *mpSaveAction;
+    QAction *mpExportAction;
 
     QMenu *mpEditMenu;
     QAction *mpLoadMapAction;
@@ -61,6 +62,7 @@ private slots:
     void contextMenuRequested(QPoint point);
     void onOpen();
     void onSave();
+    void onExport();
     void onLoadMap();
     void onLoadObj();
     void onRun();

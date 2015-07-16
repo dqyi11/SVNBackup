@@ -15,13 +15,14 @@ MORRF::MORRF(int width, int height, int objective_num, int subproblem_num, int s
 
     mpKDTree = new KDTree2D(std::ptr_fun(tac));
 
-    mRange = (mSamplingWidth < mSamplingHeight) ? mSamplingWidth:mSamplingHeight;
+    mRange = (mSamplingWidth > mSamplingHeight) ? mSamplingWidth:mSamplingHeight;
     mBallRadius = mRange;
     mObsCheckResolution = 1;
     mCurrentIteration = 0;
     mSegmentLength = segmentLength;
 
     mpWeights = NULL;
+    mTheta = 5;
 
     mpMapInfo = new int*[mSamplingWidth];
     for(int i=0;i<mSamplingWidth;i++)
@@ -173,7 +174,7 @@ bool MORRF::isObstacleFree(POS2D pos_a, POS2D pos_b)
         return true;
     int x_dist = pos_a[0] - pos_b[0];
     int y_dist = pos_a[1] - pos_b[1];
-    if (abs(x_dist) > abs(y_dist))
+    if (fabs(x_dist) > fabs(y_dist))
     {
         double k = (double)y_dist/ x_dist;
         int startX, endX, startY;
@@ -288,7 +289,7 @@ void MORRF::extend()
                 }
 
                 mReferences[k]->attachNewNode(pNewRefNode, pNearestRefNode, nearRefNodes);
-                // mReferences[k]->rewireNearNodes(new_node.mNodeList[index], nearRefNodes);
+                //mReferences[k]->rewireNearNodes(new_node.mNodeList[index], nearRefNodes);
             }
 
             // attach new nodes to subproblem trees
@@ -310,7 +311,7 @@ void MORRF::extend()
                 }
 
                 mSubproblems[m]->attachNewNode(pNewSubNode, pNearestSubNode, nearSubNodes);
-                // mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], nearSubNodes);
+                //mSubproblems[m]->rewireNearNodes(new_node.mNodeList[index], nearSubNodes);
             }
         }
     }
@@ -333,7 +334,7 @@ std::list<KDNode2D> MORRF::findNear(POS2D pos)
 
     int numVertices = mpKDTree->size();
     int numDimensions = 2;
-    mBallRadius = mRange * std::pow( std::log((double)(numVertices + 1.0))/((double)(numVertices + 1.0)), 1.0/((double)numDimensions) );
+    mBallRadius = mRange * pow( log((double)(numVertices + 1.0))/((double)(numVertices + 1.0)), 1.0/((double)numDimensions) );
 
     mpKDTree->find_within_range(node, mBallRadius, std::back_inserter(near_list));
 
@@ -374,7 +375,10 @@ bool MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, double * p_cost)
 
 double MORRF::calcCost(POS2D& pos_a, POS2D& pos_b, int k)
 {
-    return mFuncs[k](pos_a, pos_b, mFitnessDistributions[k]);
+    int dimension[2];
+    dimension[0] = mSamplingWidth;
+    dimension[1] = mSamplingHeight;
+    return mFuncs[k](pos_a, pos_b, mFitnessDistributions[k], dimension);
 }
 
 double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
@@ -398,7 +402,7 @@ double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
         {
             for(int k=0;k<mObjectiveNum;k++)
             {
-               double weighted_dist = p_weight[k] * abs(p_cost[k] - p_utopia[k]);
+               double weighted_dist = p_weight[k] * fabs(p_cost[k] - p_utopia[k]);
                if (weighted_dist > fitness)
                {
                    fitness = weighted_dist;
@@ -408,9 +412,26 @@ double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
     }
     else
     {
-
+        double p_utopia[mObjectiveNum];
+        if(true == getUtopiaReferenceVector(pos, p_utopia))
+        {
+            double d1 = 0.0, d2 = 0.0;
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+               double weighted_dist = p_weight[k] * (p_cost[k] - p_utopia[k]);
+               d1 += fabs(weighted_dist*weighted_dist);
+            }
+            d1 = fabs(sqrt(d1));
+            double vectorD2[mObjectiveNum];
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                vectorD2[k] = p_cost[k] - (p_utopia[k] + d1* p_weight[k]);
+                d2 += vectorD2[k]*vectorD2[k];
+            }
+            d2 = fabs(sqrt(d2));
+            fitness = d1 + mTheta * d2;
+        }
     }
-
     return fitness;
 }
 
@@ -623,4 +644,33 @@ std::vector<Path*> MORRF::getPaths()
     }
 
     return paths;
+}
+
+bool MORRF::updatePathCost(Path *p)
+{
+    if(p)
+    {
+        for(int k=0;k<mObjectiveNum;k++)
+        {
+            p->mpCost[k] = 0.0;
+        }
+        p->mFitness = 0.0;
+        for(int i=0;p->mWaypoints.size()-1;i++)
+        {
+            POS2D pos_a = p->mWaypoints[i];
+            POS2D pos_b = p->mWaypoints[i+1];
+            double deltaCost[mObjectiveNum];
+            double deltaFitness = 0.0;
+            calcCost(pos_a, pos_b, deltaCost);
+            deltaFitness = calcFitness(deltaCost, p->mpWeight, pos_b);
+
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                p->mpCost[k] += deltaCost[k];
+            }
+            p->mFitness += deltaFitness;
+        }
+        return true;
+    }
+    return false;
 }

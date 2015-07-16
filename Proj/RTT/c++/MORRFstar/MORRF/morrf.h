@@ -4,7 +4,7 @@
 #include "KDTree2D.h"
 #include "subtree.h"
 
-typedef double (*COST_FUNC_PTR)(POS2D, POS2D,int**);
+typedef double (*COST_FUNC_PTR)(POS2D, POS2D,int**, int*);
 
 
 class MORRF
@@ -61,6 +61,7 @@ public:
     bool isNodeNumberIdentical();
     double getBallRadius() { return mBallRadius; };
 
+    bool updatePathCost(Path *p);
 protected:
     void initWeights();
     void deinitWeights();
@@ -90,6 +91,7 @@ private:
     double mSegmentLength;
     int mObsCheckResolution;
 
+    double mTheta;
     int mCurrentIteration;
 };
 

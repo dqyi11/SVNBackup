@@ -27,7 +27,13 @@ Path::Path(POS2D start, POS2D goal, int objectiveNum)
     mGoal = goal;
     mObjectiveNum = objectiveNum;
     mpCost = new double[mObjectiveNum];
+    mpWeight = new double[mObjectiveNum];
     mFitness = 0.0;
+    for(int k=0;k<mObjectiveNum;k++)
+    {
+        mpCost[k] = 0.0;
+        mpWeight[k] = 0.0;
+    }
 }
 
 Path::~Path()
@@ -36,6 +42,11 @@ Path::~Path()
     {
         delete mpCost;
         mpCost = NULL;
+    }
+    if(mpWeight)
+    {
+        delete mpWeight;
+        mpWeight = NULL;
     }
 }
 
@@ -261,6 +272,7 @@ Path* RRTree::findPath()
         for(int k=0;k<mObjectiveNum;k++)
         {
             pNewPath->mpCost[k] = pFirstNode->mpCost[k] + deltaCost[k];
+            pNewPath->mpWeight[k] = mpWeight[k];
         }
         pNewPath->mFitness = pFirstNode->mFitness + deltaFitness;
     }
@@ -431,6 +443,16 @@ RRTNode * ReferenceTree::getClosetToGoal(double * deltaCost, double& deltaFitnes
 
     }
     return pClosestNode;
+}
+
+Path* ReferenceTree::findPath()
+{
+    Path* pNewPath = RRTree::findPath();
+    if(mpParent)
+    {
+        mpParent->updatePathCost(pNewPath);
+    }
+    return pNewPath;
 }
 
 

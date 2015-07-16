@@ -51,6 +51,7 @@ void MainWindow::createMenuBar()
     mpFileMenu = menuBar()->addMenu("&File");
     mpFileMenu->addAction(mpOpenAction);
     mpFileMenu->addAction(mpSaveAction);
+    mpFileMenu->addAction(mpExportAction);
 
     mpEditMenu = menuBar()->addMenu("&Edit");
     mpEditMenu->addAction(mpLoadMapAction);
@@ -69,12 +70,14 @@ void MainWindow::createActions()
 {
     mpOpenAction = new QAction("Open", this);
     mpSaveAction = new QAction("Save", this);
+    mpExportAction = new QAction("Export", this);
     mpLoadMapAction = new QAction("Load Map", this);
     mpLoadObjAction = new QAction("Load Objectives", this);
     mpRunAction = new QAction("Run", this);
 
     connect(mpOpenAction, SIGNAL(triggered()), this, SLOT(onOpen()));
     connect(mpSaveAction, SIGNAL(triggered()), this, SLOT(onSave()));
+    connect(mpExportAction, SIGNAL(triggered()), this, SLOT(onExport()));
     connect(mpLoadMapAction, SIGNAL(triggered()), this, SLOT(onLoadMap()));
     connect(mpLoadObjAction, SIGNAL(triggered()), this, SLOT(onLoadObj()));
     connect(mpRunAction, SIGNAL(triggered()), this, SLOT(onRun()));
@@ -112,6 +115,16 @@ void MainWindow::onSave()
     if(mpViz)
     {
         mpViz->mMOPPInfo.saveToFile(tempFilename);
+    }
+}
+
+void MainWindow::onExport()
+{
+    QString pathFilename = QFileDialog::getSaveFileName(this, tr("Save File"), "./", tr("Txt Files (*.txt)"));
+
+    if(mpViz)
+    {
+        mpViz->mMOPPInfo.exportPaths(pathFilename);
     }
 }
 

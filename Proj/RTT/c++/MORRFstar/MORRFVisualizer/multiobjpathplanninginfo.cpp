@@ -215,3 +215,35 @@ void MultiObjPathPlanningInfo::loadPaths(std::vector<Path*> paths)
         mFoundPaths.push_back(p);
     }
 }
+
+void MultiObjPathPlanningInfo::exportPaths(QString filename)
+{
+    QFile file(filename);
+    if( file.open(QIODevice::ReadWrite) )
+    {
+        QTextStream stream( & file );
+        // Save scores
+        for(std::vector<Path*>::iterator it=mFoundPaths.begin(); it!=mFoundPaths.end(); it++)
+        {
+            Path* p = *it;
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                stream << p->mpCost[k] << "\t";
+            }
+            stream << "\n";
+        }
+
+        stream << "\n";
+
+        // Save paths
+        for(std::vector<Path*>::iterator it=mFoundPaths.begin(); it!=mFoundPaths.end(); it++)
+        {
+            Path* p = *it;
+            for(int i=0;i<p->mWaypoints.size();i++)
+            {
+                stream << p->mWaypoints[i][0] << " " << p->mWaypoints[i][1] << "\t";
+            }
+            stream << "\n";
+        }
+    }
+}

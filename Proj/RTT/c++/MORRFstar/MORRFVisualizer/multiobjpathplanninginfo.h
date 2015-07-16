@@ -29,14 +29,15 @@ public:
     void write(QJsonObject &json) const;
 
     void loadPaths(std::vector<Path*> paths);
+    void exportPaths(QString filename);
 
-    static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution)
+    static double calcDist(POS2D pos_a, POS2D pos_b, int** distribution, int* dimension)
     {
         double dist = 0.0;
         if (pos_a == pos_b)
             return dist;
-        double delta_x = abs(pos_a[0]-pos_b[0]);
-        double delta_y = abs(pos_a[1]-pos_b[1]);
+        double delta_x = fabs(pos_a[0]-pos_b[0]);
+        double delta_y = fabs(pos_a[1]-pos_b[1]);
         dist = sqrt(delta_x*delta_x+delta_y*delta_y);
         //dist = (delta_x*delta_x+delta_y*delta_y);
         if(dist < 0.0)
@@ -46,7 +47,7 @@ public:
         return dist;
     }
 
-    static double calcCost(POS2D pos_a, POS2D pos_b, int** distribution)
+    static double calcCost(POS2D pos_a, POS2D pos_b, int** distribution, int* dimension)
     {
         double cost = 0.0;
         if (pos_a == pos_b)
@@ -54,14 +55,12 @@ public:
         if(distribution==NULL)
             return cost;
 
-        //int width = sizeof(distribution)/sizeof(distribution[0]);
-        //int height = sizeof(distribution[0])/sizeof(int);
-        //int width = sizeof(distribution)/sizeof(*distribution);
-        //int height = sizeof(*distribution)/sizeof(*distribution[0]);
+        int width = dimension[0];
+        int height = dimension[1];
 
         double x_dist = pos_a[0]-pos_b[0];
         double y_dist = pos_a[1]-pos_b[1];
-        if (abs(x_dist) > abs(y_dist))
+        if (fabs(x_dist) > fabs(y_dist))
         {
             int startX = 0, endX = 0, startY = 0, endY = 0;
             double k = y_dist / x_dist;
@@ -82,15 +81,16 @@ public:
             for(int coordX = startX; coordX < endX; coordX++)
             {
                 int coordY = (int)floor(k*(coordX-startX)+startY);
-                //if (coordX < pos || coordY >= height)
+                if (coordX < 0 || coordX >= width || coordY < 0 || coordY >= height)
                 {
-                    double fitnessVal = (double)distribution[coordX][coordY];
-                    if(fitnessVal < 0)
-                    {
-                        qWarning() << "Cost negative " << fitnessVal;
-                    }
-                    cost += fitnessVal/255.0;
+                    continue;
                 }
+                double fitnessVal = (double)distribution[coordX][coordY];
+                if(fitnessVal < 0)
+                {
+                    qWarning() << "Cost negative " << fitnessVal;
+                }
+                cost += fitnessVal/255.0;
             }
         }
         else
@@ -114,15 +114,16 @@ public:
             for(int coordY = startY; coordY < endY; coordY++)
             {
                 int coordX = (int)floor(k*(coordY-startY)+startX);
-                //if (coordX >= width || coordY >= height)
+                if (coordX < 0 || coordX >= width || coordY < 0 || coordY >= height)
                 {
-                    double fitnessVal = (double)distribution[coordX][coordY];
-                    if(fitnessVal < 0)
-                    {
-                        qWarning() << "Cost negative " << fitnessVal;
-                    }
-                    cost += fitnessVal/255.0;
+                    continue;
                 }
+                double fitnessVal = (double)distribution[coordX][coordY];
+                if(fitnessVal < 0)
+                {
+                    qWarning() << "Cost negative " << fitnessVal;
+                }
+                cost += fitnessVal/255.0;
             }
         }
 

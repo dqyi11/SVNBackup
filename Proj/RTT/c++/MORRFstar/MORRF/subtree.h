@@ -31,6 +31,7 @@ public:
 
     int mObjectiveNum;
     double * mpCost;
+    double * mpWeight;
     double mFitness;
     POS2D mStart;
     POS2D mGoal;
@@ -86,6 +87,8 @@ public:
     virtual void attachNewNode(RRTNode* pNode_new, RRTNode* pNearestNode, std::list<RRTNode*> near_nodes);
     virtual void rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> near_nodes);
     virtual RRTNode * getClosetToGoal(double * deltaCost, double& deltaFitness);
+
+    Path* findPath();
 protected:
     void updateFitnessToChildren(RRTNode* pNode, double delta_fitness);
 };
