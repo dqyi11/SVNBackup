@@ -419,9 +419,9 @@ double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
             for(int k=0;k<mObjectiveNum;k++)
             {
                double weighted_dist = p_weight[k] * (p_cost[k] - p_utopia[k]);
-               d1 += fabs(weighted_dist*weighted_dist);
+               d1 += weighted_dist;
             }
-            d1 = fabs(sqrt(d1));
+            d1 = fabs(d1);
             double vectorD2[mObjectiveNum];
             for(int k=0;k<mObjectiveNum;k++)
             {
@@ -431,6 +431,10 @@ double MORRF::calcFitness(double * p_cost, double * p_weight, POS2D& pos)
             d2 = fabs(sqrt(d2));
             fitness = d1 + mTheta * d2;
         }
+    }
+    if(fitness < 0.0)
+    {
+        std::cout << "Negative fitness " << fitness << std::endl;
     }
     return fitness;
 }

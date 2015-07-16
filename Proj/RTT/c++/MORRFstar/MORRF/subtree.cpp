@@ -214,7 +214,6 @@ std::list<RRTNode*> RRTree::findAllChildren(RRTNode* pNode)
             break;
         }
     }
-
     child_list.unique();
     return child_list;
 }
@@ -530,6 +529,9 @@ void SubproblemTree::rewireNearNodes(RRTNode* pNode_new, std::list<RRTNode*> nea
 
         if(true==mpParent->isObstacleFree(pNode_new->mPos, pNearNode->mPos))
         {
+            // update pNearNode fitness
+            pNearNode->mFitness = mpParent->calcFitness(pNearNode->mpCost, mpWeight, pNearNode->mPos);
+
             double temp_cost_from_new_node[mObjectiveNum];
             double temp_delta_cost_from_new_node[mObjectiveNum];
 
