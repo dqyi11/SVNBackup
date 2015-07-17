@@ -1,5 +1,13 @@
 \documentclass{sig-alternate}
 
+% Set letter paper size:
+\setlength{\paperheight}{11in}
+\setlength{\paperwidth}{8.5in}
+\usepackage[
+  pass,% keep layout unchanged 
+  % showframe,% show the layout
+]{geometry}
+
 \usepackage{comment}
 
 \newtheorem{mydef}{Definition}
@@ -92,7 +100,7 @@ This work also illuminates the way in which the personal-best and the global-bes
 
 \terms{Algorithms, Theory}
 
-\keywords{Particle Swarm Optimization, Input-to-state stability}
+\keywords{Particle Swarm Optimization; Input-to-State Stability}
 
 \begin{comment}
 Full Regular Papers = 8 Page Limit
@@ -439,13 +447,18 @@ The proof is given in Appendix \ref{sec:coro:param_unit_disc:proof}.
 
 Figure \ref{fig:paramSpace} shows the parameter space.
 The x-axis is $ \phi^{sup} = \phi^{P} + \phi^{G} $ and the y-axis is $ \chi $.
-The stable region in dark blue is obtained from eigenvalue test on Theorem \ref{thm:iss} and the red boundary is obtained from Corollary \ref{coro:param_unit_disc}.
+The stable region in dark blue is obtained from eigenvalue test on Theorem \ref{thm:iss}.
+The red boundary is obtained from Corollary \ref{coro:param_unit_disc}.
+It indicates the equivalence of  the results from Theorem \ref{thm:iss} and Corollary \ref{coro:param_unit_disc}.
+
 \begin{figure}
 \centering
 \includegraphics[width=0.8\linewidth]{./param2.png}
 \caption{Parameter space}
 \label{fig:paramSpace}
 \end{figure}
+
+%\vfill\eject
 
 \subsection{Moment Analysis}
 \label{sec:moment_analysis}
@@ -529,8 +542,8 @@ Let $ A_{m} = \begin{bmatrix}
 1 & 0
 \end{bmatrix} 
 $, in which
-$ \phi \in [0,  \phi^{sup} ] $ and $ \phi^{sup} = \phi^{P} + \phi^{G} ] $ and $ \chi \in ( 0, 1 ) $.
-When $ \phi \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable.
+$ \phi \in [0,  \phi^{sup} ] $ and $ \phi^{sup} = \phi^{P} + \phi^{G} $ and $ \chi \in ( 0, 1 ) $.
+When $ \phi^{sup} \in \left( 0 , \frac{4(1+\chi)}{\chi} \right) $, the system \eqref{eq:pso1_alg_mean_linalg:final} is input-to-state stable.
 %\begin{proof}
 %\end{proof}
 \end{mycoro}

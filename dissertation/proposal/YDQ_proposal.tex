@@ -364,6 +364,7 @@ However the search can be more difficult if we allow the number of way-points, a
 Indeed, we will use this as to guide our solution, but the algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{Sujit2009,Zhang2007}.
 There is still the need of an algorithm that can efficiently and effectively find a set of Pareto optimal paths for given multiple objectives.
 
+\begin{comment}
 \subsubsection{Consensus reaching}
 
 Consensus reaching is often an important topic for a group of cooperative agents.
@@ -375,16 +376,17 @@ The consensus reaching becomes solving the information conflict between the loca
 One of the interpretation on the consensus reaching is using input-to-state stability~\cite{1470210}.
 It indicates that the consensus reaching property depends on the input-to-stable components of the systems.
 We can decompose the networked system into components and apply input-to-state stability to evaluate whether and how the consensus can be reached. 
+\end{comment}
 
 \subsubsection{Fusing the information from the human}
 
-The current human-robot communication still heavily relies on the training of the human, which means that the human should program the information fpr the robot.
+The current human-robot communication still heavily relies on the training of the human, which means that the human should program the information for the robot.
 This prevents the human-robot interaction applied into more fields.
 The goal of current research studies is supporting the robot to understand the natural information from the human.
  
 Not all the tasks can be planned and executed with a precisely defined quantitative map.
 If the map information is from a human's mind, it is usually a qualitative description~\cite{mcclelland2012qualitative,6425551,mcclelland2014qualitative,shah2013qualitative}.
-The qualitative description provides inadequate but at least some infomration as the prior for planning.
+The qualitative description provides inadequate but at least some information as the prior for planning.
 While the robot navigates the environment based on the roughly described map, the robot could update the map description by the online observation.
 This roughly described prior information can also be modeled from the human natural language~\cite{tellex2011understanding,walter2014framework}.
 The natural language instructions can be used as the observations in the robotic SLAM problem.
@@ -613,7 +615,123 @@ Thus $ K $ reference trees are used, one each to explore the minimum of each obj
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
 The solutions obtained from $ M $ subproblem trees constitute a set of Pareto optimal paths, which is the solutions to the multi-objective path planning problem. 
 
+\begin{comment}
 \subsection{Consensus reaching}
+\end{comment}
+
+
+\subsection{Path planning with natural language instruction}
+
+
+
+\begin{comment}
+The online information interpretation is difficult when the human and the robot are executing the subtask simultaneously.
+Relatively, it is easier that the human can adapt to the information from the robot.
+We focus on how the robot can understand the information from the human, which remains a challenge.
+
+We will construct a graphic model to model the relationship between the observations and the world model.
+The world model contains the map description, the relationship between the landmarks.
+The map description will be consisted of a metric map and a topological map.
+The metric map is a pixel-based description of the accessible regions and obstacle regions.
+The topological map describes the topology relationship between the landmarks.
+The connection is determined by the regions connecting the landmarks.
+
+Both the human and the robot are information sources.
+The information from human is topological relationship between the landmarks.
+The information from robot is from the sensors, which works like the way of the simultaneous localization and mapping (SLAM).
+Because the robot is better at processing quantitative data.
+Both two types of information will be used to update the world model.
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Validation}
+% 1-2 pages
+% Answers:
+% 5) How can you demonstrate that this is a good solution?
+
+We will formally validate each proposed algorithm by theoretical analyses and experiments.
+Theoretical analyses and proofs will be used to support the validity and the performance of the algorithms or the propositions.
+Experiments and simulations will be taken to support that the algorithms can help the robot understand and utilize the information from the human.
+
+\subsection{Reference path constrained optimal path planning}
+
+We theoretically prove the convergence of the solution to the optimal.
+The proof is split in two steps.
+The first step is proving that the backtracking process proposed will never underestimate the maximum reward by utilizing the submodular property of the problem.
+The next step is showing that given enough run time, the proposed algorithm can always find an optimal solution.
+This is proved by showing that a proposed pruning process will never ``froze'' a node that is in the optimal path.
+By the proof of contradiction, we can show that the optimal path can always be found if there is enough run time.
+
+We apply the experiement in a world of hexagonal cells, which is discretized from two-dimension search space.
+We define several metrics to measure the performance of the proposed algorithm.
+We use a \emph{fully expanded tree size} to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
+Due to the human constraint, the planning length is determined by the human's path length.
+The performance of the heuristic is measured by the \emph{percentage of optimal at first iteration}, that is a percentage computed from the value obtain in the first iteration of the proposed algorithm over the optimal value.
+We use the \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
+In particular, we are interested in whether freezing nodes improves search efficiency.
+In the anytime algorithm, the exploration might not stop when the optimal is found, due to the existence of overestimation.
+If current best of a search can reach the optimal very quickly, it means that a best solution found in a fixed time has high probability of being optimal.
+We use the \emph{number of iterations reaching optimal (normalized)} to measure this optimal search capability of the proposed algorithm.
+
+The backtracking heuristic is compared with the greedy heuristic in experiments to show the advantage of the performance.
+We test the algorithms with different types of workspaces and different types of human reference paths to show the robustness of the performance.
+
+
+\subsection{Homotopy-based optimal path planning}
+
+We will provide theoretical proof that the proposed algorithm could find the optimal solutions of all the given homotopy classes.
+We will show that with the support of a bidirectional tree structure, the solutions of HA-RRT$^{*}$ gradually converge to the best paths in the given homotopy classes.
+The proof depends both the trees from two directions converge to optimal structures so that we can have the optimal subpaths from a given via-position to the start and the goal respectively.
+The concatenation of the two optimal subpaths makes the optimal path from the start to the goal with the given via-position.
+As we can identify the string class that each path belongs to, we can have the optimal paths in each string class.
+By the homotopic grammar, we can have the optimal path of each given homotopy class.
+
+We also implement experiments to show how the HA-RRT$^{*}$ can support the sliding autonomy in different levels of human intent on the topology.
+Consider the following list of ways in which a human can express intent about path shape, and the corresponding homotopy-based constraint:
+\begin{enumerate}
+\item \emph{I want the path to visit a sequence of specific regions.}
+\item \emph{I want the path to visit some regions and avoid other regions.}
+\item \emph{I prefer some path shapes over others, but I recognize that tradeoffs may be needed.} 
+\item \emph{I have preferences over paths, but I need help in understanding these preferences.}
+\end{enumerate}
+
+\subsection{Multi-objective path planning}
+
+We prove that the solutions found by the proposed MORRF$^{*}$ can almost surely converge to be Pareto optimal.
+The proof is split into several steps.
+Firstly, it is proved that the multi-objective path planning problem can be decomposed into a set of weighted subproblems;
+the path from each subproblem is a Pareto optimal path.
+Secondly, we prove that the solutions of MORRF$^{*}$ almost surely converge to the answers of the weighted subproblems.
+There are two converging processes, the convergence of the reference trees and the convergence of the subproblem trees.
+The convergence of the subproblem trees depends on the convergence of the reference trees.
+
+We then present a series of simulation studies that provide evidence that MORRF$^{*}$ produces a representative set of samples from the Pareto set.
+Results from MORRF$^{*}$ are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORRF$^{*}$ that uses a weighted sum approach.
+NSGA-II was selected because evidence suggests that it provides more uniform samples from the Pareto set than other approaches~\cite{Deb2002}.  
+
+\begin{comment}
+\subsection{Consensus reaching}
+
+The evaluation of the consensus reaching of the PSO is mainly dependent on theoretical proofs.
+Because the algorithm runs in discrete steps, we model the dynamics of a particle into a discrete-time system.
+We prove that the particle shows the property of input-to-state stability when some conditions are satisfied.
+It means that when the global best and personal best converge as the inputs to the system, the motion of the particle will converge.
+The boundary of the particle motion, which is indicated by the input-to-state stability, can be applied to analyze the likelihood that the particle reaches the optimal.
+
+The input-to-state stability analysis is also applied to the swarm.
+By the way we model the swarm as in Figure \ref{fig:sys:swarm}, the input-to-state stability of each component can be used to predict the convergence of the swarm, which is consensus reaching on the optimal position.
+We will analyze and discuss the relationship between the consensus reaching process and the likelihood that the PSO finds the optimal.
+\end{comment}
+
+\subsection{Human information}
+
+The validation of how the human information can be understood by the robot includes both theoretical analyses and experiments.
+
+The theoretical analyses will focus on the validity of the algorithm designs and the performance of the algorithm.
+The experiment will be taken on the gazebo simulator or the turtlebot.
+The experiment will be designed to support the theoretical results and to compare the performance in different cases.
+
+\section{Appendix}
 
 We analyze the consensus reaching problem in a team of autonomous agents.
 As learned the spirit from \cite{1470210}, we introduce input-to-state stability analysis~\cite{Jiang2001} to each agent in the system, which assists the analysis of the consensus reaching.
@@ -705,115 +823,6 @@ Figure \ref{fig:boundary} illustrates a boundary on the particle motion, which i
 As in the Figure \ref{fig:sys:swarm}, the particles in the swarm form a networked feedback structure.
 Integrating the input-to-state stability of each component in the swarm helps us understand the convergence of the swarm.
 This helps us to analyze the capability of optimal search of the PSO in different fitness landscapes with different parameter selections.
-
-\subsection{Fusing human information}
-
-The online information interpretation is difficult when the human and the robot are executing the subtask simultaneously.
-Relatively, it is easier that the human can adapt to the information from the robot.
-We focus on how the robot can understand the information from the human, which remains a challenge.
-
-We will construct a graphic model to model the relationship between the observations and the world model.
-The world model contains the map description, the relationship between the landmarks.
-The map description will be consisted of a metric map and a topological map.
-The metric map is a pixel-based description of the accessible regions and obstacle regions.
-The topological map describes the topology relationship between the landmarks.
-The connection is determined by the regions connecting the landmarks.
-
-Both the human and the robot are information sources.
-The information from human is topological relationship between the landmarks.
-The information from robot is from the sensors, which works like the way of the simultaneous localization and mapping (SLAM).
-Because the robot is better at processing quantitative data.
-Both two types of information will be used to update the world model.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Validation}
-% 1-2 pages
-% Answers:
-% 5) How can you demonstrate that this is a good solution?
-
-We will formally validate each proposed algorithm by theoretical analyses and experiments.
-Theoretical analyses and proofs will be used to support the validity and the performance of the algorithms or the propositions.
-Experiments and simulations will be taken to support that the algorithms can help the robot understand and utilize the information from the human.
-
-\subsection{Reference path constrained optimal path planning}
-
-We theoretically prove the convergence of the solution to the optimal.
-The proof is split in two steps.
-The first step is proving that the backtracking process proposed will never underestimate the maximum reward by utilizing the submodular property of the problem.
-The next step is showing that given enough run time, the proposed algorithm can always find an optimal solution.
-This is proved by showing that a proposed pruning process will never ``froze'' a node that is in the optimal path.
-By the proof of contradiction, we can show that the optimal path can always be found if there is enough run time.
-
-We apply the experiement in a world of hexagonal cells, which is discretized from two-dimension search space.
-We define several metrics to measure the performance of the proposed algorithm.
-We use a \emph{fully expanded tree size} to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
-Due to the human constraint, the planning length is determined by the human's path length.
-The performance of the heuristic is measured by the \emph{percentage of optimal at first iteration}, that is a percentage computed from the value obtain in the first iteration of the proposed algorithm over the optimal value.
-We use the \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
-In particular, we are interested in whether freezing nodes improves search efficiency.
-In the anytime algorithm, the exploration might not stop when the optimal is found, due to the existence of overestimation.
-If current best of a search can reach the optimal very quickly, it means that a best solution found in a fixed time has high probability of being optimal.
-We use the \emph{number of iterations reaching optimal (normalized)} to measure this optimal search capability of the proposed algorithm.
-
-The backtracking heuristic is compared with the greedy heuristic in experiments to show the advantage of the performance.
-We test the algorithms with different types of workspaces and different types of human reference paths to show the robustness of the performance.
-
-
-\subsection{Homotopy-based optimal path planning}
-
-We will provide theoretical proof that the proposed algorithm could find the optimal solutions of all the given homotopy classes.
-We will show that with the support of a bidirectional tree structure, the solutions of HA-RRT$^{*}$ gradually converge to the best paths in the given homotopy classes.
-The proof depends both the trees from two directions converge to optimal structures so that we can have the optimal subpaths from a given via-position to the start and the goal respectively.
-The concatenation of the two optimal subpaths makes the optimal path from the start to the goal with the given via-position.
-As we can identify the string class that each path belongs to, we can have the optimal paths in each string class.
-By the homotopic grammar, we can have the optimal path of each given homotopy class.
-
-We also implement experiments to show how the HA-RRT$^{*}$ can support the sliding autonomy in different levels of human intent on the topology.
-Consider the following list of ways in which a human can express intent about path shape, and the corresponding homotopy-based constraint:
-\begin{enumerate}
-\item \emph{I want the path to visit a sequence of specific regions.}
-\item \emph{I want the path to visit some regions and avoid other regions.}
-\item \emph{I prefer some path shapes over others, but I recognize that tradeoffs may be needed.} 
-\item \emph{I have preferences over paths, but I need help in understanding these preferences.}
-\end{enumerate}
-
-\subsection{Multi-objective path planning}
-
-We prove that the solutions found by the proposed MORRF$^{*}$ can almost surely converge to be Pareto optimal.
-The proof is split into several steps.
-Firstly, it is proved that the multi-objective path planning problem can be decomposed into a set of weighted subproblems;
-the path from each subproblem is a Pareto optimal path.
-Secondly, we prove that the solutions of MORRF$^{*}$ almost surely converge to the answers of the weighted subproblems.
-There are two converging processes, the convergence of the reference trees and the convergence of the subproblem trees.
-The convergence of the subproblem trees depends on the convergence of the reference trees.
-
-We then present a series of simulation studies that provide evidence that MORRF$^{*}$ produces a representative set of samples from the Pareto set.
-Results from MORRF$^{*}$ are obtained for path-planning problems with two objectives and three objectives, and are compared to a modified version of the NSGA-II multi-objective path-planning algorithm~\cite{Ahmed2013} as well as a variant of MORRF$^{*}$ that uses a weighted sum approach.
-NSGA-II was selected because evidence suggests that it provides more uniform samples from the Pareto set than other approaches~\cite{Deb2002}.  
-
-\subsection{Consensus reaching}
-
-The evaluation of the consensus reaching of the PSO is mainly dependent on theoretical proofs.
-Because the algorithm runs in discrete steps, we model the dynamics of a particle into a discrete-time system.
-We prove that the particle shows the property of input-to-state stability when some conditions are satisfied.
-It means that when the global best and personal best converge as the inputs to the system, the motion of the particle will converge.
-The boundary of the particle motion, which is indicated by the input-to-state stability, can be applied to analyze the likelihood that the particle reaches the optimal.
-
-The input-to-state stability analysis is also applied to the swarm.
-By the way we model the swarm as in Figure \ref{fig:sys:swarm}, the input-to-state stability of each component can be used to predict the convergence of the swarm, which is consensus reaching on the optimal position.
-We will analyze and discuss the relationship between the consensus reaching process and the likelihood that the PSO finds the optimal.
-
-\subsection{Human information}
-
-The validation of how the human information can be understood by the robot includes both theoretical analyses and experiments.
-
-The theoretical analyses will focus on the validity of the algorithm designs and the performance of the algorithm.
-The experiment will be taken on the gazebo simulator or the turtlebot.
-The experiment will be designed to support the theoretical results and to compare the performance in different cases.
-
-\section{Appendix}
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
