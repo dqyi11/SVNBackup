@@ -130,7 +130,6 @@ void MainWindow::onExport()
 
 void MainWindow::onLoadMap()
 {
-
     QString tempFilename = QFileDialog::getOpenFileName(this,
              tr("Open Map File"), "./", tr("Map Files (*.*)"));
 

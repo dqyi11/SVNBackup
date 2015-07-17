@@ -658,22 +658,18 @@ bool MORRF::updatePathCost(Path *p)
         {
             p->mpCost[k] = 0.0;
         }
-        p->mFitness = 0.0;
         for(int i=0;p->mWaypoints.size()-1;i++)
         {
             POS2D pos_a = p->mWaypoints[i];
             POS2D pos_b = p->mWaypoints[i+1];
             double deltaCost[mObjectiveNum];
-            double deltaFitness = 0.0;
             calcCost(pos_a, pos_b, deltaCost);
-            deltaFitness = calcFitness(deltaCost, p->mpWeight, pos_b);
 
             for(int k=0;k<mObjectiveNum;k++)
             {
                 p->mpCost[k] += deltaCost[k];
             }
-            p->mFitness += deltaFitness;
-        }
+        }        
         return true;
     }
     return false;
