@@ -59,6 +59,7 @@ public:
     bool areAllReferenceNodesFitnessPositive();
     bool areAllSubproblemNodesFitnessPositive();
     bool isNodeNumberIdentical();
+    bool isRefTreeMinCost();
     double getBallRadius() { return mBallRadius; };
 
     bool updatePathCost(Path *p);

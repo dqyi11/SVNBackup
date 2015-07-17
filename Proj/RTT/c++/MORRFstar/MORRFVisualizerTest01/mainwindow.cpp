@@ -283,6 +283,14 @@ void MainWindow::onRun()
         {
             msg += "F ";
         }
+        if(true == mpMORRF->isRefTreeMinCost())
+        {
+            msg += "T ";
+        }
+        else
+        {
+            msg += "F ";
+        }
         for(int k=0;k<mpViz->mMOPPInfo.mObjectiveNum;k++)
         {
             std::list<RRTNode*> list = mpMORRF->getReferenceTree(k)->findAllChildren(mpMORRF->getReferenceTree(k)->mpRoot);

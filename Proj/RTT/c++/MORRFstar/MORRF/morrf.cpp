@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <limits>
 
 #define OBSTACLE_THRESHOLD 200
 
@@ -636,7 +637,6 @@ std::vector<Path*> MORRF::getPaths()
             paths.push_back(pRefPath);
         }
     }
-
     for(std::vector<SubproblemTree*>::iterator it=mSubproblems.begin();it!=mSubproblems.end();it++)
     {
         SubproblemTree* pSubTree = (*it);
@@ -646,7 +646,6 @@ std::vector<Path*> MORRF::getPaths()
             paths.push_back(pSubPath);
         }
     }
-
     return paths;
 }
 
@@ -658,7 +657,7 @@ bool MORRF::updatePathCost(Path *p)
         {
             p->mpCost[k] = 0.0;
         }
-        for(int i=0;p->mWaypoints.size()-1;i++)
+        for(int i=0;i<p->mWaypoints.size()-1;i++)
         {
             POS2D pos_a = p->mWaypoints[i];
             POS2D pos_b = p->mWaypoints[i+1];
@@ -673,4 +672,40 @@ bool MORRF::updatePathCost(Path *p)
         return true;
     }
     return false;
+}
+
+bool MORRF::isRefTreeMinCost()
+{
+    if(mpKDTree)
+    {
+        for(KDTree2D::const_iterator it = mpKDTree->begin(); it!= mpKDTree->end(); it++)
+        {
+            KDNode2D node = (*it);
+            double minCost[mObjectiveNum];
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                minCost[k] = std::numeric_limits<double>::max();
+            }
+            for(int i=mObjectiveNum; i<node.mNodeList.size(); i++)
+            {
+                RRTNode* pNode = node.mNodeList[i];
+                for(int k=0;k<mObjectiveNum;k++)
+                {
+                    if(pNode->mpCost[k] < minCost[k])
+                    {
+                        minCost[k] = pNode->mpCost[k];
+                    }
+                }
+            }
+            for(int k=0;k<mObjectiveNum;k++)
+            {
+                RRTNode* pRefNode = node.mNodeList[k];
+                if(pRefNode->mFitness > minCost[k])
+                {
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
