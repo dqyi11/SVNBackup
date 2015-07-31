@@ -1,0 +1,17 @@
+cmake_minimum_required(VERSION 2.8)
+project(cdcg_sp)
+
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+  message("setting CMAKE_INSTALL_PREFIX")
+  set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR} CACHE PATH "default install prefix" FORCE)
+endif(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+
+message("CMAKE_INSTALL_PREFIX:${CMAKE_INSTALL_PREFIX}")
+
+include(ExternalProject)
+ExternalProject_Add(h2sl
+  PREFIX h2sl
+  DOWNLOAD_COMMAND git clone https://github.com/tmhoward/h2sl.git h2sl
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_MODULE_PATH=${CMAKE_INSTALL_PREFIX}/share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
+)
+
