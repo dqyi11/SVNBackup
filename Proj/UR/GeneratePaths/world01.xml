@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<world width="800" height="600" time="0">
+	<object name="o0" type="robot">
+		<point x="207" y="63"/>
+		<point x="165" y="97"/>
+		<point x="207" y="135"/>
+		<point x="251" y="100"/>
+	</object> 
+	<object name="o1" type="fridge">
+		<point x="438" y="110"/>
+		<point x="447" y="208"/>
+		<point x="608" y="210"/>
+		<point x="629" y="92"/>	
+		<point x="534" y="55"/>	
+	</object>
+	<object name="o2" type="table">
+		<point x="141" y="220"/>
+		<point x="95" y="248"/>
+		<point x="265" y="495"/>
+		<point x="327" y="466"/>	
+	</object>
+	<object name="o3" type="chair">
+		<point x="607" y="397"/>
+		<point x="613" y="456"/>
+		<point x="668" y="458"/>
+		<point x="672" y="405"/>	
+	</object>
+</world>
