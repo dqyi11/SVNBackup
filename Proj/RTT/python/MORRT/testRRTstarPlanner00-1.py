@@ -20,49 +20,44 @@ if __name__ == '__main__':
         if referencePos==None:
             return cost
         
-        pos_a = currentPos
-        pos_b = referencePos
-        if pos_a[0] == pos_b[0] and pos_a[1] == pos_b[1]:
-            return cost
+        x1 = int(currentPos[0])
+        y1 = int(currentPos[1])
+        x2 = int(referencePos[0])
+        y2 = int(referencePos[1])
         
-        x_dist = pos_a[0] - pos_b[0]
-        y_dist = pos_a[1] - pos_b[1]
-        
-        abs_x_dist = np.abs(x_dist)
-        abs_y_dist = np.abs(y_dist)
-        
-        if abs_x_dist > abs_y_dist:
-            k = y_dist/x_dist
-            if pos_a[0] < pos_b[0]:
-                startX = pos_a[0]
-                endX = pos_b[0]
-                startY = pos_a[1]
-            else:
-                startX = pos_b[0]
-                endX = pos_a[0]
-                startY = pos_b[1]
-            
-            for coordX in np.arange(startX, endX, stepLen):
-                coordY = int(k*(coordX-startX) + startY)
-                if coordY >= objVals.shape[0] or coordX >= objVals.shape[1]: break
-                cost += objVals[int(coordY),int(coordX)]/255.0
-        else:
-            k = x_dist/y_dist
-            if pos_a[1] < pos_b[1]:
-                startY = pos_a[1]
-                endY = pos_b[1]
-                startX = pos_a[0]
-            else:
-                startY = pos_b[1]
-                endY = pos_a[1]
-                startX = pos_b[0]
+        dx = x2 - x1
+        dy = y2 - y1
+        is_steep = abs(dy) > abs(dx)
+        if is_steep:
+            x1, y1 = y1, x1
+            x2, y2 = y2, x2
+ 
+        swapped = False
+        if x1 > x2:
+            x1, x2 = x2, x1
+            y1, y2 = y2, y1
+            swapped = True
+ 
+        dx = x2 - x1
+        dy = y2 - y1
+ 
+        error = int(dx / 2.0)
+        ystep = 1 if y1 < y2 else -1
+ 
+        y = y1
+        points = []
+        for x in range(x1, x2):
+            coord = (y, x) if is_steep else (x, y)
+            points.append(coord)
+            if coord[1] >= objVals.shape[0] or coord[0] >= objVals.shape[1]:
+                continue
+            cost += objVals[int(coord[1]),int(coord[0])]/255.0
+            error -= abs(dy)
+            if error < 0:
+                y += ystep
+                error += dx
                 
-            for coordY in np.arange(startY, endY, stepLen):
-                coordX = int(k*(coordY-startY) + startX)
-                if coordY >= objVals.shape[0] or coordX >= objVals.shape[1]: break
-                cost += objVals[int(coordY),int(coordX)]/255.0
-
-        return cost   
+        return cost 
     
     planner = RRTstarPlanner([600,400], 10, calcCost) 
     
