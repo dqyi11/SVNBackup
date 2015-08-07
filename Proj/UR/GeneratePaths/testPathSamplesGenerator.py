@@ -21,7 +21,7 @@ if __name__ == '__main__':
     
     MAP = "map01.png"
     MAX_RUN_NUM = 5000
-    SEGMENT = 5
+    SEGMENT = 10
     gnr01 = PathSamplesGenerator(world01, MAP, MAX_RUN_NUM, SEGMENT) 
     gnr01.run(20)
     

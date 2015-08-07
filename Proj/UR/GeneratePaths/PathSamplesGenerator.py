@@ -11,7 +11,7 @@ import json, os
 
 class PathSamplesGenerator(object):
 
-    def __init__(self, world, mapFile, maxRunNum, segmentLen):
+    def __init__(self, world, mapFile, maxRunNum, segmentLen, folder="./"):
         
         self.world = world
         self.params = []
@@ -21,11 +21,14 @@ class PathSamplesGenerator(object):
         self.mapFile = mapFile
         self.maxRun = maxRunNum
         self.segmentLength = segmentLen
+        self.folder = folder
         
         
     def run(self, iterNumMax):
         
         for iterNum in range(iterNumMax):
+            
+            print "At iteration " + str(iterNum)
             
             param = Param()
             for j in range(len(self.world.objects)):
@@ -38,10 +41,11 @@ class PathSamplesGenerator(object):
             pathoutFile = 'pathout-' + str(iterNum) + '.txt'
             
             valDist = gmmCostMap(param, self.world)    
-            vizCostMap(valDist, objectiveFile, objectiveVizFile, False)
-            self.genConfig(configFile, objectiveFile, pathoutFile)
+            vizCostMap(valDist, self.folder + objectiveFile, self.folder + objectiveVizFile, False)
+            self.genConfig(self.folder + configFile, self.folder + objectiveFile, self.folder + pathoutFile)
             
-            command_str = "rrtstar_viz_demo.exe "+configFile
+            command_str = self.folder + "rrtstar_viz_demo "+ self.folder + configFile
+            print command_str
             os.system(command_str)
                 
                 
