@@ -6,14 +6,16 @@ Created on Jul 31, 2015
 
 from World import *
 from gmm import *
+from Path import *
 import numpy as np
 import json, os
 
 class PathSamplesGenerator(object):
 
-    def __init__(self, world, mapFile, maxRunNum, segmentLen, folder="./"):
+    def __init__(self, worldViz, mapFile, maxRunNum, segmentLen, folder=""):
         
-        self.world = world
+        self.worldViz = worldViz
+        self.world = worldViz.world
         self.params = []
         self.jsonfiles = []
         self.objfiles = []
@@ -39,6 +41,7 @@ class PathSamplesGenerator(object):
             objectiveFile = "obj-" + str(iterNum) + '.png'
             objectiveVizFile = "objViz-" + str(iterNum) + '.png'
             pathoutFile = 'pathout-' + str(iterNum) + '.txt'
+            pathPicFile = pathoutFile + '.jpg'
             
             valDist = gmmCostMap(param, self.world)    
             vizCostMap(valDist, self.folder + objectiveFile, self.folder + objectiveVizFile, False)
@@ -47,6 +50,10 @@ class PathSamplesGenerator(object):
             command_str = self.folder + "rrtstar_viz_demo "+ self.folder + configFile
             print command_str
             os.system(command_str)
+            
+            self.drawPath(pathoutFile, pathPicFile)
+            
+            
                 
                 
     def genConfig(self, configFile, objFile, pathOutputFile):
@@ -66,10 +73,11 @@ class PathSamplesGenerator(object):
             'startY'          : self.world.init[1]
         }
         
-        out_file = open(configFile, "w")
-        json.dump(my_dict, out_file, indent=4)
-        out_file.close()
-                
+    def drawPath(self, pathFile, drawPathFile):
+        p = Path()
+        p.loadFromFile(pathFile)
+        self.worldViz.drawPath(p, drawPathFile)
+        
 
         
     
