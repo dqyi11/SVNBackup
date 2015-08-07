@@ -12,7 +12,7 @@ import json, os
 
 class PathSamplesGenerator(object):
 
-    def __init__(self, worldViz, mapFile, maxRunNum, segmentLen, folder=""):
+    def __init__(self, worldViz, mapFile, maxRunNum, segmentLen, folder="./"):
         
         self.worldViz = worldViz
         self.world = worldViz.world
@@ -72,6 +72,9 @@ class PathSamplesGenerator(object):
             'startX'          : self.world.init[0],
             'startY'          : self.world.init[1]
         }
+        with open(configFile, 'w') as outfile:
+            json.dump(my_dict, outfile)
+        
         
     def drawPath(self, pathFile, drawPathFile):
         p = Path()
