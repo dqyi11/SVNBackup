@@ -23,10 +23,15 @@ if __name__ == '__main__':
     param = Param()
     for j in range(len(world01.objects)):
         param.w.append(np.random.rand()*2 - 1.0)
-        param.scale.append(40.0)
+        param.scale.append(5.0)
         
-    valDist = gmmCostMap(param, world01)    
-    vizCostMap(valDist, "world01.png", "worldViz01.png", False)
+    #KERNEL = "Epanechnikov"    
+    #KERNEL = "Gaussian"
+    #KERNEL = "Tricube"
+    KERNEL = "Logistic"
+    NAME = "world01"    
+    valDist = gmmCostMap(param, world01, KERNEL)    
+    vizCostMap(valDist, NAME+"-"+KERNEL+".png", NAME+"Viz-"+KERNEL+".png", False)
     
     '''
     valDist = np.zeros((world01.width, world01.height))

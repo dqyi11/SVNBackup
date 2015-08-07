@@ -39,7 +39,7 @@ def gmmCostFunc(pos, param, world):
     
     return val
 
-def gmmCostMap(param, world):
+def gmmCostMap(param, world, type="Gaussian"):
     
     width = world.width
     height = world.height
@@ -57,7 +57,20 @@ def gmmCostMap(param, world):
         obs_y = obj.center.y
         obs_w = np.abs(obj.bounding[2] - obj.bounding[0])
         obs_h = np.abs(obj.bounding[3] - obj.bounding[1])
-        val += param.w[i] * np.exp( - ( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) / param.scale[i] )
+        if type == "Gaussian":
+            val += param.w[i] * np.exp( - ( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) / param.scale[i] )
+        elif type == "Epanechnikov":
+            dist = np.sqrt( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) 
+            dz = (dist < param.scale[i])
+            val += param.w[i] * ( 0.75 * (1 - dist) * dz.astype(float) )
+        elif type == "Tricube":
+            dist = np.sqrt( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) 
+            dz = (dist < param.scale[i])
+            val += param.w[i] * ( ( (70.0/81.0) * (1 - dist**(1.5))**3 ) * dz.astype(float) )
+        elif type == "Logistic":
+            dist = np.sqrt( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) / param.scale[i]
+            v = np.exp( dist ) + 2 + np.exp( - dist )
+            val += param.w[i] / v
         
     min_val = np.min(val)
     max_val = np.max(val)

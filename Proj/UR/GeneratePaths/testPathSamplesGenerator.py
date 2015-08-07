@@ -23,5 +23,5 @@ if __name__ == '__main__':
     MAX_RUN_NUM = 5000
     SEGMENT = 10
     gnr01 = PathSamplesGenerator(worldViz01, MAP, MAX_RUN_NUM, SEGMENT) 
-    gnr01.run(2)
+    gnr01.run(20)
     
