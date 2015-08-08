@@ -48,13 +48,14 @@ class WorldViz(object):
             
         for i in range(len(self.world.objects)):
             obj = self.world.objects[i]
-            pygame.draw.polygon(self.screen, self.colors[i], obj.polygon, 0)
-            pygame.draw.circle(self.screen, BLACK, [int(obj.center.x), int(obj.center.y)], 1)
-            
+            if obj.type == "robot":
+                pygame.draw.circle(self.screen, self.colors[i], obj.center, 10)
+            else:
+                pygame.draw.rect(self.screen, self.colors[i], (obj.center[0], obj.center[1], 15, 15))
+        
             #pygame.draw.line(self.screen, GREEN, [int(obj.bounding[0]), int(obj.center.y)], [int(obj.bounding[2]),int(obj.center.y)], 2)
             #pygame.draw.line(self.screen, GREEN, [int(obj.center.x), int(obj.bounding[1])], [int(obj.center.x), int(obj.bounding[3])], 2)
 
-            
         
         if self.world.init != None:
             pygame.draw.circle(self.screen, BLUE, self.world.init, 10, 0)
@@ -74,11 +75,10 @@ class WorldViz(object):
         surface.fill((255,255,255))
         for i in range(len(self.world.objects)):
             obj = self.world.objects[i]
-            pygame.draw.polygon(surface, self.colors[i], obj.polygon, 0)
-            pygame.draw.circle(surface, BLACK, [int(obj.center.x), int(obj.center.y)], 1)
-            
-            #pygame.draw.line(self.screen, GREEN, [int(obj.bounding[0]), int(obj.center.y)], [int(obj.bounding[2]),int(obj.center.y)], 2)
-            #pygame.draw.line(self.screen, GREEN, [int(obj.center.x), int(obj.bounding[1])], [int(obj.center.x), int(obj.bounding[3])], 2)
+            if obj.type == "robot":
+                pygame.draw.circle(surface, self.colors[i], obj.center, 10)
+            else:
+                pygame.draw.rect(surface, self.colors[i], (obj.center[0], obj.center[1], 15, 15))
             
         pathLen = len(path.waypoints)
         for i in range(pathLen-1):

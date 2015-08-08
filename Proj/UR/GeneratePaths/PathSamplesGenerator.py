@@ -35,7 +35,7 @@ class PathSamplesGenerator(object):
             param = Param()
             for j in range(len(self.world.objects)):
                 param.w.append(np.random.rand()*2 - 1.0)
-                param.scale.append(np.random.rand()*30+ 50)
+                param.scale.append(np.random.rand()*80+ 100)
                 
             configFile = "config-" + str(iterNum) + '.json'
             objectiveFile = "obj-" + str(iterNum) + '.png'

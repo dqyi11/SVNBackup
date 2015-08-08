@@ -33,7 +33,7 @@ def gmmCostFunc(pos, param, world):
         obj = world.objects[i]
         x = pos[0] - obj.center.x
         y = pos[1] - obj.center.y
-        dist = x**2 / np.abs(obj.bounding[2]-obj.bounding[0]) + y**2 / np.abs(obj.bounding[3]-obj.bounding[1])
+        dist = x**2 / np.abs(obj.radiusg[0]) + y**2 / np.abs(obj.radius[1])
         dist /= param.scale[i]
         val += param.w[i] * np.exp( - dist )
     
@@ -53,10 +53,10 @@ def gmmCostMap(param, world, type="Gaussian"):
     val = np.zeros(xv.shape)
     for i in range(obj_num):
         obj = world.objects[i]
-        obs_x = obj.center.x
-        obs_y = obj.center.y
-        obs_w = np.abs(obj.bounding[2] - obj.bounding[0])
-        obs_h = np.abs(obj.bounding[3] - obj.bounding[1])
+        obs_x = obj.center[0]
+        obs_y = obj.center[1]
+        obs_w = obj.radius[0]
+        obs_h = obj.radius[1]
         if type == "Gaussian":
             val += param.w[i] * np.exp( - ( (xv - obs_x)**2 / obs_w  + (yv - obs_y)**2 / obs_h ) / param.scale[i] )
         elif type == "Epanechnikov":
