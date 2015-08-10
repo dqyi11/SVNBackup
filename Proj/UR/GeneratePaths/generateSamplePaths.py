@@ -34,17 +34,21 @@ if __name__ == '__main__':
     
     WORLD_PREFIX = "W"
     
-    worldGnr.dumpXML(WORLD_PREFIX)
-    
     for i in range(WORLD_NUM):
         
-        filename = WORLD_PREFIX + "-" +str(i) + ".xml"
-        world01 = World()
-        world01.fromXML(filename)
-        world01.initGoal()
+        NAME = WORLD_PREFIX + "-" +str(i)
+        DIR_NAME = "./" + NAME
         
-        worldViz01 = WorldViz(world01)
+        if not os.path.exists(DIR_NAME):
+            os.makedirs(DIR_NAME)
+            
+        world_file = WORLD_PREFIX + "-" + str(i) + ".xml"
+        worldGnr.worlds[i].dumpXML(DIR_NAME + "/" + world_file)
+        
+        wrd = worldGnr.worlds[i]
+        wrd.initGoal()
+        
+        wViz = WorldViz(wrd)
 
-
-        gnr01 = PathSamplesGenerator(worldViz01, MAP, MAX_RUN_NUM, SEGMENT) 
-        gnr01.run(PATH_NUM)
+        wGnr = PathSamplesGenerator(wViz, MAP, MAX_RUN_NUM, SEGMENT, DIR_NAME+"/") 
+        wGnr.run(PATH_NUM, NAME)
