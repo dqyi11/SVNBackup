@@ -21,20 +21,20 @@ class Object(object):
         
     def randParam(self):
         if self.type == "robot":
-            r = np.random.randint(3,5)
+            r = np.random.randint(50,60)
             self.radius = [r, r]
             self.orientation = np.random.randint(0, 360)
         elif self.type == "person":
-            r = np.random.randint(4,5)
+            r = np.random.randint(40,50)
             self.radius = [r, r]
             self.orientation = np.random.randint(0, 360)
         elif self.type == "car":
-            rw = np.random.randint(8,10)
-            rh = np.random.randint(12,16)
+            rw = np.random.randint(60,90)
+            rh = np.random.randint(80,100)
             self.radius = [rw, rh]
             self.orientation = np.random.randint(0, 360)
         elif self.type == "tree":
-            r = np.random.randint(3,6)
+            r = np.random.randint(50,70)
             self.radius = [r, r]
             self.orientation = np.random.randint(0, 360)
         elif self.type == "building":
@@ -48,8 +48,8 @@ class Object(object):
             self.radius = [rw, rh]
             self.orientation = np.random.randint(0, 360)            
         elif self.type == "gate":
-            rw = np.random.randint(12,12)
-            rh = np.random.randint(1,2)
+            rw = np.random.randint(60,80)
+            rh = np.random.randint(50,60)
             self.radius = [rw, rh]
             self.orientation = np.random.randint(0, 360)
 
@@ -60,21 +60,22 @@ class World(object):
         self.width = 0
         self.height = 0
         self.objects = []
+        self.robot = None
         
         self.init = None
         self.goal = None
         
-    def initGoal(self):
+    def initRobot(self):
         self.init = None
         self.goal = None
+        self.init = self.robot.center
                 
-        for obj in self.objects:
-            if obj.type == "robot":
-                self.init = obj.center
-        while self.goal == None:
-            idx = np.random.randint(len(self.objects))
-            if self.objects[idx].type != "robot":
-                self.goal = self.objects[idx].center
+    def selectGoal(self, i=-1):
+        if i>=0 and i<len(self.objects):
+            self.goal = self.objects[i].center
+        else:
+            idx = np.random.randint(0, len(self.objects))
+            self.goal = self.objects[idx].center
         
         
     def fromXML(self, filename):
@@ -107,7 +108,10 @@ class World(object):
                 new_obj.shape = Polygon(new_obj.polygon)
                 #new_obj.center = new_obj.shape.centroid
                 new_obj.bounding = new_obj.shape.bounds
-            self.objects.append(new_obj)
+            if new_obj.type == "robot":
+                self.robot = new_obj
+            else:    
+                self.objects.append(new_obj)
         
     def dumpXML(self, filename):
         
@@ -116,6 +120,21 @@ class World(object):
         root.setAttribute( "width", str(self.width) )
         root.setAttribute( "height", str(self.height) )
         xmldoc.appendChild(root)
+        if self.robot != None:
+            objChild = xmldoc.createElement("object")
+            objChild.setAttribute("name", self.robot.name)
+            objChild.setAttribute("type", self.robot.type)
+            objChild.setAttribute("x", str(self.robot.center[0]))
+            objChild.setAttribute("y", str(self.robot.center[1]))
+            objChild.setAttribute("w", str(self.robot.radius[0]))
+            objChild.setAttribute("h", str(self.robot.radius[1]))
+            objChild.setAttribute("orientation", str(self.robot.orientation))
+            for p in self.robot.polygon:
+                pointChild = xmldoc.createElement("point")
+                pointChild.setAttribute( "x", str(p[0]) )
+                pointChild.setAttribute( "y", str(p[1]) )
+                objChild.appendChild(pointChild)
+            root.appendChild(objChild)
         for obj in self.objects:
             objChild = xmldoc.createElement("object")
             objChild.setAttribute("name", obj.name)

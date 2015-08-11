@@ -29,7 +29,10 @@ class WorldGenerator(object):
                 obj.center.append( np.random.randint(self.margin, self.width-self.margin) )
                 obj.center.append( np.random.randint(self.margin, self.height-self.margin) )
                 obj.randParam()
-                w.objects.append(obj)
+                if obj.type == "robot":
+                    w.robot = obj 
+                else:
+                    w.objects.append(obj)
             self.worlds.append(w)
         
     def dumpXML(self, prefix):

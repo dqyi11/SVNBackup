@@ -5,6 +5,7 @@ Created on Jul 31, 2015
 '''
 
 from World import *
+from ParamGenerator import *
 from gmm import *
 from Path import *
 import numpy as np
@@ -54,22 +55,23 @@ class PathSamplesGenerator(object):
             os.makedirs(PATH_TXT_DIR)
         if not os.path.exists(COST_DIR):
             os.makedirs(COST_DIR)
+            
+        paramGnr = ParamGenerator(self.worldViz)
+        params = paramGnr.generateParams(iterNumMax)    
         
         for iterNum in range(iterNumMax):
             
             print "At iteration " + str(iterNum)
             
-            param = Param()
-            for j in range(len(self.world.objects)):
-                param.w.append(np.random.rand()*2 - 1.0)
-                param.scale.append(np.random.rand()*80+ 100)
+            param = params[iterNum]
                 
             configFile = "config-" + name + "-" + str(iterNum) + '.json'
             objectiveFile = "obj-" + name + "-" + str(iterNum) + '.png'
             objectiveVizFile = "objViz-" + name + "-" + str(iterNum) + '.png'
             pathoutFile = 'pathout-' + name + "-" + str(iterNum) + '.txt'
             pathPicFile = pathoutFile + '.jpg'
-            
+
+            self.world.selectGoal()
             valDist = gmmCostMap(param, self.world)    
             vizCostMap(valDist, COST_DIR + "/" + objectiveFile, COSTVIZ_DIR + "/" + objectiveVizFile, False)
             self.genConfig(CONFIG_DIR + "/" + configFile, COST_DIR + "/" + objectiveFile, PATH_TXT_DIR + "/" + pathoutFile)
@@ -105,8 +107,8 @@ class PathSamplesGenerator(object):
         
     def drawPath(self, pathFile, drawPathFile):
         p = Path()
-        p.loadFromFile(pathFile)
-        self.worldViz.drawPath(p, drawPathFile)
+        if True == p.loadFromFile(pathFile):
+            self.worldViz.drawPath(p, drawPathFile)
         
 
         

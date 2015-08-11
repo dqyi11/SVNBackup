@@ -46,7 +46,7 @@ if __name__ == '__main__':
         worldGnr.worlds[i].dumpXML(DIR_NAME + "/" + world_file)
         
         wrd = worldGnr.worlds[i]
-        wrd.initGoal()
+        wrd.initRobot()
         
         wViz = WorldViz(wrd)
 
