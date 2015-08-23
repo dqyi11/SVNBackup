@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <instruction text="move to the person by traveling above the car"/>
+  <world height="600" width="800">
+    <robot>
+      <object h="50" name="R" orientation="330" type="robot" w="50" x="132" y="409"/>
+    </robot>
+    <objects>
+      <object h="45" name="P" orientation="346" scale="140.0" type="person" w="45" weight="0.8" x="376" y="293"/>
+      <object h="99" name="C" orientation="34" scale="140.0" type="car" w="65" weight="-0.6" x="172" y="219"/>
+      <object h="66" name="T" orientation="203" scale="140.0" type="tree" w="66" weight="0.2" x="94" y="413"/>
+      <object h="76" name="B1" orientation="56" scale="140.0" type="building" w="77" weight="0.4" x="712" y="150"/>
+      <object h="90" name="B2" orientation="193" scale="140.0" type="building" w="74" weight="1.0" x="383" y="156"/>
+    </objects>
+  </world>
+ 
+  <VP>
+    <grounding>
+      <grounding_set>
+        <object h="50" name="R" orientation="330" type="robot" w="50" x="132" y="409"/>
+        <object h="49" name="P" orientation="67" scale="116.855184853" type="person" w="49" weight="-0.804892503198" x="733" y="236"/>
+        <object h="92" name="C" orientation="251" scale="119.376962738" type="car" w="66" weight="0.0363483685737" x="550" y="141"/>
+      </grounding_set>
+    </grounding>
+    <VB text="move"/>
+    <PP>
+      <grounding>
+        <grounding_set>
+          <object h="49" name="P" orientation="67" scale="116.855184853" type="person" w="49" weight="-0.804892503198" x="733" y="236"/>
+        </grounding_set>
+      </grounding>
+      <TO text="to"/>
+      <NP>
+        <grounding>
+          <grounding_set>
+            <object h="49" name="P" orientation="67" scale="116.855184853" type="person" w="49" weight="-0.804892503198" x="733" y="236"/>
+          </grounding_set>
+        </grounding>
+        <DT text="the"/>
+	<NN text="person"/>
+      </NP>
+    </PP>
+    <PP>
+      <grounding>
+        <grounding_set>
+        </grounding_set>
+      </grounding>
+      <IN text="by"/>
+      <VP>
+        <grounding>
+          <grounding_set>
+            <object h="92" name="C" orientation="251" scale="119.376962738" type="car" w="66" weight="0.0363483685737" x="550" y="141"/>
+          </grounding_set>
+        </grounding>
+        <VBG text="traveling"/>
+        <PP>
+          <grounding>
+            <grounding_set>
+	      <object h="92" name="C" orientation="251" scale="119.376962738" type="car" w="66" weight="0.0363483685737" x="550" y="141"/>
+            </grounding_set>
+          </grounding>
+          <IN text="above"/>
+          <NP>
+            <grounding>
+              <grounding_set>
+                <object h="92" name="C" orientation="251" scale="119.376962738" type="car" w="66" weight="0.0363483685737" x="550" y="141"/>
+              </grounding_set>
+            </grounding>
+             <DT text="the"/>
+             <NN text="car"/>
+          </NP>
+        </PP>
+      </VP>
+    </PP>
+  </VP>
+</root>

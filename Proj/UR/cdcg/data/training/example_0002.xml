@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <instruction text="move to the building before going to the tree"/>
+  <world height="600" width="800">
+    <robot>
+      <object h="52" name="R" orientation="280" type="robot" w="52" x="647" y="317"/>
+    </robot>
+    <objects>
+      <object h="45" name="P" orientation="346" scale="140.0" type="person" w="45" weight="-0.2" x="376" y="293"/>
+      <object h="99" name="C" orientation="34" scale="140.0" type="car" w="65" weight="-0.2" x="172" y="219"/>
+      <object h="66" name="T" orientation="203" scale="140.0" type="tree" w="66" weight="-1.0" x="94" y="413"/>
+      <object h="76" name="B1" orientation="56" scale="140.0" type="building" w="77" weight="0.2" x="712" y="150"/>
+      <object h="90" name="B2" orientation="193" scale="140.0" type="building" w="74" weight="1.0" x="383" y="156"/>
+    </objects>
+  </world>
+
+  <VP>
+    <grounding>
+      <grounding_set>
+        <object h="52" name="R" orientation="280" type="robot" w="52" x="647" y="317"/>
+        <object h="87" name="B1" orientation="155" scale="103.438752439" type="building" w="90" weight="-0.872643474007" x="157" y="425"/>
+        <object h="67" name="T" orientation="125" scale="153.210862229" type="tree" w="67" weight="0.816410950667" x="256" y="205"/>
+      </grounding_set>
+    </grounding>
+    <VB text="move"/>
+    <PP>
+      <grounding>
+        <grounding_set>
+          <object h="87" name="B1" orientation="155" scale="103.438752439" type="building" w="90" weight="-0.872643474007" x="157" y="425"/>
+        </grounding_set>
+      </grounding>
+      <TO text="to"/>
+      <NP>
+        <grounding>
+          <grounding_set>
+            <object h="87" name="B1" orientation="155" scale="103.438752439" type="building" w="90" weight="-0.872643474007" x="157" y="425"/>
+          </grounding_set>
+        </grounding>
+        <DT text="the"/>
+	<NN text="building"/>
+      </NP>
+    </PP>
+    <PP>
+      <grounding>
+        <grounding_set>
+        </grounding_set>
+      </grounding>
+      <IN text="before"/>
+      <VP>
+        <grounding>
+          <grounding_set>
+            <object h="67" name="T" orientation="125" scale="153.210862229" type="tree" w="67" weight="0.816410950667" x="256" y="205"/>
+          </grounding_set>
+        </grounding>
+        <VBG text="going"/>
+        <PP>
+          <grounding>
+            <grounding_set>
+              <object h="67" name="T" orientation="125" scale="153.210862229" type="tree" w="67" weight="0.816410950667" x="256" y="205"/>
+            </grounding_set>
+          </grounding>
+          <TO text="to"/>
+          <NP>
+            <grounding>
+              <grounding_set>
+                <object h="67" name="T" orientation="125" scale="153.210862229" type="tree" w="67" weight="0.816410950667" x="256" y="205"/>
+              </grounding_set>
+            </grounding>
+            <DT text="the"/>
+            <NN text="tree"/>
+          </NP>
+        </PP>
+      </VP>
+    </PP>
+  </VP>
+</root>
