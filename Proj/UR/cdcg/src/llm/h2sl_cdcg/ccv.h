@@ -13,9 +13,8 @@
 
 #include <iostream>
 
-#define APPROX_RESOLUTION 5
 
-namespace h2sl {
+namespace h2sl_cdcg {
   typedef enum {
     CCV_UNKNOWN,
     CCV_ZERO,

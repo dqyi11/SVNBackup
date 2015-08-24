@@ -15,13 +15,13 @@ ExternalProject_Add(h2sl
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_MODULE_PATH=${CMAKE_INSTALL_PREFIX}/share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
 )
 
-ExternalProject_Add(cdcg
+ExternalProject_Add(h2sl_cdcg
   DEPENDS h2sl
-  PREFIX cdcg
+  PREFIX h2sl_cdcg
   SOURCE_DIR ${PROJECT_SOURCE_DIR}/src
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_MODULE_PATH=${CMAKE_INSTALL_PREFIX}/share/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules
 )
-ExternalProject_Add_Step(cdcg fb
+ExternalProject_Add_Step(h2sl_cdcg fb
   ALWAYS 1
   DEPENDERS build
 )

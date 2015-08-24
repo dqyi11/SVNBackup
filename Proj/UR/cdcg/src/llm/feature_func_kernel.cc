@@ -69,9 +69,6 @@ to_xml( xmlDocPtr doc, xmlNodePtr root )const{
   stringstream kernel_type_string;
   kernel_type_string << _kernel_type;
   xmlNewProp( node, ( const xmlChar* )( "kernel_type" ), ( const xmlChar* )( kernel_type_string.str().c_str() ) );
-  stringstream weight_string;
-  weight_string << _weight;
-  xmlNewProp( node, ( const xmlChar* )( "weight" ), ( const xmlChar* )( weight_string.str().c_str() ) );
   xmlAddChild( root, node );
   return;
 }
@@ -93,11 +90,6 @@ from_xml( xmlNodePtr root ){
       string kernel_type_string = ( char* )( tmp );
       _kernel_type = strtol( kernel_type_string.c_str(), NULL, 10 );
       xmlFree( tmp );
-    }
-    tmp = xmlGetProp( root, ( const xmlChar* )( "weight" ) );
-    if( tmp != NULL ){
-      string weight_string = ( char* )( tmp );
-      _weight = strtof( weight_string.c_str(), NULL );
     }
   }
   return;

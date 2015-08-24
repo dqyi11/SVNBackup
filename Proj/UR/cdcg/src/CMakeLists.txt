@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(cdcg)
+project(h2sl_cdcg)
 set(CDCG_VERSION 1.0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -90,7 +90,7 @@ function(process_hdrs)
           ${HDRS}
           ${QT_HDRS}
           ${MSG_HDRS_FULLPATH}
-          DESTINATION include/h2sl)
+          DESTINATION include/h2sl_cdcg)
 endfunction(process_hdrs)
 
 # function for compiling and installing a library

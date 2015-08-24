@@ -13,7 +13,7 @@
 #include <iostream>
 
 #include "h2sl/grounding.h"
-#include "h2sl/region.h"
+#include "h2sl/object.h"
 #include "h2sl_cdcg/ccv.h"
 
 using namespace h2sl;
@@ -27,8 +27,8 @@ namespace h2sl_cdcg {
 
   class Func_Kernel: public Grounding {
   public:
-    Func_Kernel( const unsigned int& type = 0, const Region& region = Region() );
-    Func_Kernel( const func_kernel_type_t& type, const Region& region );
+    Func_Kernel( const unsigned int& type = 0, const Object& object = Object() );
+    Func_Kernel( const func_kernel_type_t& type, const Object& object );
     virtual ~Func_Kernel();
     Func_Kernel( const Func_Kernel& other );
     Func_Kernel& operator=( const Func_Kernel& other );
@@ -47,17 +47,17 @@ namespace h2sl_cdcg {
 
     inline unsigned int& type( void ){ return _type; };
     inline const unsigned int& type( void )const{ return _type; };
-    inline Region& region( void ){ return _region; };
-    inline const Region& region( void )const{ return _region; };
+    inline Object& object( void ){ return _object; };
+    inline const Object& object( void )const{ return _object; };
     inline float& weight( void ){ return _weight; };
     inline const float& weight( void )const{ return _weight; };
-    inline unsigned int resolution( void ){ return APPROX_RESOLUTION; };
-    inline const unsigned int resolution( void )const{ return APPROX_RESOLUTION; };
+    inline unsigned int resolution( void ){ return NUM_CCVS - CCV_ZERO; };
+    inline const unsigned int resolution( void )const{ return NUM_CCVS - CCV_ZERO; };
 
   protected:
     unsigned int _type;
     float _weight;
-    Region _region;
+    Object _object;
 
   private:
 

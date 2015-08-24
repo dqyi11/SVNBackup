@@ -42,6 +42,7 @@
 #include "h2sl_cdcg/ccv.h"
 #include "h2sl_cdcg/func_kernel.h"
 #include "h2sl_cdcg/feature_func_kernel.h"
+#include "h2sl_cdcg/feature_set.h"
 #include "llm_train_cdcg_cmdline.h"
 
 using namespace std;
@@ -163,7 +164,7 @@ main( int argc,
     exit(1);
   }
 
-  Feature_Set * feature_set = new Feature_Set();
+  h2sl_cdcg::Feature_Set * feature_set = new h2sl_cdcg::Feature_Set();
   feature_set->from_xml( args.feature_set_arg );
 
   LLM * llm = new LLM( feature_set );

@@ -15,8 +15,6 @@
 
 #include "h2sl/feature.h"
 
-using namespace h2sl;
-
 namespace h2sl_cdcg {
   class Feature_Func_Kernel : public h2sl::Feature {
   public:
@@ -25,7 +23,7 @@ namespace h2sl_cdcg {
     Feature_Func_Kernel( const Feature_Func_Kernel& other );
     Feature_Func_Kernel& operator=( const Feature_Func_Kernel& other );
 
-    virtual bool value( const unsigned int& cv, const Grounding* grounding, const std::vector< Grounding* >& children, const Phrase* phrase, const World* world );
+    virtual bool value( const unsigned int& cv, const h2sl::Grounding* grounding, const std::vector< h2sl::Grounding* >& children, const h2sl::Phrase* phrase, const h2sl::World* world );
 
     virtual void to_xml( xmlDocPtr doc, xmlNodePtr root )const;
 
@@ -34,11 +32,10 @@ namespace h2sl_cdcg {
     inline unsigned int& kernel_type( void ){ return _kernel_type; };
     inline const unsigned int& kernel_type( void )const{ return _kernel_type; };
 
-    virtual inline const feature_type_t type( void )const{ return FEATURE_TYPE_GROUNDING; };
+    virtual inline const h2sl::feature_type_t type( void )const{ return h2sl::FEATURE_TYPE_GROUNDING; };
 
   protected:
     unsigned int _kernel_type;
-    float        _weight;
 
   private:
 

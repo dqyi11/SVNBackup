@@ -14,8 +14,6 @@
 
 #include <h2sl/feature.h>
 
-using namespace h2sl;
-
 namespace h2sl_cdcg {
   class Feature_CCV: public h2sl::Feature {
   public:
@@ -24,7 +22,7 @@ namespace h2sl_cdcg {
     Feature_CCV( const Feature_CCV& other );
     Feature_CCV& operator=( const Feature_CCV& other );
 
-    virtual bool value( const int& cv, const Grounding* grounding, const std::vector< Grounding* >& children, const Phrase* phrase, const World* world ); 
+    virtual bool value( const int& cv, const h2sl::Grounding* grounding, const std::vector< h2sl::Grounding* >& children, const h2sl::Phrase* phrase, const h2sl::World* world ); 
 
     virtual void to_xml( xmlDocPtr doc, xmlNodePtr root )const;
 
@@ -32,7 +30,7 @@ namespace h2sl_cdcg {
 
     inline int& cv( void ){ return _ccv; };
     inline const int& cv( void )const{ return _ccv; };
-    virtual inline const feature_type_t type( void )const{ return FEATURE_TYPE_CORRESPONDENCE; };
+    virtual inline const h2sl::feature_type_t type( void )const{ return h2sl::FEATURE_TYPE_CORRESPONDENCE; };
 
   protected:
     int _ccv;

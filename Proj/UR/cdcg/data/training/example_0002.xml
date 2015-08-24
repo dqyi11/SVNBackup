@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <instruction text="move to the building before going to the tree"/>
+  <instruction text="move to the bathroom before going to the bedroom"/>
   <world>
     <objects>
       <object name="R" type="robot" />
-      <object name="P" type="person" />
-      <object name="C" type="car" />
-      <object name="T" type="tree" />
-      <object name="B1" type="building" />
-      <object name="B2" type="building" />
+      <object name="P" type="bathroom" />
+      <object name="C" type="chair" />
+      <object name="T" type="table" />
+      <object name="B" type="bedroom" />
     </objects>
   </world>
 
@@ -23,7 +22,7 @@
 	  </parent>
 	  <child>
 	    <region type="na">
-	      <object name="B1" type="building"/>
+	      <object name="P" type="bathroom"/>
 	    </region>
 	  </child>
 	</constraint>
@@ -39,7 +38,7 @@
       <grounding>
         <grounding_set>
           <region type="na">
-            <object name="B1" type="building"/>
+            <object name="P" type="bathroom"/>
           </region>
         </grounding_set>
       </grounding>
@@ -48,7 +47,7 @@
         <grounding>
           <grounding_set>
             <region type="na">
-              <object name="B1" type="building"/>
+              <object name="P" type="bathroom"/>
             </region>
           </grounding_set>
         </grounding>
@@ -60,9 +59,7 @@
       <grounding>
         <grounding_set>
           <feature_func_kernel weight="0.2">
-            <region type="na">
-	      <object name="T" type="tree"/>
-            </region>
+	    <object name="B" type="bedroom"/>
           </feature_func_kernel>
         </grounding_set>
       </grounding>
@@ -71,9 +68,7 @@
         <grounding>
           <grounding_set>
             <feature_func_kernel weight="0.2">
-              <region type="na">
-	        <object name="T" type="tree"/>
-              </region>
+	      <object name="B" type="bedroom"/>
             </feature_func_kernel>
           </grounding_set>
         </grounding>
@@ -82,9 +77,7 @@
           <grounding>
             <grounding_set>
               <feature_func_kernel weight="0.2">
-                <region type="na">
-	      	  <object name="T" type="tree"/>
-                </region>
+	      	<object name="B" type="bedroom"/>
               </feature_func_kernel>
             </grounding_set>
           </grounding>
@@ -92,9 +85,7 @@
           <NP>
             <grounding>
               <grounding_set>
-	        <region type="na">
-	          <object name="T" type="tree"/>
-		</region>
+	        <object name="T" type="tree"/>
               </grounding_set>
             </grounding>
             <DT text="the"/>
