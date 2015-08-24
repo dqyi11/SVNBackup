@@ -5,11 +5,10 @@
       <feature_group>
         <feature_cv invert="0" cv="1"/>
         <feature_cv invert="0" cv="2"/>
-        <feature_ccv invert="0" cv="1"/>
-        <feature_ccv invert="0" cv="2"/>
-        <feature_ccv invert="0" cv="3"/>
-        <feature_ccv invert="0" cv="4"/>
-        <feature_ccv invert="0" cv="5"/>
+        <feature_cv invert="0" cv="3"/>
+        <feature_cv invert="0" cv="4"/>
+        <feature_cv invert="0" cv="5"/>
+        <feature_cv invert="0" cv="6"/>
       </feature_group>
       <feature_group>
         <feature_word invert="0" pos="CC" text="and"/>
@@ -122,7 +121,7 @@
         <feature_constraint_parent_is_robot invert="1"/>
         <feature_constraint_child_is_robot invert="0"/>
         <feature_constraint_child_is_robot invert="1"/>
-        <feature_func_kernel_object invert="0"/>
+        <feature_func_kernel invert="0"/>
       </feature_group>
     </feature_product>
   </feature_set>

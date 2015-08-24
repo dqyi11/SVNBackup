@@ -1,11 +1,34 @@
 /**
- * @file    cllm_train.cc
- * @author  Daqing Yi (daqing.yi@byu.edu)
+ * @file    llm_train.cc
+ * @author  Thomas M. Howard (tmhoward@csail.mit.edu)
+ *          Matthew R. Walter (mwalter@csail.mit.edu)
  * @version 1.0
+ *
+ * @section LICENSE
+ *
+ * This file is part of h2sl.
+ *
+ * Copyright (C) 2014 by the Massachusetts Institute of Technology
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see
+ * <http://www.gnu.org/licenses/gpl-2.0.html> or write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
  *
  * @section DESCRIPTION
  *
- * A CLLM model training program
+ * A LLM model training program
  */
 
 #include <iostream>
@@ -14,22 +37,26 @@
 #include "h2sl/grounding_set.h"
 #include "h2sl/region.h"
 #include "h2sl/constraint.h"
-#include "h2sl/cllm.h"
+#include "h2sl/llm.h"
 #include "h2sl/dcg.h"
-#include "cllm_train_cmdline.h"
+#include "h2sl_cdcg/ccv.h"
+#include "h2sl_cdcg/func_kernel.h"
+#include "h2sl_cdcg/feature_func_kernel.h"
+#include "llm_train_cdcg_cmdline.h"
 
 using namespace std;
 using namespace h2sl;
+using namespace h2sl_cdcg;
 
 void
-evaluate_model( CLLM* llm,
-                vector< pair< unsigned int, CLLM_X > >& examples ){
-  vector< double > cvs;
+evaluate_model( LLM* llm,
+                vector< pair< unsigned int, LLM_X > >& examples ){
+  vector< unsigned int > cvs;
   cvs.push_back( CV_FALSE );
   cvs.push_back( CV_TRUE );
 
   unsigned int num_correct = 0;
-  for( unsigned int i = 0; i < examples.size(); i++ ) {
+  for( unsigned int i = 0; i < examples.size(); i++ ){
     double pygx = llm->pygx( examples[ i ].first, examples[ i ].second, cvs );
     if( pygx < 0.75 ){
       cout << "example " << i << " had pygx " << pygx << endl;
@@ -44,6 +71,8 @@ evaluate_model( CLLM* llm,
           cout << "children[" << j << "]:" << *static_cast< Region* >( examples[ i ].second.children()[ j ] ) << endl;
         } else if( dynamic_cast< Constraint* >( examples[ i ].second.children()[ j ] ) != NULL ){
           cout << "children[" << j << "]:" << *static_cast< Constraint* >( examples[ i ].second.children()[ j ] ) << endl;
+        } else if( dynamic_cast< Func_Kernel* >( examples[ i ].second.children()[ j ] ) != NULL ){
+          cout << "children[" << j << "]:" << *static_cast< Func_Kernel* >( examples[ i ].second.children()[ j ] ) << endl;
         }
       }
       cout << "     phrase:" << *examples[ i ].second.phrase() << endl << endl;
@@ -81,7 +110,17 @@ evaluate_cv( const Grounding* grounding,
         }
       }
     }
-  }   
+  } else if ( dynamic_cast< const Func_Kernel* >( grounding ) != NULL ){
+    const Func_Kernel * func_kernel_grounding = dynamic_cast< const Func_Kernel* >( grounding );
+    cv = CCV_ZERO;
+    for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
+      if( dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
+        if( *func_kernel_grounding == *dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ){
+          cv = CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
+        }
+      } 
+    }
+  }
  
   return cv;
 }
@@ -134,7 +173,7 @@ main( int argc,
 
   vector< World* > worlds( args.inputs_num, NULL );
 
-  vector< pair< unsigned int, CLLM_X > > examples;
+  vector< pair< unsigned int, LLM_X > > examples;
   for( unsigned int i = 0; i < args.inputs_num; i++ ){
     cout << "reading file " << args.inputs[ i ] << endl;
     worlds[ i ] = new World();

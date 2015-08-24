@@ -76,8 +76,8 @@ if( NOT h2sl_FOUND )
   return()
 endif()
 include_directories(${H2SL_INCLUDE_DIR})
-message("H2SL_INCLUDE_DIR:${H2SL_INCLUDE_DIR}")
-message("H2SL_LIBRARIES:${H2SL_LIBRARIES}")
+#message("H2SL_INCLUDE_DIR:${H2SL_INCLUDE_DIR}")
+#message("H2SL_LIBRARIES:${H2SL_LIBRARIES}")
 
 # function for installing headers
 function(process_hdrs)

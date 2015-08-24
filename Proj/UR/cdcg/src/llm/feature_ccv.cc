@@ -1,6 +1,6 @@
 /**
  * @file    feature_ccv.cc
- * @author  Thomas M. Howard (tmhoward@csail.mit.edu)
+ * @author  Daqing Yi (daqing.yi@byu.edu)
  * @version 1.0
  *
  * @section DESCRIPTION
@@ -10,10 +10,11 @@
 
 #include <sstream>
 
-#include <h2sl/feature_ccv.h>
+#include <h2sl_cdcg/feature_ccv.h>
 
 using namespace std;
 using namespace h2sl;
+using namespace h2sl_cdcg;
 
 Feature_CCV::
 Feature_CCV( const int& cv ) : Feature( false ),

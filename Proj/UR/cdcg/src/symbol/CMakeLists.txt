@@ -4,7 +4,7 @@
 
 # HEADER FILES
 set(HDRS
-    h2sl/func_kernel.h)
+    h2sl_cdcg/func_kernel.h)
 
 # SOURCE FILES
 set(SRCS
@@ -14,7 +14,7 @@ set(SRCS
 set(DEPS ${LBFGS_LIBRARY} ${LIBXML2_LIBRARIES})
 
 # LIBRARY NAME
-set(LIB h2sl-csymbol)
+set(LIB h2sl_cdcg-symbol)
 
 # process the headers
 process_hdrs(HDRS ${HDRS})

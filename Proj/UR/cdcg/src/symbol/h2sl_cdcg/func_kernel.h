@@ -13,9 +13,12 @@
 #include <iostream>
 
 #include "h2sl/grounding.h"
-#include "h2sl/object.h"
+#include "h2sl/region.h"
+#include "h2sl_cdcg/ccv.h"
 
-namespace h2sl {
+using namespace h2sl;
+
+namespace h2sl_cdcg {
   typedef enum {
     FUNC_KERNEL_TYPE_UNKNOWN,
     FUNC_KERNEL_TYPE_GAUSSIAN,
@@ -24,8 +27,8 @@ namespace h2sl {
 
   class Func_Kernel: public Grounding {
   public:
-    Func_Kernel( const unsigned int& type = 0, const Object& object = Object() );
-    Func_Kernel( const func_kernel_type_t& type, const Object& object );
+    Func_Kernel( const unsigned int& type = 0, const Region& region = Region() );
+    Func_Kernel( const func_kernel_type_t& type, const Region& region );
     virtual ~Func_Kernel();
     Func_Kernel( const Func_Kernel& other );
     Func_Kernel& operator=( const Func_Kernel& other );
@@ -44,12 +47,17 @@ namespace h2sl {
 
     inline unsigned int& type( void ){ return _type; };
     inline const unsigned int& type( void )const{ return _type; };
-    inline Object& object( void ){ return _object; };
-    inline const Object& object( void )const{ return _object; };
+    inline Region& region( void ){ return _region; };
+    inline const Region& region( void )const{ return _region; };
+    inline float& weight( void ){ return _weight; };
+    inline const float& weight( void )const{ return _weight; };
+    inline unsigned int resolution( void ){ return APPROX_RESOLUTION; };
+    inline const unsigned int resolution( void )const{ return APPROX_RESOLUTION; };
 
   protected:
     unsigned int _type;
-    Object _object;
+    float _weight;
+    Region _region;
 
   private:
 

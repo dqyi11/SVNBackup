@@ -8,24 +8,25 @@
  * The implementation of a class used to describe a kernel of an object
  */
 
-#include "h2sl/func_kernel.h"
+#include "h2sl_cdcg/func_kernel.h"
 
 using namespace std;
 using namespace h2sl;
+using namespace h2sl_cdcg;
 
 Func_Kernel::
 Func_Kernel( const unsigned int& type,
-        const Object& object ) : Grounding(),
+        const Region& region ) : Grounding(),
                                   _type( type ),
-                                  _object( object ) {
+                                  _region( region ) {
 
 }
 
 Func_Kernel::
 Func_Kernel( const func_kernel_type_t& type,
-        const Object& object ) : Grounding(),
+        const Region& region ) : Grounding(),
                                   _type( type ),
-                                  _object( object ){
+                                  _region( region ){
 
 }
 
@@ -37,7 +38,7 @@ Func_Kernel::
 Func_Kernel::
 Func_Kernel( const Func_Kernel& other ) : Grounding( other ),
                                 _type( other._type ),
-                                _object( other._object ){
+                                _region( other._region ){
 
 }
 
@@ -45,7 +46,7 @@ Func_Kernel&
 Func_Kernel::
 operator=( const Func_Kernel& other ) {
   _type = other._type;
-  _object = other._object;
+  _region = other._region;
   return (*this);
 }
 
@@ -54,7 +55,7 @@ Func_Kernel::
 operator==( const Func_Kernel& other )const{
   if( _type != other._type ){
     return false;
-  } if( _object != other._object ){
+  } if( _region != other._region ){
     return false;
   } else {
     return true;
@@ -109,7 +110,7 @@ to_xml( xmlDocPtr doc,
         xmlNodePtr root )const{
   xmlNodePtr node = xmlNewDocNode( doc, NULL, ( const xmlChar* )( "func_kernel" ), NULL );
   xmlNewProp( node, ( const xmlChar* )( "type" ), ( const xmlChar* )( Func_Kernel::type_to_std_string( _type ).c_str() ) );
-  _object.to_xml( doc, node );
+  _region.to_xml( doc, node );
   xmlAddChild( root, node );
   return;
 }
@@ -141,7 +142,7 @@ void
 Func_Kernel::
 from_xml( xmlNodePtr root ){
   _type = FUNC_KERNEL_TYPE_UNKNOWN;
-  _object = Object();
+  _region = Region();
   if( root->type == XML_ELEMENT_NODE ){
     xmlChar * tmp = xmlGetProp( root, ( const xmlChar* )( "type" ) );
     if( tmp != NULL ){
@@ -152,8 +153,8 @@ from_xml( xmlNodePtr root ){
     xmlNodePtr l1 = NULL; 
     for( l1 = root->children; l1; l1 = l1->next ){
       if( l1->type == XML_ELEMENT_NODE ){
-        if( xmlStrcmp( l1->name, ( const xmlChar* )( "object" ) ) == 0 ){
-          _object.from_xml( l1 );
+        if( xmlStrcmp( l1->name, ( const xmlChar* )( "region" ) ) == 0 ){
+          _region.from_xml( l1 );
         }
       }
     }
@@ -161,13 +162,15 @@ from_xml( xmlNodePtr root ){
   return;
 }
 
-namespace h2sl {
+namespace h2sl_cdcg {
   ostream&
   operator<<( ostream& out,
               const Func_Kernel& other ) {
     out << "Func_Kernel(";
     out << "type=\"" << Func_Kernel::type_to_std_string( other.type() ) << "\",";
-    out << "object=" << other.object();
+    out << "region=" << other.region();
+    out << " weight=" << other.weight();
+    out << " resolution" << other.resolution();
     out << ")";
     return out;
   }

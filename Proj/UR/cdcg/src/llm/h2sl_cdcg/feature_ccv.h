@@ -7,15 +7,17 @@
  * The interface for a class that looks at the value of the CV
  */
 
-#ifndef H2SL_FEATURE_CCV_H
-#define H2SL_FEATURE_CCV_H
+#ifndef H2SL_FEATURE_CCV_H_CDCG
+#define H2SL_FEATURE_CCV_H_CDCG
 
 #include <iostream>
 
 #include <h2sl/feature.h>
 
-namespace h2sl {
-  class Feature_CCV: public Feature {
+using namespace h2sl;
+
+namespace h2sl_cdcg {
+  class Feature_CCV: public h2sl::Feature {
   public:
     Feature_CCV( const int& cv = 0 );
     virtual ~Feature_CCV();
@@ -41,4 +43,4 @@ namespace h2sl {
   std::ostream& operator<<( std::ostream& out, const Feature_CCV& other );
 }
 
-#endif /* H2SL_FEATURE_CCV_H */
+#endif /* H2SL_FEATURE_CCV_H_CDCG */
