@@ -13,7 +13,7 @@ set(BIN_SRCS
     llm_train_cdcg.cc)
 
 # LIBRARAY DEPENDENCIES
-set(DEPS h2sl_cdcg-llm h2sl_cdcg-symbol ${H2SL_LIBRARIES}) 
+set(DEPS h2sl_cdcg-llm h2sl_cdcg-symbol h2sl_cdcg-dcg ${H2SL_LIBRARIES}) 
 
 # LIBRARY NAME
 set(LIB )

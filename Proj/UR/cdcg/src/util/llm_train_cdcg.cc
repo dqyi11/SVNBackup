@@ -15,7 +15,7 @@
 #include "h2sl/region.h"
 #include "h2sl/constraint.h"
 #include "h2sl/llm.h"
-#include "h2sl/dcg.h"
+#include "h2sl_cdcg/dcg.h"
 #include "h2sl_cdcg/ccv.h"
 #include "h2sl_cdcg/func_kernel.h"
 #include "h2sl_cdcg/feature_func_kernel.h"
@@ -179,7 +179,7 @@ main( int argc,
   LLM * llm = new LLM( feature_set );
   llm->weights().resize( llm->feature_set()->size() );
 
-  DCG * dcg = new DCG();
+  h2sl_cdcg::DCG * dcg = new h2sl_cdcg::DCG();
 
   vector< World* > worlds( args.inputs_num, NULL );
 
