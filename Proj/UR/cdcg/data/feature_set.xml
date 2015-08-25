@@ -68,6 +68,7 @@
         <feature_word invert="0" pos="NN" text="pen"/>
         <feature_word invert="0" pos="NN" text="tape"/>
         <feature_word invert="0" pos="NN" text="bone"/>
+        <feature_word invert="0" pos="NN" text="bathroom"/>
         <feature_word invert="0" pos="TO" text="to"/>
         <feature_word invert="0" pos="VB" text="proceed"/>
         <feature_word invert="0" pos="VB" text="drive"/>
@@ -79,6 +80,7 @@
         <feature_word invert="0" pos="VB" text="leave"/>
         <feature_word invert="0" pos="VB" text="exit"/>
         <feature_word invert="0" pos="VBG" text="traveling"/>
+        <feature_word invert="0" pos="VBG" text="going"/>
         <feature_num_words invert="0" num_words="0"/>
       </feature_group>
       <feature_group>
@@ -125,6 +127,7 @@
         <feature_constraint_child_is_robot invert="0"/>
         <feature_constraint_child_is_robot invert="1"/>
         <feature_func_kernel invert="0"/>
+        <feature_func_kernel_matches_child invert="0"/>
         <feature_object invert="0" object_type="1"/>
         <feature_object invert="0" object_type="2"/>
         <feature_object invert="0" object_type="3"/>

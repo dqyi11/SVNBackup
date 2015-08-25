@@ -8,7 +8,9 @@ set(HDRS
     h2sl_cdcg/feature_func_kernel.h 
     h2sl_cdcg/feature_product.h
     h2sl_cdcg/feature_set.h
-    h2sl_cdcg/feature_ccv.h)
+    h2sl_cdcg/feature_ccv.h
+    h2sl_cdcg/feature_func_kernel_matches_child.h
+    )
 
 
 # SOURCE FILES
@@ -16,7 +18,9 @@ set(SRCS
     feature_func_kernel.cc
     feature_product.cc
     feature_set.cc
-    feature_ccv.cc)
+    feature_ccv.cc
+    feature_func_kernel_matches_child.cc
+    )
 
 # BINARY SOURCE FILES
 set(BIN_SRCS
