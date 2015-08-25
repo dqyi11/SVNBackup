@@ -1,30 +1,7 @@
 /**
- * @file    gui_demo.cc
- * @author  Thomas M. Howard (tmhoward@csail.mit.edu)
- *          Matthew R. Walter (mwalter@csail.mit.edu)
+ * @file    gui_demo_cdcg.cc
+ * @author  Daqing Yi (daqing.yi@byu.edu)
  * @version 1.0
- *
- * @section LICENSE
- *
- * This file is part of h2sl.
- *
- * Copyright (C) 2014 by the Massachusetts Institute of Technology
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see
- * <http://www.gnu.org/licenses/gpl-2.0.html> or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
  *
  * @section DESCRIPTION
  *
@@ -36,11 +13,14 @@
 #include <QtGui/QApplication>
 
 #include "h2sl/parser_cyk.h"
+#include "h2sl_cdcg/feature_set.h"
+#include "h2sl_cdcg/dcg.h"
 #include "h2sl/gui.h"
-#include "gui_demo_cmdline.h"
+#include "gui_demo_cdcg_cmdline.h"
 
 using namespace std;
 using namespace h2sl;
+using namespace h2sl_cdcg;
 
 int
 main( int argc,
@@ -61,14 +41,14 @@ main( int argc,
   World * world = new World();
   world->from_xml( args.world_arg );
 
-  Feature_Set * feature_set = new Feature_Set();
+  h2sl_cdcg::Feature_Set * feature_set = new h2sl_cdcg::Feature_Set();
 
   LLM * llm = new LLM( feature_set );
   if( args.llm_given ){
     llm->from_xml( args.llm_arg );
   }
 
-  DCG * dcg = new DCG();
+  h2sl_cdcg::DCG * dcg = new h2sl_cdcg::DCG();
 
   GUI gui( grammar, parser, world, llm, dcg, args.beam_width_arg );
 

@@ -1,5 +1,6 @@
 # GENGETOPT FILES
 set(GGOS
+   dcg_demo_cdcg.ggo
    )
 
 # HEADER FILES
@@ -15,6 +16,7 @@ set(SRCS
 
 # BINARY SOURCE FILES
 set(BIN_SRCS
+    dcg_demo_cdcg.cc
     )
 
 

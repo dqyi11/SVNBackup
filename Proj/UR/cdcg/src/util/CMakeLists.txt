@@ -1,6 +1,9 @@
 # GENGETOPT FILES
 set(GGOS
-    llm_train_cdcg.ggo)
+    llm_train_cdcg.ggo
+    gui_demo_cdcg.ggo
+   )
+   
 
 # HEADER FILES
 set(HDRS )
@@ -10,10 +13,12 @@ set(SRCS )
 
 # BINARY SOURCE FILES
 set(BIN_SRCS
-    llm_train_cdcg.cc)
+    llm_train_cdcg.cc
+    gui_demo_cdcg.cc
+    )
 
 # LIBRARAY DEPENDENCIES
-set(DEPS h2sl_cdcg-llm h2sl_cdcg-symbol h2sl_cdcg-dcg ${H2SL_LIBRARIES}) 
+set(DEPS h2sl_cdcg-llm h2sl_cdcg-symbol h2sl_cdcg-dcg ${QT_LIBRARIES} ${H2SL_LIBRARIES}) 
 
 # LIBRARY NAME
 set(LIB )
