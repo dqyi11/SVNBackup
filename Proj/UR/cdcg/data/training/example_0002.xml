@@ -4,10 +4,10 @@
   <world>
     <objects>
       <object name="R" type="robot" />
-      <object name="P" type="bathroom" />
+      <object name="B" type="bathroom" />
       <object name="C" type="chair" />
       <object name="T" type="table" />
-      <object name="B" type="bedroom" />
+      <object name="B0" type="bedroom" />
     </objects>
   </world>
 
@@ -17,19 +17,17 @@
         <constraint type="inside">
 	  <parent>
 	    <region type="na">
-	      <object name="o0" type="robot"/>
+	      <object name="R" type="robot"/>
 	    </region>
 	  </parent>
 	  <child>
 	    <region type="na">
-	      <object name="P" type="bathroom"/>
+	      <object name="B" type="bathroom"/>
 	    </region>
 	  </child>
 	</constraint>
         <feature_func_kernel weight="0.2">
-          <region type="na">
-	    <object name="T" type="tree"/>
-          </region>
+	  <object name="T" type="tree"/>
         </feature_func_kernel>
       </grounding_set>
     </grounding>
@@ -38,7 +36,7 @@
       <grounding>
         <grounding_set>
           <region type="na">
-            <object name="P" type="bathroom"/>
+            <object name="B" type="bathroom"/>
           </region>
         </grounding_set>
       </grounding>
@@ -47,7 +45,7 @@
         <grounding>
           <grounding_set>
             <region type="na">
-              <object name="P" type="bathroom"/>
+              <object name="B" type="bathroom"/>
             </region>
           </grounding_set>
         </grounding>

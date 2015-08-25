@@ -1,30 +1,7 @@
 /**
- * @file    llm_train.cc
- * @author  Thomas M. Howard (tmhoward@csail.mit.edu)
- *          Matthew R. Walter (mwalter@csail.mit.edu)
+ * @file    llm_train_cdcg.cc
+ * @author  Daqing Yi (daqing.yi@byu.edu)
  * @version 1.0
- *
- * @section LICENSE
- *
- * This file is part of h2sl.
- *
- * Copyright (C) 2014 by the Massachusetts Institute of Technology
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see
- * <http://www.gnu.org/licenses/gpl-2.0.html> or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
  *
  * @section DESCRIPTION
  *
@@ -55,10 +32,20 @@ evaluate_model( LLM* llm,
   vector< unsigned int > cvs;
   cvs.push_back( CV_FALSE );
   cvs.push_back( CV_TRUE );
+  vector< unsigned int > ccvs;
+  ccvs.push_back( CCV_ZERO );
+  ccvs.push_back( CCV_ONE );
+  ccvs.push_back( CCV_TWO );
+  ccvs.push_back( CCV_THREE );
+  ccvs.push_back( CCV_FOUR );
+  ccvs.push_back( CCV_FIVE );
 
   unsigned int num_correct = 0;
   for( unsigned int i = 0; i < examples.size(); i++ ){
-    double pygx = llm->pygx( examples[ i ].first, examples[ i ].second, cvs );
+    double pygx = 0.0;
+    //if ( dynamic_cast< 
+    pygx = llm->pygx( examples[ i ].first, examples[ i ].second, cvs );
+    
     if( pygx < 0.75 ){
       cout << "example " << i << " had pygx " << pygx << endl;
       cout << "         cv:" << examples[ i ].first << endl;
@@ -66,6 +53,8 @@ evaluate_model( LLM* llm,
         cout << "  grounding:" << *static_cast< Region* >( examples[ i ].second.grounding() ) << endl; 
       } else if ( dynamic_cast< Constraint* >( examples[ i ].second.grounding() ) != NULL ){
         cout << "  grounding:" << *static_cast< Constraint* >( examples[ i ].second.grounding() ) << endl; 
+      } else if ( dynamic_cast< Func_Kernel* >( examples[ i ].second.grounding() ) != NULL ) {
+        cout << "  grounding:" << *static_cast< Func_Kernel* >( examples[ i ].second.grounding() ) << endl; 
       }
       for( unsigned int j = 0; j < examples[ i ].second.children().size(); j++ ){
         if( dynamic_cast< Region* >( examples[ i ].second.children()[ j ] ) != NULL ){
@@ -113,13 +102,32 @@ evaluate_cv( const Grounding* grounding,
     }
   } else if ( dynamic_cast< const Func_Kernel* >( grounding ) != NULL ){
     const Func_Kernel * func_kernel_grounding = dynamic_cast< const Func_Kernel* >( grounding );
+     
+    cout << endl;
+    cout << "ASSIGN CV TO FUNC KENRLE" << endl;
+    cout << endl;
+  
     cv = CCV_ZERO;
     for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
       if( dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
         if( *func_kernel_grounding == *dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ){
-          cv = CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
+          //cv = CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
+          cv = CCV_ONE;
         }
       } 
+    }
+  } else if ( dynamic_cast< const Object* >( grounding ) != NULL ){
+    const Object* object_grounding = dynamic_cast< const Object* >( grounding );
+    cv = CV_FALSE;
+   
+    cout << endl;
+    cout << "ASSIGN CV TO OBJECT" << endl;
+    cout << endl;
+
+    for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
+      if( dynamic_cast< const Object* >( groundingSet->groundings()[ i ] ) ) {
+        cv = CV_TRUE;
+      }
     }
   }
  
@@ -166,6 +174,7 @@ main( int argc,
 
   h2sl_cdcg::Feature_Set * feature_set = new h2sl_cdcg::Feature_Set();
   feature_set->from_xml( args.feature_set_arg );
+  cout << "feature_set->size():" << feature_set->size() << endl;
 
   LLM * llm = new LLM( feature_set );
   llm->weights().resize( llm->feature_set()->size() );

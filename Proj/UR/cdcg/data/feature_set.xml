@@ -12,6 +12,7 @@
       </feature_group>
       <feature_group>
         <feature_word invert="0" pos="CC" text="and"/>
+        <feature_word invert="0" pos="IN" text="above"/>
         <feature_word invert="0" pos="IN" text="near"/>
         <feature_word invert="0" pos="IN" text="behind"/>
         <feature_word invert="0" pos="IN" text="at"/>
@@ -23,6 +24,7 @@
         <feature_word invert="0" pos="IN" text="in"/>
         <feature_word invert="0" pos="IN" text="from"/>
         <feature_word invert="0" pos="IN" text="behind"/>
+        <feature_word invert="0" pos="IN" text="before"/>
         <feature_word invert="0" pos="IN" text="on"/>
         <feature_word invert="0" pos="NN" text="robot"/>
         <feature_word invert="0" pos="NN" text="box"/>
@@ -76,6 +78,7 @@
         <feature_word invert="0" pos="VB" text="approach"/>
         <feature_word invert="0" pos="VB" text="leave"/>
         <feature_word invert="0" pos="VB" text="exit"/>
+        <feature_word invert="0" pos="VBG" text="traveling"/>
         <feature_num_words invert="0" num_words="0"/>
       </feature_group>
       <feature_group>
@@ -122,6 +125,24 @@
         <feature_constraint_child_is_robot invert="0"/>
         <feature_constraint_child_is_robot invert="1"/>
         <feature_func_kernel invert="0"/>
+        <feature_object invert="0" object_type="1"/>
+        <feature_object invert="0" object_type="2"/>
+        <feature_object invert="0" object_type="3"/>
+        <feature_object invert="0" object_type="4"/>
+        <feature_object invert="0" object_type="5"/>
+        <feature_object invert="0" object_type="6"/>
+        <feature_object invert="0" object_type="7"/>
+        <feature_object invert="0" object_type="8"/>
+        <feature_object invert="0" object_type="9"/>
+        <feature_object invert="0" object_type="10"/>
+        <feature_object invert="0" object_type="11"/>
+        <feature_object invert="0" object_type="12"/>
+        <feature_object invert="0" object_type="13"/>
+        <feature_object invert="0" object_type="14"/>
+        <feature_object invert="0" object_type="15"/>
+        <feature_object invert="0" object_type="16"/>
+        <feature_object invert="0" object_type="17"/>
+        <feature_object invert="0" object_type="18"/>
       </feature_group>
     </feature_product>
   </feature_set>

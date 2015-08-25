@@ -29,22 +29,13 @@ namespace h2sl_cdcg {
     Feature_Set( const Feature_Set& other );
     Feature_Set& operator=( const Feature_Set& other );
 
-    void indices( const unsigned int& cv, const h2sl::Grounding* grounding, const std::vector< h2sl::Grounding* >& children, const h2sl::Phrase* phrase, const h2sl::World* world, std::vector< unsigned int >& indices, const std::vector< bool >& evaluateFeatureTypes );
-    void evaluate( const unsigned int& cv, const h2sl::Grounding* grounding, const std::vector< h2sl::Grounding* >& children, const h2sl::Phrase* phrase, const h2sl::World* world, const std::vector< bool >& evaluateFeatureTypes );
-
     virtual void to_xml( const std::string& filename )const;
     virtual void to_xml( xmlDocPtr doc, xmlNodePtr root )const;
 
     virtual void from_xml( const std::string& filename );
     virtual void from_xml( xmlNodePtr root );
 
-    unsigned int size( void )const;
-
-    inline std::vector< Feature_Product* >& feature_products( void ){ return _feature_products; };
-    inline const std::vector< Feature_Product* >& feature_products( void )const{ return _feature_products; };
-
   protected:
-    std::vector< Feature_Product* > _feature_products;
 
   private:
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <instruction text="move to the chair by traveling above the box"/>
+  <instruction text="move to the chair"/>
   <world>
     <objects>
       <object name="R" type="robot" />
@@ -52,45 +52,6 @@
         <DT text="the"/>
 	<NN text="chair"/>
       </NP>
-    </PP>
-    <PP>
-      <grounding>
-        <grounding_set>
-          <feature_func_kernel weight="0.4">
-	    <object name="B" type="box"/>
-          </feature_func_kernel>
-        </grounding_set>
-      </grounding>
-      <IN text="by"/>
-      <VP>
-        <grounding>
-          <grounding_set>
-              <feature_func_kernel weight="0.4">
-	      	<object name="B" type="box"/>
-              </feature_func_kernel>
-          </grounding_set>
-        </grounding>
-        <VBG text="traveling"/>
-        <PP>
-          <grounding>
-            <grounding_set>
-              <feature_func_kernel weight="0.4">
-	      	<object name="B" type="box"/>
-              </feature_func_kernel>
-            </grounding_set>
-          </grounding>
-          <IN text="above"/>
-          <NP>
-            <grounding>
-              <grounding_set>
-	        <object name="B" type="box"/>
-              </grounding_set>
-            </grounding>
-             <DT text="the"/>
-             <NN text="box"/>
-          </NP>
-        </PP>
-      </VP>
-    </PP>
+    </PP>  
   </VP>
 </root>

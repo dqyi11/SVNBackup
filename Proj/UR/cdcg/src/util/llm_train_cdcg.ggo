@@ -1,4 +1,4 @@
-package "h2sl-llm-train"
+package "h2sl-llm-train-cdcg"
 version "0.0.1"
 purpose "A program used to train a log-linear model"
 

@@ -26,13 +26,10 @@
 #include "h2sl_cdcg/feature_product.h"
 
 using namespace std;
-using namespace h2sl;
-
-namespace h2sl_cdcg {
+using namespace h2sl_cdcg;
 
 Feature_Product::
-Feature_Product() : _feature_groups(),
-                _values() {
+Feature_Product() : h2sl::Feature_Product() {
 
 }
 
@@ -42,8 +39,7 @@ Feature_Product::
 }
 
 Feature_Product::
-Feature_Product( const Feature_Product& other ) : _feature_groups( other._feature_groups ),
-                                          _values( other._values ) {
+Feature_Product( const Feature_Product& other ) : h2sl::Feature_Product( other ) {
 
 }
 
@@ -53,71 +49,6 @@ operator=( const Feature_Product& other ) {
   _feature_groups = other._feature_groups;
   _values = other._values;
   return (*this);
-}
-
-void 
-Feature_Product::
-indices( const unsigned int& cv, 
-          const Grounding* grounding,
-          const vector< Grounding* >& children, 
-          const Phrase* phrase,
-          const World* world,
-          vector< unsigned int >& indices,
-          const vector< bool >& evaluateFeatureTypes ){
-  indices.clear();
-  evaluate( cv, grounding, children, phrase, world, evaluateFeatureTypes );
-
-  std::vector< std::vector< unsigned int > > group_indices( _values.size() );
-  for( unsigned int i = 0; i < _values.size(); i++ ){
-    for( unsigned int j = 0; j < _values[ i ].size(); j++ ){
-      if( _values[ i ][ j ] ){
-        group_indices[ i ].push_back( j ); 
-      }
-    }
-  }
-
-  if( _values.size() == 3 ){
-    for( unsigned int i = 0; i < group_indices[ 0 ].size(); i++ ){
-      for( unsigned int j = 0; j < group_indices[ 1 ].size(); j++ ){
-        for( unsigned int k = 0; k < group_indices[ 2 ].size(); k++ ){
-          indices.push_back( group_indices[ 0 ][ i ] * _feature_groups[ 1 ].size() * _feature_groups[ 2 ].size() + group_indices[ 1 ][ j ] * _feature_groups[ 2 ].size() + group_indices[ 2 ][ k ] );
-        }
-      }
-    }
-  }
-
-  return;
-}
-
-void
-Feature_Product::
-evaluate( const unsigned int& cv,
-          const Grounding* grounding, 
-          const vector< Grounding* >& children,
-          const Phrase* phrase,
-          const World* world,
-          const vector< bool >& evaluateFeatureTypes ){
-
-//  cout << "phrase:" << *phrase << endl;
-
-  for( unsigned int i = 0; i < _feature_groups.size(); i++ ){
-    for( unsigned int j = 0; j < _feature_groups[ i ].size(); j++ ){
-      if( evaluateFeatureTypes[ _feature_groups[ i ][ j ]->type() ] ){
-        _values[ i ][ j ] = _feature_groups[ i ][ j ]->value( cv, grounding, children, phrase, world );
-      }
-    }
-/*
-    cout << "values[" << _values[ i ].size() << "]:{"; 
-    for( unsigned int j = 0; j < _values[ i ].size(); j++ ){
-      cout << _values[ i ][ j ];
-      if( j != ( _values[ i ].size() - 1 ) ){
-        cout << ",";
-      }
-    }
-    cout << "}" << endl;
-*/
-  }
-  return;
 }
 
 void 
@@ -192,56 +123,56 @@ from_xml( xmlNodePtr root ){
     for( l1 = root->children; l1; l1 = l1->next ){
       if( l1->type == XML_ELEMENT_NODE ){
         if( xmlStrcmp( l1->name, ( const xmlChar* )( "feature_group" ) ) == 0 ){
-          _feature_groups.push_back( vector< Feature* >() );
+          _feature_groups.push_back( vector< h2sl::Feature* >() );
           xmlNodePtr l2 = NULL;
           for( l2 = l1->children; l2; l2 = l2->next ){
             if( l2->type == XML_ELEMENT_NODE ){
               if( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_cv" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_CV() );
+                _feature_groups.back().push_back( new h2sl::Feature_CV() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_word" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Word() );
+                _feature_groups.back().push_back( new h2sl::Feature_Word() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_num_words" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Num_Words() );
+                _feature_groups.back().push_back( new h2sl::Feature_Num_Words() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_object" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Object() );
+                _feature_groups.back().push_back( new h2sl::Feature_Object() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_region_object" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Region_Object() );
+                _feature_groups.back().push_back( new h2sl::Feature_Region_Object() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_region" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Region() );
+                _feature_groups.back().push_back( new h2sl::Feature_Region() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_constraint" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Constraint() );
+                _feature_groups.back().push_back( new h2sl::Feature_Constraint() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_region_object_matches_child" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Region_Object_Matches_Child() );
+                _feature_groups.back().push_back( new h2sl::Feature_Region_Object_Matches_Child() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_region_matches_child" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Region_Matches_Child() );
+                _feature_groups.back().push_back( new h2sl::Feature_Region_Matches_Child() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_region_merge_partially_known_regions" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Region_Merge_Partially_Known_Regions() );
+                _feature_groups.back().push_back( new h2sl::Feature_Region_Merge_Partially_Known_Regions() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_constraint_parent_matches_child_region" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Constraint_Parent_Matches_Child_Region() );
+                _feature_groups.back().push_back( new h2sl::Feature_Constraint_Parent_Matches_Child_Region() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_constraint_child_matches_child_region" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Constraint_Child_Matches_Child_Region() );
+                _feature_groups.back().push_back( new h2sl::Feature_Constraint_Child_Matches_Child_Region() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_constraint_parent_is_robot" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Constraint_Parent_Is_Robot() );
+                _feature_groups.back().push_back( new h2sl::Feature_Constraint_Parent_Is_Robot() );
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_constraint_child_is_robot" ) ) == 0 ){
-                _feature_groups.back().push_back( new Feature_Constraint_Child_Is_Robot() );
+                _feature_groups.back().push_back( new h2sl::Feature_Constraint_Child_Is_Robot() );
                 _feature_groups.back().back()->from_xml( l2 );
-              } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel" ) ) == 0 ){ 
+              } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel" ) ) == 0 ){
                 _feature_groups.back().push_back( new Feature_Func_Kernel() );
                 _feature_groups.back().back()->from_xml( l2 ); 
-              }
+              } 
               else {
                 cout << "could not load feature " << l2->name << endl;
               } 
@@ -258,20 +189,7 @@ from_xml( xmlNodePtr root ){
   return;
 }
 
-unsigned int
-Feature_Product::
-size( void )const{
-  unsigned int tmp = 0;
-  for( unsigned int i = 0; i < _feature_groups.size(); i++ ){
-    if( i == 0 ){
-      tmp = _feature_groups[ i ].size();
-    } else {
-      tmp *= _feature_groups[ i ].size();
-    }
-  }
-  return tmp;
-}
-
+namespace h2sl_cdcg {
   ostream&
   operator<<( ostream& out,
               const Feature_Product& other ) {
