@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <instruction text="move to the bathroom before going to the bedroom"/>
+  <instruction text="move to the bottle before going to the box"/>
   <world>
     <object name="R" type="robot" />
-    <object name="B" type="bathroom" />
+    <object name="B" type="bottle" />
     <object name="C" type="chair" />
     <object name="T" type="table" />
-    <object name="B0" type="bedroom" />
+    <object name="BX" type="box" />
   </world>
 
   <VP>
@@ -20,13 +20,13 @@
 	  </parent>
 	  <child>
 	    <region type="na">
-	      <object name="B" type="bathroom"/>
+	      <object name="B" type="bottle"/>
 	    </region>
 	  </child>
 	</constraint>
-        <feature_func_kernel weight="0.2">
-	  <object name="T" type="tree"/>
-        </feature_func_kernel>
+        <func_kernel weight="0.2">
+	  <object name="BX" type="box"/>
+        </func_kernel>
       </grounding_set>
     </grounding>
     <VB text="move"/>
@@ -34,7 +34,7 @@
       <grounding>
         <grounding_set>
           <region type="na">
-            <object name="B" type="bathroom"/>
+            <object name="B" type="bottle"/>
           </region>
         </grounding_set>
       </grounding>
@@ -43,49 +43,49 @@
         <grounding>
           <grounding_set>
             <region type="na">
-              <object name="B" type="bathroom"/>
+              <object name="B" type="bottle"/>
             </region>
           </grounding_set>
         </grounding>
         <DT text="the"/>
-	<NN text="bathroom"/>
+	<NN text="bottle"/>
       </NP>
     </PP>
     <PP>
       <grounding>
         <grounding_set>
-          <feature_func_kernel weight="0.2">
-	    <object name="B" type="bedroom"/>
-          </feature_func_kernel>
+          <func_kernel weight="0.2">
+	    <object name="BX" type="box"/>
+          </func_kernel>
         </grounding_set>
       </grounding>
       <IN text="before"/>
       <VP>
         <grounding>
           <grounding_set>
-            <feature_func_kernel weight="0.2">
-	      <object name="B" type="bedroom"/>
-            </feature_func_kernel>
+            <func_kernel weight="0.2">
+	      <object name="BX" type="box"/>
+            </func_kernel>
           </grounding_set>
         </grounding>
         <VBG text="going"/>
         <PP>
           <grounding>
             <grounding_set>
-              <feature_func_kernel weight="0.2">
-	      	<object name="B" type="bedroom"/>
-              </feature_func_kernel>
+              <func_kernel weight="0.2">
+	      	<object name="BX" type="box"/>
+              </func_kernel>
             </grounding_set>
           </grounding>
           <TO text="to"/>
           <NP>
             <grounding>
               <grounding_set>
-	        <object name="T" type="tree"/>
+	        <object name="BX" type="box"/>
               </grounding_set>
             </grounding>
             <DT text="the"/>
-            <NN text="tree"/>
+            <NN text="box"/>
           </NP>
         </PP>
       </VP>

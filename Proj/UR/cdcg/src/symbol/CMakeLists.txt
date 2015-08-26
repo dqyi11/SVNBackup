@@ -1,15 +1,20 @@
 # GENGETOPT FILES
 set(GGOS 
-    func_kernel_demo.ggo)
+    func_kernel_demo.ggo
+   )
 
 
 # HEADER FILES
 set(HDRS
-    h2sl_cdcg/func_kernel.h)
+    h2sl_cdcg/func_kernel.h
+    h2sl_cdcg/grounding_set.h
+   )
 
 # SOURCE FILES
 set(SRCS
-    func_kernel.cc)
+    func_kernel.cc
+    grounding_set.cc
+    )
 
 # BINARY SOURCE FILES 
 set(BIN_SRCS

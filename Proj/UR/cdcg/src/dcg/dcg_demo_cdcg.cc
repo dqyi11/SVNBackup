@@ -15,12 +15,12 @@
 #include "h2sl/phrase.h"
 #include "h2sl/constraint.h"
 #include "h2sl/parser_cyk.h"
+#include "h2sl_cdcg/phrase.h"
 #include "h2sl_cdcg/dcg.h"
 #include "h2sl_cdcg/feature_set.h"
 #include "dcg_demo_cdcg_cmdline.h"
 
 using namespace std;
-using namespace h2sl;
 using namespace h2sl_cdcg;
 
 int
@@ -34,19 +34,19 @@ main( int argc,
     exit(1);
   }
 
-  Parser< Phrase > * parser = new Parser_CYK< Phrase >();
-  Grammar * grammar = new Grammar();
+  h2sl::Parser< h2sl_cdcg::Phrase > * parser = new h2sl::Parser_CYK< h2sl_cdcg::Phrase >();
+  h2sl::Grammar * grammar = new h2sl::Grammar();
   grammar->from_xml( args.grammar_arg );
 
-  vector< Phrase* > phrases;
+  vector< h2sl_cdcg::Phrase* > phrases;
 
-  World * world = new World();
+  h2sl::World * world = new h2sl::World();
   if( args.world_given ){
     world->from_xml( args.world_arg );
   }
 
   h2sl_cdcg::Feature_Set * feature_set = new h2sl_cdcg::Feature_Set();
-  LLM * llm = new LLM( feature_set );
+  h2sl::LLM * llm = new h2sl::LLM( feature_set );
   if( args.llm_given ){
     llm->from_xml( args.llm_arg );
   }
@@ -62,7 +62,7 @@ main( int argc,
   struct timeval end_time;
   gettimeofday( &end_time, NULL );
 
-  cout << "finished fill_seach_space in " << diff_time( start_time, end_time ) << " seconds" << endl;
+  cout << "finished fill_seach_space in " << h2sl::diff_time( start_time, end_time ) << " seconds" << endl;
 
   cout << endl << "search_spaces.size(): " << dcg->search_spaces().size() << endl << endl;
 
@@ -78,7 +78,7 @@ main( int argc,
 
         gettimeofday( &end_time, NULL );
 
-        cout << "finished search in " << diff_time( start_time, end_time ) << " seconds" << endl;   
+        cout << "finished search in " << h2sl::diff_time( start_time, end_time ) << " seconds" << endl;   
         for( unsigned int j = 0; j < dcg->solutions().size(); j++ ){
           cout << "  solutions[" << j << "]:" << *dcg->solutions()[ j ].second << " (" << dcg->solutions()[ j ].first << ")" << endl;
         }

@@ -18,16 +18,20 @@ using namespace h2sl_cdcg;
 
 Func_Kernel::
 Func_Kernel( const unsigned int& type,
+        const float& weight,
         const h2sl::Object& object ) : h2sl::Grounding(),
                                   _type( type ),
+                                  _weight( weight ),
                                   _object( object ) {
 
 }
 
 Func_Kernel::
 Func_Kernel( const func_kernel_type_t& type,
+        const float& weight,
         const h2sl::Object& object ) : h2sl::Grounding(),
                                   _type( type ),
+                                  _weight( weight ),
                                   _object( object ){
 
 }
@@ -40,6 +44,7 @@ Func_Kernel::
 Func_Kernel::
 Func_Kernel( const Func_Kernel& other ) : h2sl::Grounding( other ),
                                 _type( other._type ),
+                                _weight( other._weight ),
                                 _object( other._object ){
 
 }
@@ -49,6 +54,7 @@ Func_Kernel::
 operator=( const Func_Kernel& other ) {
   _type = other._type;
   _object = other._object;
+  _weight = other._weight;
   return (*this);
 }
 

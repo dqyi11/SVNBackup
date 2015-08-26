@@ -24,9 +24,6 @@
 	    </region>
 	  </child>
 	</constraint>
-	<feature_func_kernel weight="0.4">
-	   <object name="B" type="box"/>
-	 </feature_func_kernel>
       </grounding_set>
     </grounding>
     <VB text="move"/>

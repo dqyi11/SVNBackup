@@ -13,6 +13,7 @@
 #define H2SL_DCG_H_CDCG
 
 #include "h2sl/dcg.h"
+#include "h2sl_cdcg/phrase.h"
 
 namespace h2sl_cdcg {
   class DCG : public h2sl::DCG {
@@ -35,6 +36,7 @@ namespace h2sl_cdcg {
     virtual void _find_leaf( h2sl::Factor_Set* node, h2sl::Factor_Set*& leaf );
     virtual void _fill_phrase( h2sl::Factor_Set* node, h2sl::Factor_Set_Solution& solution, h2sl::Phrase* phrase );
     virtual void _fill_factors( h2sl::Factor_Set* node, const h2sl::Phrase* phrase, const bool& fill = false );  
+
   private:
 
   };

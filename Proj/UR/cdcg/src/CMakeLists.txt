@@ -16,6 +16,7 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -std=c++0x)
 # add the include directories to the build
 set(DIRS symbol
          llm
+         language
          dcg
          util
           )

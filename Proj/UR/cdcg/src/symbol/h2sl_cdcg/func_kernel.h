@@ -26,8 +26,8 @@ namespace h2sl_cdcg {
 
   class Func_Kernel: public h2sl::Grounding {
   public:
-    Func_Kernel( const unsigned int& type = 0, const h2sl::Object& object = h2sl::Object() );
-    Func_Kernel( const func_kernel_type_t& type, const h2sl::Object& object );
+    Func_Kernel( const unsigned int& type = 0, const float& weight = 0.0, const h2sl::Object& object = h2sl::Object() );
+    Func_Kernel( const func_kernel_type_t& type, const float& weight, const h2sl::Object& object );
     virtual ~Func_Kernel();
     Func_Kernel( const Func_Kernel& other );
     Func_Kernel& operator=( const Func_Kernel& other );

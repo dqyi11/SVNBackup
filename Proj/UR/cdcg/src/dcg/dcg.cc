@@ -12,10 +12,11 @@
 #include <fstream>
 #include <utility>
 
-#include "h2sl/grounding_set.h"
+//#include "h2sl/grounding_set.h"
 #include "h2sl/region.h"
 #include "h2sl/object.h"
 #include "h2sl/constraint.h"
+#include "h2sl_cdcg/grounding_set.h"
 #include "h2sl_cdcg/dcg.h"
 #include "h2sl_cdcg/ccv.h"
 #include "h2sl_cdcg/func_kernel.h"
@@ -102,10 +103,10 @@ fill_search_spaces( const h2sl::World* world ){
   }
   for( unsigned int i = 0; i < h2sl_cdcg::NUM_FUNC_KERNEL_TYPES; i++ ){
     if( i != h2sl_cdcg::FUNC_KERNEL_TYPE_UNKNOWN ){
-      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, h2sl::Object() ) ) );
+      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, 0.0, h2sl::Object() ) ) );
     }
     for( unsigned int j = 0; j < world->objects().size(); j++ ){
-      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, *world->objects()[ j ] ) ) );
+      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, 0.0, *world->objects()[ j ] ) ) );
     }
   }
 
@@ -157,7 +158,7 @@ leaf_search( const h2sl::Phrase* phrase,
     h2sl::Factor_Set * leaf = NULL;
     _find_leaf( _root, leaf );
     while( leaf != NULL ){
-      cout << "SEARCH " << leaf->phrase() << endl;
+      cout << "SEARCH " << leaf->phrase()->text() << endl;
       leaf->search( _search_spaces,
                     world,
                     llm,
@@ -228,9 +229,9 @@ DCG::
 _fill_phrase( h2sl::Factor_Set* node,
               h2sl::Factor_Set_Solution& solution,
               h2sl::Phrase* phrase ){
-  phrase->grounding() = new h2sl::Grounding_Set();
+  phrase->grounding() = new h2sl_cdcg::Grounding_Set();
   for( unsigned int i = 0; i < solution.groundings.size(); i++ ){
-    dynamic_cast< h2sl::Grounding_Set* >( phrase->grounding() )->groundings().push_back( solution.groundings[ i ] );
+    dynamic_cast< Grounding_Set* >( phrase->grounding() )->groundings().push_back( solution.groundings[ i ] );
   }
   for( unsigned int i = 0; i < node->children().size(); i++ ){
     phrase->children().push_back( node->children()[ i ]->phrase()->dup() );

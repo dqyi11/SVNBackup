@@ -17,6 +17,8 @@
 #include "h2sl/llm.h"
 #include "h2sl_cdcg/dcg.h"
 #include "h2sl_cdcg/ccv.h"
+#include "h2sl_cdcg/phrase.h"
+#include "h2sl_cdcg/grounding_set.h"
 #include "h2sl_cdcg/func_kernel.h"
 #include "h2sl_cdcg/feature_func_kernel.h"
 #include "h2sl_cdcg/feature_set.h"
@@ -24,7 +26,6 @@
 
 using namespace std;
 using namespace h2sl;
-using namespace h2sl_cdcg;
 
 void
 evaluate_model( LLM* llm,
@@ -33,19 +34,21 @@ evaluate_model( LLM* llm,
   cvs.push_back( CV_FALSE );
   cvs.push_back( CV_TRUE );
   vector< unsigned int > ccvs;
-  ccvs.push_back( CCV_ZERO );
-  ccvs.push_back( CCV_ONE );
-  ccvs.push_back( CCV_TWO );
-  ccvs.push_back( CCV_THREE );
-  ccvs.push_back( CCV_FOUR );
-  ccvs.push_back( CCV_FIVE );
+  ccvs.push_back( h2sl_cdcg::CCV_ZERO );
+  ccvs.push_back( h2sl_cdcg::CCV_ONE );
+  ccvs.push_back( h2sl_cdcg::CCV_TWO );
+  ccvs.push_back( h2sl_cdcg::CCV_THREE );
+  ccvs.push_back( h2sl_cdcg::CCV_FOUR );
+  ccvs.push_back( h2sl_cdcg::CCV_FIVE );
 
   unsigned int num_correct = 0;
   for( unsigned int i = 0; i < examples.size(); i++ ){
     double pygx = 0.0;
-    //if ( dynamic_cast< 
-    pygx = llm->pygx( examples[ i ].first, examples[ i ].second, cvs );
-    
+    if ( dynamic_cast< h2sl_cdcg::Func_Kernel* > ( examples[ i ].second.grounding() ) ) {
+      pygx = llm->pygx( examples[ i ].first, examples[ i ].second, ccvs );
+    } else { 
+      pygx = llm->pygx( examples[ i ].first, examples[ i ].second, cvs );
+    }
     if( pygx < 0.75 ){
       cout << "example " << i << " had pygx " << pygx << endl;
       cout << "         cv:" << examples[ i ].first << endl;
@@ -53,16 +56,16 @@ evaluate_model( LLM* llm,
         cout << "  grounding:" << *static_cast< Region* >( examples[ i ].second.grounding() ) << endl; 
       } else if ( dynamic_cast< Constraint* >( examples[ i ].second.grounding() ) != NULL ){
         cout << "  grounding:" << *static_cast< Constraint* >( examples[ i ].second.grounding() ) << endl; 
-      } else if ( dynamic_cast< Func_Kernel* >( examples[ i ].second.grounding() ) != NULL ) {
-        cout << "  grounding:" << *static_cast< Func_Kernel* >( examples[ i ].second.grounding() ) << endl; 
+      } else if ( dynamic_cast< h2sl_cdcg::Func_Kernel* >( examples[ i ].second.grounding() ) != NULL ) {
+        cout << "  grounding:" << *static_cast< h2sl_cdcg::Func_Kernel* >( examples[ i ].second.grounding() ) << endl; 
       }
       for( unsigned int j = 0; j < examples[ i ].second.children().size(); j++ ){
         if( dynamic_cast< Region* >( examples[ i ].second.children()[ j ] ) != NULL ){
           cout << "children[" << j << "]:" << *static_cast< Region* >( examples[ i ].second.children()[ j ] ) << endl;
         } else if( dynamic_cast< Constraint* >( examples[ i ].second.children()[ j ] ) != NULL ){
           cout << "children[" << j << "]:" << *static_cast< Constraint* >( examples[ i ].second.children()[ j ] ) << endl;
-        } else if( dynamic_cast< Func_Kernel* >( examples[ i ].second.children()[ j ] ) != NULL ){
-          cout << "children[" << j << "]:" << *static_cast< Func_Kernel* >( examples[ i ].second.children()[ j ] ) << endl;
+        } else if( dynamic_cast< h2sl_cdcg::Func_Kernel* >( examples[ i ].second.children()[ j ] ) != NULL ){
+          cout << "children[" << j << "]:" << *static_cast< h2sl_cdcg::Func_Kernel* >( examples[ i ].second.children()[ j ] ) << endl;
         }
       }
       cout << "     phrase:" << *examples[ i ].second.phrase() << endl << endl;
@@ -78,7 +81,7 @@ evaluate_model( LLM* llm,
 
 unsigned int
 evaluate_cv( const Grounding* grounding,
-              const Grounding_Set* groundingSet ){
+              const h2sl_cdcg::Grounding_Set* groundingSet ){
   unsigned int cv = CV_UNKNOWN;
   if( dynamic_cast< const Region* >( grounding ) != NULL ){
     const Region * region_grounding = dynamic_cast< const Region* >( grounding );
@@ -100,30 +103,25 @@ evaluate_cv( const Grounding* grounding,
         }
       }
     }
-  } else if ( dynamic_cast< const Func_Kernel* >( grounding ) != NULL ){
-    const Func_Kernel * func_kernel_grounding = dynamic_cast< const Func_Kernel* >( grounding );
-     
+  } else if ( dynamic_cast< const h2sl_cdcg::Func_Kernel* >( grounding ) != NULL ){
+    const h2sl_cdcg::Func_Kernel * func_kernel_grounding = dynamic_cast< const h2sl_cdcg::Func_Kernel* >( grounding );
+    /* 
     cout << endl;
     cout << "ASSIGN CV TO FUNC KENRLE" << endl;
     cout << endl;
-  
-    cv = CCV_ZERO;
+    */
+    cv = h2sl_cdcg::CCV_ZERO;
     for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
-      if( dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
-        if( *func_kernel_grounding == *dynamic_cast< const Func_Kernel* >( groundingSet->groundings()[ i ] ) ){
-          //cv = CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
-          cv = CCV_ONE;
+      if( dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
+        if( *func_kernel_grounding == *dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] ) ){
+          cv = h2sl_cdcg::CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
+          cout << "KERNEL CV " << cv << endl;
         }
       } 
     }
   } else if ( dynamic_cast< const Object* >( grounding ) != NULL ){
     const Object* object_grounding = dynamic_cast< const Object* >( grounding );
     cv = CV_FALSE;
-   
-    cout << endl;
-    cout << "ASSIGN CV TO OBJECT" << endl;
-    cout << endl;
-
     for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
       if( dynamic_cast< const Object* >( groundingSet->groundings()[ i ] ) ) {
         cv = CV_TRUE;
@@ -135,11 +133,11 @@ evaluate_cv( const Grounding* grounding,
 }
 
 void
-scrape_examples( const Phrase* phrase,
+scrape_examples( const h2sl::Phrase* phrase,
                   const World* world,
                   const vector< pair< vector< unsigned int >, Grounding* > >& searchSpaces,
                   vector< pair< unsigned int, LLM_X > >& examples ){
-  const Grounding_Set * grounding_set = dynamic_cast< const Grounding_Set* >( phrase->grounding() );
+  const h2sl_cdcg::Grounding_Set * grounding_set = dynamic_cast< const h2sl_cdcg::Grounding_Set* >( phrase->grounding() );
 
   for( unsigned int i = 0; i < searchSpaces.size(); i++ ){
     examples.push_back( pair< unsigned int, LLM_X >() );
@@ -149,7 +147,7 @@ scrape_examples( const Phrase* phrase,
     examples.back().second.grounding() = searchSpaces[ i ].second->dup();
     examples.back().second.cvs() = searchSpaces[ i ].first;
     for( unsigned int j = 0; j < phrase->children().size(); j++ ){
-      Grounding_Set * child_grounding_set = dynamic_cast< Grounding_Set* >( phrase->children()[ j ]->grounding() );
+      h2sl_cdcg::Grounding_Set * child_grounding_set = dynamic_cast< h2sl_cdcg::Grounding_Set* >( phrase->children()[ j ]->grounding() );
       if( child_grounding_set ){
         for( unsigned int k = 0; k < child_grounding_set->groundings().size(); k++ ){
           examples.back().second.children().push_back( child_grounding_set->groundings()[ k ] );
@@ -189,7 +187,7 @@ main( int argc,
     worlds[ i ] = new World();
     worlds[ i ]->from_xml( args.inputs[ i ] ); 
    
-    Phrase * phrase = new Phrase();
+    h2sl::Phrase * phrase = new h2sl_cdcg::Phrase();
     phrase->from_xml( args.inputs[ i ] );
 
     dcg->fill_search_spaces( worlds[ i ] );

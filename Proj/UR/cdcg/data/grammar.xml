@@ -48,9 +48,9 @@
     <grammar_non_terminal root="VP" children="VBZ,NP"/>
     <grammar_non_terminal root="VP" children="VBZ,PP"/>
     <grammar_non_terminal root="VP" children="VP,X2"/>
-    <grammar_non_terminal root="PP" children="IN,NP"/>
     <grammar_non_terminal root="PP" children="IN,VP"/>
     <grammar_non_terminal root="PP" children="TO,NP"/>
+    <grammar_non_terminal root="PP" children="IN,NP"/>
     <grammar_non_terminal root="NP" children="NP,PP"/>
     <grammar_non_terminal root="NP" children="DT,NN"/>
     <grammar_non_terminal root="NP" children="DT,NNS"/>

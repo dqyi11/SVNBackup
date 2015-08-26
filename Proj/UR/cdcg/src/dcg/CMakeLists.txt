@@ -21,7 +21,7 @@ set(BIN_SRCS
 
 
 # LIBRARY DEPENDENCIES
-set(DEPS ${LBFGS_LIBRARY} ${LIBXML2_LIBRARIES} ${H2SL_LIBRARIES} h2sl_cdcg-symbol h2sl_cdcg-llm)
+set(DEPS ${LBFGS_LIBRARY} ${LIBXML2_LIBRARIES} ${H2SL_LIBRARIES} h2sl_cdcg-symbol h2sl_cdcg-llm h2sl_cdcg-language )
 
 
 # LIBRARY NAME
