@@ -16,7 +16,6 @@
 #include "h2sl/object.h"
 #include "h2sl_cdcg/ccv.h"
 
-using namespace h2sl;
 
 namespace h2sl_cdcg {
   typedef enum {
@@ -25,16 +24,16 @@ namespace h2sl_cdcg {
     NUM_FUNC_KERNEL_TYPES
   } func_kernel_type_t;
 
-  class Func_Kernel: public Grounding {
+  class Func_Kernel: public h2sl::Grounding {
   public:
-    Func_Kernel( const unsigned int& type = 0, const Object& object = Object() );
-    Func_Kernel( const func_kernel_type_t& type, const Object& object );
+    Func_Kernel( const unsigned int& type = 0, const h2sl::Object& object = h2sl::Object() );
+    Func_Kernel( const func_kernel_type_t& type, const h2sl::Object& object );
     virtual ~Func_Kernel();
     Func_Kernel( const Func_Kernel& other );
     Func_Kernel& operator=( const Func_Kernel& other );
     bool operator==( const Func_Kernel& other )const;
     bool operator!=( const Func_Kernel& other )const;
-    virtual Grounding* dup( void )const;
+    virtual h2sl::Grounding* dup( void )const;
 
     static std::string type_to_std_string( const unsigned int& type );
     static unsigned int type_from_std_string( const std::string& type );
@@ -47,8 +46,8 @@ namespace h2sl_cdcg {
 
     inline unsigned int& type( void ){ return _type; };
     inline const unsigned int& type( void )const{ return _type; };
-    inline Object& object( void ){ return _object; };
-    inline const Object& object( void )const{ return _object; };
+    inline h2sl::Object& object( void ){ return _object; };
+    inline const h2sl::Object& object( void )const{ return _object; };
     inline float& weight( void ){ return _weight; };
     inline const float& weight( void )const{ return _weight; };
     inline unsigned int resolution( void ){ return NUM_CCVS - CCV_ZERO; };
@@ -57,7 +56,7 @@ namespace h2sl_cdcg {
   protected:
     unsigned int _type;
     float _weight;
-    Object _object;
+    h2sl::Object _object;
 
   private:
 

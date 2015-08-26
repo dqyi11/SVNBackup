@@ -18,7 +18,7 @@ using namespace h2sl_cdcg;
 
 Func_Kernel::
 Func_Kernel( const unsigned int& type,
-        const Object& object ) : Grounding(),
+        const h2sl::Object& object ) : h2sl::Grounding(),
                                   _type( type ),
                                   _object( object ) {
 
@@ -26,7 +26,7 @@ Func_Kernel( const unsigned int& type,
 
 Func_Kernel::
 Func_Kernel( const func_kernel_type_t& type,
-        const Object& object ) : Grounding(),
+        const h2sl::Object& object ) : h2sl::Grounding(),
                                   _type( type ),
                                   _object( object ){
 
@@ -38,7 +38,7 @@ Func_Kernel::
 }
 
 Func_Kernel::
-Func_Kernel( const Func_Kernel& other ) : Grounding( other ),
+Func_Kernel( const Func_Kernel& other ) : h2sl::Grounding( other ),
                                 _type( other._type ),
                                 _object( other._object ){
 

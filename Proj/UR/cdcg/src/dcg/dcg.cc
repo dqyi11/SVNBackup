@@ -16,6 +16,8 @@
 #include "h2sl/region.h"
 #include "h2sl/constraint.h"
 #include "h2sl_cdcg/dcg.h"
+#include "h2sl_cdcg/ccv.h"
+#include "h2sl_cdcg/func_kernel.h"
 
 using namespace std;
 using namespace h2sl_cdcg;
@@ -64,6 +66,14 @@ fill_search_spaces( const h2sl::World* world ){
   ternary_cvs.push_back( h2sl::CV_TRUE );
   ternary_cvs.push_back( h2sl::CV_INVERTED );
 
+  std::vector< unsigned int > ccvs;
+  ccvs.push_back( h2sl_cdcg::CCV_ZERO );
+  ccvs.push_back( h2sl_cdcg::CCV_ONE );
+  ccvs.push_back( h2sl_cdcg::CCV_TWO );
+  ccvs.push_back( h2sl_cdcg::CCV_THREE );
+  ccvs.push_back( h2sl_cdcg::CCV_FOUR );
+  ccvs.push_back( h2sl_cdcg::CCV_FIVE );
+
   // add the NP groundings
   for( unsigned int i = 0; i < h2sl::NUM_REGION_TYPES; i++ ){
     if( i != h2sl::REGION_TYPE_UNKNOWN ){
@@ -83,6 +93,12 @@ fill_search_spaces( const h2sl::World* world ){
       _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Region( i, *world->objects()[ j ] ) ) );
     }
   }
+  for( unsigned int i = 0; i < h2sl_cdcg::NUM_FUNC_KERNEL_TYPES; i++ ){
+    if( i != h2sl_cdcg::FUNC_KERNEL_TYPE_UNKNOWN ){
+      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, h2sl::Object() ) ) );
+    }
+  }
+ 
 
   // add the VP groundings
   for( unsigned int i = h2sl::CONSTRAINT_TYPE_INSIDE; i < h2sl::NUM_CONSTRAINT_TYPES; i++ ){
