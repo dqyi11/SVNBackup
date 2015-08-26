@@ -14,6 +14,7 @@
 
 #include "h2sl/grounding_set.h"
 #include "h2sl/region.h"
+#include "h2sl/object.h"
 #include "h2sl/constraint.h"
 #include "h2sl_cdcg/dcg.h"
 #include "h2sl_cdcg/ccv.h"
@@ -83,6 +84,12 @@ fill_search_spaces( const h2sl::World* world ){
       _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Region( i, *world->objects()[ j ] ) ) );
     }
   }
+  
+  for( unsigned int j = 0; j < world->objects().size(); j++ ){
+    _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Object( *world->objects()[ j ] ) ) ); 
+  }
+  
+  
 
   // add the PP groundings
   for( unsigned int i = 0; i < h2sl::NUM_REGION_TYPES; i++ ){
@@ -97,8 +104,11 @@ fill_search_spaces( const h2sl::World* world ){
     if( i != h2sl_cdcg::FUNC_KERNEL_TYPE_UNKNOWN ){
       _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, h2sl::Object() ) ) );
     }
+    for( unsigned int j = 0; j < world->objects().size(); j++ ){
+      _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( ccvs, new h2sl_cdcg::Func_Kernel( i, *world->objects()[ j ] ) ) );
+    }
   }
- 
+
 
   // add the VP groundings
   for( unsigned int i = h2sl::CONSTRAINT_TYPE_INSIDE; i < h2sl::NUM_CONSTRAINT_TYPES; i++ ){
