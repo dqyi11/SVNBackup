@@ -2,13 +2,11 @@
 <root>
   <instruction text="move to the chair"/>
   <world>
-    <objects>
-      <object name="R" type="robot" />
-      <object name="C" type="chair" />
-      <object name="B" type="box" />
-      <object name="T" type="table" />
-      <object name="CO" type="couch" />
-    </objects>
+    <object name="R" type="robot" />
+    <object name="C" type="chair" />
+    <object name="B" type="box" />
+    <object name="T" type="table" />
+    <object name="CO" type="couch" />
   </world>
  
   <VP>

@@ -50,7 +50,8 @@ main( int argc,
   if( args.llm_given ){
     llm->from_xml( args.llm_arg );
   }
-
+  
+  cout << "INIT DCG ... " << endl;
   h2sl_cdcg::DCG * dcg = new h2sl_cdcg::DCG();
   
   struct timeval start_time;

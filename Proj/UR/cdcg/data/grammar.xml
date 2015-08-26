@@ -6,7 +6,7 @@
     <grammar_terminal symbol="DT" words="the,these,a,this"/>
     <grammar_terminal symbol="EX" words="there"/>
     <grammar_terminal symbol="FW" words=""/>
-    <grammar_terminal symbol="IN" words="near,at,toward,towards,by,for,of,in,from,behind,on"/>
+    <grammar_terminal symbol="IN" words="near,at,above,toward,towards,by,for,of,in,from,behind,on"/>
     <grammar_terminal symbol="JJ" words=""/>
     <grammar_terminal symbol="JJR" words=""/>
     <grammar_terminal symbol="JJS" words=""/>
@@ -29,7 +29,7 @@
     <grammar_terminal symbol="UH" words=""/>
     <grammar_terminal symbol="VB" words="walk,run,drive,move,go,approach,put,leave,exit,proceed,push,stay"/>
     <grammar_terminal symbol="VBD" words=""/>
-    <grammar_terminal symbol="VBG" words=""/>
+    <grammar_terminal symbol="VBG" words="traveling"/>
     <grammar_terminal symbol="VBN" words="left,right"/>
     <grammar_terminal symbol="VBP" words=""/>
     <grammar_terminal symbol="VBZ" words="is"/>
@@ -40,13 +40,16 @@
     <grammar_non_terminal root="S" children="NP,VP"/>
     <grammar_non_terminal root="SBAR" children="WHNP,S"/>
     <grammar_non_terminal root="VP" children="VB,PP"/>
+    <grammar_non_terminal root="VP" children="VB,PP,PP"/>
     <grammar_non_terminal root="VP" children="VB,X1"/>
     <grammar_non_terminal root="VP" children="VB,X3"/>
     <grammar_non_terminal root="VP" children="VB,NP"/>
+    <grammar_non_terminal root="VP" children="VBG,PP"/>
     <grammar_non_terminal root="VP" children="VBZ,NP"/>
     <grammar_non_terminal root="VP" children="VBZ,PP"/>
     <grammar_non_terminal root="VP" children="VP,X2"/>
     <grammar_non_terminal root="PP" children="IN,NP"/>
+    <grammar_non_terminal root="PP" children="IN,VP"/>
     <grammar_non_terminal root="PP" children="TO,NP"/>
     <grammar_non_terminal root="NP" children="NP,PP"/>
     <grammar_non_terminal root="NP" children="DT,NN"/>

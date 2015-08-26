@@ -2,13 +2,11 @@
 <root>
   <instruction text="move to the bathroom before going to the bedroom"/>
   <world>
-    <objects>
-      <object name="R" type="robot" />
-      <object name="B" type="bathroom" />
-      <object name="C" type="chair" />
-      <object name="T" type="table" />
-      <object name="B0" type="bedroom" />
-    </objects>
+    <object name="R" type="robot" />
+    <object name="B" type="bathroom" />
+    <object name="C" type="chair" />
+    <object name="T" type="table" />
+    <object name="B0" type="bedroom" />
   </world>
 
   <VP>
