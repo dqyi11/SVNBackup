@@ -22,8 +22,9 @@
 #include "h2sl/feature_constraint_child_matches_child_region.h"
 #include "h2sl/feature_constraint_parent_is_robot.h"
 #include "h2sl/feature_constraint_child_is_robot.h"
-#include "h2sl_cdcg/feature_func_kernel.h"
 #include "h2sl_cdcg/feature_product.h"
+#include "h2sl_cdcg/feature_func_kernel.h"
+#include "h2sl_cdcg/feature_func_kernel_object.h"
 #include "h2sl_cdcg/feature_func_kernel_matches_child.h"
 
 using namespace std;
@@ -172,6 +173,9 @@ from_xml( xmlNodePtr root ){
                 _feature_groups.back().back()->from_xml( l2 );
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel" ) ) == 0 ){
                 _feature_groups.back().push_back( new Feature_Func_Kernel() );
+                _feature_groups.back().back()->from_xml( l2 ); 
+              } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel_object" ) ) == 0 ){
+                _feature_groups.back().push_back( new Feature_Func_Kernel_Object() );
                 _feature_groups.back().back()->from_xml( l2 ); 
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel_matches_child" ) ) == 0 ){
                 _feature_groups.back().push_back( new Feature_Func_Kernel_Matches_Child() );

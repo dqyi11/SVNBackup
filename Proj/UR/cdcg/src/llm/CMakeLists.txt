@@ -6,6 +6,7 @@ set(GGOS
 # HEADER FILES
 set(HDRS
     h2sl_cdcg/feature_func_kernel.h 
+    h2sl_cdcg/feature_func_kernel_object.h
     h2sl_cdcg/feature_product.h
     h2sl_cdcg/feature_set.h
     h2sl_cdcg/feature_ccv.h
@@ -16,6 +17,7 @@ set(HDRS
 # SOURCE FILES
 set(SRCS
     feature_func_kernel.cc
+    feature_func_kernel_object.cc
     feature_product.cc
     feature_set.cc
     feature_ccv.cc

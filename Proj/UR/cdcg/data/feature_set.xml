@@ -126,7 +126,25 @@
         <feature_constraint_parent_is_robot invert="1"/>
         <feature_constraint_child_is_robot invert="0"/>
         <feature_constraint_child_is_robot invert="1"/>
-        <feature_func_kernel invert="0"/>
+        <feature_func_kernel invert="0" kernel_type="1"/>
+        <feature_func_kernel_object invert="0" object_type="1"/>
+        <feature_func_kernel_object invert="0" object_type="2"/>
+        <feature_func_kernel_object invert="0" object_type="3"/>
+        <feature_func_kernel_object invert="0" object_type="4"/>
+        <feature_func_kernel_object invert="0" object_type="5"/>
+        <feature_func_kernel_object invert="0" object_type="6"/>
+        <feature_func_kernel_object invert="0" object_type="7"/>
+        <feature_func_kernel_object invert="0" object_type="8"/>
+        <feature_func_kernel_object invert="0" object_type="9"/>
+        <feature_func_kernel_object invert="0" object_type="10"/>
+        <feature_func_kernel_object invert="0" object_type="11"/>
+        <feature_func_kernel_object invert="0" object_type="12"/>
+        <feature_func_kernel_object invert="0" object_type="13"/>
+        <feature_func_kernel_object invert="0" object_type="14"/>
+        <feature_func_kernel_object invert="0" object_type="15"/>
+        <feature_func_kernel_object invert="0" object_type="16"/>
+        <feature_func_kernel_object invert="0" object_type="17"/>
+        <feature_func_kernel_object invert="0" object_type="18"/>
         <feature_func_kernel_matches_child invert="0"/>
         <feature_func_kernel_matches_child invert="1"/>
         <feature_object invert="0" object_type="1"/>

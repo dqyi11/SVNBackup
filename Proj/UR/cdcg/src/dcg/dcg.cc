@@ -25,7 +25,9 @@ using namespace std;
 using namespace h2sl_cdcg;
 
 DCG::
-DCG() : h2sl::DCG() {
+DCG() : _search_spaces(), 
+        _solutions(), 
+        _root( NULL ) {
 
 }
 
@@ -89,7 +91,6 @@ fill_search_spaces( const h2sl::World* world ){
   for( unsigned int j = 0; j < world->objects().size(); j++ ){
     _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Object( *world->objects()[ j ] ) ) ); 
   }
-  
   
 
   // add the PP groundings

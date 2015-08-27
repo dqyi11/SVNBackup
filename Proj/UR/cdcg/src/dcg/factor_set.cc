@@ -25,37 +25,6 @@ factor_set_solution_sort( const h2sl::Factor_Set_Solution& a,
                               const h2sl::Factor_Set_Solution& b ){
   return a.pygx > b.pygx;
 }
-/*
-Factor_Set_Solution::
-Factor_Set_Solution() : cv(),
-                            children(),
-                            groundings(),
-                            pygx( 1.0 ) {
-
-}
-
-Factor_Set_Solution::
-~Factor_Set_Solution() {
-
-}
-
-Factor_Set_Solution::
-Factor_Set_Solution( const Factor_Set_Solution& other ) : cv( other.cv ),
-                                                                  children( other.children ),
-                                                                  groundings( other.groundings ),
-                                                                  pygx( other.pygx ){
-
-}
-
-Factor_Set_Solution&
-Factor_Set_Solution::
-operator=( const Factor_Set_Solution& other ){
-  cv = other.cv;
-  children = other.children;
-  groundings = other.groundings;
-  pygx = other.pygx;
-  return (*this);
-}*/
 
 Factor_Set::
 Factor_Set( const h2sl::Phrase* phrase ) : _phrase( phrase ),

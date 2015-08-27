@@ -50,8 +50,8 @@ namespace h2sl_cdcg {
     inline const h2sl::Object& object( void )const{ return _object; };
     inline float& weight( void ){ return _weight; };
     inline const float& weight( void )const{ return _weight; };
-    inline unsigned int resolution( void ){ return NUM_CCVS - CCV_ZERO; };
-    inline const unsigned int resolution( void )const{ return NUM_CCVS - CCV_ZERO; };
+    inline unsigned int resolution( void ){ return NUM_CCVS - CCV_ONE; };
+    inline const unsigned int resolution( void )const{ return NUM_CCVS - CCV_ONE; };
 
   protected:
     unsigned int _type;

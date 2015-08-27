@@ -24,7 +24,7 @@
 	    </region>
 	  </child>
 	</constraint>
-	<func_kernel weight="0.4">
+	<func_kernel weight="0.6">
 	   <object name="B" type="box"/>
 	 </func_kernel>
       </grounding_set>
@@ -54,7 +54,7 @@
     <PP>
       <grounding>
         <grounding_set>
-          <func_kernel weight="0.4">
+          <func_kernel weight="0.6">
 	    <object name="B" type="box"/>
           </func_kernel>
         </grounding_set>
@@ -63,7 +63,7 @@
       <VP>
         <grounding>
           <grounding_set>
-              <func_kernel weight="0.4">
+              <func_kernel weight="0.6">
 	      	<object name="B" type="box"/>
               </func_kernel>
           </grounding_set>
@@ -72,7 +72,7 @@
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel weight="0.4">
+              <func_kernel weight="0.6">
 	      	<object name="B" type="box"/>
               </func_kernel>
             </grounding_set>

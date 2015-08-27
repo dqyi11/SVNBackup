@@ -187,7 +187,7 @@ main( int argc,
     worlds[ i ] = new World();
     worlds[ i ]->from_xml( args.inputs[ i ] ); 
    
-    h2sl::Phrase * phrase = new h2sl_cdcg::Phrase();
+    h2sl::Phrase* phrase = new h2sl_cdcg::Phrase();
     phrase->from_xml( args.inputs[ i ] );
 
     dcg->fill_search_spaces( worlds[ i ] );
