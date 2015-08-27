@@ -69,12 +69,12 @@ fill_search_spaces( const h2sl::World* world ){
   ternary_cvs.push_back( h2sl::CV_INVERTED );
 
   std::vector< unsigned int > ccvs;
-  ccvs.push_back( h2sl_cdcg::CCV_ZERO );
-  ccvs.push_back( h2sl_cdcg::CCV_ONE );
-  ccvs.push_back( h2sl_cdcg::CCV_TWO );
-  ccvs.push_back( h2sl_cdcg::CCV_THREE );
-  ccvs.push_back( h2sl_cdcg::CCV_FOUR );
-  ccvs.push_back( h2sl_cdcg::CCV_FIVE );
+  ccvs.push_back( CCV_ZERO );
+  ccvs.push_back( CCV_ONE );
+  ccvs.push_back( CCV_TWO );
+  ccvs.push_back( CCV_THREE );
+  ccvs.push_back( CCV_FOUR );
+  ccvs.push_back( CCV_FIVE );
 
   // add the NP groundings
   for( unsigned int i = 0; i < h2sl::NUM_REGION_TYPES; i++ ){
@@ -152,13 +152,13 @@ leaf_search( const h2sl::Phrase* phrase,
       _root = NULL;
     }
 
-    _root = new h2sl::Factor_Set( phrase->dup() );
+    _root = new Factor_Set( phrase->dup() );
     _fill_factors( _root, _root->phrase() );  
 
-    h2sl::Factor_Set * leaf = NULL;
+    Factor_Set * leaf = NULL;
     _find_leaf( _root, leaf );
     while( leaf != NULL ){
-      cout << "SEARCH " << leaf->phrase()->text() << endl;
+      cout << "SEARCH " << *leaf->phrase() << endl;
       leaf->search( _search_spaces,
                     world,
                     llm,
@@ -204,8 +204,8 @@ to_latex( const string& filename )const{
 
 void
 DCG::
-_find_leaf( h2sl::Factor_Set* node, 
-            h2sl::Factor_Set*& leaf ){ 
+_find_leaf( Factor_Set* node, 
+            Factor_Set*& leaf ){ 
   if( node->solutions().empty() ){
     bool all_children_known = true;
     for( unsigned int i = 0; i < node->children().size(); i++ ){
@@ -226,12 +226,12 @@ _find_leaf( h2sl::Factor_Set* node,
 
 void
 DCG::
-_fill_phrase( h2sl::Factor_Set* node,
+_fill_phrase( Factor_Set* node,
               h2sl::Factor_Set_Solution& solution,
               h2sl::Phrase* phrase ){
   phrase->grounding() = new h2sl_cdcg::Grounding_Set();
   for( unsigned int i = 0; i < solution.groundings.size(); i++ ){
-    dynamic_cast< Grounding_Set* >( phrase->grounding() )->groundings().push_back( solution.groundings[ i ] );
+    dynamic_cast< h2sl_cdcg::Grounding_Set* >( phrase->grounding() )->groundings().push_back( solution.groundings[ i ] );
   }
   for( unsigned int i = 0; i < node->children().size(); i++ ){
     phrase->children().push_back( node->children()[ i ]->phrase()->dup() );
@@ -257,11 +257,11 @@ _fill_phrase( h2sl::Factor_Set* node,
 
 void
 DCG::
-_fill_factors( h2sl::Factor_Set* node,
+_fill_factors( Factor_Set* node,
                 const h2sl::Phrase* phrase, 
                 const bool& fill ){
   for( unsigned int i = 0; i < phrase->children().size(); i++ ){
-    node->children().push_back( new h2sl::Factor_Set( phrase->children()[ i ] ) );
+    node->children().push_back( new Factor_Set( phrase->children()[ i ] ) );
     _fill_factors( node->children().back(), phrase->children()[ i ] );
   } 
   return;

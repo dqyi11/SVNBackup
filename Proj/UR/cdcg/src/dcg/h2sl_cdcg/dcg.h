@@ -14,6 +14,7 @@
 
 #include "h2sl/dcg.h"
 #include "h2sl_cdcg/phrase.h"
+#include "h2sl_cdcg/factor_set.h"
 
 namespace h2sl_cdcg {
   class DCG : public h2sl::DCG {
@@ -31,11 +32,15 @@ namespace h2sl_cdcg {
 
     inline const std::vector< std::pair< std::vector< unsigned int >, h2sl::Grounding* > >& search_spaces( void ){ return _search_spaces; };
     inline const std::vector< std::pair< double, h2sl::Phrase* > >& solutions( void )const{ return _solutions; };
-    inline const h2sl::Factor_Set* root( void )const{ return _root; };
+    inline const Factor_Set* root( void )const{ return _root; };
   protected:
-    virtual void _find_leaf( h2sl::Factor_Set* node, h2sl::Factor_Set*& leaf );
-    virtual void _fill_phrase( h2sl::Factor_Set* node, h2sl::Factor_Set_Solution& solution, h2sl::Phrase* phrase );
-    virtual void _fill_factors( h2sl::Factor_Set* node, const h2sl::Phrase* phrase, const bool& fill = false );  
+    virtual void _find_leaf( Factor_Set* node, Factor_Set*& leaf );
+    virtual void _fill_phrase( Factor_Set* node, h2sl::Factor_Set_Solution& solution, h2sl::Phrase* phrase );
+    virtual void _fill_factors( Factor_Set* node, const h2sl::Phrase* phrase, const bool& fill = false );  
+
+    std::vector< std::pair< std::vector< unsigned int >, h2sl::Grounding* > > _search_spaces;
+    std::vector< std::pair< double, h2sl::Phrase* > > _solutions;
+    Factor_Set * _root;
 
   private:
 

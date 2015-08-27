@@ -6,12 +6,16 @@ set(GGOS
 # HEADER FILES
 set(HDRS
     h2sl_cdcg/dcg.h 
+    h2sl_cdcg/factor.h
+    h2sl_cdcg/factor_set.h
     )
 
 
 # SOURCE FILES
 set(SRCS
     dcg.cc
+    factor.cc
+    factor_set.cc
     )
 
 # BINARY SOURCE FILES
