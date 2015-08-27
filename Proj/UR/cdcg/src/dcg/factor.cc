@@ -1,29 +1,7 @@
 /**
  * @file    factor.cc
- * @author  Thomas M. Howard (tmhoward@csail.mit.edu)
+ * @author  Daqing Yi (daqing.yi@byu.edu)
  * @version 1.0
- *
- * @section LICENSE
- *
- * This file is part of h2sl.
- *
- * Copyright (C) 2014 by the Massachusetts Institute of Technology
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see
- * <http://www.gnu.org/licenses/gpl-2.0.html> or write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA.
  *
  * @section DESCRIPTION
  *
@@ -109,7 +87,11 @@ value( const unsigned int& cv ){
         if( ( _children[ i ]->cv() == h2sl::CV_INVERTED ) || ( _children[ i ]->cv() == h2sl::CV_TRUE ) ){
           children.push_back( _children[ i ]->grounding() );
         }
-      }
+      } else if ( _children[ i ]->cvs().size() > 3 ){
+        if( _children[ i ]->cv() > h2sl_cdcg::CCV_ZERO ){
+          children.push_back( _children[ i ]->grounding() );
+        }
+      }      
     }
     _pygx = _llm->pygx( _cv, _grounding, children, _phrase, _world, _cvs );
     return _pygx;
