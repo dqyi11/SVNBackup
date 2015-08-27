@@ -105,17 +105,13 @@ evaluate_cv( const Grounding* grounding,
     }
   } else if ( dynamic_cast< const h2sl_cdcg::Func_Kernel* >( grounding ) != NULL ){
     const h2sl_cdcg::Func_Kernel * func_kernel_grounding = dynamic_cast< const h2sl_cdcg::Func_Kernel* >( grounding );
-    /* 
-    cout << endl;
-    cout << "ASSIGN CV TO FUNC KENRLE" << endl;
-    cout << endl;
-    */
     cv = h2sl_cdcg::CCV_ZERO;
     for( unsigned int i=0; i < groundingSet->groundings().size(); i++ ){
       if( dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
-        if( *func_kernel_grounding == *dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] ) ){
-          cv = h2sl_cdcg::CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding->weight() * func_kernel_grounding->resolution() );
-          cout << "KERNEL CV " << cv << endl;
+        const h2sl_cdcg::Func_Kernel * func_kernel_grounding_i = dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] );
+        if( *func_kernel_grounding == *func_kernel_grounding_i ){
+          //cv = h2sl_cdcg::CCV_ONE;
+          cv = h2sl_cdcg::CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding_i->weight() * func_kernel_grounding_i->resolution() );
         }
       } 
     }
