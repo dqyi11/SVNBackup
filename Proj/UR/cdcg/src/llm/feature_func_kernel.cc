@@ -52,8 +52,6 @@ value( const unsigned int& cv,
         const World* world ){
   const Func_Kernel * func_kernel = dynamic_cast< const Func_Kernel* >( grounding );
   if( func_kernel != NULL ){
-    //unsigned int approx_cv = static_cast<unsigned int> ( func_kernel->weight() * func_kernel->resolution() );
-    //if ( approx_cv == cv ) {
     if( func_kernel->type() == _kernel_type ){
       return !_invert;
     }

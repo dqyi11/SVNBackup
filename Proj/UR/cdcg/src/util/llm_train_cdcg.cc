@@ -37,9 +37,9 @@ evaluate_model( LLM* llm,
   ccvs.push_back( h2sl_cdcg::CCV_ZERO );
   ccvs.push_back( h2sl_cdcg::CCV_ONE );
   ccvs.push_back( h2sl_cdcg::CCV_TWO );
-  ccvs.push_back( h2sl_cdcg::CCV_THREE );
-  ccvs.push_back( h2sl_cdcg::CCV_FOUR );
-  ccvs.push_back( h2sl_cdcg::CCV_FIVE );
+//  ccvs.push_back( h2sl_cdcg::CCV_THREE );
+//  ccvs.push_back( h2sl_cdcg::CCV_FOUR );
+//  ccvs.push_back( h2sl_cdcg::CCV_FIVE );
 
   unsigned int num_correct = 0;
   for( unsigned int i = 0; i < examples.size(); i++ ){
@@ -110,8 +110,8 @@ evaluate_cv( const Grounding* grounding,
       if( dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] ) ) { 
         const h2sl_cdcg::Func_Kernel * func_kernel_grounding_i = dynamic_cast< const h2sl_cdcg::Func_Kernel* >( groundingSet->groundings()[ i ] );
         if( *func_kernel_grounding == *func_kernel_grounding_i ){
-          //cv = h2sl_cdcg::CCV_ONE;
-          cv = h2sl_cdcg::CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding_i->weight() * func_kernel_grounding_i->resolution() );
+          cv = h2sl_cdcg::CCV_ONE;
+          //cv = h2sl_cdcg::CCV_ZERO + static_cast<unsigned int>( func_kernel_grounding_i->weight() * func_kernel_grounding_i->resolution() );
         }
       } 
     }

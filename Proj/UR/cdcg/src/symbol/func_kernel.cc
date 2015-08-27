@@ -164,7 +164,8 @@ from_xml( xmlNodePtr root ){
     xmlChar * tmp = xmlGetProp( root, ( const xmlChar* )( "type" ) );
     if( tmp != NULL ){
       string type_string = ( char* )( tmp );
-      _type = Func_Kernel::type_from_std_string( type_string );
+      //_type = Func_Kernel::type_from_std_string( type_string );
+      _type = strtol( type_string.c_str() , NULL , 10 ); 
       xmlFree( tmp );
     }
     tmp = xmlGetProp( root, ( const xmlChar* )( "weight" ) );

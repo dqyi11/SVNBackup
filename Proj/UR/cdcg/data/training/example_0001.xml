@@ -4,9 +4,8 @@
   <world>
     <object name="R" type="robot" />
     <object name="C" type="chair" />
-    <object name="B" type="box" />
     <object name="T" type="table" />
-    <object name="CO" type="couch" />
+    <object name="B" type="box" />
   </world>
  
   <VP>
@@ -24,7 +23,7 @@
 	    </region>
 	  </child>
 	</constraint>
-	<func_kernel weight="0.6">
+	<func_kernel type="1" weight="0.6">
 	   <object name="B" type="box"/>
 	 </func_kernel>
       </grounding_set>
@@ -54,7 +53,7 @@
     <PP>
       <grounding>
         <grounding_set>
-          <func_kernel weight="0.6">
+          <func_kernel type="1" weight="0.6">
 	    <object name="B" type="box"/>
           </func_kernel>
         </grounding_set>
@@ -63,7 +62,7 @@
       <VP>
         <grounding>
           <grounding_set>
-              <func_kernel weight="0.6">
+              <func_kernel type="1" weight="0.6">
 	      	<object name="B" type="box"/>
               </func_kernel>
           </grounding_set>
@@ -72,7 +71,7 @@
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel weight="0.6">
+              <func_kernel type="1" weight="0.6">
 	      	<object name="B" type="box"/>
               </func_kernel>
             </grounding_set>

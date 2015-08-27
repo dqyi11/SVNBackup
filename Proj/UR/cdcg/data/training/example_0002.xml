@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <instruction text="move to the bottle before going to the box"/>
+  <instruction text="move to the box before going to the table"/>
   <world>
     <object name="R" type="robot" />
-    <object name="B" type="bottle" />
     <object name="C" type="chair" />
     <object name="T" type="table" />
-    <object name="BX" type="box" />
+    <object name="B" type="box" />
   </world>
 
   <VP>
@@ -20,12 +19,12 @@
 	  </parent>
 	  <child>
 	    <region type="na">
-	      <object name="B" type="bottle"/>
+	      <object name="B" type="box"/>
 	    </region>
 	  </child>
 	</constraint>
-        <func_kernel weight="0.2">
-	  <object name="BX" type="box"/>
+        <func_kernel type="1" weight="0.2">
+	  <object name="T" type="table"/>
         </func_kernel>
       </grounding_set>
     </grounding>
@@ -34,7 +33,7 @@
       <grounding>
         <grounding_set>
           <region type="na">
-            <object name="B" type="bottle"/>
+            <object name="B" type="box"/>
           </region>
         </grounding_set>
       </grounding>
@@ -43,19 +42,19 @@
         <grounding>
           <grounding_set>
             <region type="na">
-              <object name="B" type="bottle"/>
+              <object name="B" type="box"/>
             </region>
           </grounding_set>
         </grounding>
         <DT text="the"/>
-	<NN text="bottle"/>
+	<NN text="box"/>
       </NP>
     </PP>
     <PP>
       <grounding>
         <grounding_set>
-          <func_kernel weight="0.2">
-	    <object name="BX" type="box"/>
+          <func_kernel type="1" weight="0.2">
+	    <object name="T" type="table"/>
           </func_kernel>
         </grounding_set>
       </grounding>
@@ -63,8 +62,8 @@
       <VP>
         <grounding>
           <grounding_set>
-            <func_kernel weight="0.2">
-	      <object name="BX" type="box"/>
+            <func_kernel type="1" weight="0.2">
+	      <object name="T" type="table"/>
             </func_kernel>
           </grounding_set>
         </grounding>
@@ -72,8 +71,8 @@
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel weight="0.2">
-	      	<object name="BX" type="box"/>
+              <func_kernel type="1" weight="0.2">
+	      	<object name="T" type="table"/>
               </func_kernel>
             </grounding_set>
           </grounding>
@@ -81,11 +80,11 @@
           <NP>
             <grounding>
               <grounding_set>
-	        <object name="BX" type="box"/>
+	        <object name="T" type="table"/>
               </grounding_set>
             </grounding>
             <DT text="the"/>
-            <NN text="box"/>
+            <NN text="table"/>
           </NP>
         </PP>
       </VP>

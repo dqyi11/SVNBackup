@@ -135,9 +135,16 @@ search( const vector< pair< vector< unsigned int >, h2sl::Grounding* > >& search
   }
 
   for( unsigned int i = 0; i < _solutions.size(); i++ ){
+    
     for( unsigned int j = 0; j < _solutions[ i ].cv[ h2sl::CV_TRUE ].size(); j++ ){
       _solutions[ i ].groundings.push_back( searchSpace[ _solutions[ i ].cv[ h2sl::CV_TRUE ][ j ] ].second );
     }
+    /*
+    for( unsigned int k = CCV_ONE; k < NUM_CCVS; k ++ ){
+      for( unsigned int j = 0; j < _solutions[ i ].cv[ j ].size(); j ++ ){ 
+        _solutions[ i ].groundings.push_back( searchSpace[ _solutions[ i ].cv[ k ][ j ] ].second );
+      }
+    }*/
   }
 
   if( debug ){
