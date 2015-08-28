@@ -147,6 +147,8 @@
         <feature_func_kernel_object invert="0" object_type="18"/>
         <feature_func_kernel_matches_child invert="0"/>
         <feature_func_kernel_matches_child invert="1"/>
+        <feature_func_kernel_matches_child_region invert="0"/>
+        <feature_func_kernel_matches_child_region invert="1"/>
         <feature_object invert="0" object_type="1"/>
         <feature_object invert="0" object_type="2"/>
         <feature_object invert="0" object_type="3"/>

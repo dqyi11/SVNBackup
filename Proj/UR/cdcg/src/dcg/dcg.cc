@@ -74,12 +74,12 @@ fill_search_spaces( const h2sl::World* world ){
   ccvs.push_back( CCV_ZERO );
   ccvs.push_back( CCV_ONE );
   ccvs.push_back( CCV_TWO );
-//  ccvs.push_back( CCV_THREE );
-//  ccvs.push_back( CCV_FOUR );
-//  ccvs.push_back( CCV_FIVE );
+  ccvs.push_back( CCV_THREE );
+  ccvs.push_back( CCV_FOUR );
+  ccvs.push_back( CCV_FIVE );
 
   // add the NP groundings
-  /*
+  /* 
   for( unsigned int i = 0; i < h2sl::NUM_REGION_TYPES; i++ ){
     if( i != h2sl::REGION_TYPE_UNKNOWN ){
       _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Region( i, h2sl::Object() ) ) );
@@ -87,11 +87,11 @@ fill_search_spaces( const h2sl::World* world ){
     for( unsigned int j = 0; j < world->objects().size(); j++ ){
       _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Region( i, *world->objects()[ j ] ) ) );
     }
-  }*/
+  } 
 
   for( unsigned int j = 0; j < world->objects().size(); j++ ){
     _search_spaces.push_back( pair< vector< unsigned int >, h2sl::Grounding* >( binary_cvs, new h2sl::Object( *world->objects()[ j ] ) ) );
-  }
+  }*/
 
 
   // add the PP groundings

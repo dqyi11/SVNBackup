@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-  <instruction text="move to the chair by traveling above the box"/>
+  <instruction text="move to the box before going to the table"/>
   <world>
     <object name="R" type="robot" />
     <object name="C" type="chair" />
     <object name="T" type="table" />
     <object name="B" type="box" />
   </world>
- 
+
   <VP>
     <grounding>
       <grounding_set>
@@ -19,13 +19,13 @@
 	  </parent>
 	  <child>
 	    <region type="na">
-	      <object name="C" type="chair"/>
+	      <object name="B" type="box"/>
 	    </region>
 	  </child>
 	</constraint>
-	<func_kernel type="1" weight="0.6">
-	   <object name="B" type="box"/>
-	 </func_kernel>
+        <func_kernel type="1" weight="0.2">
+	  <object name="T" type="table"/>
+        </func_kernel>
       </grounding_set>
     </grounding>
     <VB text="move"/>
@@ -33,7 +33,7 @@
       <grounding>
         <grounding_set>
           <region type="na">
-            <object name="C" type="chair"/>
+            <object name="B" type="box"/>
           </region>
         </grounding_set>
       </grounding>
@@ -42,49 +42,51 @@
         <grounding>
           <grounding_set>
             <region type="na">
-              <object name="C" type="chair"/>
+              <object name="B" type="box"/>
             </region>
           </grounding_set>
         </grounding>
         <DT text="the"/>
-	<NN text="chair"/>
+	<NN text="box"/>
       </NP>
     </PP>
     <PP>
       <grounding>
         <grounding_set>
-          <func_kernel type="1" weight="0.6">
-	    <object name="B" type="box"/>
+          <func_kernel type="1" weight="0.2">
+	    <object name="T" type="table"/>
           </func_kernel>
         </grounding_set>
       </grounding>
-      <IN text="by"/>
+      <IN text="before"/>
       <VP>
         <grounding>
           <grounding_set>
-              <func_kernel type="1" weight="0.6">
-	      	<object name="B" type="box"/>
-              </func_kernel>
+            <func_kernel type="1" weight="0.2">
+	      <object name="T" type="table"/>
+            </func_kernel>
           </grounding_set>
         </grounding>
-        <VBG text="traveling"/>
+        <VBG text="going"/>
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel type="1" weight="0.6">
-	      	<object name="B" type="box"/>
+              <func_kernel type="1" weight="0.2">
+	      	<object name="T" type="table"/>
               </func_kernel>
             </grounding_set>
           </grounding>
-          <IN text="above"/>
+          <TO text="to"/>
           <NP>
             <grounding>
               <grounding_set>
-	        <object name="B" type="box"/>
+                <region type="na">
+	          <object name="T" type="table"/>
+                </region>
               </grounding_set>
             </grounding>
-             <DT text="the"/>
-             <NN text="box"/>
+            <DT text="the"/>
+            <NN text="table"/>
           </NP>
         </PP>
       </VP>

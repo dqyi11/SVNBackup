@@ -11,6 +11,7 @@ set(HDRS
     h2sl_cdcg/feature_set.h
     h2sl_cdcg/feature_ccv.h
     h2sl_cdcg/feature_func_kernel_matches_child.h
+    h2sl_cdcg/feature_func_kernel_matches_child_region.h
     )
 
 
@@ -22,6 +23,7 @@ set(SRCS
     feature_set.cc
     feature_ccv.cc
     feature_func_kernel_matches_child.cc
+    feature_func_kernel_matches_child_region.cc
     )
 
 # BINARY SOURCE FILES

@@ -26,6 +26,7 @@
 #include "h2sl_cdcg/feature_func_kernel.h"
 #include "h2sl_cdcg/feature_func_kernel_object.h"
 #include "h2sl_cdcg/feature_func_kernel_matches_child.h"
+#include "h2sl_cdcg/feature_func_kernel_matches_child_region.h"
 
 using namespace std;
 using namespace h2sl_cdcg;
@@ -179,6 +180,9 @@ from_xml( xmlNodePtr root ){
                 _feature_groups.back().back()->from_xml( l2 ); 
               } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel_matches_child" ) ) == 0 ){
                 _feature_groups.back().push_back( new Feature_Func_Kernel_Matches_Child() );
+                _feature_groups.back().back()->from_xml( l2 ); 
+              } else if ( xmlStrcmp( l2->name, ( const xmlChar* )( "feature_func_kernel_matches_child_region" ) ) == 0 ){
+                _feature_groups.back().push_back( new Feature_Func_Kernel_Matches_Child_Region() );
                 _feature_groups.back().back()->from_xml( l2 ); 
               } 
               else {

@@ -20,9 +20,9 @@ namespace h2sl_cdcg {
     CCV_ZERO,
     CCV_ONE,
     CCV_TWO,
-//    CCV_THREE,
-//    CCV_FOUR,
-//    CCV_FIVE,
+    CCV_THREE,
+    CCV_FOUR,
+    CCV_FIVE,
     NUM_CCVS
   } ccv_t;
 }
