@@ -73,10 +73,10 @@ fill_search_spaces( const h2sl::World* world ){
   std::vector< unsigned int > ccvs;
   ccvs.push_back( CCV_ZERO );
   ccvs.push_back( CCV_ONE );
-  ccvs.push_back( CCV_TWO );
+  /* ccvs.push_back( CCV_TWO );
   ccvs.push_back( CCV_THREE );
   ccvs.push_back( CCV_FOUR );
-  ccvs.push_back( CCV_FIVE );
+  ccvs.push_back( CCV_FIVE ); */
 
   // add the NP groundings
   /* 

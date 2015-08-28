@@ -71,9 +71,9 @@
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel type="1" weight="0.2">
+              <region type="na">
 	      	<object name="T" type="table"/>
-              </func_kernel>
+              </region>
             </grounding_set>
           </grounding>
           <TO text="to"/>

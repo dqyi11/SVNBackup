@@ -13,6 +13,7 @@
 #include "h2sl/grounding.h"
 #include "h2sl/llm.h"
 #include "h2sl/world.h"
+#include "h2sl/cv.h"
 #include "h2sl_cdcg/ccv.h"
 #include "h2sl_cdcg/factor_set.h"
 
@@ -82,7 +83,8 @@ search( const vector< pair< vector< unsigned int >, h2sl::Grounding* > >& search
     solutions_vector.push_back( vector< h2sl::Factor_Set_Solution >() );
     solutions_vector.back().push_back( h2sl::Factor_Set_Solution() );
     solutions_vector.back().back().children = child_solution_indices_cartesian_power[ i ];
-    solutions_vector.back().back().cv.resize( h2sl_cdcg::NUM_CCVS );
+    //solutions_vector.back().back().cv.resize( h2sl_cdcg::NUM_CCVS );
+    solutions_vector.back().back().cv.resize( h2sl::NUM_CVS );
 
     vector< h2sl::Grounding* > child_groundings;
     for( unsigned int j = 0; j < child_solution_indices_cartesian_power[ i ].size(); j++ ){

@@ -71,9 +71,9 @@
         <PP>
           <grounding>
             <grounding_set>
-              <func_kernel type="1" weight="0.6">
+              <region type="na">
 	      	<object name="B" type="box"/>
-              </func_kernel>
+              </region>
             </grounding_set>
           </grounding>
           <IN text="above"/>
