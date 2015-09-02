@@ -179,8 +179,8 @@ The team players include both humans and robots.
 %In general, human's strengths include high-level decision-making and robot's strengths include low-level operations.  
 For example, in a search-and-rescue task, robots perform dull, dirty and dangerous tasks, and alert a human only when an abnormality is detected~\cite{Nourbakhsh2005}.
 The human then deals with abnormal occurrences.
-The robot players explore regions that are inaccessible and dangerous to humans, and assist human players when needed.
-Particularly when situations change, human players are needed to organize the robot players to react.
+The robot players explore regions that are inaccessible and dangerous to the humans, and assist the human players when needed.
+Particularly when situations change, the human players are needed to organize the robot players to react.
 
 Because task requirements from a human coach are usually qualitative~\cite{brenner2007mediating}, how they can be precisely interpreted by robots into quantitative optimization problems is a big challenge.
 When a few requirements are ambiguous or difficult to describe, an interactive processes can be used to identify the human's intent.
@@ -193,7 +193,7 @@ Generally, the robot is expected to translate qualitative information from the h
 
 Allowing a human to use qualitative instructions to guide a robot simplifies the human's task.
 %Expressing qualitatively simplifies humans instructing robots, which is essential to the prevalence of human-robot interaction. 
-In modeling a path-planning problem, qualitative information needs to be translated into quantitative information contain geographic information, objectives to be optimized, and constraints.
+In modeling a path-planning problem, qualitative information needs to be translated into quantitative information, including geographic information, objectives to be optimized, and constraints.
 From the qualitative perspective, we are interested with several phenomena in humans' expression.
 
 \begin{itemize}
@@ -221,14 +221,14 @@ Spatial constraints, such as those created by finding a path through obstacles, 
 It is natural that a human coach has preference for some path topologies~\cite{Yi2014}.
 These preference may come from task requirements, team scheduling constraints, or the properties of an agent.
 These topological differences can be represented by either a soft path shape constraint or a preference ordering.
-For example, the human coach might hope that a robot goes to some goal location as quick as possible.
+For example, the human coach might hope that a robot goes to some goal location as quickly as possible.
 In this case, there is no hard constraint of visiting some regions while avoiding some other regions.
-But visiting several regions, which means the paths belong to specific homotopic classes, is implicitly helpful to performance in other cases.
+But visiting several regions, which means the paths belong to specific homotopic classes, is implicitly helpful to the performance.
 This type of qualitative information can be important to the task performance and should not be ignored in planning paths.
 
 \end{itemize} 
 
-In the reminder of this proposal, we will propose our requirements and claims using the phenomena above in human-robot interaction for path-planning problems.
+In the reminder of this proposal, we will propose our requirements and claims using the above phenomena in human-robot interaction for path-planning problems.
 Then we will propose algorithms to support the proposed requirements and the claims.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -267,7 +267,7 @@ However, humans' intents are often qualitative descriptions, which are difficult
 
 In path-planning problems, the mental model provides goals and preferences for evaluating the performance of tasks.
 These goals and preferences are used to find the optimal paths for task execution~\cite{choset2005principles}.
-Current research work focus on introducing new features to the robotic mental models for creating new affordances, especially in interpreting human's mental model.
+Current research work focus on introducing new features to the robotic mental models for creating new affordances, especially in interpreting humans' mental models.
 In human-machine interaction, affordance refers to the perceived and actual properties of the thing, primarily those fundamental properties that determine just how the thing could possibly be used, see, for example, in~\cite{norman2013design}.
 Planning for a task consists of two steps:
 \begin{enumerate}
@@ -334,33 +334,33 @@ For example, a robot in a search task may be expected to maximize the coverage a
 As another example, a robot manipulator may need to satisfy performance criteria related to movement, joint velocities, joint accelerations, etc.~\cite{Pires2004}.
 
 A common method of finding a solution to a multi-objective optimization problem is optimizing the single objective created by a weighted sum of the multiple objectives.  
-In path-planning with multiple objectives, the properties of the path produced by this method depend strongly on how each objective is weighted. 
+In path-planning with multiple objectives, the properties of the path produced by this method are determined by how the objectives are weighted. 
 This means that a programmer, designer, or human teammate must decide how to assign the weights so that the quantitative behavior matches what is intended in advance.  
 In addition to the burden this places on the human operator, optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
 
-In solving a multi-objective optimization problem, the output is often a set of non-dominated solutions, which are also often called Pareto optimal solutions~\cite{Miettinen1999}.
+In solving a multi-objective optimization problem, the output is often a set of non-dominated solutions, which are also often called Pareto-optimal solutions~\cite{Miettinen1999}.
 ``Non-dominated''  means that each solution is at least better in one objective or equally the same in all the objectives when compared to any other solution.
-In this proposed work, we assume that there can be an interactive process where a human selects one solution from the set of Pareto optimal solution~\cite{Marler2004}.
-In multi-objective path-planning, a set of Pareto optimal paths could be found as well.
-The Pareto optimal path that best matches the human's intent most can be selected as the solution that best balances tradeoffs between the objectives.
+In this proposed work, we assume that there can be an interactive process where a human selects one solution from the set of Pareto-optimal solution~\cite{Marler2004}.
+In multi-objective path-planning, a set of Pareto-optimal paths could be found as well.
+The Pareto-optimal path that best matches the human's intent most can be selected as the solution that best balances tradeoffs between the objectives.
 
 Most popular methods in multi-objective optimization are not naturally applicable to path-planning~\cite{Zhang2007,Deb2014}.
-One approach to addressing this issue is to change the representation for a path by coding a path as a sequence of fixed-length line segments represented by direction~\cite{Ahmed2013,Howlett2006} or waypoints~\cite{Sujit2009,Pires2004} so that an evolutionary algorithm can be applied. 
-Unfortunately, these approaches do not scale well for large problems, and estimating the required number of segments a priori is very challenging. 
+One approach to addressing this issue is to change the representation for a path by coding a path as a sequence of fixed-length line segments represented by directions~\cite{Ahmed2013,Howlett2006} or waypoints~\cite{Sujit2009,Pires2004} so that an evolutionary algorithm can be applied. 
+Unfortunately, these approaches do not scale well for large problems, and estimating the required number of segments is very challenging. 
 Another approach is to represent the path as a point in a very high-dimensional vector space.
 In this approach a path is represented as a point in a $ n * d $ dimensional space formed by $ n $ different  $d$-dimensional way-points~\cite{Ahmed2011,Ahmed2013}.
 However the search can be very difficult if we allow the number of way-points and, therefore, the dimensionality of the optimization problem to vary. 
 The algorithm we present works when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{Sujit2009,Zhang2007}.
-There is still the need for an algorithm that can efficiently and effectively find a set of Pareto optimal paths for a given set of objectives.
+There is still the need of an algorithm that can efficiently and effectively find a set of Pareto-optimal paths for a given set of objectives.
 
 \subsubsection{Homotopy in Path Planning}
 \label{sec:related_work:algorithm_specific_work:homotopy_in_path_planning}
 
 
 Unlike a point solution in common optimization problems, a path is not only evaluated by its fitness but also its shape.
-Humans often represent the world using a topological rather than metric-based path planning~\cite{Aginsky1997,kuipers1999}. 
+Humans often represent the world using a topological-based rather than metric-based path planning~\cite{Aginsky1997,kuipers1999}. 
 Various methods have been used to create topological-representations that can be used by path-planners for robots~\cite{Mataric1992,Thrun1998,Fasola2013,Shah2013}.
-Obstacles in a map divide paths into topological groups by the similarity of the shapes of the paths. 
+Obstacles in a map divide paths into topological groups by the similarities in the shapes of the paths. 
 The topological notion of {\em homotopy} presents a formal definition of the similarity between two paths. 
 This definition can be used both to determine the similarity between two paths as well as to partition paths into different classes.
 
@@ -373,7 +373,7 @@ By applying the funnel algorithm in the universal covering space, the minimum-le
 Similar to the Voronoi approach, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex. 
 Semi-algebraic cuts are used to convert paths into “words” so that the homotopic equivalence can be recognized into~\cite{Grigoriev1998}. 
 Also, the Cauchy Integral theorem has been introduced to determine the homotopic equivalence of any two paths by marking some positions in obstacles as undefined~\cite{Bhattachary2010}. 
-Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside a region that is closed by two paths by the value of the complex integral. 
+Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside a region that is enclosed by two paths by the value of the complex integral. 
 Because the map is discretized, the computation cost expands greatly if some complex obstacles are reasonably approximated by the cells.
 How to efficiently and effectively find the optimal paths in different homotopy classes is still an open question.
 
@@ -391,9 +391,9 @@ A greedy approximation with a known performance bound can efficiently exploit th
 A branch and bound approach can also be used in informative path
 planning~\cite{Binney2012}.
 
-Maximizing the reward collected from a limited-length graph walk is usually known as an orienteering problem~\cite{Vansteenwegen2011}, in which the total reward is a summation of the rewards of visited vertices. 
+Maximizing the reward collected from a limited-length graph walk is usually known as an orienteering problem~\cite{Vansteenwegen2011}, in which the total reward is a sum of the rewards of visited vertices. 
 If the reward function of a vertex has the submodularity property as in a maximum coverage problem, the problem is defined as a submodular orienteering problem~\cite{Chekuri2005}. 
-Unfortunately, in the submodular orienteering case the location of the robot at time t constrains the reachable locations at time t+1.
+Unfortunately, in the submodular orienteering case the location of the robot at time $ t $ constrains the reachable locations at time $ t+1 $.
 Thus, naively applying a greedy algorithm to the submodular orienteering case, that is, with a “teleport” assumption, yields poor results~\cite{Krause2012}. 
 For a generalization of the submodular orienteering problem in which the neighboring constraint can be converted into time budget, a recursive greedy algorithm can be applied~\cite{Chekuri2005}.
 If the planning is considered for a human-robot team, as we are proposing the collaboration and the constraints between team players cannot be ingored.
@@ -419,7 +419,7 @@ We will model the following aspects of information flow from a human to a robot:
 \begin{itemize}
 	\item How to support multiple objectives in tasks,
 	\item How to support human's topological preference, and
-	\item How to model problems from a human language-based instruction.
+	\item How to model problems from a language instruction.
 \end{itemize}
 After they have been modeled into path-planning problems, we will propose algorithms to solve the problems and provide analyses and simulations to support the algorithms.
 Table \ref{tb:requirement} shows how the list of model requirements abobe can be interpreted as a general type of problem from the literature, and identifies an algorithm that we propose to solve the problem for path-planning in a human-robot team.
@@ -451,15 +451,15 @@ When there are multiple objectives in a task, the goal is to find a solution tha
 A common method for finding a solution to a multi-objective optimization problem is to optimize a single objective created by a weighted sum of the multiple objectives.
 This means that either a programmer, designer , or a human teammate must decide how to assign the weights so that the qualitative behavior matches what is intended. 
 Optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
-Thus, it will be better if a set of Pareto optimal paths is firstly found and the human teammate can select one from them.
+Thus, it will be better if a set of Pareto-optimal paths is firstly found and the human teammate can select one from them.
 
-Given this context, we now define the multi-objective path-planning problem to find a set of Pareto optimal paths.
+Given this context, we now define the multi-objective path-planning problem to find a set of Pareto-optimal paths.
 Consider a multi-objective path-planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
 Without loss of generality, assume that each $c_{k}(\cdot)$ is a cost function such that the objective is to minimize these functions.  
-Since the Pareto optimal set of paths in $ \mathbb{R}^{d} $ is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto optimal set}.  
+Since the Pareto-optimal set of paths in $ \mathbb{R}^{d} $ is not enumerable, the {\em goal is to find a representative, finite ($M$-element) subset of the Pareto-optimal set}.  
 By ``representative" we mean a diverse set of solutions that span the Pareto set rather than, for example, several points clustered in a single region of the Pareto set.
 
-In contrast to searching through and comparing solutions in order to find the Pareto optimal set, we use a decomposition-based method similar to MOEA-D~\cite{Zhang2007}.  
+In contrast to searching through and comparing solutions in order to find a Pareto-optimal set, we use a decomposition-based method similar to MOEA-D~\cite{Zhang2007}.  
 MOEA-D is an algorithm that decomposes a multi-objective optimization problem into a set of subproblems.  
 Each subproblem uses a weighed combination of the objectives to find specific points in the Pareto set or to guide the search for such points.  
 %Because we  will use this subproblem idea in our algorithm, it is useful to introduce some notation.
@@ -476,11 +476,11 @@ Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote 
 
 Three types of decomposition methods have been used in prior work~\cite{Zhang2007}.
 \begin{eqnarray}
-\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm weighted \ sum} \label{eq:weighted}\\
+\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm Weighted \ Sum} \label{eq:weighted}\\
 \arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} & {\rm Tchebycheff} \label{eq:Tchebycheff}\\
-\arg\min_x \{ d \mid \bm{z}^{\rm utop} - F(x) = d \bm{\lambda} \} & {\rm boundary \ intersect\ } \label{eq:boundary}
+\arg\min_x \{ d \mid \bm{z}^{\rm utop} - F(x) = d \bm{\lambda} \} & {\rm Boundary \ Intersection \ } \label{eq:boundary}
 \end{eqnarray}
-The solutions generated by each method are a subset of the Pareto optimal set.
+The solutions generated by each method are a subset of the Pareto-optimal set.
 
 We propose an algorithm that explores the solution space using RRT$^{*}$-based tree structures but uses multiple trees in the spirit of decomposition-based multi-objective optimization.
 Because a set of trees are constructed in the exploration process, we call the algorithm MORRF$^{*}$ (Multi-Objective Rapidly exploring Random Forest$^{*}$).
@@ -492,27 +492,27 @@ Because a set of trees are constructed in the exploration process, we call the a
 	\label{fig:MORRTstar}
 \end{figure}
 
-Adopting the idea from the MOEA-D algorithm~\cite{Zhang2007}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained by decomposing the multi-objective problem into $ M $ subproblems.  
+Adopting the idea from the MOEA-D algorithm~\cite{Zhang2007}, the $M$ elements in the solution set $\Sigma^{*}$ will be obtained from $ M $ subproblems decomposed from the multi-objective problem. 
 Both the Tchebycheff approach and Boundary Intersection approach require us to define a Utopia reference vector $ \bm{z}^{\rm utop} $ in the fitness space. 
 Figure~\ref{fig:Tchebycheff} illustrates how this reference vector is used in a simple (not path planning) two objective problem.  
 
 Take the Tchebycheff approach as an example.
 Recall that  $ \bm{\lambda} = [ \lambda_{1} , \cdots , \lambda_{K}  ]^{T} $ is a weighting vector such that $ \sum_{k=1}^{K} \lambda_{k} = 1 $ and that the Tchebycheff approach seeks to find the solution $ x^{te}\in X $ given by $ x^{te} = \arg\min_x \max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} $.  
 As illustrated in Figure~\ref{fig:Tchebycheff}, the Utopia reference vector is defined as the point in cost space that would be obtained if it were possible to find a solution that produced the minimum value for all objectives, that is the $k^{\rm th}$ element of $\bm{z}^{\rm utop}$ is given by $\bm{z}^{\rm utop}_{k} = \arg \min_{x \in X} c_{k}(x)$.  
-It is called the ``Utopia'' reference vector because it represents a point that very best that could conceivably be achieved for an ideal point in the solution space.
+It is called the ``Utopia'' reference vector because it represents a point that could conceivably be achieved for an ideal point in the solution space.
 
 Given this brief overview of the Tchebycheff method, we now need to extend it to allow for RRT$^{*}$-based sampling of the search space.  
 We will need one type of RRT$^{*}$ structure to explore in an attempt to find the Utopia reference vector in payoff space and another type of RRT$^{*}$ structure to find paths that minimize the Tchebycheff condition. %, as described below.  
 Thus, there are two types of tree structures used for the optimization process.
 \begin{itemize}
 	\item Each \emph{reference tree} explores using a single objective $ c_{k} (x), k \in K $. 
-	The cost of each vertex is calculated using the $ k^{\rm th} $ objective function.
+	The cost of each vertex is calculated by using the $ k^{\rm th} $ objective function.
 	\item Each \emph{subproblem tree} explores a subproblem $ g_{m} ( x \mid \lambda_{m} , \bm{z}^{\rm utop} ) , m \in M $.
-	The cost associated with each vertex is calculated using $ g_{m}(x) $ defined by the corresponding approach.
+	The cost associated with each vertex is calculated by using $ g_{m}(x) $ defined by the corresponding approach.
 \end{itemize}
 Thus $ K $ reference trees are used, one each to explore the minimum of each objective, and $ M $ subproblem trees are used, one for each weighting vector, $ \lambda_{m} $.  
 The $K$ reference trees and $M$ subproblem trees constitute the exploration forest.
-The solutions obtained from $ M $ subproblem trees constitute a set of Pareto optimal paths, which are the solutions to the multi-objective path-planning problem. 
+The solutions obtained from $ M $ subproblem trees constitute a set of Pareto-optimal paths, which are the solutions to the multi-objective path-planning problem. 
 
 \subsection{Involving Topological Preferences in Path-Planning}
 \label{sec:project_description:involving_topological_preferences_in_path_planning}
@@ -667,14 +667,14 @@ For example, if a human coach tells a robot that ``go around building A quickly 
 it implies that there potentially exist two objectives from the adverbs, ``quickly'' and ``carefully''.
 Practically, this might mean to minimize the path length and minimize the risk.
 It also indicates the topology of the path that the human wants: ``around building A'', ``between the two trees'' and ``avoiding region C''.
-The semantic structures can be grounded into multi-objective path-planning, homotopy-based path-planning or submodular path-planning with constraints.
-We propose to use a graphical model to infer the relations between the semantics and the groundings.
+The semantic structures can be grounded into multi-objective path planning, homotopy-based path-planning or submodular path planning with constraints.
+We are going to use a graphical model to infer the relations between the semantics and the groundings.
 
-The graphical model has been a popular tool to model ambiguous relationships between natural language and semantics.
+The graphical model has been a popular tool to model ambiguous relationships between utterances and semantics.
 After training by language samples, the graphical model could infer the meaning of verbal language.
 Similarly, we can use it to understand a human's verbal commands to a robot.
 In the application of path-planning, the human's verbal command is associated with spatial elements. 
-Therefore, Spatial Descriptive Clause(SDC) has been introduced to parse the verbal command into a sequence of phrases~\cite{Kollar:2010:TUN:1734454.1734553}.
+Therefore, the Spatial Descriptive Clause(SDC) has been introduced to parse the verbal command into a sequence of phrases~\cite{Kollar:2010:TUN:1734454.1734553}.
 
 The process of assigning physical meanings to phrases is called {\em grounding}.
 A verbal sentence is decomposed into phrases $ \lambda^{r}_{i} $, which carry the information from the human.
@@ -742,7 +742,7 @@ We propose to construct a factor graph to represent the preference relationship 
 % 5) How can you demonstrate that this is a good solution?
 
 Essentially, the thesis statement makes two claims:
-(1) verbal instructions with specific grammar restriction can be translated into path-planning problem.,
+(1) verbal instructions with specific grammar restriction can be translated into path-planning problem,
 and (2) planning problems with  consideration of humans' intents can be solved.
 We will validate each claim by theoretical analyses, and by experiments.
 Each claim is supported by proposing a corresponding algorithm.
@@ -756,7 +756,7 @@ Table \ref{tb:claim} lists the claims from the project description and identifie
 \begin{tabular}{|l|l|l|}
 \hline
 \multicolumn{2}{|l|}{ \textbf{Claim} } & \textbf{Validation} \\ \hline
-\multirow{2}{*}{ \pbox{20cm}{Verbal instructions with \\ specific grammar restriction \\ can be translated into \\ path-planning problem. } } & \pbox{20cm}{ The proposed task grammar converts \\ commands into semantic structures. } & \pbox{20cm}{ Empirical study } \\ \cline{2-3} 
+\multirow{2}{*}{ \pbox{20cm}{Verbal instructions with \\ specific grammar restriction \\ can be translated into \\ path-planning problems. } } & \pbox{20cm}{ The proposed task grammar converts \\ commands into semantic structures. } & \pbox{20cm}{ Empirical study } \\ \cline{2-3} 
                    & \pbox{20cm}{ The proposed graph models converts semantic \\ structures into path-planning problems. } & \pbox{20cm}{ Empirical study } \\ \hline
 \multirow{3}{*}{ \pbox{20cm}{Planning problems that \\ considers human intent\\ can be solved.} }  & \pbox{20cm}{ The solutions of the proposed algorithm \\ asymptotically converge to a set of Pareto \\ optimal paths with multiple objectives. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \cline{2-3} 
                    & \pbox{20cm}{ The proposed algorithm returns a near-optimal \\ solution at the first iteration and the solution \\ converges to the optimal after enough iterations. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \cline{2-3} 
@@ -771,10 +771,10 @@ Table \ref{tb:claim} lists the claims from the project description and identifie
 \subsection{Multi-Objective Path Planning}
 \label{sec:validation:multi_objective_path_planning}
 
-We propose to prove that the solutions found by the proposed MORRF$^{*}$ algorithm can almost surely converge to be Pareto optimal.
+We propose to prove that the solutions found by the proposed MORRF$^{*}$ algorithm can almost surely converge to be Pareto-optimal.
 The proof is split into several steps.
 First, we prove that the multi-objective path-planning problem can be decomposed into a set of weighted subproblems;
-the path from each subproblem tree is a Pareto optimal path.
+the path from each subproblem tree is a Pareto-optimal path.
 Second, we prove that the solutions of MORRF$^{*}$ almost surely converge to the answers of the weighted subproblems.
 There are two converging processes, namely the convergence of the reference trees and the convergence of the subproblem trees.
 The convergence of the subproblem trees depends on the convergence of the reference trees.
