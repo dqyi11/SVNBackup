@@ -10,6 +10,7 @@ from gmm import *
 from Path import *
 import numpy as np
 import json, os
+from xml.dom import minidom
 
 CONFIG_PREFIX = "CONFIG"
 COSTVIZ_PREFIX = "COSTVIZ"
@@ -65,7 +66,7 @@ class PathSamplesGenerator(object):
             
             param = params[iterNum]
                 
-            configFile = "config-" + name + "-" + str(iterNum) + '.json'
+            configFile = "config-" + name + "-" + str(iterNum) + '.xml'
             objectiveFile = "obj-" + name + "-" + str(iterNum) + '.png'
             objectiveVizFile = "objViz-" + name + "-" + str(iterNum) + '.png'
             pathoutFile = 'pathout-' + name + "-" + str(iterNum) + '.txt'
@@ -77,7 +78,7 @@ class PathSamplesGenerator(object):
             
             self.genConfig(CONFIG_DIR + "/" + configFile, COST_DIR + "/" + objectiveFile, PATH_TXT_DIR + "/" + pathoutFile)
             
-            command_str = "./rrtstar_viz_demo "+ CONFIG_DIR + "/" + configFile
+            command_str = "./rrtstar-viz-demo "+ CONFIG_DIR + "/" + configFile
             print command_str
             os.system(command_str)
             
@@ -87,24 +88,29 @@ class PathSamplesGenerator(object):
                 
                 
     def genConfig(self, configFile, objFile, pathOutputFile):
-        my_dict = {
-            'goalX'           : self.world.goal[0],
-            'goalY'           : self.world.goal[1],
-            'mapFilename'     : self.mapFile,
-            'mapFullpath'     : './'+self.mapFile,
-            'mapHeight'       : self.world.height,
-            'mapWidth'        : self.world.width,
-            'maxIterationNum' : self.maxRun,
-            'minDistEnabled'  : False,
-            'objectiveFile'   : objFile,
-            'pathOutputFile'  : pathOutputFile,
-            'segmentLength'   : self.segmentLength,
-            'startX'          : self.world.init[0],
-            'startY'          : self.world.init[1]
-        }
-        with open(configFile, 'w') as outfile:
-            json.dump(my_dict, outfile)
-        
+            
+        if configFile == "":
+            return        
+        xmldoc = minidom.Document()
+        root = xmldoc.createElement("root")
+        world_obj = xmldoc.createElement("world")
+        world_obj.setAttribute( "goal_x", str(self.world.goal[0]) )
+        world_obj.setAttribute( "goal_y", str(self.world.goal[1]) )
+        world_obj.setAttribute( 'map_filename', self.mapFile )
+        world_obj.setAttribute( 'map_fullpath', './'+self.mapFile )
+        world_obj.setAttribute( 'map_height', str(self.world.height) )
+        world_obj.setAttribute( 'map_width', str(self.world.width) ) 
+        world_obj.setAttribute( 'max_iteration_num', str( self.maxRun ) )
+        world_obj.setAttribute( 'min_dist_enabled', str( int( False ) ) )
+        world_obj.setAttribute( 'objective_file', objFile )
+        world_obj.setAttribute( 'path_output_file', pathOutputFile )
+        world_obj.setAttribute( 'segment_length',  str(self.segmentLength) )
+        world_obj.setAttribute( 'start_x', str(self.world.init[0]) )
+        world_obj.setAttribute( 'start_y', str(self.world.init[1]) )
+        xmldoc.appendChild(root)
+        root.appendChild(world_obj)
+        xmldoc.writexml( open(configFile, 'w'), indent="  ", addindent="  ", newl="\n" )
+        xmldoc.unlink()
         
     def drawPath(self, pathFile, drawPathFile):
         p = Path()
