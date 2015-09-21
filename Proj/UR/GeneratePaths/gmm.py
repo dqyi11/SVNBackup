@@ -17,6 +17,7 @@ def vizCostMap(data, outputfilename="", outputVizFilename="", blockVal=True):
         pyplot.savefig(filename=outputVizFilename)
     if outputfilename!= "":
         matplotlib.image.imsave(outputfilename, np.uint8(data), cmap=cm.gray)
+        matplotlib.image.imsave(outputfilename+"-c.png", np.uint8(data), cmap=cm.autumn)
     #pyplot.show(block=blockVal)
 
 class Param:
