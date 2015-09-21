@@ -74,6 +74,7 @@ class PathSamplesGenerator(object):
             self.world.selectGoal()
             valDist = gmmCostMap(param, self.world)    
             vizCostMap(valDist, COST_DIR + "/" + objectiveFile, COSTVIZ_DIR + "/" + objectiveVizFile, False)
+            
             self.genConfig(CONFIG_DIR + "/" + configFile, COST_DIR + "/" + objectiveFile, PATH_TXT_DIR + "/" + pathoutFile)
             
             command_str = "./rrtstar_viz_demo "+ CONFIG_DIR + "/" + configFile
@@ -82,7 +83,7 @@ class PathSamplesGenerator(object):
             
             self.drawPath(PATH_TXT_DIR + "/" + pathoutFile, PATH_MAP_DIR + "/" + pathPicFile)
             
-            
+            paramGnr.dumpXML(params[iterNum], PATH_MAP_DIR + "/" + pathPicFile + ".xml")
                 
                 
     def genConfig(self, configFile, objFile, pathOutputFile):

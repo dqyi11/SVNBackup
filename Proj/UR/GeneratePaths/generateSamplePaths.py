@@ -11,8 +11,8 @@ from PathSamplesGenerator import *
 
 if __name__ == '__main__':
     
-    WORLD_NUM = 1
-    PATH_NUM = 2
+    WORLD_NUM = 10
+    PATH_NUM = 10
     
     MAP = "map01.png"
     MAX_RUN_NUM = 5000
