@@ -1,0 +1,12 @@
+strict digraph  {
+	A -> B;
+	C -> B;
+	B -> D;
+	D -> E;
+	D -> F;
+	E -> G;
+	F -> G;
+	F -> H;
+	G -> I;
+	H -> I;
+}

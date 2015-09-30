@@ -1,0 +1,33 @@
+Schemes:
+   snap(S,N,A,P)
+   csg(C,S,G)
+   cdh(C,D,H)
+   cr(C,R)
+Facts:
+   snap('12345','C. Brown','12 Apple','555-1234').
+   snap('67890','L. Van Pelt','34 Pear','555-5678').
+   snap('22222','P. Patty','56 Grape','555-9999').
+   snap('33333','Snoopy','12 Apple','555-1234').
+   csg('CS101','12345','A').
+   csg('CS101','67890','B').
+   csg('CS101','33333','A-').
+   csg('EE200','12345','C').
+   csg('EE200','22222','B+').
+   csg('EE200','33333','B').
+   csg('PH100','67890','C+').
+   cdh('CS101','F','9PM').
+   cdh('EE200','M','10AM').
+   cdh('EE200','W','10AM').
+   cdh('PH100','Tu','11AM').
+   cr('CS101','Auditorium').
+   cr('EE200','25 Ohm Hall').
+   cr('PH100','Newton Lab').
+Rules:
+Queries:
+   snap(Id,'Snoopy',Adr,Ph)?
+   csg(Course,'33333',Grade)?
+   cr('CS101','Auditorium')?
+   cdh('EE200','F',Hour)?
+   csg(Course,Id,Grade)?
+   cdh(Course,Day,Hour)?
+   cr(Course,Room)?

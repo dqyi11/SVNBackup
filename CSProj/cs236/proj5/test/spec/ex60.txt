@@ -1,0 +1,25 @@
+Schemes:
+ Parent(P,C)
+ Ancestor(A,P)
+ GPA(P,G)
+ Smart(S)
+ SmartAncestor(S,P)
+GT(X,Y)
+Facts:
+ Parent('Pat','Kelly').
+ Parent('Kelly','Tracy').
+ Parent('Tracy','Lynn').
+ GPA('Kelly','4.0').
+ GPA('Pat','3.7').
+ GPA('Tracy','2.9').
+ GT('4.0','3.7').
+ GT('3.9','3.7').
+ GT('3.8','3.9').
+Rules:
+ Ancestor(x,y) :- Parent(x,y).
+ Ancestor(x,y) :- Ancestor(x,z),Parent(z,y).
+ Ancestor(x,y) :- SmartAncestor(y,x).
+Smart(x) :- GPA(x,y),GT(y,'3.7').
+ SmartAncestor(x,y) :- Smart(x),Ancestor(x,y).
+Queries:
+ SmartAncestor(x,'Lynn')?

@@ -1,0 +1,15 @@
+Estimated:
+
+[[ 0.15648875  0.4499925 ]
+ [ 0.1016225   0.29189625]]
+ 
+P(G=True,F=True|A=True,D=True)=0.15648875\n
+P(G=True,F=False|A=True,D=True)=0.4499925\n
+P(G=False,F=True|A=True,D=True)=0.1016225\n
+P(G=False,F=False|A=True,D=True)=0.29189625\n
+
+Calculated:
+
+P(G,F|A='T',D='T')=
+[[ 0.1566231   0.44997294]
+ [ 0.1015769   0.29182706]]

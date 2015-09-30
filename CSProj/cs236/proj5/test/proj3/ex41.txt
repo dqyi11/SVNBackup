@@ -1,0 +1,8 @@
+Schemes:
+    S(A,B,C)
+Facts:
+    S('a','a','a').
+    S('a','b','b').
+Rules:
+Queries:
+    S(X,'a',Y)?

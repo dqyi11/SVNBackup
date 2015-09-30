@@ -1,0 +1,32 @@
+#!/bin/bash
+
+spec="236_4_spec"
+to_test="../Debug/236_5_graph"
+test_cases="tests.txt"
+out="output/"
+
+diff="meld"   # Diff command
+
+# Loop input file
+while read file; do
+    file_out_spec="$out$file.out"       # The out file to check against
+    file_out_test="$out$file.out.tst"   # The outfile from test application
+
+    # Validate infile exists (do the same for out validate file)
+    if [ ! -f "$file" ]; then
+        printf "Test case %s is missing\n" "$file"
+        continue;
+    fi
+
+    printf "Testing against %s\n" "$file"
+
+    "./$spec" "$file" > "$file_out_spec"
+    "./$to_test" "$file" > "$file_out_test"
+
+    # Execute diff
+    $diff "$file_out_test" "$file_out_spec" &
+
+done < "$test_cases"
+
+# Clean exit with status 0
+exit 0

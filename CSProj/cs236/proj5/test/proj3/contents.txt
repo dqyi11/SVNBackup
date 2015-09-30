@@ -1,0 +1,20 @@
+Exception
+	(1) Query: constant input not in domain
+		NOTE: currently just returns no results.  I think this is fine, spec doesn't say to handle exception.
+	(2) Duplicate facts							OK
+
+Acceptable
+	(1) All constant input						OK
+	(2) All variable input						OK
+	(3) constant + variable input				OK
+	(3.1) 1st const + variable 					OK
+	(3.2) Last const + variable 				OK
+	(3.3) 1st Variable + const 					OK (3.2)
+	(3.4) Last variable + const 				OK (3.2)
+	(4) Variable with same name 				
+		Q(x,x)									OK
+		Q(x,x,x)								OK
+	(5) No match record found 					OK
+
+Examples
+	ex42.txt									OK

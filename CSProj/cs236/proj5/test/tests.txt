@@ -1,0 +1,4 @@
+spec/ex50.txt
+spec/ex60.txt
+spec/ex61.txt
+spec/ex62.txt

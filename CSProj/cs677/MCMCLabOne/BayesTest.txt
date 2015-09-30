@@ -1,0 +1,48 @@
+Estimated:
+
+[ 0.284025  0.715975]
+P(Burglary=True|MaryCalls=True,JohnCalls=True)=0.284025\n
+P(Burglary=False|MaryCalls=True,JohnCalls=True)=0.715975\n
+
+[ 0.76027875  0.23972125]
+P(Alarm=True|MaryCalls=True,JohnCalls=True)=0.76027875\n
+P(Alarm=False|MaryCalls=True,JohnCalls=True)=0.23972125\n
+
+[ 0.175855  0.824145]
+P(Earthquake=True|MaryCalls=True,JohnCalls=True)=0.175855\n
+P(Earthquake=False|MaryCalls=True,JohnCalls=True)=0.824145\n
+
+[  9.50000000e-05   9.99905000e-01]
+P(Burglary=True|MaryCalls=False,JohnCalls=False)=9.5e-05\n
+P(Burglary=False|MaryCalls=False,JohnCalls=False)=0.999905\n
+
+[ 0.00506875  0.99493125]
+P(Burglary=True|MaryCalls=False,JohnCalls=True)=0.00506875\n
+P(Burglary=False|MaryCalls=False,JohnCalls=True)=0.99493125\n
+
+[ 0.016335  0.983665]
+P(Burglary=True|JohnCalls=True)=0.016335\n
+P(Burglary=False|JohnCalls=True)=0.983665\n
+
+[ 0.055955  0.944045]
+P(Burglary=True|MaryCalls=True)=0.055955\n
+P(Burglary=False|MaryCalls=True)=0.944045\n
+
+
+
+Calculated:
+
+P(B|J='T',M='T')=
+[ 0.28417184  0.71582816]
+P(A|J='T',M='T')=
+[ 0.76069204  0.23930796]
+P(E|J='T',M='T')=
+[ 0.17606684  0.82393316]
+P(B|J='F',M='F')=
+[  9.01843938e-05   9.99909816e-01]
+P(B|J='T',M='F')=
+[ 0.00512986  0.99487014]
+P(B|J='T')=
+[ 0.01628373  0.98371627]
+P(B|M='T')=
+[ 0.05611745  0.94388255]

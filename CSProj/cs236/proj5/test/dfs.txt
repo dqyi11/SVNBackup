@@ -1,0 +1,20 @@
+Schemes:
+  a(a)
+  b(b)
+  c(c)
+  d(d)
+  e(e)
+
+Facts:
+  b('d').
+  a('d').
+  c('c').
+  d('d').
+  e('e').
+
+Rules:
+  a(a) :- c(a),b(a).
+  b(a) :- d(a).
+  c(a) :- b(a).
+
+Queries:

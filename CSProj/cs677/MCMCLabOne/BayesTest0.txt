@@ -1,0 +1,181 @@
+[[ 0.06831125  0.156675  ]
+ [ 0.5009725   0.27404125]]
+P(C=True,E=True|A=True,B=True,F=False)=0.06831125\n
+P(C=True,E=False|A=True,B=True,F=False)=0.156675\n
+P(C=False,E=True|A=True,B=True,F=False)=0.5009725\n
+P(C=False,E=False|A=True,B=True,F=False)=0.27404125\n
+
+[[[[ 0.19632     0.02982875]
+   [ 0.0240975   0.00374125]]
+
+  [[ 0.02174875  0.0352375 ]
+   [ 0.0901225   0.14797125]]]
+
+
+ [[[ 0.07167875  0.01063875]
+   [ 0.0086175   0.00133125]]
+
+  [[ 0.02619625  0.043005  ]
+   [ 0.10904     0.180425  ]]]]
+P(C=True,E=True,G=True,F=True|A=False,B=True,D=False)=0.19632\n
+P(C=True,E=True,G=True,F=False|A=False,B=True,D=False)=0.02982875\n
+P(C=True,E=True,G=False,F=True|A=False,B=True,D=False)=0.0240975\n
+P(C=True,E=True,G=False,F=False|A=False,B=True,D=False)=0.00374125\n
+
+P(C=True,E=False,G=True,F=True|A=False,B=True,D=False)=0.02174875\n
+P(C=True,E=False,G=True,F=False|A=False,B=True,D=False)=0.0352375\n
+P(C=True,E=False,G=False,F=True|A=False,B=True,D=False)=0.0901225\n
+P(C=True,E=False,G=False,F=False|A=False,B=True,D=False)=0.14797125\n
+
+P(C=False,E=True,G=True,F=True|A=False,B=True,D=False)=0.07167875\n
+P(C=False,E=True,G=True,F=False|A=False,B=True,D=False)=0.01063875\n
+P(C=False,E=True,G=False,F=True|A=False,B=True,D=False)=0.0086175\n
+P(C=False,E=True,G=False,F=False|A=False,B=True,D=False)=0.00133125\n
+
+P(C=False,E=False,G=True,F=True|A=False,B=True,D=False)=0.02619625\n
+P(C=False,E=False,G=True,F=False|A=False,B=True,D=False)=0.043005\n
+P(C=False,E=False,G=False,F=True|A=False,B=True,D=False)=0.10904\n
+P(C=False,E=False,G=False,F=False|A=False,B=True,D=False)=0.180425\n
+
+[[[[ 0.00319125  0.00386125]
+   [ 0.04538125  0.0058225 ]]
+
+  [[ 0.21390625  0.06498375]
+   [ 0.0289525   0.1611075 ]]]
+
+
+ [[[ 0.00117125  0.00914625]
+   [ 0.00096875  0.00334625]]
+
+  [[ 0.02053125  0.08028125]
+   [ 0.0200875   0.33726125]]]]
+   
+P(A=True,B=True,C=True,D=True|E=True,G=False,F=False)=0.00319125\n
+P(A=True,B=True,C=True,D=False|E=True,G=False,F=False)=0.00386125\n
+P(A=True,B=True,C=False,D=True|E=True,G=False,F=False)=0.04538125\n
+P(A=True,B=True,C=False,D=False|E=True,G=False,F=False)=0.0058225\n
+
+P(A=True,B=False,C=True,D=True|E=True,G=False,F=False)=0.21390625\n
+P(A=True,B=False,C=True,D=False|E=True,G=False,F=False)=0.06498375\n
+P(A=True,B=False,C=False,D=True|E=True,G=False,F=False)=0.0289525\n
+P(A=True,B=False,C=False,D=False|E=True,G=False,F=False)=0.1611075\n
+
+P(A=False,B=True,C=True,D=True|E=True,G=False,F=False)=0.00117125\n
+P(A=False,B=True,C=True,D=False|E=True,G=False,F=False)=0.00914625\n
+P(A=False,B=True,C=False,D=True|E=True,G=False,F=False)=0.00096875\n
+P(A=False,B=True,C=False,D=False|E=True,G=False,F=False)=0.00334625\n
+
+P(A=False,B=False,C=True,D=True|E=True,G=False,F=False)=0.02053125\n
+P(A=False,B=False,C=True,D=False|E=True,G=False,F=False)=0.08028125\n
+P(A=False,B=False,C=False,D=True|E=True,G=False,F=False)=0.0200875\n
+P(A=False,B=False,C=False,D=False|E=True,G=False,F=False)=0.33726125\n
+
+[[[[ 0.0057825   0.00319375]
+   [ 0.03863     0.05318   ]]
+
+  [[ 0.05776375  0.0227075 ]
+   [ 0.06649875  0.09272375]]]
+
+
+ [[[ 0.02820375  0.00485125]
+   [ 0.10498625  0.1773    ]]
+
+  [[ 0.01013375  0.0019525 ]
+   [ 0.12542375  0.20666875]]]]
+   
+P(A=True,C=True,E=True,F=True|B=True,G=False)=0.0057825\n
+P(A=True,C=True,E=True,F=False|B=True,G=False)=0.00319375\n
+P(A=True,C=True,E=False,F=True|B=True,G=False)=0.03863\n
+P(A=True,C=True,E=False,F=False|B=True,G=False)=0.05318\n
+
+P(A=True,C=False,E=True,F=True|B=True,G=False)=0.05776375\n
+P(A=True,C=False,E=True,F=False|B=True,G=False)=0.0227075\n
+P(A=True,C=False,E=False,F=True|B=True,G=False)=0.06649875\n
+P(A=True,C=False,E=False,F=False|B=True,G=False)=0.09272375\n
+
+P(A=False,C=True,E=True,F=True|B=True,G=False)=0.02820375\n
+P(A=False,C=True,E=True,F=False|B=True,G=False)=0.00485125\n
+P(A=False,C=True,E=False,F=True|B=True,G=False)=0.10498625\n
+P(A=False,C=True,E=False,F=False|B=True,G=False)=0.1773\n
+
+P(A=False,C=False,E=True,F=True|B=True,G=False)=0.01013375\n
+P(A=False,C=False,E=True,F=False|B=True,G=False)=0.0019525\n
+P(A=False,C=False,E=False,F=True|B=True,G=False)=0.12542375\n
+P(A=False,C=False,E=False,F=False|B=True,G=False)=0.20666875\n
+
+
+[ 0.602795  0.397205]
+
+P(G=True|C=False,B=True)=0.602795\n
+P(G=False|C=False,B=True)=0.397205\n
+
+[[[ 0.05143125  0.0256825 ]
+  [ 0.00764     0.12736875]]
+
+ [[ 0.58503125  0.09254875]
+  [ 0.01961     0.0906875 ]]]
+  
+P(B=True,C=True,D=True|A=True,E=False)=0.05143125\n
+P(B=True,C=True,D=False|A=True,E=False)=0.0256825\n
+P(B=True,C=False,D=True|A=True,E=False)=0.00764\n
+P(B=True,C=False,D=False|A=True,E=False)=0.12736875\n
+
+P(B=False,C=True,D=True|A=True,E=False)=0.58503125\n
+P(B=False,C=True,D=False|A=True,E=False)=0.09254875\n
+P(B=False,C=False,D=True|A=True,E=False)=0.01961\n
+P(B=False,C=False,D=False|A=True,E=False)=0.0906875\n
+
+
+
+Calculated:
+
+P(C,E|A='T',B='T',F='F')=
+[[ 0.06891083  0.15657703]
+ [ 0.49857373  0.27593841]]
+P(C,E,G,F|A='F',B='T',D='F')=
+[[[[ 0.19717015  0.029723  ]
+   [ 0.0241207   0.00363615]]
+
+  [[ 0.02165861  0.03563929]
+   [ 0.08998369  0.14806841]]]
+
+
+ [[[ 0.07177566  0.01082004]
+   [ 0.00878064  0.00132366]]
+
+  [[ 0.02620152  0.04311468]
+   [ 0.10885788  0.17912592]]]]
+P(A,B,C,D|E='T',F='F',G='F')=
+[[[[ 0.00316629  0.00387184]
+   [ 0.04515405  0.00576722]]
+
+  [[ 0.21224051  0.06509369]
+   [ 0.0290233   0.16088369]]]
+
+
+ [[[ 0.00125098  0.00936821]
+   [ 0.00094039  0.0034103 ]]
+
+  [[ 0.02072737  0.08052878]
+   [ 0.01995041  0.33862298]]]]
+P(A,C,E,F|B='T',G='F')=
+[[[[ 0.00568159  0.00314604]
+   [ 0.03838161  0.0528584 ]]
+
+  [[ 0.05783379  0.02276181]
+   [ 0.0664643   0.09315327]]]
+
+
+ [[[ 0.02799085  0.00474678]
+   [ 0.10520255  0.17783468]]
+
+  [[ 0.01027171  0.00194476]
+   [ 0.12537912  0.20634874]]]]
+P(G|B='T',C='F')=
+[ 0.60019242  0.39980758]
+P(B,C,D|A='T',E='F')=
+[[[ 0.05153103  0.02576934]
+  [ 0.00767183  0.12755939]]
+
+ [[ 0.58471264  0.09258836]
+  [ 0.0194816   0.09068581]]]

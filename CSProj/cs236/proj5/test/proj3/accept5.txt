@@ -1,0 +1,10 @@
+Schemes:
+   test(T,E,S)
+Facts:
+   test('a','b','c').
+   test('a','b','d').
+   test('c','b','c').
+   test('a','c','b').
+Rules:
+Queries:
+   test(A,'b','f')?

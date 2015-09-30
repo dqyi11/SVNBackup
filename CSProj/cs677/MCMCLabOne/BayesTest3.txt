@@ -1,0 +1,10 @@
+Estimated:
+[ 0.043875  0.956125]
+P(TrafficJam=True|BeLateForClass=True)=0.043875\n
+P(TrafficJam=False|BeLateForClass=True)=0.956125\n
+
+Calculated:
+P(A|E='T')=
+[ 0.0430398  0.9569602]
+
+

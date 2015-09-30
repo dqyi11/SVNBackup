@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\input{preamble}
+
+\begin{document}
+
+\title{\textsf{Convergence of particle swarms to Pareto front in Multi-Objective Optimization}}
+\author{\textsf{Daqing Yi}}
+\date{\textsf{CS611 Assignment 2}}
+
+\maketitle
+
+%\section{Requirement}
+%\begin{itemize}
+%\item Write a concise, formal and accurate statement of your theorem 
+%\item Include with this a set of brief definitions (formal, if possible, informal when necessary for brevity) that will allow a reader to understand the content and significance of your statement
+%\end{itemize}
+
+
+\section{Definitions}
+
+\begin{prop}[\textbf{Minimum Problem}]
+All the optimization functions in this paper are all defined for minimum problems.
+\end{prop}
+A solver of a minimum problem can be converted to a solver of a maximum problem easily.
+
+\begin{mydef}[\textbf{Multi-Objective Optimization}]
+\label{def:multi_opt}
+Find the vector $ \vec{x}^{*} = \left[ {x}_{1}^{*}, {x}_{2}^{*}, \cdots {x}_{n}^{*} \right]^{T} \in \Omega $ which will satisfy the $ m $ inequality constraints
+\begin{equation}
+\label{eq:mo_ineq_constraint}
+g_{i}(\vec{x}) \geq 0, i = 1, 2, \cdots , m, 
+\end{equation}
+the $ p $ equality constraints
+\begin{equation}
+\label{eq:mo_eq_constraint}
+h_{i}(\vec{x}) \geq 0, i = 1, 2, \cdots , p, 
+\end{equation}
+and will optimize the vector function
+\begin{equation}
+\label{eq:mo_obj}
+\min_{\Omega} \vec{f}(\vec{x}) = \min_{\Omega} \left[ f_{1}(\vec{x}), f_{2}(\vec{x}) \cdots f_{k}(\vec{x}) \right]^{T},
+\end{equation}
+where $ \vec{x} = \left[ x_{1}, x_{2}, \cdots x_{n} \right]^{T} $ is the vector of decision variables.
+\end{mydef}
+
+\begin{mydef}[\textbf{Pareto Optimal}]
+\label{def:pareto_opt}
+$ \vec{x}^{*} \in \Sigma $ is \emph{Pareto optimal} if for every $ \vec{x} \in \Omega $ and $ I = \{ 1, 2, \cdots k \} $, either 
+\begin{equation}
+\label{eq:po_eq}
+\forall i \in I, f_{i}(\vec{x}) = f_{i}(\vec{x}^{*})
+\end{equation}
+or there is at least one $ i \in I $ such that
+\begin{equation}
+\label{eq:po_g}
+f_{i}(\vec{x}) > f_{i}(\vec{x}^{*})
+\end{equation}
+for a minimum problem.
+\end{mydef}
+
+
+\begin{mydef}[\textbf{Pareto optimal set}]
+\label{def:pareto_opt_set}
+For a given Multi-Objective Optimization problem $ \vec{f}(\vec{x}) $, the \emph{Pareto optimal set} $ P^{*} $ is defined as
+\begin{equation}
+\label{eq:pa_opt_set}
+P^{*} := \{ \vec{x} \in \Omega \mid \neg \exists \vec{x}' \in \Omega (\vec{f}(\vec{x}') \preceq  \vec{f}(\vec{x})) \},
+\end{equation}
+in which $ \vec{f}(\vec{x}') \preceq \vec{f}(\vec{x})) $ means $ \forall i \in I, f_{i}(\vec{x}') \leq f_{i}(\vec{x}) $.
+
+\end{mydef}
+
+\begin{mydef}[\textbf{Pareto Front}]
+\label{def:pareto_front}
+For a given Multi-Objective Optimization problem $ \vec{f}(\vec{x}) $ and Pareto optimal set $ P^{*} $, the \emph{Pareto front} $ PF^{*} $ is defined as
+\begin{equation}
+\label{eq:pa_front}
+PF^{*} := \{ \vec{u} = \vec{f}(\vec{x}) \mid \vec{x} \in P^{*}  \}.
+\end{equation}
+\end{mydef}
+
+\begin{mydef}[\textbf{Particle Swarm Optimization}]
+\label{def:pso}
+A \emph{particle} is a data structure that maintains current position $ \hat{\vec{x}} $ and current velocity  $ \hat{\vec{v}} $. Denote $ p_{best} $ for ``personal best'', which is the most fit position remembered of a particle. Denote $ g_{best} $ for ``global best'', which is most fit $ p_{best} $ among all particles. 
+\begin{enumerate}
+\item Scattering particles in decision space stochastically
+\item Each particle update its location over time \\
+\begin{equation}
+\label{eq:up_vel}
+\vec{v}_{t+1} = \vec{v}_{t} + \phi_{1} U() (p_{best} - \vec{x}_{t}) + \phi_{2} U() (g_{best} - \vec{x}_{t}),
+\end{equation}
+\begin{equation}
+\label{eq:up_pos}
+\vec{x}_{t+1} = \vec{x}_{t} + \vec{v}_{t+1},
+\end{equation}
+in which $ U() $ is sampling from uniform distribution.
+\end{enumerate}
+\end{mydef}
+
+\section{Hypothesis}
+
+\begin{hyp}[Convergence]
+\label{thm:convergence}
+Applying \emph{particle swarm optimization} \textsuperscript{\ref{def:pso}} algorithm to a \emph{multi-objective optimization} \textsuperscript{\ref{def:multi_opt}} problem, all the particles will converge to \emph{Pareto front} \textsuperscript{\ref{def:pareto_front}} of the problem after enough run.
+\end{hyp}
+
+Note: Intuitively, the convergence should depend on parameter selection and the way of measuring fitness for each particles, which will be stated clearly in rough draft of the proof.
+
+%\bibliographystyle{apalike}
+%\bibliography{reference}
+
+\end{document}

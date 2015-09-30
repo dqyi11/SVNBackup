@@ -1,0 +1,7 @@
+Estimated:
+[ 0.32952625  0.67047375]
+P(A=True|B=True,E=False)=0.32952625\nP(A=False|B=True,E=False)=0.67047375\n
+
+Calculated:
+P(A|B='T',E='F')=
+[ 0.32984293  0.67015707]
