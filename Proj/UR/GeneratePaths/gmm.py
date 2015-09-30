@@ -7,7 +7,7 @@ import numpy as np
 from matplotlib import mpl,pyplot,cm
 import matplotlib
 
-def vizCostMap(data, outputfilename="", outputVizFilename="", blockVal=True):
+def vizCostMap(data, outputfilename="", outputVizFilename="", outputColorFilename="", blockVal=True):
     
     fig = pyplot.figure()
     ax = fig.add_subplot(111)
@@ -17,7 +17,7 @@ def vizCostMap(data, outputfilename="", outputVizFilename="", blockVal=True):
         pyplot.savefig(filename=outputVizFilename)
     if outputfilename!= "":
         matplotlib.image.imsave(outputfilename, np.uint8(data), cmap=cm.gray)
-        matplotlib.image.imsave(outputfilename+"-c.png", np.uint8(data), cmap=cm.autumn)
+        matplotlib.image.imsave(outputColorFilename, np.uint8(data), cmap=cm.autumn)
     #pyplot.show(block=blockVal)
 
 class Param:
@@ -75,7 +75,8 @@ def gmmCostMap(param, world, type="Gaussian"):
         
     min_val = np.min(val)
     max_val = np.max(val)
-    val = 255 * (val - min_val) / (max_val - min_val)    
+    # guarantee no zero value (move any location has a cost)
+    val = 254 * (val - min_val) / (max_val - min_val) + 1    
         
     cols = np.unique(xv).shape[0]    
     val.reshape(-1, cols)

@@ -27,8 +27,8 @@ if __name__ == '__main__':
     objects.append(["P", "person"])
     objects.append(["C", "car"])
     objects.append(["T", "tree"])
-    objects.append(["B1", "building"])
-    objects.append(["B2", "building"])
+    objects.append(["B", "building"])
+    objects.append(["H", "house"])
     
     worldGnr.randInitWorlds(WORLD_NUM, objects)
     

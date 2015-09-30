@@ -23,7 +23,7 @@ if __name__ == '__main__':
     param = Param()
     for j in range(len(world01.objects)):
         param.w.append(np.random.rand()*2 - 1.0)
-        param.scale.append(5.0)
+        param.scale.append(10.0)
         
     #KERNEL = "Epanechnikov"    
     #KERNEL = "Gaussian"

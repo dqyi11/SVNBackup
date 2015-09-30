@@ -68,13 +68,15 @@ class PathSamplesGenerator(object):
                 
             configFile = "config-" + name + "-" + str(iterNum) + '.xml'
             objectiveFile = "obj-" + name + "-" + str(iterNum) + '.png'
+            objectiveColorFile = objectiveFile + "-c.png"
             objectiveVizFile = "objViz-" + name + "-" + str(iterNum) + '.png'
             pathoutFile = 'pathout-' + name + "-" + str(iterNum) + '.txt'
             pathPicFile = pathoutFile + '.jpg'
+            pathPicCostFile = pathPicFile + '.jpg'
 
             self.world.selectGoal()
             valDist = gmmCostMap(param, self.world)    
-            vizCostMap(valDist, COST_DIR + "/" + objectiveFile, COSTVIZ_DIR + "/" + objectiveVizFile, False)
+            vizCostMap(valDist, COST_DIR + "/" + objectiveFile, COSTVIZ_DIR + "/" + objectiveVizFile, COST_DIR + "/" + objectiveColorFile, False)
             
             self.genConfig(CONFIG_DIR + "/" + configFile, COST_DIR + "/" + objectiveFile, PATH_TXT_DIR + "/" + pathoutFile)
             
@@ -82,7 +84,8 @@ class PathSamplesGenerator(object):
             print command_str
             os.system(command_str)
             
-            self.drawPath(PATH_TXT_DIR + "/" + pathoutFile, PATH_MAP_DIR + "/" + pathPicFile)
+            self.drawPath(PATH_TXT_DIR + "/" + pathoutFile, PATH_MAP_DIR + "/" + pathPicFile, "")
+            self.drawPath(PATH_TXT_DIR + "/" + pathoutFile, PATH_MAP_DIR + "/" + pathPicCostFile, COST_DIR + "/" + objectiveColorFile)
             
             paramGnr.dumpXML(params[iterNum], PATH_MAP_DIR + "/" + pathPicFile + ".xml")
                 
@@ -112,10 +115,14 @@ class PathSamplesGenerator(object):
         xmldoc.writexml( open(configFile, 'w'), indent="  ", addindent="  ", newl="\n" )
         xmldoc.unlink()
         
-    def drawPath(self, pathFile, drawPathFile):
+    def drawPath(self, pathFile, drawPathFile, background_file=""):
         p = Path()
-        if True == p.loadFromFile(pathFile):
-            self.worldViz.drawPath(p, drawPathFile)
+        if True == p.loadFromFile(pathFile):            
+            if "" == background_file:
+                self.worldViz.drawPath(p, drawPathFile)
+            else:
+                self.worldViz.drawPath(p, drawPathFile, background_file)
+            
         
 
         

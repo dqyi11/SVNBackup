@@ -42,7 +42,7 @@ class Object(object):
             rh = np.random.randint(60,100)
             self.radius = [rw, rh]
             self.orientation = np.random.randint(0, 360)            
-        elif self.type == "chapel":
+        elif self.type == "house":
             rw = np.random.randint(50,70)
             rh = np.random.randint(50,70)
             self.radius = [rw, rh]

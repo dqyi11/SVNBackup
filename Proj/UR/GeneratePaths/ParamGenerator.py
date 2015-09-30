@@ -9,12 +9,12 @@ class ParamGenerator(object):
         
         self.worldViz = worldViz
 
-    def generateParams(self, num, resolution=0.2):
+    def generateParams(self, num, resolution=0.1):
         params = []        
         num_res = int(1/resolution)
         for i in range(num):
             param = Param()
-            param.w = np.random.randint( -num_res , num_res+1, len(self.worldViz.world.objects)) * resolution
+            param.w = np.random.randint( 0 , num_res+1, len(self.worldViz.world.objects)) * resolution
             param.scale = 140 * np.ones(len(self.worldViz.world.objects))           
             params.append(param)        
         return params    

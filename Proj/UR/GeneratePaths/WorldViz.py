@@ -76,9 +76,14 @@ class WorldViz(object):
     def close(self):
         pygame.quit()
         
-    def drawPath(self, path, filename):
+    def drawPath(self, path, filename, background=""):
         surface = pygame.Surface((self.world.width, self.world.height))
-        surface.fill((255,255,255))
+        if background == "":
+            surface.fill((255,255,255))
+        else:
+            #surface.fill((255,255,255))
+            img = pygame.image.load(background)
+            surface.blit( img, (0,0) )
         
         RADIUS = 10
         RECT_WIDTH = 16  
@@ -93,7 +98,7 @@ class WorldViz(object):
             
         pathLen = len(path.waypoints)
         for i in range(pathLen-1):
-            pygame.draw.line(surface, (255,255,0), path.waypoints[i], path.waypoints[i+1], 2)
+            pygame.draw.line(surface, (0,0,0), path.waypoints[i], path.waypoints[i+1], 6)
 
         if self.world.init != None:
             pygame.draw.circle(surface, BLUE, self.world.init, 10, 0)
@@ -101,5 +106,7 @@ class WorldViz(object):
             pygame.draw.circle(surface, RED, self.world.goal, 10, 0)
         
         pygame.image.save(surface, filename)
+        
+        
 
         
