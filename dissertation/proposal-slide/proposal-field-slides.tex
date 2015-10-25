@@ -1,0 +1,144 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\usepackage{amsmath}
+\usepackage{textpos}
+\usepackage{ulem}
+%\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{subfigure}
+
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}
+
+\usepackage{paralist}
+\usepackage{comment} 
+
+\usepackage[labelformat=empty]{caption}
+
+\definecolor{BYUblue}{RGB}{0,31,69}
+\definecolor{BYUgold}{RGB}{195,163,106}
+\usecolortheme[RGB={0,31,69}]{structure} % BYU Blue
+
+\definecolor{diff-point}{RGB}{102,178,255}
+\definecolor{diff-path}{RGB}{0,76,153}
+
+\definecolor{reference_color}{RGB}{0,175,0}
+\definecolor{subproblem_color}{RGB}{0,0,255}
+
+\newtheorem{reference_tree}{Example}
+\newtheorem{subproblem_tree}{Example}
+\newenvironment<>{reference_tree}[1][]{%
+  \setbeamercolor{block title example}{fg=white,bg=reference_color}%
+  \begin{example}#2[#1]}{\end{example}}
+\newenvironment<>{subproblem_tree}[1][]{%
+  \setbeamercolor{block title example}{fg=white,bg=subproblem_color}%
+  \begin{example}#2[#1]}{\end{example}}
+
+
+\usetheme{Frankfurt}
+\setbeamercolor*{section in head/foot}{bg=BYUblue,fg=gray!25}
+\setbeamercolor*{frametitle}{bg=BYUblue!50,fg=white!25}
+\setbeamercovered{transparent}
+\mode<all>
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\title{From Qualitative to Quantitative: Supporting Robot Understanding in Human-Interactive Path Planning}
+
+\subtitle{\bf [ Research Area ] }
+
+\author{Daqing Yi
+}
+
+\institute
+{
+  Department of Computer Science\\
+  Brigham Young University
+}
+
+\date[]{} 
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{100mm}(0.9\textwidth,-1.2cm)
+\includegraphics[width=1.1cm]{figure/BYU_logo.png}
+\end{textblock*}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}{$ \null $}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+
+% Add citation in the footnote
+
+\input{motivation.tex}
+
+\input{path_planning.tex}
+
+\input{related_work.tex}
+
+\begin{frame}{$ \null $}{$ \null $}
+
+\centering
+{\Large \bf Thank you!}
+
+\end{frame}
+
+\end{document}
+
+

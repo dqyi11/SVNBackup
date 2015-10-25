@@ -1,0 +1,181 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to freely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+%\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid}
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh}
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\usepackage{amsmath}
+\usepackage{textpos}
+\usepackage{ulem}
+%\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{amsthm}
+\newtheorem{thm}{Theorem}
+
+\usepackage{paralist}
+\usepackage{comment}
+\usepackage{subfigure}
+
+\usepackage[labelformat=empty]{caption}
+
+\definecolor{BYUblue}{RGB}{0,31,69}
+\definecolor{BYUgold}{RGB}{195,163,106}
+\usecolortheme[RGB={0,31,69}]{structure} % BYU Blue
+
+\definecolor{diff-point}{RGB}{102,178,255}
+\definecolor{diff-path}{RGB}{0,76,153}
+
+\definecolor{reference_color}{RGB}{0,175,0}
+\definecolor{subproblem_color}{RGB}{0,0,255}
+
+\definecolor{metric-PR}{RGB}{200,127,0}
+\definecolor{metric-NE}{RGB}{51,51,255}
+\definecolor{metric-OFI}{RGB}{204,0,0}
+\definecolor{metric-IRO}{RGB}{0,102,51}
+
+\newtheorem{reference_tree}{Example}
+\newtheorem{subproblem_tree}{Example}
+\newenvironment<>{reference_tree}[1][]{%
+  \setbeamercolor{block title example}{fg=white,bg=reference_color}%
+  \begin{example}#2[#1]}{\end{example}}
+\newenvironment<>{subproblem_tree}[1][]{%
+  \setbeamercolor{block title example}{fg=white,bg=subproblem_color}%
+  \begin{example}#2[#1]}{\end{example}}
+
+
+\usetheme{Frankfurt}
+\setbeamercolor*{section in head/foot}{bg=BYUblue,fg=gray!25}
+\setbeamercolor*{frametitle}{bg=BYUblue!50,fg=white!25}
+\setbeamercovered{transparent}
+\mode<all>
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\title{From Qualitative to Quantitative: Supporting Robot Understanding in Human-Interactive Path Planning}
+
+\subtitle{\bf [ Research Topic ] }
+
+\author{Daqing Yi}
+
+\institute
+{
+  Department of DepartComputer Science\\
+  Brigham Young University
+}
+
+\date[]{} 
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{textblock*}{100mm}(0.9\textwidth,-1.2cm)
+\includegraphics[width=1.1cm]{figure/BYU_logo.png}
+\end{textblock*}}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}{$ \null $}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+
+% Add citation in the footnote
+
+\input{thesis_statement.tex}
+
+\input{project_description.tex}
+
+\begin{frame}{Schedule}{$ \null $}
+
+\tiny
+
+\begin{block}{}
+\setbeamercolor{item}{fg=green}
+\begin{itemize}
+\item Toward Task-Based Mental Models of Human-Robot Teaming: A Bayesian Approach. (HCII 2013)
+\item Supporting Task-oriented Collaboration in Human-Robot Teams using Semantic-based Path Planning. (DSS 2014)
+\item Path Planning with a Human Path Constraint. (IEEE SMC 2014)
+\item Input-to-State Stability Analysis on Particle Swarm Optimization. (GECCO 2015)
+\item MORRF* : Sampling-based Multi-Objective Motion Planning. (IJCAI 2015)
+\end{itemize}
+\end{block}
+
+\begin{block}{}
+\setbeamercolor{item}{fg=yellow}
+\begin{itemize}
+\item Homotopy-Aware RRT* : Toward Human-Robot Topological Path-Planning. (HRI 2016, Submitted)
+\end{itemize}
+\end{block}
+
+\begin{block}{}
+\setbeamercolor{item}{fg=red}
+\begin{itemize}
+\item Understanding Adverbs in Natural Language Instructions : a Cost-Function Learning Approach (CDCG)
+\item Understanding the Particle Swarm Optimization by Component Decomposition (PSO-ISS)
+\item Toward Verbally Instructing Robot Navigation by Expressing Topological Constraint. (HDCG)
+\item Sampling-based Multi-Objective Path Planning (MORRF*)
+\item Finding the Optimal Path-Planning with Different Homotopy Classes (HARRT*)
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}{$ \null $}{$ \null $}
+
+\centering
+{\Large \bf Thank you!}
+
+\end{frame}
+
+\end{document}
+
+

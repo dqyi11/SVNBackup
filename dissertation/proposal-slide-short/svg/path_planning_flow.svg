@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="690"
+   height="280"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="path_planning_flow.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.0756757"
+     inkscape:cx="355"
+     inkscape:cy="146.45833"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1680"
+     inkscape:window-height="987"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(6.8616867,-333.875)">
+    <rect
+       style="fill:#eee8aa;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2987"
+       width="160"
+       height="93.459015"
+       x="-6.8616867"
+       y="418.90317" />
+    <rect
+       style="fill:#b0c4de;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2987-1"
+       width="170"
+       height="70"
+       x="240"
+       y="382.36218" />
+    <rect
+       style="fill:#b0c4de;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2987-1-9"
+       width="170"
+       height="70"
+       x="240"
+       y="472.36218"
+       inkscape:transform-center-x="35"
+       inkscape:transform-center-y="45" />
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="260"
+       y="422.36218"
+       id="text3793"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3795"
+         x="260"
+         y="422.36218"
+         style="font-size:30px">Objective</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="260"
+       y="512.36218"
+       id="text3793-5"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3795-2"
+         x="260"
+         y="512.36218"
+         style="font-size:30px">Constraint</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="70"
+       y="452.36218"
+       id="text3818"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3820"
+         x="70"
+         y="452.36218"
+         style="font-size:25px;text-align:center;text-anchor:middle">Qualitative</tspan><tspan
+         sodipodi:role="line"
+         x="70"
+         y="483.61218"
+         id="tspan3822"
+         style="font-size:25px;text-align:center;text-anchor:middle">Requirement</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:9, 9;stroke-dashoffset:0"
+       id="rect3824"
+       width="230"
+       height="200"
+       x="210"
+       y="362.36218" />
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="220"
+       y="352.36218"
+       id="text3826"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3828"
+         x="220"
+         y="352.36218"
+         style="font-size:25px">Quantitative Model</tspan></text>
+    <rect
+       style="fill:#c8fb98;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="rect2987-2"
+       width="160"
+       height="93.459015"
+       x="493.13831"
+       y="418.90317" />
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="570"
+       y="452.36218"
+       id="text3818-8"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="570"
+         y="452.36218"
+         style="font-size:25px;text-align:center;text-anchor:middle"
+         id="tspan3859">Paths for</tspan><tspan
+         sodipodi:role="line"
+         x="570"
+         y="483.61218"
+         style="font-size:25px;text-align:center;text-anchor:middle"
+         id="tspan3863">Execution</tspan></text>
+    <path
+       style="fill:#baaf98;fill-opacity:0.78431373;stroke:#e0eee0;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 170,452.36218 30,0 0,-20 30,30 -30,30 0,-20 -30,0 z"
+       id="path3865"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       style="fill:#baaf98;fill-opacity:0.78431373;stroke:#e0eee0;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 420,452.36218 30,0 0,-20 30,30 -30,30 0,-20 -30,0 z"
+       id="path3865-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       style="fill:#d3d3d3;fill-opacity:1;stroke:none"
+       d="m 3.1383133,533.875 139.9999967,0 40,-30 -10,30 30,0 0,70 -199.9999967,0 z"
+       id="path3887"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="103.13831"
+       y="563.875"
+       id="text3889"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="103.13831"
+         y="563.875"
+         id="tspan3893"
+         style="font-size:20px;text-align:center;text-anchor:middle">Model Problems from</tspan><tspan
+         sodipodi:role="line"
+         x="103.13831"
+         y="588.875"
+         id="tspan3895"
+         style="font-size:20px;text-align:center;text-anchor:middle">Verbal Instructions</tspan></text>
+    <path
+       style="fill:#d3d3d3;fill-opacity:1;stroke:none"
+       d="m 683.13831,403.875 -180,0 0,-10 -40,10 40,-40 0,-30 180,0 z"
+       id="path3887-6-1"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <path
+       style="fill:#d3d3d3;fill-opacity:1;stroke:none"
+       d="m 653.13831,543.875 -140,0 -40,-30 10,30 -30,0 0,70 200,0 z"
+       id="path3887-6-3"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="553.13831"
+       y="573.875"
+       id="text3889-9"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="553.13831"
+         y="573.875"
+         id="tspan3895-0"
+         style="font-size:20px;text-align:center;text-anchor:middle">Multiple Objectives</tspan><tspan
+         sodipodi:role="line"
+         x="553.13831"
+         y="598.875"
+         style="font-size:20px;text-align:center;text-anchor:middle"
+         id="tspan3979">in Path-Planning</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:15px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="588.13831"
+       y="358.875"
+       id="text3889-9-4-3"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         x="588.13831"
+         y="358.875"
+         id="tspan3895-0-1-1"
+         style="font-size:20px;text-align:center;text-anchor:middle">Path Topology</tspan><tspan
+         sodipodi:role="line"
+         x="588.13831"
+         y="383.875"
+         style="font-size:20px;text-align:center;text-anchor:middle"
+         id="tspan3979-6-6">in Path-Planning</tspan></text>
+  </g>
+</svg>
