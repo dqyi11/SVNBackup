@@ -52,6 +52,9 @@
 \usepackage{multirow}
 \usepackage{pbox}
 
+\usepackage[titletoc,title]{appendix}
+
+
 \newtheorem{mylem}{Lemma}
 \newtheorem{myhyp}{Assumption}
 \newtheorem{myprop}{Property}
@@ -82,7 +85,7 @@
 From qualitative to quantitative: Supporting robot understanding in human-interactive path planning
 }
 \newcommand{\Author}{Daqing Yi}
-\newcommand{\SubmissionMonth}{July}
+\newcommand{\SubmissionMonth}{September}
 \newcommand{\SubmissionYear}{2015}
 
 % Take these from the commands defined above
@@ -180,7 +183,7 @@ The team players include both humans and robots.
 For example, in a search-and-rescue task, robots perform dull, dirty and dangerous tasks, and alert a human only when an abnormality is detected~\cite{Nourbakhsh2005}.
 The human then deals with abnormal occurrences.
 The robot players explore regions that are inaccessible and dangerous to the humans, and assist the human players when needed.
-Particularly when situations change, the human players are needed to organize the robot players to react.
+Particularly when situations change, the human players are needed to organize the robot players.
 
 Because task requirements from a human coach are usually qualitative~\cite{brenner2007mediating}, how they can be precisely translated by robots into quantitative optimization problems is a big challenge.
 When a few requirements are ambiguous or difficult to describe, an interactive processes can be used to identify the human intent.
@@ -206,7 +209,7 @@ A key problem is establishing a shared spatial common ground between the humans 
 
 \item {\em There often exist multiple objectives in a human's instructions.}
 In planning a path, there is often more than one factor to consider~\cite{Ahmed2013}.
-For example, in motion-planning for a rescue task, a human coach might hope a robot's search not only covers the most likely regions but also focuses robot effort in risky regions that humans should avoid~\cite{Yi2014}.
+For example, in motion-planning for a rescue task, a human coach might hope a robot's search not only covers the most likely regions but also focuses the robot's effort in risky regions that humans should avoid~\cite{Yi2014}.
 In this example, there are two objectives: maximizing information and minimizing the risk to the robot.
 Extending the example, if the robot is also expected to reach some goal quickly, minimizing the path length should be added as a new objective.
 Human preferences on different objectives are often qualitative, meaning that they may be difficult to represent by the kinds of quantitative weights used in an optimization algorithm.
@@ -216,7 +219,7 @@ Therefore, the robot needs to model multi-objective path planning problems and f
 \item {\em Humans often have topological preferences for planned paths.}
 Spatial constraints, such as those created by finding a path through obstacles, divide paths into different topologies~\cite{Bhattachary2010}.
 It is natural that a human coach has a preference for some classes of paths over others~\cite{Yi2014}.
-These preference may come from task requirements, team scheduling constraints, or the properties of an agent.
+These preferences may come from task requirements, team scheduling constraints, or the properties of an agent.
 These topological differences can be represented by either a soft path shape constraint or a preference ranking.
 For example, the human coach hopes that a robot goes to some goal location as quickly as possible.
 In this case, there is no hard constraint of visiting some regions while avoiding some other regions.
@@ -245,15 +248,15 @@ Then we discuss related work with specific topics that we are interested in.
 % sections or may be an appendix.
 
 In the literature on human-machine interaction, mental models play key roles.
-Operationally, a mental model is a representation of how current states are turned into consequences through the actions of an agent~\cite{gray2014manipulating}.
-When we have humans and robots in a team, a shared mental model is used as a hypothetical construct that models and explains certain coordinated behaviors of teams.
-It provides a framework of mutual awareness, which serves as the means by which an agent selects actions that are consistent and coordinated with those of its teammates~\cite{nikolaidis2012human,Yen_implementingshared,FSS149109,Jonker:2010:SMM:2018118.2018128,Neerincx2011,Mathieu2000,Kennedy2007}.
+Operationally, a mental model is ``a representation of how current states are turned into consequences through the actions of an agent''~\cite{gray2014manipulating}.
+When we have humans and robots in a team, a shared mental model is used as a ``hypothetical construct''~\cite{Yen_implementingshared} that models and explains certain coordinated behaviors of teams.
+It provides a framework of mutual awareness, which serves as the means by which ``an agent selects actions that are consistent and coordinated with those of its teammates''~\cite{nikolaidis2012human,FSS149109,Jonker:2010:SMM:2018118.2018128,Neerincx2011,Mathieu2000,Kennedy2007}.
 Figure \ref{fig:team_info_flow} illustrates the information flow in the shared mental model of the coach-based human-robot team described above.
 
 A human's intent can be operationally defined as a preference over consequences produced by a robot's actions and possibly as a preference over the actions used by the robot to produce a desirable consequence.
-Because a robot's task is given by a human coach in a human-robot team, information flows from the human coach's mental model to the team players' mental models.
+Because we assume that a robot's task is given by a human coach in a human-robot team, information flows from the human coach's mental model to the team players' mental models.
 Correctly modeling the human's intent determines the performance of task execution.
-However, a humans' intent is often only qualitatively expressed, making it difficult to translate intent into quantitative models.
+However, a human's intent is often only qualitatively expressed, making it difficult to translate intent into quantitative models.
 
 \begin{figure}[hbtp]
 \centering
@@ -265,7 +268,7 @@ However, a humans' intent is often only qualitatively expressed, making it diffi
 In path-planning problems, the mental model provides goals and preferences for evaluating the performance of tasks.
 These goals and preferences are used to find optimal paths for task execution~\cite{choset2005principles}.
 Current research work focus on introducing new features to the robotic mental models for creating new affordances, especially in interpreting humans' mental models.
-In human-machine interaction, the term ``affordance'' refers to ``the perceived and actual properties of the thing, primarily those fundamental properties that determine just how the thing could possibly be used''~\cite{norman2013design}, see, for example, in~\cite{norman2013design}.
+In human-machine interaction, the term ``affordance'' refers to ``the perceived and actual properties of the thing, primarily those fundamental properties that determine just how the thing could possibly be used''~\cite{norman2013design}.
 \begin{comment}
 Planning for a task consists of two steps:
 \begin{enumerate}
@@ -274,7 +277,7 @@ Planning for a task consists of two steps:
 \end{enumerate}
 \end{comment}
 
-We are proposing work that explore how to translate a human's qualitative intents into problems with quantitative models, and then how to solve the resulting quantitative problems.
+We are proposing work that explores how to translate a human's qualitative intent into problems with quantitative models, and then how to solve the resulting quantitative problems.
 A qualitative map description is one common type of qualitative information associated with a human's mental model~\cite{kuipers1999}.
 Based on a human-sketched map, a probabilistic topological structure can be created to model a map with uncertainty~\cite{Shah2013}.
 Observations in navigation are used to correct the probabilistic topological structure, which is used as an estimated map.
@@ -284,9 +287,9 @@ Within the constraints of feasibility, the estimated map structure can be update
 
 Another important type of qualitative source is human language~\cite{tellex2011understanding,walter2014framework}.
 Natural language instructions can be used as observations in the robotic SLAM problem.
-Three layers of maps, which are semantic, topological and metric, are maintained in a graphical model structure~\cite{walter2014framework} so that the input can be either noisy sensor measurement or fuzzy verbal description.
-Both sensor information and human's online instructions can be merged into an environmental learning process~\cite{6301744,5509521,ahmed2014enabling}.
-By using the Bayesian filter framework, human information is loaded into a softmax likelihood model so that it can be merged into Bayesian update.
+In \cite{walter2014framework}, three layers of maps, which are semantic, topological and metric, are maintained in a graphical model structure.
+Both sensor information and human instructions can be merged into an environmental learning process~\cite{6301744,5509521,ahmed2014enabling}.
+By using the Bayesian filter framework, human information is loaded into a softmax likelihood model so that it can be merged into a Bayesian update.
 %New affordances in human-robot interaction are created by extending the ways of communication in mental models and supporting more features of problem definitions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -306,15 +309,14 @@ In how to support problem solving, we review studies in path-planning problems w
 \subsubsection{Model Problems from Verbal Instructions}
 \label{sec:related_work:algorithm_specific_work:model_problems_from_verbal_instructions}
 
-Current human-robot communication relies heavily on training human operators, which means that the operators need customize information for robots.
-This prevents human-robot interaction being applied in more fields.
-The goal of the proposed research is supporting a robot in modeling problems based on natural information of human.
+Current human-robot communication relies heavily on training human operators, which means that the operators should customize information for robots.
+This prevents human-robot interaction being applied in more problems
 
-In planning paths, spatial information in the language is a very important source to a mental model.
-A spatial semantic hierarchy is usually maintained in the mental model, which represents the information relationship from the sensory to the topological and the metrical~\cite{kuipers1999}.
+In planning paths, spatial information in the language is a very important for communicating a mental model.
+It has been proposed that a spatial semantic hierarchy is maintained in the mental model, which represents the information relationship from the sensory to the topological and the metrical~\cite{kuipers1999}.
 There have been a few grammars introduced to parse sentences into semantic elements by task specifications, e.g. SDC (Spatial Description Clause)~\cite{tellex2011understanding} and TBS (Tactical Behavior Specification)~\cite{Boularias_2015_7953}.
-Grounding the semantic elements with meanings behind is an understanding process~\cite{Kollar:2010:TUN:1734454.1734553}.
-In path planning, problems are often framed as optimization problems that seek to find paths best match semantic meanings~\cite{tellex2011understanding,Boularias_2015_7953}.
+Grounding semantic elements is an important area of current work~\cite{Kollar:2010:TUN:1734454.1734553}.
+In path planning, problems are often framed as optimization problems that seek to find paths best match given a set of semantic meanings~\cite{tellex2011understanding,Boularias_2015_7953}.
 This approach can be strengthened by integrating multiple information sources, such as visual sensors and odometers~\cite{6696569}.
 
 Planners have been proposed to infer a human's intent from a human's verbal instruction~\cite{howard2014natural,Duvallet2014}.
@@ -339,7 +341,7 @@ In addition to the burden placed on the human operator, optimizing a weighted su
 
 In solving a multi-objective optimization problem, the output is often a set of non-dominated solutions, which are also often called Pareto-optimal solutions~\cite{Miettinen1999}.
 ``Non-dominated''  means that each solution is at least better in one objective or equally the same in all the objectives when compared with any other solution.
-In this proposed work, we assume that there can be an interactive process where a human selects one solution from the set of Pareto-optimal solution~\cite{Marler2004}.
+In this proposed work, we assume that there can be an interactive process where a human selects one solution from the set of Pareto-optimal solutions~\cite{Marler2004}.
 In multi-objective path-planning, a set of Pareto-optimal paths could be found as well.
 The Pareto-optimal path that best matches the human's intent can be selected as the solution that best balances tradeoffs between the objectives.
 
@@ -347,14 +349,13 @@ Most popular methods in multi-objective optimization are not naturally applicabl
 One approach to addressing this issue is to change the representation for a path by coding a path as a sequence of fixed-length line segments represented by directions~\cite{Ahmed2013,Howlett2006} or waypoints~\cite{Sujit2009,Pires2004} so that an evolutionary algorithm can be applied. 
 Unfortunately, these approaches do not scale well for large problems, and estimating the required number of segments is very challenging. 
 Another approach is to represent the path as a point in a very high-dimensional vector space.
-In this approach a path is represented as a point in a $ n * d $ dimensional space formed by $ n $ different  $d$-dimensional way-points~\cite{Ahmed2011,Ahmed2013}.
+In this approach a path is represented as a point in an $ n * d $ dimensional space formed by $ n $ different  $d$-dimensional way-points~\cite{Ahmed2011,Ahmed2013}.
 However the search can be very difficult if we allow the number of way-points and, therefore, the dimensionality of the optimization problem to vary. 
 The algorithm does not work well when the obstacles in the path-planning space introduce discontinuities in these high-dimensional spaces, which limits the applicability of heuristic-based search approaches~\cite{Sujit2009,Zhang2007}.
-There is still the need of an algorithm that can efficiently and effectively find a set of Pareto-optimal paths for a given set of objectives.
+There is still a need for an algorithm that can efficiently and effectively find a set of Pareto-optimal paths for a given set of objectives.
 
 \subsubsection{Homotopy in Path Planning}
 \label{sec:related_work:algorithm_specific_work:homotopy_in_path_planning}
-
 
 Unlike a point solution in common optimization problems, a path is not only evaluated by its fitness/cost but also its shape.
 Humans often represent the world using a topological-based rather than metric-based path planning~\cite{Aginsky1997,kuipers1999}. 
@@ -363,14 +364,25 @@ Obstacles in a map divide paths into topological groups by the similarities in t
 The topological notion of {\em homotopy} presents a formal definition of the similarity between two paths. 
 This definition can be used both to determine the similarity between two paths as well as to partition paths into different classes.
 
+The topological concept of \emph{homotopy} is a mathematical formalism of the inherent similarity or dissimilarity of two paths and allows us to precisely quantify such topological constraints.
+Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez2015}.
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=.2\textwidth]{fig/path_homotopy}
+	\caption{Path homotopy.}
+	\label{fig:homotopy:definition}
+\end{figure}
+In Figure \ref{fig:homotopy:definition}, the yellow path and the green path are homotopic.
+But they are not homotopic to the red path.
+
 Homotopy-based path planning requires an algorithm to determine the homotopic equivalence of two paths, which is usually computationally expensive. 
 There are a few research studies that focus on effectively and efficiently identifying the homotopy class to which a path belongs or determining the homotopic equivalence of two paths. 
 The Voronoi diagram is used to identify a path from any homotopy class in~\cite{Banerjee2013}. 
 By converting any path into a simple path from the Voronoi diagram, the homotopy class of the path can be determined. 
-However there exist limitations on finding some paths in a map with complex obstacles in this approach.
+However there exist limitations on finding some paths in a map with complex obstacles by this approach.
 By applying the funnel algorithm in the universal covering space, the minimum-length path is efficiently optimized in a given homotopy class in~\cite{Hershberger1994}. 
 Similar to the Voronoi approach, the complexity of the problem is increased when the shapes of the obstacles are not smooth and convex. 
-Semi-algebraic cuts are used to convert paths into “words” so that the homotopic equivalence can be recognized into~\cite{Grigoriev1998}. 
+Semi-algebraic cuts are used to convert paths into “words” so that the homotopic equivalence can be recognized in~\cite{Grigoriev1998}. 
 Also, the Cauchy Integral theorem has been introduced to determine the homotopic equivalence of any two paths by marking some positions in obstacles as undefined~\cite{Bhattachary2010}. 
 Given two paths sharing the same start and goal, we can determine whether there is an obstacle inside a region that is enclosed by two paths by the value of the complex integral. 
 Because the map is discretized, the computation cost expands greatly if some complex obstacles are reasonably approximated by the cells.
@@ -381,11 +393,10 @@ How to efficiently and effectively find the optimal paths in different homotopy 
 
 Search is a very important task in path planning.
 In planning motion for a search task, the objective is usually to maximize the information collected with a limited motion resource.
-Because an observation at a time covers a region around the search agent, using a coverage model for the robot makes the path planning a {\em maximum coverage problem}.
+Because observations cover a region around the search agent, using a coverage model for the robot makes the path planning a {\em maximum coverage problem}.
 Maximum coverage is known to be a classic NP-hard combinatorial optimization problem~\cite{Megiddo1983} because coverage overlap cannot be ignored. 
 Mutual information is introduced to measure the total information
-of a set of observation coverages, which implies a property of
-“nondecreasing submodularity”~\cite{Singh2009}. 
+of a set of observation coverages, which implies a property of ``nondecreasing submodularity''~\cite{Singh2009}. 
 A greedy approximation with a known performance bound can efficiently exploit the submodularity property of mutual information~\cite{Singh2009}. 
 A branch and bound approach can also be used in informative path
 planning~\cite{Binney2012}.
@@ -393,10 +404,10 @@ planning~\cite{Binney2012}.
 Maximizing the reward collected from a limited-length graph walk is usually known as an orienteering problem~\cite{Vansteenwegen2011}, in which the total reward is a sum of the rewards of visited vertices. 
 If the reward function of a vertex has the submodularity property as in a maximum coverage problem, the problem is defined as a submodular orienteering problem~\cite{Chekuri2005}. 
 Unfortunately, in the submodular orienteering case the location of the robot at time $ t $ constrains the reachable locations at time $ t+1 $.
-Thus, naively applying a greedy algorithm to the submodular orienteering case, that is, with a “teleport” assumption, yields poor results~\cite{Krause2012}. 
-For a generalization of the submodular orienteering problem in which the neighboring constraint can be converted into time budget, a recursive greedy algorithm can be applied~\cite{Chekuri2005}.
+Thus, naively applying a greedy algorithm to the submodular orienteering case, that is, with a 		``teleport'' assumption, yields poor results~\cite{Krause2012}. 
+For a generalization of the submodular orienteering problem in which the neighboring constraint can be converted into a time budget, a recursive greedy algorithm can be applied~\cite{Chekuri2005}.
 If the planning is considered for a human-robot team as we are proposing, the collaboration and the constraints between team players cannot be ingored.
-When we import the constraints from a human teammate's behavior to the submodular path planning, this solution won't work any more. 
+When we import the constraints from a human teammate's behavior to submodular path planning, this solution will not work any more. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -421,7 +432,7 @@ We will model the following aspects of information flow from a human to a robot:
 	\item How to model problems from a language instruction.
 \end{itemize}
 After they have been modeled into path-planning problems, we will propose algorithms to solve the problems and provide analyses and simulations to support the algorithms.
-Table \ref{tb:requirement} shows how the list of model requirements abobe can be interpreted as a general type of problem from the literature, and identifies an algorithm that we propose to solve the problem for path-planning in a human-robot team.
+Table \ref{tb:requirement} shows how the list of model requirements above can be interpreted as a general type of problem from the literature, and identifies a specific algorithm that we propose to solve the problem for path-planning in a human-robot team.
 
 \begin{table}
 \begin{center}
@@ -429,10 +440,10 @@ Table \ref{tb:requirement} shows how the list of model requirements abobe can be
 \begin{tabular}{|l|l|l|l|}
 	\hline
 	\multicolumn{2}{|l|}{ \textbf{Requirement} } & \textbf{Problem} & \textbf{Algorithm} \\ \hline
+	\multicolumn{2}{|l|}{ \pbox{20cm}{Model problems from verbal\\ instructions} } & \pbox{20cm}{Grounding multiple objectives and \\ topological preference in \\ natural language} & \pbox{20cm}{ CDCG \\ HDCG } \\ \hline
 	\multicolumn{2}{|l|}{ \pbox{20cm}{Support multiple objectives in \\ tasks} }  & Multi-objective path planning & MORFF $^{*}$ \\ \hline
 	\multicolumn{2}{|l|}{\multirow{2}{*}{ \pbox{20cm}{Support humans' topological\\ preference} }}  & \pbox{20cm}{Submodular path planning with \\ reference path constraint} & Wingman path planning \\ \cline{3-4} 
-	\multicolumn{2}{|l|}{ }  & Homotopy-based path planning  & HA-RRT$^{*}$ \\ \hline
-	\multicolumn{2}{|l|}{ \pbox{20cm}{Model problems from verbal\\ instructions} } & \pbox{20cm}{Grounding multiple objectives and \\ topological preference in \\ natural language} & \pbox{20cm}{ CDCG \\ HDCG } \\ \hline
+	\multicolumn{2}{|l|}{ }  & Homotopy-based path planning  & HA-RRT$^{*}$  \\ \hline
 \end{tabular}
 }
 \end{center}
@@ -440,17 +451,125 @@ Table \ref{tb:requirement} shows how the list of model requirements abobe can be
 \label{tb:requirement}
 \end{table}
 
+\subsection{Model Path-Planning Problems from Natural Language Instructions}
+\label{sec:project_description:path_planning_with_natural_language_instruction}
+
+A human-natural way of human-robot interaction is to use human language.
+%, which is mainly supported by the research in natural language processing(NLP).
+Instead of focusing on generic natural language processing problems, we only look at how path-planning problems can be modeled from semantic structures.
+The semantic structures are generated from verbal instructions by existing grammar parsers~\cite{Kollar:2010:TUN:1734454.1734553}.
+We need to provide methods to infer the task definition from the semantic structures, focusing on the requirements with multiple objectives and topological preferences.
+
+The Tactical Behavior Specification (TBS) language has been introduced as a grammar to support instructions with spatial relations~\cite{Boularias_2015_7953}.
+We propose to extend this grammar so that it can be applied in our context.
+We propose to extend it in two ways: grounding adverbs and allowing topological preferences~\cite{Yi2014}.
+For example, if a human coach tells a robot to ``go around building A quickly and carefully and then between the two trees while avoiding region C'',
+it implies that there potentially exist two objectives from the adverbs, ``quickly'' and ``carefully''.
+Practically, this might mean to minimize the path length and minimize the risk.
+It also indicates the topology of the path that the human wants: ``around building A'', ``between the two trees'' and ``avoiding region C''.
+The semantic structures can be grounded into multi-objective path planning, homotopy-based path-planning or submodular path planning with constraints.
+We are going to use a graphical model to infer the relations between the semantics and the groundings.
+
+The graphical model has been a popular tool to model ambiguous relationships between utterances and semantics.
+After training by language samples, the graphical model could infer the meaning of verbal language.
+Similarly, we can use it to understand a human's verbal commands to a robot.
+In the application of path-planning, the human's verbal command is associated with spatial elements. 
+Therefore, the Spatial Descriptive Clause(SDC) has been introduced to parse the verbal command into a sequence of phrases~\cite{Kollar:2010:TUN:1734454.1734553}.
+
+The process of assigning physical meanings to phrases is called {\em grounding}.
+A verbal sentence is decomposed into phrases $ \lambda^{r}_{i} $, which carry the information from the human.
+Grounding variables $ \gamma^{r}_{j} $ are extracted from the map, which include
+\begin{itemize}
+	\item {\em verb fields} : the change in orientation between the viewpoints from verb/action semantic,
+	\item {\em figure and landmark fields} : the viewpoint transition and the detected objects, and
+	\item {\em spatial relations} : the functions of the geometries of the paths and the landmarks.
+\end{itemize}
+By assuming that the groundings are conditionally independent, a conditional random field (CRF) can be used as an undirected graphical model for the relationship between the phrases and the groundings.
+Correspondences $ \phi^{k} $ are introduced to indicate whether a grounding element is linked with a phrase from the SDC~\cite{tellex2011understanding},
+indirectly, it measures how the grounding variables match the verbal sentence.
+Figure \ref{fig:graph_model:induction} gives two examples of how graphical models are created from the SDC.
+The corresponding node $ \phi^{k} $ connects the grounding node $ \gamma^{r}_{j} $ and the phrase node $ \lambda^{r}_{i} $.
+A labeled dataset can be used to train the graphical model.
+The objective of the training is maximizing the likelihood of the correspondences.
+\begin{equation}
+\label{eq:factor_graph_model}
+\arg \max_{\phi_{i,j} \in \Phi } \prod p( \phi_{i,j} \mid \gamma^{r}_{j} , \lambda^{r}_{i} )
+\end{equation}
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[t]{0.35\linewidth}
+		\centering
+		\includegraphics[width=.8\textwidth]{fig/phrase_structure}
+		\caption{Phrase structure}
+		\label{fig:factor:phrase_structure}
+	\end{subfigure}  
+	%\\
+	\begin{subfigure}[t]{0.35\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/factor_model}
+		\caption{Factor model}
+		\label{fig:factor:factor_model}
+	\end{subfigure}   
+	\caption{How a factor graph is constructed.}
+	\label{fig:factor_graph}
+\end{figure}
+Equation \eqref{eq:factor_graph_model} can be converted into a graphical model.
+Firstly, a verbal command is parsed into a phrase structure.
+Figure \ref{fig:factor:phrase_structure} shows a phrase structure of a sentence ``put the pallet on the truck''.
+Each phrase corresponds to a factor model as illustrated in Figure \ref{fig:factor:factor_model}.
+Each factor model defines the relationship among a phrase $ \lambda_i $, a correspondence variable $ \phi_i $, a grounding $ \gamma_i $ and groundings in other models $ \gamma_j $.
+By the structure of the phrase, a factor graph can be created. 
+Figure \ref{fig:graph_model:induction1} gives an example of the sentence ``put the pallet on the truck''.
+The trained graphical model can then be used to infer the most likely grounding nodes from a given verbal command.
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[t]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/Induction1}
+		\caption{``Put the pallet on the truck.''}
+		\label{fig:graph_model:induction1}
+	\end{subfigure}  
+	%\\
+	\begin{subfigure}[t]{0.45\linewidth}
+		\centering
+		\includegraphics[width=\textwidth]{fig/Induction2}
+		\caption{``Go to the pallet on the truck.''}
+		\label{fig:graph_model:induction2}
+	\end{subfigure}   
+	\caption{Graph model of two examples~\cite{tellex2011understanding}.}
+	\label{fig:graph_model:induction}
+\end{figure}
+
+It is noticeable that some adverbs might mean different things in different contexts.
+For example, in a sentence of ``put the pallet carefully on the truck'', ``carefully'' requires a smooth motion. 
+But in a sentence of ``walk carefully in the crowd'', ``carefully'' means avoiding collisions with someone else.
+It can also define multiple objectives as well, e.g. smoothly moving and collision avoiding simultaneously.
+A human language understanding process helps identify the human's intent behind an utterance.
+We can create a factor graph to model the correspondence between the adverbs and the intended objectives in different sentences and scenarios~\cite{tellex2011understanding}.
+After training, it can be used to infer what kind of objectives that the human intended in the verbal command.
+
+Topological preferences can be extracted from human language.
+In~\cite{howard2014natural}, the topological preference is inferred from human language and is used as a hard constraint in path planning.
+Sometimes, the topological preference can be a soft constraint.
+For example, if a human coach says ``better avoiding region C'', he/she prefers avoiding region C but not necessarily.
+The topological preference can also be the order of different homotopy classes.
+``Going through between A and B is better than between A and C'' implies a homotopy class via the region between A and B is better than a class via the region between A and C.
+We propose to construct a factor graph to represent the preference relationship between the groundings and the verbal phrases.
+%The {\em correspondence} nodes are replaced with {\em preference} nodes.
+%The preference variable is a real value instead of a boolean value.
+
 \subsection{Multi-Objective Path Planning}
 \label{sec:project_description:multi_objective_path_planning}
 
-To support a complex decision with multiple objectives, we define a multi-objective path planning and propose an algorithm to find solutions.
+To support a complex decision with multiple objectives, we define a multi-objective path planning problem and propose an algorithm to find solutions.
 
 When there are multiple objectives in a task, the goal is to find a solution that trades off between the objectives.
 %When there exists conflicts between the objectives, the goal is then finding a solution that is a good trade-off between the objectives.
-A common method for finding a solution of a multi-objective optimization problem is to optimize a single objective created by a weighted sum of the multiple objectives.
+A common method for finding a solution to a multi-objective optimization problem is to optimize a single objective created by a weighted sum of the multiple objectives.
 This means that either a programmer, designer , or a human teammate must decide how to assign the weights so that the qualitative behavior matches what is intended. 
 Optimizing a weighted sum does not work when the multiple objectives are very difficult to compare or are expressed in incommensurate units.
-Thus, it will be better if a set of Pareto-optimal paths is firstly found and the human teammate can select one from them.
+Thus, it will be better if a set of Pareto-optimal paths is firstly found and the human teammate can select one of several options.
 
 Given this context, we now define the multi-objective path-planning problem to find a set of Pareto-optimal paths.
 Consider a multi-objective path-planning problem defined on a bounded, connected open set $X\subset\mathbb{R}^d$ of possible solutions, and $K$ different objectives $\{c_{1}(\cdot), c_{2}(\cdot), ... c_{K}(\cdot)\}$. 
@@ -475,9 +594,9 @@ Finally, let $ \bm{z}^{\rm utop} = [z^{*}_{1}, \cdots , z^{*}_{K}]^{T} $ denote 
 
 Three types of decomposition methods have been used in prior work~\cite{Zhang2007}.
 \begin{eqnarray}
-\arg\max_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm Weighted \ Sum} \label{eq:weighted}\\
+\arg\min_x \sum_{k=1}^{K} \lambda_{k} c_{k} (x) & {\rm Weighted \ Sum} \label{eq:weighted}\\
 \arg\min_x\max_{1 \leq k \leq K}  \{ \lambda_{k} | c_{k}(x) - \bm{z}^{\rm utop}_{k}  | \} & {\rm Tchebycheff} \label{eq:Tchebycheff}\\
-\arg\min_x \{ d \mid \bm{z}^{\rm utop} - F(x) = d \bm{\lambda} \} & {\rm Boundary \ Intersection \ } \label{eq:boundary}
+\arg\min_x \{ d \mid \bm{z}^{\rm utop} - c(x) = d \bm{\lambda} \} & {\rm Boundary \ Intersection \ } \label{eq:boundary}
 \end{eqnarray}
 The solutions generated by each method are a subset of the Pareto-optimal set.
 
@@ -517,7 +636,7 @@ The solutions obtained from $ M $ subproblem trees constitute a set of Pareto-op
 \label{sec:project_description:involving_topological_preferences_in_path_planning}
 
 We categorize topological preferences into two types by considering the level of collaboration.
-If a human and a robot are constrained in a tight collaborative relationship, the motion of the robot has to be constrained in a region near the position of the human.
+If a human and a robot are constrained in a collaborative movement in shared space, the motion of the robot has to be constrained in a region near the position of the human.
 A topological preference is defined by a reference path from the human.
 By considering the sensor coverage overlap in collaboration, we can model the problem as submodular path-planning problem with a reference-path constraint, which is described in Section~\ref{sec:project_description:submodular_path_planning_with_reference_path_constraint}.
 If we ignore the collaboration, the topological preference can then be presented by the homotopy classes in the map.
@@ -527,9 +646,9 @@ Therefore, in this case, we can model the problem as homotopy-based path-plannin
 \label{sec:project_description:submodular_path_planning_with_reference_path_constraint}
 
 Before task execution, a coach can assign a subtask for a robot player to explore the world while staying near a human teammate.
-For this type of topological preference, the information of the human is given to the robot.
+For this type of topological preference, the information about the human is given to the robot.
 Thus, assuming that the human player's motion can be predicted or is known, the robot player's motion is constrained by the human player's motion, yielding a path-planning problem with a reference-path constraint.
-We call this situation in a search task with the {\em robot wingman} problem.
+We call this situation the {\em robot wingman} problem.
 
 Consider a discretized map of the world formed by a set of cells $ \mathbf{S}$ and suppose that the robot moves with constant speed from any cell to any of its neighbors.
 In the search task, each cell in a discretized map is assigned an entropy value, $ H(s) $; to represent the information distribution.
@@ -591,11 +710,9 @@ We then propose to use an expanding tree to create an anytime algorithm that app
 \subsubsection{Homotopy-based Optimal Path Planning}
 \label{sec:project_description:homotopy_based_path_planning}
 
-Observe that, in planning paths for a robot player, a coach may want to express topological constraints like ``go tp the left of the obstacle''.
+Observe that, in planning paths for a robot player, a coach may want to express topological constraints like ``go to the left of the obstacle''.
 %some path preference for a subtask is hard for a coach to express.
 %The topology of a path is difficult to model into a quantitative model.
-The topological concept of \emph{homotopy} is a mathematical formalism of the inherent similarity or dissimilarity of two paths and allows us to precisely quantify such topological constraints.
-Given two paths, if one can be deformed into the other without encroaching any obstacle, they are said to be \emph{homotopic}~\cite{Hernandez2015}.
 A set of paths that are homotopic to each other forms a \emph{homotopy class}, and the  set of homotopy classes partition the set of all possible paths between any two points $A$ and $B$.
 In an environment containing obstacles, the homotopy partition can provide a useful way of grouping paths together based on the similarities of their ``shapes", where the term ``shape'' is interpreted by using the formal topological notion.
 
@@ -632,13 +749,13 @@ Figure \ref{fig:obs_map:topology} shows a topological graph from the map decompo
 Label each reference frame with a \emph{character}.
 Each path can be mapped into a {\em string}, which represents the sequence of crossed reference frames.
 Following the pattern from \cite{Hernandez2015}, the string can be used to identify the homotopy class of a branch in the RRT.
-This means that the growth of a tree can be constrained to a desired homotopy class.
-We propose to require each branch of the tree structure tracking a corresponding string as the homotopy information, so that a homotopic constraint can be satisfied and the homotopy classes of all paths can be identified.
+This means that the growth of a tree can be constrained to desired homotopy classes $ H $.
+%We propose to require each branch of the tree structure tracking a corresponding string as the homotopy information, so that a homotopic constraint can be satisfied and the homotopy classes of all paths can be identified.
 
-We define the set of paths with the same string as a \emph{string class} and use ``$ - $'' to concatenate characters into a string.
-Two string classes might still belong to the same homotopy class, e.g, a string class $ \alpha_{1,1}-\alpha_{2,1} $ and a string class $ \alpha_{2,1}-\alpha_{1,1} $ in Figure \ref{fig:obs_map} belong to the same homotopy class.
-A homotopic grammar can be used to identify the equivalence.
-Also, given one string class, the homotopic grammar can be used to find all the equivalent string classes in the same homotopy class.
+We define the set of paths with the same string $ v $ as a \emph{string block} $ \Gamma_{v} $.
+Two string classes might still belong to the same homotopy class, e.g, a string class $ \Gamma_{\alpha_{1,1}\alpha_{2,1}} $ and a string class $ \Gamma_{\alpha_{2,1}\alpha_{1,1}} $ in Figure \ref{fig:obs_map} belong to the same homotopy class.
+A string grammar can be used to identify the equivalence.
+Also, given one string class, the string grammar can be used to find all the equivalent string classes in the same homotopy class.
 
 With the generated reference frames $ \mathbf{R} $ to identify the homotopy classes, the next question is how to search the optimal paths in the homotopy classes.
 RRT$^{*}$ explores the map to generate an optimal tree structure based on the cost distribution in the map.
@@ -650,87 +767,7 @@ We can eventually have the optimal path with a via-position constraint by combin
 Because the string classes of the branches of both trees are tracked in the exploration process, the optimal path that visits a specific via position can be used to update the optimal paths of the string classes. 
 %Thus, in the exploration process, the homotopy class of each branch of the tree is aware.
 
-\subsection{Model Path-Planing Problems from Natural Language Instructions}
-\label{sec:project_description:path_planning_with_natural_language_instruction}
 
-A human-natural way of human-robot interaction is to use human language.
-%, which is mainly supported by the research in natural language processing(NLP).
-Instead of focusing on generic natural language processing problems, we only look at how path-planning problems can be modeled from semantic structures.
-The semantic structures are generated from verbal instructions by existing grammar parsers~\cite{Kollar:2010:TUN:1734454.1734553}.
-We need to provide methods to infer the task definition from the semantic structures, focusing on the requirements with multiple objectives and topological preferences.
-
-The Tactical Behavior Specification (TBS) language has been introduced as a grammar to support instructions with spatial relations~\cite{Boularias_2015_7953}.
-We propose to extend this grammar so that it can be applied in our context.
-We propose to extend it in two ways: by grounding adverbs and allowing topological preferences~\cite{Yi2014}.
-For example, if a human coach tells a robot that ``go around building A quickly and carefully and then between the two trees while avoiding region C'',
-it implies that there potentially exist two objectives from the adverbs, ``quickly'' and ``carefully''.
-Practically, this might mean to minimize the path length and minimize the risk.
-It also indicates the topology of the path that the human wants: ``around building A'', ``between the two trees'' and ``avoiding region C''.
-The semantic structures can be grounded into multi-objective path planning, homotopy-based path-planning or submodular path planning with constraints.
-We are going to use a graphical model to infer the relations between the semantics and the groundings.
-
-The graphical model has been a popular tool to model ambiguous relationships between utterances and semantics.
-After training by language samples, the graphical model could infer the meaning of verbal language.
-Similarly, we can use it to understand a human's verbal commands to a robot.
-In the application of path-planning, the human's verbal command is associated with spatial elements. 
-Therefore, the Spatial Descriptive Clause(SDC) has been introduced to parse the verbal command into a sequence of phrases~\cite{Kollar:2010:TUN:1734454.1734553}.
-
-The process of assigning physical meanings to phrases is called {\em grounding}.
-A verbal sentence is decomposed into phrases $ \lambda^{r}_{i} $, which carry the information from the human.
-Grounding variables $ \gamma^{r}_{j} $ are extracted from the map, which include
-\begin{itemize}
-\item {\em verb fields} : the change in orientation between the viewpoints from verb/action semantic,
-\item {\em figure and landmark fields} : the viewpoint transition and the detected objects, and
-\item {\em spatial relations} : the functions of the geometries of the paths and the landmarks.
-\end{itemize}
-By assuming that the groundings are conditionally independent, a conditional random field (CRF) can be used as an undirected graphical model for the relationship between the phrases and the groundings.
-Correspondences $ \phi^{k} $ are introduced to indicate whether a grounding element is linked with a phrase from the SDC~\cite{tellex2011understanding},
-indirectly, it measures how the grounding variables match the verbal sentence.
-Figure \ref{fig:graph_model:induction} gives two examples of how graphical models are created from the SDC.
-The corresponding node $ \phi^{k} $ connects the grounding node $ \gamma^{r}_{j} $ and the phrase node $ \lambda^{r}_{i} $.
-A labeled dataset can be used to train the graphical model.
-The objective of the training is maximizing the likelihood of the correspondences.
-\begin{equation}
-\arg \max_{\phi_{i,j} \in \Phi } \prod p( \phi_{i,j} \mid \gamma^{r}_{j} , \lambda^{r}_{i} )
-\end{equation}
-The trained graphical model can then be used to infer the most likely grounding nodes from a given verbal command.
-
-\begin{figure}[htbp]
-	\centering
-	\begin{subfigure}[t]{0.45\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/Induction1}
-		\caption{``Put the pallet on the truck.''}
-		\label{fig:graph_model:induction1}
-	\end{subfigure}  
-	%\\
-	\begin{subfigure}[t]{0.45\linewidth}
-		\centering
-		\includegraphics[width=\textwidth]{fig/Induction2}
-		\caption{``Go to the pallet on the truck.''}
-		\label{fig:graph_model:induction2}
-	\end{subfigure}   
-	\caption{Graph model of two examples~\cite{tellex2011understanding}.}
-	\label{fig:graph_model:induction}
-\end{figure}
-
-It is noticeable that some adverbs might mean different things in different contexts.
-For example, in a sentence of ``put the pallet carefully on the truck'', ``carefully'' requires a smooth motion. 
-But in a sentence of ``walk carefully in the crowd'', ``carefully'' means avoiding collisions with someone else.
-It can also define multiple objectives as well, e.g. smoothly moving and collision avoiding simultaneously.
-A human language understanding process helps identify the human's intent behind an utterance.
-We can create a factor graph to model the correspondence between the adverbs and the intended objectives in different sentences and scenarios~\cite{tellex2011understanding}.
-After training, it can be used to infer what kind of objectives that the human intended in the verbal command.
-
-Topological preferences can be extracted from human language.
-In~\cite{howard2014natural}, the topological preference is inferred from human language and is used as a hard constraint in path planning.
-Sometimes, the topological preference can be a soft constraint.
-For example, if a human coach says ``better avoiding region C'', he/she prefers avoiding region C but not necessarily.
-The topological preference can also be the order of different homotopy classes.
-``Going through between A and B is better than between A and C'' implies a homotopy class via the region between A and B is better than a class via the region between A and C.
-We propose to construct a factor graph to represent the preference relationship between the groundings and the verbal phrases.
-%The {\em correspondence} nodes are replaced with {\em preference} nodes.
-%The preference variable is a real value instead of a boolean value.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -741,9 +778,9 @@ We propose to construct a factor graph to represent the preference relationship 
 % 5) How can you demonstrate that this is a good solution?
 
 Essentially, the dissertation statement makes two claims:
-(1) verbal instructions with specific grammar restriction can be translated into path-planning problem,
-and (2) planning problems with  consideration of humans' intents can be solved.
-We will validate each claim by theoretical analyses, and by experiments.
+(1) verbal instructions with specific grammar restriction can be translated into well-formed path-planning problems,
+and (2) the resulting planning problems can be solved.
+We will validate each claim by theoretical analyses and by experiments.
 Each claim is supported by proposing a corresponding algorithm.
 Theoretical analyses and proofs will be used to support the validity and the performance of the algorithms.
 Experiments and simulations will be taken to support the performances of the algorithms.
@@ -757,7 +794,7 @@ Table \ref{tb:claim} lists the claims from the project description and identifie
 \multicolumn{2}{|l|}{ \textbf{Claim} } & \textbf{Validation} \\ \hline
 \multirow{2}{*}{ \pbox{20cm}{Verbal instructions with \\ specific grammar restriction \\ can be translated into \\ path-planning problems. } } & \pbox{20cm}{ The proposed task grammar converts \\ commands into semantic structures. } & \pbox{20cm}{ Empirical study } \\ \cline{2-3} 
                    & \pbox{20cm}{ The proposed graph models converts semantic \\ structures into path-planning problems. } & \pbox{20cm}{ Empirical study } \\ \hline
-\multirow{3}{*}{ \pbox{20cm}{Planning problems that \\ considers human intent\\ can be solved.} }  & \pbox{20cm}{ The solutions of the proposed algorithm \\ asymptotically converge to a set of Pareto \\ optimal paths with multiple objectives. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \cline{2-3} 
+\multirow{3}{*}{ \pbox{20cm}{Planning problems that \\ consider human intent\\ can be solved.} }  & \pbox{20cm}{ The solutions of the proposed algorithm \\ asymptotically converge to a set of Pareto \\ optimal paths with multiple objectives. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \cline{2-3} 
                    & \pbox{20cm}{ The proposed algorithm returns a near-optimal \\ solution at the first iteration and the solution \\ converges to the optimal after enough iterations. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \cline{2-3} 
                    & \pbox{20cm}{ The solutions of the proposed algorithm \\ asymptotically converge to optimal paths \\ of given homotopy classes. } & \pbox{20cm}{ Theoretical study \\ and simulation } \\ \hline
 \end{tabular}
@@ -766,6 +803,22 @@ Table \ref{tb:claim} lists the claims from the project description and identifie
 \caption{Claims and validation.}
 \label{tb:claim}
 \end{table}
+
+\subsection{Problems Modeled from Verbal Instructions}
+\label{sec:validation:understanding_verbal_command}
+
+We will show how verbal instructions can be modeled into optimization problems.
+This will be done in two steps.
+The first is parsing verbal instructions into semantic structures by a task grammar.
+The second is grounding elements in semantic structures into problems, especially multiple objectives and topological preferences.
+
+We will test the verbal instructions can be parsed into semantic structures by a parser that is defined by a task grammar.
+How a semantic structure can be modeled into a path-planning problem is essentially a machine learning problem.
+We will prepare training datasets and testing datasets.
+We will verify the learning capability of a proposed factor graph structure.
+We will propose the measurement method for calibrating how well the human's intent is identified.
+Based on the measurement of intent identification, we can collect the successful rate from the statistics.
+The performance of the factor graph can be supported by the successful rates of the training datasets and the testing datasets.
 
 \subsection{Multi-Objective Path Planning}
 \label{sec:validation:multi_objective_path_planning}
@@ -785,7 +838,7 @@ NSGA-II was selected because evidence suggests that it provides more uniform sam
 \subsection{Reference Path Constrained Optimal Path Planning}
 \label{sec:validation:reference_path_constrained_optimal_path_planning}
 
-We will prove that the solution produced by the wingman algorithm converge to the optimal.
+We will prove that the solution produced by the wingman algorithm converges to the optimal.
 The proof will be split in two steps.
 The first step is proving that the backtracking process proposed will never underestimate the maximum reward, by utilizing the submodular property of the problem.
 The next step is showing that given enough run time, the proposed algorithm can always find an optimal solution.
@@ -795,7 +848,7 @@ By using contradiction, we can show that the optimal path can always be found if
 We propose to apply experiments in a world of hexagonal cells,  discretized from a two-dimensional search space.
 We will define several metrics to measure the performance of the proposed algorithm.
 We will use a \emph{fully expanded tree size} to measure the \emph{problem size}, which depends on the planning length and the vertex connectivities.
-Due to the human constraint, the planning length is determined by the human's path length.
+Due to the human constraint, the planning length is determined by the length of the path followed by the human.
 The performance of the heuristic is measured by the \emph{percentage of optimal at first iteration}, that is a percentage computed from the value obtain in the first iteration of the proposed algorithm over the optimal value.
 We will use the \emph{percentage of nodes explored} to indicate the efficiency of the anytime algorithm framework.
 In particular, we are interested in whether freezing nodes improves search efficiency.
@@ -812,10 +865,10 @@ We will test the algorithm with different types of workspaces and different type
 
 We will provide theoretical proof that the proposed algorithm can find the optimal solutions in a given homotopy classes.
 We will show that with the support of a bidirectional tree structure, the solutions of the HA-RRT$^{*}$ gradually converge to the best paths in the given homotopy classes.
-The proof requires that both of the trees are from each of the two directions converge to the optimal structures.
+The proof requires that the trees are from each of the two directions converge to the optimal overall path.
 Then, given a via-position, the optimal subpath from the start to the via-position and the optimal subpath from the end to the via-position can be found.
 The concatenation of the two optimal subpaths makes the optimal path from the start to the goal with the via-position constraint.
-As we can identify the string class that each path belongs to, we can restrict the optimal paths to specific string classes.
+As we identify the string class that each path belongs to, we can restrict the optimal paths to specific string classes.
 By a homotopic grammar, we can find the optimal path in each given homotopy class.
 
 We also implement experiments to show how the HA-RRT$^{*}$ can support different types of human intent on the topology.
@@ -828,21 +881,6 @@ Consider the following list of ways in which a human can express intent about pa
 \end{enumerate}
 We will use a demonstration to show that the algorithm enables each type of constraint.
 
-\subsection{Problems Modeled from Verbal Instructions}
-\label{sec:validation:understanding_verbal_command}
-
-We will show how verbal instructions can be modeled into optimization problems.
-This will be done in two steps.
-The first is parsing verbal instructions into semantic structures by a task grammar.
-The second is grounding elements in semantic structures into problems, especially multiple objectives and topological preferences.
-
-We will test how the verbal instructions can be parsed into semantic structures by a parser that is defined by a task grammar.
-How a semantic structure can be modeled into a path-planning problem is essentially a machine learning problem.
-We will prepare training datasets and testing datasets.
-We will verify the learning capability of a proposed factor graph structure.
-We will propose the measurement method for calibrating how well the human's intent is identified.
-Based on the measurement of intent identification, we can collect the successful rate from the statistics.
-The performance of the factor graph can be supported by the successful rates of the training datasets and the testing datasets.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -855,23 +893,22 @@ The performance of the factor graph can be supported by the successful rates of 
 \begin{itemize}
 \item Conference Paper: Toward Task-Based Mental Models of Human-Robot Teaming: A Bayesian Approach. (HCII 2013, July 2013)
 \item Conference Paper: Supporting Task-oriented Collaboration in Human-Robot Teams using Semantic-based Path Planning. (DSS 2014, June 2014)
-\item Conference Paper: Path Planning with a Human
-Path Constraint. (IEEE SMC 2014, October 2014)
+\item Conference Paper: Path Planning with a Human Path Constraint. (IEEE SMC 2014, October 2014)
 \item Conference Paper: Input-to-State Stability Analysis on Particle Swarm Optimization. (GECCO 2015, July 2015)
 \item Conference Paper: MORRF$^{*}$ : Sampling-based Multi-Objective Motion Planning. (IJCAI 2015, July 2015)
-\item Journal Paper: Understanding the Particle Swarm Optimization by component decomposition. (TEVC, Submitted by June 2015)
-\item Conference Paper: Homotopy-Aware RRT$^{*}$ : Toward Human-Robot Topological Path-Planning. (AAAI 2016, Submitted by September 2015)
+\item Conference Paper: Homotopy-Aware RRT$^{*}$ : Toward Human-Robot Topological Path-Planning. (HRI 2016, Submitted by September 2015)
 \item Conference Paper: Understanding adverbs in natural language instructions : a
 cost-function learning approach (HRI 2016, Submitted by October 2015)
-\item Submission of the dissertation to advisor (March 2016)
-\item Journal Paper: Sampling-based Multi-Objective Path Planning (Submitted by September 2016)
+\item Journal Paper: Understanding the Particle Swarm Optimization by Component Decomposition. (TEVC, Submitted by November 2015)
 \item Conference Paper: Robotic environment learning with human instructions (IJCAI 2016, Submitted by February 2016)
+\item Submission of the dissertation to advisor (March 2016)
 \item Submission of the dissertation to committee members (April 2016)
+\item Journal Paper: Sampling-based Multi-Objective Path Planning (Submitted by May 2016)
 \item Dissertation Defense (June 2016)
-\item Journal Paper: Finding the optimal path planning with different homotopy classes (Submitted by April 2016)
+\item Journal Paper: Finding the optimal path planning with different homotopy classes (Submitted by June 2016)
 \end{itemize}
 
-\appendix
+\begin{appendices}
 
 \section{PSO Stability Analysis}
 \label{sec:pso_stability_analysis}
@@ -968,6 +1005,7 @@ As in the Figure \ref{fig:sys:swarm}, the particles in the swarm form a networke
 Integrating the input-to-state stability of each component in the swarm helps us understand the convergence of the swarm.
 This helps us to analyze the capability of optimal search of the PSO in different fitness landscapes with different parameter selections.
 
+\end{appendices}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Change these to reflect the bibliography style and bibtex database file you want to use
