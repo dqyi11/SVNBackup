@@ -15,7 +15,7 @@ if __name__ == '__main__':
     PATH_NUM = 10
     
     MAP = "map01.png"
-    MAX_RUN_NUM = 5000
+    MAX_RUN_NUM = 8000
     SEGMENT = 10
     
     WORLD_WIDTH = 800

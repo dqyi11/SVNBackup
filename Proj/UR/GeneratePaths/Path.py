@@ -4,6 +4,8 @@ Created on Aug 6, 2015
 @author: daqing_yi
 '''
 
+from interparc import interparc
+
 class Path(object):
 
 
@@ -34,4 +36,12 @@ class Path(object):
             return True
         except:
             return False
+        
+    def resample(self, num):
+        xs = []
+        ys = []
+        for p in self.waypoints:
+            xs.append(p[0])
+            ys.append(p[1])
+        return interparc(num, xs, ys)   
                         

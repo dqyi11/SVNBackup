@@ -11,6 +11,8 @@ from Path import *
 import numpy as np
 import json, os
 from xml.dom import minidom
+from PathEvaluator import *
+import matplotlib.pyplot as plt
 
 CONFIG_PREFIX = "CONFIG"
 COSTVIZ_PREFIX = "COSTVIZ"
@@ -34,6 +36,8 @@ class PathSamplesGenerator(object):
         self.maxRun = maxRunNum
         self.segmentLength = segmentLen
         self.folder = folder
+        
+        self.paths = []
         
         
     def run(self, iterNumMax, name):
@@ -117,12 +121,27 @@ class PathSamplesGenerator(object):
         
     def drawPath(self, pathFile, drawPathFile, background_file=""):
         p = Path()
-        if True == p.loadFromFile(pathFile):            
+        if True == p.loadFromFile(pathFile):
+            self.paths.append(p)            
             if "" == background_file:
                 self.worldViz.drawPath(p, drawPathFile)
             else:
                 self.worldViz.drawPath(p, drawPathFile, background_file)
-            
+                
+    def vizDist(self):
+        
+        scores = []
+        for p in self.paths:
+            score = evaluatePathDistance( p )
+            scores.append( score )
+        n, bins, patches = plt.hist(scores, 50, normed=1, facecolor='green', alpha=0.75)
+        #plt.xlabel('Smarts')
+        #plt.ylabel('Probability')
+        #plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
+        #plt.axis([40, 160, 0, 0.03])
+        #plt.grid(True)
+
+        plt.show()
         
 
         
