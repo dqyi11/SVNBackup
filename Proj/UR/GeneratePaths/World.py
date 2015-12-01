@@ -97,17 +97,19 @@ class World(object):
             new_obj.center = [cx, cy]
             new_obj.radius = [cw, ch]
             new_obj.orientation = int(obj.getAttribute("orientation"))
-            points = obj.getElementsByTagName("point")
-            exteriors = []
-            for p in points:
-                x = int(p.getAttribute("x"))
-                y = int(p.getAttribute("y"))
-                new_obj.polygon.append([x,y])
-                exteriors.append((x,y))
-            if len(points) > 0:
-                new_obj.shape = Polygon(new_obj.polygon)
-                #new_obj.center = new_obj.shape.centroid
-                new_obj.bounding = new_obj.shape.bounds
+            
+            #points = obj.getElementsByTagName("point")
+            #exteriors = []
+            #for p in points:
+            #    x = int(p.getAttribute("x"))
+            #    y = int(p.getAttribute("y"))
+            #    new_obj.polygon.append([x,y])
+            #    exteriors.append((x,y))
+            #if len(points) > 0:
+            #    new_obj.shape = Polygon(new_obj.polygon)
+            #    #new_obj.center = new_obj.shape.centroid
+            #    new_obj.bounding = new_obj.shape.bounds
+        
             if new_obj.type == "robot":
                 self.robot = new_obj
             else:    
@@ -129,11 +131,11 @@ class World(object):
             objChild.setAttribute("w", str(self.robot.radius[0]))
             objChild.setAttribute("h", str(self.robot.radius[1]))
             objChild.setAttribute("orientation", str(self.robot.orientation))
-            for p in self.robot.polygon:
-                pointChild = xmldoc.createElement("point")
-                pointChild.setAttribute( "x", str(p[0]) )
-                pointChild.setAttribute( "y", str(p[1]) )
-                objChild.appendChild(pointChild)
+            #for p in self.robot.polygon:
+            #    pointChild = xmldoc.createElement("point")
+            #    pointChild.setAttribute( "x", str(p[0]) )
+            #    pointChild.setAttribute( "y", str(p[1]) )
+            #    objChild.appendChild(pointChild)
             root.appendChild(objChild)
         for obj in self.objects:
             objChild = xmldoc.createElement("object")
@@ -144,11 +146,11 @@ class World(object):
             objChild.setAttribute("w", str(obj.radius[0]))
             objChild.setAttribute("h", str(obj.radius[1]))
             objChild.setAttribute("orientation", str(obj.orientation))
-            for p in obj.polygon:
-                pointChild = xmldoc.createElement("point")
-                pointChild.setAttribute( "x", str(p[0]) )
-                pointChild.setAttribute( "y", str(p[1]) )
-                objChild.appendChild(pointChild)
+            #for p in obj.polygon:
+            #    pointChild = xmldoc.createElement("point")
+            #    pointChild.setAttribute( "x", str(p[0]) )
+            #    pointChild.setAttribute( "y", str(p[1]) )
+            #    objChild.appendChild(pointChild)
             root.appendChild(objChild)
         
         xmldoc.writexml( open(filename, 'w'), indent="  ", addindent="  ", newl="\n" )

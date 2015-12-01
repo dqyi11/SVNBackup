@@ -34,6 +34,8 @@ if __name__ == '__main__':
     
     WORLD_PREFIX = "W"
     
+    scores = []
+    
     for i in range(WORLD_NUM):
         
         NAME = WORLD_PREFIX + "-" +str(i)
@@ -52,3 +54,9 @@ if __name__ == '__main__':
 
         wGnr = PathSamplesGenerator(wViz, MAP, MAX_RUN_NUM, SEGMENT, DIR_NAME+"/") 
         wGnr.run(PATH_NUM, NAME)
+        
+        for p in wGnr.paths:
+            score = evaluatePathDistance( p )
+            scores.append( score )
+        
+    vizDist( scores, "hist.png" )

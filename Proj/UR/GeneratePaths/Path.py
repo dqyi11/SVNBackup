@@ -25,10 +25,10 @@ class Path(object):
                 else:
                     if in_path_mode == True:
                         str_line = str_line.replace('\n', '')
-                        str_poses = str_line.split("\t")
+                        str_poses = str_line.split(" ")
                         for str_pos in str_poses:
                             if str_pos != "":
-                                str_ps = str_pos.split(" ")
+                                str_ps = str_pos.split(",")
                                 pos = []
                                 for str_p in str_ps:
                                     pos.append(int(str_p))

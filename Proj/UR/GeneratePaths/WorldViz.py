@@ -97,6 +97,7 @@ class WorldViz(object):
                 surface.blit(label, (obj.center[0], obj.center[1]+15))
             
         pathLen = len(path.waypoints)
+        #print path.waypoints
         for i in range(pathLen-1):
             pygame.draw.line(surface, (0,0,0), path.waypoints[i], path.waypoints[i+1], 6)
 

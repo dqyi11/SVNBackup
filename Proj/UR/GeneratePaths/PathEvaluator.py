@@ -15,7 +15,7 @@ def evaluatePathDistance( path, sample_num = 100 ):
 
     dist = 0.0
     sample_path = path.resample(sample_num)
-    sample_straight_path = path.resample(sample_num)
+    sample_straight_path = straight_path.resample(sample_num)
     for i in range(sample_num):
         dist += np.sqrt( (sample_path[i][0] - sample_straight_path[i][0])**2 + (sample_path[i][1] - sample_straight_path[i][1])**2 )
     return dist

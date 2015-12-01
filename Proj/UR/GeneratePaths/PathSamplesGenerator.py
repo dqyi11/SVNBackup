@@ -128,20 +128,20 @@ class PathSamplesGenerator(object):
             else:
                 self.worldViz.drawPath(p, drawPathFile, background_file)
                 
-    def vizDist(self):
-        
-        scores = []
-        for p in self.paths:
-            score = evaluatePathDistance( p )
-            scores.append( score )
-        n, bins, patches = plt.hist(scores, 50, normed=1, facecolor='green', alpha=0.75)
-        #plt.xlabel('Smarts')
-        #plt.ylabel('Probability')
-        #plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
-        #plt.axis([40, 160, 0, 0.03])
-        #plt.grid(True)
+def vizDist(scores, filename):
+    
+    fig = plt.figure();
+    ax = fig.add_subplot(111)
+    
+    print scores
+    n, bins, patches = ax.hist(scores, normed=1)
+    #plt.xlabel('Smarts')
+    #plt.ylabel('Probability')
+    #plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
+    #plt.axis([40, 160, 0, 0.03])
+    #plt.grid(True)
 
-        plt.show()
+    fig.savefig(filename)
         
 
         
